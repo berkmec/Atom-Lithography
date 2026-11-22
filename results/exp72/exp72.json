@@ -1,0 +1,135 @@
+{
+ "experiment": "exp72_ibic_efficiency",
+ "predictions": {
+  "registered": "2026-10-20 (this session, before any Exp72 computation)",
+  "question": "R&D gap S3.1/S3.2 (BOM): what single-ion detection efficiency eta does an IBIC counted-implantation detector reach for 10 keV P ions, as a function of detector capacitance, against the Exp67 requirement eta>=0.9 (target 0.99)?",
+  "model": {
+   "signal": "Ionization energy fraction (Lindhard-scale, registered assumption) 0.4 of 10 keV -> E_ion=4 keV; e-h pair creation 3.6 eV -> mean signal S electrons, Gaussian spread sigma_sig/S=0.15 (damage/straggle fluctuation, assumption).",
+   "noise": "Charge-sensitive amplifier ENC(C) = 50 + 25*C[pF] electrons rms (registered model). Detection threshold at 5 sigma_noise; eta = Phi((S - 5*ENC)/sigma_sig). Capacitances {0.05, 0.2, 0.5, 2, 5} pF (small pixel diode to large-area diode).",
+   "energies": "Also 5 keV and 20 keV with ionization fractions 0.35/0.45 (assumptions)."
+  },
+  "success_rule": "eta >= 0.99 is reachable at 10 keV for some detector capacitance <= 0.5 pF.",
+  "predictions": [
+   "AU1 SMALL PIXEL WINS: eta >= 0.99 at 10 keV for C=0.5 pF.",
+   "AU2 LARGE DIODE FAILS SPEC: eta < 0.9 at 10 keV for C=5 pF.",
+   "AU3 ENERGY HELPS: eta(20 keV) >= eta(10 keV) >= eta(5 keV) at C=0.5 pF.",
+   "AU4 THRESHOLD ROBUSTNESS: At C=0.5 pF, 10 keV, eta stays >= 0.95 even with threshold raised to 8 sigma_noise."
+  ]
+ },
+ "verdicts": {
+  "AU1_small_pixel": true,
+  "AU2_large_fails": false,
+  "AU3_energy_helps": true,
+  "AU4_threshold_robust": true
+ },
+ "success_rule_met": true,
+ "table": {
+  "E5_C0.05": {
+   "E_keV": 5.0,
+   "C_pF": 0.05,
+   "eta": 0.9991902757906659,
+   "signal_e": 486.1111111111111,
+   "ENC_e": 51.25
+  },
+  "E5_C0.2": {
+   "E_keV": 5.0,
+   "C_pF": 0.2,
+   "eta": 0.9981056447931516,
+   "signal_e": 486.1111111111111,
+   "ENC_e": 55.0
+  },
+  "E5_C0.5": {
+   "E_keV": 5.0,
+   "C_pF": 0.5,
+   "eta": 0.9913660280019122,
+   "signal_e": 486.1111111111111,
+   "ENC_e": 62.5
+  },
+  "E5_C2": {
+   "E_keV": 5.0,
+   "C_pF": 2.0,
+   "eta": 0.42446799944027375,
+   "signal_e": 486.1111111111111,
+   "ENC_e": 100.0
+  },
+  "E5_C5": {
+   "E_keV": 5.0,
+   "C_pF": 5.0,
+   "eta": 4.8213033651140707e-08,
+   "signal_e": 486.1111111111111,
+   "ENC_e": 175.0
+  },
+  "E10_C0.05": {
+   "E_keV": 10.0,
+   "C_pF": 0.05,
+   "eta": 0.9999998544862005,
+   "signal_e": 1111.111111111111,
+   "ENC_e": 51.25
+  },
+  "E10_C0.2": {
+   "E_keV": 10.0,
+   "C_pF": 0.2,
+   "eta": 0.9999997371216561,
+   "signal_e": 1111.111111111111,
+   "ENC_e": 55.0
+  },
+  "E10_C0.5": {
+   "E_keV": 10.0,
+   "C_pF": 0.5,
+   "eta": 0.9999991729923079,
+   "signal_e": 1111.111111111111,
+   "ENC_e": 62.5
+  },
+  "E10_C2": {
+   "E_keV": 10.0,
+   "C_pF": 2.0,
+   "eta": 0.9998771336100348,
+   "signal_e": 1111.111111111111,
+   "ENC_e": 100.0
+  },
+  "E10_C5": {
+   "E_keV": 10.0,
+   "C_pF": 5.0,
+   "eta": 0.9217097964551826,
+   "signal_e": 1111.111111111111,
+   "ENC_e": 175.0
+  },
+  "E20_C0.05": {
+   "E_keV": 20.0,
+   "C_pF": 0.05,
+   "eta": 0.9999999989069164,
+   "signal_e": 2500.0,
+   "ENC_e": 51.25
+  },
+  "E20_C0.2": {
+   "E_keV": 20.0,
+   "C_pF": 0.2,
+   "eta": 0.9999999985157734,
+   "signal_e": 2500.0,
+   "ENC_e": 55.0
+  },
+  "E20_C0.5": {
+   "E_keV": 20.0,
+   "C_pF": 0.5,
+   "eta": 0.9999999972834562,
+   "signal_e": 2500.0,
+   "ENC_e": 62.5
+  },
+  "E20_C2": {
+   "E_keV": 20.0,
+   "C_pF": 2.0,
+   "eta": 0.9999999517869663,
+   "signal_e": 2500.0,
+   "ENC_e": 100.0
+  },
+  "E20_C5": {
+   "E_keV": 20.0,
+   "C_pF": 5.0,
+   "eta": 0.9999926565761631,
+   "signal_e": 2500.0,
+   "ENC_e": 175.0
+  }
+ },
+ "eta_10keV_C0p5_thr8": 0.9998771336100348,
+ "no_lab_measurement": true
+}

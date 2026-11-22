@@ -1,0 +1,162 @@
+{
+ "experiment": "exp91_budget_attack",
+ "predictions": {
+  "registered": "2026-10-21 (this session, before Exp91 computation; Exp66/71/72/82 anchors read, P91 arithmetic not yet run by script)",
+  "question": "Driving the Exp66 position budget toward its floor: at a 5 keV operating point (straggle anchor 3 nm) with the Exp82 energy filter (dE<=2 eV, Cc=0.5 mm), a brightness-affordable spot reduction 2.0->1.5 nm, and a halved anneal term (flash-anneal scenario, labeled), what sigma_total results, does IBIC detection survive at 5 keV, does the source brightness still close, and what certified Mode-A production rate follows?",
+  "method": "Exp66 RSS model verbatim (terms spot/stage/pointing/thermal/anneal + straggle anchors 3/5/9 nm log-interp; yield map with 49% cap below 5 nm). Chromatic term sigma_c = Cc*alpha*(dE/E)/2.355 folded into spot exactly as Exp82. P91 point: E=5 keV, dE=2 eV, Cc=0.5 mm, alpha=10 mrad, spot_geom=1.5 nm, anneal=0.5 nm, others EUV class. Variants: energy/filter only (spot 2.0, anneal 1.0). Brightness: Exp71 requirement B=4.06e4 at sigma=2 nm scaled as 1/sigma^2 vs Exp82 filtered net 7.96e4 A/m2/sr. Detection: Exp72 table eta(5 keV, C=0.5 pF). Production: Exp65 Mode-A anchors (shots=35000, spec=34, T_FIRE=1 ms, T_SPEC=1 s, duty 0.5) at nb=1000 beamlets, ns=1000 spec channels; certified = min(write, meas) * yield_mapped.",
+  "success_rule": "BN1, BN2 and BN3: sigma_total(P91) <= 3.65 nm, brightness for the 1.5 nm spot stays within the filtered duoplasmatron net, and eta(5 keV, 0.5 pF) >= 0.99.",
+  "predictions": [
+   "BN1 OPERATING POINT: sigma_total at P91 <= 3.65 nm; the energy/filter-only variant (spot 2.0, anneal 1.0) <= 4.0 nm.",
+   "BN2 BRIGHTNESS: Required brightness for sigma_spot=1.5 nm <= 7.96e4 A/m2/sr (Exp82 filtered net).",
+   "BN3 DETECTION: eta at 5 keV, C=0.5 pF (Exp72 table) >= 0.99.",
+   "BN4 PRODUCTION: Mode-A certified output at P91 (nb=1000, ns=1000) >= 5e5 registers/day at the 49% yield cap."
+  ]
+ },
+ "verdicts": {
+  "BN1_operating_point": true,
+  "BN2_brightness": true,
+  "BN3_detection": true,
+  "BN4_production": true
+ },
+ "success_rule_met": true,
+ "audit_exp82_cell": {
+  "E_keV": 10.0,
+  "sigma_c": 0.8492569002123143,
+  "sigma_spot_eff": 2.172840832311062,
+  "sigma_equip": 2.5122176025492355,
+  "sigma_straggle": 4.999999999999999,
+  "sigma_total": 5.595644492152644,
+  "yield_mapped": 0.31133043983987047
+ },
+ "variant_energy_filter_only": {
+  "E_keV": 5.0,
+  "sigma_c": 0.8492569002123143,
+  "sigma_spot_eff": 2.172840832311062,
+  "sigma_equip": 2.5122176025492355,
+  "sigma_straggle": 3.0000000000000004,
+  "sigma_total": 3.9129576131819053,
+  "yield_mapped": 0.49
+ },
+ "p91": {
+  "E_keV": 5.0,
+  "sigma_c": 0.8492569002123143,
+  "sigma_spot_eff": 1.7237277286619916,
+  "sigma_equip": 1.9522390433956156,
+  "sigma_straggle": 3.0000000000000004,
+  "sigma_total": 3.57927887744979,
+  "yield_mapped": 0.49
+ },
+ "p91_no_anneal_lever": {
+  "E_keV": 5.0,
+  "sigma_c": 0.8492569002123143,
+  "sigma_spot_eff": 1.7237277286619916,
+  "sigma_equip": 2.135705336079448,
+  "sigma_straggle": 3.0000000000000004,
+  "sigma_total": 3.68255852398278,
+  "yield_mapped": 0.49
+ },
+ "energy_sweep_P91terms": {
+  "E3": {
+   "E_keV": 3.0,
+   "sigma_c": 1.4154281670205235,
+   "sigma_spot_eff": 2.062386214072204,
+   "sigma_equip": 2.2568643946845985,
+   "sigma_straggle": 3.0000000000000004,
+   "sigma_total": 3.7541226532966503,
+   "yield_mapped": 0.49
+  },
+  "E4": {
+   "E_keV": 4.0,
+   "sigma_c": 1.0615711252653928,
+   "sigma_spot_eff": 1.8376433968529455,
+   "sigma_equip": 2.053517288458325,
+   "sigma_straggle": 3.0000000000000004,
+   "sigma_total": 3.635510040420358,
+   "yield_mapped": 0.49
+  },
+  "E5": {
+   "E_keV": 5.0,
+   "sigma_c": 0.8492569002123143,
+   "sigma_spot_eff": 1.7237277286619916,
+   "sigma_equip": 1.9522390433956156,
+   "sigma_straggle": 3.0000000000000004,
+   "sigma_total": 3.57927887744979,
+   "yield_mapped": 0.49
+  },
+  "E6": {
+   "E_keV": 6.0,
+   "sigma_c": 0.7077140835102618,
+   "sigma_spot_eff": 1.6585714407280652,
+   "sigma_equip": 1.8949562591254632,
+   "sigma_straggle": 3.4314297226852317,
+   "sigma_total": 3.9198940248081215,
+   "yield_mapped": 0.49
+  },
+  "E7.5": {
+   "E_keV": 7.5,
+   "sigma_c": 0.5661712668082095,
+   "sigma_spot_eff": 1.6032934551601004,
+   "sigma_equip": 1.8467674199419948,
+   "sigma_straggle": 4.044775801847516,
+   "sigma_total": 4.446432411559904,
+   "yield_mapped": 0.49
+  },
+  "E10": {
+   "E_keV": 10.0,
+   "sigma_c": 0.42462845010615713,
+   "sigma_spot_eff": 1.5589449382962688,
+   "sigma_equip": 1.8083996573322938,
+   "sigma_straggle": 4.999999999999999,
+   "sigma_total": 5.316983103287009,
+   "yield_mapped": 0.38249068508161077
+  }
+ },
+ "brightness_required_1p5nm": 72177.77777777778,
+ "brightness_filtered_net": 79600.0,
+ "eta_5keV_C0p5": 0.9913660280019122,
+ "production_ModeA": {
+  "nb100_ns47": {
+   "candidates_day": 59717.64705882353,
+   "certified_day": 29261.64705882353
+  },
+  "nb1000_ns47": {
+   "candidates_day": 59717.64705882353,
+   "certified_day": 29261.64705882353
+  },
+  "nb10000_ns47": {
+   "candidates_day": 59717.64705882353,
+   "certified_day": 29261.64705882353
+  },
+  "nb100_ns200": {
+   "candidates_day": 123428.57142857143,
+   "certified_day": 60480.0
+  },
+  "nb1000_ns200": {
+   "candidates_day": 254117.64705882352,
+   "certified_day": 124517.64705882352
+  },
+  "nb10000_ns200": {
+   "candidates_day": 254117.64705882352,
+   "certified_day": 124517.64705882352
+  },
+  "nb100_ns1000": {
+   "candidates_day": 123428.57142857143,
+   "certified_day": 60480.0
+  },
+  "nb1000_ns1000": {
+   "candidates_day": 1234285.7142857143,
+   "certified_day": 604800.0
+  },
+  "nb10000_ns1000": {
+   "candidates_day": 1270588.2352941176,
+   "certified_day": 622588.2352941176
+  }
+ },
+ "certified_nb1000_ns1000": 604800.0,
+ "labels": {
+  "straggle": "Exp66 SRIM-scale anchors (assumption)",
+  "anneal_0p5": "flash/laser anneal scenario (assumption)",
+  "spot_1p5": "brightness-checked lever (Exp71 scaling)"
+ },
+ "no_lab_measurement": true
+}

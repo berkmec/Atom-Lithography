@@ -1,0 +1,40 @@
+{
+  "experiment": "exp127_detector_frontend_sim",
+  "registered": "2026-11-22 (pre-run registration before executing sim127.py)",
+  "no_lab_measurement": true,
+  "epistemic_tag": "Model",
+  "question": "What are the true first-principles Lindhard signal, Laplace/transient response, Parseval ENC noise, Rice false-trigger rate, and Monte Carlo single-ion detection efficiency eta(C_det) of the repaired 8-channel IBIC detector front-end (src/board/detector_frontend.net/.cir) at P91 5 keV and 10 keV 31P+?",
+  "model": {
+    "lindhard": "Exact Lindhard universal electronic/nuclear partition for 31P (Z1=15, M1=30.974) in Si (Z2=14, M2=28.085), w_Si=3.62 eV (300 K) / 3.72 eV (100 K), Fano F=0.115, nuclear straggle sigma_strag/S = 0.18 (5 keV) / 0.15 (10, 20 keV).",
+    "circuit": "LTC6268 CSA (C_in=0.45 pF, e_n=4.3 nV/rtHz @ 300 K, 2.5 nV/rtHz @ 100 K, GBP=500 MHz, Cf=0.25 pF, Rf=100 MOhm RT / 1 GOhm cold) + buffered CR-RC shaper (ADA4817-1 GBP=1.05 GHz, G_stage=136 -> G_peak=50.0, tau_s=200 ns baseline & tau_s sweep 50..2000 ns) + TLV3501 hysteresis comparator (3.3 mV hys, 4.5 ns t_pd) + DAC8568 per-channel SPI threshold.",
+    "noise": "Exact Parseval quadrature over [1 Hz, 500 MHz] of CSA series voltage, 1/f flicker (fc=5 kHz), Rf Johnson current, diode leakage + op-amp current shot noise, and shaper resistor/op-amp noise; Rice upcrossing formula for 1 ms shot window.",
+    "monte_carlo": "50,000 simulated ions per (energy, C_det, frontend_config) point across C_det in [0.2, 2.0] pF; threshold at 5.5*sigma_ENC (P_false < 1e-3 per 1 ms shot)."
+  },
+  "predictions": [
+    {
+      "id": "CZ1_LINDHARD_MONOTONIC",
+      "statement": "First-principles Lindhard electronic partition for 31P in Si is strictly monotonic Y_e(20 keV) > Y_e(10 keV) > Y_e(5 keV) and lower than the Exp72 heuristic assumption (0.35/0.40/0.45), putting 5 keV mean signal in [300, 420] e-."
+    },
+    {
+      "id": "CZ2_LAPLACE_PEAK_AND_BALLISTIC",
+      "statement": "Exact Laplace + time-domain impulse response of the 200 ns CR-RC shaper peaks within 15% of tau_s=200 ns (accounting for finite ADA4817 GBP and tau_col=1.5 ns) and recovers effective peak gain within 10% of 50x Q/Cf (~35.6 mV at 1111 e- / 0.178 fC)."
+    },
+    {
+      "id": "CZ3_ENC_NOISE_CORNER",
+      "statement": "Parseval ENC(tau_s) exhibits an interior minimum tau_opt in [400 ns, 2000 ns] where series voltage noise (~1/sqrt(tau_s)) crosses parallel current noise (~sqrt(tau_s)), reducing ENC by >=25% vs tau_s=200 ns."
+    },
+    {
+      "id": "CZ4_RT200NS_5KEV_EXPOSED",
+      "statement": "Under true Lindhard stopping at P91 5 keV (S~351 e-), the uncooled 300 K / 200 ns / Rf=100 MOhm baseline fails eta>=0.99 at C_det=0.5 pF (exposing a genuine design gap hidden by Exp72's heuristic), while still passing 10 keV at C_det<=0.5 pF (eta>=0.99)."
+    },
+    {
+      "id": "CZ5_COLD_OPT_5KEV_CLOSES",
+      "statement": "Operating the in-vacuum CSA on the cold island (T=100 K, Rf=1 GOhm, tau_s=1.2 us, still <0.2% of the 1 ms shot cycle) lowers ENC(C_det=0.5 pF) below 35 e- rms and achieves Monte Carlo eta >= 0.99 at 5 keV across C_det <= 0.5 pF with Rice false-trigger probability P_false < 1e-3 per 1 ms shot."
+    },
+    {
+      "id": "CZ6_ERC_CLEAN",
+      "statement": "The repaired 8-channel KiCad netlist (detector_frontend.net) and SPICE deck (detector_frontend.cir) pass automated ERC with 0 errors, 0 floating IC pins, 0 pin conflicts, and 8 independent SPI-DAC threshold channels."
+    }
+  ],
+  "success_rule": "CZ1, CZ2, CZ3, CZ5, CZ6 all PASS (and CZ4 quantitatively documents RT-200ns vs Cold-1.2us regime boundary)."
+}

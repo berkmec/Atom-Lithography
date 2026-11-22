@@ -1,0 +1,70 @@
+{
+ "experiment": "exp81_source",
+ "predictions": {
+  "registered": "2026-10-20 (this session, before Exp81 computation; patent/datasheet reading above is source extraction)",
+  "question": "Exp71 ruled plasma/duoplasmatron-class sources insufficient (requirement B=4.06e4 A/m2/sr vs class anchors 10^1-10^2) and forced S1.1 to LMIS R&D class D. Was that a units/convention artifact? What does a first-principles derivation from the duoplasmatron factory current density give, and does a COTS plasma-class source (a) meet the brightness requirement with margin and (b) close Exp80's remaining BC3 when S1.1 drops D->C?",
+  "external_data": {
+   "factory_current_density": "US11289299B2: comparable factory specification for traditional duoplasmatron = 10 mA/cm2 extracted current density (=100 A/m2)",
+   "literature_brightness": "space plasma mass spectroscopy text: duoplasmatron brightness ~10 A/cm2/sr (=1e5 A/m2/sr)",
+   "species_feed": "PH3 (phosphine) documented as P feed gas across implanter patents (US4629930A, US6184532B1, EP1538655A2); PF3 also listed. PH3 is highly toxic - gas cabinet/scrubber required (standard implanter practice, cost note in summary)."
+  },
+  "method": {
+   "derivation": "Thermal-source axial brightness B = J * E / (pi * Ti) with J=100 A/m2, E=10 keV extraction, Ti swept 0.1/0.5/1.0 eV (stated assumption range for plasma ion temperature). Compare against Exp71 requirement 4.06e4 A/m2/sr and against the 1e5 literature anchor.",
+   "cost": "Exp80 model at s=0.5 with two changes applied in BOTH golden and reference configs: S4.3 piezo stack C (Exp79) and S1.1 source D(1000)->C(100). BC3 predicate from predictions_exp80.json re-evaluated verbatim (golden cost_frac <= 0.50).",
+   "honesty": "Brightness is necessary, not sufficient, for a 2 nm spot: energy spread/chromatic and lens aberrations (Exp66 equipment term) are separate budgets and are NOT re-derived here; the verdict is limited to the brightness line item Exp71 actually decided on."
+  },
+  "success_rule": "BD1 and BD3: conservative derived brightness >= 2x requirement AND recomputed golden cost_frac <= 0.50.",
+  "predictions": [
+   "BD1 MARGIN: Derived duoplasmatron brightness at the conservative Ti = 1.0 eV end is at least 2x the Exp71 requirement 4.06e4 A/m2/sr.",
+   "BD2 CROSS-CHECK: The literature anchor 1e5 A/m2/sr lies within a factor 3 of the derived Ti=1.0 eV value.",
+   "BD3 BC3 CLOSED: Golden cost_frac with S1.1=C, S4.3=C, s=0.5 is at most 0.50.",
+   "BD4 THROUGHPUT KEPT: Golden configuration still delivers >=90% of the 10^6-beamlet reference throughput (model unchanged on the throughput side)."
+  ]
+ },
+ "verdicts": {
+  "BD1_margin": true,
+  "BD2_crosscheck": false,
+  "BD3_bc3_closed": true,
+  "BD4_throughput": true
+ },
+ "success_rule_met": true,
+ "brightness": {
+  "J_A_m2": 100.0,
+  "E_eV": 10000.0,
+  "B_by_Ti": {
+   "0.1": 3183098.8618379068,
+   "0.5": 636619.7723675814,
+   "1.0": 318309.8861837907
+  },
+  "requirement": 40600.0,
+  "margin_Ti1": 7.840144979896323,
+  "literature_anchor": 100000.0
+ },
+ "golden": {
+  "exp79_s1": {
+   "fixed": 2790.0,
+   "ref_cost": 6890.0,
+   "n_beam": 100,
+   "cost": 3794.7674795773833,
+   "cost_frac": 0.5507645108240034,
+   "thr_frac": 1.0
+  },
+  "exp80_s05": {
+   "fixed": 2475.0,
+   "ref_cost": 6575.0,
+   "n_beam": 100,
+   "cost": 3479.7674795773833,
+   "cost_frac": 0.5292422022170925,
+   "thr_frac": 1.0
+  },
+  "exp81_s05_sourceC": {
+   "fixed": 1575.0,
+   "ref_cost": 5675.0,
+   "n_beam": 100,
+   "cost": 2579.7674795773833,
+   "cost_frac": 0.4545845778990984,
+   "thr_frac": 1.0
+  }
+ },
+ "no_lab_measurement": true
+}

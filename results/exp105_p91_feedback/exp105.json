@@ -1,0 +1,109 @@
+{
+ "experiment": "exp105_p91_feedback",
+ "predictions": {
+  "registered": "2026-10-22 (this session, before the sigma<5 yield computation; Exp57 code/method read first)",
+  "context": "Clarification was requested on the golden-ratio target/scope (absolute cost vs relative ratio vs performance; source blend) and timed out with no answer; proceeding on the recommended defaults: Exp87 absolute-cost framework, internal Exp0-104 data, cost model first.",
+  "question": "Exp91/92 moved sigma_total to 3.80 nm (BCA-computed), but every downstream number still uses Exp57 yields computed only at sigma=5/10/20/40, with Exp91 capping yield at Y(5)=0.49 for sigma<5. Is 0.49 a true ceiling (selection-limited) or conservative? Recompute Exp57's own yield model at sigma=2/3/3.8, feed through Exp65 slot statistics to t_eff, then through Exp87's chain-step cost model to the absolute 1e6/day cost.",
+  "method": "Reuse Exp57 implant57 machinery verbatim (isotope42/adaptive44/pulse_select48, same eligibility/selection). Audit cell: sigma=5, N=1024, original seed57 scheme, 100 realizations -> must reproduce 49 successes. Scan: sigma in {2,3,3.8,5}, N in {256,1024}, 400 realizations, seed base 105_000_000. Then Exp65 slot_stats (R=1, shots/attempt=N+1) -> exp_specs_per_register -> t_eff = specs x 1.0 s; Exp87 chain model (packing 24/line, chain class B) at t_eff(sigma=3.8, N=1024) -> absolute cost + golden fraction; self-consistent Mode A production at (1000 beamlets, 1000 channels).",
+  "success_rule": "CC1 and CC3: audit reproduces AND absolute cost lands in [1550, 1700]. CC2 is the scientific question, scored as written either way.",
+  "predictions": [
+   "CC1 AUDIT: sigma=5/N=1024/original seeds reproduces exactly 49/100 successes.",
+   "CC2 CEILING: yield(sigma=3.8, N=1024) > 0.54 (Y5 + 0.05) - the Exp91 cap was conservative.",
+   "CC3 COST STABILITY: absolute 1e6/day cost with t_eff(sigma=3.8) stays in [1550, 1700] units (Exp87: 1619.8) - fixed-base dominated.",
+   "CC4 PRODUCTION: self-consistent certified/day at (1000 beamlets, 1000 channels, Mode A sigma=3.8) in [3e5, 3e6]."
+  ]
+ },
+ "verdicts": {
+  "CC1_audit": true,
+  "CC2_ceiling": true,
+  "CC3_cost_stability": true,
+  "CC4_production": false,
+  "success": true
+ },
+ "cells": {
+  "S2_N256": {
+   "yield_frac": 0.8425,
+   "slot_success": 0.841735,
+   "exp_shots_per_register": 305.32174615526264,
+   "exp_specs_per_register": 1.1880223585807885,
+   "t_eff_s": 1.1880223585807885
+  },
+  "S2_N1024": {
+   "yield_frac": 0.9125,
+   "slot_success": 0.911545,
+   "exp_shots_per_register": 1124.4645080604907,
+   "exp_specs_per_register": 1.0970385444492592,
+   "t_eff_s": 1.0970385444492592
+  },
+  "S3_N256": {
+   "yield_frac": 0.5475,
+   "slot_success": 0.54601,
+   "exp_shots_per_register": 470.6873500485339,
+   "exp_specs_per_register": 1.8314682881265911,
+   "t_eff_s": 1.8314682881265911
+  },
+  "S3_N1024": {
+   "yield_frac": 0.8125,
+   "slot_success": 0.811895,
+   "exp_shots_per_register": 1262.4785224690386,
+   "exp_specs_per_register": 1.2316863633844277,
+   "t_eff_s": 1.2316863633844277
+  },
+  "S3.8_N256": {
+   "yield_frac": 0.3025,
+   "slot_success": 0.300755,
+   "exp_shots_per_register": 854.5161343951056,
+   "exp_specs_per_register": 3.3249655034829013,
+   "t_eff_s": 3.3249655034829013
+  },
+  "S3.8_N1024": {
+   "yield_frac": 0.6925,
+   "slot_success": 0.692135,
+   "exp_shots_per_register": 1480.9249640604796,
+   "exp_specs_per_register": 1.4448048429858338,
+   "t_eff_s": 1.4448048429858338
+  },
+  "S5_N256": {
+   "yield_frac": 0.1025,
+   "slot_success": 0.102065,
+   "exp_shots_per_register": 2518.0032332337237,
+   "exp_specs_per_register": 9.797677950325772,
+   "t_eff_s": 9.797677950325772
+  },
+  "S5_N1024": {
+   "yield_frac": 0.455,
+   "slot_success": 0.45311,
+   "exp_shots_per_register": 2262.1438502791816,
+   "exp_specs_per_register": 2.20696961002847,
+   "t_eff_s": 2.20696961002847
+  }
+ },
+ "audit_successes": 49,
+ "yield_38": 0.6925,
+ "yield_5_newseeds": 0.455,
+ "t_eff_38_s": 1.4448048429858338,
+ "chain_exp87_audit": {
+  "t_eff": 2.0,
+  "golden_cost": 5349.767479577384,
+  "golden_nb": 100,
+  "ref_cost": 8865.0,
+  "golden_frac": 0.6034706688750574,
+  "ns_min": 9000,
+  "ns_abs": 47,
+  "chains_abs": 2,
+  "abs_cost": 1619.7674795773833
+ },
+ "chain_p91": {
+  "t_eff": 1.4448048429858338,
+  "golden_cost": 5359.767479577384,
+  "golden_nb": 100,
+  "ref_cost": 8865.0,
+  "golden_frac": 0.6045987004599418,
+  "ns_min": 9001,
+  "ns_abs": 34,
+  "chains_abs": 2,
+  "abs_cost": 1619.7674795773833
+ },
+ "production_1000x1000": 29170958.048780486,
+ "no_lab_measurement": true
+}

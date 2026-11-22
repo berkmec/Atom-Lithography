@@ -1,0 +1,108 @@
+* Atom Lithography Machine - 8-Channel IBIC Detector Front-End (v2.1, Profile=COLD_100K, Exp127)
+* Candidate COTS macromodel deck ({Aday-COTS}; no physical lab measurement).
+* Locked P91 5 keV 31P+ @ 100 K: RF=1G, CS=CP=600p (tau_s=1200 ns), Q_ION=0.055f.
+* Rails: VCCA=+2.5V, VSSA=-2.5V, VCCD=+3.3V, VBIAS=-30.0V.
+
+.param C_DET=0.5p  C_PAR=0.25p  C_F=0.25p  R_F=1G
+.param C_S=600p   R_S1=2.0k    R_G1=100   R_G2=13.5k
+.param R_S2=2.0k   C_P=600p    R_HYS1=1.0k R_HYS2=1.0Meg  R_TERM=49.9
+.param Q_ION=0.055f  TAU_COL=1.5n  V_THR=0.00423
+
+* Behavioral single-pole op-amp macromodels matching datasheet GBP & C_in
+.subckt OPAMP_LTC6268 inp inn vcc vss out
+Cin inp inn 0.45p
+Rin inp inn 1T
+Egain n1 0 VALUE = { 1e5 * V(inp, inn) }
+* GBP = 500 MHz -> dominant pole f_p = 5 kHz (R=1k, C=31.83nF)
+Rp n1 n2 1k
+Cp n2 0 31.83n
+Ebuf out 0 VALUE = { LIMIT(V(n2), V(vss)+0.1, V(vcc)-0.1) }
+.ends OPAMP_LTC6268
+
+.subckt OPAMP_ADA4817 inp inn vcc vss out
+Cin inp inn 1.3p
+Rin inp inn 500G
+Egain n1 0 VALUE = { 1e5 * V(inp, inn) }
+* GBP = 1.05 GHz -> dominant pole f_p = 10.5 kHz (R=1k, C=15.16nF)
+Rp n1 n2 1k
+Cp n2 0 15.16n
+Ebuf out 0 VALUE = { LIMIT(V(n2), V(vss)+0.2, V(vcc)-0.2) }
+.ends OPAMP_ADA4817
+
+.subckt CMP_TLV3501 inp inn vcc gnd out
+* 4.5 ns comparator macromodel with rail-to-rail 0..VCCD output
+Eraw n1 gnd VALUE = { V(vcc) * 0.5 * (1 + TANH((V(inp, inn)) / 0.2m)) }
+Rdel n1 out 100
+Cdel out gnd 45p
+.ends CMP_TLV3501
+
+* Single IBIC Front-End Channel Subcircuit
+.subckt IBIC_CHANNEL hv_bias thresh_in count_hit vcca vssa vccd agnd dgnd PARAMS: qion={Q_ION}
+* Per-channel HV bias filter & pixel capacitance + ion charge impulse
+Rbias hv_bias det_bias 10Meg
+Cbias det_bias agnd 10n
+Cdet  csa_sum agnd {C_DET + C_PAR}
+* Exponential charge collection pulse: integral I_ion dt = qion
+Iion  agnd csa_sum EXP(0 {qion/TAU_COL} 50n 0.2n 51n {TAU_COL})
+* CSA stage (LTC6268): positive output for positive hole-collection polarity
+Xcsa  agnd csa_sum vcca vssa csa_out OPAMP_LTC6268
+Cf    csa_out csa_sum {C_F}
+Rf    csa_out csa_sum {R_F}
+* Buffered CR-RC active shaper (tau_1 = tau_2 = 1200 ns, G_stage = 136 -> G_peak = 50)
+Cs    csa_out cr_out {C_S}
+Rs1   cr_out  agnd   {R_S1}
+Xshp  cr_out  shp_fb vcca vssa shp_gain OPAMP_ADA4817
+Rg1   shp_fb  agnd   {R_G1}
+Rg2   shp_gain shp_fb {R_G2}
+Rs2   shp_gain shp_out {R_S2}
+Cp    shp_out agnd   {C_P}
+* Per-channel DAC threshold RC filter & hysteresis comparator (TLV3501)
+Rdac  thresh_in thresh 1k
+Cdac  thresh agnd 100n
+Rhys1 shp_out cmp_inp {R_HYS1}
+Rhys2 cmp_out cmp_inp {R_HYS2}
+Xcmp  cmp_inp thresh vccd dgnd cmp_out CMP_TLV3501
+Rterm cmp_out count_hit {R_TERM}
+.ends IBIC_CHANNEL
+
+* Board Power Supplies & Star Ground
+Vcca vcca agnd DC 2.5
+Vssa vssa agnd DC -2.5
+Vccd vccd dgnd DC 3.3
+Vbias hv_in agnd DC -30.0
+Rstar agnd dgnd 1m
+Rbias_bulk hv_in hv_filt 100k
+Cbias_bulk hv_filt agnd 100n
+Vagnd agnd 0 DC 0
+
+* 8-Channel Tile Instantiation (CH0..CH7) with Individual DAC Thresholds
+Vthr0 thr_raw_0 agnd DC {V_THR}
+Xch0 hv_filt thr_raw_0 count_hit_0 vcca vssa vccd agnd dgnd IBIC_CHANNEL PARAMS: qion={Q_ION}
+Rfpga0 count_hit_0 dgnd 10k
+Vthr1 thr_raw_1 agnd DC {V_THR}
+Xch1 hv_filt thr_raw_1 count_hit_1 vcca vssa vccd agnd dgnd IBIC_CHANNEL PARAMS: qion=0
+Rfpga1 count_hit_1 dgnd 10k
+Vthr2 thr_raw_2 agnd DC {V_THR}
+Xch2 hv_filt thr_raw_2 count_hit_2 vcca vssa vccd agnd dgnd IBIC_CHANNEL PARAMS: qion=0
+Rfpga2 count_hit_2 dgnd 10k
+Vthr3 thr_raw_3 agnd DC {V_THR}
+Xch3 hv_filt thr_raw_3 count_hit_3 vcca vssa vccd agnd dgnd IBIC_CHANNEL PARAMS: qion=0
+Rfpga3 count_hit_3 dgnd 10k
+Vthr4 thr_raw_4 agnd DC {V_THR}
+Xch4 hv_filt thr_raw_4 count_hit_4 vcca vssa vccd agnd dgnd IBIC_CHANNEL PARAMS: qion=0
+Rfpga4 count_hit_4 dgnd 10k
+Vthr5 thr_raw_5 agnd DC {V_THR}
+Xch5 hv_filt thr_raw_5 count_hit_5 vcca vssa vccd agnd dgnd IBIC_CHANNEL PARAMS: qion=0
+Rfpga5 count_hit_5 dgnd 10k
+Vthr6 thr_raw_6 agnd DC {V_THR}
+Xch6 hv_filt thr_raw_6 count_hit_6 vcca vssa vccd agnd dgnd IBIC_CHANNEL PARAMS: qion=0
+Rfpga6 count_hit_6 dgnd 10k
+Vthr7 thr_raw_7 agnd DC {V_THR}
+Xch7 hv_filt thr_raw_7 count_hit_7 vcca vssa vccd agnd dgnd IBIC_CHANNEL PARAMS: qion=0
+Rfpga7 count_hit_7 dgnd 10k
+
+* Standard Analyses (cross-checked by experiments/exp127_detector_frontend_sim/)
+.ac dec 100 100 100Meg
+.tran 5n 8.0u
+.noise V(Xch0.shp_out) Iion dec 50 1k 50Meg
+.end

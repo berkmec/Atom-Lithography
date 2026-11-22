@@ -1,0 +1,74 @@
+{
+ "experiment": "exp71_beamlet_optics",
+ "predictions": {
+  "registered": "2026-10-20 (this session, before any Exp71 computation)",
+  "question": "R&D gaps S1/S2.3 (BOM): what source brightness does counted implantation at 1 ion/ms into a nanometre spot require, and is space charge at array scale a limit?",
+  "model": {
+   "brightness": "I = B * (pi r^2) * (pi alpha^2) for spot radius r and convergence half-angle alpha. Required current for counted writing = e/tau_shot (tau=1 ms, Exp65 center). Spot cases: sigma_spot 2 nm (Exp66 EUV-grade spec; r=2 nm), 5 nm (relaxed); alpha in {5, 10, 30} mrad.",
+   "source_classes": "Registered literature-scale brightness anchors (assumptions, not measurements): plasma/duoplasmatron ~1e1..1e2, LMIS ~1e6 A/m^2/sr class.",
+   "space_charge": "Total array current at 1e6 beamlets and Child-Langmuir extraction limit J_CL = (4 eps0/9) sqrt(2e/m_P) V^1.5/d^2 for d=1 mm, V=10 kV, aperture area per beamlet at 10 um pitch."
+  },
+  "success_rule": "Some registered spot/alpha case reaches 1 ion/ms with brightness at or below the LMIS anchor 1e6 A/m^2/sr, and space charge is not the binding limit (array current < 1% of the Child-Langmuir total).",
+  "predictions": [
+   "AT1 PLASMA INSUFFICIENT: At sigma=2 nm, alpha=10 mrad, required brightness exceeds 1e4 A/m^2/sr (above plasma class).",
+   "AT2 LMIS ENOUGH: The same case is within the LMIS anchor 1e6 A/m^2/sr.",
+   "AT3 RELAXED SPOT HELPS: At sigma=5 nm, alpha=30 mrad, required brightness drops by more than 30x vs the AT1 case.",
+   "AT4 SPACE CHARGE MINOR: Total array current at 1e6 beamlets is below 1% of the Child-Langmuir extraction total."
+  ]
+ },
+ "verdicts": {
+  "AT1_plasma_insufficient": true,
+  "AT2_lmis_enough": true,
+  "AT3_relaxed_helps": true,
+  "AT4_spacecharge_minor": true
+ },
+ "success_rule_met": true,
+ "cases": {
+  "r2_a5": {
+   "spot_nm": 2.0,
+   "alpha_mrad": 5.0,
+   "B_required": 162334.43296097658,
+   "ions_per_s_at_1e2": 0.6160122543073712
+  },
+  "r2_a10": {
+   "spot_nm": 2.0,
+   "alpha_mrad": 10.0,
+   "B_required": 40583.608240244146,
+   "ions_per_s_at_1e2": 2.4640490172294847
+  },
+  "r2_a30": {
+   "spot_nm": 2.0,
+   "alpha_mrad": 30.0,
+   "B_required": 4509.289804471572,
+   "ions_per_s_at_1e2": 22.17644115506536
+  },
+  "r5_a5": {
+   "spot_nm": 5.0,
+   "alpha_mrad": 5.0,
+   "B_required": 25973.50927375625,
+   "ions_per_s_at_1e2": 3.85007658942107
+  },
+  "r5_a10": {
+   "spot_nm": 5.0,
+   "alpha_mrad": 10.0,
+   "B_required": 6493.377318439063,
+   "ions_per_s_at_1e2": 15.40030635768428
+  },
+  "r5_a30": {
+   "spot_nm": 5.0,
+   "alpha_mrad": 30.0,
+   "B_required": 721.4863687154516,
+   "ions_per_s_at_1e2": 138.6027572191585
+  }
+ },
+ "space_charge": {
+  "J_CL_A_m2": 9818.180472951144,
+  "I_CL_per_beamlet_A": 9.818180472951145e-07,
+  "I_CL_total_A": 0.9818180472951146,
+  "I_array_required_A": 1.6021766339999998e-10,
+  "fraction": 1.631846795252907e-10
+ },
+ "I_required_A": 1.602176634e-16,
+ "design_consequence": "BOM S1.1 class changes: plasma source insufficient; LMIS/cold-ionization high-brightness source required.",
+ "no_lab_measurement": true
+}

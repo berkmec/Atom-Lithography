@@ -1,0 +1,128 @@
+# Strict Allowlist .gitignore — Atom Lithography Machine v3.0
+# Ignore everything by default; explicitly whitelist only the clean v3.0 release
+# package and the exact minimal legacy helper/JSON anchors needed for 89/89 pytest.
+*
+
+# Root metadata & showcase
+!.gitignore
+!README.md
+!requirements.txt
+
+# Master engineering documentation, BOM, RFQ & Parametric CAD v3.0
+!research/
+!research/atom_lithography_machine/
+!research/atom_lithography_machine/**
+!research/hypotheses/
+!research/hypotheses/hypotheses.md
+
+# Software control stack (CellISA v2.0), 0-ERC IBIC board & verified RTL
+!src/
+!src/README.md
+!src/machine_control/
+!src/machine_control/**
+!src/board/
+!src/board/**
+!src/rtl/
+!src/rtl/blanker_gate.v
+!src/rtl/blanker_gate_spec.v
+!src/rtl/blanker_tile.v
+!src/rtl/blanker_tile_formal.v
+!src/rtl/BLANKER_TILE.md
+!src/rtl/bmc64.ys
+
+# v3.0 First-principles experiment suites (Exp124-Exp128)
+!experiments/
+!experiments/exp124_ion_column_optics/
+!experiments/exp124_ion_column_optics/**
+!experiments/exp125_cryo_magnet_readout/
+!experiments/exp125_cryo_magnet_readout/**
+!experiments/exp126_atom_cell_programming/
+!experiments/exp126_atom_cell_programming/**
+!experiments/exp127_detector_frontend_sim/
+!experiments/exp127_detector_frontend_sim/**
+!experiments/exp128_bom_sensitivity/
+!experiments/exp128_bom_sensitivity/**
+
+# Minimal legacy physics helpers required by AtlasSelector & Exp124 (89/89 pytest)
+!experiments/exp25_universal_atom/
+!experiments/exp25_universal_atom/ap25_control.py
+!experiments/exp25_universal_atom/ap25_register.py
+!experiments/exp42_isotope_coded_atom/
+!experiments/exp42_isotope_coded_atom/isotope42.py
+!experiments/exp43_robustness_control/
+!experiments/exp43_robustness_control/robustness43.py
+!experiments/exp44_adaptive_isotope_code/
+!experiments/exp44_adaptive_isotope_code/adaptive44.py
+!experiments/exp48_pulse_aware_selection/
+!experiments/exp48_pulse_aware_selection/pulse_select48.py
+
+# v3.0 Verified experiment results & plots (Exp124-Exp128)
+!results/
+!results/exp124_ion_column_optics/
+!results/exp124_ion_column_optics/**
+!results/exp125_cryo_magnet_readout/
+!results/exp125_cryo_magnet_readout/**
+!results/exp126_atom_cell_programming/
+!results/exp126_atom_cell_programming/**
+!results/exp127_detector_frontend_sim/
+!results/exp127_detector_frontend_sim/**
+!results/exp128_bom_sensitivity/
+!results/exp128_bom_sensitivity/**
+
+# Minimal legacy JSON anchors required by 89/89 pytest & Exp124/126/128 audit gates
+!results/exp42/
+!results/exp42/isotope42.json
+!results/exp45/
+!results/exp45/spectral45.json
+!results/exp47/
+!results/exp47/pulse47.json
+!results/exp59/
+!results/exp59/bath59.json
+!results/exp59/finalist59.json
+!results/exp62/
+!results/exp62/bath62.json
+!results/exp62/finalist62.json
+!results/exp63/
+!results/exp63/exp63.json
+!results/exp66/
+!results/exp66/exp66.json
+!results/exp71/
+!results/exp71/exp71.json
+!results/exp72/
+!results/exp72/exp72.json
+!results/exp81_source/
+!results/exp81_source/exp81.json
+!results/exp82_chromatic/
+!results/exp82_chromatic/exp82.json
+!results/exp91_budget_attack/
+!results/exp91_budget_attack/exp91.json
+!results/exp92_bca_straggle/
+!results/exp92_bca_straggle/exp92.json
+!results/exp105_p91_feedback/
+!results/exp105_p91_feedback/exp105.json
+!results/exp121_cost_decision/
+!results/exp121_cost_decision/exp121.json
+!results/exp122_budget_cap/
+!results/exp122_budget_cap/exp122.json
+
+# Atom Lithography verification test suite (10 test files, 89/89 pytest)
+!tests/
+!tests/conftest.py
+!tests/test_machine_control.py
+!tests/test_atom_programmer.py
+!tests/test_detector_frontend.py
+!tests/test_cad.py
+!tests/test_bom_detailed.py
+!tests/test_exp124.py
+!tests/test_exp125.py
+!tests/test_exp126.py
+!tests/test_rtl_contract.py
+!tests/test_blanker_tile.py
+
+# Hard re-exclusions (caches, bytecode, superseded v1 & local disk forensics)
+**/__pycache__/
+**/__pycache__/**
+*.py[cod]
+.pytest_cache/
+research/atom_lithography_machine/DESIGN_v1.md
+research/atom_lithography_machine/NOTES_RECOVERY.md

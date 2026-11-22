@@ -1,0 +1,133 @@
+{
+ "experiment": "exp82_chromatic",
+ "predictions": {
+  "registered": "2026-10-20 (this session, before Exp82 computation)",
+  "question": "Exp81 showed duoplasmatron brightness is sufficient, but brightness is not sufficient for a 2 nm spot: what does the duoplasmatron energy spread do to the Exp66 spot budget through chromatic aberration, and which documented mitigation (expansion-cup spread control to ~6 eV, short-focal lens, energy filtering paid from the 7.8x brightness margin) recovers the Exp66 success predicate (sigma_total <= 6 nm and mapped yield >= 0.30 at 10 keV)?",
+  "external_data": {
+   "energy_spread": "Duoplasmatron extracted-ion energy spectra: total spread up to 100 eV, reducible to 6 eV via expansion-cup potential (Energy spectra of ions and electrons of a duoplasmatron, abstract via ouci.dntb.gov.ua). Sweep uses FWHM 2/6/30/100 eV."
+  },
+  "method": {
+   "chromatic": "sigma_c = Cc * alpha * (dE_FWHM/2.355)/E, alpha = 10 mrad (Exp71), E = 10 keV, Cc swept 0.5/1/2 mm (microlens focal-length class, stated assumption).",
+   "budget": "Exp66 verbatim: sigma_spot_new = sqrt(2.0^2 + sigma_c^2); equipment = RSS(spot_new, stage 0.5, pointing 0.5, thermal 0.3, anneal 1.0); total = RSS(equipment, straggle 5 nm @10 keV); yield by the Exp66/Exp57 log map (5 nm->0.49, 10 nm->0.03).",
+   "filter_accounting": "Energy filtering to 2 eV FWHM is charged a 4x current loss against the Exp81 brightness margin 7.84x (Ti=1 eV end); net brightness must stay >= Exp71 requirement 4.06e4 A/m2/sr."
+  },
+  "success_rule": "BE2: at least one documented-mitigation configuration (filtered dE<=2 eV at Cc=1 mm) recovers sigma_total <= 6 nm with mapped yield >= 0.30 while net brightness stays at or above requirement.",
+  "predictions": [
+   "BE1 BARE SOURCE FAILS AT Cc=1: At the best documented unfiltered spread (6 eV FWHM, expansion-cup controlled), Cc=1 mm gives sigma_total > 6.0 nm at 10 keV.",
+   "BE2 FILTER RECOVERS: With dE filtered to 2 eV FWHM at Cc=1 mm, sigma_total <= 6.0 nm, mapped yield >= 0.30, and brightness after a 4x filter loss (3.18e5/4) remains >= 4.06e4 A/m2/sr.",
+   "BE3 UNCONTROLLED KILLS: At dE = 30 eV FWHM, sigma_total >= 10 nm for every Cc in 0.5-2 mm.",
+   "BE4 SHORT LENS BORDERLINE: At dE = 6 eV and Cc = 0.5 mm, sigma_total < 6.0 nm but mapped yield < 0.30 (the two Exp66 criteria split)."
+  ]
+ },
+ "verdicts": {
+  "BE1_bare_fails_Cc1": true,
+  "BE2_filter_recovers": true,
+  "BE3_uncontrolled_kills": false,
+  "BE4_short_lens_split": true
+ },
+ "success_rule_met": true,
+ "grid": {
+  "dE2_Cc0.5": {
+   "sigma_c": 0.42462845010615713,
+   "sigma_spot": 2.0445804754617893,
+   "sigma_equip": 2.402146814963556,
+   "sigma_total": 5.547099180710541,
+   "yield_mapped": 0.32245631697968613
+  },
+  "dE2_Cc1": {
+   "sigma_c": 0.8492569002123143,
+   "sigma_spot": 2.172840832311062,
+   "sigma_equip": 2.5122176025492355,
+   "sigma_total": 5.595644492152645,
+   "yield_mapped": 0.31133043983987035
+  },
+  "dE2_Cc2": {
+   "sigma_c": 1.6985138004246285,
+   "sigma_spot": 2.6239186592257226,
+   "sigma_equip": 2.9111765886378165,
+   "sigma_total": 5.785753981136159,
+   "yield_mapped": 0.272113797429651
+  },
+  "dE6_Cc0.5": {
+   "sigma_c": 1.2738853503184713,
+   "sigma_spot": 2.371241001196634,
+   "sigma_equip": 2.6856626530068914,
+   "sigma_total": 5.675630703785792,
+   "yield_mapped": 0.29402358121679056
+  },
+  "dE6_Cc1": {
+   "sigma_c": 2.5477707006369426,
+   "sigma_spot": 3.2390022449859552,
+   "sigma_equip": 3.475792793453611,
+   "sigma_total": 6.089428178657177,
+   "yield_mapped": 0.22142338250687937
+  },
+  "dE6_Cc2": {
+   "sigma_c": 5.095541401273885,
+   "sigma_spot": 5.473987776027292,
+   "sigma_equip": 5.6173429815257165,
+   "sigma_total": 7.520275405335647,
+   "yield_mapped": 0.09459495828798874
+  },
+  "dE30_Cc0.5": {
+   "sigma_c": 6.369426751592357,
+   "sigma_spot": 6.676046520501513,
+   "sigma_equip": 6.794085453090826,
+   "sigma_total": 8.435614805329863,
+   "yield_mapped": 0.059545935673330073
+  },
+  "dE30_Cc1": {
+   "sigma_c": 12.738853503184714,
+   "sigma_spot": 12.89489777297988,
+   "sigma_equip": 12.956403381170311,
+   "sigma_total": 13.887706382826556,
+   "yield_mapped": 0.018336880851520333
+  },
+  "dE30_Cc2": {
+   "sigma_c": 25.477707006369428,
+   "sigma_spot": 25.556086443397508,
+   "sigma_equip": 25.587175582748596,
+   "sigma_total": 26.071124914403022,
+   "yield_mapped": 0.0
+  },
+  "dE100_Cc0.5": {
+   "sigma_c": 21.231422505307854,
+   "sigma_spot": 21.325414453156423,
+   "sigma_equip": 21.362661388480902,
+   "sigma_total": 21.93999319960908,
+   "yield_mapped": 0.0
+  },
+  "dE100_Cc1": {
+   "sigma_c": 42.46284501061571,
+   "sigma_spot": 42.509918917772254,
+   "sigma_equip": 42.528616323548206,
+   "sigma_total": 42.821527371119906,
+   "yield_mapped": 0.0
+  },
+  "dE100_Cc2": {
+   "sigma_c": 84.92569002123142,
+   "sigma_spot": 84.94923675691433,
+   "sigma_equip": 84.95859477170208,
+   "sigma_total": 85.10559808603828,
+   "yield_mapped": 0.0
+  }
+ },
+ "net_brightness_after_filter": 79577.47154594767,
+ "exp66_reference": {
+  "sigma_total": 5.5308227236099325,
+  "yield_mapped": 0.3262974071102328
+ },
+ "no_lab_measurement": true,
+ "plate_fea": {
+  "force_N": 1.0,
+  "max_disp_mm": 0.0008239885055913891,
+  "max_vM_MPa": 786.8891007749255,
+  "nodes": 59579,
+  "elements": 282036,
+  "atm_force_N": 0.010375680000000002,
+  "atm_disp_nm": 8.549441057694466,
+  "atm_vM_MPa": 8.16450950512838,
+  "sha256": "3affb51d5853332162cba441fc30e8c1e69734905621dadb63bcf7af9ff1b246",
+  "note": "linear scaling; top-face nodal load stands in for uniform pressure; two edges fixed"
+ }
+}

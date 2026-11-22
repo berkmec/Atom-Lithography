@@ -1,0 +1,82 @@
+subsystem,id,item,qty_or_class,class_or_note,spec,cost_class
+
+S1,S1.1,Yüksek parlaklıklı iyon kaynağı (LMIS/soğuk iyonizasyon sınıfı) — Exp71: plazma sınıfı yetersiz (B≥4×10⁴ A/m²/sr şart),2 (P + Si hattı),R&D,³¹P⁺/²⁹Si⁺ uyumlu kimya ayrıca AR-GE,C
+
+S1,S1.2,Wien kütle filtresi,2,COTS/CUS,²⁹Si izotop saflığı (Mod A),C
+
+S1,S1.3,Hızlandırma/yavaşlatma kolonu 5–20 keV ayarlanabilir,1,CUS,enerji yayılımı ΔE/E ≤ %1 (Exp66 saçılma bütçesi),C
+
+S1,S1.4,Demet akım geri besleme (Faraday + PID),2,CUS,atış başına doz tekrarlanabilirliği,B
+
+S2,S2.1,"Apertür plakası (Si MEMS, 1 cm² alan)",1 (+yedek),R&D,altin bant 10³-10⁴ demetcik (32 um uretim adimi - Exp79); M2'de 10²–10³,D (geliştirme)
+
+S2,S2.2,Blanker plakası (demetcik başına elektrostatik saptırıcı),1,R&D,kapı süresi ≤1 ms atış çevrimi (Exp65),D
+
+S2,S2.3,Mini lens dizisi,1,R&D,σ_nokta ≤ 2 nm (Exp66 baskın terim),D
+
+S2,S2.4,Blanker sürücü ASIC/anakartları (kanal başına programlanabilir atış),dizi boyutunca,CUS,SKY130 türevi kontrol çekirdeği (Exp58/64; R5 açık),C
+
+S2,S2.5,Kafa hizalama metrolojisi (kapasitif/optik),1 set,CUS,kafa-kademe göreli sapma ölçümü (§5.4),B
+
+S3,S3.1,IBIC algılama katmanlı substrat taşıyıcı (pikselli p-i-n diyot dizisi),yonga başına,CUS,"Exp72: C≤0,5 pF ile η≈1; η ≥ 0,9 şart (Exp67)",C
+
+S3,S3.2,Düşük gürültülü yük-amp (CSA) ön uç kartları,kanal sayısınca,CUS,"ENC, 5 keV P91 calisma noktasi iyon yukune gore (Exp72 yontemi, Exp91 noktasi)",C
+
+S3,S3.3,Sayım kapısı FPGA kartı (blanker geri besleme),1 set,COTS/CUS,kapı gecikmesi ≪ atış çevrimi,B
+
+S4,S4.1,Granit blok + hava izolatörleri,1,COTS,1–2 Hz köşe,C
+
+S4,S4.2,Aktif sönümleme tablası (jeofon + piezo),1,COTS,"0,5–100 Hz bandı",C
+
+S4,S4.3,Piezo kademe masası (Exp79; maglev kaldırıldı) (6 serbestlik),1,CUS,"artık titreşim payı σ_kademe ≤ 0,5 nm hedefi (Exp66)",C
+
+S4,S4.4,Lazer interferometre metroloji (3 eksen),1,COTS,pm sınıfı çözünürlük,C
+
+S4,S4.5,Yonga referans işaretleri + hizalama optiği,1 set,CUS,atış-anı sapma telafisi,B
+
+S5,S5.1,UHV ana oda + yük kilidi,1,CUS,≤10⁻⁸ mbar sınıfı,C
+
+S5,S5.2,Turbomoleküler + iyon pompa seti,1,COTS,—,B
+
+S5,S5.3,"Tavlama modülü (hızlı termal, yerinde veya hat-içi)",1,COTS,difüzyon bütçesi σ_tavlama (Exp66 ikincil terim),C
+
+S5,S5.4,²⁸Si/²⁹Si epitaksiyel substrat tedariği (Mod B banyosu),parti,CUS,f=%1 ± tolerans (Exp68 sağlam bolluk),C/parti
+
+S6,S6.1,"Kapalı çevrim soğutucu (pulse-tube, 4 K sınıfı)","1 (altın ölçek: PT420-sınıfı 2,0 W veya 2. PT)",COTS,"yalnız yonga adası soğutulur; Exp111 (@NL58, 156 hat): 4K okuma yükü 1,48 W@7,5 mW LNA; Exp112 NL163te 56 hat ile 0,55 W@7,8mW; LNA <=2,8 mW ise tek PT410 yeter",C
+
+S6,S6.2,Soğuk parmak + radyasyon kalkanları,1,CUS,yazma anı termal sapma donması,B
+
+S6,S6.3,Süperiletken mıknatıs (ESR alanı),1,COTS,"ornekte ~0,3-1,5 T; rezonator duzleminde <=0,4 T sarti (Exp109, kalkan/offset)",C
+
+S6,S6.4,"Mikrodalga hattı (kaynak, IQ modülatör, kriyo zayıflatıcılar)",kanal grubunca,COTS,GRAPE darbe sentezi (Exp61; ε≤10⁻³ şartı Exp68),C
+
+S6,S6.5,RF/ENDOR hattı,kanal grubunca,COTS,çekirdek adresleme bantları,B
+
+S6,S6.6,Paralel okuma elektronikleri (frekans çoğullamalı),R&D ölçeği,R&D,"Exp112: altin olcek 9000 kanal = 56-82 zincir (NL 110-160); termal Exp110-112 ile kapali; Exp111 sartname: hat-basi on-kuvvetlendirici <= 2,8 mW (NL=58 %25 pay; 2,1 mW InP HEMT capali); Exp112: NL hedef bandi 110-160 (Ql 800-1200; model optimumu 164 izgara kosesi - uyari ozette); Exp113: ton gucu <= -100 dBm/kanal (sikisma NLmax=316 capali; -90 dBmde 32ye duser)",D
+
+S6,S6.7,Tek-elektron okuma (SET/rf-SET) ön uçları,kanal grubunca,CUS/R&D,spin-ölçüm sadakati,C
+
+S6,S6.8,Seyreltme unitesi (MXC ~20 mK; S6.1 PT on-sogutma ustune),1,COTS,"BAZ kademe (kullanici karari Exp121: maliyet artisi serbest; saglam secenek baz). Exp117 1K sicak-okuma kolu maliyet-indirme alternatifi olarak sicilde; implant transferi gosterimi gelirse Cye inebilir",D
+
+S7,S7.1,Ana kontrol bilgisayarı + GPU (GRAPE sentez/seçim),1 küme,COTS,yazmaç başına sentez süresi (hesap tarafı),B
+
+S7,S7.2,AWG kartları (çok kanal),kanal grubunca,COTS,XY darbe doğruluğu (Exp68 ε bütçesi),C
+
+S7,S7.3,SKY130 yerel kontrol çipleri (Exp58 SEG8 hattı),parti,CUS,4 K çalışması Exp33 ile karakterize; kapanış Exp64'te açık (R5),C
+
+S7,S7.4,Senkronizasyon/saat dağıtımı,1,COTS,atış-spektroskopi zamanlaması,B
+
+S8,S8.1,`machine_control` fabrika yazılımı (yaz-ölç-seç-kalibre döngüsü),bu projede yazılır,simülasyon + testlerle teslim,,
+
+S8,S8.2,Blanker kapı denetleyici RTL (Verilog) + testbench,bu projede yazılır,yosys sentez kontrolü,,
+
+S8,S8.3,Spektroskopi fit + seçim motoru,Exp48/61 hatlarından taşınır,proje içi kod,,
+
+S8,S8.4,Sertifika/kayıt veritabanı (atış ve yazmaç kimlikleri),bu projede yazılır,ürün izlenebilirliği,,
+
+S9,S9.1,Kalibrasyon yongaları (bilinen donor desenleri),CUS,kabul testleri,,
+
+S9,S9.2,"Kaynak sarfiyatı (katot, gaz)",COTS,—,,
+
+S9,S9.3,Yedek apertür/blanker plakaları,R&D çıktısına bağlı,aşınma bilinmiyor,,
+

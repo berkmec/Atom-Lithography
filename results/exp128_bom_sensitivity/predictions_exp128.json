@@ -1,0 +1,25 @@
+{
+  "experiment": "exp128_bom_sensitivity",
+  "registered": "2026-11-22 (before running Exp128 Monte Carlo simulation)",
+  "question": "When the canonical 40-row BOM.csv ($2.531M central BOM-scope in Exp122) is expanded to 145 engineering parts (BOM_DETAILED.csv) including Exp124 deceleration/energy-filter/PH3 optics, Exp125 1.5 T/<=0.4 T active bucking cryo-magnet + Nb shield, Exp127 in-vacuum 8-ch IBIC frontend, fixed MEMS foundry NRE, and S9 spares, what are the 100,000-sample correlated Monte Carlo budget-cap exceedance probabilities against the binding $50M soft line and $100M hard cap (Exp122/H140), what drives variance (Tornado + RFQ coverage), and does EVPI break-even analysis vindicate the Exp121 20 mK dilution baseline over 1 K hot-readout R&D?",
+  "method": {
+    "n_samples": 100000,
+    "seed": 2026128,
+    "canonical_gate": "Verify BOM.csv SHA-256 unchanged and reproduce Exp121/122 NL55-B (0.560295033350 / 2159.00039876329) and NL163_central ($2,531,244.37 @ $720/u) within 1e-9.",
+    "model_a_detailed_mc": "Correlated log-normal Monte Carlo over all 137 priced hardware+spares parts in BOM_DETAILED.csv (usd_low=P10, usd_nom=P50, usd_high=P90) using Cholesky-decomposed Gaussian copula: within-subsystem correlation rho_sub=0.55, cross-R&D correlation rho_rd=0.45, global macro correlation rho_macro=0.25. Plus explicit Exp114 B/C chain-class regime uncertainty on S6.6 readout chains (80% Exp114 log-normal continuous band around $12.15k/chain + 20% C-class cryogenic procurement stress regime $45k-$100k/chain). Program multiplier M_prog modeled as stochastic log-normal spanning [3x, 10x] (P10=3.0, P50=5.5, P90=10.0) alongside fixed x3 and x10 slices.",
+    "model_b_canonical_plus_deltas": "Canonical Exp122 class-unit model with Exp114 unit calibration (log-normal P10=$190, P50=$720, P90=$1600), continuous chain class spanning [4.06, 16.875, 116.84], NL uniform over Exp112 spec band [110, 163], plus log-normal Exp124/125/127 + MEMS NRE + S9 engineering deltas.",
+    "m1_vs_m3": "Part-level M1 (single-beam lab prototype: 1 beamlet, 1 ion line, no MEMS multi-beam array, 1-4 readout chains, 20 mK or 1 K test insert) vs M3 (golden scale: 10^3-10^4 beamlets, 56 readout chains, 9000 channels) bottom-up scaling table.",
+    "evpi_20mk_vs_1k": "Decision-theoretic Expected Value & EVPI analysis comparing Exp121 20 mK dilution baseline (S6.8=D, $720k nom) vs Exp117/118/125 1 K hot-readout R&D transfer (S6.8=C, $110k nom; delta_hw ~$610k/machine) across probability of technical success p_succ in [0.1, 0.9], R&D cost C_RD in [$0.5M, $5.0M], and machine volume N_mach in {1, 2, 5, 10, 20, 50}, plus EVPI of the 6 vendor RFQs."
+  },
+  "success_rule": "CU1 and CU2 and CU6 PASS; CU3, CU4, CU5 scored honestly as computed.",
+  "predictions": [
+    "CU1_BOM_INTEGRITY: Canonical BOM.csv SHA-256 matches cee02adfd207e37bbbc6b66982226b27fa87c2be528ede2b762f72840759cfc2, Exp121/122 baseline gate reproduces within 1e-9, BOM_DETAILED.csv contains >=120 parts covering 40/40 canonical BOM IDs plus Exp124/125/127 deltas with exact roll-up reconciliation (<1e-6 error).",
+    "CU2_BOM_CAP_SAFETY: Under Model A (100,000-sample correlated MC on M3 BOM_DETAILED), P(BOM > $50M) < 0.001 and BOM P95 < $15M.",
+    "CU3_PROGRAM_SOFT_HARD_CAP: Under Model A with stochastic program multiplier (P10=3x, P50=5.5x, P90=10x), P(Program > $100M) < 0.05 (hard-cap breach probability < 5%) and P(Program > $50M) < 0.30.",
+    "CU4_BC_WALL_DOMINANCE: In BOM-scope Tornado sensitivity (Model A), S6.6 (readout chains / B-C wall), S2 (MEMS NRE/head), and S6.8 (dilution cryostat) together account for >= 50% of total BOM variance (R^2), and the 6 RFQ packages cover >= 75% of total BOM nominal cost.",
+    "CU5_EVPI_20MK_VINDICATION: For a single M3 machine (N_mach=1) with 1 K implanted-donor transfer R&D cost C_RD=$2.0M and p_succ=0.50, expected net value of pursuing 1 K R&D is negative (break-even requires N_mach >= 4 machines), quantitatively vindicating Exp121's 20 mK dilution baseline.",
+    "CU6_MC_CONVERGENCE: 100,000-sample Model A Program P50 and P95 converge within <= 1.0% of the first 50,000-sample half-split, and Monte Carlo standard error on P(Program > $100M) is < 0.001."
+  ],
+  "no_lab_measurement": true,
+  "no_supplier_quotes": true
+}

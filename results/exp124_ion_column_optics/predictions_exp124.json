@@ -1,0 +1,47 @@
+{
+  "experiment": "exp124_ion_column_optics",
+  "registered": "2026-11-22 (write-once before any Exp124 numerical computation)",
+  "no_lab_measurement": true,
+  "epistemic_tags": [
+    "Model",
+    "Analitik",
+    "Sayısal-Simülasyon",
+    "Literatür"
+  ],
+  "question": "1) Does a Liouville-consistent 10-15 keV -> 5 keV electrostatic retarding ion column (duoplasmatron + Wien filter + HDA energy filter + MEMS aperture/blanker + retarding immersion mini-lens) close the 5 keV brightness scaling gap uncovered in Exp91_budget_attack (_attack91.py) while respecting UHV breakdown, spherical/chromatic aberrations, and Exp72 IBIC efficiency? 2) How much does the Exp105 Mode-A selection yield (69.25% at isotropic sigma=3.8 nm) shift under realistic 3D anisotropic BCA straggle (Exp92 sigma_z=2.88 nm vs Exp91 Holmes sigma_z=5.27 nm), wafer surface truncation (z > 0), and stochastic 31P donor straggle?",
+  "success_rule": "CD1, CD2, CD3, CD4, CD6 all PASS (historical audit exact, Laplace/ray-trace Liouville & Scherzer verified, breakdown-safe 5 keV column closes sigma_spot<=1.50 nm & sigma_tot<=3.80 nm & eta_IBIC>=0.99, and portable Exp57/105 yield engine reproduces 49/100 and 277/400 verbatim). CD5, CD7, CD8 are scientific hypotheses scored verbatim either way.",
+  "predictions": [
+    {
+      "id": "CD1_audit_and_liouville_deficit",
+      "claim": "Unified chain reproduces Exp66/71/72/81/82/91_budget_attack/92/105 anchors within 1e-4 rel error, and proves via Liouville reduced brightness conservation (B_r = tau_f * J / (pi * T_i)) that _attack91.py at E_land=5 keV, alpha=10 mrad, r=1.5 nm, T_i=1.0 eV, tau_f=0.25 has a brightness deficit > 1.7x (B_net(5 keV) < B_req / 1.7)."
+    },
+    {
+      "id": "CD2_laplace_raytrace_verification",
+      "claim": "2D axisymmetric Laplace (spsolve) + DOP853 ray tracer conserves the Lagrange-Helmholtz Wronskian W = sqrt(Phi_0)*(r_g*r_a' - r_a*r_g') to < 1e-6 relative error, and Scherzer-integral C_c agrees with direct finite-difference chromatic ray tracing within < 5%."
+    },
+    {
+      "id": "CD3_pitch_breakdown_vs_viable_lens",
+      "claim": "Direct single-stage 32 um-pitch (D=18 um) 10->5 keV deceleration violates either UHV breakdown (E_max > 15 MV/m at WD<=0.1 mm) or spherical aberration (C_s > 50 mm at WD>=0.5 mm); whereas both Arch-B (0.50 mm-pitch immersion mini-lens, D=0.30 mm, WD~0.65 mm) and Arch-C (2-stage pre-retarded 32 um-pitch micro-lens, 10->5.5->5.0 keV, WD~0.08 mm) stay <= 12 MV/m with C_c <= 0.50 mm."
+    },
+    {
+      "id": "CD4_liouville_closed_5keV_window",
+      "claim": "At least one breakdown-safe (E_max <= 12 MV/m), Liouville-consistent 10-15 -> 5 keV column configuration achieves sigma_spot <= 1.50 nm, sigma_tot <= 3.80 nm (with Exp92 BCA 3.259 nm straggle), IBIC eta(5 keV, 0.5 pF) >= 0.99, Wien 32PH+ separation >= 3x slit width, and HDA dE_FWHM <= 2.0 eV."
+    },
+    {
+      "id": "CD5_boersch_coulomb_suppression",
+      "claim": "Upper-column extraction at 10-15 keV reduces Coulomb trajectory blur by >= 2.5x relative to 5 keV extraction, while single-beamlet simultaneous ion occupancy at 1 ion/ms is < 0.01 (intra-beamlet Boersch negligible)."
+    },
+    {
+      "id": "CD6_yield_engine_exact_audit",
+      "claim": "Portable Exp42/44/48 yield engine reproduces Exp57 AUDIT_S5_N1024 = 49/100 (0.4900) and Exp105 S3.8_N1024 = 277/400 (0.6925) bit-for-bit."
+    },
+    {
+      "id": "CD7_anisotropic_bca_vs_holmes_split",
+      "claim": "At N=1024 (fixed donor at R_p=6.46 nm, wafer surface z>0), tighter Exp92 BCA depth (sigma_z=2.88 nm) raises yield above Exp105 isotropic 0.6925 (both ANISO_BCA_PURE in [0.74, 0.88] and ANISO_P91_BCA > 0.70), while broader Exp91 Holmes depth (sigma_z=5.27 nm) + surface loss lowers ANISO_P91_HOLMES below 0.65."
+    },
+    {
+      "id": "CD8_stochastic_donor_straggle_penalty",
+      "claim": "Including realistic stochastic 31P donor 3D straggle (correlated donor-to-cloud offset, z_D > 0) reduces Mode-A N=1024 yield by at least 0.15 absolute compared to fixed-donor ANISO_P91_BCA."
+    }
+  ]
+}

@@ -1,0 +1,672 @@
+{
+ "experiment": "exp62_finalist_audit",
+ "t2e_model": {
+  "form": "1/T2e = 1/0.010s + k*f_fraction, T2e(4.7%)=0.3ms",
+  "k_per_fraction": 68794.32624113475,
+  "T2e0_s": 0.01
+ },
+ "Q_definition": "register-restricted shaped GAUSS500 GHZ fidelity lin-interp in 1/T2e",
+ "cells": {
+  "F0.5": {
+   "abundance_pct": 0.5,
+   "yield_frac": 0.26,
+   "T2e_s": 0.0022523961661341852,
+   "Q": 0.8658784147241424,
+   "lie_primary": {
+    "rank": 1023,
+    "full": 1023
+   },
+   "register_gauss_points": [
+    [
+     0.0,
+     0.9999933795391612
+    ],
+    [
+     100.0,
+     0.9093597521592427
+    ],
+    [
+     3333.3333,
+     0.500635184482955
+    ]
+   ],
+   "K8_selected_global": [
+    30006,
+    12136,
+    23633,
+    23783,
+    33006,
+    15302,
+    23262,
+    26195
+   ],
+   "source": "exp59 finalist59.json register audit"
+  },
+  "F1": {
+   "abundance_pct": 1.0,
+   "yield_frac": 0.51,
+   "T2e_s": 0.0012691269126912691,
+   "Q": 0.8223779789315134,
+   "lie_primary": {
+    "rank": 1023,
+    "full": 1023
+   },
+   "register_gauss_points": [
+    [
+     0.0,
+     0.9999631715929062
+    ],
+    [
+     100.0,
+     0.9093352138261058
+    ],
+    [
+     3333.3333,
+     0.5006362140349133
+    ]
+   ],
+   "K8_selected_global": [
+    27012,
+    17543,
+    23640,
+    21120,
+    22799,
+    27030,
+    11459,
+    27535
+   ]
+  },
+  "F2": {
+   "abundance_pct": 2.0,
+   "yield_frac": 0.69,
+   "T2e_s": 0.0006775588659298414,
+   "Q": 0.735421715110314,
+   "lie_primary": {
+    "rank": 1023,
+    "full": 1023
+   },
+   "register_gauss_points": [
+    [
+     0.0,
+     0.9999659804298691
+    ],
+    [
+     100.0,
+     0.9093373930749882
+    ],
+    [
+     3333.3333,
+     0.5006355540714249
+    ]
+   ],
+   "K8_selected_global": [
+    17582,
+    14272,
+    26499,
+    23838,
+    14452,
+    29662,
+    23841,
+    23810
+   ]
+  },
+  "F4.7": {
+   "abundance_pct": 4.7,
+   "yield_frac": 0.66,
+   "T2e_s": 0.0002999999999999999,
+   "Q": 0.5006360058245172,
+   "lie_primary": {
+    "rank": 1023,
+    "full": 1023
+   },
+   "register_gauss_points": [
+    [
+     0.0,
+     0.9999705882460567
+    ],
+    [
+     100.0,
+     0.909341246564767
+    ],
+    [
+     3333.3333,
+     0.5006360058245172
+    ]
+   ],
+   "K8_selected_global": [
+    9159,
+    20402,
+    20926,
+    18057,
+    20928,
+    21101,
+    17377,
+    23129
+   ]
+  }
+ },
+ "audits": {
+  "F1": {
+   "cloud_size": 452,
+   "K8_selected_global": [
+    27012,
+    17543,
+    23640,
+    21120,
+    22799,
+    27030,
+    11459,
+    27535
+   ],
+   "K4_global_indices": [
+    25243,
+    17543,
+    23640,
+    19914
+   ],
+   "K4_evaluation": {
+    "min_transition_gap_Hz": 32.27834113128483,
+    "retained_10kHz": 2,
+    "retained_30kHz": 2,
+    "retained_100kHz": 1,
+    "all10": false,
+    "all30": false,
+    "max_abs_J_Hz": 0.2648413999068382,
+    "min_pair_distance_nm": 1.295210950723858,
+    "nn_pairs": 0,
+    "resolving_time_s": 0.00011178209916687256,
+    "vandermonde_rank": 4,
+    "vandermonde_log10_condition": 2.3999557259034057,
+    "max_selected_spectator_J_Hz": 74.85111476721865,
+    "selected_spectator_NN_pairs": 0,
+    "selected_with_NN_spectator": 0,
+    "D0_leakage_proxy": 0.012323928023323463,
+    "D0_leakage_proxy_max": 0.012323680810640128,
+    "selected_global_indices": [
+     25243,
+     17543,
+     23640,
+     19914
+    ],
+    "selected_local_indices": [
+     244,
+     165,
+     235,
+     192
+    ]
+   },
+   "lie_rank_by_direction": {
+    "[001]": {
+     "rank": 1023,
+     "full": 1023,
+     "A_kHz": [
+      8.918359544300516,
+      1196.1464403244354,
+      700.9967316163883,
+      373.6873583962637
+     ]
+    },
+    "[110]": {
+     "rank": 1023,
+     "full": 1023,
+     "A_kHz": [
+      9.036920106714408,
+      1196.3055241585391,
+      594.1706319761684,
+      374.95570734700686
+     ]
+    },
+    "[111]": {
+     "rank": 1023,
+     "full": 1023,
+     "A_kHz": [
+      8.966623136079622,
+      1203.676408472007,
+      629.7793318562417,
+      373.7489559170503
+     ]
+    },
+    "[123]": {
+     "rank": 1023,
+     "full": 1023,
+     "A_kHz": [
+      8.94597621133561,
+      1201.4871118979145,
+      687.6434691613608,
+      373.4293687799819
+     ]
+    }
+   },
+   "register_restricted_K4": {
+    "selection_criterion": "maximize (min|A|, min full-environment gap) over C(8,4) inside K8 register",
+    "local_indices": [
+     165,
+     235,
+     205,
+     116
+    ],
+    "global_indices": [
+     17543,
+     23640,
+     21120,
+     11459
+    ],
+    "A_kHz_primary": [
+     1201.4871118979145,
+     687.6434691613608,
+     540.2628105154354,
+     311.12284420573394
+    ],
+    "min_abs_A_khz": 311.12284420573394,
+    "min_gap_khz": 6.893071031140163,
+    "lie_primary": {
+     "rank": 1023,
+     "full": 1023
+    },
+    "shaped_ghz": {
+     "RECT": {
+      "fidelities": {
+       "no_dephasing": 0.9836731206001657,
+       "T2e=0.3ms": 0.5005429783279325,
+       "T2e=10ms": 0.8959848885370472
+      },
+      "Pp": 0.9997576047182725,
+      "Pm": 0.9999517837030382,
+      "spectator_overlap": 0.9676321541049153,
+      "total_time_us": 2000.0,
+      "pulse_duration_us": 500.0
+     },
+     "GAUSS": {
+      "fidelities": {
+       "no_dephasing": 0.9999631715929062,
+       "T2e=0.3ms": 0.5006362140349133,
+       "T2e=10ms": 0.9093352138261058
+      },
+      "Pp": 0.9999998109101732,
+      "Pm": 0.9999999648176869,
+      "spectator_overlap": 0.9999265674497207,
+      "total_time_us": 2000.0,
+      "pulse_duration_us": 500.0
+     },
+     "HANN": {
+      "fidelities": {
+       "no_dephasing": 0.9999463239734672,
+       "T2e=0.3ms": 0.500636248313973,
+       "T2e=10ms": 0.9093214302751315
+      },
+      "Pp": 0.9999999998781641,
+      "Pm": 0.9999999990133404,
+      "spectator_overlap": 0.9998926490553705,
+      "total_time_us": 2000.0,
+      "pulse_duration_us": 500.0
+     }
+    }
+   },
+   "register_gauss_points": [
+    [
+     0.0,
+     0.9999631715929062
+    ],
+    [
+     100.0,
+     0.9093352138261058
+    ],
+    [
+     3333.3333,
+     0.5006362140349133
+    ]
+   ]
+  },
+  "F2": {
+   "cloud_size": 904,
+   "K8_selected_global": [
+    17582,
+    14272,
+    26499,
+    23838,
+    14452,
+    29662,
+    23841,
+    23810
+   ],
+   "K4_global_indices": [
+    26499,
+    14272,
+    23838,
+    29662
+   ],
+   "K4_evaluation": {
+    "min_transition_gap_Hz": 42580.97944314033,
+    "retained_10kHz": 4,
+    "retained_30kHz": 4,
+    "retained_100kHz": 2,
+    "all10": true,
+    "all30": true,
+    "max_abs_J_Hz": 2.4715412791330023,
+    "min_pair_distance_nm": 1.3846387489161207,
+    "nn_pairs": 0,
+    "resolving_time_s": 4.88410037074248e-06,
+    "vandermonde_rank": 4,
+    "vandermonde_log10_condition": 2.75130414628751,
+    "max_selected_spectator_J_Hz": 74.85111476721872,
+    "selected_spectator_NN_pairs": 0,
+    "selected_with_NN_spectator": 0,
+    "D0_leakage_proxy": 1.6650250718354627e-07,
+    "D0_leakage_proxy_max": 1.370260815088969e-07,
+    "selected_global_indices": [
+     26499,
+     14272,
+     23838,
+     29662
+    ],
+    "selected_local_indices": [
+     524,
+     276,
+     475,
+     595
+    ]
+   },
+   "lie_rank_by_direction": {
+    "[001]": {
+     "rank": 1023,
+     "full": 1023,
+     "A_kHz": [
+      1745.3215152348037,
+      709.4358821510367,
+      972.0216545882264,
+      506.4173851661421
+     ]
+    },
+    "[110]": {
+     "rank": 1023,
+     "full": 1023,
+     "A_kHz": [
+      1735.6527204235,
+      716.0968985084827,
+      935.2243902449096,
+      508.31967343215416
+     ]
+    },
+    "[111]": {
+     "rank": 1023,
+     "full": 1023,
+     "A_kHz": [
+      1738.8756520272677,
+      713.8765597226674,
+      947.4901450260152,
+      509.0089083111441
+     ]
+    },
+    "[123]": {
+     "rank": 1023,
+     "full": 1023,
+     "A_kHz": [
+      1746.7027716364182,
+      711.5769231230729,
+      958.8797744656132,
+      506.83092609353605
+     ]
+    }
+   },
+   "register_restricted_K4": {
+    "selection_criterion": "maximize (min|A|, min full-environment gap) over C(8,4) inside K8 register",
+    "local_indices": [
+     524,
+     282,
+     476,
+     474
+    ],
+    "global_indices": [
+     26499,
+     14452,
+     23841,
+     23810
+    ],
+    "A_kHz_primary": [
+     1746.7027716364182,
+     1097.4415656501667,
+     1206.7498930955587,
+     1189.128156700199
+    ],
+    "min_abs_A_khz": 1097.4415656501667,
+    "min_gap_khz": 8.810868197681382,
+    "lie_primary": {
+     "rank": 1023,
+     "full": 1023
+    },
+    "shaped_ghz": {
+     "RECT": {
+      "fidelities": {
+       "no_dephasing": 0.9837645725278468,
+       "T2e=0.3ms": 0.49383139319241304,
+       "T2e=10ms": 0.8948415876713582
+      },
+      "Pp": 0.9728344142437688,
+      "Pm": 0.9999939584069226,
+      "spectator_overlap": 0.9947220532935533,
+      "total_time_us": 2000.0,
+      "pulse_duration_us": 500.0
+     },
+     "GAUSS": {
+      "fidelities": {
+       "no_dephasing": 0.9999659804298691,
+       "T2e=0.3ms": 0.5006355540714249,
+       "T2e=10ms": 0.9093373930749882
+      },
+      "Pp": 0.9999971226498171,
+      "Pm": 0.9999999955435377,
+      "spectator_overlap": 0.9999348425735294,
+      "total_time_us": 2000.0,
+      "pulse_duration_us": 500.0
+     },
+     "HANN": {
+      "fidelities": {
+       "no_dephasing": 0.9999425843496637,
+       "T2e=0.3ms": 0.5006179918375903,
+       "T2e=10ms": 0.9093150558392422
+      },
+      "Pp": 0.9999268990030417,
+      "Pm": 0.9999999999902172,
+      "spectator_overlap": 0.9999582688487398,
+      "total_time_us": 2000.0,
+      "pulse_duration_us": 500.0
+     }
+    }
+   },
+   "register_gauss_points": [
+    [
+     0.0,
+     0.9999659804298691
+    ],
+    [
+     100.0,
+     0.9093373930749882
+    ],
+    [
+     3333.3333,
+     0.5006355540714249
+    ]
+   ]
+  },
+  "F4.7": {
+   "cloud_size": 2125,
+   "K8_selected_global": [
+    9159,
+    20402,
+    20926,
+    18057,
+    20928,
+    21101,
+    17377,
+    23129
+   ],
+   "K4_global_indices": [
+    17804,
+    20402,
+    18057,
+    27208
+   ],
+   "K4_evaluation": {
+    "min_transition_gap_Hz": 42.13239457085729,
+    "retained_10kHz": 2,
+    "retained_30kHz": 1,
+    "retained_100kHz": 0,
+    "all10": false,
+    "all30": false,
+    "max_abs_J_Hz": 0.3336582979934689,
+    "min_pair_distance_nm": 2.116522785578979,
+    "nn_pairs": 0,
+    "resolving_time_s": 5.272022196538298e-05,
+    "vandermonde_rank": 4,
+    "vandermonde_log10_condition": 2.4365474064071333,
+    "max_selected_spectator_J_Hz": 74.85111476721882,
+    "selected_spectator_NN_pairs": 0,
+    "selected_with_NN_spectator": 0,
+    "D0_leakage_proxy": 0.00013915423045000527,
+    "D0_leakage_proxy_max": 0.0001383466521428775,
+    "selected_global_indices": [
+     17804,
+     20402,
+     18057,
+     27208
+    ],
+    "selected_local_indices": [
+     829,
+     944,
+     840,
+     1253
+    ]
+   },
+   "lie_rank_by_direction": {
+    "[001]": {
+     "rank": 1023,
+     "full": 1023,
+     "A_kHz": [
+      19.110546711622245,
+      1253.4013013242677,
+      719.2254885577887,
+      371.3652600580079
+     ]
+    },
+    "[110]": {
+     "rank": 1023,
+     "full": 1023,
+     "A_kHz": [
+      18.738596156403908,
+      1274.423703663552,
+      716.3493862045705,
+      387.4209879412487
+     ]
+    },
+    "[111]": {
+     "rank": 1023,
+     "full": 1023,
+     "A_kHz": [
+      18.834856652060825,
+      1277.6710666265308,
+      716.362519092028,
+      385.25745014137937
+     ]
+    },
+    "[123]": {
+     "rank": 1023,
+     "full": 1023,
+     "A_kHz": [
+      18.968053675051245,
+      1273.5447181998884,
+      716.5857781788075,
+      380.24715207852404
+     ]
+    }
+   },
+   "register_restricted_K4": {
+    "selection_criterion": "maximize (min|A|, min full-environment gap) over C(8,4) inside K8 register",
+    "local_indices": [
+     944,
+     972,
+     980,
+     803
+    ],
+    "global_indices": [
+     20402,
+     20926,
+     21101,
+     17377
+    ],
+    "A_kHz_primary": [
+     1273.5447181998884,
+     769.5398018196902,
+     1181.1739006884047,
+     1198.5781503600194
+    ],
+    "min_abs_A_khz": 769.5398018196902,
+    "min_gap_khz": 8.702124835805968,
+    "lie_primary": {
+     "rank": 1023,
+     "full": 1023
+    },
+    "shaped_ghz": {
+     "RECT": {
+      "fidelities": {
+       "no_dephasing": 0.9858439574953661,
+       "T2e=0.3ms": 0.4951397113098374,
+       "T2e=10ms": 0.8967810238280473
+      },
+      "Pp": 0.9780597090224745,
+      "Pm": 0.9999980059533335,
+      "spectator_overlap": 0.9936206535758703,
+      "total_time_us": 2000.0,
+      "pulse_duration_us": 500.0
+     },
+     "GAUSS": {
+      "fidelities": {
+       "no_dephasing": 0.9999705882460567,
+       "T2e=0.3ms": 0.5006360058245172,
+       "T2e=10ms": 0.909341246564767
+      },
+      "Pp": 0.9999989052667582,
+      "Pm": 0.9999999987554213,
+      "spectator_overlap": 0.9999422724384492,
+      "total_time_us": 2000.0,
+      "pulse_duration_us": 500.0
+     },
+     "HANN": {
+      "fidelities": {
+       "no_dephasing": 0.999948032809722,
+       "T2e=0.3ms": 0.5006182449632397,
+       "T2e=10ms": 0.9093195613449092
+      },
+      "Pp": 0.9999278854341871,
+      "Pm": 0.9999999995809363,
+      "spectator_overlap": 0.9999681801070341,
+      "total_time_us": 2000.0,
+      "pulse_duration_us": 500.0
+     }
+    }
+   },
+   "register_gauss_points": [
+    [
+     0.0,
+     0.9999705882460567
+    ],
+    [
+     100.0,
+     0.909341246564767
+    ],
+    [
+     3333.3333,
+     0.5006360058245172
+    ]
+   ]
+  }
+ },
+ "effective_yield": {
+  "F0.5": 0.26,
+  "F1": 0.0,
+  "F2": 0.0,
+  "F4.7": 0.0
+ },
+ "best_cell": "F0.5",
+ "elapsed_sec": 200.62551379203796,
+ "no_lab_measurement": true
+}

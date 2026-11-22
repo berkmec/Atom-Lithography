@@ -1,0 +1,43 @@
+{
+ "experiment": "exp121_cost_decision",
+ "kind": "user_decision_application (no predictions; supersedes Exp121-transfer plan)",
+ "user_instruction": "makinenin pahalilasmaasina izin veriyorum; proje genelinde bu karari uygula (2026-10-26)",
+ "changes": [
+  "BOM S6.8: 1K stage class C -> dilution unit class D (baseline); hot-readout demoted to cost-down alternative",
+  "DESIGN S6: dilution is the baseline stage; cost increase allowed, robust option wins risk-cost trades",
+  "REVERSE_ENGINEERING principle 4: cheapening demoted to secondary criterion",
+  "Unchanged deliberately: chain-class triple reporting (market unknown, not a design lever); NL spec band (performance target, both operating points now costed); changelog history"
+ ],
+ "new_baseline_nl55_b": {
+  "frac": 0.5602950333504173,
+  "abs": 2159.00039876329
+ },
+ "numbers": {
+  "NL163_B": {
+   "frac": 0.4957430206854133,
+   "abs": 2159.00039876329
+  },
+  "NL163_central": {
+   "frac": 0.5215082033196196,
+   "abs": 2165.87539876329
+  },
+  "NL163_C": {
+   "frac": 0.6868950967321047,
+   "abs": 2249.00039876329
+  },
+  "NL67_B": {
+   "frac": 0.5449085720122843,
+   "abs": 2159.00039876329
+  },
+  "NL67_central": {
+   "frac": 0.5894231485340691,
+   "abs": 2165.87539876329
+  },
+  "NL67_C": {
+   "frac": 0.7765458891340123,
+   "abs": 2249.00039876329
+  }
+ },
+ "gate": "Exp116 D-scenario reproduced exactly (NL163 central 0.5215/2165.9)",
+ "no_lab_measurement": true
+}

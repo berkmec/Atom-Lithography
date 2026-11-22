@@ -1,0 +1,110 @@
+{
+ "experiment": "exp122_budget_cap",
+ "predictions": {
+  "experiment": "exp122_budget_cap",
+  "registered": "2026-10-26 (this session, after the user's cap instruction, before any USD computation)",
+  "user_decision": "Uretim maliyeti 50 milyon dolarin ustu olabilir; 100 milyon dolar son sinir (hard cap USD 100M).",
+  "question": "Where does the current design (40-row BOM with dilution baseline, Exp121) land against a USD 100M hard cap, using the Exp114 public-price calibration of the BOM class unit (median $720/unit, range $190-$1600)?",
+  "method": "golden() on current BOM (gate: NL55-B reproduces 0.56029503/2159.0004). Compute golden_cost and abs_cost for NL in {163, 67} x chain {B=10, central=16.875, C=100}. USD = units x unit_price for unit_price in {190, 720, 1600}. Program-cost sensitivity multipliers x3 and x10 on BOM-scope hardware (labeled assumptions covering facility/integration/R&D/contingency NOT in BOM scope). Headroom = 100M / estimate. No BOM changes in this experiment; the cap is recorded into DESIGN S8 + hypotheses + memory regardless of verdicts.",
+  "success_rule": "CT1 and CT2 as written (design inside the cap at worst BOM-scope corner and at central program estimate).",
+  "predictions": [
+   "CT1 WORST CORNER: golden-scale BOM-scope cost at NL163, chain C, unit $1600 is < USD 50M.",
+   "CT2 PROGRAM CENTRAL: NL163 central-chain estimate at $720/unit with x10 program multiplier is < USD 100M."
+  ],
+  "no_lab_measurement": true
+ },
+ "baseline_gate": {
+  "frac": 0.5602950333504173,
+  "abs": 2159.00039876329,
+  "ok": true
+ },
+ "verdicts": {
+  "CT1_worst_corner": true,
+  "CT1_measure": {
+   "usd": 13072987.481005417
+  },
+  "CT2_program_central": true,
+  "CT2_measure": {
+   "usd_x10": 25312443.664524373,
+   "headroom_vs_cap": 39.50626076460209,
+   "worst_corner_x10": 130729874.81005417
+  },
+  "success": true
+ },
+ "table": {
+  "NL163_B": {
+   "golden_units": 3130.617175628385,
+   "abs_units": 2159.00039876329,
+   "ref_units": 6315.0,
+   "frac": 0.4957430206854133,
+   "golden_usd_u190": 594817.2633693932,
+   "abs_usd_u190": 410210.0757650251,
+   "golden_usd_u720": 2254044.3664524374,
+   "abs_usd_u720": 1554480.2871095687,
+   "golden_usd_u1600": 5008987.481005416,
+   "abs_usd_u1600": 3454400.6380212638
+  },
+  "NL163_central": {
+   "golden_units": 3515.617175628385,
+   "abs_units": 2165.87539876329,
+   "ref_units": 6741.25,
+   "frac": 0.5215082033196196,
+   "golden_usd_u190": 667967.2633693932,
+   "abs_usd_u190": 411516.3257650251,
+   "golden_usd_u720": 2531244.3664524374,
+   "abs_usd_u720": 1559430.2871095687,
+   "golden_usd_u1600": 5624987.481005416,
+   "abs_usd_u1600": 3465400.6380212638
+  },
+  "NL163_C": {
+   "golden_units": 8170.617175628386,
+   "abs_units": 2249.00039876329,
+   "ref_units": 11895.0,
+   "frac": 0.6868950967321047,
+   "golden_usd_u190": 1552417.2633693933,
+   "abs_usd_u190": 427310.0757650251,
+   "golden_usd_u720": 5882844.366452438,
+   "abs_usd_u720": 1619280.2871095687,
+   "golden_usd_u1600": 13072987.481005417,
+   "abs_usd_u1600": 3598400.6380212638
+  },
+  "NL67_B": {
+   "golden_units": 3920.617175628385,
+   "abs_units": 2159.00039876329,
+   "ref_units": 7195.0,
+   "frac": 0.5449085720122843,
+   "golden_usd_u190": 744917.2633693932,
+   "abs_usd_u190": 410210.0757650251,
+   "golden_usd_u720": 2822844.3664524374,
+   "abs_usd_u720": 1554480.2871095687,
+   "golden_usd_u1600": 6272987.481005416,
+   "abs_usd_u1600": 3454400.6380212638
+  },
+  "NL67_central": {
+   "golden_units": 4848.742175628386,
+   "abs_units": 2165.87539876329,
+   "ref_units": 8226.25,
+   "frac": 0.5894231485340691,
+   "golden_usd_u190": 921261.0133693933,
+   "abs_usd_u190": 411516.3257650251,
+   "golden_usd_u720": 3491094.366452438,
+   "abs_usd_u720": 1559430.2871095687,
+   "golden_usd_u1600": 7757987.481005417,
+   "abs_usd_u1600": 3465400.6380212638
+  },
+  "NL67_C": {
+   "golden_units": 16070.617175628386,
+   "abs_units": 2249.00039876329,
+   "ref_units": 20695.0,
+   "frac": 0.7765458891340123,
+   "golden_usd_u190": 3053417.263369393,
+   "abs_usd_u190": 427310.0757650251,
+   "golden_usd_u720": 11570844.366452437,
+   "abs_usd_u720": 1619280.2871095687,
+   "golden_usd_u1600": 25712987.481005415,
+   "abs_usd_u1600": 3598400.6380212638
+  }
+ },
+ "caveat": "USD figures cover BOM-scope hardware only (40 rows) translated by the Exp114 unit calibration, whose implied unit spans 8.4x. Facility, cleanroom, integration labor, R&D amortization, spares and contingency are NOT in BOM rows; x3/x10 multipliers are labeled assumptions, not anchors. Cap compliance at program level therefore remains an estimate until supplier quotes exist.",
+ "no_lab_measurement": true
+}

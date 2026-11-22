@@ -1,0 +1,121 @@
+{
+ "experiment": "exp92_bca_straggle",
+ "predictions": {
+  "registered": "2026-10-21 (this session, before any BCA computation)",
+  "question": "The Exp66/91 straggle anchors (3/5/9 nm at 5/10/20 keV) are declared SRIM-scale assumptions and now carry 70% of the P91 variance. Does an in-house binary-collision Monte Carlo (ZBL potential, magic-formula scattering, Lindhard-Scharff electronic stopping) for P into amorphous Si reproduce that scale, and does the P91 budget + 5 keV optimum survive computed straggle?",
+  "method": "BCA: P (Z=15, M=31) into Si (N=5.0e22/cm3); mean free path L=N^-1/3; impact parameter p = pmax*sqrt(rand), pmax = L/sqrt(pi); ZBL screening with magic-formula scattering angle; nuclear energy transfer kinematics; LS velocity-proportional electronic loss per step; stop at E<25 eV or z>300 nm. N>=2000 ions at 3/4/5/6/7.5/10/15/20 keV, fixed RNG seed recorded. Outputs: lateral sigma_x(E), projected range Rp(E) (sanity vs literature scale: P 10 keV Rp ~13-15 nm). Budget: Exp91 P91 terms with straggle replaced by BCA curve (log-interp), recompute sigma_total and energy optimum. Honest labels: amorphous target (no channeling), classical BCA, no recombination/damage chemistry.",
+  "success_rule": "BO1 and BO2: BCA sigma_x at 5/10/20 keV within +/-40% of the 3/5/9 anchors, and sigma_total(P91 with BCA straggle) <= 4.2 nm.",
+  "predictions": [
+   "BO1 ANCHOR SCALE: BCA lateral sigma_x at 5, 10, 20 keV each within +/-40% of 3, 5, 9 nm.",
+   "BO2 BUDGET SURVIVES: sigma_total at P91 terms with BCA straggle(5 keV) <= 4.2 nm.",
+   "BO3 OPTIMUM STAYS: energy of minimum sigma_total (P91 terms, BCA straggle curve) lies in [4, 6] keV.",
+   "BO4 RANGE SANITY: BCA projected range Rp(10 keV) in [8, 22] nm."
+  ]
+ },
+ "verdicts": {
+  "BO1_anchor_scale": true,
+  "BO2_budget_survives": true,
+  "BO3_optimum_stays": false,
+  "BO4_range_sanity": true
+ },
+ "success_rule_met": true,
+ "bca": {
+  "E3": {
+   "E_keV": 3.0,
+   "sigma_x_nm": 2.446166290227142,
+   "sigma_y_nm": 2.360357761818743,
+   "Rp_nm": 4.754812049246454,
+   "Rp_std_nm": 2.2205036583157773,
+   "backscattered": 9
+  },
+  "E4": {
+   "E_keV": 4.0,
+   "sigma_x_nm": 2.7946743430160366,
+   "sigma_y_nm": 2.812803976220843,
+   "Rp_nm": 5.629767646951315,
+   "Rp_std_nm": 2.553014910185579,
+   "backscattered": 4
+  },
+  "E5": {
+   "E_keV": 5.0,
+   "sigma_x_nm": 3.2585495402330853,
+   "sigma_y_nm": 3.243810777142517,
+   "Rp_nm": 6.458214487196816,
+   "Rp_std_nm": 2.8790637068167695,
+   "backscattered": 12
+  },
+  "E6": {
+   "E_keV": 6.0,
+   "sigma_x_nm": 3.6007995569789184,
+   "sigma_y_nm": 3.494748096756035,
+   "Rp_nm": 6.992317850721267,
+   "Rp_std_nm": 3.2026322379121828,
+   "backscattered": 14
+  },
+  "E7.5": {
+   "E_keV": 7.5,
+   "sigma_x_nm": 4.113163488339512,
+   "sigma_y_nm": 4.057044433164064,
+   "Rp_nm": 8.181365354115583,
+   "Rp_std_nm": 3.5530254174152236,
+   "backscattered": 14
+  },
+  "E10": {
+   "E_keV": 10.0,
+   "sigma_x_nm": 4.873602053448934,
+   "sigma_y_nm": 4.784261913834783,
+   "Rp_nm": 9.600417633899815,
+   "Rp_std_nm": 4.110935030739668,
+   "backscattered": 9
+  },
+  "E15": {
+   "E_keV": 15.0,
+   "sigma_x_nm": 6.3317077022074635,
+   "sigma_y_nm": 6.418693052009957,
+   "Rp_nm": 11.836148166723964,
+   "Rp_std_nm": 5.154476874735741,
+   "backscattered": 15
+  },
+  "E20": {
+   "E_keV": 20.0,
+   "sigma_x_nm": 7.498819394270516,
+   "sigma_y_nm": 7.261445933815833,
+   "Rp_nm": 13.856873027814293,
+   "Rp_std_nm": 5.869241473231039,
+   "backscattered": 20
+  }
+ },
+ "sigma_total_P91_BCA": 3.7986026889780775,
+ "sweep_totals": {
+  "E3": 3.328237734212912,
+  "E4": 3.468016426937645,
+  "E5": 3.7986026889780775,
+  "E6": 4.068982265080341,
+  "E7.5": 4.508731948693388,
+  "E10": 5.198298403903072,
+  "E15": 6.577283626394191,
+  "E20": 7.705022364539088
+ },
+ "E_optimum": "E3",
+ "params": {
+  "A_SCR_angstrom": 0.12666061529356334,
+  "L_MFP_angstrom": 2.7144176165949063,
+  "P_MAX_angstrom": 1.5314461446813734,
+  "seed": 20261021,
+  "ions_per_energy": 2000
+ },
+ "elapsed_sec": 3.443352222442627,
+ "no_lab_measurement": true,
+ "detection_extension_posthoc": {
+  "E3_C0.05": 0.602728805896596,
+  "E3_C0.2": 0.4174843531794777,
+  "E3_C0.5": 0.12593206000660656,
+  "E4_C0.05": 0.9811045003718315,
+  "E4_C0.2": 0.9591839303366047,
+  "E4_C0.5": 0.8576119519584255,
+  "E5_C0.05": 0.9991902757906659,
+  "E5_C0.2": 0.9981056447931516,
+  "E5_C0.5": 0.9913660280019122
+ },
+ "detection_note": "Exp72 model verbatim; FRAC at 3/4 keV extrapolated (0.32/0.335). At C=0.5 pF detection collapses below 5 keV, restoring the 5 keV optimum once detection is priced in."
+}

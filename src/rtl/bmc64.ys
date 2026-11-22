@@ -1,0 +1,8 @@
+read_verilog -sv blanker_gate.v blanker_gate_spec.v blanker_miter.v
+chparam -set WATCHDOG_CYCLES 12 blanker_gate
+chparam -set WATCHDOG_CYCLES 12 blanker_gate_spec
+hierarchy -top blanker_miter
+proc
+async2sync
+flatten
+sat -verify -prove-asserts -seq 80 -set-init-zero -dump_vcd bmc_cex.vcd

@@ -1,0 +1,4595 @@
+{
+  "cad_version": "3.0-exp124-exp125-locked",
+  "units": "mm",
+  "tolerance_std": "ISO 2768-mK",
+  "no_lab_measurement": true,
+  "overall_pass": true,
+  "design_specs": {
+    "envelope_scale_s": 0.5,
+    "z_wafer_mm": 500.0,
+    "exp124_synced": true,
+    "column_total_height_mm": 562.66,
+    "column_max_od_mm": 110.0,
+    "column_est_mass_kg": 25.92,
+    "working_distance_mm": 0.25,
+    "lens_arch": "Arch-B (0.50 mm pitch, D=0.30 mm, E_gap=10.60 MV/m, Cc=2.660 mm, Cs=10.786 mm)",
+    "hv_grounding": "Wafer/Cryo/IBIC 0 V; üst kolon gömleği -5,0 kV; kaynak anodu +5,0 kV",
+    "ion_extract_keV": 10.0,
+    "ion_landing_keV": 5.0,
+    "energy_filter_type": "HDA-HiRes (R0=40 mm, E_pass=100 eV, slit=0.35 mm)",
+    "energy_filter_dE_eV": 0.453,
+    "spot_sigma_nm": 1.428,
+    "total_sigma_nm": 3.674,
+    "write_field_mm": 16.0,
+    "write_field_diagonal_mm": 22.627,
+    "beamlet_pitch_mm": 0.5,
+    "beamlet_pitch_um": 500.0,
+    "beamlet_array_grid": "32x32",
+    "beamlet_count": 1024,
+    "blanker_tile_count": 16,
+    "column_beam_bore_mm": 28.0,
+    "exp125_synced": true,
+    "magnet_coil_count": 8,
+    "magnet_clear_bore_mm": 150.0,
+    "magnet_split_gap_mm": 36.0,
+    "magnet_former_od_mm": 352.0,
+    "magnet_B_sample_T": 1.5,
+    "magnet_B_res_limit_T": 0.4,
+    "magnet_B_res_shielded_uT": 22.3,
+    "resonator_plane_dz_mm": -155.0,
+    "resonator_disk_od_mm": 50.0,
+    "nb_meissner_r_mm": [
+      32.0,
+      34.5
+    ],
+    "cryoperm_r_mm": [
+      39.0,
+      41.0
+    ],
+    "dr_mxc_temp_mK": 20.0,
+    "readout_chains_band": [
+      56,
+      82
+    ],
+    "readout_NL_band": [
+      110,
+      160
+    ],
+    "exp127_synced": true,
+    "ibic_csa_ic": "LTC6268 @ 100 K (1,2 µs / 1 GΩ, ENC=24,1 e⁻, η=0,99936)",
+    "wafer_diameter_mm": 50.0,
+    "carrier_size_mm": 80.0,
+    "chamber_r_out_mm": 192.0,
+    "chamber_r_in_mm": 182.0,
+    "chamber_inner_height_mm": 335.0,
+    "chamber_ref_volume_L": 269.3916,
+    "blanker_f1_fea_hz": 2591027.0,
+    "blanker_f1_analytic_hz": 2679466.6
+  },
+  "legacy_cleanup": {
+    "maglev_removed": true,
+    "piezo_6dof_present": true,
+    "dr_s68_present": true,
+    "energy_filter_hda_present": true,
+    "exp125_8coil_magnet_present": true
+  },
+  "master_assembly": {
+    "part_count": 143,
+    "subsystem_count": 7,
+    "total_mass_kg": 956.903,
+    "total_volume_L": 468.783,
+    "center_of_mass_mm": [
+      141.32,
+      -10.88,
+      443.33
+    ],
+    "bbox_min_mm": [
+      -845.0,
+      -490.0,
+      0.0
+    ],
+    "bbox_max_mm": [
+      1280.0,
+      391.0,
+      1400.0
+    ],
+    "bbox_span_mm": [
+      2125.0,
+      881.0,
+      1400.0
+    ],
+    "stl": {
+      "file": "atom_litho_machine.stl",
+      "bytes": 1502484,
+      "triangles": 30048,
+      "is_watertight": true,
+      "boundary_edges": 0,
+      "non_manifold_edges": 0,
+      "volume_mm3": 468627307.692,
+      "surface_area_mm2": 19818470.11,
+      "com_mm": [
+        590.408,
+        -6.004,
+        539.381
+      ]
+    }
+  },
+  "interference_audit": {
+    "pairs_checked": 10153,
+    "solid_clashes": 0,
+    "clashes": [],
+    "mated_contact_pairs": 115,
+    "margin_mm": 0.05
+  },
+  "critical_clearances": {
+    "exp124_archB_wafer_to_minilens_WD_mm": {
+      "value_mm": 0.25,
+      "min_req_mm": 0.2,
+      "pass": true
+    },
+    "beam_array_diagonal_to_bore_clearance_mm": {
+      "value_mm": 2.686,
+      "min_req_mm": 2.0,
+      "pass": true
+    },
+    "ibic_ring_to_archB_lens_radial_mm": {
+      "value_mm": 2.0,
+      "min_req_mm": 1.5,
+      "pass": true
+    },
+    "tile_carrier_to_magnet_bore_radial_mm": {
+      "value_mm": 9.0,
+      "min_req_mm": 5.0,
+      "pass": true
+    },
+    "aperture_frame_to_magnet_bore_radial_mm": {
+      "value_mm": 25.0,
+      "min_req_mm": 15.0,
+      "pass": true
+    },
+    "transfer_lens_to_magnet_bore_radial_mm": {
+      "value_mm": 33.0,
+      "min_req_mm": 20.0,
+      "pass": true
+    },
+    "hda_filter_to_top_flange_bore_radial_mm": {
+      "value_mm": 9.0,
+      "min_req_mm": 5.0,
+      "pass": true
+    },
+    "piezo_coarse_corner_to_magnet_bore_mm": {
+      "value_mm": 7.118,
+      "min_req_mm": 5.0,
+      "pass": true
+    },
+    "pedestal_to_cryoperm_radial_mm": {
+      "value_mm": 4.0,
+      "min_req_mm": 3.0,
+      "pass": true
+    },
+    "pedestal_to_bucking_coil_radial_mm": {
+      "value_mm": 4.0,
+      "min_req_mm": 3.0,
+      "pass": true
+    },
+    "nbtin_disk_inside_nb_meissner_radial_mm": {
+      "value_mm": 7.0,
+      "min_req_mm": 5.0,
+      "pass": true
+    },
+    "nb_meissner_inside_cryoperm_radial_mm": {
+      "value_mm": 4.5,
+      "min_req_mm": 3.0,
+      "pass": true
+    },
+    "magnet_former_to_chamber_wall_radial_mm": {
+      "value_mm": 6.0,
+      "min_req_mm": 5.0,
+      "pass": true
+    },
+    "cryo_4k_tube_in_36mm_magnet_split_z_mm": {
+      "value_mm": 0.5,
+      "min_req_mm": 0.5,
+      "pass": true
+    },
+    "cold_finger_inside_4k_shield_radial_mm": {
+      "value_mm": 2.5,
+      "min_req_mm": 1.5,
+      "pass": true
+    },
+    "dr_frame_to_granite_x_mm": {
+      "value_mm": 30.0,
+      "min_req_mm": 15.0,
+      "pass": true
+    },
+    "granite_to_loadlock_stand_x_mm": {
+      "value_mm": 15.0,
+      "min_req_mm": 10.0,
+      "pass": true
+    },
+    "transfer_arm_to_s7_panel_x_mm": {
+      "value_mm": 34.0,
+      "min_req_mm": 25.0,
+      "pass": true
+    },
+    "turbo_pump_to_granite_y_mm": {
+      "value_mm": 24.0,
+      "min_req_mm": 15.0,
+      "pass": true
+    }
+  },
+  "exp80_golden_envelope_audit": {
+    "scale_s": 0.5,
+    "bc1_carrier_ge_25mm": {
+      "value_mm": 80.0,
+      "limit_mm": 25.0,
+      "pass": true
+    },
+    "bc1_in_vacuum_bore_gt_carrier_diag": {
+      "value_mm": 150.0,
+      "carrier_diag_mm": 113.14,
+      "radial_margin_mm": 18.43,
+      "pass": true
+    },
+    "bc4_chamber_volume_one_eighth": {
+      "value_L": 34.861,
+      "ref_s1_L": 269.3916,
+      "ratio_to_s1": 0.12941,
+      "target_ratio": 0.125,
+      "pass": true
+    }
+  },
+  "exp124_column_audit": {
+    "exp124_synced": true,
+    "active_array": "32x32 = 1024 beamlets @ 0.50 mm pitch (16.0x16.0 mm)",
+    "blanker_tile_count": 16,
+    "beam_array_diagonal_mm": 22.627,
+    "s1_6_transfer_bore_mm": 28.0,
+    "s2_1_aperture_bore_mm": 28.0,
+    "beam_array_diagonal_to_bore_clearance_mm": 2.686,
+    "total_column_height_mm": 562.66,
+    "target_height_mm": 562.66,
+    "max_od_mm": 110.0,
+    "target_od_mm": 110.0,
+    "wd_mm": 0.25,
+    "target_wd_mm": 0.25,
+    "stage_mass_kg": 25.92,
+    "target_mass_kg": 25.92,
+    "pass": true
+  },
+  "exp125_magnet_audit": {
+    "exp125_synced": true,
+    "coil_count": 8,
+    "clear_bore_mm": 150.0,
+    "midplane_split_gap_mm": 36.0,
+    "former_od_mm": 352.0,
+    "resonator_z_loc_mm": -155.0,
+    "resonator_od_mm": 50.0,
+    "nb_meissner_r_mm": [
+      32.0,
+      34.5
+    ],
+    "cryoperm_r_mm": [
+      39.0,
+      41.0
+    ],
+    "pass": true
+  },
+  "exp84_modal_audit": {
+    "blanker_f1_fea_hz": 2591027.0,
+    "blanker_f1_analytic_hz": 2679466.6,
+    "fea_analytic_ratio": 0.967,
+    "servo_bw_hz": 1000.0,
+    "margin_ratio_over_servo": 2591.0,
+    "pass": true
+  },
+  "subsystems": {
+    "s1_ion_source_column": {
+      "code": "S1",
+      "title_tr": "Exp124 İyon Kaynağı & 10→5 keV Yavaşlatmalı Kolon",
+      "drawing_no": "ALM-300-S1",
+      "part_count": 11,
+      "stl": {
+        "file": "s1_ion_source_column.stl",
+        "bytes": 173484,
+        "triangles": 3468,
+        "is_watertight": true,
+        "boundary_edges": 0,
+        "non_manifold_edges": 0,
+        "volume_mm3": 3970394.181,
+        "surface_area_mm2": 290268.25,
+        "com_mm": [
+          0.0,
+          -4.449,
+          806.383
+        ]
+      },
+      "mass_kg": 25.977,
+      "volume_cm3": 3981.19,
+      "com_mm": [
+        0.0,
+        -5.44,
+        822.65
+      ],
+      "bbox_min_mm": [
+        -55.0,
+        -112.0,
+        539.66
+      ],
+      "bbox_max_mm": [
+        55.0,
+        55.0,
+        1062.66
+      ],
+      "bbox_span_mm": [
+        110.0,
+        167.0,
+        523.0
+      ]
+    },
+    "s2_mems_write_head": {
+      "code": "S2",
+      "title_tr": "Exp124 Arch-B Mini-Lens, Blanker & MEMS Yazma Kafası (32×32)",
+      "drawing_no": "ALM-300-S2",
+      "part_count": 9,
+      "stl": {
+        "file": "s2_mems_write_head.stl",
+        "bytes": 124884,
+        "triangles": 2496,
+        "is_watertight": true,
+        "boundary_edges": 0,
+        "non_manifold_edges": 0,
+        "volume_mm3": 234019.618,
+        "surface_area_mm2": 64672.01,
+        "com_mm": [
+          -0.0,
+          0.0,
+          515.965
+        ]
+      },
+      "mass_kg": 1.832,
+      "volume_cm3": 234.69,
+      "com_mm": [
+        -0.0,
+        -0.0,
+        515.89
+      ],
+      "bbox_min_mm": [
+        -66.0,
+        -66.0,
+        500.25
+      ],
+      "bbox_max_mm": [
+        66.0,
+        66.0,
+        539.61
+      ],
+      "bbox_span_mm": [
+        132.0,
+        132.0,
+        39.36
+      ]
+    },
+    "s3_ibic_detector_assembly": {
+      "code": "S3",
+      "title_tr": "IBIC Yonga Algılama & 100 K LTC6268 Ön-Uç (Exp127)",
+      "drawing_no": "ALM-300-S3",
+      "part_count": 7,
+      "stl": {
+        "file": "s3_ibic_detector_assembly.stl",
+        "bytes": 31884,
+        "triangles": 636,
+        "is_watertight": true,
+        "boundary_edges": 0,
+        "non_manifold_edges": 0,
+        "volume_mm3": 40623.726,
+        "surface_area_mm2": 25638.16,
+        "com_mm": [
+          0.0,
+          0.0,
+          496.949
+        ]
+      },
+      "mass_kg": 0.153,
+      "volume_cm3": 40.64,
+      "com_mm": [
+        0.0,
+        -0.0,
+        497.3
+      ],
+      "bbox_min_mm": [
+        -40.0,
+        -55.0,
+        494.0
+      ],
+      "bbox_max_mm": [
+        40.0,
+        55.0,
+        502.0
+      ],
+      "bbox_span_mm": [
+        80.0,
+        110.0,
+        8.0
+      ]
+    },
+    "s4_piezo_stage_interferometry": {
+      "code": "S4",
+      "title_tr": "6-DOF Piezo Kademe, Titreşim İzolasyonu & İnterferometri",
+      "drawing_no": "ALM-300-S4",
+      "part_count": 18,
+      "stl": {
+        "file": "s4_piezo_stage_interferometry.stl",
+        "bytes": 120084,
+        "triangles": 2400,
+        "is_watertight": true,
+        "boundary_edges": 0,
+        "non_manifold_edges": 0,
+        "volume_mm3": 110362164.588,
+        "surface_area_mm2": 3265670.63,
+        "com_mm": [
+          1.173,
+          0.902,
+          165.548
+        ]
+      },
+      "mass_kg": 302.367,
+      "volume_cm3": 110371.92,
+      "com_mm": [
+        1.16,
+        0.89,
+        164.12
+      ],
+      "bbox_min_mm": [
+        -450.0,
+        -350.0,
+        0.0
+      ],
+      "bbox_max_mm": [
+        450.0,
+        350.0,
+        471.0
+      ],
+      "bbox_span_mm": [
+        900.0,
+        700.0,
+        471.0
+      ]
+    },
+    "s5_uhv_chamber_loadlock": {
+      "code": "S5",
+      "title_tr": "s=0,5 UHV Ana Oda (Ø384/Ø364), Pompalar, Load-Lock & Flaş",
+      "drawing_no": "ALM-300-S5",
+      "part_count": 20,
+      "stl": {
+        "file": "s5_uhv_chamber_loadlock.stl",
+        "bytes": 176684,
+        "triangles": 3532,
+        "is_watertight": true,
+        "boundary_edges": 0,
+        "non_manifold_edges": 0,
+        "volume_mm3": 27269235.978,
+        "surface_area_mm2": 2347903.2,
+        "com_mm": [
+          130.563,
+          -106.174,
+          394.09
+        ]
+      },
+      "mass_kg": 169.988,
+      "volume_cm3": 27309.54,
+      "com_mm": [
+        130.44,
+        -61.99,
+        441.56
+      ],
+      "bbox_min_mm": [
+        -225.0,
+        -490.0,
+        0.0
+      ],
+      "bbox_max_mm": [
+        710.0,
+        391.0,
+        675.0
+      ],
+      "bbox_span_mm": [
+        935.0,
+        881.0,
+        675.0
+      ]
+    },
+    "s6_cryo_dr_magnet_readout": {
+      "code": "S6",
+      "title_tr": "Exp125 8-Bobinli 1,5 T / 22,3 µT Mıknatıs, 20 mK DR & Okuma",
+      "drawing_no": "ALM-300-S6",
+      "part_count": 66,
+      "stl": {
+        "file": "s6_cryo_dr_magnet_readout.stl",
+        "bytes": 868684,
+        "triangles": 17372,
+        "is_watertight": true,
+        "boundary_edges": 0,
+        "non_manifold_edges": 0,
+        "volume_mm3": 40446669.6,
+        "surface_area_mm2": 7037877.85,
+        "com_mm": [
+          -488.825,
+          -0.0,
+          519.65
+        ]
+      },
+      "mass_kg": 238.34,
+      "volume_cm3": 40540.37,
+      "com_mm": [
+        -446.16,
+        -0.0,
+        548.06
+      ],
+      "bbox_min_mm": [
+        -845.0,
+        -195.0,
+        0.0
+      ],
+      "bbox_max_mm": [
+        176.0,
+        195.0,
+        1220.0
+      ],
+      "bbox_span_mm": [
+        1021.0,
+        390.0,
+        1220.0
+      ]
+    },
+    "s7_electronics_rack_interconnect": {
+      "code": "S7",
+      "title_tr": "19\" Kontrol, RF/AWG, FPGA Kabini & Kriyo/UHV Geçiş Paneli",
+      "drawing_no": "ALM-300-S7",
+      "part_count": 12,
+      "stl": {
+        "file": "s7_electronics_rack_interconnect.stl",
+        "bytes": 7284,
+        "triangles": 144,
+        "is_watertight": true,
+        "boundary_edges": 0,
+        "non_manifold_edges": 0,
+        "volume_mm3": 286304200.0,
+        "surface_area_mm2": 6786440.0,
+        "com_mm": [
+          1022.559,
+          0.0,
+          696.432
+        ]
+      },
+      "mass_kg": 218.247,
+      "volume_cm3": 286304.2,
+      "com_mm": [
+        1003.65,
+        0.0,
+        671.35
+      ],
+      "bbox_min_mm": [
+        744.0,
+        -300.0,
+        0.0
+      ],
+      "bbox_max_mm": [
+        1280.0,
+        300.0,
+        1400.0
+      ],
+      "bbox_span_mm": [
+        536.0,
+        600.0,
+        1400.0
+      ]
+    }
+  },
+  "parts": {
+    "s1_transfer_lens": {
+      "subsystem": "s1_ion_source_column",
+      "bom_id": "S1.6",
+      "label_tr": "Telecentric Transfer Lensi (Einzel, Ø28/Ø84)",
+      "shape": "tube",
+      "material": "col_cu_ss",
+      "tol_mm": 0.02,
+      "triangles": 384,
+      "is_watertight": true,
+      "volume_analytic_mm3": 320191.123,
+      "volume_mesh_mm3": 319277.508,
+      "mass_kg": 2.6,
+      "com_mm": [
+        -0.0,
+        -0.0,
+        572.16
+      ],
+      "bbox_min_mm": [
+        -42.0,
+        -42.0,
+        539.66
+      ],
+      "bbox_max_mm": [
+        42.0,
+        42.0,
+        604.66
+      ]
+    },
+    "s1_hv_iso_16_15": {
+      "subsystem": "s1_ion_source_column",
+      "bom_id": "S1.3",
+      "label_tr": "HV Al₂O₃ Ara Yalıtkan (Transfer↔HDA, 10 mm)",
+      "shape": "tube",
+      "material": "alumina",
+      "tol_mm": 0.02,
+      "triangles": 384,
+      "is_watertight": true,
+      "volume_analytic_mm3": 11974.18,
+      "volume_mesh_mm3": 11940.014,
+      "mass_kg": 0.0473,
+      "com_mm": [
+        -0.0,
+        0.0,
+        609.66
+      ],
+      "bbox_min_mm": [
+        -41.0,
+        -41.0,
+        604.71
+      ],
+      "bbox_max_mm": [
+        41.0,
+        41.0,
+        614.61
+      ]
+    },
+    "s1_energy_filter": {
+      "subsystem": "s1_ion_source_column",
+      "bom_id": "S1.5",
+      "label_tr": "HDA-HiRes Enerji Süzgeci (R₀=40, ΔE=0,453 eV)",
+      "shape": "tube",
+      "material": "hda_mu_al",
+      "tol_mm": 0.02,
+      "triangles": 384,
+      "is_watertight": true,
+      "volume_analytic_mm3": 883714.305,
+      "volume_mesh_mm3": 881192.766,
+      "mass_kg": 5.2,
+      "com_mm": [
+        0.0,
+        -0.0,
+        662.16
+      ],
+      "bbox_min_mm": [
+        -55.0,
+        -55.0,
+        614.66
+      ],
+      "bbox_max_mm": [
+        55.0,
+        55.0,
+        709.66
+      ]
+    },
+    "s1_hv_iso_15_12": {
+      "subsystem": "s1_ion_source_column",
+      "bom_id": "S1.3",
+      "label_tr": "HV Al₂O₃ Ara Yalıtkan (HDA↔Wien, 8 mm)",
+      "shape": "tube",
+      "material": "alumina",
+      "tol_mm": 0.02,
+      "triangles": 384,
+      "is_watertight": true,
+      "volume_analytic_mm3": 17199.277,
+      "volume_mesh_mm3": 17150.202,
+      "mass_kg": 0.0679,
+      "com_mm": [
+        -0.0,
+        -0.0,
+        713.66
+      ],
+      "bbox_min_mm": [
+        -53.0,
+        -53.0,
+        709.71
+      ],
+      "bbox_max_mm": [
+        53.0,
+        53.0,
+        717.61
+      ]
+    },
+    "s1_wien_filter": {
+      "subsystem": "s1_ion_source_column",
+      "bom_id": "S1.2",
+      "label_tr": "ExB Wien Kütle Filtresi (h=150, OD=110, 0,45 T)",
+      "shape": "tube",
+      "material": "iron_yoke",
+      "tol_mm": 0.02,
+      "triangles": 384,
+      "is_watertight": true,
+      "volume_analytic_mm3": 1408533.066,
+      "volume_mesh_mm3": 1404514.039,
+      "mass_kg": 6.8,
+      "com_mm": [
+        -0.0,
+        -0.0,
+        792.66
+      ],
+      "bbox_min_mm": [
+        -55.0,
+        -55.0,
+        717.66
+      ],
+      "bbox_max_mm": [
+        55.0,
+        55.0,
+        867.66
+      ]
+    },
+    "s1_hv_iso_12_14": {
+      "subsystem": "s1_ion_source_column",
+      "bom_id": "S1.3",
+      "label_tr": "HV Al₂O₃ Ara Yalıtkan (Wien↔Kondansör, 6 mm)",
+      "shape": "tube",
+      "material": "alumina",
+      "tol_mm": 0.02,
+      "triangles": 384,
+      "is_watertight": true,
+      "volume_analytic_mm3": 7136.128,
+      "volume_mesh_mm3": 7115.766,
+      "mass_kg": 0.0282,
+      "com_mm": [
+        0.0,
+        0.0,
+        870.66
+      ],
+      "bbox_min_mm": [
+        -41.0,
+        -41.0,
+        867.71
+      ],
+      "bbox_max_mm": [
+        41.0,
+        41.0,
+        873.61
+      ]
+    },
+    "s1_condenser_lens": {
+      "subsystem": "s1_ion_source_column",
+      "bom_id": "S1.4",
+      "label_tr": "Çıkarım & Kondansör Einzel Lensi (10 keV)",
+      "shape": "tube",
+      "material": "col_cu_ss",
+      "tol_mm": 0.02,
+      "triangles": 384,
+      "is_watertight": true,
+      "volume_analytic_mm3": 235242.458,
+      "volume_mesh_mm3": 234571.231,
+      "mass_kg": 2.1,
+      "com_mm": [
+        0.0,
+        -0.0,
+        896.16
+      ],
+      "bbox_min_mm": [
+        -42.0,
+        -42.0,
+        873.66
+      ],
+      "bbox_max_mm": [
+        42.0,
+        42.0,
+        918.66
+      ]
+    },
+    "s1_hv_iso_14_11": {
+      "subsystem": "s1_ion_source_column",
+      "bom_id": "S1.3",
+      "label_tr": "HV Seramik Kırıcı (+5 kV↔−5 kV, 4 mm)",
+      "shape": "tube",
+      "material": "alumina",
+      "tol_mm": 0.02,
+      "triangles": 384,
+      "is_watertight": true,
+      "volume_analytic_mm3": 4717.101,
+      "volume_mesh_mm3": 4703.642,
+      "mass_kg": 0.0186,
+      "com_mm": [
+        -0.0,
+        -0.0,
+        920.66
+      ],
+      "bbox_min_mm": [
+        -41.0,
+        -41.0,
+        918.71
+      ],
+      "bbox_max_mm": [
+        41.0,
+        41.0,
+        922.61
+      ]
+    },
+    "s1_duoplasmatron": {
+      "subsystem": "s1_ion_source_column",
+      "bom_id": "S1.1",
+      "label_tr": "Duoplazmatron İyon Kaynağı (+5 kV, h=140, OD=90)",
+      "shape": "cyl",
+      "material": "ss316ln",
+      "tol_mm": 0.05,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 890641.517,
+      "volume_mesh_mm3": 888100.212,
+      "mass_kg": 7.5,
+      "com_mm": [
+        0.0,
+        0.0,
+        992.66
+      ],
+      "bbox_min_mm": [
+        -45.0,
+        -45.0,
+        922.66
+      ],
+      "bbox_max_mm": [
+        45.0,
+        45.0,
+        1062.66
+      ]
+    },
+    "s1_ph3_manifold": {
+      "subsystem": "s1_ion_source_column",
+      "bom_id": "S1.1",
+      "label_tr": "PH₃ Toksik Gaz Besleme Manifoldu",
+      "shape": "box",
+      "material": "ss316ln",
+      "tol_mm": 0.2,
+      "triangles": 12,
+      "is_watertight": true,
+      "volume_analytic_mm3": 198912.0,
+      "volume_mesh_mm3": 198912.0,
+      "mass_kg": 1.5913,
+      "com_mm": [
+        -0.0,
+        -88.0,
+        992.66
+      ],
+      "bbox_min_mm": [
+        -28.0,
+        -112.0,
+        955.66
+      ],
+      "bbox_max_mm": [
+        28.0,
+        -64.0,
+        1029.66
+      ]
+    },
+    "s1_ph3_feed_pipe": {
+      "subsystem": "s1_ion_source_column",
+      "bom_id": "S1.1",
+      "label_tr": "PH₃ Koaksiyel Besleme Borusu",
+      "shape": "cyl",
+      "material": "ss316ln",
+      "tol_mm": 0.1,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 2924.823,
+      "volume_mesh_mm3": 2916.477,
+      "mass_kg": 0.0234,
+      "com_mm": [
+        -0.0,
+        -54.5,
+        992.66
+      ],
+      "bbox_min_mm": [
+        -7.0,
+        -64.0,
+        985.66
+      ],
+      "bbox_max_mm": [
+        7.0,
+        -45.0,
+        999.66
+      ]
+    },
+    "s2_mini_lens_plate": {
+      "subsystem": "s2_mems_write_head",
+      "bom_id": "S2.3",
+      "label_tr": "Arch-B Yavaşlatıcı Mini-Lens (32×32, 0,50 mm)",
+      "shape": "cyl",
+      "material": "si_mems",
+      "tol_mm": 0.005,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 4976.283,
+      "volume_mesh_mm3": 4962.084,
+      "mass_kg": 0.2,
+      "com_mm": [
+        -0.0,
+        -0.0,
+        501.13
+      ],
+      "bbox_min_mm": [
+        -30.0,
+        -30.0,
+        500.25
+      ],
+      "bbox_max_mm": [
+        30.0,
+        30.0,
+        502.01
+      ]
+    },
+    "s2_spacer_lower": {
+      "subsystem": "s2_mems_write_head",
+      "bom_id": "S2.3",
+      "label_tr": "Alt HV Al₂O₃ Ara Halkası (1,0 mm)",
+      "shape": "tube",
+      "material": "alumina",
+      "tol_mm": 0.005,
+      "triangles": 384,
+      "is_watertight": true,
+      "volume_analytic_mm3": 799.221,
+      "volume_mesh_mm3": 796.941,
+      "mass_kg": 0.0032,
+      "com_mm": [
+        -0.0,
+        -0.0,
+        502.51
+      ],
+      "bbox_min_mm": [
+        -29.0,
+        -29.0,
+        502.03
+      ],
+      "bbox_max_mm": [
+        29.0,
+        29.0,
+        502.99
+      ]
+    },
+    "s2_blanker_plate": {
+      "subsystem": "s2_mems_write_head",
+      "bom_id": "S2.2",
+      "label_tr": "Eş-Adımlı 0,50 mm Blanker + Stop (32×32, h=4)",
+      "shape": "cyl",
+      "material": "si_mems",
+      "tol_mm": 0.005,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 11309.734,
+      "volume_mesh_mm3": 11277.463,
+      "mass_kg": 0.12,
+      "com_mm": [
+        -0.0,
+        -0.0,
+        505.01
+      ],
+      "bbox_min_mm": [
+        -30.0,
+        -30.0,
+        503.01
+      ],
+      "bbox_max_mm": [
+        30.0,
+        30.0,
+        507.01
+      ]
+    },
+    "s2_tile_carrier": {
+      "subsystem": "s2_mems_write_head",
+      "bom_id": "S2.4",
+      "label_tr": "16× 64-Kanallı SKY130 Karo Halkası (1.024 ch)",
+      "shape": "tube",
+      "material": "fr4_rogers",
+      "tol_mm": 0.02,
+      "triangles": 384,
+      "is_watertight": true,
+      "volume_analytic_mm3": 41871.147,
+      "volume_mesh_mm3": 41751.674,
+      "mass_kg": 0.1005,
+      "com_mm": [
+        -0.0,
+        -0.0,
+        505.01
+      ],
+      "bbox_min_mm": [
+        -66.0,
+        -66.0,
+        503.01
+      ],
+      "bbox_max_mm": [
+        66.0,
+        66.0,
+        507.01
+      ]
+    },
+    "s2_spacer_upper": {
+      "subsystem": "s2_mems_write_head",
+      "bom_id": "S2.1",
+      "label_tr": "Üst HV Al₂O₃ Ara Halkası (0,65 mm)",
+      "shape": "tube",
+      "material": "alumina",
+      "tol_mm": 0.005,
+      "triangles": 384,
+      "is_watertight": true,
+      "volume_analytic_mm3": 507.838,
+      "volume_mesh_mm3": 506.389,
+      "mass_kg": 0.002,
+      "com_mm": [
+        -0.0,
+        0.0,
+        507.34
+      ],
+      "bbox_min_mm": [
+        -29.0,
+        -29.0,
+        507.03
+      ],
+      "bbox_max_mm": [
+        29.0,
+        29.0,
+        507.64
+      ]
+    },
+    "s2_aperture_plate": {
+      "subsystem": "s2_mems_write_head",
+      "bom_id": "S2.1",
+      "label_tr": "MEMS Apertür & Tutucu (h=24, Ø28/Ø100)",
+      "shape": "tube",
+      "material": "invar36",
+      "tol_mm": 0.01,
+      "triangles": 384,
+      "is_watertight": true,
+      "volume_analytic_mm3": 173717.507,
+      "volume_mesh_mm3": 173221.832,
+      "mass_kg": 1.4,
+      "com_mm": [
+        -0.0,
+        0.0,
+        519.66
+      ],
+      "bbox_min_mm": [
+        -50.0,
+        -50.0,
+        507.66
+      ],
+      "bbox_max_mm": [
+        50.0,
+        50.0,
+        531.66
+      ]
+    },
+    "s2_mount_strut_1": {
+      "subsystem": "s2_mems_write_head",
+      "bom_id": "S2.5",
+      "label_tr": "Kinematik Kolon Bağlantı Dikmesi #1 (8 mm)",
+      "shape": "cyl",
+      "material": "ti6al4v",
+      "tol_mm": 0.01,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 502.576,
+      "volume_mesh_mm3": 501.142,
+      "mass_kg": 0.0022,
+      "com_mm": [
+        18.0,
+        31.18,
+        535.66
+      ],
+      "bbox_min_mm": [
+        13.5,
+        26.68,
+        531.71
+      ],
+      "bbox_max_mm": [
+        22.5,
+        35.68,
+        539.61
+      ]
+    },
+    "s2_mount_strut_2": {
+      "subsystem": "s2_mems_write_head",
+      "bom_id": "S2.5",
+      "label_tr": "Kinematik Kolon Bağlantı Dikmesi #2 (8 mm)",
+      "shape": "cyl",
+      "material": "ti6al4v",
+      "tol_mm": 0.01,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 502.576,
+      "volume_mesh_mm3": 501.142,
+      "mass_kg": 0.0022,
+      "com_mm": [
+        -36.0,
+        0.0,
+        535.66
+      ],
+      "bbox_min_mm": [
+        -40.5,
+        -4.5,
+        531.71
+      ],
+      "bbox_max_mm": [
+        -31.5,
+        4.5,
+        539.61
+      ]
+    },
+    "s2_mount_strut_3": {
+      "subsystem": "s2_mems_write_head",
+      "bom_id": "S2.5",
+      "label_tr": "Kinematik Kolon Bağlantı Dikmesi #3 (8 mm)",
+      "shape": "cyl",
+      "material": "ti6al4v",
+      "tol_mm": 0.01,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 502.576,
+      "volume_mesh_mm3": 501.142,
+      "mass_kg": 0.0022,
+      "com_mm": [
+        18.0,
+        -31.18,
+        535.66
+      ],
+      "bbox_min_mm": [
+        13.5,
+        -35.68,
+        531.71
+      ],
+      "bbox_max_mm": [
+        22.5,
+        -26.68,
+        539.61
+      ]
+    },
+    "s3_wafer_carrier": {
+      "subsystem": "s3_ibic_detector_assembly",
+      "bom_id": "S3.1",
+      "label_tr": "AlN Yonga Taşıyıcı (80×80×5 mm, Exp80 BC1)",
+      "shape": "box",
+      "material": "aln_ceramic",
+      "tol_mm": 0.02,
+      "triangles": 12,
+      "is_watertight": true,
+      "volume_analytic_mm3": 32000.0,
+      "volume_mesh_mm3": 32000.0,
+      "mass_kg": 0.1043,
+      "com_mm": [
+        0.0,
+        0.0,
+        496.5
+      ],
+      "bbox_min_mm": [
+        -40.0,
+        -40.0,
+        494.0
+      ],
+      "bbox_max_mm": [
+        40.0,
+        40.0,
+        499.0
+      ]
+    },
+    "s3_silicon_wafer": {
+      "subsystem": "s3_ibic_detector_assembly",
+      "bom_id": "S5.4",
+      "label_tr": "Ø50 mm ²⁸Si/²⁹Si (f=%1) Epitaksiyel Yonga (0 V)",
+      "shape": "cyl",
+      "material": "si_mems",
+      "tol_mm": 0.01,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 1963.495,
+      "volume_mesh_mm3": 1957.893,
+      "mass_kg": 0.0046,
+      "com_mm": [
+        -0.0,
+        -0.0,
+        499.5
+      ],
+      "bbox_min_mm": [
+        -25.0,
+        -25.0,
+        499.0
+      ],
+      "bbox_max_mm": [
+        25.0,
+        25.0,
+        500.0
+      ]
+    },
+    "s3_ibic_contact_ring": {
+      "subsystem": "s3_ibic_detector_assembly",
+      "bom_id": "S3.1",
+      "label_tr": "BeCu/Au IBIC Kontak Halkası (Ø64/Ø78, WD paylı)",
+      "shape": "tube",
+      "material": "becu",
+      "tol_mm": 0.02,
+      "triangles": 384,
+      "is_watertight": true,
+      "volume_analytic_mm3": 3122.743,
+      "volume_mesh_mm3": 3113.833,
+      "mass_kg": 0.0258,
+      "com_mm": [
+        0.0,
+        -0.0,
+        500.0
+      ],
+      "bbox_min_mm": [
+        -39.0,
+        -39.0,
+        499.0
+      ],
+      "bbox_max_mm": [
+        39.0,
+        39.0,
+        501.0
+      ]
+    },
+    "s3_ibic_csa_pos": {
+      "subsystem": "s3_ibic_detector_assembly",
+      "bom_id": "S3.2",
+      "label_tr": "100 K LTC6268 CSA (+Y, ENC=24,1 e⁻, η=0,99936)",
+      "shape": "box",
+      "material": "fr4_rogers",
+      "tol_mm": 0.05,
+      "triangles": 12,
+      "is_watertight": true,
+      "volume_analytic_mm3": 960.0,
+      "volume_mesh_mm3": 960.0,
+      "mass_kg": 0.0023,
+      "com_mm": [
+        0.0,
+        46.0,
+        496.0
+      ],
+      "bbox_min_mm": [
+        -15.0,
+        42.0,
+        494.0
+      ],
+      "bbox_max_mm": [
+        15.0,
+        50.0,
+        498.0
+      ]
+    },
+    "s3_ibic_csa_neg": {
+      "subsystem": "s3_ibic_detector_assembly",
+      "bom_id": "S3.2",
+      "label_tr": "100 K LTC6268 CSA (−Y, 1,2 µs / 1 GΩ, Exp127)",
+      "shape": "box",
+      "material": "fr4_rogers",
+      "tol_mm": 0.05,
+      "triangles": 12,
+      "is_watertight": true,
+      "volume_analytic_mm3": 960.0,
+      "volume_mesh_mm3": 960.0,
+      "mass_kg": 0.0023,
+      "com_mm": [
+        0.0,
+        -46.0,
+        496.0
+      ],
+      "bbox_min_mm": [
+        -15.0,
+        -50.0,
+        494.0
+      ],
+      "bbox_max_mm": [
+        15.0,
+        -42.0,
+        498.0
+      ]
+    },
+    "s3_hv_bias_shield_pos": {
+      "subsystem": "s3_ibic_detector_assembly",
+      "bom_id": "S3.3",
+      "label_tr": "HV Besleme & Faraday Koruma Kalkanı (+Y)",
+      "shape": "box",
+      "material": "becu",
+      "tol_mm": 0.05,
+      "triangles": 12,
+      "is_watertight": true,
+      "volume_analytic_mm3": 816.0,
+      "volume_mesh_mm3": 816.0,
+      "mass_kg": 0.0067,
+      "com_mm": [
+        0.0,
+        53.5,
+        498.0
+      ],
+      "bbox_min_mm": [
+        -17.0,
+        52.0,
+        494.0
+      ],
+      "bbox_max_mm": [
+        17.0,
+        55.0,
+        502.0
+      ]
+    },
+    "s3_hv_bias_shield_neg": {
+      "subsystem": "s3_ibic_detector_assembly",
+      "bom_id": "S3.3",
+      "label_tr": "HV Besleme & Faraday Koruma Kalkanı (−Y)",
+      "shape": "box",
+      "material": "becu",
+      "tol_mm": 0.05,
+      "triangles": 12,
+      "is_watertight": true,
+      "volume_analytic_mm3": 816.0,
+      "volume_mesh_mm3": 816.0,
+      "mass_kg": 0.0067,
+      "com_mm": [
+        0.0,
+        -53.5,
+        498.0
+      ],
+      "bbox_min_mm": [
+        -17.0,
+        -55.0,
+        494.0
+      ],
+      "bbox_max_mm": [
+        17.0,
+        -52.0,
+        502.0
+      ]
+    },
+    "s4_air_isolator_1": {
+      "subsystem": "s4_piezo_stage_interferometry",
+      "bom_id": "S4.1",
+      "label_tr": "Hava Yaylı Pnömatik İzolatör #1 (1–2 Hz)",
+      "shape": "cyl",
+      "material": "rubber_air",
+      "tol_mm": 0.5,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 679589.323,
+      "volume_mesh_mm3": 677650.222,
+      "mass_kg": 1.2233,
+      "com_mm": [
+        -350.0,
+        -250.0,
+        40.0
+      ],
+      "bbox_min_mm": [
+        -402.0,
+        -302.0,
+        0.0
+      ],
+      "bbox_max_mm": [
+        -298.0,
+        -198.0,
+        80.0
+      ]
+    },
+    "s4_air_isolator_2": {
+      "subsystem": "s4_piezo_stage_interferometry",
+      "bom_id": "S4.1",
+      "label_tr": "Hava Yaylı Pnömatik İzolatör #2 (1–2 Hz)",
+      "shape": "cyl",
+      "material": "rubber_air",
+      "tol_mm": 0.5,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 679589.323,
+      "volume_mesh_mm3": 677650.222,
+      "mass_kg": 1.2233,
+      "com_mm": [
+        350.0,
+        -250.0,
+        40.0
+      ],
+      "bbox_min_mm": [
+        298.0,
+        -302.0,
+        0.0
+      ],
+      "bbox_max_mm": [
+        402.0,
+        -198.0,
+        80.0
+      ]
+    },
+    "s4_air_isolator_3": {
+      "subsystem": "s4_piezo_stage_interferometry",
+      "bom_id": "S4.1",
+      "label_tr": "Hava Yaylı Pnömatik İzolatör #3 (1–2 Hz)",
+      "shape": "cyl",
+      "material": "rubber_air",
+      "tol_mm": 0.5,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 679589.323,
+      "volume_mesh_mm3": 677650.222,
+      "mass_kg": 1.2233,
+      "com_mm": [
+        350.0,
+        250.0,
+        40.0
+      ],
+      "bbox_min_mm": [
+        298.0,
+        198.0,
+        0.0
+      ],
+      "bbox_max_mm": [
+        402.0,
+        302.0,
+        80.0
+      ]
+    },
+    "s4_air_isolator_4": {
+      "subsystem": "s4_piezo_stage_interferometry",
+      "bom_id": "S4.1",
+      "label_tr": "Hava Yaylı Pnömatik İzolatör #4 (1–2 Hz)",
+      "shape": "cyl",
+      "material": "rubber_air",
+      "tol_mm": 0.5,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 679589.323,
+      "volume_mesh_mm3": 677650.222,
+      "mass_kg": 1.2233,
+      "com_mm": [
+        -350.0,
+        250.0,
+        40.0
+      ],
+      "bbox_min_mm": [
+        -402.0,
+        198.0,
+        0.0
+      ],
+      "bbox_max_mm": [
+        -298.0,
+        302.0,
+        80.0
+      ]
+    },
+    "s4_granite_base": {
+      "subsystem": "s4_piezo_stage_interferometry",
+      "bom_id": "S4.1",
+      "label_tr": "Optik Granit Taban Bloğu (900×700×120)",
+      "shape": "box",
+      "material": "granite",
+      "tol_mm": 0.05,
+      "triangles": 12,
+      "is_watertight": true,
+      "volume_analytic_mm3": 75600000.0,
+      "volume_mesh_mm3": 75600000.0,
+      "mass_kg": 223.02,
+      "com_mm": [
+        0.0,
+        0.0,
+        140.0
+      ],
+      "bbox_min_mm": [
+        -450.0,
+        -350.0,
+        80.0
+      ],
+      "bbox_max_mm": [
+        450.0,
+        350.0,
+        200.0
+      ]
+    },
+    "s4_active_table": {
+      "subsystem": "s4_piezo_stage_interferometry",
+      "bom_id": "S4.2",
+      "label_tr": "Aktif Sönümleme Tablası (0,5–100 Hz)",
+      "shape": "box",
+      "material": "honeycomb_steel",
+      "tol_mm": 0.05,
+      "triangles": 12,
+      "is_watertight": true,
+      "volume_analytic_mm3": 30504000.0,
+      "volume_mesh_mm3": 30504000.0,
+      "mass_kg": 67.1088,
+      "com_mm": [
+        0.0,
+        0.0,
+        230.0
+      ],
+      "bbox_min_mm": [
+        -410.0,
+        -310.0,
+        200.0
+      ],
+      "bbox_max_mm": [
+        410.0,
+        310.0,
+        260.0
+      ]
+    },
+    "s4_stage_pedestal": {
+      "subsystem": "s4_piezo_stage_interferometry",
+      "bom_id": "S4.3",
+      "label_tr": "Invar Tüp Kademe Kaidesi (R=45..52 mm)",
+      "shape": "tube",
+      "material": "invar36",
+      "tol_mm": 0.02,
+      "triangles": 384,
+      "is_watertight": true,
+      "volume_analytic_mm3": 294373.515,
+      "volume_mesh_mm3": 293533.566,
+      "mass_kg": 2.3697,
+      "com_mm": [
+        -0.0,
+        0.0,
+        354.0
+      ],
+      "bbox_min_mm": [
+        -52.0,
+        -52.0,
+        285.0
+      ],
+      "bbox_max_mm": [
+        52.0,
+        52.0,
+        423.0
+      ]
+    },
+    "s4_piezo_coarse_xy": {
+      "subsystem": "s4_piezo_stage_interferometry",
+      "bom_id": "S4.3",
+      "label_tr": "Kaba Stick-Slip XY Piezo Kademe (96×96, 26 mm)",
+      "shape": "box",
+      "material": "ti6al4v",
+      "tol_mm": 0.01,
+      "triangles": 12,
+      "is_watertight": true,
+      "volume_analytic_mm3": 221184.0,
+      "volume_mesh_mm3": 221184.0,
+      "mass_kg": 0.9798,
+      "com_mm": [
+        0.0,
+        0.0,
+        435.0
+      ],
+      "bbox_min_mm": [
+        -48.0,
+        -48.0,
+        423.0
+      ],
+      "bbox_max_mm": [
+        48.0,
+        48.0,
+        447.0
+      ]
+    },
+    "s4_piezo_fine_6dof": {
+      "subsystem": "s4_piezo_stage_interferometry",
+      "bom_id": "S4.3",
+      "label_tr": "6-DOF İnce Piezo Kademe (PI PIMars, ≤0,5 nm)",
+      "shape": "box",
+      "material": "invar36",
+      "tol_mm": 0.005,
+      "triangles": 12,
+      "is_watertight": true,
+      "volume_analytic_mm3": 194400.0,
+      "volume_mesh_mm3": 194400.0,
+      "mass_kg": 1.5649,
+      "com_mm": [
+        0.0,
+        0.0,
+        459.0
+      ],
+      "bbox_min_mm": [
+        -45.0,
+        -45.0,
+        447.0
+      ],
+      "bbox_max_mm": [
+        45.0,
+        45.0,
+        471.0
+      ]
+    },
+    "s4_met_col_1": {
+      "subsystem": "s4_piezo_stage_interferometry",
+      "bom_id": "S4.5",
+      "label_tr": "Invar Metroloji Çerçeve Sütunu #1",
+      "shape": "cyl",
+      "material": "invar36",
+      "tol_mm": 0.02,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 8256.105,
+      "volume_mesh_mm3": 8232.548,
+      "mass_kg": 0.0665,
+      "com_mm": [
+        83.44,
+        83.44,
+        321.5
+      ],
+      "bbox_min_mm": [
+        77.44,
+        77.44,
+        285.0
+      ],
+      "bbox_max_mm": [
+        89.44,
+        89.44,
+        358.0
+      ]
+    },
+    "s4_met_col_2": {
+      "subsystem": "s4_piezo_stage_interferometry",
+      "bom_id": "S4.5",
+      "label_tr": "Invar Metroloji Çerçeve Sütunu #2",
+      "shape": "cyl",
+      "material": "invar36",
+      "tol_mm": 0.02,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 8256.105,
+      "volume_mesh_mm3": 8232.548,
+      "mass_kg": 0.0665,
+      "com_mm": [
+        -83.44,
+        83.44,
+        321.5
+      ],
+      "bbox_min_mm": [
+        -89.44,
+        77.44,
+        285.0
+      ],
+      "bbox_max_mm": [
+        -77.44,
+        89.44,
+        358.0
+      ]
+    },
+    "s4_met_col_3": {
+      "subsystem": "s4_piezo_stage_interferometry",
+      "bom_id": "S4.5",
+      "label_tr": "Invar Metroloji Çerçeve Sütunu #3",
+      "shape": "cyl",
+      "material": "invar36",
+      "tol_mm": 0.02,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 8256.105,
+      "volume_mesh_mm3": 8232.548,
+      "mass_kg": 0.0665,
+      "com_mm": [
+        -83.44,
+        -83.44,
+        321.5
+      ],
+      "bbox_min_mm": [
+        -89.44,
+        -89.44,
+        285.0
+      ],
+      "bbox_max_mm": [
+        -77.44,
+        -77.44,
+        358.0
+      ]
+    },
+    "s4_met_col_4": {
+      "subsystem": "s4_piezo_stage_interferometry",
+      "bom_id": "S4.5",
+      "label_tr": "Invar Metroloji Çerçeve Sütunu #4",
+      "shape": "cyl",
+      "material": "invar36",
+      "tol_mm": 0.02,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 8256.105,
+      "volume_mesh_mm3": 8232.548,
+      "mass_kg": 0.0665,
+      "com_mm": [
+        83.44,
+        -83.44,
+        321.5
+      ],
+      "bbox_min_mm": [
+        77.44,
+        -89.44,
+        285.0
+      ],
+      "bbox_max_mm": [
+        89.44,
+        -77.44,
+        358.0
+      ]
+    },
+    "s4_metrology_frame": {
+      "subsystem": "s4_piezo_stage_interferometry",
+      "bom_id": "S4.5",
+      "label_tr": "Zerodur Metroloji Referans Halkası (Ø208/Ø264)",
+      "shape": "tube",
+      "material": "zerodur",
+      "tol_mm": 0.005,
+      "triangles": 384,
+      "is_watertight": true,
+      "volume_analytic_mm3": 373673.597,
+      "volume_mesh_mm3": 372607.378,
+      "mass_kg": 0.9454,
+      "com_mm": [
+        0.0,
+        -0.0,
+        367.0
+      ],
+      "bbox_min_mm": [
+        -132.0,
+        -132.0,
+        358.0
+      ],
+      "bbox_max_mm": [
+        132.0,
+        132.0,
+        376.0
+      ]
+    },
+    "s4_interferometer_x": {
+      "subsystem": "s4_piezo_stage_interferometry",
+      "bom_id": "S4.4",
+      "label_tr": "Lazer İnterferometre Başlığı (X Ekseni)",
+      "shape": "box",
+      "material": "invar36",
+      "tol_mm": 0.01,
+      "triangles": 12,
+      "is_watertight": true,
+      "volume_analytic_mm3": 3136.0,
+      "volume_mesh_mm3": 3136.0,
+      "mass_kg": 0.0252,
+      "com_mm": [
+        94.0,
+        0.0,
+        367.0
+      ],
+      "bbox_min_mm": [
+        86.0,
+        -7.0,
+        360.0
+      ],
+      "bbox_max_mm": [
+        102.0,
+        7.0,
+        374.0
+      ]
+    },
+    "s4_interferometer_y": {
+      "subsystem": "s4_piezo_stage_interferometry",
+      "bom_id": "S4.4",
+      "label_tr": "Lazer İnterferometre Başlığı (Y Ekseni)",
+      "shape": "box",
+      "material": "invar36",
+      "tol_mm": 0.01,
+      "triangles": 12,
+      "is_watertight": true,
+      "volume_analytic_mm3": 3136.0,
+      "volume_mesh_mm3": 3136.0,
+      "mass_kg": 0.0252,
+      "com_mm": [
+        0.0,
+        94.0,
+        367.0
+      ],
+      "bbox_min_mm": [
+        -7.0,
+        86.0,
+        360.0
+      ],
+      "bbox_max_mm": [
+        7.0,
+        102.0,
+        374.0
+      ]
+    },
+    "s4_interferometer_z": {
+      "subsystem": "s4_piezo_stage_interferometry",
+      "bom_id": "S4.4",
+      "label_tr": "Lazer İnterferometre Başlığı (Z Ekseni)",
+      "shape": "box",
+      "material": "invar36",
+      "tol_mm": 0.01,
+      "triangles": 12,
+      "is_watertight": true,
+      "volume_analytic_mm3": 3136.0,
+      "volume_mesh_mm3": 3136.0,
+      "mass_kg": 0.0252,
+      "com_mm": [
+        0.0,
+        -94.0,
+        367.0
+      ],
+      "bbox_min_mm": [
+        -7.0,
+        -102.0,
+        360.0
+      ],
+      "bbox_max_mm": [
+        7.0,
+        -86.0,
+        374.0
+      ]
+    },
+    "s4_laser_head": {
+      "subsystem": "s4_piezo_stage_interferometry",
+      "bom_id": "S4.4",
+      "label_tr": "3-Eksen Stabilize Heterodin Lazer Ünitesi",
+      "shape": "box",
+      "material": "al6061",
+      "tol_mm": 0.1,
+      "triangles": 12,
+      "is_watertight": true,
+      "volume_analytic_mm3": 423500.0,
+      "volume_mesh_mm3": 423500.0,
+      "mass_kg": 1.1435,
+      "com_mm": [
+        305.0,
+        235.0,
+        287.5
+      ],
+      "bbox_min_mm": [
+        250.0,
+        200.0,
+        260.0
+      ],
+      "bbox_max_mm": [
+        360.0,
+        270.0,
+        315.0
+      ]
+    },
+    "s5_chamber_bottom_flange": {
+      "subsystem": "s5_uhv_chamber_loadlock",
+      "bom_id": "S5.1",
+      "label_tr": "UHV Oda Taban Flanşı (CF400)",
+      "shape": "cyl",
+      "material": "ss316ln",
+      "tol_mm": 0.05,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 3976078.202,
+      "volume_mesh_mm3": 3964733.089,
+      "mass_kg": 31.8086,
+      "com_mm": [
+        -0.0,
+        -0.0,
+        272.5
+      ],
+      "bbox_min_mm": [
+        -225.0,
+        -225.0,
+        260.0
+      ],
+      "bbox_max_mm": [
+        225.0,
+        225.0,
+        285.0
+      ]
+    },
+    "s5_chamber_wall_lower": {
+      "subsystem": "s5_uhv_chamber_loadlock",
+      "bom_id": "S5.1",
+      "label_tr": "UHV Ana Oda Alt Gövde (R=192/182)",
+      "shape": "tube",
+      "material": "ss316ln",
+      "tol_mm": 0.05,
+      "triangles": 384,
+      "is_watertight": true,
+      "volume_analytic_mm3": 2291163.522,
+      "volume_mesh_mm3": 2284626.048,
+      "mass_kg": 18.3293,
+      "com_mm": [
+        0.0,
+        -0.0,
+        382.5
+      ],
+      "bbox_min_mm": [
+        -192.0,
+        -192.0,
+        285.0
+      ],
+      "bbox_max_mm": [
+        192.0,
+        192.0,
+        480.0
+      ]
+    },
+    "s5_chamber_pillar_ne": {
+      "subsystem": "s5_uhv_chamber_loadlock",
+      "bom_id": "S5.1",
+      "label_tr": "UHV Ekvatoryal Port Sütunu (NE)",
+      "shape": "arc_tube",
+      "material": "ss316ln",
+      "tol_mm": 0.05,
+      "triangles": 52,
+      "is_watertight": true,
+      "volume_analytic_mm3": 66469.852,
+      "volume_mesh_mm3": 66361.542,
+      "mass_kg": 0.5318,
+      "com_mm": [
+        130.22,
+        130.22,
+        510.0
+      ],
+      "bbox_min_mm": [
+        85.44,
+        85.44,
+        480.05
+      ],
+      "bbox_max_mm": [
+        169.53,
+        169.53,
+        539.95
+      ]
+    },
+    "s5_chamber_pillar_nw": {
+      "subsystem": "s5_uhv_chamber_loadlock",
+      "bom_id": "S5.1",
+      "label_tr": "UHV Ekvatoryal Port Sütunu (NW)",
+      "shape": "arc_tube",
+      "material": "ss316ln",
+      "tol_mm": 0.05,
+      "triangles": 52,
+      "is_watertight": true,
+      "volume_analytic_mm3": 66469.852,
+      "volume_mesh_mm3": 66361.542,
+      "mass_kg": 0.5318,
+      "com_mm": [
+        -130.22,
+        130.22,
+        510.0
+      ],
+      "bbox_min_mm": [
+        -169.53,
+        85.44,
+        480.05
+      ],
+      "bbox_max_mm": [
+        -85.44,
+        169.53,
+        539.95
+      ]
+    },
+    "s5_chamber_pillar_sw": {
+      "subsystem": "s5_uhv_chamber_loadlock",
+      "bom_id": "S5.1",
+      "label_tr": "UHV Ekvatoryal Port Sütunu (SW)",
+      "shape": "arc_tube",
+      "material": "ss316ln",
+      "tol_mm": 0.05,
+      "triangles": 52,
+      "is_watertight": true,
+      "volume_analytic_mm3": 66469.852,
+      "volume_mesh_mm3": 66361.542,
+      "mass_kg": 0.5318,
+      "com_mm": [
+        -130.22,
+        -130.22,
+        510.0
+      ],
+      "bbox_min_mm": [
+        -169.53,
+        -169.53,
+        480.05
+      ],
+      "bbox_max_mm": [
+        -85.44,
+        -85.44,
+        539.95
+      ]
+    },
+    "s5_chamber_pillar_se": {
+      "subsystem": "s5_uhv_chamber_loadlock",
+      "bom_id": "S5.1",
+      "label_tr": "UHV Ekvatoryal Port Sütunu (SE)",
+      "shape": "arc_tube",
+      "material": "ss316ln",
+      "tol_mm": 0.05,
+      "triangles": 52,
+      "is_watertight": true,
+      "volume_analytic_mm3": 66469.852,
+      "volume_mesh_mm3": 66361.542,
+      "mass_kg": 0.5318,
+      "com_mm": [
+        130.22,
+        -130.22,
+        510.0
+      ],
+      "bbox_min_mm": [
+        85.44,
+        -169.53,
+        480.05
+      ],
+      "bbox_max_mm": [
+        169.53,
+        -85.44,
+        539.95
+      ]
+    },
+    "s5_chamber_wall_upper": {
+      "subsystem": "s5_uhv_chamber_loadlock",
+      "bom_id": "S5.1",
+      "label_tr": "UHV Ana Oda Üst Gövde (V_iç=34,86 L)",
+      "shape": "tube",
+      "material": "ss316ln",
+      "tol_mm": 0.05,
+      "triangles": 384,
+      "is_watertight": true,
+      "volume_analytic_mm3": 939964.522,
+      "volume_mesh_mm3": 937282.481,
+      "mass_kg": 7.5197,
+      "com_mm": [
+        0.0,
+        0.0,
+        580.0
+      ],
+      "bbox_min_mm": [
+        -192.0,
+        -192.0,
+        540.0
+      ],
+      "bbox_max_mm": [
+        192.0,
+        192.0,
+        620.0
+      ]
+    },
+    "s5_chamber_top_flange": {
+      "subsystem": "s5_uhv_chamber_loadlock",
+      "bom_id": "S5.1",
+      "label_tr": "UHV Oda Üst Flanşı (Ø128 Kolon Geçişi)",
+      "shape": "tube",
+      "material": "ss316ln",
+      "tol_mm": 0.05,
+      "triangles": 384,
+      "is_watertight": true,
+      "volume_analytic_mm3": 3654379.114,
+      "volume_mesh_mm3": 3643951.919,
+      "mass_kg": 29.235,
+      "com_mm": [
+        -0.0,
+        0.0,
+        632.5
+      ],
+      "bbox_min_mm": [
+        -225.0,
+        -225.0,
+        620.0
+      ],
+      "bbox_max_mm": [
+        225.0,
+        225.0,
+        645.0
+      ]
+    },
+    "s5_loadlock_duct": {
+      "subsystem": "s5_uhv_chamber_loadlock",
+      "bom_id": "S5.3",
+      "label_tr": "Load-Lock Transfer Tüneli & Sürgülü Vana (+X)",
+      "shape": "tube",
+      "material": "ss316ln",
+      "tol_mm": 0.1,
+      "triangles": 384,
+      "is_watertight": true,
+      "volume_analytic_mm3": 130061.936,
+      "volume_mesh_mm3": 129690.825,
+      "mass_kg": 1.0405,
+      "com_mm": [
+        261.0,
+        -0.0,
+        500.0
+      ],
+      "bbox_min_mm": [
+        192.0,
+        -28.0,
+        472.0
+      ],
+      "bbox_max_mm": [
+        330.0,
+        28.0,
+        528.0
+      ]
+    },
+    "s5_loadlock_chamber": {
+      "subsystem": "s5_uhv_chamber_loadlock",
+      "bom_id": "S5.3",
+      "label_tr": "UHV Yük Kilidi (Load-Lock) Odası",
+      "shape": "box",
+      "material": "ss316ln",
+      "tol_mm": 0.1,
+      "triangles": 12,
+      "is_watertight": true,
+      "volume_analytic_mm3": 5508000.0,
+      "volume_mesh_mm3": 5508000.0,
+      "mass_kg": 44.064,
+      "com_mm": [
+        420.0,
+        0.0,
+        500.0
+      ],
+      "bbox_min_mm": [
+        330.0,
+        -90.0,
+        415.0
+      ],
+      "bbox_max_mm": [
+        510.0,
+        90.0,
+        585.0
+      ]
+    },
+    "s5_loadlock_stand": {
+      "subsystem": "s5_uhv_chamber_loadlock",
+      "bom_id": "S5.3",
+      "label_tr": "Titreşim-Ayrık Load-Lock Zemin Sehpası",
+      "shape": "box",
+      "material": "rack_chassis",
+      "tol_mm": 0.5,
+      "triangles": 12,
+      "is_watertight": true,
+      "volume_analytic_mm3": 2324000.0,
+      "volume_mesh_mm3": 2324000.0,
+      "mass_kg": 5.5776,
+      "com_mm": [
+        485.0,
+        0.0,
+        207.5
+      ],
+      "bbox_min_mm": [
+        465.0,
+        -70.0,
+        0.0
+      ],
+      "bbox_max_mm": [
+        505.0,
+        70.0,
+        415.0
+      ]
+    },
+    "s5_transfer_arm": {
+      "subsystem": "s5_uhv_chamber_loadlock",
+      "bom_id": "S5.3",
+      "label_tr": "Manyetik Yonga Transfer Kolu",
+      "shape": "cyl",
+      "material": "ss316ln",
+      "tol_mm": 0.1,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 141371.669,
+      "volume_mesh_mm3": 140968.288,
+      "mass_kg": 1.131,
+      "com_mm": [
+        610.0,
+        0.0,
+        500.0
+      ],
+      "bbox_min_mm": [
+        510.0,
+        -15.0,
+        485.0
+      ],
+      "bbox_max_mm": [
+        710.0,
+        15.0,
+        515.0
+      ]
+    },
+    "s5_pump_duct": {
+      "subsystem": "s5_uhv_chamber_loadlock",
+      "bom_id": "S5.2",
+      "label_tr": "UHV Vakum Pompa Boğazı (−Y)",
+      "shape": "tube",
+      "material": "ss316ln",
+      "tol_mm": 0.1,
+      "triangles": 384,
+      "is_watertight": true,
+      "volume_analytic_mm3": 201539.452,
+      "volume_mesh_mm3": 200964.391,
+      "mass_kg": 1.6123,
+      "com_mm": [
+        0.0,
+        -291.0,
+        500.0
+      ],
+      "bbox_min_mm": [
+        -30.0,
+        -390.0,
+        470.0
+      ],
+      "bbox_max_mm": [
+        30.0,
+        -192.0,
+        530.0
+      ]
+    },
+    "s5_pump_tee": {
+      "subsystem": "s5_uhv_chamber_loadlock",
+      "bom_id": "S5.2",
+      "label_tr": "UHV Pompa T-Manifoldu",
+      "shape": "box",
+      "material": "ss316ln",
+      "tol_mm": 0.1,
+      "triangles": 12,
+      "is_watertight": true,
+      "volume_analytic_mm3": 512000.0,
+      "volume_mesh_mm3": 512000.0,
+      "mass_kg": 4.096,
+      "com_mm": [
+        0.0,
+        -430.0,
+        500.0
+      ],
+      "bbox_min_mm": [
+        -40.0,
+        -470.0,
+        460.0
+      ],
+      "bbox_max_mm": [
+        40.0,
+        -390.0,
+        540.0
+      ]
+    },
+    "s5_turbo_pump": {
+      "subsystem": "s5_uhv_chamber_loadlock",
+      "bom_id": "S5.2",
+      "label_tr": "Mag-Lev Turbomoleküler Pompa (300 L/s)",
+      "shape": "cyl",
+      "material": "al6061",
+      "tol_mm": 0.2,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 1724106.048,
+      "volume_mesh_mm3": 1719186.583,
+      "mass_kg": 4.6551,
+      "com_mm": [
+        0.0,
+        -430.0,
+        372.5
+      ],
+      "bbox_min_mm": [
+        -56.0,
+        -486.0,
+        285.0
+      ],
+      "bbox_max_mm": [
+        56.0,
+        -374.0,
+        460.0
+      ]
+    },
+    "s5_ion_tsp_pump": {
+      "subsystem": "s5_uhv_chamber_loadlock",
+      "bom_id": "S5.2",
+      "label_tr": "İyon + Titanyum Süblimasyon (TSP) Pompası",
+      "shape": "cyl",
+      "material": "ss316ln",
+      "tol_mm": 0.2,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 821086.656,
+      "volume_mesh_mm3": 818743.814,
+      "mass_kg": 6.5687,
+      "com_mm": [
+        -0.0,
+        -430.0,
+        607.5
+      ],
+      "bbox_min_mm": [
+        -44.0,
+        -474.0,
+        540.0
+      ],
+      "bbox_max_mm": [
+        44.0,
+        -386.0,
+        675.0
+      ]
+    },
+    "s5_pump_stand": {
+      "subsystem": "s5_uhv_chamber_loadlock",
+      "bom_id": "S5.2",
+      "label_tr": "Pompa İstasyonu Zemin Şasisi",
+      "shape": "box",
+      "material": "rack_chassis",
+      "tol_mm": 0.5,
+      "triangles": 12,
+      "is_watertight": true,
+      "volume_analytic_mm3": 4104000.0,
+      "volume_mesh_mm3": 4104000.0,
+      "mass_kg": 9.8496,
+      "com_mm": [
+        0.0,
+        -430.0,
+        142.5
+      ],
+      "bbox_min_mm": [
+        -60.0,
+        -490.0,
+        0.0
+      ],
+      "bbox_max_mm": [
+        60.0,
+        -370.0,
+        285.0
+      ]
+    },
+    "s5_flash_anneal_duct": {
+      "subsystem": "s5_uhv_chamber_loadlock",
+      "bom_id": "S5.5",
+      "label_tr": "Flaş Tavlama Optik Port Boğazı (+Y)",
+      "shape": "tube",
+      "material": "ss316ln",
+      "tol_mm": 0.1,
+      "triangles": 384,
+      "is_watertight": true,
+      "volume_analytic_mm3": 79278.091,
+      "volume_mesh_mm3": 79051.883,
+      "mass_kg": 0.6342,
+      "com_mm": [
+        -0.0,
+        243.5,
+        500.0
+      ],
+      "bbox_min_mm": [
+        -27.0,
+        192.0,
+        473.0
+      ],
+      "bbox_max_mm": [
+        27.0,
+        295.0,
+        527.0
+      ]
+    },
+    "s5_flash_window": {
+      "subsystem": "s5_uhv_chamber_loadlock",
+      "bom_id": "S5.5",
+      "label_tr": "CF63 Optik Safir Flaş Tavlama Penceresi",
+      "shape": "cyl",
+      "material": "sapphire",
+      "tol_mm": 0.05,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 15707.963,
+      "volume_mesh_mm3": 15663.143,
+      "mass_kg": 0.0625,
+      "com_mm": [
+        -0.0,
+        299.0,
+        500.0
+      ],
+      "bbox_min_mm": [
+        -25.0,
+        295.0,
+        475.0
+      ],
+      "bbox_max_mm": [
+        25.0,
+        303.0,
+        525.0
+      ]
+    },
+    "s5_flash_anneal_head": {
+      "subsystem": "s5_uhv_chamber_loadlock",
+      "bom_id": "S5.5",
+      "label_tr": "ms-Flaş Tavlama Lamba/Lazer Başlığı",
+      "shape": "box",
+      "material": "al6061",
+      "tol_mm": 0.2,
+      "triangles": 12,
+      "is_watertight": true,
+      "volume_analytic_mm3": 620928.0,
+      "volume_mesh_mm3": 620928.0,
+      "mass_kg": 1.6765,
+      "com_mm": [
+        0.0,
+        347.0,
+        500.0
+      ],
+      "bbox_min_mm": [
+        -42.0,
+        303.0,
+        458.0
+      ],
+      "bbox_max_mm": [
+        42.0,
+        391.0,
+        542.0
+      ]
+    },
+    "s6_coil_m_upper": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.3",
+      "label_tr": "Exp125 Ana Bobin M_upper (1600T, 40,2 A)",
+      "shape": "tube",
+      "material": "nbti_coil",
+      "tol_mm": 0.05,
+      "triangles": 384,
+      "is_watertight": true,
+      "volume_analytic_mm3": 1095913.181,
+      "volume_mesh_mm3": 1092786.165,
+      "mass_kg": 8.6577,
+      "com_mm": [
+        0.0,
+        -0.0,
+        545.0
+      ],
+      "bbox_min_mm": [
+        -112.0,
+        -112.0,
+        518.0
+      ],
+      "bbox_max_mm": [
+        112.0,
+        112.0,
+        572.0
+      ]
+    },
+    "s6_coil_m_lower": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.3",
+      "label_tr": "Exp125 Ana Bobin M_lower (1600T, 216,5 A)",
+      "shape": "tube",
+      "material": "nbti_coil",
+      "tol_mm": 0.05,
+      "triangles": 384,
+      "is_watertight": true,
+      "volume_analytic_mm3": 1095913.181,
+      "volume_mesh_mm3": 1092786.165,
+      "mass_kg": 8.6577,
+      "com_mm": [
+        0.0,
+        0.0,
+        455.0
+      ],
+      "bbox_min_mm": [
+        -112.0,
+        -112.0,
+        428.0
+      ],
+      "bbox_max_mm": [
+        112.0,
+        112.0,
+        482.0
+      ]
+    },
+    "s6_coil_s_upper": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.3",
+      "label_tr": "Exp125 Şim Bobini S_upper (1100T, 255,9 A)",
+      "shape": "tube",
+      "material": "nbti_shim",
+      "tol_mm": 0.05,
+      "triangles": 384,
+      "is_watertight": true,
+      "volume_analytic_mm3": 833753.558,
+      "volume_mesh_mm3": 831374.573,
+      "mass_kg": 6.5867,
+      "com_mm": [
+        -0.0,
+        -0.0,
+        594.0
+      ],
+      "bbox_min_mm": [
+        -116.0,
+        -116.0,
+        576.0
+      ],
+      "bbox_max_mm": [
+        116.0,
+        116.0,
+        612.0
+      ]
+    },
+    "s6_coil_s_lower": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.3",
+      "label_tr": "Exp125 Şim Bobini S_lower (1100T, −195,3 A)",
+      "shape": "tube",
+      "material": "nbti_shim",
+      "tol_mm": 0.05,
+      "triangles": 384,
+      "is_watertight": true,
+      "volume_analytic_mm3": 833753.558,
+      "volume_mesh_mm3": 831374.573,
+      "mass_kg": 6.5867,
+      "com_mm": [
+        -0.0,
+        0.0,
+        406.0
+      ],
+      "bbox_min_mm": [
+        -116.0,
+        -116.0,
+        388.0
+      ],
+      "bbox_max_mm": [
+        116.0,
+        116.0,
+        424.0
+      ]
+    },
+    "s6_coil_a_upper": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.3",
+      "label_tr": "Exp125 Aktif Kalkan A_upper (960T, −168,0 A)",
+      "shape": "tube",
+      "material": "nbti_shield",
+      "tol_mm": 0.05,
+      "triangles": 384,
+      "is_watertight": true,
+      "volume_analytic_mm3": 1976036.646,
+      "volume_mesh_mm3": 1970398.337,
+      "mass_kg": 15.6107,
+      "com_mm": [
+        -0.0,
+        -0.0,
+        562.0
+      ],
+      "bbox_min_mm": [
+        -168.0,
+        -168.0,
+        520.0
+      ],
+      "bbox_max_mm": [
+        168.0,
+        168.0,
+        604.0
+      ]
+    },
+    "s6_coil_a_lower": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.3",
+      "label_tr": "Exp125 Aktif Kalkan A_lower (960T, −57,2 A)",
+      "shape": "tube",
+      "material": "nbti_shield",
+      "tol_mm": 0.05,
+      "triangles": 384,
+      "is_watertight": true,
+      "volume_analytic_mm3": 1976036.646,
+      "volume_mesh_mm3": 1970398.337,
+      "mass_kg": 15.6107,
+      "com_mm": [
+        -0.0,
+        0.0,
+        438.0
+      ],
+      "bbox_min_mm": [
+        -168.0,
+        -168.0,
+        396.0
+      ],
+      "bbox_max_mm": [
+        168.0,
+        168.0,
+        480.0
+      ]
+    },
+    "s6_coil_b_upper": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.3",
+      "label_tr": "Exp125 Karşı-Sargı B_upper (400T, 83,9 A)",
+      "shape": "tube",
+      "material": "nbti_buck",
+      "tol_mm": 0.05,
+      "triangles": 384,
+      "is_watertight": true,
+      "volume_analytic_mm3": 270528.827,
+      "volume_mesh_mm3": 269756.915,
+      "mass_kg": 2.1372,
+      "com_mm": [
+        -0.0,
+        0.0,
+        367.0
+      ],
+      "bbox_min_mm": [
+        -82.0,
+        -82.0,
+        355.0
+      ],
+      "bbox_max_mm": [
+        82.0,
+        82.0,
+        379.0
+      ]
+    },
+    "s6_coil_b_lower": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.3",
+      "label_tr": "Exp125 Karşı-Sargı B_lower (400T, 22,5 A)",
+      "shape": "tube",
+      "material": "nbti_buck",
+      "tol_mm": 0.05,
+      "triangles": 384,
+      "is_watertight": true,
+      "volume_analytic_mm3": 270528.827,
+      "volume_mesh_mm3": 269756.915,
+      "mass_kg": 2.1372,
+      "com_mm": [
+        0.0,
+        0.0,
+        328.0
+      ],
+      "bbox_min_mm": [
+        -82.0,
+        -82.0,
+        316.0
+      ],
+      "bbox_max_mm": [
+        82.0,
+        82.0,
+        340.0
+      ]
+    },
+    "s6_magnet_former_lower": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.3",
+      "label_tr": "Kriyo-Mıknatıs Karkası Alt (OD=352 mm)",
+      "shape": "tube",
+      "material": "ti6al4v",
+      "tol_mm": 0.05,
+      "triangles": 384,
+      "is_watertight": true,
+      "volume_analytic_mm3": 637303.486,
+      "volume_mesh_mm3": 635485.04,
+      "mass_kg": 2.8233,
+      "com_mm": [
+        0.0,
+        0.0,
+        438.0
+      ],
+      "bbox_min_mm": [
+        -176.0,
+        -176.0,
+        396.0
+      ],
+      "bbox_max_mm": [
+        176.0,
+        176.0,
+        480.0
+      ]
+    },
+    "s6_magnet_former_upper": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.3",
+      "label_tr": "Kriyo-Mıknatıs Karkası Üst (OD=352 mm)",
+      "shape": "tube",
+      "material": "ti6al4v",
+      "tol_mm": 0.05,
+      "triangles": 384,
+      "is_watertight": true,
+      "volume_analytic_mm3": 637303.486,
+      "volume_mesh_mm3": 635485.04,
+      "mass_kg": 2.8233,
+      "com_mm": [
+        0.0,
+        0.0,
+        562.0
+      ],
+      "bbox_min_mm": [
+        -176.0,
+        -176.0,
+        520.0
+      ],
+      "bbox_max_mm": [
+        176.0,
+        176.0,
+        604.0
+      ]
+    },
+    "s6_magnet_foot_1": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.3",
+      "label_tr": "Mıknatıs Taşıyıcı Titanyum Ayak #1",
+      "shape": "cyl",
+      "material": "ti6al4v",
+      "tol_mm": 0.1,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 28246.06,
+      "volume_mesh_mm3": 28165.464,
+      "mass_kg": 0.1251,
+      "com_mm": [
+        110.31,
+        110.31,
+        340.5
+      ],
+      "bbox_min_mm": [
+        101.31,
+        101.31,
+        285.0
+      ],
+      "bbox_max_mm": [
+        119.31,
+        119.31,
+        396.0
+      ]
+    },
+    "s6_magnet_tie_rod_1": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.3",
+      "label_tr": "36 mm Yarık Lorentz Gergi Çubuğu #1",
+      "shape": "cyl",
+      "material": "ti6al4v",
+      "tol_mm": 0.05,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 1535.532,
+      "volume_mesh_mm3": 1531.151,
+      "mass_kg": 0.0068,
+      "com_mm": [
+        121.98,
+        121.98,
+        500.0
+      ],
+      "bbox_min_mm": [
+        118.48,
+        118.48,
+        480.05
+      ],
+      "bbox_max_mm": [
+        125.48,
+        125.48,
+        519.95
+      ]
+    },
+    "s6_buck_foot_1": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.3",
+      "label_tr": "B-Bobin Alt Destek Dikmesi #1",
+      "shape": "cyl",
+      "material": "ti6al4v",
+      "tol_mm": 0.05,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 1972.135,
+      "volume_mesh_mm3": 1966.508,
+      "mass_kg": 0.0087,
+      "com_mm": [
+        48.79,
+        48.79,
+        300.5
+      ],
+      "bbox_min_mm": [
+        44.29,
+        44.29,
+        285.0
+      ],
+      "bbox_max_mm": [
+        53.29,
+        53.29,
+        316.0
+      ]
+    },
+    "s6_magnet_foot_2": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.3",
+      "label_tr": "Mıknatıs Taşıyıcı Titanyum Ayak #2",
+      "shape": "cyl",
+      "material": "ti6al4v",
+      "tol_mm": 0.1,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 28246.06,
+      "volume_mesh_mm3": 28165.464,
+      "mass_kg": 0.1251,
+      "com_mm": [
+        -110.31,
+        110.31,
+        340.5
+      ],
+      "bbox_min_mm": [
+        -119.31,
+        101.31,
+        285.0
+      ],
+      "bbox_max_mm": [
+        -101.31,
+        119.31,
+        396.0
+      ]
+    },
+    "s6_magnet_tie_rod_2": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.3",
+      "label_tr": "36 mm Yarık Lorentz Gergi Çubuğu #2",
+      "shape": "cyl",
+      "material": "ti6al4v",
+      "tol_mm": 0.05,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 1535.532,
+      "volume_mesh_mm3": 1531.151,
+      "mass_kg": 0.0068,
+      "com_mm": [
+        -121.98,
+        121.98,
+        500.0
+      ],
+      "bbox_min_mm": [
+        -125.48,
+        118.48,
+        480.05
+      ],
+      "bbox_max_mm": [
+        -118.48,
+        125.48,
+        519.95
+      ]
+    },
+    "s6_buck_foot_2": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.3",
+      "label_tr": "B-Bobin Alt Destek Dikmesi #2",
+      "shape": "cyl",
+      "material": "ti6al4v",
+      "tol_mm": 0.05,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 1972.135,
+      "volume_mesh_mm3": 1966.508,
+      "mass_kg": 0.0087,
+      "com_mm": [
+        -48.79,
+        48.79,
+        300.5
+      ],
+      "bbox_min_mm": [
+        -53.29,
+        44.29,
+        285.0
+      ],
+      "bbox_max_mm": [
+        -44.29,
+        53.29,
+        316.0
+      ]
+    },
+    "s6_magnet_foot_3": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.3",
+      "label_tr": "Mıknatıs Taşıyıcı Titanyum Ayak #3",
+      "shape": "cyl",
+      "material": "ti6al4v",
+      "tol_mm": 0.1,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 28246.06,
+      "volume_mesh_mm3": 28165.464,
+      "mass_kg": 0.1251,
+      "com_mm": [
+        -110.31,
+        -110.31,
+        340.5
+      ],
+      "bbox_min_mm": [
+        -119.31,
+        -119.31,
+        285.0
+      ],
+      "bbox_max_mm": [
+        -101.31,
+        -101.31,
+        396.0
+      ]
+    },
+    "s6_magnet_tie_rod_3": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.3",
+      "label_tr": "36 mm Yarık Lorentz Gergi Çubuğu #3",
+      "shape": "cyl",
+      "material": "ti6al4v",
+      "tol_mm": 0.05,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 1535.532,
+      "volume_mesh_mm3": 1531.151,
+      "mass_kg": 0.0068,
+      "com_mm": [
+        -121.98,
+        -121.98,
+        500.0
+      ],
+      "bbox_min_mm": [
+        -125.48,
+        -125.48,
+        480.05
+      ],
+      "bbox_max_mm": [
+        -118.48,
+        -118.48,
+        519.95
+      ]
+    },
+    "s6_buck_foot_3": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.3",
+      "label_tr": "B-Bobin Alt Destek Dikmesi #3",
+      "shape": "cyl",
+      "material": "ti6al4v",
+      "tol_mm": 0.05,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 1972.135,
+      "volume_mesh_mm3": 1966.508,
+      "mass_kg": 0.0087,
+      "com_mm": [
+        -48.79,
+        -48.79,
+        300.5
+      ],
+      "bbox_min_mm": [
+        -53.29,
+        -53.29,
+        285.0
+      ],
+      "bbox_max_mm": [
+        -44.29,
+        -44.29,
+        316.0
+      ]
+    },
+    "s6_magnet_foot_4": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.3",
+      "label_tr": "Mıknatıs Taşıyıcı Titanyum Ayak #4",
+      "shape": "cyl",
+      "material": "ti6al4v",
+      "tol_mm": 0.1,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 28246.06,
+      "volume_mesh_mm3": 28165.464,
+      "mass_kg": 0.1251,
+      "com_mm": [
+        110.31,
+        -110.31,
+        340.5
+      ],
+      "bbox_min_mm": [
+        101.31,
+        -119.31,
+        285.0
+      ],
+      "bbox_max_mm": [
+        119.31,
+        -101.31,
+        396.0
+      ]
+    },
+    "s6_magnet_tie_rod_4": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.3",
+      "label_tr": "36 mm Yarık Lorentz Gergi Çubuğu #4",
+      "shape": "cyl",
+      "material": "ti6al4v",
+      "tol_mm": 0.05,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 1535.532,
+      "volume_mesh_mm3": 1531.151,
+      "mass_kg": 0.0068,
+      "com_mm": [
+        121.98,
+        -121.98,
+        500.0
+      ],
+      "bbox_min_mm": [
+        118.48,
+        -125.48,
+        480.05
+      ],
+      "bbox_max_mm": [
+        125.48,
+        -118.48,
+        519.95
+      ]
+    },
+    "s6_buck_foot_4": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.3",
+      "label_tr": "B-Bobin Alt Destek Dikmesi #4",
+      "shape": "cyl",
+      "material": "ti6al4v",
+      "tol_mm": 0.05,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 1972.135,
+      "volume_mesh_mm3": 1966.508,
+      "mass_kg": 0.0087,
+      "com_mm": [
+        48.79,
+        -48.79,
+        300.5
+      ],
+      "bbox_min_mm": [
+        44.29,
+        -53.29,
+        285.0
+      ],
+      "bbox_max_mm": [
+        53.29,
+        -44.29,
+        316.0
+      ]
+    },
+    "s6_nbtin_resonator_carrier": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.6",
+      "label_tr": "NbTiN Rezonatör Diski (Ø50, z=−155, 22,3 µT)",
+      "shape": "cyl",
+      "material": "nbtin_si",
+      "tol_mm": 0.02,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 11780.972,
+      "volume_mesh_mm3": 11747.357,
+      "mass_kg": 0.0336,
+      "com_mm": [
+        -0.0,
+        -0.0,
+        345.0
+      ],
+      "bbox_min_mm": [
+        -25.0,
+        -25.0,
+        342.0
+      ],
+      "bbox_max_mm": [
+        25.0,
+        25.0,
+        348.0
+      ]
+    },
+    "s6_meissner_cup_bot": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.3",
+      "label_tr": "Nb RRR>300 Meissner Kabı Tabanı (R=34,5)",
+      "shape": "cyl",
+      "material": "nb_meissner",
+      "tol_mm": 0.02,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 9348.202,
+      "volume_mesh_mm3": 9321.528,
+      "mass_kg": 0.0801,
+      "com_mm": [
+        0.0,
+        0.0,
+        327.25
+      ],
+      "bbox_min_mm": [
+        -34.5,
+        -34.5,
+        326.0
+      ],
+      "bbox_max_mm": [
+        34.5,
+        34.5,
+        328.5
+      ]
+    },
+    "s6_meissner_cup_wall": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.3",
+      "label_tr": "Nb RRR>300 Meissner Duvarı (R=32..34,5)",
+      "shape": "tube",
+      "material": "nb_meissner",
+      "tol_mm": 0.02,
+      "triangles": 384,
+      "is_watertight": true,
+      "volume_analytic_mm3": 17183.334,
+      "volume_mesh_mm3": 17134.304,
+      "mass_kg": 0.1473,
+      "com_mm": [
+        0.0,
+        -0.0,
+        345.0
+      ],
+      "bbox_min_mm": [
+        -34.5,
+        -34.5,
+        328.55
+      ],
+      "bbox_max_mm": [
+        34.5,
+        34.5,
+        361.45
+      ]
+    },
+    "s6_meissner_cup_top": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.3",
+      "label_tr": "Nb RRR>300 Meissner Kapağı (r=8 Baca Deliği)",
+      "shape": "tube",
+      "material": "nb_meissner",
+      "tol_mm": 0.02,
+      "triangles": 384,
+      "is_watertight": true,
+      "volume_analytic_mm3": 8845.547,
+      "volume_mesh_mm3": 8820.307,
+      "mass_kg": 0.0758,
+      "com_mm": [
+        0.0,
+        -0.0,
+        362.75
+      ],
+      "bbox_min_mm": [
+        -34.5,
+        -34.5,
+        361.5
+      ],
+      "bbox_max_mm": [
+        34.5,
+        34.5,
+        364.0
+      ]
+    },
+    "s6_meissner_chimney": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.3",
+      "label_tr": "Nb Meissner Koaksiyel Bacası (r=8, h=11 mm)",
+      "shape": "tube",
+      "material": "nb_meissner",
+      "tol_mm": 0.02,
+      "triangles": 384,
+      "is_watertight": true,
+      "volume_analytic_mm3": 958.814,
+      "volume_mesh_mm3": 956.078,
+      "mass_kg": 0.0082,
+      "com_mm": [
+        0.0,
+        0.0,
+        369.5
+      ],
+      "bbox_min_mm": [
+        -8.0,
+        -8.0,
+        364.05
+      ],
+      "bbox_max_mm": [
+        8.0,
+        8.0,
+        374.95
+      ]
+    },
+    "s6_cryoperm_sleeve": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.3",
+      "label_tr": "Cryoperm-10 Dış Kılıf (R=39..41, z=−180..−124)",
+      "shape": "tube",
+      "material": "cryoperm10",
+      "tol_mm": 0.02,
+      "triangles": 384,
+      "is_watertight": true,
+      "volume_analytic_mm3": 28148.67,
+      "volume_mesh_mm3": 28068.352,
+      "mass_kg": 0.2449,
+      "com_mm": [
+        0.0,
+        -0.0,
+        348.0
+      ],
+      "bbox_min_mm": [
+        -41.0,
+        -41.0,
+        320.0
+      ],
+      "bbox_max_mm": [
+        41.0,
+        41.0,
+        376.0
+      ]
+    },
+    "s6_res_mxc_post": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.2",
+      "label_tr": "Rezonatör Kabı 20 mK Termal Destek Ayağı",
+      "shape": "cyl",
+      "material": "ofhc_cu",
+      "tol_mm": 0.05,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 18547.963,
+      "volume_mesh_mm3": 18495.039,
+      "mass_kg": 0.1662,
+      "com_mm": [
+        -0.0,
+        -0.0,
+        305.5
+      ],
+      "bbox_min_mm": [
+        -12.0,
+        -12.0,
+        285.0
+      ],
+      "bbox_max_mm": [
+        12.0,
+        12.0,
+        326.0
+      ]
+    },
+    "s6_thermal_iso_1": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.2",
+      "label_tr": "Vespel SP-22 Termal İzolasyon Dikmesi #1",
+      "shape": "cyl",
+      "material": "vespel",
+      "tol_mm": 0.02,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 1178.097,
+      "volume_mesh_mm3": 1174.736,
+      "mass_kg": 0.0017,
+      "com_mm": [
+        -32.0,
+        -32.0,
+        478.5
+      ],
+      "bbox_min_mm": [
+        -37.0,
+        -37.0,
+        471.0
+      ],
+      "bbox_max_mm": [
+        -27.0,
+        -27.0,
+        486.0
+      ]
+    },
+    "s6_thermal_iso_2": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.2",
+      "label_tr": "Vespel SP-22 Termal İzolasyon Dikmesi #2",
+      "shape": "cyl",
+      "material": "vespel",
+      "tol_mm": 0.02,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 1178.097,
+      "volume_mesh_mm3": 1174.736,
+      "mass_kg": 0.0017,
+      "com_mm": [
+        32.0,
+        -32.0,
+        478.5
+      ],
+      "bbox_min_mm": [
+        27.0,
+        -37.0,
+        471.0
+      ],
+      "bbox_max_mm": [
+        37.0,
+        -27.0,
+        486.0
+      ]
+    },
+    "s6_thermal_iso_3": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.2",
+      "label_tr": "Vespel SP-22 Termal İzolasyon Dikmesi #3",
+      "shape": "cyl",
+      "material": "vespel",
+      "tol_mm": 0.02,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 1178.097,
+      "volume_mesh_mm3": 1174.736,
+      "mass_kg": 0.0017,
+      "com_mm": [
+        32.0,
+        32.0,
+        478.5
+      ],
+      "bbox_min_mm": [
+        27.0,
+        27.0,
+        471.0
+      ],
+      "bbox_max_mm": [
+        37.0,
+        37.0,
+        486.0
+      ]
+    },
+    "s6_thermal_iso_4": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.2",
+      "label_tr": "Vespel SP-22 Termal İzolasyon Dikmesi #4",
+      "shape": "cyl",
+      "material": "vespel",
+      "tol_mm": 0.02,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 1178.097,
+      "volume_mesh_mm3": 1174.736,
+      "mass_kg": 0.0017,
+      "com_mm": [
+        -32.0,
+        32.0,
+        478.5
+      ],
+      "bbox_min_mm": [
+        -37.0,
+        27.0,
+        471.0
+      ],
+      "bbox_max_mm": [
+        -27.0,
+        37.0,
+        486.0
+      ]
+    },
+    "s6_mxc_cold_chuck": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.2",
+      "label_tr": "20 mK MXC Lokal Soğuk Ada (OFHC Cu, Ø116)",
+      "shape": "cyl",
+      "material": "ofhc_cu",
+      "tol_mm": 0.02,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 84546.541,
+      "volume_mesh_mm3": 84305.301,
+      "mass_kg": 0.7575,
+      "com_mm": [
+        0.0,
+        -0.0,
+        490.0
+      ],
+      "bbox_min_mm": [
+        -58.0,
+        -58.0,
+        486.0
+      ],
+      "bbox_max_mm": [
+        58.0,
+        58.0,
+        494.0
+      ]
+    },
+    "s6_mxc_cold_finger": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.2",
+      "label_tr": "20 mK OFHC Bakır Soğuk Parmak Köprüsü",
+      "shape": "cyl",
+      "material": "ofhc_cu",
+      "tol_mm": 0.05,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 19126.801,
+      "volume_mesh_mm3": 19072.226,
+      "mass_kg": 0.1714,
+      "com_mm": [
+        -306.5,
+        -0.0,
+        490.0
+      ],
+      "bbox_min_mm": [
+        -555.0,
+        -3.5,
+        486.5
+      ],
+      "bbox_max_mm": [
+        -58.0,
+        3.5,
+        493.5
+      ]
+    },
+    "s6_cryo_bridge_4k_shield": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.2",
+      "label_tr": "4 K Radyasyon Kalkan Tüpü (36 mm Yarıktan Geçiş)",
+      "shape": "tube",
+      "material": "ofhc_cu",
+      "tol_mm": 0.05,
+      "triangles": 384,
+      "is_watertight": true,
+      "volume_analytic_mm3": 34989.488,
+      "volume_mesh_mm3": 34889.651,
+      "mass_kg": 0.3135,
+      "com_mm": [
+        -287.0,
+        0.0,
+        491.5
+      ],
+      "bbox_min_mm": [
+        -512.0,
+        -9.0,
+        482.5
+      ],
+      "bbox_max_mm": [
+        -62.0,
+        9.0,
+        500.5
+      ]
+    },
+    "s6_cryo_bridge_ovc": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.2",
+      "label_tr": "Kriyo Köprü Dış Vakum Ceketi (DR↔UHV)",
+      "shape": "tube",
+      "material": "ss316ln",
+      "tol_mm": 0.1,
+      "triangles": 384,
+      "is_watertight": true,
+      "volume_analytic_mm3": 266721.216,
+      "volume_mesh_mm3": 265960.169,
+      "mass_kg": 2.1338,
+      "com_mm": [
+        -333.5,
+        -0.0,
+        491.5
+      ],
+      "bbox_min_mm": [
+        -475.0,
+        -28.0,
+        463.5
+      ],
+      "bbox_max_mm": [
+        -192.0,
+        28.0,
+        519.5
+      ]
+    },
+    "s6_dr_support_frame": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.8",
+      "label_tr": "Seyreltme Kriyostatı (DR) Taşıyıcı Şasisi",
+      "shape": "frame",
+      "material": "rack_chassis",
+      "tol_mm": 0.5,
+      "triangles": 32,
+      "is_watertight": true,
+      "volume_analytic_mm3": 7680000.0,
+      "volume_mesh_mm3": 7680000.0,
+      "mass_kg": 18.432,
+      "com_mm": [
+        -650.0,
+        0.0,
+        80.0
+      ],
+      "bbox_min_mm": [
+        -820.0,
+        -170.0,
+        0.0
+      ],
+      "bbox_max_mm": [
+        -480.0,
+        170.0,
+        160.0
+      ]
+    },
+    "s6_dr_ovc_bottom": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.8",
+      "label_tr": "DR Dış Vakum Kabı (OVC) Tabanı",
+      "shape": "cyl",
+      "material": "ss316ln",
+      "tol_mm": 0.2,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 1493073.325,
+      "volume_mesh_mm3": 1488813.075,
+      "mass_kg": 11.9446,
+      "com_mm": [
+        -650.0,
+        -0.0,
+        167.5
+      ],
+      "bbox_min_mm": [
+        -828.0,
+        -178.0,
+        160.0
+      ],
+      "bbox_max_mm": [
+        -472.0,
+        178.0,
+        175.0
+      ]
+    },
+    "s6_dr_ovc_lower": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.8",
+      "label_tr": "DR OVC Alt Gövde",
+      "shape": "tube",
+      "material": "ss316ln",
+      "tol_mm": 0.2,
+      "triangles": 384,
+      "is_watertight": true,
+      "volume_analytic_mm3": 2406711.3,
+      "volume_mesh_mm3": 2399844.128,
+      "mass_kg": 19.2537,
+      "com_mm": [
+        -650.0,
+        0.0,
+        315.0
+      ],
+      "bbox_min_mm": [
+        -825.0,
+        -175.0,
+        175.0
+      ],
+      "bbox_max_mm": [
+        -475.0,
+        175.0,
+        455.0
+      ]
+    },
+    "s6_dr_ovc_port_arc": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.8",
+      "label_tr": "DR OVC Köprü Geçiş Kemeri",
+      "shape": "arc_tube",
+      "material": "ss316ln",
+      "tol_mm": 0.2,
+      "triangles": 340,
+      "is_watertight": true,
+      "volume_analytic_mm3": 595202.626,
+      "volume_mesh_mm3": 593536.476,
+      "mass_kg": 4.7616,
+      "com_mm": [
+        -675.51,
+        -0.0,
+        495.0
+      ],
+      "bbox_min_mm": [
+        -825.0,
+        -174.98,
+        455.05
+      ],
+      "bbox_max_mm": [
+        -490.13,
+        174.98,
+        534.95
+      ]
+    },
+    "s6_dr_ovc_upper": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.8",
+      "label_tr": "DR OVC Üst Gövde",
+      "shape": "tube",
+      "material": "ss316ln",
+      "tol_mm": 0.2,
+      "triangles": 384,
+      "is_watertight": true,
+      "volume_analytic_mm3": 3653043.938,
+      "volume_mesh_mm3": 3642620.552,
+      "mass_kg": 29.2244,
+      "com_mm": [
+        -650.0,
+        0.0,
+        747.5
+      ],
+      "bbox_min_mm": [
+        -825.0,
+        -175.0,
+        535.0
+      ],
+      "bbox_max_mm": [
+        -475.0,
+        175.0,
+        960.0
+      ]
+    },
+    "s6_dr_top_flange": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.8",
+      "label_tr": "DR 300 K Üst Ana Flanş",
+      "shape": "cyl",
+      "material": "ss316ln",
+      "tol_mm": 0.1,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 2986476.516,
+      "volume_mesh_mm3": 2977955.076,
+      "mass_kg": 23.8918,
+      "com_mm": [
+        -650.0,
+        -0.0,
+        972.5
+      ],
+      "bbox_min_mm": [
+        -845.0,
+        -195.0,
+        960.0
+      ],
+      "bbox_max_mm": [
+        -455.0,
+        195.0,
+        985.0
+      ]
+    },
+    "s6_pt420_coldhead": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.1",
+      "label_tr": "Cryomech PT415/420 Darbeli-Tüp Soğutucu",
+      "shape": "cyl",
+      "material": "al6061",
+      "tol_mm": 0.2,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 3023971.425,
+      "volume_mesh_mm3": 3015342.998,
+      "mass_kg": 8.1647,
+      "com_mm": [
+        -650.0,
+        -0.0,
+        1102.5
+      ],
+      "bbox_min_mm": [
+        -714.0,
+        -64.0,
+        985.0
+      ],
+      "bbox_max_mm": [
+        -586.0,
+        64.0,
+        1220.0
+      ]
+    },
+    "s6_dr_flange_50k": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.8",
+      "label_tr": "DR 50 K Radyasyon Kademesi Flanşı",
+      "shape": "cyl",
+      "material": "al6061",
+      "tol_mm": 0.1,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 1070353.183,
+      "volume_mesh_mm3": 1067299.099,
+      "mass_kg": 2.89,
+      "com_mm": [
+        -650.0,
+        -0.0,
+        847.0
+      ],
+      "bbox_min_mm": [
+        -806.0,
+        -156.0,
+        840.0
+      ],
+      "bbox_max_mm": [
+        -494.0,
+        156.0,
+        854.0
+      ]
+    },
+    "s6_shield_50k_lower": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.2",
+      "label_tr": "50 K Alüminyum Termal Kalkan (Alt)",
+      "shape": "tube",
+      "material": "al6061",
+      "tol_mm": 0.2,
+      "triangles": 384,
+      "is_watertight": true,
+      "volume_analytic_mm3": 897741.517,
+      "volume_mesh_mm3": 895179.953,
+      "mass_kg": 2.4239,
+      "com_mm": [
+        -650.0,
+        -0.0,
+        337.5
+      ],
+      "bbox_min_mm": [
+        -804.0,
+        -154.0,
+        220.0
+      ],
+      "bbox_max_mm": [
+        -496.0,
+        154.0,
+        455.0
+      ]
+    },
+    "s6_shield_50k_port": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.2",
+      "label_tr": "50 K Termal Kalkan (Port Kemeri)",
+      "shape": "arc_tube",
+      "material": "al6061",
+      "tol_mm": 0.2,
+      "triangles": 340,
+      "is_watertight": true,
+      "volume_analytic_mm3": 264534.5,
+      "volume_mesh_mm3": 263793.989,
+      "mass_kg": 0.7142,
+      "com_mm": [
+        -672.68,
+        -0.0,
+        495.0
+      ],
+      "bbox_min_mm": [
+        -804.0,
+        -153.98,
+        455.05
+      ],
+      "bbox_max_mm": [
+        -509.31,
+        153.98,
+        534.95
+      ]
+    },
+    "s6_shield_50k_upper": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.2",
+      "label_tr": "50 K Alüminyum Termal Kalkan (Üst)",
+      "shape": "tube",
+      "material": "al6061",
+      "tol_mm": 0.2,
+      "triangles": 384,
+      "is_watertight": true,
+      "volume_analytic_mm3": 1165153.883,
+      "volume_mesh_mm3": 1161829.3,
+      "mass_kg": 3.1459,
+      "com_mm": [
+        -650.0,
+        0.0,
+        687.5
+      ],
+      "bbox_min_mm": [
+        -804.0,
+        -154.0,
+        535.0
+      ],
+      "bbox_max_mm": [
+        -496.0,
+        154.0,
+        840.0
+      ]
+    },
+    "s6_dr_flange_4k": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.8",
+      "label_tr": "DR 4 K Kademesi Flanşı (OFHC Cu)",
+      "shape": "cyl",
+      "material": "ofhc_cu",
+      "tol_mm": 0.1,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 957255.848,
+      "volume_mesh_mm3": 954524.469,
+      "mass_kg": 8.577,
+      "com_mm": [
+        -650.0,
+        0.0,
+        728.0
+      ],
+      "bbox_min_mm": [
+        -788.0,
+        -138.0,
+        720.0
+      ],
+      "bbox_max_mm": [
+        -512.0,
+        138.0,
+        736.0
+      ]
+    },
+    "s6_shield_4k_lower": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.2",
+      "label_tr": "4 K OFHC Bakır Termal Kalkan (Alt)",
+      "shape": "tube",
+      "material": "ofhc_cu",
+      "tol_mm": 0.2,
+      "triangles": 384,
+      "is_watertight": true,
+      "volume_analytic_mm3": 690396.402,
+      "volume_mesh_mm3": 688426.464,
+      "mass_kg": 6.186,
+      "com_mm": [
+        -650.0,
+        0.0,
+        352.5
+      ],
+      "bbox_min_mm": [
+        -786.0,
+        -136.0,
+        250.0
+      ],
+      "bbox_max_mm": [
+        -514.0,
+        136.0,
+        455.0
+      ]
+    },
+    "s6_shield_4k_port": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.2",
+      "label_tr": "4 K Termal Kalkan (Port Kemeri)",
+      "shape": "arc_tube",
+      "material": "ofhc_cu",
+      "tol_mm": 0.2,
+      "triangles": 340,
+      "is_watertight": true,
+      "volume_analytic_mm3": 233208.046,
+      "volume_mesh_mm3": 232555.228,
+      "mass_kg": 2.0895,
+      "com_mm": [
+        -669.99,
+        0.0,
+        495.0
+      ],
+      "bbox_min_mm": [
+        -786.0,
+        -135.98,
+        455.05
+      ],
+      "bbox_max_mm": [
+        -525.76,
+        135.98,
+        534.95
+      ]
+    },
+    "s6_shield_4k_upper": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.2",
+      "label_tr": "4 K OFHC Bakır Termal Kalkan (Üst)",
+      "shape": "tube",
+      "material": "ofhc_cu",
+      "tol_mm": 0.2,
+      "triangles": 384,
+      "is_watertight": true,
+      "volume_analytic_mm3": 623040.655,
+      "volume_mesh_mm3": 621262.907,
+      "mass_kg": 5.5824,
+      "com_mm": [
+        -650.0,
+        0.0,
+        627.5
+      ],
+      "bbox_min_mm": [
+        -786.0,
+        -136.0,
+        535.0
+      ],
+      "bbox_max_mm": [
+        -514.0,
+        136.0,
+        720.0
+      ]
+    },
+    "s6_hemt_rack_4k": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.6",
+      "label_tr": "4 K InP HEMT LNA Rafı (56–82 Kanal, ≤1,0 W)",
+      "shape": "tube",
+      "material": "fr4_rogers",
+      "tol_mm": 0.1,
+      "triangles": 384,
+      "is_watertight": true,
+      "volume_analytic_mm3": 1031824.691,
+      "volume_mesh_mm3": 1028880.542,
+      "mass_kg": 2.4764,
+      "com_mm": [
+        -650.0,
+        -0.0,
+        697.0
+      ],
+      "bbox_min_mm": [
+        -772.0,
+        -122.0,
+        674.0
+      ],
+      "bbox_max_mm": [
+        -528.0,
+        122.0,
+        720.0
+      ]
+    },
+    "s6_dr_flange_still": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.8",
+      "label_tr": "DR Still (~800 mK) Kademesi Flanşı",
+      "shape": "cyl",
+      "material": "ofhc_cu",
+      "tol_mm": 0.1,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 507279.249,
+      "volume_mesh_mm3": 505831.807,
+      "mass_kg": 4.5452,
+      "com_mm": [
+        -650.0,
+        0.0,
+        616.0
+      ],
+      "bbox_min_mm": [
+        -766.0,
+        -116.0,
+        610.0
+      ],
+      "bbox_max_mm": [
+        -534.0,
+        116.0,
+        622.0
+      ]
+    },
+    "s6_dr_flange_cp": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.8",
+      "label_tr": "DR Cold Plate (~100 mK) Flanşı",
+      "shape": "cyl",
+      "material": "ofhc_cu",
+      "tol_mm": 0.1,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 339794.661,
+      "volume_mesh_mm3": 338825.111,
+      "mass_kg": 3.0446,
+      "com_mm": [
+        -650.0,
+        -0.0,
+        550.0
+      ],
+      "bbox_min_mm": [
+        -754.0,
+        -104.0,
+        545.0
+      ],
+      "bbox_max_mm": [
+        -546.0,
+        104.0,
+        555.0
+      ]
+    },
+    "s6_dr_flange_mxc": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.8",
+      "label_tr": "DR MXC (~20 mK) Karıştırma Odası Flanşı",
+      "shape": "cyl",
+      "material": "ofhc_cu",
+      "tol_mm": 0.05,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 453645.979,
+      "volume_mesh_mm3": 452351.572,
+      "mass_kg": 4.0647,
+      "com_mm": [
+        -650.0,
+        -0.0,
+        490.0
+      ],
+      "bbox_min_mm": [
+        -745.0,
+        -95.0,
+        482.0
+      ],
+      "bbox_max_mm": [
+        -555.0,
+        95.0,
+        498.0
+      ]
+    },
+    "s6_coax_300k_50k_pos": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.4",
+      "label_tr": "56–82 Koaksiyel Demet (300k_50k)",
+      "shape": "cyl",
+      "material": "nbtin_si",
+      "tol_mm": 0.1,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 26973.715,
+      "volume_mesh_mm3": 26896.749,
+      "mass_kg": 0.0769,
+      "com_mm": [
+        -650.0,
+        62.0,
+        907.0
+      ],
+      "bbox_min_mm": [
+        -659.0,
+        53.0,
+        854.0
+      ],
+      "bbox_max_mm": [
+        -641.0,
+        71.0,
+        960.0
+      ]
+    },
+    "s6_coax_300k_50k_neg": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.4",
+      "label_tr": "56–82 Koaksiyel Demet (300k_50k)",
+      "shape": "cyl",
+      "material": "nbtin_si",
+      "tol_mm": 0.1,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 26973.715,
+      "volume_mesh_mm3": 26896.749,
+      "mass_kg": 0.0769,
+      "com_mm": [
+        -650.0,
+        -62.0,
+        907.0
+      ],
+      "bbox_min_mm": [
+        -659.0,
+        -71.0,
+        854.0
+      ],
+      "bbox_max_mm": [
+        -641.0,
+        -53.0,
+        960.0
+      ]
+    },
+    "s6_coax_50k_4k_pos": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.4",
+      "label_tr": "56–82 Koaksiyel Demet (50k_4k)",
+      "shape": "cyl",
+      "material": "nbtin_si",
+      "tol_mm": 0.1,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 26464.777,
+      "volume_mesh_mm3": 26389.263,
+      "mass_kg": 0.0754,
+      "com_mm": [
+        -650.0,
+        62.0,
+        788.0
+      ],
+      "bbox_min_mm": [
+        -659.0,
+        53.0,
+        736.0
+      ],
+      "bbox_max_mm": [
+        -641.0,
+        71.0,
+        840.0
+      ]
+    },
+    "s6_coax_50k_4k_neg": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.4",
+      "label_tr": "56–82 Koaksiyel Demet (50k_4k)",
+      "shape": "cyl",
+      "material": "nbtin_si",
+      "tol_mm": 0.1,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 26464.777,
+      "volume_mesh_mm3": 26389.263,
+      "mass_kg": 0.0754,
+      "com_mm": [
+        -650.0,
+        -62.0,
+        788.0
+      ],
+      "bbox_min_mm": [
+        -659.0,
+        -71.0,
+        736.0
+      ],
+      "bbox_max_mm": [
+        -641.0,
+        -53.0,
+        840.0
+      ]
+    },
+    "s6_coax_4k_still_pos": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.4",
+      "label_tr": "56–82 Koaksiyel Demet (4k_still)",
+      "shape": "cyl",
+      "material": "nbtin_si",
+      "tol_mm": 0.1,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 24937.962,
+      "volume_mesh_mm3": 24866.806,
+      "mass_kg": 0.0711,
+      "com_mm": [
+        -650.0,
+        62.0,
+        671.0
+      ],
+      "bbox_min_mm": [
+        -659.0,
+        53.0,
+        622.0
+      ],
+      "bbox_max_mm": [
+        -641.0,
+        71.0,
+        720.0
+      ]
+    },
+    "s6_coax_4k_still_neg": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.4",
+      "label_tr": "56–82 Koaksiyel Demet (4k_still)",
+      "shape": "cyl",
+      "material": "nbtin_si",
+      "tol_mm": 0.1,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 24937.962,
+      "volume_mesh_mm3": 24866.806,
+      "mass_kg": 0.0711,
+      "com_mm": [
+        -650.0,
+        -62.0,
+        671.0
+      ],
+      "bbox_min_mm": [
+        -659.0,
+        -71.0,
+        622.0
+      ],
+      "bbox_max_mm": [
+        -641.0,
+        -53.0,
+        720.0
+      ]
+    },
+    "s6_coax_still_cp_pos": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.4",
+      "label_tr": "56–82 Koaksiyel Demet (still_cp)",
+      "shape": "cyl",
+      "material": "nbtin_si",
+      "tol_mm": 0.1,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 13995.795,
+      "volume_mesh_mm3": 13955.86,
+      "mass_kg": 0.0399,
+      "com_mm": [
+        -650.0,
+        62.0,
+        582.5
+      ],
+      "bbox_min_mm": [
+        -659.0,
+        53.0,
+        555.0
+      ],
+      "bbox_max_mm": [
+        -641.0,
+        71.0,
+        610.0
+      ]
+    },
+    "s6_coax_still_cp_neg": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.4",
+      "label_tr": "56–82 Koaksiyel Demet (still_cp)",
+      "shape": "cyl",
+      "material": "nbtin_si",
+      "tol_mm": 0.1,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 13995.795,
+      "volume_mesh_mm3": 13955.86,
+      "mass_kg": 0.0399,
+      "com_mm": [
+        -650.0,
+        -62.0,
+        582.5
+      ],
+      "bbox_min_mm": [
+        -659.0,
+        -71.0,
+        555.0
+      ],
+      "bbox_max_mm": [
+        -641.0,
+        -53.0,
+        610.0
+      ]
+    },
+    "s6_coax_cp_mxc_pos": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.4",
+      "label_tr": "56–82 Koaksiyel Demet (cp_mxc)",
+      "shape": "cyl",
+      "material": "nbtin_si",
+      "tol_mm": 0.1,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 11960.043,
+      "volume_mesh_mm3": 11925.917,
+      "mass_kg": 0.0341,
+      "com_mm": [
+        -650.0,
+        62.0,
+        521.5
+      ],
+      "bbox_min_mm": [
+        -659.0,
+        53.0,
+        498.0
+      ],
+      "bbox_max_mm": [
+        -641.0,
+        71.0,
+        545.0
+      ]
+    },
+    "s6_coax_cp_mxc_neg": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.4",
+      "label_tr": "56–82 Koaksiyel Demet (cp_mxc)",
+      "shape": "cyl",
+      "material": "nbtin_si",
+      "tol_mm": 0.1,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 11960.043,
+      "volume_mesh_mm3": 11925.917,
+      "mass_kg": 0.0341,
+      "com_mm": [
+        -650.0,
+        -62.0,
+        521.5
+      ],
+      "bbox_min_mm": [
+        -659.0,
+        -71.0,
+        498.0
+      ],
+      "bbox_max_mm": [
+        -641.0,
+        -53.0,
+        545.0
+      ]
+    },
+    "s7_rack_base": {
+      "subsystem": "s7_electronics_rack_interconnect",
+      "bom_id": "S7.1",
+      "label_tr": "19\" Kabin Taban Şasisi",
+      "shape": "box",
+      "material": "rack_chassis",
+      "tol_mm": 0.5,
+      "triangles": 12,
+      "is_watertight": true,
+      "volume_analytic_mm3": 15000000.0,
+      "volume_mesh_mm3": 15000000.0,
+      "mass_kg": 36.0,
+      "com_mm": [
+        1030.0,
+        0.0,
+        25.0
+      ],
+      "bbox_min_mm": [
+        780.0,
+        -300.0,
+        0.0
+      ],
+      "bbox_max_mm": [
+        1280.0,
+        300.0,
+        50.0
+      ]
+    },
+    "s7_rack_top": {
+      "subsystem": "s7_electronics_rack_interconnect",
+      "bom_id": "S7.1",
+      "label_tr": "19\" Kabin Üst Tavan & Fan Ünitesi",
+      "shape": "box",
+      "material": "rack_chassis",
+      "tol_mm": 0.5,
+      "triangles": 12,
+      "is_watertight": true,
+      "volume_analytic_mm3": 12000000.0,
+      "volume_mesh_mm3": 12000000.0,
+      "mass_kg": 28.8,
+      "com_mm": [
+        1030.0,
+        0.0,
+        1380.0
+      ],
+      "bbox_min_mm": [
+        780.0,
+        -300.0,
+        1360.0
+      ],
+      "bbox_max_mm": [
+        1280.0,
+        300.0,
+        1400.0
+      ]
+    },
+    "s7_rack_post_1": {
+      "subsystem": "s7_electronics_rack_interconnect",
+      "bom_id": "S7.1",
+      "label_tr": "19\" Kabin Köşe Dikmesi #1",
+      "shape": "box",
+      "material": "rack_chassis",
+      "tol_mm": 0.5,
+      "triangles": 12,
+      "is_watertight": true,
+      "volume_analytic_mm3": 1179000.0,
+      "volume_mesh_mm3": 1179000.0,
+      "mass_kg": 2.8296,
+      "com_mm": [
+        795.0,
+        -285.0,
+        705.0
+      ],
+      "bbox_min_mm": [
+        780.0,
+        -300.0,
+        50.0
+      ],
+      "bbox_max_mm": [
+        810.0,
+        -270.0,
+        1360.0
+      ]
+    },
+    "s7_rack_post_2": {
+      "subsystem": "s7_electronics_rack_interconnect",
+      "bom_id": "S7.1",
+      "label_tr": "19\" Kabin Köşe Dikmesi #2",
+      "shape": "box",
+      "material": "rack_chassis",
+      "tol_mm": 0.5,
+      "triangles": 12,
+      "is_watertight": true,
+      "volume_analytic_mm3": 1179000.0,
+      "volume_mesh_mm3": 1179000.0,
+      "mass_kg": 2.8296,
+      "com_mm": [
+        1265.0,
+        -285.0,
+        705.0
+      ],
+      "bbox_min_mm": [
+        1250.0,
+        -300.0,
+        50.0
+      ],
+      "bbox_max_mm": [
+        1280.0,
+        -270.0,
+        1360.0
+      ]
+    },
+    "s7_rack_post_3": {
+      "subsystem": "s7_electronics_rack_interconnect",
+      "bom_id": "S7.1",
+      "label_tr": "19\" Kabin Köşe Dikmesi #3",
+      "shape": "box",
+      "material": "rack_chassis",
+      "tol_mm": 0.5,
+      "triangles": 12,
+      "is_watertight": true,
+      "volume_analytic_mm3": 1179000.0,
+      "volume_mesh_mm3": 1179000.0,
+      "mass_kg": 2.8296,
+      "com_mm": [
+        1265.0,
+        285.0,
+        705.0
+      ],
+      "bbox_min_mm": [
+        1250.0,
+        270.0,
+        50.0
+      ],
+      "bbox_max_mm": [
+        1280.0,
+        300.0,
+        1360.0
+      ]
+    },
+    "s7_rack_post_4": {
+      "subsystem": "s7_electronics_rack_interconnect",
+      "bom_id": "S7.1",
+      "label_tr": "19\" Kabin Köşe Dikmesi #4",
+      "shape": "box",
+      "material": "rack_chassis",
+      "tol_mm": 0.5,
+      "triangles": 12,
+      "is_watertight": true,
+      "volume_analytic_mm3": 1179000.0,
+      "volume_mesh_mm3": 1179000.0,
+      "mass_kg": 2.8296,
+      "com_mm": [
+        795.0,
+        285.0,
+        705.0
+      ],
+      "bbox_min_mm": [
+        780.0,
+        270.0,
+        50.0
+      ],
+      "bbox_max_mm": [
+        810.0,
+        300.0,
+        1360.0
+      ]
+    },
+    "s7_psu_hv_bay": {
+      "subsystem": "s7_electronics_rack_interconnect",
+      "bom_id": "S7.4",
+      "label_tr": "±5 kV Kolon HV & 8-Bobin Mıknatıs PSU",
+      "shape": "box",
+      "material": "rack_psu",
+      "tol_mm": 0.5,
+      "triangles": 12,
+      "is_watertight": true,
+      "volume_analytic_mm3": 45597200.0,
+      "volume_mesh_mm3": 45597200.0,
+      "mass_kg": 31.0061,
+      "com_mm": [
+        1030.0,
+        0.0,
+        170.0
+      ],
+      "bbox_min_mm": [
+        815.0,
+        -241.0,
+        60.0
+      ],
+      "bbox_max_mm": [
+        1245.0,
+        241.0,
+        280.0
+      ]
+    },
+    "s7_host_gpu_server": {
+      "subsystem": "s7_electronics_rack_interconnect",
+      "bom_id": "S7.1",
+      "label_tr": "Ana Kontrol Sunucusu & GRAPE/CellISA GPU",
+      "shape": "box",
+      "material": "rack_steel",
+      "tol_mm": 0.5,
+      "triangles": 12,
+      "is_watertight": true,
+      "volume_analytic_mm3": 49742400.0,
+      "volume_mesh_mm3": 49742400.0,
+      "mass_kg": 22.8815,
+      "com_mm": [
+        1030.0,
+        0.0,
+        420.0
+      ],
+      "bbox_min_mm": [
+        815.0,
+        -241.0,
+        300.0
+      ],
+      "bbox_max_mm": [
+        1245.0,
+        241.0,
+        540.0
+      ]
+    },
+    "s7_fpga_blanker_bay": {
+      "subsystem": "s7_electronics_rack_interconnect",
+      "bom_id": "S7.3",
+      "label_tr": "FPGA Blanker/IBIC Sayım Kapısı & Servo DSP",
+      "shape": "box",
+      "material": "rack_fpga",
+      "tol_mm": 0.2,
+      "triangles": 12,
+      "is_watertight": true,
+      "volume_analytic_mm3": 45597200.0,
+      "volume_mesh_mm3": 45597200.0,
+      "mass_kg": 19.1508,
+      "com_mm": [
+        1030.0,
+        0.0,
+        670.0
+      ],
+      "bbox_min_mm": [
+        815.0,
+        -241.0,
+        560.0
+      ],
+      "bbox_max_mm": [
+        1245.0,
+        241.0,
+        780.0
+      ]
+    },
+    "s7_awg_rf_mw_bay": {
+      "subsystem": "s7_electronics_rack_interconnect",
+      "bom_id": "S7.2",
+      "label_tr": "Çok-Kanallı AWG & 56–82 Zincir RF/MW Sentezi",
+      "shape": "box",
+      "material": "rack_awg",
+      "tol_mm": 0.2,
+      "triangles": 12,
+      "is_watertight": true,
+      "volume_analytic_mm3": 62178000.0,
+      "volume_mesh_mm3": 62178000.0,
+      "mass_kg": 31.089,
+      "com_mm": [
+        1030.0,
+        0.0,
+        950.0
+      ],
+      "bbox_min_mm": [
+        815.0,
+        -241.0,
+        800.0
+      ],
+      "bbox_max_mm": [
+        1245.0,
+        241.0,
+        1100.0
+      ]
+    },
+    "s7_clock_sync_bay": {
+      "subsystem": "s7_electronics_rack_interconnect",
+      "bom_id": "S7.4",
+      "label_tr": "10 MHz Rb Saat Dağıtımı & Kriyo Termometri",
+      "shape": "box",
+      "material": "rack_clock",
+      "tol_mm": 0.2,
+      "triangles": 12,
+      "is_watertight": true,
+      "volume_analytic_mm3": 43524600.0,
+      "volume_mesh_mm3": 43524600.0,
+      "mass_kg": 16.5393,
+      "com_mm": [
+        1030.0,
+        0.0,
+        1225.0
+      ],
+      "bbox_min_mm": [
+        815.0,
+        -241.0,
+        1120.0
+      ],
+      "bbox_max_mm": [
+        1245.0,
+        241.0,
+        1330.0
+      ]
+    },
+    "s7_feedthrough_panel": {
+      "subsystem": "s7_electronics_rack_interconnect",
+      "bom_id": "S7.4",
+      "label_tr": "Kriyo / UHV / RF Geçiş Yama Paneli",
+      "shape": "box",
+      "material": "al6061",
+      "tol_mm": 0.2,
+      "triangles": 12,
+      "is_watertight": true,
+      "volume_analytic_mm3": 7948800.0,
+      "volume_mesh_mm3": 7948800.0,
+      "mass_kg": 21.4618,
+      "com_mm": [
+        762.0,
+        0.0,
+        950.0
+      ],
+      "bbox_min_mm": [
+        744.0,
+        -230.0,
+        710.0
+      ],
+      "bbox_max_mm": [
+        780.0,
+        230.0,
+        1190.0
+      ]
+    }
+  }
+}

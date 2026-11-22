@@ -1,0 +1,11 @@
+# Core scientific stack (sufficient for all 89/89 Atom Lithography tests,
+# CellISA v2.0, IBIC 0-ERC netlist/SPICE generator, BOM/MC & CAD STL/SCAD)
+numpy>=1.26
+scipy>=1.11
+pandas>=2.0
+torch>=2.2
+pytest>=8.0
+
+# Optional — required only to re-render 2D technical drawings & PNG/SVG figures
+# pycairo>=1.25
+# pillow>=10.0
