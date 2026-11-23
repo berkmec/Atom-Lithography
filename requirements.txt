@@ -1,11 +1,13 @@
-# Core scientific stack for Atom Lithography Machine v5.0
-# (All 23/23 Atom Lithography test suites [198/198 pytest], BOED + Q16.16 FPGA DSP,
-# CellISA v3.5, IBIC 0-ERC netlist/SPICE generator, BOM v5.0 / 8-RFQ MC,
-# CAD v5.0 STL/SCAD, and Exp124-Exp141 Digital Twin)
+# Core scientific & cloud-QPU stack for Atom Lithography Machine v6.0
+# (All 28/28 Atom Lithography test suites [252/252 pytest], BOED + Q16.16 FPGA DSP,
+# CellISA v4.0, pure-requests IBM Quantum Platform 2026 REST bridge [zero qiskit],
+# autonomous self-healing auto_recal, IBIC 0-ERC netlist/SPICE generator,
+# BOM v6.0 / 9-RFQ MC, CAD v6.0 STL/SCAD, and Exp124-Exp146 Digital Twin)
 numpy>=1.26
 scipy>=1.11
 pandas>=2.0
 torch>=2.2
+requests>=2.31
 pytest>=8.0
 
 # Optional — required only to re-render 2D technical drawings & PNG/SVG figures

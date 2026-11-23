@@ -1,29 +1,32 @@
-# Atom Litografi Makinesi — Kapsamlı Teknik El Kitabı (`TECHNICAL_MANUAL.md`, v5.0)
+# Atom Litografi Makinesi — Kapsamlı Teknik El Kitabı (`TECHNICAL_MANUAL.md`, v6.0)
 
-**Sürüm:** `v5.0` (Tarih: `2026-11-23`; Tam Hata-Toleranslı Dalga Kilidi — `Exp124`–`Exp141`, `CAD v5.0`, `Q16.16` FPGA `BOED` & `CellISA v3.5`, `S5.6` MBE, `S6.5` Cryo-MUX, `BOM_DETAILED v5.0` + `8-RFQ`, `Exp141` Master `v5.0` Dijital İkiz)
-**Kapsam:** Tek-kriyostatlı, **`32×32 = 1.024` eş-adımlı (`0,50 mm`) demetçikli** Atom Litografi Makinesi'nin birinci-ilkeler fiziği (`Exp124–141`), atomistik `sp³d⁵s*` TB (`Exp136`), `1530 K` flaş tavlama + `S5.6` LT-MBE (`Exp130/139`), `P4 Echo CZ` & `d=3..11` MWPM yüzey kodu (`Exp137/138`), `Q16.16` FPGA `BOED` + `S6.5` `N_mux*=32` + `CellISA v3.5` (`Exp132/140`), `CAD v5.0` (`189` parça / `32/32`), `BOM v5.0` (`167` parça / `8-RFQ`), `W2/W3` `CX4` SOI ekonomisi ve `Exp141` Master `v5.0` Dijital İkiz el kitabı.
-**Ana Referanslar:** [DESIGN.md](DESIGN.md) (`v5.0`), [MODULAR.md](MODULAR.md) (`v5.0-ICD`), [M1_PROTOTYPE_BLUEPRINT.md](M1_PROTOTYPE_BLUEPRINT.md), [PROJECT_DOSSIER.md](PROJECT_DOSSIER.md), [BOM_ENGINEERING.md](BOM_ENGINEERING.md), [RFQ_SPECIFICATIONS.md](RFQ_SPECIFICATIONS.md) (`8-RFQ`), [LITERATURE.md](LITERATURE.md), `research/atom_lithography_machine/cad/cad_verification.json`, `results/exp124..141/`.
+**Sürüm:** `v6.0` (Tarih: `2026-11-23`; Tam Modüler Ölçekleme, `qLDPC` Devrimi & Canlı IBM QPU Kilidi — `Exp124`–`Exp146`, `CAD v6.0`, `BOM_DETAILED v6.0` + `9-RFQ`, `Option-Q` `qRAM`/`S1-Multi`, `D3` GRAPE `M4` + `Option-HPC` `100G` RDMA, `[[144,12,12]]` Gross Code `qLDPC`, `CellISA v4.0` + `auto_recal.py` + canlı `156Q` `ibm_marrakesh` QPU & `Exp146` Master `v6.0` Dijital İkiz)
+**Kapsam:** Tek-kriyostatlı, **`32×32 = 1.024` eş-adımlı (`0,50 mm`) demetçikli** Atom Litografi Makinesi'nin birinci-ilkeler fiziği (`Exp124–146`), `1530,1 K` flaş + `S5.6` MBE, `D3` `K=8` Fourier GRAPE `M4` (`p_2q = %0,337–%0,395`), **`[[144,12,12]]` Gross Code `qLDPC` (`108L = 1` kriyostat, `$63.827/L_sys`)**, `Option-Q` (`8.403×–25.122×` `qRAM`), `Option-HPC` (`100G` RDMA), **`CellISA v4.0` (`20` op) + `auto_recal` + canlı `156Q` `ibm_marrakesh`**, `CAD v6.0` (`199` parça / `40/40`), `BOM v6.0` (`174` parça / `9-RFQ`) ve `Exp146` Master `v6.0` Dijital İkiz el kitabı.
+**Ana Referanslar:** [DESIGN.md](DESIGN.md) (`v6.0`), [MODULAR.md](MODULAR.md) (`v6.0-ICD`), [M1_PROTOTYPE_BLUEPRINT.md](M1_PROTOTYPE_BLUEPRINT.md) (`v6.0`), [PROJECT_DOSSIER.md](PROJECT_DOSSIER.md) (`v6.0`), [BOM_ENGINEERING.md](BOM_ENGINEERING.md) (`v6.0`), [RFQ_SPECIFICATIONS.md](RFQ_SPECIFICATIONS.md) (`9-RFQ`), [LITERATURE.md](LITERATURE.md), `research/atom_lithography_machine/cad/cad_verification.json`, `results/exp124..146/`.
 
-> **Epistemik Sözleşme (Zorunlu Uyarı):** Bu el kitabındaki tüm sayısal veriler `no_lab_measurement=true`, `no_supplier_quotes=true`, `tapeout_done=false` statüsündedir. Henüz fiziksel prototip, ıslak laboratuvar ölçümü, tedarikçi bağlayıcı teklifi veya yonga üretimi (tape-out) yoktur. Her değer kaynağıyla `[ExpID | dosya]` ve epistemik etiketiyle taşınır; ön-kayıtlı `FAIL` hükümleri (`Exp124, 126, 127, 129, 131, 134, 136, 137, 138, 139`) gizlenmeden raporlanır.
+> **Epistemik Sözleşme (Kristal Ayrım):**
+> - **Silikon `³¹P` fabrikasyon, `CAD v6.0`, `BOM v6.0`, `M1–M4` makine fiziği ve `auto_recal.py`:** `M0` tasarım & sayısal fizibilite (**`no_lab_measurement=true`, `no_supplier_quotes=true`, `tapeout_done=false`**). Tüm ön-kayıtlı `FAIL` hükümleri (`Exp124, 126, 127, 129, 131, 134, 136, 137, 138, 139, 142, 143`) gizlenmeden raporlanır.
+> - **Kontrol yığını (`CellISA v4.0 → OpenQASM 3.0`), `Echo/XY4` DD, `d=3` sendrom dekoderi ve bit-kesin `Q16.16` BOED (`Exp145`):** **Gerçek `156`-kübitlik `ibm_marrakesh` (IBM Heron r2, `job_id = dc1tdo2nj2vs73dfrfl0`, `16 PUB × 4.096 shot`, `32,54 s`) süperiletken bulut QPU üzerinde canlı doğrulandı** (`{Canlı-Donanım-IBM-QPU}`, `SECRET_LEAKS = 0`).
 
 ---
 
 ## İçindekiler
 
-- [Bölüm 1: Sistem Mimarisi, Çalışma Noktası (`v5.0`) ve Fiziksel Gerçeklik Sınırları](#bölüm-1-sistem-mimarisi-çalışma-noktası-v50-ve-fiziksel-gerçeklik-sınırları)
+- [Bölüm 1: Sistem Mimarisi, Çalışma Noktası (`v6.0`) ve Fiziksel Gerçeklik Sınırları](#bölüm-1-sistem-mimarisi-çalışma-noktası-v60-ve-fiziksel-gerçeklik-sınırları)
 - [Bölüm 2: İyon Kolonu Optiği & Liouville/Scherzer Matematiği (`Exp124`)](#bölüm-2-iyon-kolonu-optiği--liouvillescherzer-matematiği-exp124)
 - [Bölüm 3: Kriyojenik `1,50 T / 22,3 µT` Mıknatıs, Meissner Kalkanı & 5-Kademe Termal/RF Bütçesi (`Exp125`)](#bölüm-3-kriyojenik-150-t--223-µt-mıknatıs-meissner-kalkanı--5-kademe-termalrf-bütçesi-exp125)
 - [Bölüm 4: IBIC Tek-İyon Algılama & Soğuk-Ada Ön-Uç Elektroniği (`Exp127` & `src/board/`)](#bölüm-4-ibic-tek-iyon-algılama--soğuk-ada-ön-uç-elektroniği-exp127--srcboard)
-- [Bölüm 5: Kuantum Kontrol, `Q16.16` FPGA `BOED`, GRAPE/XY8 & `CellISA v3.5` Programlama Kılavuzu](#bölüm-5-kuantum-kontrol-q1616-fpga-boed-grapexy8--cellisa-v35-programlama-kılavuzu)
-- [Bölüm 6: Parametrik CAD v5.0 Montaj, Kütle Bütçesi & `32/32` Tolerans Rehberi](#bölüm-6-parametrik-cad-v50-montaj-kütle-bütçesi--3232-tolerans-rehberi)
-- [Bölüm 7: Mühendislik BOM (`167` Parça), `8-RFQ` Tedarik Stratejisi, `Exp128 v5.0` MC & `Exp141` `CX4` Ekonomisi](#bölüm-7-mühendislik-bom-167-parça-8-rfq-tedarik-stratejisi-exp128-v50-mc--exp141-cx4-ekonomisi)
+- [Bölüm 5: Kuantum Kontrol, `Q16.16` FPGA, `CellISA v4.0`, `auto_recal` & Canlı IBM QPU Kılavuzu](#bölüm-5-kuantum-kontrol-q1616-fpga-cellisa-v40-auto_recal--canlı-ibm-qpu-kılavuzu)
+- [Bölüm 6: Parametrik CAD v6.0 Montaj, Kütle Bütçesi & `40/40` Tolerans Rehberi](#bölüm-6-parametrik-cad-v60-montaj-kütle-bütçesi--4040-tolerans-rehberi)
+- [Bölüm 7: Modüler BOM v6.0 (`174` Parça), `9-RFQ` Stratejisi, `Exp128 v6.0` MC & `qLDPC` Ekonomisi](#bölüm-7-modüler-bom-v60-174-parça-9-rfq-stratejisi-exp128-v60-mc--qldpc-ekonomisi)
 - [Bölüm 8: Kurulum, Devreye Alma, Kalibrasyon SOP & EHS Güvenlik Protokolleri](#bölüm-8-kurulum-devreye-alma-kalibrasyon-sop--ehs-güvenlik-protokolleri)
 - [Bölüm 9: `v4.0` Yükseltme Paketi (`Exp129`–`Exp135`): `VOKL-6`, Flaş Tavlama, `M4` cQED, `BOED`, `PT420` & Birleşik Dijital İkiz](#bölüm-9-v40-yükseltme-paketi-exp129exp135-vokl-6-flaş-tavlama-m4-cqed-boed-pt420--birleşik-dijital-ikiz)
 - [Bölüm 10: `v5.0` Hata-Toleranslı Yükseltme Paketi (`Exp136`–`Exp141`): `sp³d⁵s*` TB, `P4 Echo CZ`, MWPM FT, `1530 K`+MBE, `N_mux*=32` & Master Dijital İkiz](#bölüm-10-v50-hata-toleranslı-yükseltme-paketi-exp136exp141-sp³d⁵s-tb-p4-echo-cz-mwpm-ft-1530-kmbe-n_mux32--master-dijital-ikiz)
+- [Bölüm 11: `v6.0` Modüler Ölçekleme, `qLDPC` Devrimi & Canlı IBM QPU Doğrulaması (`Exp142`–`Exp146`)](#bölüm-11-v60-modüler-ölçekleme-qldpc-devrimi--canlı-ibm-qpu-doğrulaması-exp142exp146)
 
 ---
 
-## Bölüm 1: Sistem Mimarisi, Çalışma Noktası (`v5.0`) ve Fiziksel Gerçeklik Sınırları
+## Bölüm 1: Sistem Mimarisi, Çalışma Noktası (`v6.0`) ve Fiziksel Gerçeklik Sınırları
 
 ### 1.1 Tek-Kriyostatlı Entegre Sistem Blok Diyagramı
 
@@ -47,17 +50,17 @@ Atom Litografi Makinesi, ultra-yüksek vakumlu (UHV, `< 1×10⁻⁹ mbar`) tek b
           +--> [S4 Granit + Piezo + 3-Eksen He-Ne] <---> [S5 UHV Oda (34,86 L) + Yük-Kilidi + S6.8 DR]
 ```
 
-### 1.2 Kilitli `v5.0` Sistem Çalışma Noktası
+### 1.2 Kilitli `v6.0` Sistem Çalışma Noktası
 
-| Parametre | `v5.0` Kilitli Değer | Önceki (`v4.0` / `Exp129–135`) | Değişim Nedeni & Kaynak | Etiket |
+| Parametre | `v6.0` Kilitli Değer | Önceki (`v5.0` / `Exp136–141`) | Değişim Nedeni & Kaynak | Etiket |
 |---|---|---|---|---|
-| **Atomistik Bağ & Optimal `f*`** | `160k`-orb `sp³d⁵s*` TB: `R331 %21,1` (`log10-RMS=0,2426`), `f=%1 → %52,75`, **`f*=%1,5+2 MV/m → %77,50` (`d_eff/d=%99,5 @ N=6`)** | `VOKL-6` `R331 %64,73`, `HM5962 %33,25` | `R1` atomistik olarak `3×` daraltıldı; `XY8 T₂e = 10,8–20,3 ms` `[Exp136]` | `{Sayısal-Simülasyon}` |
-| **Yerleştirme, `1530 K` Flaş & `S5.6` MBE** | **`σ_tot = 3,631 / 3,588 nm`** (`1530 K / 43,49 J/cm²`, `σ_anneal = 0,430 nm`) + **`S5.6` MBE Rota C (`S_ε = 0,390 µeV/√Hz`, `p_ff = %97,70`)** | `1440 K` (`3,620 nm` ama gizli `+1,318 nm` TED → `3,995 nm` FAIL!) | `v4` gizli `{311}` küme TED'i keşfedilip `1530 K` + `S5.6` MBE ile kapatıldı `[Exp139, Exp141]` | `{Sayısal-Simülasyon}` |
-| **`M4` `P4 Echo CZ` & Yüzey Kodu FT** | **`F_Bell = 0,9949, F_avg = 0,9926, p_err = %0,92 < %1`**; **`p_2q,th = %1,60`**, **`D2 Λ = 1,40`** (`679` kriyo), **`D3 Λ = 2,52`** (`100` kriyo, `1 L/kriyo`) | `F_Bell = 0,9655`, `CZ = 0,7768`, `P1 Λ = 0,00` | `P4` `δg`'yi `5,09×` bastırır + Rota C eşik altını açar; `D2→D3` `6,8×` filo küçülmesi `[Exp137, Exp138]` | `{Sayısal-Simülasyon}` |
-| **`Q16.16` FPGA `BOED` & `S6.5` Cryo-MUX** | **`abs(ΔRMS) = 0,0502 Hz`, `2,336 µs/adım`, `%10,49` DSP48E2**; **`N_mux* = 32` (`F_RO = %99,61`, `625×` Purcell)**; tek kriyo **`2.887` hücre** | FP64 `BOED` (`41 ms`), MUX tavanı belirsizdi | `1.024` hücre `4/4` PASS, `10.000` hücre `≥ 4` kriyo; `N_mux=64` `%94,13` FAIL `[Exp140]` | `{Sayısal-Simülasyon}` |
-| **`CellISA v3.5` & Canlı İkiz** | **`17` komut (`+ ECHO_CZ, MUX_READOUT, SYNDROME_CYCLE`)**, canlı **`ECHO_CZ = 0,9818` (`+20,27 pp`), `F_syn = 0,9427`, `T_cyc = 2,620 µs`** | `CellISA v3.0` (`14` komut) | `63/63` yazılım/DSP/ikiz/ön-uç/RTL `pytest` / **`198/198`** (`23/23` dosya) `[Exp140, Exp141]` | `{Sayısal-Simülasyon}` |
-| **CAD & Kütle (`v5.0`)** | **`189` parça, `1.034,937 kg`, `8/8` STL (`38.876` üçgen, `491,444 L`), `0/17.766` çakışma, `32/32` boşluk** | `170` parça, `993,27 kg`, `0/14.365`, `25/25` | `+ S5.6` MBE (`22,4 kg`) + `S6.5` Cryo-MUX/RFSoC (`19,27 kg`), `27/27` test `[cad_verification.json]` | `{EDA}` |
-| **BOM v5.0, `8-RFQ` & `CX4` SOI** | **`167` parça (`M3 $5,248M`, pilot `$4,790M`, `M1 $2,466M`)**, **`8-RFQ %76,4 / %92,6` MC var**, `P(Prog>$100M) = %4,23`; **`W2/W3` SOI `CX4` PASS (`−%79,5 / −%85,3`)** | `159` parça (`M3 $4,610M`), `7-RFQ %72,9`, `CX4 FAIL` | `+$724,2k` brüt / `−$86k` kredi = net `+$638,2k`; `D3 10⁻⁹`: `$0,73` fab / `$2,76M` sys (`5,41×` ucuz) `[Exp128 v5.0, Exp141]` | `{Model}` |
+| **`D3` `K=8` Fourier GRAPE `M4`** | **`p_2q = %0,337–%0,395`**, **`F_avg = %99,73`, `F_Bell = %99,69`**, **`Λ_D3_phys = 2,825`** (`0,894 µs` muhaf. / `1,126 µs` yankılı, `%100 ≤ 300 MHz`) | `P4` `p_err = %0,92`, `D2 Λ = 1,40` (`679` kriyo) | `100L` yüzey kodu `679 → 100` kriyo (`6,8×`); `Q=1e6` + Rota C `[Exp143]` | `{Sayısal-Simülasyon}` |
+| **`[[144,12,12]]` `qLDPC` Devrimi** | **`L_max = 268,3 µm ≤ 300 µm`** (`0` rezonatör değişikliği!), **`120L` tek `LD400`'de (`108L = 1` kriyo, `$63.827/L_sys`, `W3` `$0,0085/L`)** | Yüzey kodu `679` (`D2`) / `100` (`D3`) kriyo, `$14,94M / $2,76M` | **`234×` sistem maliyeti çöküşü**; `f*=%1,5+2 MV/m, N=8 → %99,94` `108L` yonga `[Exp144]` | `{Sayısal-Simülasyon}` |
+| **`Option-Q` (`qRAM` & `S1-Multi`)** | Chebyshev-5 `0,0004 dB`, `F_SWAP_rt = 0,9858`, **`8.403×–25.122×` ömür (`+0,78 µW @ 20 mK`)**; `10 km ¹⁶⁷Er 1.352,3 Hz`, `¹²¹Sb −%41,5` | Yok (yalnız `³¹P`) | Tak-çıkar `+$168k / +9,20 kg` (`S1.7-01` + `S9.4-01..03`) `[Exp142]` | `{Sayısal-Simülasyon}` |
+| **`Option-HPC` `100G` RDMA Dekoder** | `τ_ingest = 777 ns`, `d=37 SC 6,34 µs < 6,70 µs`, **`qLDPC 108L 2,32 µs < 2,62 µs`** (tek `4U`, `+$132k / +64 kg / 2.195 W`) | Gerçek-zamanlı dekoder gecikmesi çözülmemişti | `0 W` kriyo yüküyle `backlog-free` dekoder kapanışı `[Exp143]` | `{Sayısal-Simülasyon}` |
+| **Canlı IBM QPU & `CellISA v4.0`** | **Gerçek `156Q` `ibm_marrakesh` (`dc1tdo2nj2vs73dfrfl0`):** Bare `0,333` → Echo `0,922` → XY4 `0,928`, Bell `0,9733`, `d=3` `5,16×/7,83×`, `Q16.16 BOED` `1,6 Hz`; `20` op + `auto_recal` `4/4` | `CellISA v3.5` (`17` op), yalnızca simülasyon | Yazılım/DD/QEC/BOED canlı QPU'da doğrulandı; **`252/252` `pytest` (`28/28`)** `[Exp145]` | **`{Canlı-Donanım-IBM-QPU}`** + `{Model}` |
+| **CAD & Kütle (`v6.0`)** | **`199` parça, `1.108,137 kg`, `8/8` STL (`39.536` üçgen, `591,200 L`), `0/19.701` çakışma, `40/40` boşluk** | `189` parça, `1.034,94 kg`, `0/17.766`, `32/32` | `+ Option-Q` (`9,20 kg`) + `Option-HPC` (`64,00 kg`), `30/30` test `[cad_verification.json]` | `{EDA}` |
+| **Modüler BOM v6.0 & `9-RFQ`** | **`174` parça (`M1 Base $2,466M`, `M3 Base $5,248M`, `M3 Full $5,548M`), `9-RFQ %77,7 / %92,6` MC var**, `P(Prog>$100M) = %4,92 < %5` | `167` parça (`M3 $5,248M`), `8-RFQ %76,4` | `M1/M3 Base` korundu; `+$300k` tak-çıkar `Option-Q/HPC`; `0,000 kg` CAD uyumu `[Exp128 v6.0]` | `{Model}` |
 
 ### 1.3 Baz Üretim Modu (Mod B) vs. Deterministik `²⁹Si` Opsiyonu (Mod A) ve Donör Saçılması Gerçeği
 
@@ -131,7 +134,7 @@ Burada $C_c = 2,660\text{ mm}$'lik yükselişi telafi etmek için `S1.5` yarım-
 
 ### 2.5 8-Kademeli İyon Kolonu İstif & Yüksek Gerilim Şeması
 
-Kolon toplam yüksekliği **`562,66 mm`**, en büyük dış çapı **`OD = 110,0 mm`**, toplam kütlesi **`25,92 kg`**'dır (`CAD v5.0 S1` montaj kütle karşılığı bağlantı flanşlarıyla `25,977 kg`). HV potansiyel mimarisi: **pul/IBIC = `0 V` (toprak)**, **üst kolon astarı = `−5,0 kV`**, **duoplasmatron anodu = `+5,0 kV`** (`[Exp124 | exp124.json]`, `{Sayısal-Simülasyon}`).
+Kolon toplam yüksekliği **`562,66 mm`**, en büyük dış çapı **`OD = 110,0 mm`**, temel kütlesi **`25,92 kg`**'dır (`CAD v6.0 S1` flanşlarla temel `25,977 kg`, isteğe bağlı `Option-Q S1-Multi +4,80 kg` ile `30,777 kg`). HV potansiyel mimarisi: **pul/IBIC = `0 V` (toprak)**, **üst kolon astarı = `−5,0 kV`**, **duoplasmatron anodu = `+5,0 kV`** (`[Exp124 | exp124.json]`, `{Sayısal-Simülasyon}`).
 
 | Sıra (Alttan) | Modül Kodu | Bileşen | Yükseklik `h` (`mm`) | Alt Aralık (`mm`) | Dış Çap `OD` (`mm`) | İç Delik (`mm`) | Kütle (`kg`) | Nominal Potansiyel |
 |---|---|---|---|---|---|---|---|---|
@@ -295,27 +298,28 @@ $$\text{ENC}^2 = \frac{1}{q^2 V_{\text{peak,1e}}^2} \int_0^\infty \left[ S_{v,\t
 
 ---
 
-## Bölüm 5: Kuantum Kontrol, `Q16.16` FPGA `BOED`, GRAPE/XY8 & `CellISA v3.5` Programlama Kılavuzu
+## Bölüm 5: Kuantum Kontrol, `Q16.16` FPGA, `CellISA v4.0`, `auto_recal` & Canlı IBM QPU Kılavuzu
 
-Bu bölüm, `src/machine_control/` **v3.5** yazılım yığınını (**`63/63`** yazılım/FPGA-DSP/Dijital-İkiz/ön-uç/RTL `pytest` [`src/machine_control/ + Exp132 + Exp135 + Exp140 + Exp141 + board + RTL`] / **`198/198`** toplam `23/23` staged Atom Litografi `pytest` PASS), `BOED` + `Q16.16` FPGA DSP motorunu (`Exp132/140`) ve `17`-komutlu **`CellISA v3.5`** derleyicisini belgeler (`[Exp127, Exp132, Exp140, Exp141 | src/machine_control/]`, `{Model}`).
+Bu bölüm, `src/machine_control/` **v4.0** yazılım yığınını (**`85/85`** yazılım/FPGA-DSP/IBM-QPU/auto_recal/Dijital-İkiz/ön-uç/RTL `pytest` [`11` dosya] / **`252/252`** toplam `28/28` staged Atom Litografi `pytest` PASS), `20`-komutlu **`CellISA v4.0`** derleyicisini, otonom **`auto_recal.py`** (`4/4 PASS`) denetleyicisini ve gerçek **`156Q` `ibm_marrakesh`** üzerinde canlı doğrulanan sıfır-`qiskit` **`cloud_qpu_bridge.py`** köprüsünü belgeler (`[Exp127–146 | src/machine_control/]`, `{Model}` + `{Canlı-Donanım-IBM-QPU}`).
 
-### 5.1 Yazılım Modül Haritası & Yapılandırma Ön-Ayarları (`v3.5`)
+### 5.1 Yazılım Modül Haritası & Yapılandırma Ön-Ayarları (`v4.0`)
 
 | Modül (`src/machine_control/`) | Sorumluluk | Temel Sınıflar / İşlevler |
 |---|---|---|
 | `config.py` | Makine yapılandırma ön-ayarları | `MachineConfig.v400_bayesian()`, `v300_baseline()`, `v224_baseline()`, `v224_1k_upgrade()`, `legacy_exp65()` |
 | `adaptive_spectroscopy.py` | **`BOED`** 3-aşamalı uyarlamalı spektroskopi (`$0` HW) | `BayesianSpectroscopy` (`41,03 ms`, `RMS=72,67 Hz`, `FNR=%0,20`, `FPR=%0,00`, `Exp132`) |
-| **`fpga_boed_dsp.py`** | **`Q16.16` sabit-nokta `ZCU216` RFSoC FPGA DSP** | `abs(ΔRMS) = 0,0502 Hz`, `2,336 µs/adım`, `%10,49` DSP48E2 (`Exp140/141`) |
+| `fpga_boed_dsp.py` | **`Q16.16` sabit-nokta `ZCU216` RFSoC FPGA DSP** | `abs(ΔRMS) = 0,0502 Hz`, `2,336 µs/adım`, `%10,49` DSP48E2 (`Exp140/141`; canlı `ibm_marrakesh` `1,6 Hz`) |
+| **`cloud_qpu_bridge.py`** | **Sıfır-`qiskit` IBM Quantum Platform 2026 REST + `OpenQASM 3.0`** | `IBMQuantumRESTClient`, `NativeOpenQASM3Transpiler` (`16-dt`, Heron/Eagle), `select_best_linear_chain` (`Exp145`) |
+| **`auto_recal.py`** | **Otonom kendini-onaran 4-arıza kapalı-çevrim kontrolörü** | `AutoRecalController` (`S5.5` lazer, `S5` UHV, `S3` `%5` ölü blanker, `³¹P ±350 Hz` kayma — `4/4 PASS`, `Exp145`) |
 | `selector.py` | `Exp48` doğal `²⁹Si` çekirdek seçicisi | `AtlasSelector` (bellek köprüsü, taşınabilir repo-kökü) |
 | `writer.py` | Sayılmış tek-iyon yerleştirme modeli | `IonWriter` (`1.024` demetçik [`32×32 @ 0,50 mm`], `15 ms/atış`, `5 keV`) |
 | `spectroscopy.py` | Klasik hiperince çizgi tarama (`{A_k}`) | `SpectroscopyEngine` (`NL=160 × 56 = 8.960` kanal) |
 | `calibrator.py` | Çift-`α` (`α=1 ∧ α=2`) DD kapılı kalibrasyon | `spectral`, `shaped` ve `grape` kalibrasyon modları |
 | `pulse_engine.py` | Birinci-ilkeler spin dinamiği & GRAPE/XY8 | `su2_rotation` (Rodrigues), `MultiSpinSimulator`, 9-köşeli L-BFGS-B GRAPE, OU gürültü + `XY8` |
-| `programmer.py` | **`CellISA v3.5`** (`17` komut) & `M4`/QEC derleyici | `CellInstruction`, `CellProgram`, `AtomCellProgrammer`, `MultiCellProgrammer`, `ProgramCertificate` (SHA-256) |
-| `factory.py` | Çok-yuvalı fabrika yürütücüsü (`BOED` destekli) | `Factory`, `Certificate` (7 alan), `FactoryReport` |
-| `sim.py` | Birleşik komut satırı arayüzü (CLI) | `python3 -m machine_control.sim --preset v400` |
+| `programmer.py` | **`CellISA v4.0`** (`20` komut `VALID_OPCODES_ALL`; `17` donmuş `v3.5`) | `CellInstruction`, `CellProgram`, `AtomCellProgrammer`, `MultiCellProgrammer`, `ProgramCertificate` (SHA-256) |
+| `factory.py` & `sim.py` | Çok-yuvalı fabrika yürütücüsü & CLI | `Factory`, `Certificate` (7 alan), `python3 -m machine_control.sim --preset v400` |
 
-- **Kanonik Ön-Ayarlar:** **`v400_bayesian()`** (`--preset v400`, `BOED 41,03 ms` + `Q16.16` FPGA + `CellISA v3.5`), `v300_baseline()` / `v224_baseline()`, `v224_1k_upgrade()`, `legacy_exp65()`.
+- **Kanonik Ön-Ayarlar:** **`v400_bayesian()`** (`--preset v400`, `BOED 41,03 ms` + `Q16.16` FPGA + `CellISA v4.0`), `v300_baseline()` / `v224_baseline()`, `v224_1k_upgrade()`, `legacy_exp65()`.
 
 ### 5.2 `SU(2)` Rodrigues Darbe Fiziği, 9-Köşeli GRAPE & `XY8` Dinamik Ayrıştırma
 
@@ -323,11 +327,11 @@ Bu bölüm, `src/machine_control/` **v3.5** yazılım yığınını (**`63/63`**
 - **9-Köşeli Sağlam GRAPE:** Seçici RF/MW darbeleri, `±400 Hz` frekans kayması × `±%2` genlik hatası oluşturan 9 köşede (`3 × 3` ızgara) eşzamanlı L-BFGS-B optimizasyonuyla sentezlenir (`CORNER_OFFSETS_HZ`, `CORNER_AMP_SCALES`).
 - **Ornstein–Uhlenbeck (OU) Gürültü & `XY8` DD (Soyutlama Sınırı Notu):** Yavaş manyetik gürültü altında serbest bozunma (`FID = 0,1145`) `XY8` dinamik ayrıştırmasıyla **`DD = 0,9533`** düzeyine taşınır (**`8,32× – 14,37×`** eşevrelilik kazancı). **Önemli soyutlama ayrımı:** `src/machine_control/pulse_engine.py` içindeki hızlı `CellISA` derleyici adımı (`apply_dd_hold`), `DD_HOLD` aralığını efektif eşevrelilik faz operatörüyle (`0,5·arccos(dd_coherence)`) modeller; tam `32`-boyutlu (`1e + 4n` + `448` banyo seyircisi + seküler `J_ij`) mikroskobik `XY8`-GRAPE Hamiltonyen doğrulaması Bölüm `5.6`'da (`experiments/exp126_atom_cell_programming/`, `Exp126`) ayrı olarak gerçekleştirilmiştir. Kalibratör ayrıca `α=1` ve `α=2` çift-`α` DD kapısını zorunlu kılar.
 
-### 5.3 `CellISA v3.5` `17`-Komut Referansı (`v2.0` + `v3.0` + `v3.5`)
+### 5.3 `CellISA v4.0` `20`-Komut Referansı (`v2.0` + `v3.0` + `v3.5` + `v4.0`)
 
-Kübit adreslemesi: elektron için `'e'` / `0`; sertifikalı `²⁹Si` çekirdek kübitleri için `'n0'..'n7'` / `1..8` (`parse_qubit()`).
+Kübit adreslemesi: elektron için `'e'` / `0`; sertifikalı `²⁹Si` çekirdek kübitleri için `'n0'..'n7'` / `1..8` (`parse_qubit()`). `VALID_OPCODES` (`17`) geriye dönük `v3.5` uyumluluğu için dondurulmuştur; `VALID_OPCODES_ALL` tüm `20` `v4.0` komutunu sunar.
 
-| Opcode | Sürüm | Zorunlu / İsteğe Bağlı Argümanlar | Fiziksel Derleme Çıktısı (`ScheduleOp` / `M4` QEC) |
+| Opcode | Sürüm | Zorunlu / İsteğe Bağlı Argümanlar | Fiziksel Derleme Çıktısı (`ScheduleOp` / `M4` QEC / Bulut QPU) |
 |---|---|---|---|
 | `INIT` | `v2.0` | `state` (varsayılan `\|0...0>`) | Başlatma / optik-RF hazırlık kaydı |
 | `RX` | `v2.0` | `target`, `angle` (`rad`) | Seçici MW (`e`) veya RF (`n_k`, `A_k` frekansında) X-döndürme darbesi |
@@ -339,13 +343,16 @@ Kübit adreslemesi: elektron için `'e'` / `0`; sertifikalı `²⁹Si` çekirdek
 | `DD_HOLD` | `v2.0` | `duration_us`, `sequence` (`XY8`) | Bekleme aralığına `XY8` dinamik ayrıştırma sekansı gömme |
 | `MEASURE` | `v2.0` | `qubits` (isteğe bağlı), `shots` | RF yansıma / tek-atışlı spin okuma örneklemesi (`visibility = 0,99`) |
 | `ARRAY_EXEC` | `v2.0` | `program`, `cells` | Derlenmiş programı seçilen sertifikalı hücre dizisinde paralel yürütme |
-| **`WAFER_MAP_ROUTE`** | `v3.0` | `wafer_map`, `topology`, `n_cells` | Çalışan yonga yuvalarını `M4` veri yolu topolojisine yönlendirme (`Exp132`) |
-| **`BUS_TUNE`** | `v3.0` | `cell`, `detuning_mhz`, `g_eff` | Flip-flop saat-geçişi DC kapı ayarı & `3 kΩ NbTiN` rezonatör eşleştirme |
-| **`BUS_CZ`** | `v3.0` | `cell_a`, `cell_b`, `bus_id` | Hücreler arası kavite-aracılı çıplak `CZ` kapısı (`Exp131/132`) |
-| **`LOGICAL_ENCODE`** | `v3.0` | `code`, `data_cells`, `ancilla` | Çok-hücreli mantıksal kodlama (`bitflip3_plus_ancilla`, `p_L = 3,65×10⁻⁴`) |
-| **`ECHO_CZ`** | **`v3.5`** | `cell_a`, `cell_b`, `echo_seq` | `Exp137 P4` (`XY4-DRAG-Echo-CZ`) `1/f`-yankılı `CZ` (`0,7791 → 0,9818`, `Exp140/141`) |
-| **`MUX_READOUT`** | **`v3.5`** | `cells`, `n_mux` (`≤ 32`), `twpa` | `S6.5` Purcell-filtreli TWPA çoklamalı okuma (`N_mux* = 32`, `F_RO = %99,61`) |
-| **`SYNDROME_CYCLE`** | **`v3.5`** | `stabilizers`, `rounds`, `decoder` | Tam yüzey-kodu sendrom döngüsü (`ECHO_CZ` + `MUX_READOUT`, `F_syn = 0,9427`, `T_cyc = 2,620 µs`) |
+| `WAFER_MAP_ROUTE` | `v3.0` | `wafer_map`, `topology`, `n_cells` | Çalışan yonga yuvalarını `M4` veri yolu topolojisine yönlendirme (`Exp132`) |
+| `BUS_TUNE` | `v3.0` | `cell`, `detuning_mhz`, `g_eff` | Flip-flop saat-geçişi DC kapı ayarı & `3 kΩ NbTiN` rezonatör eşleştirme |
+| `BUS_CZ` | `v3.0` | `cell_a`, `cell_b`, `bus_id` | Hücreler arası kavite-aracılı çıplak `CZ` kapısı (`Exp131/132`) |
+| `LOGICAL_ENCODE` | `v3.0` | `code`, `data_cells`, `ancilla` | Çok-hücreli mantıksal kodlama (`bitflip3_plus_ancilla`, `p_L = 3,65×10⁻⁴`) |
+| `ECHO_CZ` | `v3.5` | `cell_a`, `cell_b`, `echo_seq` | `Exp137 P4` (`XY4-DRAG-Echo-CZ`) `1/f`-yankılı `CZ` (`0,7791 → 0,9818`, `Exp140/141`) |
+| `MUX_READOUT` | `v3.5` | `cells`, `n_mux` (`≤ 32`), `twpa` | `S6.5` Purcell-filtreli TWPA çoklamalı okuma (`N_mux* = 32`, `F_RO = %99,61`) |
+| `SYNDROME_CYCLE` | `v3.5` | `stabilizers`, `rounds`, `decoder` | Tam yüzey-kodu sendrom döngüsü (`ECHO_CZ` + `MUX_READOUT`, `F_syn = 0,9427`, `T_cyc = 2,620 µs`) |
+| **`QRAM_SWAP`** | **`v4.0`** | `transmon_port`, `cell`, `mode` | `Option-Q` `50 Ω ↔ 3 kΩ` süperiletken ↔ `³¹P` `qRAM` takası (`F_SWAP_rt = 0,9858`, `Exp142/145`) |
+| **`QLDPC_ROUND`** | **`v4.0`** | `code` (`BB144`), `blocks`, `decoder` | `[[144,12,12]]` Gross Code derinlik-7 sendrom turu + `Option-HPC` `BP-OSD` (`2,32 µs`, `Exp144/145`) |
+| **`AUTO_RECAL`** | **`v4.0`** | `subsystem`, `fault_mode`, `tolerance` | `auto_recal.py` 4-arıza kapalı-çevrim otonom yeniden kalibrasyon (`4/4 PASS`, `Exp145`) |
 
 ### 5.4 CLI Kullanımı & Sertifika JSONL Şemaları
 
@@ -415,66 +422,69 @@ PYTHONPATH=src python3 -m machine_control.sim \
 
 ---
 
-## Bölüm 6: Parametrik CAD v5.0 Montaj, Kütle Bütçesi & `32/32` Tolerans Rehberi
+## Bölüm 6: Parametrik CAD v6.0 Montaj, Kütle Bütçesi & `40/40` Tolerans Rehberi
 
-Tüm mekanik tasarım tek bir parametrik kaynaktan (`research/atom_lithography_machine/cad/params.py`) otomatik olarak OpenSCAD (`.scad`), su-geçirmez ikili `.stl` ve 10 teknik çizime (`2400×1600` `.png` + `.svg`) + `00_v5_overview_dashboard.png` kapak panosuna derlenir (`[CAD v5.0 | research/atom_lithography_machine/cad/cad_verification.json]`, `tests/test_cad.py` `27/27 PASS`, `{EDA}`).
+Tüm mekanik tasarım tek bir parametrik kaynaktan (`research/atom_lithography_machine/cad/params.py`) otomatik olarak OpenSCAD (`.scad`), su-geçirmez ikili `.stl` ve 10 teknik çizime (`2400×1600` `.png` + `.svg`, `ALM-600-*`) + `00_v6_overview_dashboard.png` kapak panosuna derlenir (`[CAD v6.0 | research/atom_lithography_machine/cad/cad_verification.json]`, `tests/test_cad.py` `30/30 PASS`, `{EDA}`).
 
-### 6.1 Ana Montaj Özeti (`5.0-exp139-exp140-locked`, `ISO 2768-mK`)
+### 6.1 Ana Montaj Özeti (`6.0-exp142-exp143-option-qhpc-locked`, `ISO 2768-mK`)
 
-- **Katı Parça Sayısı:** **`189`** (`7` alt-sistem; `v4.0`'dan `+19` parça: `S5.6` MBE kapak `+6`, `S6.5` Cryo-MUX/TWPA soğuk `+12`, `S7` RFSoC raf `+1`).
-- **Toplam Kütle & Hacim:** **`1.034,937 kg`**, `491,615 L` (birleşik STL: **`38.876` üçgen**, **`491,444 L`**, `22,278 m²` yüzey, **`0` açık kenar, `0` non-manifold kenar**).
-- **Kütle Merkezi (`CoM`):** `(109,03; −9,43; 467,67) mm`; dış zarf `2.520 × 937,3 × 1.400 mm`.
-- **Çakışma & Boşluk Denetimi:** **`0 / 17.766` katı çakışma** (`113` eşleşmiş temas) ve **`32 / 32` kritik boşluk PASS** (`25` `v4.0` boşluğu + `7` yeni `v5.0` boşluğu: `S5.6` MBE `119,0 / 70,1 / 186,0 mm`, `S6.5` TWPA/HEMT/looms/RFSoC `17,982 / 10,0 / 8,0 / 20,0 mm`).
+- **Katı Parça Sayısı:** **`199`** (`7` alt-sistem; `v5.0`'dan `+10` parça: `Option-Q` `+5` [`S1.6` Multi `+2`, `S9.1` qRAM/fiber `+3`] + `Option-HPC` `+5` [`S9.HPC` `4U` 2-düğüm `100G` RDMA]).
+- **Toplam Kütle & Hacim:** **`1.108,137 kg`** (`1.034,937` Base + `9,200` `Option-Q` + `64,000` `Option-HPC`; `BOM v6.0` ile **`0,000 kg`** fark!), `591,371 L` (birleşik STL: **`39.536` üçgen**, **`591,200 L`**, `25,723 m²` yüzey, **`0` açık kenar, `0` non-manifold kenar**).
+- **Kütle Merkezi (`CoM`):** `(189,67; −8,35; 452,68) mm`; dış zarf `3.062,6 × 937,3 × 1.400 mm`.
+- **Çakışma & Boşluk Denetimi:** **`0 / 19.701` katı çakışma** (`113` eşleşmiş temas) ve **`40 / 40` kritik boşluk PASS** (`32` `v5.0` boşluğu + `8` yeni `v6.0` boşluğu).
 
-### 6.2 Alt-Sistem Kütle, STL & Teknik Çizim Envanteri (`CAD v5.0`)
+### 6.2 Alt-Sistem Kütle, STL & Teknik Çizim Envanteri (`CAD v6.0`)
 
 | Kod | Alt-Sistem (`research/atom_lithography_machine/cad/`) | Çizim No | Parça | Kütle (`kg`) | STL Üçgen | STL Hacim (`L`) | Su-Geçirmez |
 |---|---|---|---:|---:|---:|---:|---|
-| `S1` | `parts/s1_ion_source_column.scad` (`Exp124` kolon) | `ALM-500-S1` (`01_s1_*.png/.svg`) | `11` | `25,977` | `3.468` | `3,970` | PASS |
-| `S2` | `parts/s2_mems_write_head.scad` (`Arch-B` + MEMS) | `ALM-500-S2` (`02_s2_*.png/.svg`) | `9` | `1,832` | `2.496` | `0,234` | PASS |
-| `S3` | `parts/s3_ibic_detector_assembly.scad` (`100 K` IBIC) | `ALM-500-S3` (`03_s3_*.png/.svg`) | `7` | `0,153` | `636` | `0,041` | PASS |
-| `S4` | `parts/s4_piezo_stage_interferometry.scad` (Granit + Piezo) | `ALM-500-S4` (`04_s4_*.png/.svg`) | `18` | `302,367` | `2.400` | `110,362` | PASS |
-| `S5` | `parts/s5_uhv_chamber_loadlock.scad` (UHV + `S5.5` + **`S5.6` MBE**) | `ALM-500-S5` (`05_s5_*.png/.svg`) | **`29`** | **`193,941`** | **`4.732`** | **`31,772`** | PASS |
-| `S6` | `parts/s6_cryo_dr_magnet_readout.scad` (DR + `S6.9` + `S6.10` + **`S6.5` Cryo-MUX**) | `ALM-500-S6` (`06_s6_*.png/.svg`) | **`102`** | **`280,920`** | **`24.988`** | **`57,930`** | PASS |
-| `S7` | `parts/s7_electronics_rack_interconnect.scad` (Raf + **`S6.5` RFSoC**) | `ALM-500-S7` (`07_s7_*.png/.svg`) | **`13`** | **`229,747`** | **`156`** | **`287,135`** | PASS |
-| **Ana** | `atom_litho_machine.scad` (`08_assembly`, `09_cutaway`, `10_exploded`, `preview_machine.png`) | `ALM-500-00` | **`189`** | **`1.034,937`** | **`38.876`** | **`491,444`** | **PASS** |
+| `S1` | `parts/s1_ion_source_column.scad` (`Exp124` + **`S1.6` Multi**) | `ALM-600-S1` (`01_s1_*.png/.svg`) | **`13`** | **`30,777`** | **`3.672`** | **`4,531`** | PASS |
+| `S2` | `parts/s2_mems_write_head.scad` (`Arch-B` + MEMS) | `ALM-600-S2` (`02_s2_*.png/.svg`) | `9` | `1,832` | `2.496` | `0,234` | PASS |
+| `S3` | `parts/s3_ibic_detector_assembly.scad` (`100 K` IBIC) | `ALM-600-S3` (`03_s3_*.png/.svg`) | `7` | `0,153` | `636` | `0,041` | PASS |
+| `S4` | `parts/s4_piezo_stage_interferometry.scad` (Granit + Piezo) | `ALM-600-S4` (`04_s4_*.png/.svg`) | `18` | `302,367` | `2.400` | `110,362` | PASS |
+| `S5` | `parts/s5_uhv_chamber_loadlock.scad` (UHV + `S5.5` + `S5.6` MBE) | `ALM-600-S5` (`05_s5_*.png/.svg`) | `29` | `193,941` | `4.732` | `31,772` | PASS |
+| `S6` | `parts/s6_cryo_dr_magnet_readout.scad` (DR + MUX + **`S9.1` qRAM**) | `ALM-600-S6` (`06_s6_*.png/.svg`) | **`105`** | **`285,320`** | **`25.204`** | **`59,423`** | PASS |
+| `S7` | `parts/s7_electronics_rack_interconnect.scad` (Raf + **`S9.HPC` RDMA**) | `ALM-600-S7` (`07_s7_*.png/.svg`) | **`18`** | **`293,747`** | **`396`** | **`384,838`** | PASS |
+| **Ana** | `atom_litho_machine.scad` (`08_assembly`, `09_cutaway`, `10_exploded`, `preview_machine.png`) | `ALM-600-00` | **`199`** | **`1.108,137`** | **`39.536`** | **`591,200`** | **PASS** |
 
-### 6.3 `32 / 32` Kritik Boşluk (Clearance) — `v5.0` Ek 7 Boşluğu (`#26–#32`)
+### 6.3 `40 / 40` Kritik Boşluk (Clearance) — `v6.0` Ek 8 Boşluğu (`#33–#40`)
 
-*(İlk `25/25` `v4.0` kritik boşluğu birebir korunup PASS'tır; aşağıda `CAD v5.0` ile eklenen 7 yeni boşluk verilmiştir.)*
+*(İlk `32/32` `v5.0` kritik boşluğu birebir korunup PASS'tır; aşağıda `CAD v6.0` ile eklenen 8 yeni boşluk verilmiştir.)*
 
-| # | Yeni `v5.0` Kritik Arayüz Boşluğu (`cad_verification.json`) | Tasarım Değeri (`mm`) | Alt Sınır (`mm`) | Durum |
+| # | Yeni `v6.0` Kritik Arayüz Boşluğu (`cad_verification.json`) | Tasarım Değeri (`mm`) | Alt Sınır (`mm`) | Durum |
 |---|---|---:|---:|---|
-| 26 | `Exp139 S5.6` MBE gövdesi ↔ ana oda üst flanşı (`X`) | **`119,00`** | `100,00` | PASS |
-| 27 | `Exp139 S5.6` MBE alt port ↔ transfer kolu (`Z`) | **`70,10`** | `65,00` | PASS |
-| 28 | `Exp139 S5.6` MBE gövdesi ↔ `S7` raf paneli (`X`) | **`186,00`** | `100,00` | PASS |
-| 29 | `Exp140 S6.5` TWPA ↔ `4K` kalkan iç duvarı (radyal) | **`17,982`** | `15,00` | PASS |
-| 30 | `Exp140 S6.5` HEMT ↔ `4K` kalkan (radyal) | **`10,00`** | `8,00` | PASS |
-| 31 | `Exp140 S6.5` koaksiyel demet ↔ `M4` çapraz-çubuk (`X`) | **`8,00`** | `5,00` | PASS |
-| 32 | `Exp140 S6.5` RFSoC şasesi ↔ AWG raf aralığı (`Z`) | **`20,00`** | `10,00` | PASS |
+| 33 | `Exp142 S1.6` Multi kartuş ↔ duoplazmatron (`Y`) | **`27,00`** | `20,00` | PASS |
+| 34 | `Exp142 S1.6` Multi kartuş ↔ `−Y PH₃` manifoldu (`Y`) | **`136,00`** | `100,00` | PASS |
+| 35 | `Exp142 S9.1` `qRAM` köprüsü ↔ `S6.5` TWPA (`Z`) | **`8,50`** | `5,00` | PASS |
+| 36 | `Exp142 S9.1` OVC portu ↔ `PT420` valf sehpası (`X`) | **`144,80`** | `100,00` | PASS |
+| 37 | `Exp142 S9.1` fiber demeti ↔ `4K/50K` kalkanları | **`2,00`** | `1,50` | PASS |
+| 38 | `Exp143 S9.HPC` sunucu rafı ↔ `S7` servis koridoru (`X`) | **`60,00`** | `40,00` | PASS |
+| 39 | `Exp143 S9.HPC` düğüm-1 ↔ düğüm-2 hava payı (`Z`) | **`5,00`** | `3,00` | PASS |
+| 40 | `Exp143 S9.HPC` RoCEv2 anahtar ↔ düğüm-2 (`Z`) | **`5,00`** | `3,00` | PASS |
 
 ---
 
-## Bölüm 7: Mühendislik BOM (`167` Parça), `8-RFQ` Tedarik Stratejisi, `Exp128 v5.0` MC & `Exp141` `CX4` Ekonomisi
+## Bölüm 7: Modüler BOM v6.0 (`174` Parça), `9-RFQ` Stratejisi, `Exp128 v6.0` MC & `qLDPC` Ekonomisi
 
-Tüm maliyet hesapları değişmez `BOM.csv` (`$2.531.244`, SHA-256 değişmez) ile `$0,00` köprü hatasıyla bağlanan **`BOM_DETAILED.csv v5.0`** (`167` parça: `156` fiyatlı + `9` yazılım `$0` + `2` ikame `$0`, `tests/test_bom_detailed.py` `7/7 PASS`), `Exp128 v5.0` (`6/6 PASS`) ve `Exp141` wafer/mantıksal kübit ekonomisine dayanır (`no_supplier_quotes=true`).
+Tüm maliyet hesapları değişmez `BOM.csv` (`$2.531.244`, SHA-256 değişmez) ile `$0,00` köprü hatasıyla ve `CAD v6.0` ile `0,000 kg` kütle eşitliğiyle bağlanan **`BOM_DETAILED.csv v6.0`** (`174` parça = `167` `M3 Base` + `4` `Option-Q` + `3` `Option-HPC`, `tests/test_bom_detailed.py` `7/7 PASS`), `Exp128 v6.0` (`6/6 PASS`) ve `Exp144/146` `qLDPC` ekonomisine dayanır (`no_supplier_quotes=true`).
 
-### 7.1 `Exp122` → `BOM_DETAILED v5.0` Köprü & `8-RFQ` Paketleri (`%76,4` Nom / `%92,6` MC Varyansı)
+### 7.1 Modüler `v6.0` Yapılandırma & `9-RFQ` Paketleri (`%77,7` Nom / `%92,6` MC Varyansı)
 
-| Paket / Kalem | Parça | Düşük (`USD`) | Nominal (`USD`) | Yüksek (`USD`) | `M3 v5.0` Payı |
+| Paket / Yapılandırma | Parça | Düşük (`USD`) | Nominal (`USD`) | Yüksek (`USD`) | `M3 Full` Payı / Kütle |
 |---|---:|---:|---:|---:|---:|
-| `RFQ-01..06` (`S1, S2, S4, S6.3, S6.6, S6.8/6.1`) | `58` | `$1.644.000` | `$2.950.900` | `$5.495.700` | `%56,23` |
-| `RFQ-07` (`v4.0` `S5.5` + `S6.9` + `S6.10`; `−$86k` kredi düşülmüş) | `12` | `$187.000` | `$334.000` | `$621.000` | `%6,36` |
-| **`RFQ-08` (`v5.0` `S5.6` MBE `$95k` + `S6.5` TWPA/RFSoC `$629,2k`)** | **`8`** | **`$523.400`** | **`$724.200`** | **`$1.070.200`** | **`%13,80`** |
-| **`8-RFQ` Toplamı (`CU4 PASS`)** | **`78`** | **`$2.354.400`** | **`$4.009.100`** | **`$7.186.900`** | **`%76,40` (`%92,56` MC varyansı)** |
-| `Non-RFQ` (COTS / UHV / Raf / Sarf / `$0` SW) | `89` | `$685.000` | `$1.238.700` | `$2.339.000` | `%23,60` |
-| **`M3 v5.0` Tam Makine Toplamı (`167` parça, `$0,00` köprü)** | **`167`** | **`$3.039.400`** | **`$5.247.800`** | **`$9.525.900`** | `256`-hücre pilot: **`$4.790.400`** |
-| **`M1 v5.0` İlk Prototip** | — | `$1.454.520` | **`$2.466.120`** | `$4.400.540` | `M3`'ün `%47,0`'ı (`v4`'ten `+$129,9k`) |
+| `RFQ-01..06` (`S1, S2, S4, S6.3, S6.6, S6.8/6.1`) | `58` | `$1.644.000` | `$2.950.900` | `$5.495.700` | `%53,19` |
+| `RFQ-07` (`v4.0` `S5.5` + `S6.9` + `S6.10` net) | `12` | `$187.000` | `$334.000` | `$621.000` | `%6,02` |
+| `RFQ-08` (`v5.0` `S5.6` MBE + `S6.5/S6.11` MUX) | `8` | `$523.400` | `$724.200` | `$1.070.200` | `%13,05` |
+| **`RFQ-09` (`v6.0` `Option-Q $168k` + `Option-HPC $132k`)** | **`7`** | **`$216.000`** | **`$300.000`** | **`$423.000`** | **`%5,41` (`+73,20 kg`)** |
+| **`9-RFQ` Toplamı (`CU4 PASS`)** | **`85`** | **`$2.570.400`** | **`$4.309.100`** | **`$7.609.900`** | **`%77,67` (`%92,61` MC varyansı)** |
+| `Non-RFQ` (COTS / UHV / Raf / Sarf / `$0` SW) | `89` | `$685.000` | `$1.238.700` | `$2.339.000` | `%22,33` |
+| **`M1 Base` Prototip *(korundu)*** | — | `$1.454.996` | **`$2.466.120`** | `$4.400.788` | `M3 Base`'in `%47,0`'ı |
+| **`M3 v5.0 Base` *(korundu, `256`-hücre pilot `$4,790M`)*** | `167` | `$3.039.400` | **`$5.247.800`** | `$9.525.900` | `1.034,94 kg` (`P>100M = %4,37`) |
+| **`M3 v6.0 Full` (`+Option-Q` `$5,416M` / `+Option-HPC` `$5,380M`)** | **`174`** | **`$3.255.400`** | **`$5.547.800`** | **`$9.948.900`** | **`1.108,14 kg` (`P>100M = %4,92`)** |
 
-### 7.2 `Exp128 v5.0` 100k MC, EVPI & `Exp141` `CX4` SOI + `$/Mantıksal Kübit` Özeti
+### 7.2 `Exp128 v6.0` 100k MC, EVPI & `Exp144/146` `qLDPC` `$63.827/L_sys` Devrimi
 
-- **`Exp128 v5.0` 100k MC (`CU1–CU6 6/6 PASS`):** BOM `P50 = $6,15M` (`P95 = $12,52M`); Program `P50 = $34,59M ≤ $50M`, `P95 = $94,75M`, **`P(>$100M) = %4,23 < %5`** *(dürüst not: `FOAK` 5y TCO kuyruğu `P(>$100M) = %5,91`)*. Tornado: `#1 S6.6 %70,6`, `#2 S2 %6,0`, `#3 S6.8 %5,3`, `#4 v5.0 %3,4`. EVPI (`20 mK` vs `1 K`): `N=1`'de `$0`, `N_be = 6,04` makine.
-- **`Exp141` `CX4` Silikon Duvarı Kırıldı (`wafer_econ141.py`):** `W1` (`$12k` kalın epi: `$2,576/çip`, `−%14,5`, FAIL) → **`W2` (`30 nm` `200 mm` SOI `$2,2k`, `$0` makine değişikliği: `$0,616/çip`, `−%79,5`, `CX4 PASS`)** → **`W3` (`300 mm` SOI `$3,6k`: `$0,442/çip`, `−%85,3`, `CX4 PASS`)**. `10⁻⁹` mantıksal kübit (Wright `b=%85`): **`D2` (`Λ=1,40`, `679` kriyo)** `$/L_fab = $5,20` / `$/L_sys = $14,94M` vs **`D3` (`Λ=2,52`, `100` kriyo, `1 L/kriyo`)** **`$/L_fab = $0,73` / `$/L_sys = $2,76M` (`5,41×` ucuz!)**.
+- **`Exp128 v6.0` 100k MC (`CU1–CU6 6/6 PASS`):** `M3 Full` BOM `P50 = $6,46M` (`P95 = $12,98M`); Program `P50 = $36,25M ≤ $50M`, `P95 = $99,48M`, **`P(>$100M) = %4,92 < %5`** (`M3 Base: %4,37`; dürüst not: `FOAK` 5y TCO `%6,90`). Tornado: `#1 S6.6 %70,0`, `#2 S2 %6,0`, `#3 S6.8 %5,3`, `#4 v5.0 %3,3`. EVPI (`20 mK` vs `1 K`): `N=1`'de `$0`, `N_be = 6,02`.
+- **`Exp144/146` `100L` Sistem Maliyeti Sıkıştırması (`v5 D2 → v6 D3 → v6 qLDPC`):** `v5 D2 SC` (`679` kriyo, `$14.939.541/L_sys`) → `v6 D3 GRAPE SC` (`100` kriyo, `$2.759.442/L_sys`, `5,4×` ↓) → **`v6 [[144,12,12]] qLDPC 108L` (`1` kriyostat, `$63.827/L_sys` [`234,06×` ↓!], `W3` silikon fab `$0,0085/L_fab`)**!
 
 ---
 
@@ -504,24 +514,24 @@ Ayrıntılı `M1` yapım planı ve `10` alt-aşamalık iş kırılımı [M1_PROT
 
 ### 8.3 `G1–G8` Go/No-Go Doğrulama Kapıları & Açık Mühendislik Borçları
 
-| Kapı | Konu | Geçiş Kriteri (`M1 → M3/M4`) | Şimdiki Statü (`v5.0`) |
+| Kapı | Konu | Geçiş Kriteri (`M1 → M3/M4`) | Şimdiki Statü (`v6.0`) |
 |---|---|---|---|
-| `G1` | `8-RFQ` Fiyat & `S6.9` `PT420` | `8` paketten teklif (`%92,56` MC var); `CFG4` `σ_stage ≤ 0,25 nm` (`0,102 nm`) | `{Sayısal-Simülasyon}` PASS (`Exp133`); tedarikçi/lab açık |
+| `G1` | `9-RFQ` Fiyat & `S6.9` `PT420` | `9` paketten teklif (`%92,6` MC var); `CFG4` `σ_stage ≤ 0,25 nm` (`0,102 nm`) | `{Sayısal-Simülasyon}` PASS (`Exp133`); tedarikçi/lab açık |
 | `G2` | `S1` İyon Kolonu & `HDA-HiRes` | `10 → 5 keV`, `ΔE ≤ 0,50 eV`, `R_m ≥ 100`, `σ_spot ≤ 1,6 nm` | `{Sayısal-Simülasyon}` PASS (`Exp124`); lab açık |
 | `G3` | `S3` `100 K` Soğuk-Ada IBIC | `ENC ≤ 25 e⁻`, `η(5 keV) ≥ 0,99`, `P_false < 10⁻³ / 1 ms` | `{Sayısal-Simülasyon}` PASS (`Exp127`); PCB/lab açık |
-| `G4` | `S5.5` `1530 K` + `S5.6` MBE & `S6.3` | `1530 K` `%99,99` temizlik (`σ_anneal = 0,430 nm`), Rota C `S_ε ≤ 0,40`; `1,50 T ± 20 ppm`, `≤ 50 µT` | `{Sayısal-Simülasyon}` PASS (`Exp125, Exp130, Exp139`); fab/lab açık |
-| `G5` | `S6.8/6.5` Termal, `N_mux*` & `Q16.16` | `4K ≤ 1,0 W`, `MXC ≤ 19 µW`, `N_mux* = 32` (`F_RO = %99,61`), `Q16.16` `2,336 µs` | `{Sayısal-Simülasyon}` PASS (`Exp125, Exp132, Exp140`); lab açık |
-| `G6` | `S2` MEMS, `CAD v5.0` & **`G6b` `ENDOR` (`R1`)** | `WD = 0,25 mm`, `0/17.766` CAD çakışma (`32/32`); **`G6b` `p_work(f*=%1,5) ≥ %50`** | `{EDA}` PASS (`CAD v5.0`); **`R1` (`Exp129/136`) lab kapısı AÇIK** |
-| `G7` | `CellISA v3.5`, 32B & `M4` FT | RF `10–15 kHz`, `XY8 N=32–64`, `P4 Echo CZ ≥ 0,99`, `Λ ≥ 1,40` (`D2`) / `2,52` (`D3`) | `{Sayısal-Simülasyon}` PASS (`Exp126, Exp137, Exp138, Exp140, Exp141`); lab açık |
-| `G8` | `M2/M3` SKY130 Anten & Bütçe Onayı | `Exp123` `10` anten ihlali `→ 0` (`M2+`); `Exp128 v5.0` + `8-RFQ` | `M1` FPGA ile yürür (`R5` erteli); `P50 = $34,59M ≤ $50M`, `P(>100M) = %4,23` (`FOAK 5y TCO %5,91`) |
+| `G4` | `S5.5` `1530,1 K` + `S5.6` MBE & `S6.3` | `1530,1 K` `%99,99` temizlik (`σ_anneal = 0,430 nm`), Rota C `S_ε ≤ 0,40`; `1,50 T ± 20 ppm`, `≤ 50 µT` | `{Sayısal-Simülasyon}` PASS (`Exp125, Exp130, Exp139`); fab/lab açık |
+| `G5` | `S6.8/6.5` Termal, `N_mux*` & `Q16.16` | `4K ≤ 1,0 W`, `MXC ≤ 19 µW`, `N_mux* = 32` (`F_RO = %99,61`), `Q16.16` `2,336 µs` | **`{Canlı-Donanım-IBM-QPU}` (`Q16.16` `1,6 Hz`)** + `{Model}` PASS; silikon lab açık |
+| `G6` | `S2` MEMS, `CAD v6.0` & **`G6b` `ENDOR` (`R1`)** | `WD = 0,25 mm`, `0/19.701` CAD çakışma (`40/40`); **`G6b` `p_work(f*=%1,5) ≥ %50`** | `{EDA}` PASS (`CAD v6.0`); **`R1` (`Exp129/136`) lab kapısı AÇIK** |
+| `G7` | `CellISA v4.0`, `D3` GRAPE & `qLDPC` | `D3` `p_2q ≤ %0,45` (`%0,337–0,395`), `[[144,12,12]]` `108L = 1` kriyo, `auto_recal` `4/4` | **`{Canlı-Donanım-IBM-QPU}` (`ibm_marrakesh` `dc1tdo2nj2vs73dfrfl0`)** + `{Model}` PASS |
+| `G8` | `M2/M3` SKY130 Anten & Bütçe Onayı | `Exp123` `10` anten ihlali `→ 0` (`M2+`); `Exp128 v6.0` + `9-RFQ` | `M1` FPGA ile yürür (`R5` erteli); `M3 Base %4,37` / `M3 Full P50=$36,25M, P(>100M)=%4,92` |
 
-**Açık Teknik Borçlar (Şeffaf Envanter, `v5.0`):** (1) `M1` **`G6b` `ENDOR` Risk `R1` ölçümü** (`Exp136` `sp³d⁵s*` `R331 %21,1` kalıntısı & all-electron DFT doğrulaması); (2) `src/board/` 4-katmanlı KiCad PCB yerleşimi (`C_par ≤ 0,25 pF`) & `ngspice` köşe testi; (3) `RFQ-01..08` gerçek tedarikçi fiyat/termin toplama (`no_supplier_quotes=true`) ve `W2/W3` `30 nm` `²⁸Si-on-SOI` tedarik doğrulaması; (4) `M4` `3 kΩ NbTiN` `Q_int ≥ 5×10⁵` + `S_ε ≤ 0,25 µeV/√Hz` (`D2 → D3` `5,41×` sistem maliyeti yolu) ve `R2` `Crystal-TRIM` + `Exp126` `K=8` ölçeklemesi; (5) `M2/M3` aşamasında `Exp123` `10` SKY130 anten ihlalinin kapanması (`R5` erteli); (6) `M1` fiziksel prototip üzerinde ilk ıslak laboratuvar ölçümleri (`no_lab_measurement=true` durumunun kapanması).
+**Açık Teknik Borçlar (Şeffaf Envanter, `v6.0`):** (1) `M1` **`G6b` `ENDOR` Risk `R1` ölçümü** (`Exp136` `R331 %21,1` & all-electron DFT); (2) `src/board/` 4-katmanlı KiCad PCB yerleşimi (`C_par ≤ 0,25 pF`) & `ngspice`; (3) `RFQ-01..09` gerçek tedarikçi fiyat/termin toplama (`no_supplier_quotes=true`) ve `W2/W3` `30 nm` SOI tedarik doğrulaması; (4) `Q_r = 10⁶` `NbTiN` + `S_ε ≤ 0,25 µeV/√Hz` (`D3` GRAPE) ve `[[144,12,12]]` `qLDPC` fiziksel testi + `Exp142` `¹²¹Sb` gerinim/derinlik sınırı (`OQ5/6 FAIL`); (5) `M2/M3` aşamasında `Exp123` `10` SKY130 anten ihlalinin kapanması (`R5` erteli); (6) `M1 Base` silikon laboratuvar ölçümleri (`no_lab_measurement=true` kapanışı — yazılım/QEC/BOED `ibm_marrakesh` üzerinde canlı doğrulanmıştır).
 
 ---
 
 ## Bölüm 9: `v4.0` Yükseltme Paketi (`Exp129`–`Exp135`): `VOKL-6`, Flaş Tavlama, `M4` cQED, `BOED`, `PT420` & Birleşik Dijital İkiz
 
-Bu bölüm, tarihsel `v4.0` dalgasında üretilen ve her biri bağımsız `pytest` + `@verifier` QA onayı alan 7 birinci-ilkeler deneyini özetler (`tests/test_exp129..135.py`; `v4.0` dönem paketi `142/142 PASS`, güncel `v5.0` tam paketi Bölüm 10'da **`198/198 PASS`** [`23/23` dosya]; tümü `no_lab_measurement=true`).
+Bu bölüm, tarihsel `v4.0` dalgasında üretilen ve her biri bağımsız `pytest` + `@verifier` QA onayı alan 7 birinci-ilkeler deneyini özetler (`tests/test_exp129..135.py`; `v4.0` dönem paketi `142/142 PASS`, güncel `v6.0` tam paketi Bölüm 11'de **`252/252 PASS`** [`28/28` dosya]; tümü `no_lab_measurement=true`).
 
 ### 9.1 `Exp129` (`H147`, Risk `R1`) — `VOKL-6` 6-Vadi Merkez-Hücre Modeli (`3/7 PASS, 4/7 FAIL`, QA `#130`)
 - **Fizik Çekirdeği:** `216×216` 6-vadi merkez-hücre Kohn–Luttinger modeli (`0` `²⁹Si` uyumu): çıplak EMT `E_EMT = −31,262 meV` (Faulkner `−31,27`, `%0,03`); Morton–Preston `η_P/η_Si = 1,4178` tüm 4 `³¹P` değişmezini (`A1 = −45,5900`, `ΔT2 = 11,7000`, `ΔE = 13,0100 meV`, `A_P(0) = 117,530 MHz`) `< 10⁻¹⁰` (`~10⁻¹¹` mertebesi, maks `7,36×10⁻¹¹`) hassasiyetle tutturur (`a_⊥ / a_∥ = 1,748 / 0,959 nm`; `145`-PW `C_g(0,0,2) = 8,82×10⁻¹⁵`).
@@ -555,11 +565,25 @@ Bu bölüm, tarihsel `v4.0` dalgasında üretilen ve her biri bağımsız `pytes
 
 ## Bölüm 10: `v5.0` Hata-Toleranslı Yükseltme Paketi (`Exp136`–`Exp141`): `sp³d⁵s*` TB, `P4 Echo CZ`, MWPM FT, `1530 K`+MBE, `N_mux*=32` & Master Dijital İkiz
 
-Bu bölüm, `v5.0` hata-toleranslı dalgasında eklenen 6 birinci-ilkeler deneyini özetler (`tests/test_exp136..141.py`; tüm **`23/23`** staged Atom Litografi test paketi **`198/198 PASS`**, tümü `no_lab_measurement=true`, `no_supplier_quotes=true`).
+Bu bölüm, tarihsel `v5.0` hata-toleranslı dalgasında eklenen 6 birinci-ilkeler deneyini özetler (`tests/test_exp136..141.py`; `v5.0` dönem paketi `198/198 PASS`, güncel `v6.0` tam paketi Bölüm 11'de **`252/252 PASS`** [`28/28` dosya]; tümü `no_lab_measurement=true`, `no_supplier_quotes=true`).
 
 - **`Exp136` (`H154`, `4/7 PASS`, `10/10` test):** `16.000` atom / `160.000` orbital `sp³d⁵s*` TB çözücüsü `Exp129` `R331` sapmasını `%64,73 →` **`%21,1`** (`α_cp=0`) / **`%25,7`** (`α_cp=0,015`, `log10-RMS = 0,2426`) indirdi; `f=%1 → %52,75 (%99,74 M4)`, **`f*=%1,5+2 MV/m → %77,50` / DDRF `%54,00` (`%99,88 M4`)**, `f*=%2,0 → %59,75 (%99,99 M4)`, `XY8 T₂e = 10,8–20,3 ms`.
 - **`Exp137` (`H155`, `4/7 PASS`, `8/8` test):** `12×12` CUDA + `M=40` OU `1/f^α` altında `P4` (`XY4-DRAG-Echo-CZ`) `δg` cezasını **`5,09×`** bastırır; pasivesiz `S_ε=1,0 µeV/√Hz` `F_Bell=0,9587` (`0,9824` hızlı); **`Exp139` Rota C ile `(Q=2e5, S=0,50) → F_Bell=0,9901`, `(Q=5e5, S=0,25) → F_Bell=0,9949, F_avg=0,9926, p_err=%0,92 < %1`**.
 - **`Exp138` (`H156`, `6/7 PASS`, `10/10` test):** `d=3..11` Edmonds Blossom MWPM: **`p_2q,th = %1,60 ± %0,17`**, `P1 Λ=0,00`, `C2 Λ=1,04`, `D1 Λ=1,26`, **`D2 (Q=5e5, S=0,25) Λ=1,40`** (`10⁻⁹: d*=99, 679` kriyo), **`D3 (p_2q=%0,50) Λ=2,52`** (`10⁻⁹: d*=37, 100` kriyo, `1 L/kriyo`, **`6,8×` küçülme**); `f*=%1,5+2 MV/m+N=6 → d_eff/d = %99,5` (`FT5 FAIL` @ `f=%1, N=6: %79,0`).
-- **`Exp139` (`H157`, `4/7 PASS`, `9/9` test):** `v4` `1440 K` gizli `+1,318 nm` TED (`3,995 nm` FAIL) keşfedilip **`v5` `1530 K` (`43,49 J/cm²`, `%99,99` küme temizliği, `σ_anneal=0,430 nm`, `σ_tot=3,665 nm` PASS)** + **Rota C (`S_ε=0,390 µeV/√Hz`, `2,57×` düşüş, `p_ff=%97,70`)** + **`S5.6` MBE (`22,4 kg`, `$95k`, `0 µW`, `%0` akış cezası)** ile çözüldü.
-- **`Exp140` (`H158`, `7/7 PASS`, `7/7` test):** `Q16.16` FPGA `abs(ΔRMS)=0,0502 Hz`, `2,336 µs/adım`, `%10,49` DSP48E2; **`N_mux*=32` (`F_RO=%99,61`, `625×` Purcell; `64` FAIL `%94,13`)**; `1.024` PASS / tek kriyo **`2.887` hücre** / `10.000 ≥ 4` kriyo; **`CellISA v3.5` (`17` opcode)**; `S6.5` (`19,27 kg`, `$629,2k`).
-- **`Exp141` (`H159`, `8/8 DT5 PASS`, `9/9` test):** `19/19` artefakt `SHA-256` kilitli master dijital ikiz (`results/exp141_v5_digital_twin/v5_digital_twin_cert.json`, tam 64-hex **`SHA-256 = 2828e8ce8d9388f7cba5490b2d05add930aadc5fe6d3ba4295f0380f816d43d1`**): yerleştirme **`3,6307 / 3,5883 nm`**, canlı `Q16.16` `0,0183 Hz`, canlı `CellISA v3.5` **`ECHO_CZ = 0,9818`**, `W2/W3` SOI `CX4 PASS` (`$0,616 / $0,442/çip`, `−%79,5 / −%85,3`), `10⁻⁹` `D2` `$/L_fab=$5,20` / `$/L_sys=$14,94M` vs **`D3` `$0,73` / `$2,76M` (`5,41×` ucuz!)**.
+- **`Exp139` (`H157`, `4/7 PASS`, `9/9` test):** `v4` `1440 K` gizli `+1,318 nm` TED (`3,995 nm` FAIL) keşfedilip **`v5` `1530,1 K` (`43,49 J/cm²`, `%99,99` küme temizliği, `σ_anneal=0,430 nm`, `σ_tot=3,665 nm` PASS)** + **Rota C (`S_ε=0,390 µeV/√Hz`, `2,57×` düşüş, `p_ff=%97,70`)** + **`S5.6` MBE (`22,4 kg`, `$95k`, `0 µW`, `%0` akış cezası)** ile çözüldü.
+- **`Exp140` (`H158`, `7/7 PASS`, `7/7` test):** `Q16.16` FPGA `abs(ΔRMS)=0,0502 Hz`, `2,336 µs/adım`, `%10,49` DSP48E2; **`N_mux*=32` (`F_RO=%99,61`, `625×` Purcell; `64` FAIL `%94,13`)**; `1.024` PASS / tek kriyo **`2.887` hücre** / `10.000 ≥ 4` kriyo; `CellISA v3.5` (`17` opcode); `S6.5` (`19,27 kg`, `$629,2k`).
+- **`Exp141` (`H159`, `8/8 DT5 PASS`, `9/9` test):** `19/19` artefakt `SHA-256` kilitli tarihsel `v5.0` dijital ikizi (`results/exp141_v5_digital_twin/v5_digital_twin_cert.json`, tam 64-hex **`SHA-256 = 2828e8ce8d9388f7cba5490b2d05add930aadc5fe6d3ba4295f0380f816d43d1`**): yerleştirme **`3,6307 / 3,5883 nm`**, canlı `Q16.16` `0,0183 Hz`, canlı `CellISA v3.5` `ECHO_CZ = 0,9818`, `W2/W3` SOI `CX4 PASS` (`$0,616 / $0,442/çip`, `−%79,5 / −%85,3`), `10⁻⁹` `D2` `$/L_fab=$5,20` / `$/L_sys=$14,94M` vs `D3` `$0,73` / `$2,76M` (`5,41×` ucuz).
+
+---
+
+## Bölüm 11: `v6.0` Modüler Ölçekleme, `qLDPC` Devrimi & Canlı IBM QPU Doğrulaması (`Exp142`–`Exp146`)
+
+Bu bölüm, `v6.0` dalgasında eklenen 5 deney paketini özetler (`tests/test_exp142..146.py`; tüm **`28/28`** staged Atom Litografi test paketi **`252/252 PASS`**; silikon `³¹P` `M0` model, `Exp145` kontrol/DD/dekoder/BOED canlı `156Q` `ibm_marrakesh` donanımı).
+
+- **`Exp142` (`H160`, `5/7 PASS`, `10/10` test):** Tak-çıkar **`Option-Q`** (`$168k / 9,20 kg`) — `5`-kademe Chebyshev `50 Ω ↔ 3 kΩ` (`IL = 0,0004 dB`, `BW = 5,20 GHz`), `F_SWAP_rt = 0,9858`, **`8.403×` (`1 s DD`) – `25.122×` (`3 s`)** bellek ömrü (`+0,78 µW @ 20 mK`); `S1-Multi` `10 km` `¹⁶⁷Er` `1.352,3 Hz` (`F = 0,9474`), `7,5 keV ¹²¹Sb` `−%41,5` keskin saçılma (`OQ5/6` gerinim/derinlik sınırı dürüst `FAIL`).
+- **`Exp143` (`H161`, `4/7 PASS`, `9/9` test):** `D3` `K=8` Fourier GRAPE (`0,894 µs` muhaf. / `1,126 µs` yankılı, `%100 ≤ 300 MHz`): yankılı `Q=1e6, S=0,390 → p_2q = %0,395`, **`S=0,25 → p_2q = %0,337 (F_avg = %99,73, F_Bell = %99,69)`**, muhafazakar `high-g → %0,481`, canlı `Exp138` MWPM **`Λ_D3_phys = 2,825`** (`100L SC: 679 → 100` kriyo, `6,8×`); **`Option-HPC`** (`$132k / 64,0 kg / 2.195 W`, `0 W` kriyo): `τ_ingest = 777 ns`, `d=37 SC 6,34 µs < 6,70 µs`, **`qLDPC 108L 2,32 µs < 2,62 µs`**.
+- **`Exp144` (`H162`, `7/7 PASS`, `10/10` test):** **`[[144,12,12]]` Gross Code** `P_cell = 20 µm → L_max = 268,3 µm ≤ 300 µm` (`0` rezonatör değişikliği!), `f* = %1,5 + 2 MV/m, N_cand = 8 → %99,64` blok / `%99,94` `108L` yonga verimi; `p_th = %0,633`; `D3+` (`%0,30`) `2,1×10⁻⁵/1L` (`5,2×` iyi, `10,0×` az hücre vs `d=11` SC); **`120L` tek `LD400` kriyostatta (`108L = 1` kriyo, `$63.827/L_sys`, `234×` ucuz vs `v5 D2`, `W3` fab `$0,0085/L`)**.
+- **`Exp145` (`H163`, `7/7 PASS`, `12/12` test, `{Canlı-Donanım-IBM-QPU}` + `{Model}`):** Gerçek **`156Q` `ibm_marrakesh` (`dc1tdo2nj2vs73dfrfl0`, `[2,3,4,5,6]`, `16 PUB × 4.096 shot`, `32,54 s`, `0` gizli sızıntı):** Bare `0,3325` → Echo `0,9224` (`+59,0 pp`) → XY4 `0,9280` (`+59,5 pp`), Bell **`0,9733`**, `d=3` `p_phys = %2,96 → MWPM %0,57 (5,16×) / maj %0,38 (7,83×) / postsel %0,00`, `Q16.16 BOED` `3`-nokta `120,11 kHz` (`1,6 Hz` vs FP64); **`CellISA v4.0` (`20` op)** & **`auto_recal.py` (`4/4 PASS`)**.
+- **`Exp146` (`H164`, `8/8 DT6 PASS`, `10/10` test):** `24/24` birincil + canlı QPU `SHA-256` kilitli Master `v6.0` Dijital İkiz (`results/exp146_v6_digital_twin/v6_digital_twin_cert.json`):
+  - **Tam 64-Hex `v6_digital_twin_cert.json` `SHA-256`:** `ca3f0e0267263bacb973f46c3cc2d321c0f204075ea232f4094758e1a9abf1d7`
+  - **Canlı `ibm_qpu_live_results.json` `SHA-256`:** `02b7a19d1704662c6424e76f4971e21b04a98d48230a917c9682853b3ca1fc5a`

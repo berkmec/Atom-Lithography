@@ -1,0 +1,111 @@
+{
+  "experiment": "exp142_option_q_multispecies_qram",
+  "hypothesis_id": "H160",
+  "registered_at": "2026-11-23T08:42:00+03:00",
+  "registered_before_computation": true,
+  "no_lab_measurement": true,
+  "no_supplier_quotes": true,
+  "epistemic_tags": [
+    "{Literatür}",
+    "{Analitik}",
+    "{Model}",
+    "{Sayısal-Simülasyon}",
+    "{Varsayım}"
+  ],
+  "question": "Can an optional plug-in Option-Q superconducting 4-8 GHz qRAM bridge (50 Ohm transmon <-> 3 kOhm NbTiN 31P flip-flop) achieve high-fidelity round-trip SWAP (>=0.96) and >10^3x quantum memory lifetime gain inside the remaining LD400/PT420 cryostat heat budget, and how do S1-Multi heavy-ion species (167Er 1536 nm silicon-photonic telecom link and 121Sb I=7/2 8-level nuclear qudit) perform from first-principles ABCD, 12x12 Lindblad, 3D ZBL-BCA, and 8x8 spin-Hamiltonian physics?",
+  "fixed_parameters": {
+    "qram_bridge": {
+      "Z_transmon_ohm": 50.0,
+      "Z_nbtin_ohm": 3000.0,
+      "f0_GHz": 6.0,
+      "Q_int_supercond": 1.0e5,
+      "Q_bridge_res": 2.0e5,
+      "transmon_T1_us": 200.0,
+      "transmon_T2_us": 150.0,
+      "g_TR_MHz": 12.0,
+      "g_PR_MHz": 4.0,
+      "p31_T2n_star_ms_exp136_f1p5": 17.7,
+      "p31_T2n_DD_s": 1.0,
+      "p31_T2n_DD_opt_s": 3.0,
+      "e_to_n_swap_us": 2.0,
+      "e_to_n_swap_fidelity_one_way": 0.996,
+      "n_qram_ports_option_q": 4
+    },
+    "er167_telecom": {
+      "mass_amu": 167.0,
+      "Z_atomic": 68,
+      "lambda_nm": 1536.0,
+      "n_Si": 3.48,
+      "tau_rad_bare_ms": 14.0,
+      "debye_waller_zpl": 0.20,
+      "dipole_overlap_xi": 0.50,
+      "cavity_Q_nom": 1.0e5,
+      "cavity_V_eff_cubic_lambda_n": 0.50,
+      "fiber_loss_dB_per_km": 0.20,
+      "n_fiber": 1.468,
+      "eta_cav_wg": 0.90,
+      "eta_wg_fiber": 0.80,
+      "eta_snspd": 0.90,
+      "V_hom": 0.94,
+      "dark_count_Hz": 10.0,
+      "er_spin_T2_ms": 10.0
+    },
+    "sb121_qudit": {
+      "mass_amu": 121.0,
+      "Z_atomic": 51,
+      "spin_I": 3.5,
+      "n_levels": 8,
+      "A_hyperfine_MHz": 186.8,
+      "gamma_n_MHz_per_T": 10.19,
+      "Q_quadrupole_barn": -0.36,
+      "f_Q_nom_kHz": 35.0,
+      "delta_f_Q_rms_Hz": 500.0,
+      "T1_n_s": 100.0,
+      "T2_n_mag_ms": 20.0
+    },
+    "p31_reference": {
+      "mass_amu": 31.0,
+      "Z_atomic": 15,
+      "E_landing_keV": 5.0
+    },
+    "exp140_cryo_baseline_1024": {
+      "mxc_20mK_used_uW": 6.256,
+      "mxc_20mK_limit_uW": 14.0,
+      "stage_4K_used_W": 0.488,
+      "stage_4K_limit_W": 2.0,
+      "stage_50K_used_W": 8.26,
+      "stage_50K_limit_W": 40.0
+    }
+  },
+  "predictions": [
+    {
+      "id": "OQ1_IMPEDANCE_TRANSFORMER_50_TO_3K",
+      "description": "Exact ABCD 5-section Chebyshev & Klopfenstein 50 Ohm <-> 3 kOhm transformer (f0=6 GHz, Q_int=1e5) satisfies passivity |S11|^2+|S21|^2<=1+1e-12, insertion loss IL(6 GHz)<=0.10 dB, and -15 dB bandwidth >= 2.0 GHz (>=5x wider than single lambda/4 section)."
+    },
+    {
+      "id": "OQ2_LINDBLAD_QRAM_SWAP_AND_LIFETIME",
+      "description": "Exact 12x12 CPTP Lindblad SWAP simulation (Transmon <-> Bridge <-> 31P Flip-Flop -> Nuclear Register) preserves Tr(rho)=1 (<1e-10) and positivity (>=-1e-10), achieves round-trip SWAP fidelity F_SWAP_rt >= 0.960, and delivers >= 1,000x memory lifetime gain (time to F=0.90 under T2n,DD=1.0 s vs bare Transmon idle)."
+    },
+    {
+      "id": "OQ3_QRAM_CRYO_HEAT_BUDGET",
+      "description": "Option-Q 4-port 4-8 GHz qRAM bridge + 1-fiber 1550 nm cryo feedthrough adds <= 2.0 uW at 20 mK MXC and <= 0.15 W at 4 K, staying strictly within single LD400/PT420 limits alongside the 1,024-cell Exp140 S6.5 module."
+    },
+    {
+      "id": "OQ4_ER167_PURCELL_AND_TELECOM_LINK",
+      "description": "167Er in a 1536 nm Si photonic crystal nanobeam (Q=1e5, V=0.5(lambda/n)^3, DW=0.20) achieves effective Purcell factor F_P_eff >= 500 (cavity lifetime <= 30 us), 10 km SMF-28 heralded Barrett-Kok fidelity F_ent >= 0.85 with R_ent > 1.0 Hz, and Cabrillo single-photon rate > 100 Hz at 10 km."
+    },
+    {
+      "id": "OQ5_SB121_HEAVY_ION_STRAGGLE_ADVANTAGE",
+      "description": "Exact 3D ZBL binary-collision Monte Carlo (N=4,000 ions/species in Si) proves heavy 121Sb at 14-16 keV matches 5 keV 31P implantation depth (within +-3 nm) with strictly smaller lateral straggle sigma_lat(Sb) < sigma_lat(P)."
+    },
+    {
+      "id": "OQ6_SB121_8LEVEL_QUDIT_AND_STRAIN_WALL",
+      "description": "Exact 8x8 I=7/2 121Sb nuclear Hamiltonian resolves all 7 adjacent NMR transitions by >= 20 kHz at f_Q=35 kHz, verifies Knill-Laflamme single-flip detection for the spin-cat encoding, and honestly evaluates whether high-|m_I| spin-cat (|+-7/2>) beats the strain-protected |+-1/2> clock transition under delta_f_Q=500 Hz strain noise (expected honest FAIL on strain immunity due to I_z^2 scaling)."
+    },
+    {
+      "id": "OQ7_S9Q_SPEC_PORTABILITY_AND_TESTS",
+      "description": "Exports collision-free s9q_hardware_spec.json for CAD v6.0/BOM v6.0, has zero hardcoded host paths, 0 GFM table errors, visually verified 2400x1400 PNG, and >= 8 passing Exp142 tests with zero regression on existing tests."
+    }
+  ],
+  "success_rule": "OQ1, OQ2, OQ3, OQ4, OQ5, OQ7 PASS; OQ6 evaluated strictly and honestly exposing the I_z^2 quadrupole-strain boundary without post-hoc threshold edits."
+}

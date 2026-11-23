@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""Generate part-level BOM_DETAILED.csv (v5.0: 167 parts = 145 v3.0 + 14 v4.0 + 8 v5.0) and reconcile against canonical BOM.csv + Exp122 + Exp134 + Exp139 + Exp140.
+"""Generate part-level BOM_DETAILED.csv (v6.0: 174 parts = 167 M3 v5.0 Base + 7 v6.0 Modular Options) and reconcile against canonical BOM.csv + Exp122 + Exp134 + Exp139 + Exp140 + Exp142 + Exp143.
 
 Strictly READ-ONLY with respect to canonical BOM.csv (SHA-256 verified before and after) and
-primary v5.0 hardware spec JSONs (s56_hardware_spec.json, s65_hardware_spec.json).
+primary v5.0/v6.0 hardware spec JSONs (s56, s65, s9q, s9hpc).
 Outputs: research/atom_lithography_machine/BOM_DETAILED.csv
-All USD figures are extended line-item totals for Golden Scale M3 v5.0 (1,024-cell full M4 Cryo-MUX
-+ In-Situ 28Si UHV MBE Capper, anti-double-counting credits applied against superseded v4.0 starter items)
-and carry explicit epistemic tags ({Model-Kalibrasyon-Exp114}, {Liste-Çapası}, {Varsayım}, {Program-NRE-Kapsam}).
+All USD figures are extended line-item totals for Golden Scale M3 v6.0 Full ($5,547,800 = M3 v5.0 Base $5,247,800
++ Option-Q $168,000 [9.20 kg] + Option-HPC $132,000 [64.00 kg], zero double-counting) and carry explicit
+epistemic tags ({Model-Kalibrasyon-Exp114}, {Liste-Çapası}, {Varsayım}, {Program-NRE-Kapsam}).
 No supplier quotes or physical hardware measurements exist.
 """
 from __future__ import annotations
@@ -21,6 +21,8 @@ BOM_CSV = ROOT / "research" / "atom_lithography_machine" / "BOM.csv"
 BOM_DETAILED = ROOT / "research" / "atom_lithography_machine" / "BOM_DETAILED.csv"
 S56_SPEC_JSON = ROOT / "results" / "exp139_epi_cap_process_integration" / "s56_hardware_spec.json"
 S65_SPEC_JSON = ROOT / "results" / "exp140_cryo_fpga_boed_mux_readout" / "s65_hardware_spec.json"
+S9Q_SPEC_JSON = ROOT / "results" / "exp142_option_q_multispecies_qram" / "s9q_hardware_spec.json"
+S9HPC_SPEC_JSON = ROOT / "results" / "exp143_d3_grape_m4_and_hpc_decoder" / "s9hpc_hardware_spec.json"
 EXPECTED_BOM_SHA256 = "cee02adfd207e37bbbc6b66982226b27fa87c2be528ede2b762f72840759cfc2"
 
 FIELDNAMES = [
@@ -169,6 +171,15 @@ PARTS: list[tuple] = [
      "300 K (tesis)", "Egzoz hatti", "COTS", "B(ADDER)",
      14000, 24000, 43000, "s1_ion_source_column", "{Varsayım}",
      "DELTA-ADDER(Exp81/83): guvenlik kilidi (S7.4 PLC ile bagli)"),
+
+    # S1.7 — v6.0 Option-Q Multi-Species Quick-Swap Source Cartridge Bay (Exp142 S1.6-01; 4.80 kg; $48k/$68k/$96k)
+    # Note: S1.6 is already occupied in BOM_DETAILED.csv by PH3/SiF4 toxic gas safety (S1.6-01..02);
+    # Exp142 S1.6-01 maps cleanly to S1.7-01 with zero ID collision and exact cross-reference.
+    ("S1.7-01", "S1.7", "S1", "S1-Multi Hizli-Degisim 3-Turlu Kaynak Kartus Yuvasi (31P Gaz / 121Sb 450C Firin / 167Er Mikro-Paul, Exp142 S1.6-01, 4.80 kg)", 1, "set",
+     "316LN SS / PBN 450C firin / Ti-6Al-4V kartus yuvasi", "s1_duoplasmatron +Y flans (76x76x95 mm, [0,110,992.66] mm, min bosluk 27 mm), 31P+ / 121Sb+ / 167Er+ (1536 nm F_P_eff=1520, beta_ZPL=0.9993), 180 W tepe / 0 W kriyo, kutle=4.80 kg", "±0.05 mm eksen",
+     "300 K (UHV kolon)", "UHV 1e-9 mbar", "CUS", "C(v6.0-OptQ)",
+     48000, 68000, 96000, "s1_ion_source_column", "{Varsayım}",
+     "DELTA-V6.0-OPTQ-EXP142 (Exp142 S1.6-01 Option-Q 4/4, 4.80 kg; mevcut S1.6=PH3/SiF4 korundu; M3 Base ustune opsiyonel; RFQ-09)"),
 
     # =========================================================================
     # S2 — MEMS MULTI-BEAM WRITE HEAD (18 parts: S2.1-S2.5)
@@ -967,6 +978,42 @@ PARTS: list[tuple] = [
      "300 K / 4 K", "Kriyo/Vakum", "COTS", "--",
      5500, 10000, 19000, "consumables_calibration", "{Model-Kalibrasyon-Exp114}",
      "DELTA-S9: PT420 + DR + scroll pompa bakim sarfi"),
+
+    # S9.4 — v6.0 Option-Q Cryo-qRAM & 1550 nm Fiber Bridge (Exp142 S9.1-01..03; 4.40 kg; $70k/$100k/$146k)
+    # Note: Canonical BOM.csv already uses S9.1 for calibration reference chips (S9.1-01..02);
+    # Exp142 S9.1-01..03 maps cleanly to S9.4-01..03 with zero ID collision and exact cross-reference.
+    ("S9.4-01", "S9.4", "S9", "Option-Q OVC -X CF63 Kriyo-Koaksiyel (4-Port 4-8 GHz) & 1550 nm SMF-28 Vakum Gecisi (Exp142 S9.1-01, 3.20 kg)", 1, "adet",
+     "316LN CF63 / hermetik 4x SMA + 1550 nm SMF-28 fiber gecis", "s6_dr_ovc_upper -X dis port ([-875,0,690] mm, 100x120x120 mm, sifir ic cakisma), 0 W / 0 uW kriyo, kutle=3.20 kg", "He<=1e-10 mbar*L/s",
+     "300 K (OVC portu)", "Kriyo-vakum", "CUS", "C(v6.0-OptQ)",
+     22000, 32000, 46000, "s6_cryo_dr_magnet_readout", "{Varsayım}",
+     "DELTA-V6.0-OPTQ-EXP142 (Exp142 S9.1-01 Option-Q 1/4, 3.20 kg; kanonik S9.1=kalibrasyon korundu; M3 Base ustune opsiyonel; RFQ-09)"),
+    ("S9.4-02", "S9.4", "S9", "20 mK NbTiN 5-Kademe Chebyshev/Klopfenstein 50 Ohm <-> 3 kOhm qRAM Kopru Modulu (4-ch, Exp142 S9.1-02, 0.38 kg)", 1, "adet",
+     "NbTiN ince film (5-kademe Chebyshev) + kalkanli OFHC/Nb kasa", "s6_dr_flange_mxc ([-650,0,410] mm, 60x30x16 mm, S6.5 TWPA alti 8.5 mm Z bosluk), max S11=-39.56 dB @ 4-8 GHz (BW_20dB=4.8 GHz), F_SWAP_31P=0.9858, 0.78 uW @ 20 mK, kutle=0.38 kg", "S11<=-20 dB (4-8 GHz)",
+     "20 mK (MXC)", "Kriyo-vakum", "R&D", "D(v6.0-OptQ)",
+     32000, 46000, 68000, "s6_cryo_dr_magnet_readout", "{Varsayım}",
+     "DELTA-V6.0-OPTQ-EXP142 (Exp142 S9.1-02 Option-Q 2/4, 0.38 kg; 148.6x-25122x omur kazanci; M3 Base ustune opsiyonel; RFQ-09)"),
+    ("S9.4-03", "S9.4", "S9", "Option-Q 4x NbTi Superiletken qRAM Kopru Koaksiyel + 1x 1550 nm SMF-28 Kriyo-Fiber Demeti (Exp142 S9.1-03, 0.82 kg)", 1, "set",
+     "4x NbTi/CuNi kriyo koaksiyel + 1x SMF-28 kriyo fiber", "s6_dr_ovc_upper -X termal ankraj yolu ([-770,0,560] mm, 30x30x320 mm), 100 mK=6.15 uW, 4 K=0.062 W, 50 K=0.48 W, kutle=0.82 kg", "<=0.1 dB/m (NbTi)",
+     "300 K -> 20 mK", "Kriyo-vakum", "CUS", "C(v6.0-OptQ)",
+     16000, 22000, 32000, "s6_cryo_dr_magnet_readout", "{Varsayım}",
+     "DELTA-V6.0-OPTQ-EXP142 (Exp142 S9.1-03 Option-Q 3/4, 0.82 kg; Option-Q toplam 9.20 kg & $118k/$168k/$242k; s9q_hardware_spec.json birebir; RFQ-09)"),
+
+    # S9.HPC — v6.0 Option-HPC 100G RoCEv2 RDMA Supercomputer Real-Time QEC Syndrome Decoder (Exp143 S9.HPC-01..03; 64.00 kg; $98k/$132k/$181k)
+    ("S9.HPC-01", "S9.HPC", "S9", "2U Cift-Hizlandiricili QEC Dekoder Dugumu (2x H100/Alveo-U280 Sinifi + Cift-100G ConnectX-7 RoCEv2 NIC, Exp143, 56.00 kg)", 2, "dugum",
+     "2x 2U sunucu (4U toplam) + H100/Alveo-U280 + ConnectX-7 100G", "482.6x780x177.8 mm (4U dogrudan / 5U anahtarli), Surface d=37 e2e=6.34 us (<6.70 us D3 dongu, 16L/modul) & qLDPC [[144,12,12]] e2e=2.32 us (<2.62 us, 108L/modul), 2100 W / 0 W kriyo, kutle=56.00 kg", "<6.7 us d=37 / <2.6 us qLDPC",
+     "300 K (HPC rafi)", "Atmosfer", "COTS/CUS", "C(v6.0-OptHPC)",
+     84000, 112000, 152000, "s7_electronics_rack_interconnect", "{Varsayım}",
+     "DELTA-V6.0-OPTHPC-EXP143 (Exp143 S9.HPC-01 Option-HPC 1/3, 56.00 kg; 2 dugum x $56k nom; M3 Base ustune opsiyonel; RFQ-09)"),
+    ("S9.HPC-02", "S9.HPC", "S9", "1U Ultra-Dusuk-Gecikmeli Cut-Through 100 GbE RoCEv2 Optik Kopru + 4x QSFP28-100G-SR4 + 20m OM4 MPO-12 (Exp143, 4.20 kg)", 1, "set",
+     "1U cut-through 100GbE anahtar + 4x QSFP28-SR4 + 20m OM4 MPO-12", "482.6x380x44.5 mm, 4x 100G QSFP28 port, tek-yon giris gecikmesi 0.777 us (RFSoC 0.32 + RDMA 0.45 + koaks 0.007 us), 95 W / 0 W kriyo, kutle=4.20 kg", "tau_ingest <= 0.80 us",
+     "300 K (HPC rafi)", "Atmosfer", "COTS", "B(v6.0-OptHPC)",
+     9500, 13500, 19500, "s7_electronics_rack_interconnect", "{Liste-Çapası}",
+     "DELTA-V6.0-OPTHPC-EXP143 (Exp143 S9.HPC-02 Option-HPC 2/3, 4.20 kg; s9hpc_hardware_spec.json birebir; M3 Base ustune opsiyonel; RFQ-09)"),
+    ("S9.HPC-03", "S9.HPC", "S9", "Yedekli 2.6 kW Titanium PSU Paketi, Surgulu Raf Raylari & ZU48DR 100G CMAC RDMA Entegrasyon Kiti (Exp143, 3.80 kg)", 1, "set",
+     "2.6 kW 80+ Titanium PSU + celik raf rayi + ZU48DR 100G CMAC FW", "4U raf montaj + ZU48DR 100G CMAC RoCEv2 donanim arayuzu, 0 W ek yuk, kutle=3.80 kg (Option-HPC toplam 64.00 kg & 2195 W)", "99.99% yedekli PSU",
+     "300 K (HPC rafi)", "Atmosfer", "COTS/CUS", "B(v6.0-OptHPC)",
+     4500, 6500, 9500, "s7_electronics_rack_interconnect", "{Varsayım}",
+     "DELTA-V6.0-OPTHPC-EXP143 (Exp143 S9.HPC-03 Option-HPC 3/3, 3.80 kg; Option-HPC toplam 64.00 kg & $98k/$132k/$181k; s9hpc_hardware_spec.json birebir; RFQ-09)"),
 ]
 
 
@@ -1011,9 +1058,11 @@ def main() -> None:
         for p in PARTS:
             w.writerow(p)
 
-    # 4. Print concise verification summary (with strict v3.0 + v4.0 + v5.0 net reconciliation against s56/s65 JSONs)
+    # 4. Print concise verification summary (strict v3.0 + v4.0 + v5.0 Base + v6.0 Option-Q/Option-HPC reconciliation)
     s56_spec = json.loads(S56_SPEC_JSON.read_text(encoding="utf-8"))["s56_hardware_spec"]
     s65_spec = json.loads(S65_SPEC_JSON.read_text(encoding="utf-8"))
+    s9q_spec = json.loads(S9Q_SPEC_JSON.read_text(encoding="utf-8"))
+    s9hpc_spec = json.loads(S9HPC_SPEC_JSON.read_text(encoding="utf-8"))
 
     tot_lo = sum(p[13] for p in PARTS)
     tot_nom = sum(p[14] for p in PARTS)
@@ -1021,18 +1070,30 @@ def main() -> None:
 
     s56_parts = [p for p in PARTS if p[1] == "S5.6"]
     s611_parts = [p for p in PARTS if p[1] == "S6.11"]
+    optq_parts = [p for p in PARTS if "DELTA-V6.0-OPTQ" in p[18]]
+    opthpc_parts = [p for p in PARTS if "DELTA-V6.0-OPTHPC" in p[18]]
+    v6_parts = optq_parts + opthpc_parts
     v5_parts = [p for p in PARTS if "DELTA-V5.0" in p[18]]
     v4_net_parts = [p for p in PARTS if ("DELTA-V4.0" in p[18] and "DELTA-V5.0" not in p[18])]
-    v3_parts = [p for p in PARTS if ("DELTA-V4.0" not in p[18] and "DELTA-V5.0" not in p[18])]
+    v3_parts = [
+        p for p in PARTS
+        if ("DELTA-V4.0" not in p[18] and "DELTA-V5.0" not in p[18] and "DELTA-V6.0" not in p[18])
+    ]
 
     v3_nom = sum(p[14] for p in v3_parts)
     v4_net_nom = sum(p[14] for p in v4_net_parts)  # $420k - $86k anti-double-count credit = $334k
     s56_lo, s56_nom, s56_hi = sum(p[13] for p in s56_parts), sum(p[14] for p in s56_parts), sum(p[15] for p in s56_parts)
     s611_lo, s611_nom, s611_hi = sum(p[13] for p in s611_parts), sum(p[14] for p in s611_parts), sum(p[15] for p in s611_parts)
+    optq_lo, optq_nom, optq_hi = sum(p[13] for p in optq_parts), sum(p[14] for p in optq_parts), sum(p[15] for p in optq_parts)
+    opthpc_lo, opthpc_nom, opthpc_hi = sum(p[13] for p in opthpc_parts), sum(p[14] for p in opthpc_parts), sum(p[15] for p in opthpc_parts)
+
     v5_gross_nom = s56_nom + s611_nom
     v5_credit_nom = 420_000.0 - v4_net_nom  # $86,000 exact ($54k S6.10-02 + $20k S6.10-04 RF + $12k S7.1-04)
     v5_net_delta_nom = v5_gross_nom - v5_credit_nom  # $638,200 exact
+    v5_base_nom = v3_nom + v4_net_nom + v5_gross_nom  # $5,247,800 exact
+    v6_delta_nom = optq_nom + opthpc_nom  # $300,000 exact
 
+    assert len(PARTS) == 174, f"Expected 174 v6.0 parts, got {len(PARTS)}"
     assert abs(v3_nom - 4_189_600.0) < 1e-6, f"v3.0 base drift: {v3_nom}"
     assert abs(v5_credit_nom - 86_000.0) < 1e-6, f"v5.0 anti-double-count credit drift: {v5_credit_nom}"
     assert abs(s56_lo - s56_spec["bom_v5_cost_estimate_usd"]["total_p10_usd"]) < 1e-6
@@ -1041,15 +1102,23 @@ def main() -> None:
     assert abs(s611_lo - s65_spec["totals_1024_cell_module"]["cost_usd_low"]) < 1e-6
     assert abs(s611_nom - s65_spec["totals_1024_cell_module"]["cost_usd_nom"]) < 1e-6
     assert abs(s611_hi - s65_spec["totals_1024_cell_module"]["cost_usd_high"]) < 1e-6
-    assert abs(tot_nom - 5_247_800.0) < 1e-6, f"M3 v5.0 total drift: {tot_nom}"
+    assert abs(v5_base_nom - 5_247_800.0) < 1e-6, f"M3 v5.0 Base drift: {v5_base_nom}"
+
+    assert abs(optq_lo - s9q_spec["totals_option_q_plus_s1_multi"]["cost_usd_low"]) < 1e-6
+    assert abs(optq_nom - s9q_spec["totals_option_q_plus_s1_multi"]["cost_usd_nom"]) < 1e-6
+    assert abs(optq_hi - s9q_spec["totals_option_q_plus_s1_multi"]["cost_usd_high"]) < 1e-6
+    assert abs(opthpc_lo - s9hpc_spec["totals_base_4u_option_hpc_module"]["cost_usd_low"]) < 1e-6
+    assert abs(opthpc_nom - s9hpc_spec["totals_base_4u_option_hpc_module"]["cost_usd_nom"]) < 1e-6
+    assert abs(opthpc_hi - s9hpc_spec["totals_base_4u_option_hpc_module"]["cost_usd_high"]) < 1e-6
+    assert abs(tot_nom - 5_547_800.0) < 1e-6, f"M3 v6.0 Full total drift: {tot_nom}"
 
     print(f"BOM.csv SHA-256 verified: {bom_sha}")
-    print(f"Wrote {len(PARTS)} parts ({len(v3_parts)} v3.0 + {len(v4_net_parts)} v4.0 + {len(v5_parts)} v5.0) to {BOM_DETAILED}")
+    print(f"Wrote {len(PARTS)} parts ({len(v3_parts)} v3.0 + {len(v4_net_parts)} v4.0 + {len(v5_parts)} v5.0 + {len(v6_parts)} v6.0) to {BOM_DETAILED}")
     print(f"Canonical parents covered: {len(canonical_ids)}/40; extra delta parents: {extra_parents}")
-    print(f"M3 v3.0 Base   : nom=${v3_nom:,.0f} | M3 v4.0 Base: nom=$4,609,600")
-    print(f"v5.0 Gross New : S5.6=${s56_nom:,.0f} (22.4 kg) + S6.11/Exp140 S6.5=${s611_nom:,.0f} (19.27 kg) = ${v5_gross_nom:,.0f}")
-    print(f"v5.0 Credits   : -${v5_credit_nom:,.0f} (S6.10-02 -$54k, S6.10-04 RF -$20k, S7.1-04 GPU -$12k) -> Net +${v5_net_delta_nom:,.0f}")
-    print(f"M3 v5.0 Totals : low=${tot_lo:,.0f} | nom=${tot_nom:,.0f} | high=${tot_hi:,.0f}")
+    print(f"M3 v5.0 Base   : nom=${v5_base_nom:,.0f} (167 parts; v3=$4,189,600 | v4=$4,609,600 | v5 net=+${v5_net_delta_nom:,.0f})")
+    print(f"v6.0 Option-Q  : +${optq_nom:,.0f} [${optq_lo:,.0f}-${optq_hi:,.0f}] (4 parts, 9.20 kg) -> Base+OptQ = ${v5_base_nom + optq_nom:,.0f}")
+    print(f"v6.0 Option-HPC: +${opthpc_nom:,.0f} [${opthpc_lo:,.0f}-${opthpc_hi:,.0f}] (3 parts, 64.00 kg) -> Base+OptHPC = ${v5_base_nom + opthpc_nom:,.0f}")
+    print(f"M3 v6.0 Full   : low=${tot_lo:,.0f} | nom=${tot_nom:,.0f} (+${v6_delta_nom:,.0f}, +73.20 kg) | high=${tot_hi:,.0f}")
     by_sub: dict[str, list[float]] = {}
     for p in PARTS:
         s = p[2]

@@ -1,4 +1,4 @@
-"""CellISA v3.0 instruction set and AtomCellProgrammer / MultiCellProgrammer (Exp132).
+"""CellISA v4.0 instruction set and AtomCellProgrammer / MultiCellProgrammer (Exp132-145).
 
 Compiles high-level quantum/atom-cell programs expressed in ``CellISA`` into
 per-cell physical MW/RF control waveforms tailored to each certified register's
@@ -7,11 +7,19 @@ measured hyperfine spectrum ``{A_k}``, verifies execution on the full
 XY8 dynamical decoupling), and emits SHA-256 signed ``ProgramCertificate``
 and ``MultiCellCertificate`` records (JSONL).
 
-Supported CellISA opcodes:
+Supported CellISA opcodes (20 total in ``VALID_OPCODES_ALL``):
   * v2.0 (10 opcodes, 100% backwards-compatible):
       INIT, RX, RY, RZ, CZ, CNOT, GHZ, DD_HOLD, MEASURE, ARRAY_EXEC
   * v3.0 (4 multi-cell M4 & wafer-routing opcodes):
       BUS_TUNE, BUS_CZ, LOGICAL_ENCODE, WAFER_MAP_ROUTE
+  * v3.5 (3 fault-tolerant echoed-CZ & multiplexed syndrome opcodes):
+      ECHO_CZ, MUX_READOUT, SYNDROME_CYCLE
+  * v4.0 (3 cloud-QPU / qLDPC / self-healing supervisory opcodes):
+      QRAM_SWAP, QLDPC_ROUND, AUTO_RECAL
+
+``VALID_OPCODES`` is preserved as the frozen 17-opcode v3.5 set for 100%
+backward compatibility with Exp140/Exp141 regression checks; ``VALID_OPCODES_ALL``
+exposes all 20 CellISA v4.0 opcodes.
 
 Includes a portable ``verify_with_exp126_bridge()`` provenance link to the full
 32D (2^5) 448-spectator XY8-GRAPE verification ledger in
@@ -53,6 +61,10 @@ VALID_OPCODES_V35 = frozenset({
     "ECHO_CZ", "MUX_READOUT", "SYNDROME_CYCLE"
 })
 VALID_OPCODES = VALID_OPCODES_V2 | VALID_OPCODES_V3 | VALID_OPCODES_V35
+VALID_OPCODES_V4 = frozenset({
+    "QRAM_SWAP", "QLDPC_ROUND", "AUTO_RECAL"
+})
+VALID_OPCODES_ALL = VALID_OPCODES | VALID_OPCODES_V4
 
 
 def parse_qubit(q: int | str) -> int:
@@ -79,8 +91,8 @@ class CellInstruction:
 
     def __post_init__(self):
         op = self.opcode.upper()
-        if op not in VALID_OPCODES:
-            raise ValueError(f"Invalid CellISA opcode {self.opcode!r}; valid: {sorted(VALID_OPCODES)}")
+        if op not in VALID_OPCODES_ALL:
+            raise ValueError(f"Invalid CellISA opcode {self.opcode!r}; valid: {sorted(VALID_OPCODES_ALL)}")
         object.__setattr__(self, "opcode", op)
 
     def to_dict(self) -> dict[str, Any]:
@@ -388,7 +400,13 @@ def simulate_ideal(program: CellProgram, n_qubits: int) -> np.ndarray:
             state = _apply_ideal_1q(state, n_qubits, qs[0], su2_rotation("Y", math.pi / 2.0))
             for tgt in qs[1:]:
                 state = _apply_ideal_controlled(state, n_qubits, qs[0], tgt, X)
-        elif op in ("DD_HOLD", "MEASURE", "ARRAY_EXEC"):
+        elif op == "QRAM_SWAP":
+            qa = parse_qubit(a.get("qubit_a", "e"))
+            qb = parse_qubit(a.get("qubit_b", "n0"))
+            state = _apply_ideal_controlled(state, n_qubits, qa, qb, X)
+            state = _apply_ideal_controlled(state, n_qubits, qb, qa, X)
+            state = _apply_ideal_controlled(state, n_qubits, qa, qb, X)
+        elif op in ("DD_HOLD", "MEASURE", "ARRAY_EXEC", "AUTO_RECAL", "QLDPC_ROUND"):
             pass
     return state
 
@@ -542,6 +560,12 @@ class AtomCellProgrammer:
                     "basis": str(a.get("basis", "Z")),
                     "shots": int(a.get("shots", 1024)),
                 }))
+            elif op == "QRAM_SWAP":
+                qa = parse_qubit(a.get("qubit_a", "e"))
+                qb = parse_qubit(a.get("qubit_b", "n0"))
+                self._emit_cnot(ops, A_active, qa, qb, cache)
+                self._emit_cnot(ops, A_active, qb, qa, cache)
+                self._emit_cnot(ops, A_active, qa, qb, cache)
             elif op == "ARRAY_EXEC":
                 raise ValueError("Use execute_array() to run ARRAY_EXEC across multiple cells")
 
@@ -1377,5 +1401,121 @@ class MultiCellProgrammer:
             "cycle_duration_us": round(cycle_us, 4),
         }
         return route, mcert, syndrome_summary
+
+    # -----------------------------------------------------------------------
+    # CellISA v4.0 — Cloud-QPU, qLDPC & Autonomous Recalibration Opcodes
+    # -----------------------------------------------------------------------
+
+    def execute_qram_swap(
+        self,
+        cert: Certificate,
+        qubit_a: str = "e",
+        qubit_b: str = "n0",
+        seed: int = 2026145,
+    ) -> dict[str, Any]:
+        """Execute CellISA v4.0 ``QRAM_SWAP`` between electron bus and nuclear memory spin."""
+        prog = CellProgram(name="qram_swap_v4")
+        prog.add("INIT", qubits=[qubit_a, qubit_b], state="10")
+        prog.add("QRAM_SWAP", qubit_a=qubit_a, qubit_b=qubit_b)
+        prog.add("MEASURE", qubits=[qubit_a, qubit_b], basis="Z", shots=512)
+        sched, pcert = self.local_programmer.execute_and_certify(
+            cert, prog, verify_corners=False, seed=seed
+        )
+        return {
+            "opcode": "QRAM_SWAP",
+            "isa_version": "4.0",
+            "total_opcodes_v4": len(VALID_OPCODES_ALL),
+            "register_id": cert.register_id,
+            "qubit_a": qubit_a,
+            "qubit_b": qubit_b,
+            "pulse_count": sched.pulse_count,
+            "duration_us": round(sched.total_duration_us, 4),
+            "swap_fidelity": pcert.nominal_state_fidelity,
+            "certified": pcert.certified,
+            "cert_sha256": pcert.sha256,
+        }
+
+    def execute_qldpc_round(
+        self,
+        code_name: str = "BB_144_12_12",
+        n_data: int = 144,
+        n_logical: int = 12,
+        distance: int = 12,
+        check_weight: int = 6,
+        p_phys: float = 0.002,
+        p_threshold: float = 0.007,
+        n_mux: int = 32,
+        tau_ro_us: float = 2.0,
+        echo_cz_us: float = 0.29,
+        rounds: int = 1,
+    ) -> dict[str, Any]:
+        """Execute CellISA v4.0 ``QLDPC_ROUND`` for high-rate [[n,k,d]] qLDPC check cycles."""
+        inst = CellInstruction(
+            opcode="QLDPC_ROUND",
+            args={
+                "code_name": code_name,
+                "n_data": int(n_data),
+                "n_logical": int(n_logical),
+                "distance": int(distance),
+                "rounds": int(rounds),
+                "n_mux": int(n_mux),
+            },
+        )
+        n_ancilla = n_data  # CSS bivariate bicycle code: n/2 X-checks + n/2 Z-checks
+        feedlines_required = int(math.ceil(n_ancilla / max(1, int(n_mux))))
+        # Parallel 6-layer edge coloring for weight-6 checks + multiplexed readout
+        round_duration_us = check_weight * echo_cz_us + tau_ro_us
+        total_duration_us = round_duration_us * max(1, int(rounds))
+        # Sub-threshold suppression scaling estimate: p_L ~ 0.1 * (p / p_th)^((d+1)/2)
+        ratio = max(1e-9, float(p_phys) / max(float(p_threshold), 1e-6))
+        p_logical_per_round = min(0.5, 0.1 * (ratio ** (0.5 * (distance + 1))))
+        code_rate = float(n_logical) / max(float(n_data + n_ancilla), 1.0)
+        return {
+            "opcode": inst.opcode,
+            "isa_version": "4.0",
+            "total_opcodes_v4": len(VALID_OPCODES_ALL),
+            "code_name": code_name,
+            "n_data": int(n_data),
+            "n_ancilla": int(n_ancilla),
+            "n_logical": int(n_logical),
+            "distance": int(distance),
+            "check_weight": int(check_weight),
+            "code_rate_k_over_2n": round(code_rate, 6),
+            "feedlines_required": feedlines_required,
+            "round_duration_us": round(round_duration_us, 4),
+            "total_duration_us": round(total_duration_us, 4),
+            "p_phys": float(p_phys),
+            "p_logical_per_round_est": float(f"{p_logical_per_round:.3e}"),
+            "rounds": int(rounds),
+        }
+
+    def execute_auto_recal(
+        self,
+        fault_type: str = "thermal_drift_Hz",
+        magnitude: float = 350.0,
+        seed: int = 2026145,
+    ) -> dict[str, Any]:
+        """Execute CellISA v4.0 ``AUTO_RECAL`` supervisory closed-loop fault recovery."""
+        inst = CellInstruction(
+            opcode="AUTO_RECAL",
+            args={"fault_type": str(fault_type), "magnitude": float(magnitude)},
+        )
+        from .auto_recal import AutoRecalController
+
+        ctrl = AutoRecalController(seed=seed)
+        if fault_type == "laser_power_drift_pct":
+            res = ctrl.mitigate_laser_power_drift(drift_pct=float(magnitude))
+        elif fault_type == "vacuum_spike_torr":
+            res = ctrl.mitigate_vacuum_spike(peak_pressure_torr=float(magnitude))
+        elif fault_type == "blanker_dead_frac":
+            res = ctrl.mitigate_blanker_dead_channels(dead_fraction=float(magnitude))
+        else:
+            res = ctrl.mitigate_hyperfine_thermal_drift(drift_Hz=float(magnitude))
+        return {
+            "opcode": inst.opcode,
+            "isa_version": "4.0",
+            "total_opcodes_v4": len(VALID_OPCODES_ALL),
+            "recovery": res,
+        }
 
 

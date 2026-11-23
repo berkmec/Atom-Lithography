@@ -1,0 +1,30 @@
+{
+ "experiment": "exp144_qldpc_bivariate_bicycle_m4",
+ "hypothesis_id": "H162",
+ "registered": "2026-11-23 (before any Exp144 solver code or numerical run)",
+ "no_lab_measurement": true,
+ "no_supplier_quotes": true,
+ "epistemic_tags": [
+  "Model",
+  "Sayisal-Simulasyon",
+  "Literatur",
+  "Varsayim"
+ ],
+ "question": "Can our long-range 300 um high-impedance 3 kOhm NbTiN M4 cavity-QED bus natively host Bravyi et al. (Nature 2024) Bivariate Bicycle qLDPC codes ([[72,12,6]], [[90,8,10]], and [[144,12,12]] Gross Code) in a thickness-2 planar layout, what circuit-level logical error rates does a pure-NumPy Min-Sum BP + OSD-0/OSD-2 decoder achieve at Exp137/138/140 D2/D3/D3+ machine noise points, and how dramatically does qLDPC compress 100-logical-qubit cryostat count and $/L_sys under Exp140's 2,887-cell MXC ceiling and Exp141's exact TCO model?",
+ "method": {
+  "algebra": "Exact GF(2) construction of H_X=[A|B], H_Z=[B^T|A^T] for [[72,12,6]], [[90,8,10]], and [[144,12,12]], verifying H_X H_Z^T = 0 mod 2, exact weight-6 regularity, GF(2) ranks (k=12, 8, 12), and exact symplectic logical operators L_X, L_Z.",
+  "layout_and_defects": "Exact thickness-2 folded-torus 2D planar embedding of [[144,12,12]] (24x12 grid, 288 cells) mapped to physical um coordinates (P_cell in [20, 50] um), checking max resonator length L_max <= 300-500 um, frequency shift, layer crossings, and defect-free 288-cell block yield under Exp136 f*=1.5%+2MV/m (N_cand=6..8).",
+  "bp_osd_decoder": "Pure-NumPy/SciPy Normalized Min-Sum Belief Propagation (alpha=0.625) + bit-packed GF(2) Gauss-Jordan OSD-0 and OSD-2 combination-sweep decoder evaluated on both code-capacity and full 3D space-time circuit-level 6-CNOT Bravyi Detector Error Models (DEM) at uniform p in [0.001, 0.010] and Exp137/138/140 D2 (0.92%), D3 (0.50%), D3+ (0.30%) machine noise points.",
+  "cryo_and_tco_compression": "Exact packing of 288-cell [[144,12,12]] blocks into Exp140's 2,887-cell LD400/PT420 MXC limit and exact apples-to-apples 100L cryostat count & $/L_sys comparison against Exp138/141 Surface Code using Exp141's wafer_econ141.py cost parameters."
+ },
+ "success_rule": "QL1 and QL2 and QL3 and QL4 and QL5 and QL6 and QL7 (at least 6/7 PASS with 0 algebra/portability errors; any honest physical threshold/regime limit reported transparently).",
+ "predictions": [
+  "QL1 EXACT BB CSS ALGEBRA: [[72,12,6]], [[90,8,10]], and [[144,12,12]] satisfy H_X H_Z^T == 0 (mod 2), exact row/column weight 6, exact GF(2) k = 12, 8, 12, and exact symplectic logical basis L_X L_Z^T == I_k (mod 2).",
+  "QL2 THICKNESS-2 M4 LAYOUT & DEFECT YIELD: Folded-torus thickness-2 embedding of [[144,12,12]] (288 cells) fits within L_max <= 300 um at P_cell = 20-30 um (matching Exp131 3 kOhm NbTiN lambda/2 = 300 um @ 5 GHz); under Exp136 f*=1.5%+2MV/m (p_slot=0.7557), N_cand=6 yields 93%-96% defect-free 288-cell blocks and N_cand=8 yields > 99.5%.",
+  "QL3 BP-OSD DECODER GAIN & CODE-CAPACITY SCALING: Pure-NumPy Min-Sum BP+OSD-2 outperforms standalone BP by >= 5x below threshold on [[144,12,12]], and code-capacity p_L at p=0.04 strictly satisfies p_L([[144,12,12]]) < p_L([[90,8,10]]) < p_L([[72,12,6]]) with >= 10x suppression from d=6 to d=12.",
+  "QL4 CIRCUIT-LEVEL THRESHOLD & D2/D3/D3+ MACHINE REGIMES: Under 3D space-time 6-CNOT Bravyi circuit DEM + BP-OSD, [[144,12,12]] exhibits circuit-level threshold p_th in [0.40%, 1.00%]; at D2 (p_2q=0.92%, p_meas=0.386%) it sits near/above its weight-6 threshold (honest limitation motivating D3), while at D3 (p_2q=0.50%) and D3+ (p_2q=0.30%) it achieves deep fault tolerance with p_L/round(D3+) < 1e-3 and beats Exp138 d=7 Surface Code at lower physical-qubit overhead per logical qubit.",
+  "QL5 CRYOSTAT & $/L_SYS COMPRESSION VS EXP138/141: Single LD400/PT420 (2,887 MXC ceiling) holds 10 Gross Code blocks = 120 logical qubits (2,880 active cells); a 100L (9-block = 108L, 2,592-cell) qLDPC system fits in 1 cryostat (>= 50x fewer cryostats than Exp138 D3 100 cryostats and 679x fewer than D2) and compresses $/L_sys by >= 20x vs Exp141 D3 Surface Code ($2.76M/L_sys), with honest side-by-side reporting of achieved p_L/round.",
+  "QL6 DEFECTIVE BLOCK RESILIENCE SENSITIVITY: Without Exp136 Stark enhancement (f=1.0%, N_cand=6, p_drop=1.31%), defect-free 288-cell Gross Code block yield collapses below 5%, whereas Exp136 f*=1.5%+2MV/m + N_cand=8 achieves > 99.5% per block and > 96% for an entire 10-block (120L) single-cryostat die.",
+  "QL7 PORTABILITY, VISUALIZATION & TESTS: Zero hardcoded host paths, 0 GFM table errors, visually verified 2400x1400 PNG, and >= 8 passing tests in tests/test_exp144.py with 0 regressions across existing repository tests."
+ ]
+}

@@ -1,0 +1,863 @@
+{
+  "experiment": "exp145_cloud_qpu_ibm_validation",
+  "hypothesis_id": "H163",
+  "epistemic_scope": {
+    "silicon_31P_fabrication": "Model/Sayisal-Simulasyon (M0, no_lab_measurement=true)",
+    "auto_recal_fault_simulation": "Model/Sayisal-Simulasyon (M0, no_lab_measurement=true)",
+    "control_stack_ibm_qpu_validation": "Canli-Donanim-IBM-QPU (ibm_marrakesh, 156Q, job_id=dc1tdo2nj2vs73dfrfl0)"
+  },
+  "offline_validation": {
+    "experiment": "exp145_cloud_qpu_ibm_validation",
+    "mode": "offline_simulation",
+    "hypothesis_id": "H163",
+    "epistemic_tag": "Model/Sayisal-Simulasyon",
+    "no_lab_measurement": true,
+    "shots_per_pub": 4096,
+    "seed": 2026145,
+    "cellisa_v40": {
+      "v35_compat_opcode_count": 17,
+      "v40_total_opcode_count": 20,
+      "v40_new_opcodes": [
+        "AUTO_RECAL",
+        "QLDPC_ROUND",
+        "QRAM_SWAP"
+      ],
+      "qram_swap": {
+        "opcode": "QRAM_SWAP",
+        "isa_version": "4.0",
+        "total_opcodes_v4": 20,
+        "register_id": "REG-EXP145-DEMO-01",
+        "qubit_a": "e",
+        "qubit_b": "n0",
+        "pulse_count": 9,
+        "duration_us": 3500.1,
+        "swap_fidelity": 0.999893,
+        "certified": true,
+        "cert_sha256": "746e7fa72f288638284f9ab6e9d4d688c4edc4a76fdaa0021cfe9c760e1dd2cd"
+      },
+      "qldpc_round": {
+        "opcode": "QLDPC_ROUND",
+        "isa_version": "4.0",
+        "total_opcodes_v4": 20,
+        "code_name": "BB_144_12_12",
+        "n_data": 144,
+        "n_ancilla": 144,
+        "n_logical": 12,
+        "distance": 12,
+        "check_weight": 6,
+        "code_rate_k_over_2n": 0.041667,
+        "feedlines_required": 5,
+        "round_duration_us": 3.74,
+        "total_duration_us": 3.74,
+        "p_phys": 0.002,
+        "p_logical_per_round_est": 2.908e-05,
+        "rounds": 1
+      },
+      "auto_recal_opcode": {
+        "opcode": "AUTO_RECAL",
+        "isa_version": "4.0",
+        "total_opcodes_v4": 20,
+        "recovery": {
+          "fault_mode": "31P_hyperfine_thermal_drift",
+          "limit_relock_time_ms": 5.0,
+          "limit_residual_error_Hz": 100.0,
+          "max_relock_time_ms": 4.1974,
+          "max_residual_error_Hz": 29.52,
+          "cases": {
+            "drift_plus": {
+              "injected_drift_Hz": 350.0,
+              "true_freq_Hz": 42850.0,
+              "estimated_freq_Hz": 42870.34,
+              "residual_error_Hz": 20.34,
+              "posterior_std_Hz": 38.31,
+              "probes_used": 16,
+              "fpga_total_cycles": 9344,
+              "fpga_compute_us": 37.376,
+              "relock_time_ms": 4.1974,
+              "passed": true
+            },
+            "drift_minus": {
+              "injected_drift_Hz": -350.0,
+              "true_freq_Hz": 42150.0,
+              "estimated_freq_Hz": 42120.48,
+              "residual_error_Hz": 29.52,
+              "posterior_std_Hz": 37.81,
+              "probes_used": 16,
+              "fpga_total_cycles": 9344,
+              "fpga_compute_us": 37.376,
+              "relock_time_ms": 4.1974,
+              "passed": true
+            }
+          },
+          "passed": true
+        }
+      }
+    },
+    "transpiler_and_subgraph": {
+      "heron": {
+        "backend_name": "ibm_heron_sim_133",
+        "native_2q": "cz",
+        "dt_ns": 4.0,
+        "granularity_dt": 16,
+        "selected_5q_chain": [
+          7,
+          6,
+          5,
+          4,
+          3
+        ],
+        "chain_edge_errors": [
+          0.009764,
+          0.004609,
+          0.005533,
+          0.004279
+        ],
+        "chain_readout_errors": [
+          0.006978,
+          0.012349,
+          0.01572,
+          0.006932,
+          0.016308
+        ],
+        "n_pubs_compiled": 16,
+        "all_pubs_isa_valid": true,
+        "total_2q_gates_suite": 11,
+        "total_delay_ops_suite": 22,
+        "cellprogram_bell_isa_valid": true,
+        "sample_qasm_c1d_bell_zz": "OPENQASM 3.0;\ninclude \"stdgates.inc\";\nbit[2] c;\nrz(pi/2) $7;\nsx $7;\nrz(pi/2) $7;\nrz(pi/2) $6;\nsx $6;\nrz(pi/2) $6;\ncz $7, $6;\nrz(pi/2) $6;\nsx $6;\nrz(pi/2) $6;\nbarrier $7, $6;\nc[0] = measure $7;\nc[1] = measure $6;",
+        "sample_qasm_c2a_rep3": "OPENQASM 3.0;\ninclude \"stdgates.inc\";\nbit[5] c;\nbarrier $7, $6, $5, $4, $3;\ndelay[992dt] $7;\ndelay[992dt] $5;\ndelay[992dt] $3;\nbarrier $7, $6, $5, $4, $3;\nrz(pi/2) $6;\nsx $6;\nrz(pi/2) $6;\ncz $7, $6;\nrz(pi/2) $6;\nsx $6;\nrz(pi/2) $6;\nrz(pi/2) $4;\nsx $4;\nrz(pi/2) $4;\ncz $5, $4;\nrz(pi/2) $4;\nsx $4;\nrz(pi/2) $4;\nbarrier $7, $6, $5, $4, $3;\nrz(pi/2) $6;\nsx $6;\nrz(pi/2) $6;\ncz $5, $6;\nrz(pi/2) $6;\nsx $6;\nrz(pi/2) $6;\nrz(pi/2) $4;\nsx $4;\nrz(pi/2) $4;\ncz $3, $4;\nrz(pi/2) $4;\nsx $4;\nrz(pi/2) $4;\nbarrier $7, $6, $5, $4, $3;\nc[0] = measure $7;\nc[1] = measure $6;\nc[2] = measure $5;\nc[3] = measure $4;\nc[4] = measure $3;"
+      },
+      "eagle": {
+        "backend_name": "ibm_eagle_sim_127",
+        "native_2q": "ecr",
+        "dt_ns": 0.5,
+        "granularity_dt": 16,
+        "selected_5q_chain": [
+          7,
+          6,
+          5,
+          4,
+          3
+        ],
+        "chain_edge_errors": [
+          0.013264,
+          0.008109,
+          0.009033,
+          0.007779
+        ],
+        "chain_readout_errors": [
+          0.013978,
+          0.019349,
+          0.02272,
+          0.013932,
+          0.023308
+        ],
+        "n_pubs_compiled": 16,
+        "all_pubs_isa_valid": true,
+        "total_2q_gates_suite": 11,
+        "total_delay_ops_suite": 22,
+        "cellprogram_bell_isa_valid": true,
+        "sample_qasm_c1d_bell_zz": "OPENQASM 3.0;\ninclude \"stdgates.inc\";\ngate ecr _gate_q_0, _gate_q_1 {\n  s _gate_q_0;\n  sx _gate_q_1;\n  cx _gate_q_0, _gate_q_1;\n  x _gate_q_0;\n}\nbit[2] c;\nrz(pi/2) $7;\nsx $7;\nrz(pi/2) $7;\nrz(pi/2) $7;\nsx $7;\nrz(pi/2) $7;\nrz(pi/2) $6;\nsx $6;\nrz(pi/2) $6;\nx $6;\necr $6, $7;\nrz(pi/2) $6;\nsx $7;\nrz(pi/2) $7;\nsx $7;\nrz(pi/2) $7;\nrz(pi/2) $6;\nsx $6;\nrz(pi/2) $6;\nbarrier $7, $6;\nc[0] = measure $7;\nc[1] = measure $6;",
+        "sample_qasm_c2a_rep3": "OPENQASM 3.0;\ninclude \"stdgates.inc\";\ngate ecr _gate_q_0, _gate_q_1 {\n  s _gate_q_0;\n  sx _gate_q_1;\n  cx _gate_q_0, _gate_q_1;\n  x _gate_q_0;\n}\nbit[5] c;\nbarrier $7, $6, $5, $4, $3;\ndelay[8000dt] $7;\ndelay[8000dt] $5;\ndelay[8000dt] $3;\nbarrier $7, $6, $5, $4, $3;\nrz(pi/2) $7;\nsx $7;\nrz(pi/2) $7;\nrz(pi/2) $6;\nsx $6;\nrz(pi/2) $6;\nx $6;\necr $6, $7;\nrz(pi/2) $6;\nsx $7;\nrz(pi/2) $7;\nsx $7;\nrz(pi/2) $7;\nrz(pi/2) $6;\nsx $6;\nrz(pi/2) $6;\nrz(pi/2) $5;\nsx $5;\nrz(pi/2) $5;\nrz(pi/2) $4;\nsx $4;\nrz(pi/2) $4;\nx $4;\necr $4, $5;\nrz(pi/2) $4;\nsx $5;\nrz(pi/2) $5;\nsx $5;\nrz(pi/2) $5;\nrz(pi/2) $4;\nsx $4;\nrz(pi/2) $4;\nbarrier $7, $6, $5, $4, $3;\nx $5;\necr $5, $6;\nrz(pi/2) $5;\nsx $6;\nx $3;\necr $3, $4;\nrz(pi/2) $3;\nsx $4;\nbarrier $7, $6, $5, $4, $3;\nc[0] = measure $7;\nc[1] = measure $6;\nc[2] = measure $5;\nc[3] = measure $4;\nc[4] = measure $3;"
+      }
+    },
+    "offline_heron_suite": {
+      "C1_dd_and_bell": {
+        "p0_bare_idle": 0.5625,
+        "p0_hahn_echo": 0.842773,
+        "p0_xy4_dd": 0.859131,
+        "dd_gain_echo_over_bare": 0.280273,
+        "dd_gain_xy4_over_bare": 0.296631,
+        "bell_expect_ZZ": 0.933594,
+        "bell_expect_XX": 0.941895,
+        "bell_expect_YY": -0.936523,
+        "bell_fidelity_Phi_plus": 0.953003
+      },
+      "C2_repcode3": {
+        "logical_0": {
+          "shots": 4096,
+          "logical_bit": 0,
+          "p_phys": 0.021891,
+          "p_L_majority": 0.000488,
+          "p_L_syndrome_mwpm": 0.001953,
+          "p_L_postsel": 0.0,
+          "postsel_keep_rate": 0.958984,
+          "suppression_factor_mwpm": 11.208,
+          "suppression_factor_majority": 44.833
+        },
+        "logical_1": {
+          "shots": 4096,
+          "logical_bit": 1,
+          "p_phys": 0.037598,
+          "p_L_majority": 0.003418,
+          "p_L_syndrome_mwpm": 0.005859,
+          "p_L_postsel": 0.00054,
+          "postsel_keep_rate": 0.903809,
+          "suppression_factor_mwpm": 6.417,
+          "suppression_factor_majority": 11.0
+        },
+        "avg_p_phys": 0.029745,
+        "avg_p_L_majority": 0.001953,
+        "avg_p_L_syndrome_mwpm": 0.003906,
+        "avg_p_L_decoded": 0.001953,
+        "avg_p_L_postsel": 0.00027,
+        "avg_postsel_keep_rate": 0.931396,
+        "suppression_ratio_decoded": 15.23,
+        "suppression_ratio_postsel": 110.165
+      },
+      "C3_ramsey_boed": {
+        "prior_range_kHz": [
+          30.0,
+          220.0
+        ],
+        "grid_bins": 761,
+        "grid_step_kHz": 0.25,
+        "visibility_est": 0.9662,
+        "blind_8pt": {
+          "n_points": 8,
+          "est_freq_kHz": 125.6787,
+          "posterior_std_kHz": 0.6598,
+          "err_vs_programmed_kHz": 0.6787
+        },
+        "fp64_boed": {
+          "n_points": 3,
+          "queried_indices": [
+            1,
+            5,
+            6
+          ],
+          "queried_delays_us": [
+            1.984,
+            6.016,
+            6.976
+          ],
+          "est_freq_kHz": 125.8509,
+          "posterior_std_kHz": 0.7778,
+          "err_vs_programmed_kHz": 0.8509
+        },
+        "q16_16_boed": {
+          "n_points": 3,
+          "queried_indices": [
+            1,
+            5,
+            6
+          ],
+          "queried_delays_us": [
+            1.984,
+            6.016,
+            6.976
+          ],
+          "est_freq_kHz": 125.8516,
+          "posterior_std_kHz": 0.875,
+          "q16_vs_fp64_diff_kHz": 0.0007,
+          "q16_vs_blind8_diff_kHz": 0.1728,
+          "err_vs_programmed_kHz": 0.8516
+        },
+        "programmed_detuning_kHz": 125.0,
+        "delays_us": [
+          1.024,
+          1.984,
+          3.008,
+          3.968,
+          4.992,
+          6.016,
+          6.976,
+          8.0
+        ],
+        "p0_measured": [
+          0.817871,
+          0.507324,
+          0.195801,
+          0.091064,
+          0.223389,
+          0.518311,
+          0.759277,
+          0.853271
+        ]
+      }
+    },
+    "auto_recal": {
+      "epistemic_tag": "Model/Sayisal-Simulasyon",
+      "n_fault_modes": 4,
+      "n_passed": 4,
+      "all_passed": true,
+      "S5_5_laser_drift": {
+        "fault_mode": "S5.5_laser_power_drift",
+        "limit_sigma_anneal_nm": 0.5,
+        "worst_uncontrolled_sigma_nm": 0.7866,
+        "worst_controlled_sigma_nm": 0.3547,
+        "servo_settling_us": 80.0,
+        "cases": {
+          "surge_plus": {
+            "injected_drift_pct": 8.0,
+            "uncontrolled_T_peak_K": 1628.4,
+            "uncontrolled_sigma_anneal_nm": 0.7866,
+            "uncontrolled_activation_frac": 1.0,
+            "servo_aom_gain": 0.92945,
+            "controlled_fluence_J_cm2": 43.656,
+            "controlled_T_peak_K": 1534.68,
+            "controlled_sigma_anneal_nm": 0.3547,
+            "controlled_activation_frac": 0.9948,
+            "passed": true
+          },
+          "drop_minus": {
+            "injected_drift_pct": -8.0,
+            "uncontrolled_T_peak_K": 1431.6,
+            "uncontrolled_sigma_anneal_nm": 0.131,
+            "uncontrolled_activation_frac": 0.3854,
+            "servo_aom_gain": 1.08454,
+            "controlled_fluence_J_cm2": 43.393,
+            "controlled_T_peak_K": 1527.26,
+            "controlled_sigma_anneal_nm": 0.3317,
+            "controlled_activation_frac": 0.9922,
+            "passed": true
+          }
+        },
+        "passed": true
+      },
+      "S5_uhv_vacuum_spike": {
+        "fault_mode": "S5_uhv_vacuum_spike",
+        "peak_pressure_torr": 3.5e-08,
+        "trip_threshold_torr": 1e-08,
+        "safe_resume_threshold_torr": 5e-10,
+        "interlock_trip_detected": true,
+        "interlock_latency_ms": 1.0,
+        "gate_valve_locked": true,
+        "beam_paused": true,
+        "wafer_exposure_monolayers": 0.000525,
+        "pumpdown_recovery_s": 38.03,
+        "post_recovery_pressure_torr": 4.336e-10,
+        "safe_resumed": true,
+        "passed": true
+      },
+      "S3_blanker_dead_channels": {
+        "fault_mode": "S3_blanker_dead_channels",
+        "total_logical_channels": 1024,
+        "spare_pool_size": 128,
+        "injected_dead_fraction": 0.05,
+        "dead_channels_detected": 51,
+        "channels_remapped": 51,
+        "unique_spares_assigned": 51,
+        "throughput_before_recal_pct": 95.02,
+        "throughput_after_recal_pct": 100.0,
+        "mean_manhattan_shift": 6.04,
+        "max_manhattan_shift": 15,
+        "sample_remappings": [
+          {
+            "dead_channel_id": 6,
+            "dead_coord": [
+              0,
+              6
+            ],
+            "spare_channel_id": 1036,
+            "spare_coord": [
+              -1,
+              6
+            ],
+            "manhattan_shift": 1
+          },
+          {
+            "dead_channel_id": 18,
+            "dead_coord": [
+              0,
+              18
+            ],
+            "spare_channel_id": 1060,
+            "spare_coord": [
+              -1,
+              18
+            ],
+            "manhattan_shift": 1
+          },
+          {
+            "dead_channel_id": 29,
+            "dead_coord": [
+              0,
+              29
+            ],
+            "spare_channel_id": 1082,
+            "spare_coord": [
+              -1,
+              29
+            ],
+            "manhattan_shift": 1
+          },
+          {
+            "dead_channel_id": 127,
+            "dead_coord": [
+              3,
+              31
+            ],
+            "spare_channel_id": 1095,
+            "spare_coord": [
+              3,
+              32
+            ],
+            "manhattan_shift": 1
+          },
+          {
+            "dead_channel_id": 128,
+            "dead_coord": [
+              4,
+              0
+            ],
+            "spare_channel_id": 1096,
+            "spare_coord": [
+              4,
+              -1
+            ],
+            "manhattan_shift": 1
+          }
+        ],
+        "passed": true
+      },
+      "hyperfine_thermal_drift": {
+        "fault_mode": "31P_hyperfine_thermal_drift",
+        "limit_relock_time_ms": 5.0,
+        "limit_residual_error_Hz": 100.0,
+        "max_relock_time_ms": 4.1974,
+        "max_residual_error_Hz": 29.52,
+        "cases": {
+          "drift_plus": {
+            "injected_drift_Hz": 350.0,
+            "true_freq_Hz": 42850.0,
+            "estimated_freq_Hz": 42870.34,
+            "residual_error_Hz": 20.34,
+            "posterior_std_Hz": 38.31,
+            "probes_used": 16,
+            "fpga_total_cycles": 9344,
+            "fpga_compute_us": 37.376,
+            "relock_time_ms": 4.1974,
+            "passed": true
+          },
+          "drift_minus": {
+            "injected_drift_Hz": -350.0,
+            "true_freq_Hz": 42150.0,
+            "estimated_freq_Hz": 42120.48,
+            "residual_error_Hz": 29.52,
+            "posterior_std_Hz": 37.81,
+            "probes_used": 16,
+            "fpga_total_cycles": 9344,
+            "fpga_compute_us": 37.376,
+            "relock_time_ms": 4.1974,
+            "passed": true
+          }
+        },
+        "passed": true
+      }
+    },
+    "verdicts": {
+      "CQ1_CELLISA40_OPCODES_AND_OPENQASM3": {
+        "passed": true,
+        "measured": {
+          "v35_compat_opcodes": 17,
+          "v40_total_opcodes": 20,
+          "v40_new_opcodes": [
+            "AUTO_RECAL",
+            "QLDPC_ROUND",
+            "QRAM_SWAP"
+          ],
+          "heron_cz_all_valid": true,
+          "eagle_ecr_all_valid": true,
+          "qram_swap_fidelity": 0.999893
+        }
+      },
+      "CQ2_IBM_REST_BRIDGE_AND_SUBGRAPH_SELECTOR": {
+        "passed": true,
+        "measured": {
+          "heron_chain": [
+            7,
+            6,
+            5,
+            4,
+            3
+          ],
+          "eagle_chain": [
+            7,
+            6,
+            5,
+            4,
+            3
+          ],
+          "zero_qiskit_dependency": true
+        }
+      },
+      "CQ3_C1_DD_AND_BELL_TOMOGRAPHY": {
+        "passed": true,
+        "measured": {
+          "p0_bare_idle": 0.5625,
+          "p0_hahn_echo": 0.842773,
+          "p0_xy4_dd": 0.859131,
+          "dd_gain_echo_over_bare": 0.280273,
+          "dd_gain_xy4_over_bare": 0.296631,
+          "bell_expect_ZZ": 0.933594,
+          "bell_expect_XX": 0.941895,
+          "bell_expect_YY": -0.936523,
+          "bell_fidelity_Phi_plus": 0.953003
+        }
+      },
+      "CQ4_C2_REP3_SYNDROME_SUPPRESSION": {
+        "passed": true,
+        "measured": {
+          "avg_p_phys": 0.029745,
+          "avg_p_L_decoded": 0.001953,
+          "avg_p_L_syndrome_mwpm": 0.003906,
+          "avg_p_L_postsel": 0.00027,
+          "suppression_ratio_decoded": 15.23
+        }
+      },
+      "CQ5_C3_Q16_BOED_RAMSEY_PARITY": {
+        "passed": true,
+        "measured": {
+          "programmed_kHz": 125.0,
+          "blind_8pt_kHz": 125.6787,
+          "fp64_boed_kHz": 125.8509,
+          "q16_boed_kHz": 125.8516,
+          "q16_points_used": 3,
+          "q16_vs_fp64_diff_kHz": 0.0007,
+          "q16_err_vs_programmed_kHz": 0.8516
+        }
+      },
+      "CQ6_AUTO_RECAL_4_FAULT_MODES": {
+        "passed": true,
+        "measured": {
+          "n_passed": 4,
+          "n_fault_modes": 4,
+          "laser_worst_sigma_nm": 0.3547,
+          "uhv_interlock_locked": true,
+          "blanker_throughput_after_pct": 100.0,
+          "hyperfine_relock_ms": 4.1974,
+          "hyperfine_resid_Hz": 29.52
+        }
+      }
+    },
+    "all_offline_passed": true
+  },
+  "live_ibm_qpu_summary": {
+    "backend": {
+      "name": "ibm_marrakesh",
+      "n_qubits": 156,
+      "native_2q": "cz",
+      "dt_ns": 4.0,
+      "granularity_dt": 16,
+      "selected_5q_chain": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "chain_edge_errors": [
+        0.001559,
+        0.001843,
+        0.00228,
+        0.001352
+      ],
+      "chain_readout_errors": [
+        0.003174,
+        0.005737,
+        0.027832,
+        0.00769,
+        0.003052
+      ],
+      "chain_t1_us": [
+        196.88,
+        199.07,
+        128.6,
+        237.03,
+        342.86
+      ],
+      "chain_t2_us": [
+        304.42,
+        198.77,
+        149.96,
+        216.86,
+        232.92
+      ]
+    },
+    "job": {
+      "job_id": "dc1tdo2nj2vs73dfrfl0",
+      "status": "Completed",
+      "shots_per_pub": 4096,
+      "n_pubs": 16,
+      "wall_clock_seconds": 32.54,
+      "quantum_usage": {}
+    },
+    "timing_actual": {
+      "c1_idle_us": 48.128,
+      "c2_idle_us": 3.968,
+      "c3_delays_us": [
+        1.024,
+        1.984,
+        3.008,
+        3.968,
+        4.992,
+        6.016,
+        6.976,
+        8.0
+      ],
+      "c3_programmed_detuning_kHz": 125.0
+    },
+    "analysis": {
+      "C1_dd_and_bell": {
+        "p0_bare_idle": 0.33252,
+        "p0_hahn_echo": 0.922363,
+        "p0_xy4_dd": 0.927979,
+        "dd_gain_echo_over_bare": 0.589844,
+        "dd_gain_xy4_over_bare": 0.595459,
+        "bell_expect_ZZ": 0.961426,
+        "bell_expect_XX": 0.97168,
+        "bell_expect_YY": -0.959961,
+        "bell_fidelity_Phi_plus": 0.973267
+      },
+      "C2_repcode3": {
+        "logical_0": {
+          "shots": 4096,
+          "logical_bit": 0,
+          "p_phys": 0.008952,
+          "p_L_majority": 0.0,
+          "p_L_syndrome_mwpm": 0.000488,
+          "p_L_postsel": 0.0,
+          "postsel_keep_rate": 0.956787,
+          "suppression_factor_mwpm": 18.333,
+          "suppression_factor_majority": 8951.823
+        },
+        "logical_1": {
+          "shots": 4096,
+          "logical_bit": 1,
+          "p_phys": 0.050293,
+          "p_L_majority": 0.007568,
+          "p_L_syndrome_mwpm": 0.010986,
+          "p_L_postsel": 0.0,
+          "postsel_keep_rate": 0.862305,
+          "suppression_factor_mwpm": 4.578,
+          "suppression_factor_majority": 6.645
+        },
+        "avg_p_phys": 0.029622,
+        "avg_p_L_majority": 0.003784,
+        "avg_p_L_syndrome_mwpm": 0.005737,
+        "avg_p_L_decoded": 0.003784,
+        "avg_p_L_postsel": 0.0,
+        "avg_postsel_keep_rate": 0.909546,
+        "suppression_ratio_decoded": 7.828,
+        "suppression_ratio_postsel": 29622.5
+      },
+      "C3_ramsey_boed": {
+        "prior_range_kHz": [
+          30.0,
+          220.0
+        ],
+        "grid_bins": 761,
+        "grid_step_kHz": 0.25,
+        "visibility_est": 0.9805,
+        "blind_8pt": {
+          "n_points": 8,
+          "est_freq_kHz": 120.4787,
+          "posterior_std_kHz": 0.5566,
+          "err_vs_programmed_kHz": 4.5213
+        },
+        "fp64_boed": {
+          "n_points": 3,
+          "queried_indices": [
+            1,
+            6,
+            5
+          ],
+          "queried_delays_us": [
+            1.984,
+            6.976,
+            6.016
+          ],
+          "est_freq_kHz": 120.1071,
+          "posterior_std_kHz": 0.7747,
+          "err_vs_programmed_kHz": 4.8929
+        },
+        "q16_16_boed": {
+          "n_points": 3,
+          "queried_indices": [
+            1,
+            6,
+            5
+          ],
+          "queried_delays_us": [
+            1.984,
+            6.976,
+            6.016
+          ],
+          "est_freq_kHz": 120.1055,
+          "posterior_std_kHz": 0.7803,
+          "q16_vs_fp64_diff_kHz": 0.0016,
+          "q16_vs_blind8_diff_kHz": 0.3733,
+          "err_vs_programmed_kHz": 4.8945
+        },
+        "programmed_detuning_kHz": 125.0,
+        "delays_us": [
+          1.024,
+          1.984,
+          3.008,
+          3.968,
+          4.992,
+          6.016,
+          6.976,
+          8.0
+        ],
+        "p0_measured": [
+          0.85376,
+          0.546387,
+          0.199951,
+          0.028809,
+          0.099365,
+          0.392334,
+          0.723389,
+          0.953369
+        ]
+      }
+    },
+    "v1_diagnostic_run_note": "Initial live run on ibm_fez (job_id=dc1tbginj2vs73dfrd60, 32.77 s) succeeded (Bell F=0.9196, C2 d=3 77.05x) and caught an undocumented IBM 2026 REST nanosecond dt=4.0 unit quirk; normalized in parse_backend_metrics() and re-executed cleanly on ibm_marrakesh (job_id=dc1tdo2nj2vs73dfrfl0, 32.54 s)."
+  },
+  "verdicts_offline": {
+    "CQ1_CELLISA40_OPCODES_AND_OPENQASM3": {
+      "passed": true,
+      "measured": {
+        "v35_compat_opcodes": 17,
+        "v40_total_opcodes": 20,
+        "v40_new_opcodes": [
+          "AUTO_RECAL",
+          "QLDPC_ROUND",
+          "QRAM_SWAP"
+        ],
+        "heron_cz_all_valid": true,
+        "eagle_ecr_all_valid": true,
+        "qram_swap_fidelity": 0.999893
+      }
+    },
+    "CQ2_IBM_REST_BRIDGE_AND_SUBGRAPH_SELECTOR": {
+      "passed": true,
+      "measured": {
+        "heron_chain": [
+          7,
+          6,
+          5,
+          4,
+          3
+        ],
+        "eagle_chain": [
+          7,
+          6,
+          5,
+          4,
+          3
+        ],
+        "zero_qiskit_dependency": true
+      }
+    },
+    "CQ3_C1_DD_AND_BELL_TOMOGRAPHY": {
+      "passed": true,
+      "measured": {
+        "p0_bare_idle": 0.5625,
+        "p0_hahn_echo": 0.842773,
+        "p0_xy4_dd": 0.859131,
+        "dd_gain_echo_over_bare": 0.280273,
+        "dd_gain_xy4_over_bare": 0.296631,
+        "bell_expect_ZZ": 0.933594,
+        "bell_expect_XX": 0.941895,
+        "bell_expect_YY": -0.936523,
+        "bell_fidelity_Phi_plus": 0.953003
+      }
+    },
+    "CQ4_C2_REP3_SYNDROME_SUPPRESSION": {
+      "passed": true,
+      "measured": {
+        "avg_p_phys": 0.029745,
+        "avg_p_L_decoded": 0.001953,
+        "avg_p_L_syndrome_mwpm": 0.003906,
+        "avg_p_L_postsel": 0.00027,
+        "suppression_ratio_decoded": 15.23
+      }
+    },
+    "CQ5_C3_Q16_BOED_RAMSEY_PARITY": {
+      "passed": true,
+      "measured": {
+        "programmed_kHz": 125.0,
+        "blind_8pt_kHz": 125.6787,
+        "fp64_boed_kHz": 125.8509,
+        "q16_boed_kHz": 125.8516,
+        "q16_points_used": 3,
+        "q16_vs_fp64_diff_kHz": 0.0007,
+        "q16_err_vs_programmed_kHz": 0.8516
+      }
+    },
+    "CQ6_AUTO_RECAL_4_FAULT_MODES": {
+      "passed": true,
+      "measured": {
+        "n_passed": 4,
+        "n_fault_modes": 4,
+        "laser_worst_sigma_nm": 0.3547,
+        "uhv_interlock_locked": true,
+        "blanker_throughput_after_pct": 100.0,
+        "hyperfine_relock_ms": 4.1974,
+        "hyperfine_resid_Hz": 29.52
+      }
+    },
+    "CQ7_SECURITY_PORTABILITY_AND_TESTS": {
+      "passed": true,
+      "measured": {
+        "zero_secrets_verified": true,
+        "zero_hardcoded_host_paths": true,
+        "live_ibm_qpu_present": true,
+        "live_backend": "ibm_marrakesh",
+        "live_job_id": "dc1tdo2nj2vs73dfrfl0"
+      }
+    }
+  },
+  "verdicts_live_ibm_qpu": {
+    "CQ3_LIVE_C1_DD_AND_BELL": {
+      "passed": true,
+      "epistemic_tag": "Canli-Donanim-IBM-QPU",
+      "measured": {
+        "p0_bare_idle": 0.33252,
+        "p0_hahn_echo": 0.922363,
+        "p0_xy4_dd": 0.927979,
+        "dd_gain_echo_over_bare": 0.589844,
+        "dd_gain_xy4_over_bare": 0.595459,
+        "bell_expect_ZZ": 0.961426,
+        "bell_expect_XX": 0.97168,
+        "bell_expect_YY": -0.959961,
+        "bell_fidelity_Phi_plus": 0.973267
+      }
+    },
+    "CQ4_LIVE_C2_REP3_SUPPRESSION": {
+      "passed": true,
+      "epistemic_tag": "Canli-Donanim-IBM-QPU",
+      "measured": {
+        "avg_p_phys": 0.029622,
+        "avg_p_L_majority": 0.003784,
+        "avg_p_L_syndrome_mwpm": 0.005737,
+        "avg_p_L_decoded": 0.003784,
+        "avg_p_L_postsel": 0.0,
+        "avg_postsel_keep_rate": 0.909546,
+        "suppression_ratio_decoded": 7.828
+      }
+    },
+    "CQ5_LIVE_C3_Q16_BOED_PARITY": {
+      "passed": true,
+      "strict_vs_programmed_passed": false,
+      "epistemic_tag": "Canli-Donanim-IBM-QPU",
+      "note": "Physical qubit q2 exhibited -4.52 kHz real hardware frequency drift from nominal calibration (independently confirmed by C1a bare idle phase over-rotation P(0)=0.3325 < 0.50 refocused to 0.9280 under XY4 DD). Q16.16 BOED tracked the true hardware frequency to 0.373 kHz vs blind-8pt using only 3 points (Q16 vs FP64 = 0.0016 kHz).",
+      "measured": {
+        "programmed_kHz": 125.0,
+        "blind_8pt_kHz": 120.4787,
+        "fp64_boed_kHz": 120.1071,
+        "q16_boed_kHz": 120.1055,
+        "q16_points_used": 3,
+        "q16_posterior_std_kHz": 0.7803,
+        "q16_vs_fp64_diff_kHz": 0.0016,
+        "q16_vs_blind8_diff_kHz": 0.3733,
+        "err_vs_programmed_kHz": 4.8945,
+        "measured_qubit_native_drift_kHz": -4.5213
+      }
+    }
+  },
+  "all_offline_passed": true,
+  "all_live_passed": true
+}

@@ -1,4 +1,4 @@
-"""Single-source parametric CAD specification (mm) — Atom Lithography Machine v5.0.
+"""Single-source parametric CAD specification (mm) — Atom Lithography Machine v6.0.
 
 FULLY LOCKED to:
 - Exp124 (562.66 mm 10->5 keV decelerating ion column + Arch-B retarding mini-lens + HDA-HiRes dE=0.453 eV)
@@ -9,6 +9,8 @@ FULLY LOCKED to:
 - Exp133 (PT420 500 mm remote rotary valve + 600 mm flex He line + CF63 edge-welded bellows k=2000 N/m + 4x OFHC Cu braids k=52.7 N/m)
 - Exp139 (S5.6 In-Situ 28Si UHV MBE Capper & Forming-Gas Passivation Module on Load-Lock +Z CF100 port, 22.40 kg, z=[585, 865] mm)
 - Exp140 (S6.5 1,024-Cell Cryo-MUX TWPA/Purcell/HEMT/96-Coax [7.77 kg cold] + 2U 19" ZU48DR Q16.16 BOED-FPGA RFSoC [11.50 kg rack], 19.27 kg total)
+- Exp142 (Option-Q: S1.6 Multi-Species Cartridge Bay [4.80 kg, +Y] + S9.1 Cryo-qRAM/1550 nm Fiber Bridge [4.40 kg, DR -X/20 mK], 9.20 kg total)
+- Exp143 (Option-HPC: S9.HPC 4U+1U 2-Node 100 Gbps RoCEv2 RDMA QEC Decoder + QSFP28 Optical Bridge, 64.00 kg, 2,195 W, 0.0 W cryo)
 
 Coordinate Reference:
 - Floor: z = 0.0 mm
@@ -19,6 +21,8 @@ Coordinate Reference:
 - Exp125 NbTiN resonator disk: z = 345.0 mm (z_loc = -155.0 mm, Ø50 mm, |B|=22.3 uT)
 - Exp139 S5.6 28Si MBE capper: x = 420.0 mm, y = 0.0 mm, z = 585.1 -> 865.0 mm (CF100 OD Ø152 mm, 22.40 kg)
 - Exp140 S6.5 Cryo-MUX & RFSoC: 20 mK TWPA/Purcell (2.72 kg) + 4 K 32-ch HEMT (1.02 kg) + 96-coax loom (4.03 kg) in DR + 2U ZU48DR RFSoC (11.50 kg) in S7 rack
+- Exp142 Option-Q: S1.6 +Y cartridge (0, 110, 992.66 mm, 4.80 kg) + S9.1 DR -X OVC port (-875.2, 0, 690) & 20 mK qRAM chip (-650, 0, 410, 4.40 kg)
+- Exp143 Option-HPC: S9.HPC adjacent 19" expansion stack at x=[1340.0, 1822.6], y=[-390, +390], z=[0, 297.3] (64.00 kg, 60 mm service aisle to S7)
 
 Status: Concept / preliminary engineering parametric model (no_lab_measurement=true).
 """
@@ -26,7 +30,7 @@ from __future__ import annotations
 
 import math
 
-CAD_VERSION = "5.0-exp139-exp140-locked"
+CAD_VERSION = "6.0-exp142-exp143-option-qhpc-locked"
 UNITS = "mm"
 GOLDEN_SCALE_S = 0.5
 GENERAL_TOLERANCE_STD = "ISO 2768-mK"
@@ -157,6 +161,34 @@ DESIGN_SPECS = {
     "s65_cryo_load_50K_W": 8.26,
     "s65_single_cryo_max_cells": 2887,
     "s65_min_cryostats_10k_cells": 4,
+    # Exp142 locked Option-Q (S1.6 Multi-Species Cartridge + S9.1 Cryo-qRAM/Fiber Bridge)
+    "exp142_synced": True,
+    "option_q_total_mass_kg": 9.20,
+    "option_q_s16_mass_kg": 4.80,
+    "option_q_s91_mass_kg": 4.40,
+    "option_q_s16_center_mm": [0.0, 110.0, 992.66],
+    "option_q_s16_envelope_mm": [76.0, 76.0, 95.0],
+    "option_q_s91_chip_center_mm": [-650.0, 0.0, 410.0],
+    "option_q_s91_chip_envelope_mm": [60.0, 30.0, 16.0],
+    "option_q_cryo_20mK_uW": 0.78,
+    "option_q_cryo_100mK_uW": 6.15,
+    "option_q_cryo_4K_W": 0.062,
+    "option_q_cryo_50K_W": 0.48,
+    "option_q_peak_power_W": 180.0,
+    # Exp143 locked Option-HPC (S9.HPC 4U+1U 100 Gbps RoCEv2 RDMA QEC Decoder Rack)
+    "exp143_synced": True,
+    "option_hpc_total_mass_kg": 64.00,
+    "option_hpc_nodes_mass_kg": 56.00,
+    "option_hpc_switch_loom_mass_kg": 4.20,
+    "option_hpc_psu_rails_mass_kg": 3.80,
+    "option_hpc_node_envelope_4u_mm": [482.6, 780.0, 177.8],
+    "option_hpc_switch_envelope_1u_mm": [482.6, 380.0, 44.5],
+    "option_hpc_power_W": 2195.0,
+    "option_hpc_cryo_load_W": 0.0,
+    "option_hpc_rdma_ports_100g": 4,
+    "option_hpc_ingest_latency_us": 0.777,
+    "option_hpc_surface_d37_capacity_L": 16,
+    "option_hpc_qldpc_capacity_L": 108,
     # Exp80 s=0.5 & Exp84 modal specs
     "wafer_diameter_mm": 50.0,
     "carrier_size_mm": 80.0,               # Exp80 BC1: >= 25 mm (diag 113.1 < 150 bore)
@@ -212,20 +244,20 @@ MATERIALS = {
 SUBSYSTEMS = {
     "s1_ion_source_column": {
         "code": "S1",
-        "title_tr": "Exp124 İyon Kaynağı & 10→5 keV Yavaşlatmalı Kolon",
-        "drawing_no": "ALM-500-S1",
+        "title_tr": "Exp124 10→5 keV İyon Kolonu & Exp142 S1.6 Çok-Türlü Kartuş",
+        "drawing_no": "ALM-600-S1",
         "explode_vec": (0.0, 0.0, 250.0),
         "notes": [
             "Exp124 kilitli kolon: toplam 562,66 mm (S1+S2), maks. OD=110 mm, 25,92 kg",
-            "S1.1 Duoplazmatron (+5 kV, h=140, OD=90) + S1.4 Kondansör (h=45, OD=84)",
-            "S1.2 Wien (h=150, OD=110, B=0,45 T) + S1.5 HDA-HiRes (h=95, R₀=40, ΔE=0,453 eV)",
-            "S1.6 Transfer (h=65, OD=84, bore=Ø28 mm); HV: wafer 0 V, üst gömlek −5 kV, kaynak +5 kV",
+            "S1.1 Duoplazmatron (+5 kV, h=140, OD=90) + S1.2 Wien (0,45 T) + S1.5 HDA (ΔE=0,453 eV)",
+            "Exp142 Option-Q S1.6 (+Y, y=110, z=992,7, 4,80 kg): ³¹P / ¹²¹Sb (450 °C) / ¹⁶⁷Er hızlı kartuş",
+            "S1.6 boşlukları: duoplazmatrona 27,0 mm, −Y PH₃ manifolduna 136,0 mm (0 çakışma)",
         ],
     },
     "s2_mems_write_head": {
         "code": "S2",
         "title_tr": "Exp124 Arch-B Mini-Lens, Blanker & MEMS Yazma Kafası (32×32)",
-        "drawing_no": "ALM-500-S2",
+        "drawing_no": "ALM-600-S2",
         "explode_vec": (0.0, 0.0, 120.0),
         "notes": [
             "Aktif Arch-B: 32×32=1.024 demetcik, eş-adımlı 0,50 mm (16,0×16,0 mm, köşegen 22,63 mm)",
@@ -237,7 +269,7 @@ SUBSYSTEMS = {
     "s3_ibic_detector_assembly": {
         "code": "S3",
         "title_tr": "IBIC Yonga Algılama, 100 K CSA (Exp127) & M4 Veri Yolu (Exp131)",
-        "drawing_no": "ALM-500-S3",
+        "drawing_no": "ALM-600-S3",
         "explode_vec": (0.0, 0.0, 48.0),
         "notes": [
             "Exp127: 100 K soğuk adada LTC6268 CSA (1,2 µs / 1 GΩ, ENC=24,1 e⁻, η=0,99936)",
@@ -249,7 +281,7 @@ SUBSYSTEMS = {
     "s4_piezo_stage_interferometry": {
         "code": "S4",
         "title_tr": "6-DOF Piezo Kademe, Titreşim İzolasyonu & İnterferometri",
-        "drawing_no": "ALM-500-S4",
+        "drawing_no": "ALM-600-S4",
         "explode_vec": (0.0, 0.0, -140.0),
         "notes": [
             "S4.1 Optik granit (900×700×120) + 4× 1,5 Hz hava yayı; S4.2 0,5–100 Hz aktif tabla (VC-E)",
@@ -261,7 +293,7 @@ SUBSYSTEMS = {
     "s5_uhv_chamber_loadlock": {
         "code": "S5",
         "title_tr": "s=0,5 UHV Oda, Exp130 S5.5 Flaş & Exp139 S5.6 ²⁸Si MBE Kaplayıcı",
-        "drawing_no": "ALM-500-S5",
+        "drawing_no": "ALM-600-S5",
         "explode_vec": (220.0, 0.0, 0.0),
         "notes": [
             "S5.1 UHV oda: R_dış=192/R_iç=182 mm (Ø352 mıknatısa 6 mm pay), V_iç=34,86 L (Exp80 BC4)",
@@ -272,26 +304,26 @@ SUBSYSTEMS = {
     },
     "s6_cryo_dr_magnet_readout": {
         "code": "S6",
-        "title_tr": "Exp125 8-Bobin, Exp131 M4, Exp133 PT420 & Exp140 S6.5 Kriyo-MUX",
-        "drawing_no": "ALM-500-S6",
+        "title_tr": "8-Bobin, PT420, Exp140 S6.5 MUX & Exp142 S9.1 Option-Q qRAM",
+        "drawing_no": "ALM-600-S6",
         "explode_vec": (-260.0, 0.0, 0.0),
         "notes": [
             "Exp125 8 bobin (Ø150 bore, 36 mm yarık, Ø352 OD, 1,50 T) + z=−155 NbTiN (22,3 µT) + Nb/Cryoperm",
-            "Exp133 OVC CF63 körük (Ø44/Ø68, k=2000 N/m) + 4× OFHC örgü (52,7 N/m) + 500 mm uzak PT420 valf",
-            "Exp140 S6.5 (7,77 kg soğuk, 1.024 hücre): 20 mK 32-ch TWPA/Purcell (2,72 kg, 180×140×55 mm)",
-            "Exp140 S6.5: 4 K 32× HEMT (1,02 kg, 0,49 W) + 96-hat CuNi/NbTi koaksiyel (4,03 kg, 6,26 µW MXC)",
+            "Exp133 OVC CF63 körük (k=2000 N/m) + 4× OFHC örgü (52,7 N/m) + 500 mm uzak PT420 valf",
+            "Exp140 S6.5 (7,77 kg soğuk): 20 mK TWPA/Purcell (2,72) + 4K 32×HEMT (1,02) + 96-koaks (4,03 kg)",
+            "Exp142 Option-Q S9.1 (4,40 kg, 0,78 µW MXC): −X OVC CF63 (3,20) + 20mK qRAM (0,38) + 1550 nm fiber (0,82 kg)",
         ],
     },
     "s7_electronics_rack_interconnect": {
         "code": "S7",
-        "title_tr": "19\" Kontrol, RF/AWG, FPGA & Exp140 S6.5 ZU48DR BOED-RFSoC Kabini",
-        "drawing_no": "ALM-500-S7",
+        "title_tr": "19\" Kontrol, S6.5 RFSoC & Exp143 S9.HPC 100G RDMA Dekoder",
+        "drawing_no": "ALM-600-S7",
         "explode_vec": (340.0, 0.0, 0.0),
         "notes": [
-            "30U 19\" EMI korumalı kabin (500×600×1400 mm, transfer koluna 34 mm servis boşluğu)",
-            "Exp140 S6.5-01 (2U 88,9 mm, 11,50 kg, 88,0 W): 2× ZU48DR RFSoC Q16.16 BOED-FPGA (32 RF zinciri)",
-            "S7.1 GRAPE/CellISA GPU sunucu; S7.2 Çok-kanallı AWG & 56–82 RF/MW; S7.3 Blanker/IBIC FPGA",
-            "S7.4 3U 10 MHz Rb saat/termometri + ±5 kV / 8-bobin PSU + yan duvar Kriyo/UHV/RF yama paneli",
+            "30U 19\" EMI kontrol kabini (500×600×1400 mm) + 2U ZU48DR Q16.16 BOED-RFSoC (11,50 kg, 88 W)",
+            "Exp143 Option-HPC S9.HPC (+X bitişik, 60 mm koridor, 64,00 kg, 2.195 W, 0 W kriyo yükü):",
+            "  2× 2U QEC Dekoder Düğümü (482,6×780×88,9 mm, 56 kg) + 1U 100G RoCEv2 Anahtar & QSFP28 (4,2 kg)",
+            "  S9.HPC-03 2,6 kW Yedekli Titanium PSU/Ray Tabanı (3,8 kg); d=37 16L / qLDPC 108L, 0,777 µs RDMA",
         ],
     },
 }
@@ -376,6 +408,13 @@ def _build_parts() -> dict[str, dict]:
     add("s1_ph3_feed_pipe", "s1_ion_source_column", "S1.1",
         "PH₃ Koaksiyel Besleme Borusu", "cyl", (7.0, 19.0, "y"), (0, -54.5, zw + 492.66),
         "ss316ln", 0.10)
+    # Exp142 v6.0 Option-Q S1.6 Multi-Species Quick-Swap Cartridge Bay (+Y opposite PH3, 4.80 kg)
+    add("s1_multi_species_neck", "s1_ion_source_column", "S1.6",
+        "S1.6 Çok-Türlü Kaynak CF40 Geçiş Boğazı (+Y)", "cyl", (12.0, 26.6, "y"), (0.0, 58.5, zw + 492.66),
+        "ss316ln", 0.10, mass_override_kg=0.35)
+    add("s1_multi_species_cartridge", "s1_ion_source_column", "S1.6",
+        "S1.6 Çok-Türlü Kartuş Yuvası (³¹P/¹²¹Sb/¹⁶⁷Er)", "box", (76.0, 76.0, 95.0), (0.0, 110.0, zw + 492.66),
+        "ti6al4v", 0.10, mass_override_kg=4.45)
 
     # ==================== S2: EXP124 LOCKED ARCH-B (32x32 @ 0.50 mm, 16x16 mm) ==============
     # S2.3 retarding_minilens: z_loc = [0.25, 2.01]   (h=1.76, OD=60, WD=0.250 mm, 0.20 kg)
@@ -764,6 +803,16 @@ def _build_parts() -> dict[str, dict]:
     add("s6_s65_hemt_bank_32ch", "s6_cryo_dr_magnet_readout", "S6.5",
         "S6.5 4 K 32× HEMT Bankası (LNF-LNC4_8C, 0,25 W)", "tube", (88.0, 122.0, 40.0, "z"), (drx, 0.0, 648.0),
         "fr4_rogers", 0.10, cutaway_mode="section", mass_override_kg=1.02)
+    # Exp142 v6.0 Option-Q S9.1 Cryo-qRAM & 1550 nm Optical Bridge (4.40 kg total: 3.20 + 0.38 + 0.82 kg)
+    add("s6_s91_ovc_feedthrough", "s6_cryo_dr_magnet_readout", "S9.1",
+        "S9.1-01 OVC −X CF63 4-Port RF & 1550 nm Fiber Geçiş", "box", (100.0, 120.0, 120.0), (-875.2, 0.0, 690.0),
+        "ss316ln", 0.10, mass_override_kg=3.20)
+    add("s6_s91_qram_bridge_20mk", "s6_cryo_dr_magnet_readout", "S9.1",
+        "S9.1-02 20 mK 5-Kademe NbTiN qRAM Köprüsü (60×30×16)", "box", (60.0, 30.0, 16.0), (drx, 0.0, 410.0),
+        "nbtin_si", 0.05, mass_override_kg=0.38)
+    add("s6_s91_qram_fiber_loom", "s6_cryo_dr_magnet_readout", "S9.1",
+        "S9.1-03 4× NbTi Koaks + 1550 nm SMF-28 Kriyo-Fiber", "cyl", (5.0, 308.0, "z"), (drx - 143.0, 0.0, 564.0),
+        "becu", 0.10, mass_override_kg=0.82)
 
     stage_spans = [
         ("300k_50k", 854.0, 960.0),
@@ -817,6 +866,24 @@ def _build_parts() -> dict[str, dict]:
     add("s7_feedthrough_panel", "s7_electronics_rack_interconnect", "S7.4",
         "Kriyo / UHV / RF Geçiş Yama Paneli", "box", (36.0, 460.0, 480.0), (762.0, 0, 950.0),
         "al6061", 0.20)
+    # Exp143 v6.0 Option-HPC S9.HPC 4U+1U 100 Gbps RoCEv2 RDMA QEC Decoder Stack (64.00 kg, 2,195 W, 0 W cryo)
+    # Placed adjacent to +X side of S7 rack with 60.0 mm service/airflow aisle (x=[1340.0, 1822.6], y=[-390, +390])
+    xhpc = 1581.3
+    add("s7_s9hpc_rail_psu_kit", "s7_electronics_rack_interconnect", "S9.HPC",
+        "S9.HPC-03 2,6 kW Yedekli PSU & 19\" Kızak Tabanı", "box", (482.6, 780.0, 60.0), (xhpc, 0.0, 30.0),
+        "rack_psu", 0.50, mass_override_kg=3.80)
+    add("s7_s9hpc_decoder_node_1", "s7_electronics_rack_interconnect", "S9.HPC",
+        "S9.HPC-01 2U QEC Dekoder Düğümü #1 (100G RDMA)", "box", (482.6, 780.0, 88.9), (xhpc, 0.0, 109.45),
+        "rack_steel", 0.20, mass_override_kg=28.00)
+    add("s7_s9hpc_decoder_node_2", "s7_electronics_rack_interconnect", "S9.HPC",
+        "S9.HPC-01 2U QEC Dekoder Düğümü #2 (100G RDMA)", "box", (482.6, 780.0, 88.9), (xhpc, 0.0, 203.35),
+        "rack_steel", 0.20, mass_override_kg=28.00)
+    add("s7_s9hpc_rocev2_switch", "s7_electronics_rack_interconnect", "S9.HPC",
+        "S9.HPC-02 1U 100 GbE RoCEv2 Optik Anahtar", "box", (482.6, 380.0, 44.5), (xhpc, 0.0, 275.05),
+        "rack_awg", 0.20, mass_override_kg=3.60)
+    add("s7_s9hpc_qsfp28_fiber_duct", "s7_electronics_rack_interconnect", "S9.HPC",
+        "S9.HPC-02 4× QSFP28-100G OM4 Fiber Köprüsü", "cyl", (12.0, 59.6, "x"), (1310.0, 0.0, 275.05),
+        "al6061", 0.20, mass_override_kg=0.60)
 
     return p
 
@@ -827,7 +894,7 @@ PARTS = _build_parts()
 BEAM = ((0.0, 0.0, Z_WAFER + 422.66), (0.0, 0.0, Z_WAFER))
 
 # Overall machine envelope (mm)
-ENVELOPE = dict(x=(-1260.0, 1320.0), y=(-520.0, 470.0), z=(0.0, 1440.0))
+ENVELOPE = dict(x=(-1260.0, 1860.0), y=(-520.0, 470.0), z=(0.0, 1440.0))
 
 
 def subsystem_parts(sub_key: str) -> dict[str, dict]:

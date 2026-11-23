@@ -1,5 +1,5 @@
 {
-  "cad_version": "5.0-exp139-exp140-locked",
+  "cad_version": "6.0-exp142-exp143-option-qhpc-locked",
   "units": "mm",
   "tolerance_std": "ISO 2768-mK",
   "no_lab_measurement": true,
@@ -139,6 +139,56 @@
     "s65_cryo_load_50K_W": 8.26,
     "s65_single_cryo_max_cells": 2887,
     "s65_min_cryostats_10k_cells": 4,
+    "exp142_synced": true,
+    "option_q_total_mass_kg": 9.2,
+    "option_q_s16_mass_kg": 4.8,
+    "option_q_s91_mass_kg": 4.4,
+    "option_q_s16_center_mm": [
+      0.0,
+      110.0,
+      992.66
+    ],
+    "option_q_s16_envelope_mm": [
+      76.0,
+      76.0,
+      95.0
+    ],
+    "option_q_s91_chip_center_mm": [
+      -650.0,
+      0.0,
+      410.0
+    ],
+    "option_q_s91_chip_envelope_mm": [
+      60.0,
+      30.0,
+      16.0
+    ],
+    "option_q_cryo_20mK_uW": 0.78,
+    "option_q_cryo_100mK_uW": 6.15,
+    "option_q_cryo_4K_W": 0.062,
+    "option_q_cryo_50K_W": 0.48,
+    "option_q_peak_power_W": 180.0,
+    "exp143_synced": true,
+    "option_hpc_total_mass_kg": 64.0,
+    "option_hpc_nodes_mass_kg": 56.0,
+    "option_hpc_switch_loom_mass_kg": 4.2,
+    "option_hpc_psu_rails_mass_kg": 3.8,
+    "option_hpc_node_envelope_4u_mm": [
+      482.6,
+      780.0,
+      177.8
+    ],
+    "option_hpc_switch_envelope_1u_mm": [
+      482.6,
+      380.0,
+      44.5
+    ],
+    "option_hpc_power_W": 2195.0,
+    "option_hpc_cryo_load_W": 0.0,
+    "option_hpc_rdma_ports_100g": 4,
+    "option_hpc_ingest_latency_us": 0.777,
+    "option_hpc_surface_d37_capacity_L": 16,
+    "option_hpc_qldpc_capacity_L": 108,
     "wafer_diameter_mm": 50.0,
     "carrier_size_mm": 80.0,
     "chamber_r_out_mm": 192.0,
@@ -158,17 +208,19 @@
     "exp131_m4_4k_crossbar_present": true,
     "exp133_pt420_decoupled_present": true,
     "exp139_s56_mbe_capper_present": true,
-    "exp140_s65_cryo_mux_rfsoc_present": true
+    "exp140_s65_cryo_mux_rfsoc_present": true,
+    "exp142_option_q_present": true,
+    "exp143_option_hpc_present": true
   },
   "master_assembly": {
-    "part_count": 189,
+    "part_count": 199,
     "subsystem_count": 7,
-    "total_mass_kg": 1034.937,
-    "total_volume_L": 491.615,
+    "total_mass_kg": 1108.137,
+    "total_volume_L": 591.371,
     "center_of_mass_mm": [
-      109.03,
-      -9.43,
-      467.67
+      189.67,
+      -8.35,
+      452.68
     ],
     "bbox_min_mm": [
       -1240.0,
@@ -176,33 +228,33 @@
       0.0
     ],
     "bbox_max_mm": [
-      1280.0,
+      1822.6,
       447.3,
       1400.0
     ],
     "bbox_span_mm": [
-      2520.0,
+      3062.6,
       937.3,
       1400.0
     ],
     "stl": {
       "file": "atom_litho_machine.stl",
-      "bytes": 1943884,
-      "triangles": 38876,
+      "bytes": 1976884,
+      "triangles": 39536,
       "is_watertight": true,
       "boundary_edges": 0,
       "non_manifold_edges": 0,
-      "volume_mm3": 491444304.973,
-      "surface_area_mm2": 22278143.36,
+      "volume_mm3": 591200169.128,
+      "surface_area_mm2": 25722588.1,
       "com_mm": [
-        530.481,
-        -5.503,
-        548.658
+        700.089,
+        -4.471,
+        481.407
       ]
     }
   },
   "interference_audit": {
-    "pairs_checked": 17766,
+    "pairs_checked": 19701,
     "solid_clashes": 0,
     "clashes": [],
     "mated_contact_pairs": 113,
@@ -367,6 +419,46 @@
     "exp140_s65_rfsoc_to_awg_z_mm": {
       "value_mm": 20.0,
       "min_req_mm": 10.0,
+      "pass": true
+    },
+    "exp142_s16_cartridge_to_duoplasmatron_y_mm": {
+      "value_mm": 27.0,
+      "min_req_mm": 20.0,
+      "pass": true
+    },
+    "exp142_s16_cartridge_to_ph3_manifold_y_mm": {
+      "value_mm": 136.0,
+      "min_req_mm": 100.0,
+      "pass": true
+    },
+    "exp142_s91_qram_chip_to_s65_twpa_z_mm": {
+      "value_mm": 8.5,
+      "min_req_mm": 5.0,
+      "pass": true
+    },
+    "exp142_s91_ovc_port_to_valve_stand_x_mm": {
+      "value_mm": 144.8,
+      "min_req_mm": 100.0,
+      "pass": true
+    },
+    "exp142_s91_fiber_loom_to_4k_50k_shields_mm": {
+      "value_mm": 2.0,
+      "min_req_mm": 1.5,
+      "pass": true
+    },
+    "exp143_s9hpc_to_s7_rack_aisle_x_mm": {
+      "value_mm": 60.0,
+      "min_req_mm": 40.0,
+      "pass": true
+    },
+    "exp143_s9hpc_node1_to_node2_airflow_z_mm": {
+      "value_mm": 5.0,
+      "min_req_mm": 3.0,
+      "pass": true
+    },
+    "exp143_s9hpc_switch_to_node2_z_mm": {
+      "value_mm": 5.0,
+      "min_req_mm": 3.0,
       "pass": true
     }
   },
@@ -539,33 +631,92 @@
     "room_temp_power_W": 87.96,
     "pass": true
   },
+  "exp142_s9q_audit": {
+    "exp142_synced": true,
+    "option_name": "Option-Q",
+    "s16_part_count": 2,
+    "s91_part_count": 3,
+    "s16_mass_kg": 4.8,
+    "target_s16_mass_kg": 4.8,
+    "s91_mass_kg": 4.4,
+    "target_s91_mass_kg": 4.4,
+    "total_mass_kg": 9.2,
+    "target_total_mass_kg": 9.2,
+    "s16_cartridge_center_mm": [
+      0.0,
+      110.0,
+      992.66
+    ],
+    "s16_cartridge_dims_mm": [
+      76.0,
+      76.0,
+      95.0
+    ],
+    "s91_chip_center_mm": [
+      -650.0,
+      0.0,
+      410.0
+    ],
+    "s91_chip_dims_mm": [
+      60.0,
+      30.0,
+      16.0
+    ],
+    "cryo_load_20mK_uW": 0.78,
+    "cryo_load_4K_W": 0.062,
+    "pass": true
+  },
+  "exp143_s9hpc_audit": {
+    "exp143_synced": true,
+    "option_name": "Option-HPC",
+    "subsystem_id": "S9.HPC",
+    "part_count": 5,
+    "total_mass_kg": 64.0,
+    "target_mass_kg": 64.0,
+    "decoder_nodes_4u_dims_mm": [
+      482.6,
+      780.0,
+      177.8
+    ],
+    "switch_1u_dims_mm": [
+      482.6,
+      380.0,
+      44.5
+    ],
+    "room_temp_power_W": 2195.0,
+    "cryo_load_W": 0.0,
+    "rdma_ports_100g": 4,
+    "one_way_ingest_latency_us": 0.777,
+    "placement_note": "Adjacent 19-in Option-HPC expansion bay at x=[1340.0, 1822.6] mm (60.0 mm service aisle to S7 rack), 780.0 mm full server depth along Y",
+    "pass": true
+  },
   "subsystems": {
     "s1_ion_source_column": {
       "code": "S1",
-      "title_tr": "Exp124 İyon Kaynağı & 10→5 keV Yavaşlatmalı Kolon",
-      "drawing_no": "ALM-500-S1",
-      "part_count": 11,
+      "title_tr": "Exp124 10→5 keV İyon Kolonu & Exp142 S1.6 Çok-Türlü Kartuş",
+      "drawing_no": "ALM-600-S1",
+      "part_count": 13,
       "stl": {
         "file": "s1_ion_source_column.stl",
-        "bytes": 173484,
-        "triangles": 3468,
+        "bytes": 183684,
+        "triangles": 3672,
         "is_watertight": true,
         "boundary_edges": 0,
         "non_manifold_edges": 0,
-        "volume_mm3": 3970394.181,
-        "surface_area_mm2": 290268.25,
+        "volume_mm3": 4531113.752,
+        "surface_area_mm2": 333606.63,
         "com_mm": [
           0.0,
-          -4.449,
-          806.383
+          9.578,
+          829.434
         ]
       },
-      "mass_kg": 25.977,
-      "volume_cm3": 3981.19,
+      "mass_kg": 30.777,
+      "volume_cm3": 4541.94,
       "com_mm": [
         0.0,
-        -5.44,
-        822.65
+        11.98,
+        849.16
       ],
       "bbox_min_mm": [
         -55.0,
@@ -574,19 +725,19 @@
       ],
       "bbox_max_mm": [
         55.0,
-        55.0,
+        148.0,
         1062.66
       ],
       "bbox_span_mm": [
         110.0,
-        167.0,
+        260.0,
         523.0
       ]
     },
     "s2_mems_write_head": {
       "code": "S2",
       "title_tr": "Exp124 Arch-B Mini-Lens, Blanker & MEMS Yazma Kafası (32×32)",
-      "drawing_no": "ALM-500-S2",
+      "drawing_no": "ALM-600-S2",
       "part_count": 9,
       "stl": {
         "file": "s2_mems_write_head.stl",
@@ -629,7 +780,7 @@
     "s3_ibic_detector_assembly": {
       "code": "S3",
       "title_tr": "IBIC Yonga Algılama, 100 K CSA (Exp127) & M4 Veri Yolu (Exp131)",
-      "drawing_no": "ALM-500-S3",
+      "drawing_no": "ALM-600-S3",
       "part_count": 7,
       "stl": {
         "file": "s3_ibic_detector_assembly.stl",
@@ -672,7 +823,7 @@
     "s4_piezo_stage_interferometry": {
       "code": "S4",
       "title_tr": "6-DOF Piezo Kademe, Titreşim İzolasyonu & İnterferometri",
-      "drawing_no": "ALM-500-S4",
+      "drawing_no": "ALM-600-S4",
       "part_count": 18,
       "stl": {
         "file": "s4_piezo_stage_interferometry.stl",
@@ -715,7 +866,7 @@
     "s5_uhv_chamber_loadlock": {
       "code": "S5",
       "title_tr": "s=0,5 UHV Oda, Exp130 S5.5 Flaş & Exp139 S5.6 ²⁸Si MBE Kaplayıcı",
-      "drawing_no": "ALM-500-S5",
+      "drawing_no": "ALM-600-S5",
       "part_count": 29,
       "stl": {
         "file": "s5_uhv_chamber_loadlock.stl",
@@ -757,30 +908,30 @@
     },
     "s6_cryo_dr_magnet_readout": {
       "code": "S6",
-      "title_tr": "Exp125 8-Bobin, Exp131 M4, Exp133 PT420 & Exp140 S6.5 Kriyo-MUX",
-      "drawing_no": "ALM-500-S6",
-      "part_count": 102,
+      "title_tr": "8-Bobin, PT420, Exp140 S6.5 MUX & Exp142 S9.1 Option-Q qRAM",
+      "drawing_no": "ALM-600-S6",
+      "part_count": 105,
       "stl": {
         "file": "s6_cryo_dr_magnet_readout.stl",
-        "bytes": 1249484,
-        "triangles": 24988,
+        "bytes": 1260284,
+        "triangles": 25204,
         "is_watertight": true,
         "boundary_edges": 0,
         "non_manifold_edges": 0,
-        "volume_mm3": 57929911.68,
-        "surface_area_mm2": 8787094.68,
+        "volume_mm3": 59422832.937,
+        "surface_area_mm2": 8880200.51,
         "com_mm": [
-          -663.22,
+          -668.403,
           -0.0,
-          573.033
+          575.784
         ]
       },
-      "mass_kg": 280.92,
-      "volume_cm3": 58027.74,
+      "mass_kg": 285.32,
+      "volume_cm3": 59520.73,
       "com_mm": [
-        -535.0,
+        -539.71,
         -0.0,
-        567.76
+        568.91
       ],
       "bbox_min_mm": [
         -1240.0,
@@ -800,44 +951,44 @@
     },
     "s7_electronics_rack_interconnect": {
       "code": "S7",
-      "title_tr": "19\" Kontrol, RF/AWG, FPGA & Exp140 S6.5 ZU48DR BOED-RFSoC Kabini",
-      "drawing_no": "ALM-500-S7",
-      "part_count": 13,
+      "title_tr": "19\" Kontrol, S6.5 RFSoC & Exp143 S9.HPC 100G RDMA Dekoder",
+      "drawing_no": "ALM-600-S7",
+      "part_count": 18,
       "stl": {
         "file": "s7_electronics_rack_interconnect.stl",
-        "bytes": 7884,
-        "triangles": 156,
+        "bytes": 19884,
+        "triangles": 396,
         "is_watertight": true,
         "boundary_edges": 0,
         "non_manifold_edges": 0,
-        "volume_mm3": 287135455.5,
-        "surface_area_mm2": 7208696.33,
+        "volume_mm3": 384837678.827,
+        "surface_area_mm2": 10516696.86,
         "com_mm": [
-          1022.581,
-          0.0,
-          699.711
+          1164.409,
+          -0.0,
+          556.882
         ]
       },
-      "mass_kg": 229.747,
-      "volume_cm3": 287135.45,
+      "mass_kg": 293.747,
+      "volume_cm3": 384837.76,
       "com_mm": [
-        1004.96,
+        1129.98,
         -0.0,
-        700.53
+        582.04
       ],
       "bbox_min_mm": [
         744.0,
-        -300.0,
+        -390.0,
         0.0
       ],
       "bbox_max_mm": [
-        1280.0,
-        300.0,
+        1822.6,
+        390.0,
         1400.0
       ],
       "bbox_span_mm": [
-        536.0,
-        600.0,
+        1078.6,
+        780.0,
         1400.0
       ]
     }
@@ -1149,6 +1300,62 @@
         7.0,
         -45.0,
         999.66
+      ]
+    },
+    "s1_multi_species_neck": {
+      "subsystem": "s1_ion_source_column",
+      "bom_id": "S1.6",
+      "label_tr": "S1.6 Çok-Türlü Kaynak CF40 Geçiş Boğazı (+Y)",
+      "shape": "cyl",
+      "material": "ss316ln",
+      "tol_mm": 0.1,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 12033.557,
+      "volume_mesh_mm3": 11999.221,
+      "mass_kg": 0.35,
+      "com_mm": [
+        0.0,
+        58.5,
+        992.66
+      ],
+      "bbox_min_mm": [
+        -12.0,
+        45.2,
+        980.66
+      ],
+      "bbox_max_mm": [
+        12.0,
+        71.8,
+        1004.66
+      ]
+    },
+    "s1_multi_species_cartridge": {
+      "subsystem": "s1_ion_source_column",
+      "bom_id": "S1.6",
+      "label_tr": "S1.6 Çok-Türlü Kartuş Yuvası (³¹P/¹²¹Sb/¹⁶⁷Er)",
+      "shape": "box",
+      "material": "ti6al4v",
+      "tol_mm": 0.1,
+      "triangles": 12,
+      "is_watertight": true,
+      "volume_analytic_mm3": 548720.0,
+      "volume_mesh_mm3": 548720.0,
+      "mass_kg": 4.45,
+      "com_mm": [
+        0.0,
+        110.0,
+        992.66
+      ],
+      "bbox_min_mm": [
+        -38.0,
+        72.0,
+        945.16
+      ],
+      "bbox_max_mm": [
+        38.0,
+        148.0,
+        1040.16
       ]
     },
     "s2_mini_lens_plate": {
@@ -5211,6 +5418,90 @@
         668.0
       ]
     },
+    "s6_s91_ovc_feedthrough": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S9.1",
+      "label_tr": "S9.1-01 OVC −X CF63 4-Port RF & 1550 nm Fiber Geçiş",
+      "shape": "box",
+      "material": "ss316ln",
+      "tol_mm": 0.1,
+      "triangles": 12,
+      "is_watertight": true,
+      "volume_analytic_mm3": 1440000.0,
+      "volume_mesh_mm3": 1440000.0,
+      "mass_kg": 3.2,
+      "com_mm": [
+        -875.2,
+        0.0,
+        690.0
+      ],
+      "bbox_min_mm": [
+        -925.2,
+        -60.0,
+        630.0
+      ],
+      "bbox_max_mm": [
+        -825.2,
+        60.0,
+        750.0
+      ]
+    },
+    "s6_s91_qram_bridge_20mk": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S9.1",
+      "label_tr": "S9.1-02 20 mK 5-Kademe NbTiN qRAM Köprüsü (60×30×16)",
+      "shape": "box",
+      "material": "nbtin_si",
+      "tol_mm": 0.05,
+      "triangles": 12,
+      "is_watertight": true,
+      "volume_analytic_mm3": 28800.0,
+      "volume_mesh_mm3": 28800.0,
+      "mass_kg": 0.38,
+      "com_mm": [
+        -650.0,
+        0.0,
+        410.0
+      ],
+      "bbox_min_mm": [
+        -680.0,
+        -15.0,
+        402.0
+      ],
+      "bbox_max_mm": [
+        -620.0,
+        15.0,
+        418.0
+      ]
+    },
+    "s6_s91_qram_fiber_loom": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S9.1",
+      "label_tr": "S9.1-03 4× NbTi Koaks + 1550 nm SMF-28 Kriyo-Fiber",
+      "shape": "cyl",
+      "material": "becu",
+      "tol_mm": 0.1,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 24190.263,
+      "volume_mesh_mm3": 24121.24,
+      "mass_kg": 0.82,
+      "com_mm": [
+        -793.0,
+        0.0,
+        564.0
+      ],
+      "bbox_min_mm": [
+        -798.0,
+        -5.0,
+        410.0
+      ],
+      "bbox_max_mm": [
+        -788.0,
+        5.0,
+        718.0
+      ]
+    },
     "s6_coax_300k_50k_pos": {
       "subsystem": "s6_cryo_dr_magnet_readout",
       "bom_id": "S6.4",
@@ -6133,6 +6424,146 @@
         780.0,
         230.0,
         1190.0
+      ]
+    },
+    "s7_s9hpc_rail_psu_kit": {
+      "subsystem": "s7_electronics_rack_interconnect",
+      "bom_id": "S9.HPC",
+      "label_tr": "S9.HPC-03 2,6 kW Yedekli PSU & 19\" Kızak Tabanı",
+      "shape": "box",
+      "material": "rack_psu",
+      "tol_mm": 0.5,
+      "triangles": 12,
+      "is_watertight": true,
+      "volume_analytic_mm3": 22585680.0,
+      "volume_mesh_mm3": 22585680.0,
+      "mass_kg": 3.8,
+      "com_mm": [
+        1581.3,
+        0.0,
+        30.0
+      ],
+      "bbox_min_mm": [
+        1340.0,
+        -390.0,
+        0.0
+      ],
+      "bbox_max_mm": [
+        1822.6,
+        390.0,
+        60.0
+      ]
+    },
+    "s7_s9hpc_decoder_node_1": {
+      "subsystem": "s7_electronics_rack_interconnect",
+      "bom_id": "S9.HPC",
+      "label_tr": "S9.HPC-01 2U QEC Dekoder Düğümü #1 (100G RDMA)",
+      "shape": "box",
+      "material": "rack_steel",
+      "tol_mm": 0.2,
+      "triangles": 12,
+      "is_watertight": true,
+      "volume_analytic_mm3": 33464449.2,
+      "volume_mesh_mm3": 33464449.2,
+      "mass_kg": 28.0,
+      "com_mm": [
+        1581.3,
+        -0.0,
+        109.45
+      ],
+      "bbox_min_mm": [
+        1340.0,
+        -390.0,
+        65.0
+      ],
+      "bbox_max_mm": [
+        1822.6,
+        390.0,
+        153.9
+      ]
+    },
+    "s7_s9hpc_decoder_node_2": {
+      "subsystem": "s7_electronics_rack_interconnect",
+      "bom_id": "S9.HPC",
+      "label_tr": "S9.HPC-01 2U QEC Dekoder Düğümü #2 (100G RDMA)",
+      "shape": "box",
+      "material": "rack_steel",
+      "tol_mm": 0.2,
+      "triangles": 12,
+      "is_watertight": true,
+      "volume_analytic_mm3": 33464449.2,
+      "volume_mesh_mm3": 33464449.2,
+      "mass_kg": 28.0,
+      "com_mm": [
+        1581.3,
+        -0.0,
+        203.35
+      ],
+      "bbox_min_mm": [
+        1340.0,
+        -390.0,
+        158.9
+      ],
+      "bbox_max_mm": [
+        1822.6,
+        390.0,
+        247.8
+      ]
+    },
+    "s7_s9hpc_rocev2_switch": {
+      "subsystem": "s7_electronics_rack_interconnect",
+      "bom_id": "S9.HPC",
+      "label_tr": "S9.HPC-02 1U 100 GbE RoCEv2 Optik Anahtar",
+      "shape": "box",
+      "material": "rack_awg",
+      "tol_mm": 0.2,
+      "triangles": 12,
+      "is_watertight": true,
+      "volume_analytic_mm3": 8160766.0,
+      "volume_mesh_mm3": 8160766.0,
+      "mass_kg": 3.6,
+      "com_mm": [
+        1581.3,
+        0.0,
+        275.05
+      ],
+      "bbox_min_mm": [
+        1340.0,
+        -190.0,
+        252.8
+      ],
+      "bbox_max_mm": [
+        1822.6,
+        190.0,
+        297.3
+      ]
+    },
+    "s7_s9hpc_qsfp28_fiber_duct": {
+      "subsystem": "s7_electronics_rack_interconnect",
+      "bom_id": "S9.HPC",
+      "label_tr": "S9.HPC-02 4× QSFP28-100G OM4 Fiber Köprüsü",
+      "shape": "cyl",
+      "material": "al6061",
+      "tol_mm": 0.2,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 26962.405,
+      "volume_mesh_mm3": 26885.472,
+      "mass_kg": 0.6,
+      "com_mm": [
+        1310.0,
+        -0.0,
+        275.05
+      ],
+      "bbox_min_mm": [
+        1280.2,
+        -12.0,
+        263.05
+      ],
+      "bbox_max_mm": [
+        1339.8,
+        12.0,
+        287.05
       ]
     }
   }

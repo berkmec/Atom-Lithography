@@ -1,0 +1,287 @@
+{
+  "experiment": "exp145_cloud_qpu_ibm_validation",
+  "mode": "live_ibm_qpu_hardware",
+  "epistemic_tag": "Canli-Donanim-IBM-QPU",
+  "no_lab_measurement": false,
+  "timestamp_utc": "2026-11-23T06:02:37.495841+00:00",
+  "api_version_used": "2026-02-01",
+  "backend": {
+    "name": "ibm_marrakesh",
+    "n_qubits": 156,
+    "native_2q": "cz",
+    "dt_ns": 4.0,
+    "granularity_dt": 16,
+    "selected_5q_chain": [
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "chain_edge_errors": [
+      0.001559,
+      0.001843,
+      0.00228,
+      0.001352
+    ],
+    "chain_readout_errors": [
+      0.003174,
+      0.005737,
+      0.027832,
+      0.00769,
+      0.003052
+    ],
+    "chain_t1_us": [
+      196.88,
+      199.07,
+      128.6,
+      237.03,
+      342.86
+    ],
+    "chain_t2_us": [
+      304.42,
+      198.77,
+      149.96,
+      216.86,
+      232.92
+    ]
+  },
+  "job": {
+    "job_id": "dc1tdo2nj2vs73dfrfl0",
+    "status": "Completed",
+    "shots_per_pub": 4096,
+    "n_pubs": 16,
+    "wall_clock_seconds": 32.54,
+    "quantum_usage": {}
+  },
+  "timing_actual": {
+    "c1_idle_us": 48.128,
+    "c2_idle_us": 3.968,
+    "c3_delays_us": [
+      1.024,
+      1.984,
+      3.008,
+      3.968,
+      4.992,
+      6.016,
+      6.976,
+      8.0
+    ],
+    "c3_programmed_detuning_kHz": 125.0
+  },
+  "counts_by_pub": {
+    "C1a_bare_idle": {
+      "0": 1362,
+      "1": 2734
+    },
+    "C1b_hahn_echo": {
+      "0": 3778,
+      "1": 318
+    },
+    "C1c_xy4_dd": {
+      "0": 3801,
+      "1": 295
+    },
+    "C1d_bell_zz": {
+      "00": 2064,
+      "01": 33,
+      "10": 46,
+      "11": 1953
+    },
+    "C1e_bell_xx": {
+      "00": 2031,
+      "01": 30,
+      "10": 28,
+      "11": 2007
+    },
+    "C1f_bell_yy": {
+      "00": 51,
+      "01": 2005,
+      "10": 2009,
+      "11": 31
+    },
+    "C2a_rep3_logical0": {
+      "00000": 3854,
+      "00001": 4,
+      "00010": 87,
+      "00011": 1,
+      "00100": 60,
+      "00110": 1,
+      "01000": 44,
+      "01010": 1,
+      "01100": 1,
+      "01110": 39,
+      "10000": 1,
+      "11000": 3
+    },
+    "C2b_rep3_logical1": {
+      "00010": 1,
+      "00011": 16,
+      "00101": 14,
+      "01001": 3,
+      "01011": 5,
+      "01101": 136,
+      "01110": 1,
+      "01111": 4,
+      "10001": 69,
+      "10011": 11,
+      "10100": 24,
+      "10101": 3425,
+      "10110": 67,
+      "10111": 36,
+      "11000": 5,
+      "11001": 6,
+      "11011": 223,
+      "11101": 44,
+      "11110": 1,
+      "11111": 5
+    },
+    "C3_ramsey_1p0us": {
+      "0": 3497,
+      "1": 599
+    },
+    "C3_ramsey_2p0us": {
+      "0": 2238,
+      "1": 1858
+    },
+    "C3_ramsey_3p0us": {
+      "0": 819,
+      "1": 3277
+    },
+    "C3_ramsey_4p0us": {
+      "0": 118,
+      "1": 3978
+    },
+    "C3_ramsey_5p0us": {
+      "0": 407,
+      "1": 3689
+    },
+    "C3_ramsey_6p0us": {
+      "0": 1607,
+      "1": 2489
+    },
+    "C3_ramsey_7p0us": {
+      "0": 2963,
+      "1": 1133
+    },
+    "C3_ramsey_8p0us": {
+      "0": 3905,
+      "1": 191
+    }
+  },
+  "analysis": {
+    "C1_dd_and_bell": {
+      "p0_bare_idle": 0.33252,
+      "p0_hahn_echo": 0.922363,
+      "p0_xy4_dd": 0.927979,
+      "dd_gain_echo_over_bare": 0.589844,
+      "dd_gain_xy4_over_bare": 0.595459,
+      "bell_expect_ZZ": 0.961426,
+      "bell_expect_XX": 0.97168,
+      "bell_expect_YY": -0.959961,
+      "bell_fidelity_Phi_plus": 0.973267
+    },
+    "C2_repcode3": {
+      "logical_0": {
+        "shots": 4096,
+        "logical_bit": 0,
+        "p_phys": 0.008952,
+        "p_L_majority": 0.0,
+        "p_L_syndrome_mwpm": 0.000488,
+        "p_L_postsel": 0.0,
+        "postsel_keep_rate": 0.956787,
+        "suppression_factor_mwpm": 18.333,
+        "suppression_factor_majority": 8951.823
+      },
+      "logical_1": {
+        "shots": 4096,
+        "logical_bit": 1,
+        "p_phys": 0.050293,
+        "p_L_majority": 0.007568,
+        "p_L_syndrome_mwpm": 0.010986,
+        "p_L_postsel": 0.0,
+        "postsel_keep_rate": 0.862305,
+        "suppression_factor_mwpm": 4.578,
+        "suppression_factor_majority": 6.645
+      },
+      "avg_p_phys": 0.029622,
+      "avg_p_L_majority": 0.003784,
+      "avg_p_L_syndrome_mwpm": 0.005737,
+      "avg_p_L_decoded": 0.003784,
+      "avg_p_L_postsel": 0.0,
+      "avg_postsel_keep_rate": 0.909546,
+      "suppression_ratio_decoded": 7.828,
+      "suppression_ratio_postsel": 29622.5
+    },
+    "C3_ramsey_boed": {
+      "prior_range_kHz": [
+        30.0,
+        220.0
+      ],
+      "grid_bins": 761,
+      "grid_step_kHz": 0.25,
+      "visibility_est": 0.9805,
+      "blind_8pt": {
+        "n_points": 8,
+        "est_freq_kHz": 120.4787,
+        "posterior_std_kHz": 0.5566,
+        "err_vs_programmed_kHz": 4.5213
+      },
+      "fp64_boed": {
+        "n_points": 3,
+        "queried_indices": [
+          1,
+          6,
+          5
+        ],
+        "queried_delays_us": [
+          1.984,
+          6.976,
+          6.016
+        ],
+        "est_freq_kHz": 120.1071,
+        "posterior_std_kHz": 0.7747,
+        "err_vs_programmed_kHz": 4.8929
+      },
+      "q16_16_boed": {
+        "n_points": 3,
+        "queried_indices": [
+          1,
+          6,
+          5
+        ],
+        "queried_delays_us": [
+          1.984,
+          6.976,
+          6.016
+        ],
+        "est_freq_kHz": 120.1055,
+        "posterior_std_kHz": 0.7803,
+        "q16_vs_fp64_diff_kHz": 0.0016,
+        "q16_vs_blind8_diff_kHz": 0.3733,
+        "err_vs_programmed_kHz": 4.8945
+      },
+      "programmed_detuning_kHz": 125.0,
+      "delays_us": [
+        1.024,
+        1.984,
+        3.008,
+        3.968,
+        4.992,
+        6.016,
+        6.976,
+        8.0
+      ],
+      "p0_measured": [
+        0.85376,
+        0.546387,
+        0.199951,
+        0.028809,
+        0.099365,
+        0.392334,
+        0.723389,
+        0.953369
+      ]
+    }
+  }
+}

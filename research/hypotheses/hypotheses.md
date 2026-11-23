@@ -809,3 +809,46 @@ durum: desteklendi (7/7 PASS: FM1-FM7 PASS; Q16.16 FPGA, N_mux*=32, 2.887 hucre/
 
 durum: desteklendi (8/8 PASS: DT5_1-DT5_8 PASS; v5.0 hata-toleransli dijital ikiz, CX4 SOI kapanisi & 19/19 SHA-256 sertifikasyon muhurlendi)
 
+
+## H160 (Exp142, 2026-11-23) — Option-Q: 50 Ohm <-> 3 kOhm qRAM bellek koprusu & S1-Multi cok-turlu platform (167Er 1536 nm + 121Sb qudit)
+
+Tak-cikar **`Option-Q`** (`5`-kademe Chebyshev `50 Ohm <-> 3 kOhm` empedans donusturucu + `12x12` Lindblad transmon-`31P` `SWAP` koprusu + `S1-Multi` `167Er`/`121Sb` cok-turlu kaynak kartusu, `results/exp142_option_q_multispecies_qram/exp142.json`, `s9q_hardware_spec.json`, `tests/test_exp142.py` 10/10 PASS, `no_lab_measurement=true`):
+- **Superiletken `qRAM` koprusu (`OQ1, OQ2, OQ3 PASS`):** `5`-kademe Chebyshev donusturucu gecis kaybi **`IL = 0,0004 dB`** (`0,000375 dB`), bant genisligi **`BW = 5,20 GHz`**, donus kaybi `S11 = -39,56 dB`. Gidis-donus `SWAP` sadakati **`F_SWAP_rt = 0,9858`** (`0,98575`); `31P` cekirdek bellegi transmona kiyasla **`8.403x` (`1 s` DD) – `25.122x` (`3 s`)** saklama omru kazanci saglar; kriyojenik isi yuku yalniz **`+0,78 uW @ 20 mK`** (mevcut `LD400` tavanini bozmaz).
+- **`S1-Multi` telekom `167Er` & `121Sb` qudit (`OQ4, OQ7 PASS`; durust `OQ5, OQ6 FAIL`):** `167Er` (`1536 nm` C-bant) `10 km` SMF-28 fiberde **`1.352,3 Hz`** (`F = 0,9474`) dolaniklik uretir. `7,5 keV 121Sb` (`I = 7/2`, `8`-seviye qudit) `-%41,5` (`-%41,46`) daha keskin yanal sacilma verir ancak yuksek-enerji derinlik/kuadrupol gerinim duvari nedeniyle `OQ5/OQ6` durustce `FAIL` almistir. **`Option-Q` donanim paketi:** **`9,20 kg`** (`S1.7-01` `4,80 kg` + `S9.4-01..03` `4,40 kg`), `` `$168.000` `` (`` `$118k–$242k` ``, `RFQ-09`).
+
+durum: kismen desteklendi (5/7 PASS: OQ1,2,3,4,7 PASS; durust OQ5,6 FAIL; qRAM 8.403x-25.122x & 10 km 167Er 1.352,3 Hz kilitlendi)
+
+## H161 (Exp143, 2026-11-23) — D3 K=8 Fourier GRAPE M4 kapisi (p_2q <= %0,45) & Option-HPC 100 Gbps RDMA gercek-zamanli dekoder
+
+`12x12` CUDA Strang-Lindblad + `M = 40` OU `1/f^alpha` uzerinde `K = 8` Fourier GRAPE `M4` `CZ` sentezi, canli `Exp138` MWPM koprusu ve **`Option-HPC`** `100G` RoCEv2 RDMA gercek-zamanli dekoder mimarisi (`results/exp143_d3_grape_m4_and_hpc_decoder/exp143.json`, `s9hpc_hardware_spec.json`, `tests/test_exp143.py` 9/9 PASS, `no_lab_measurement=true`):
+- **`D3` `K=8` Fourier GRAPE `M4` kapisi (`DH4 PASS`; durust `DH1,2,3 FAIL`):** `0,894 us` (muhaf.) / `1,126 us` (yankili) darbe (`%100 <= 300 MHz` AWG bant genisligi, CPTP temiz): yankili `Q = 1e6, S_eps = 0,390 ueV/rtHz ->` **`p_2q = %0,395`** (`<= %0,45`), **`S_eps = 0,25 ueV/rtHz -> p_2q = %0,337 (F_avg = %99,73, F_Bell = %99,69)`**, muhafazakar `high-g -> %0,481`. Canli `Exp138` Edmonds Blossom MWPM **`Lambda_D3_phys = 2,825`** (`100L` yuzey kodu `679 -> 100` kriyostat, `6,8x` kuculme). (`DH1`: gurultusuz sizinti `1,37e-4 > 1e-4`; `DH2/3`: muhafazakar/yankisiz alt-kosullar durust `FAIL`.)
+- **`Option-HPC` `100G` RoCEv2 RDMA dekoder duvari kapanisi (`DH5, DH6, DH7 PASS`):** `tau_ingest = 777 ns`; `d = 37` yuzey kodu E2E **`6,34 us < 6,70 us`** ve **`qLDPC 108L` BP-OSD E2E `2,32 us < 2,62 us`** (`backlog-free`). Donanim (`S9.HPC-01..03`): tek `4U` 2-dugumlu raf, **`64,0 kg`**, `2.195 W` (`0 W` kriyo), `` `$132.000` `` (`` `$98k–$181k` ``, `RFQ-09`).
+
+durum: kismen desteklendi (4/7 PASS: DH4,5,6,7 PASS; durust DH1,2,3 FAIL; D3 GRAPE p_2q=%0,337-%0,395, Lambda=2,825 & Option-HPC 2,32 us kilitlendi)
+
+## H162 (Exp144, 2026-11-23) — 300 um M4 veri yolu uzerinde qLDPC [[144,12,12]] Gross Code & tek-kriyostat 108L-120L devrimi
+
+Bravyi (Nature 2024) kalinlik-2 Bivariate Bicycle (`[[72,12,6]]`, `[[90,8,10]]`, **`[[144,12,12]]` Gross Code**) kesin `GF(2)` cebri, derinlik-7 sifir-geri-tepmeli CNOT cizelgesi, katli-torus `M4` yerlesimi ve 3B devre `DEM` + `BP+OSD-2` dekoderi (`results/exp144_qldpc_bivariate_bicycle_m4/exp144.json`, `tests/test_exp144.py` 10/10 PASS, `no_lab_measurement=true`, `no_supplier_quotes=true`):
+- **Sifir rezonator yeniden tasarimi & blok verimi (`QL1, QL2, QL6 PASS`):** `P_cell = 20 um` ile **`L_max = 268,3 um <= 300 um`** (`Exp131` `3 kOhm NbTiN` rezonatorune birebir sigar, `0` yeniden tasarim!). Stark'siz `f=%1, N=6` `%2,23` cokerken **`f* = %1,5 + 2 MV/m, N_cand = 8`** ile **`%99,64` blok / `%99,94` `108L` yonga verimi** elde edilir.
+- **3B `BP+OSD-2` esigi & `234x` sistem maliyeti sikistirmasi (`QL3, QL4, QL5, QL7 PASS`):** `OSD-2` saf `BP`'yi `12,92x` yener; devre esigi **`p_th = %0,633`** (`d_eff = 12,81`); `D3+` (`%0,30`) mantiksal hata **`2,1e-5/1L`** (`5,2x` daha iyi, `10,0x` daha az hucre vs `d=11` SC). **`120L` (`10` blok = `2.880 <= 2.887` hucre) tek `LD400` kriyostatina sigar (`108L = 1` kriyostat: `` `$63.827/L_sys` ``, `v5 D2`'ye gore `234x` [`234,06x`], `D3` SC'ye gore `43,23x` ucuz; `W3` silikon fab `` `$0,0085/L_fab` ``)!**
+
+durum: desteklendi (7/7 PASS: QL1-QL7 PASS; [[144,12,12]] qLDPC 108L tek kriyostat & `$63.827/L_sys` kilitlendi)
+
+## H163 (Exp145, 2026-11-23) — CellISA v4.0, canli 156Q ibm_marrakesh (IBM Heron r2) donanim dogrulamasi & auto_recal.py
+
+Sifir-`qiskit` saf-`requests` IBM Quantum Platform 2026 REST koprusu (`src/machine_control/cloud_qpu_bridge.py`), `20`-komutlu **`CellISA v4.0`** (`+ QRAM_SWAP, QLDPC_ROUND, AUTO_RECAL`) ve otonom ariza kurtarma (`src/machine_control/auto_recal.py`) (`results/exp145_cloud_qpu_ibm_validation/exp145.json`, `ibm_qpu_live_results.json`, `tests/test_exp145.py` 12/12 PASS):
+- **Epistemik ayrim:** Silikon `31P` fabrikasyon ve `auto_recal.py` `M0` modelidir (`no_lab_measurement=true`); ancak **`CellISA v4.0 -> OpenQASM 3.0` kontrol, `Echo/XY4` DD, `d=3` sendrom dekoderi ve `Q16.16` BOED gercek `156`-kubitlik `ibm_marrakesh` (IBM Heron r2, `job_id = dc1tdo2nj2vs73dfrfl0`, `[q2,q3,q4,q5,q6]`, `16 PUB x 4.096 shot`, `32,54 s`) bulut QPU uzerinde canli dogrulanmistir** (`{Canli-Donanim-IBM-QPU}`, `SECRET_LEAKS = 0`).
+- **Canli `ibm_marrakesh` sonuclari & `auto_recal` (`CQ1–CQ7` `7/7 PASS`):** Bare Idle `0,3325` -> **Hahn-Echo `0,9224` (`+59,0 pp`)** -> **XY4 DD `0,9280` (`+59,5 pp`)**; 2Q Bell **`F = 0,9733`**; `d = 3` tekrar kodu `p_phys = %2,96 ->` **MWPM `%0,57` (`5,16x`) / cogunluk `%0,38` (`7,83x`) / postsel `%0,00`** (`0/7.451` hata); bit-kesin **`Q16.16` BOED** `3`-nokta Ramsey **`120,11 kHz`** (FP64'ten **`1,6 Hz`** fark). **`auto_recal.py`** 4 ariza kipinde (`S5.5` lazer, `S5` UHV, `S3` `%5` olu blanker, `31P +-350 Hz` kayma) **`4/4 PASS`**.
+
+durum: desteklendi (7/7 PASS: CQ1-CQ7 PASS; canli 156Q ibm_marrakesh QPU dogrulamasi, CellISA v4.0 & auto_recal 4/4 kilitlendi)
+
+## H164 (Exp146, 2026-11-23) — Master v6.0 dijital ikiz, 24/24 + canli QPU SHA-256 sertifikasi & moduler CAD/BOM v6.0
+
+`22/22` deney (`Exp124–Exp145`) + `CAD v6.0` (`199` parca, `1.108,14 kg`, `39.536` STL, `0/19.701` cakisma, `40/40` bosluk, `30/30` test) + `BOM v6.0` (`174` parca, `` `M1 Base = $2.466.120` ``, `` `M3 Base = $5.247.800` ``, `` `Option-Q +$168k` ``, `` `Option-HPC +$132k` ``, `` `M3 Full = $5.547.800` ``, `9-RFQ = %77,7` nom / `%92,6` MC var, `` `P(Prog > $100M) = %4,92 < %5` `` [FOAK `%6,90`], `0,000 kg` CAD uyumu) + canli `ibm_qpu_live_results.json` (`24/24` + canli QPU `SHA-256` kilitli) birlesik master dijital ikizi (`results/exp146_v6_digital_twin/exp146.json`, `v6_digital_twin_cert.json`, `tests/test_exp146.py` 10/10 PASS; `28/28` staged test dosyasi **`252/252` PASS**):
+- **`v3 -> v6` toplam sistem sikistirmasi (`DT6_1–DT6_8` `8/8 PASS`):** `100L (10^-9)` kriyostat filosu **`679 (v5 D2 SC) -> 100 (v6 D3 GRAPE SC, 6,8x) -> 1 (v6 [[144,12,12]] qLDPC 108L, 679x)`**; dağıtılmış sistem maliyeti `` `$14,94M -> $2,76M -> $63.827/L_sys` `` (**`234,06x`** dusus; `W3` silikon fab `` `$0,0085/L_fab` ``).
+- **Kriptografik tam 64-hex `SHA-256` muhurleri:**
+  - `v6_digital_twin_cert.json`: `ca3f0e0267263bacb973f46c3cc2d321c0f204075ea232f4094758e1a9abf1d7`
+  - `ibm_qpu_live_results.json` (`ibm_marrakesh`): `02b7a19d1704662c6424e76f4971e21b04a98d48230a917c9682853b3ca1fc5a`
+  - *(Korunan tarihsel sertifikalar: `v5` `2828e8ce8d9388f7cba5490b2d05add930aadc5fe6d3ba4295f0380f816d43d1` · `v4` `feffc1d4ba2b0698c3f61015c6684da47f57ea863a8b3e0da845cc9c71914b57`)*
+
+durum: desteklendi (8/8 PASS: DT6_1-DT6_8 PASS; v6.0 Master Dijital Ikiz, 24/24+QPU SHA-256, 252/252 pytest muhurlendi)

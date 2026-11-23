@@ -1,0 +1,44 @@
+{
+  "experiment": "exp145_cloud_qpu_ibm_validation",
+  "hypothesis_id": "H163",
+  "registered": "2026-11-23 (pre-run registration prior to implementing cloud_qpu_bridge.py, auto_recal.py, CellISA v4.0, and runners)",
+  "no_lab_measurement_offline": true,
+  "live_qpu_hardware_target": "IBM Quantum Platform 2026 REST API (Heron/Eagle QPU via SamplerV2, pending live execution)",
+  "epistemic_tags": [
+    "Model",
+    "Sayisal-Simulasyon",
+    "Hardware-Bridge-Ready"
+  ],
+  "question": "Can CellISA v4.0 (20 opcodes) compile native-ISA OpenQASM 3.0 validation circuits (DD/Bell, d=3 repetition code, Q16.16 BOED Ramsey) for IBM Quantum Platform 2026 REST API (zero qiskit dependency, zero secret leakage), while auto_recal.py autonomously mitigates all 4 critical machine fault modes?",
+  "predictions": [
+    {
+      "id": "CQ1_CELLISA40_OPCODES_AND_OPENQASM3",
+      "statement": "CellISA v4.0 adds QRAM_SWAP, QLDPC_ROUND, and AUTO_RECAL (20 opcodes in VALID_OPCODES_ALL while preserving len(VALID_OPCODES)==17 for 100% v3.5 backward compatibility) and emits strictly native-ISA OpenQASM 3.0 for both Heron (cz) and Eagle (ecr) targets with 16-dt aligned delays."
+    },
+    {
+      "id": "CQ2_IBM_REST_BRIDGE_AND_SUBGRAPH_SELECTOR",
+      "statement": "Pure-requests IBM Cloud IAM + Quantum Platform v1 REST client selects the highest-quality connected 5-qubit linear chain (zero SWAPs for d=3) from backend configuration/properties, decodes all SamplerV2 bitstring encodings, and guarantees zero token/CRN leakage."
+    },
+    {
+      "id": "CQ3_C1_DD_AND_BELL_TOMOGRAPHY",
+      "statement": "Circuit C1 demonstrates dynamical decoupling (Hahn-Echo and XY4) outperforming bare idle coherence under low-frequency dephasing (P_xy4 > P_bare), and 2Q Bell tomography achieving F(|Phi+>) >= 0.95 under realistic Heron noise (live QPU threshold >= 0.85)."
+    },
+    {
+      "id": "CQ4_C2_REP3_SYNDROME_SUPPRESSION",
+      "statement": "Circuit C2 (5-qubit linear chain d=3 bit-flip repetition code: 3 data + 2 ancillas) suppresses decoded logical error strictly below unencoded physical error (p_L_decoded < 0.5 * p_phys on Heron noise model)."
+    },
+    {
+      "id": "CQ5_C3_Q16_BOED_RAMSEY_PARITY",
+      "statement": "On Circuit C3 (8-point Ramsey fringe at 125.0 kHz), bit-exact Q16.16 BOED matches FP64 within < 0.5 kHz and achieves <= 3.0 kHz error using <= 5 adaptive points (vs 8 blind uniform points)."
+    },
+    {
+      "id": "CQ6_AUTO_RECAL_4_FAULT_MODES",
+      "statement": "auto_recal.py autonomously mitigates all 4 injected machine faults: (a) S5.5 +/-8% laser drift preserving sigma_anneal <= 0.50 nm, (b) S5 vacuum spike locking UHV gate valve & pausing beam, (c) S3 5% dead blanker channels 100% rerouted to spares, (d) +/-350 Hz 31P thermal drift relocked by Q16.16 BOED in < 5.0 ms with < 100 Hz residual error."
+    },
+    {
+      "id": "CQ7_SECURITY_PORTABILITY_AND_TESTS",
+      "statement": "Zero API tokens/CRNs in any file or output, zero hardcoded host paths, 0 GFM table errors, and >= 8 new Exp145 tests plus all existing repository tests pass 100%."
+    }
+  ],
+  "success_rule": "CQ1, CQ2, CQ3, CQ4, CQ5, CQ6, CQ7 all PASS."
+}

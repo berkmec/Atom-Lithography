@@ -581,6 +581,23 @@ def compute_critical_clearances(parts: dict[str, dict] | None = None) -> dict[st
     s65_loom_m4_x_clr = x_gap("s6_s65_coax_loom_4k_still_pos", "s6_m4_crossbar_4k_mount")
     s65_rfsoc_awg_z_clr = z_gap("s7_awg_rf_mw_bay", "s7_s65_rfsoc_boed_bay")
 
+    # Exp142 Option-Q (S1.6 Multi-Species Cartridge + S9.1 Cryo-qRAM/Fiber Bridge) clearances
+    s16_duo_y_clr = y_gap("s1_duoplasmatron", "s1_multi_species_cartridge")
+    s16_ph3_y_clr = y_gap("s1_ph3_manifold", "s1_multi_species_cartridge")
+    s91_twpa_z_clr = z_gap("s6_s91_qram_bridge_20mk", "s6_s65_twpa_purcell_pack")
+    s91_valve_x_clr = x_gap("s6_pt420_valve_stand", "s6_s91_ovc_feedthrough")
+    drx = p["s6_dr_flange_4k"]["center"][0]
+    loom_r_rel = abs(p["s6_s91_qram_fiber_loom"]["center"][0] - drx)
+    loom_rad = p["s6_s91_qram_fiber_loom"]["dims"][0]
+    sh4_rout_dr = p["s6_shield_4k_upper"]["dims"][1]
+    sh50_rin_dr = p["s6_shield_50k_upper"]["dims"][0]
+    s91_loom_shield_clr = round(float(min((loom_r_rel - loom_rad) - sh4_rout_dr, sh50_rin_dr - (loom_r_rel + loom_rad))), 3)
+
+    # Exp143 Option-HPC (S9.HPC 4U+1U 100G RoCEv2 RDMA Decoder Stack) clearances
+    s9hpc_aisle_x_clr = x_gap("s7_rack_base", "s7_s9hpc_decoder_node_1")
+    s9hpc_n1_n2_z_clr = z_gap("s7_s9hpc_decoder_node_1", "s7_s9hpc_decoder_node_2")
+    s9hpc_n2_sw_z_clr = z_gap("s7_s9hpc_decoder_node_2", "s7_s9hpc_rocev2_switch")
+
     checks = {
         "exp124_archB_wafer_to_minilens_WD_mm": {"value_mm": z_gap("s3_silicon_wafer", "s2_mini_lens_plate"), "min_req_mm": 0.20},
         "beam_array_diagonal_to_bore_clearance_mm": {"value_mm": array_bore_clr, "min_req_mm": 2.0},
@@ -616,6 +633,15 @@ def compute_critical_clearances(parts: dict[str, dict] | None = None) -> dict[st
         "exp140_s65_hemt_to_4k_shield_radial_mm": {"value_mm": s65_hemt_4k_clr, "min_req_mm": 8.0},
         "exp140_s65_coax_loom_to_m4_crossbar_x_mm": {"value_mm": s65_loom_m4_x_clr, "min_req_mm": 5.0},
         "exp140_s65_rfsoc_to_awg_z_mm": {"value_mm": s65_rfsoc_awg_z_clr, "min_req_mm": 10.0},
+        # CAD v6.0 clearances (Exp142 Option-Q S1.6/S9.1, Exp143 Option-HPC S9.HPC)
+        "exp142_s16_cartridge_to_duoplasmatron_y_mm": {"value_mm": s16_duo_y_clr, "min_req_mm": 20.0},
+        "exp142_s16_cartridge_to_ph3_manifold_y_mm": {"value_mm": s16_ph3_y_clr, "min_req_mm": 100.0},
+        "exp142_s91_qram_chip_to_s65_twpa_z_mm": {"value_mm": s91_twpa_z_clr, "min_req_mm": 5.0},
+        "exp142_s91_ovc_port_to_valve_stand_x_mm": {"value_mm": s91_valve_x_clr, "min_req_mm": 100.0},
+        "exp142_s91_fiber_loom_to_4k_50k_shields_mm": {"value_mm": s91_loom_shield_clr, "min_req_mm": 1.5},
+        "exp143_s9hpc_to_s7_rack_aisle_x_mm": {"value_mm": s9hpc_aisle_x_clr, "min_req_mm": 40.0},
+        "exp143_s9hpc_node1_to_node2_airflow_z_mm": {"value_mm": s9hpc_n1_n2_z_clr, "min_req_mm": 3.0},
+        "exp143_s9hpc_switch_to_node2_z_mm": {"value_mm": s9hpc_n2_sw_z_clr, "min_req_mm": 3.0},
     }
     for k, rec in checks.items():
         rec["pass"] = bool(rec["value_mm"] >= rec["min_req_mm"])

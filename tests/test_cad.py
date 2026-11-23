@@ -1,14 +1,14 @@
-"""Automated verification suite for Atom Lithography Machine CAD v5.0 (S1–S7 + S5.6/S6.5).
+"""Automated verification suite for Atom Lithography Machine CAD v6.0 (S1–S7 + Option-Q/HPC).
 
 Verifies:
-1. `params.py` v5.0 synchronization (no legacy maglev, golden s=0.5, Exp124..140 locked).
+1. `params.py` v6.0 synchronization (no legacy maglev, golden s=0.5, Exp124..143 locked).
 2. All 8 parametric `.scad` files exist and match `gen_scad.py` deterministically.
 3. All 8 binary `.stl` files parse cleanly from disk, are strictly watertight
    (0 boundary edges, 0 non-manifold edges), and have strictly positive volume.
-4. Zero solid-solid clashes across all part pairs and 100% pass on 32/32 critical clearances.
-5. `cad_verification.json` consistency + Exp80/84/124/125/130/131/133/139/140 compliance.
+4. Zero solid-solid clashes across all part pairs and 100% pass on 40/40 critical clearances.
+5. `cad_verification.json` consistency + Exp80/84/124..143 compliance (exact 1,108.14 kg).
 6. All 10 ISO/ANSI technical drawings (.svg + .png >= 1800x1200), `preview_machine.png`,
-   and preserved historical v3/v4 overview dashboards.
+   and preserved historical v3/v4/v5 overview dashboards.
 """
 from __future__ import annotations
 
@@ -87,9 +87,12 @@ def test_params_v3_sync_and_no_legacy_maglev():
     assert params.DESIGN_SPECS["exp133_synced"] is True
     assert params.DESIGN_SPECS["exp139_synced"] is True
     assert params.DESIGN_SPECS["exp140_synced"] is True
-    assert params.CAD_VERSION.startswith("5.0-")
-    # CAD v4.0/v5.0 required new solid parts (Exp130 S5.5, Exp131 M4 4K, Exp133 PT420, Exp139 S5.6, Exp140 S6.5)
-    for v5_key in (
+    assert params.DESIGN_SPECS["exp142_synced"] is True
+    assert params.DESIGN_SPECS["exp143_synced"] is True
+    assert params.CAD_VERSION.startswith("6.0-")
+    # CAD v4.0/v5.0/v6.0 required new solid parts
+    for v6_key in (
+        "s1_multi_species_neck", "s1_multi_species_cartridge",
         "s5_flash_safety_shutter", "s5_flash_anneal_head", "s5_flash_dichroic_pyrometer", "s5_flash_fiber_collimator",
         "s5_mbe_cf100_flange", "s5_mbe_source_body", "s5_mbe_top_feedthrough",
         "s5_mbe_qcm_valve", "s5_mbe_pbn_heater_fg", "s5_mbe_tmp_neg_pump",
@@ -99,9 +102,12 @@ def test_params_v3_sync_and_no_legacy_maglev():
         "s6_pt420_valve_stand", "s6_pt420_remote_valve_box", "s6_pt420_flex_he_bottom",
         "s6_s65_twpa_purcell_pack", "s6_s65_hemt_bank_32ch",
         "s6_s65_coax_loom_300k_50k_pos", "s6_s65_coax_loom_cp_mxc_neg",
+        "s6_s91_ovc_feedthrough", "s6_s91_qram_bridge_20mk", "s6_s91_qram_fiber_loom",
         "s7_s65_rfsoc_boed_bay",
+        "s7_s9hpc_rail_psu_kit", "s7_s9hpc_decoder_node_1", "s7_s9hpc_decoder_node_2",
+        "s7_s9hpc_rocev2_switch", "s7_s9hpc_qsfp28_fiber_duct",
     ):
-        assert v5_key in params.PARTS, f"Missing CAD v5.0 part: {v5_key}"
+        assert v6_key in params.PARTS, f"Missing CAD v6.0 part: {v6_key}"
     # Option A co-pitched Arch-B 32x32 @ 0.50 mm = 16.0x16.0 mm (diag 22.627 mm), Ø28.0 mm bore
     assert params.DESIGN_SPECS["beamlet_count"] == 1024
     assert params.DESIGN_SPECS["beamlet_pitch_mm"] == pytest.approx(0.50)
@@ -206,7 +212,7 @@ def test_verification_json_and_exp80_exp84_compliance():
     assert e133["braid_count"] == 4
     assert e133["remote_valve_offset_mm"] == pytest.approx(500.0, abs=0.2)
     assert e133["flex_he_length_mm"] == pytest.approx(600.0, abs=0.5)
-    assert len(ver["critical_clearances"]) >= 32
+    assert len(ver["critical_clearances"]) >= 40
     # Legacy cleanup
     assert all(ver["legacy_cleanup"].values())
 
@@ -257,9 +263,69 @@ def test_cad_v5_exp140_s65_cryo_mux_and_rfsoc_locked():
         assert clr[k]["pass"] is True, f"Failed S6.5 clearance {k}: {clr[k]}"
 
 
+def test_cad_v6_exp142_option_q_locked():
+    ver = json.loads((CAD_DIR / "cad_verification.json").read_text(encoding="utf-8"))
+    spec_path = ROOT / "results" / "exp142_option_q_multispecies_qram" / "s9q_hardware_spec.json"
+    assert spec_path.is_file()
+    s9q_spec = json.loads(spec_path.read_text(encoding="utf-8"))["totals_option_q_plus_s1_multi"]
+    e142 = ver["exp142_s9q_audit"]
+    assert e142["pass"] is True and e142["exp142_synced"] is True
+    assert e142["s16_part_count"] == 2
+    assert e142["s91_part_count"] == 3
+    assert e142["s16_mass_kg"] == pytest.approx(s9q_spec["s16_multispecies_mass_kg"], abs=0.02)
+    assert e142["s91_mass_kg"] == pytest.approx(s9q_spec["s91_cryo_qram_mass_kg"], abs=0.02)
+    assert e142["total_mass_kg"] == pytest.approx(s9q_spec["total_mass_kg"], abs=0.02)
+    assert e142["s16_cartridge_center_mm"] == [0.0, 110.0, 992.66]
+    assert e142["s91_chip_dims_mm"] == [60.0, 30.0, 16.0]
+    clr = ver["critical_clearances"]
+    for k in (
+        "exp142_s16_cartridge_to_duoplasmatron_y_mm",
+        "exp142_s16_cartridge_to_ph3_manifold_y_mm",
+        "exp142_s91_qram_chip_to_s65_twpa_z_mm",
+        "exp142_s91_ovc_port_to_valve_stand_x_mm",
+        "exp142_s91_fiber_loom_to_4k_50k_shields_mm",
+    ):
+        assert clr[k]["pass"] is True, f"Failed Option-Q clearance {k}: {clr[k]}"
+    assert clr["exp142_s16_cartridge_to_duoplasmatron_y_mm"]["value_mm"] == pytest.approx(27.0, abs=0.1)
+    assert clr["exp142_s91_qram_chip_to_s65_twpa_z_mm"]["value_mm"] == pytest.approx(8.5, abs=0.1)
+
+
+def test_cad_v6_exp143_option_hpc_locked():
+    ver = json.loads((CAD_DIR / "cad_verification.json").read_text(encoding="utf-8"))
+    spec_path = ROOT / "results" / "exp143_d3_grape_m4_and_hpc_decoder" / "s9hpc_hardware_spec.json"
+    assert spec_path.is_file()
+    s9hpc_spec = json.loads(spec_path.read_text(encoding="utf-8"))["totals_base_4u_option_hpc_module"]
+    e143 = ver["exp143_s9hpc_audit"]
+    assert e143["pass"] is True and e143["exp143_synced"] is True
+    assert e143["part_count"] == 5
+    assert e143["total_mass_kg"] == pytest.approx(s9hpc_spec["total_mass_kg"], abs=0.02)
+    assert e143["decoder_nodes_4u_dims_mm"] == [482.6, 780.0, 177.8]
+    assert e143["switch_1u_dims_mm"] == [482.6, 380.0, 44.5]
+    assert e143["room_temp_power_W"] == pytest.approx(2195.0, abs=0.5)
+    assert e143["cryo_load_W"] == pytest.approx(0.0, abs=1e-6)
+    clr = ver["critical_clearances"]
+    for k in (
+        "exp143_s9hpc_to_s7_rack_aisle_x_mm",
+        "exp143_s9hpc_node1_to_node2_airflow_z_mm",
+        "exp143_s9hpc_switch_to_node2_z_mm",
+    ):
+        assert clr[k]["pass"] is True, f"Failed Option-HPC clearance {k}: {clr[k]}"
+
+
+def test_cad_v6_total_mass_bridge_exact():
+    ver = json.loads((CAD_DIR / "cad_verification.json").read_text(encoding="utf-8"))
+    ma = ver["master_assembly"]
+    assert ma["part_count"] == 199
+    assert ma["total_mass_kg"] == pytest.approx(1108.137, abs=0.02)
+    # Exact v5.0 (1034.937 kg) + Option-Q (9.200 kg) + Option-HPC (64.000 kg)
+    assert ver["subsystems"]["s1_ion_source_column"]["mass_kg"] == pytest.approx(30.777, abs=0.02)
+    assert ver["subsystems"]["s6_cryo_dr_magnet_readout"]["mass_kg"] == pytest.approx(285.320, abs=0.02)
+    assert ver["subsystems"]["s7_electronics_rack_interconnect"]["mass_kg"] == pytest.approx(293.747, abs=0.02)
+
+
 def test_legacy_overview_dashboards_preserved():
     ddir = CAD_DIR / "drawings"
-    for fname in ("00_v3_overview_dashboard.png", "00_v4_overview_dashboard.png"):
+    for fname in ("00_v3_overview_dashboard.png", "00_v4_overview_dashboard.png", "00_v5_overview_dashboard.png"):
         p = ddir / fname
         assert p.is_file() and p.stat().st_size > 100_000, f"Preserved dashboard missing/corrupt: {fname}"
         w, h = _read_png_dimensions(p)

@@ -1,0 +1,61 @@
+{
+  "experiment": "exp143_d3_grape_m4_and_hpc_decoder",
+  "hypothesis_id": "H161",
+  "registered_before_execution": true,
+  "date": "2026-11-23",
+  "no_lab_measurement": true,
+  "epistemic_tag": "{Sayısal-Simülasyon}",
+  "question": "Can multi-harmonic Fourier GRAPE optimal control (K=8 harmonics, <=300 MHz AWG bandwidth, double sweet spot) on the exact 12x12 CUDA Strang-Lindblad M4 bus with M=40 1/f^alpha OU noise physically achieve the D3 deep-FT gate target (p_2q <= 0.45-0.50%, F_avg >= 0.9960, empirical Exp138 MWPM Lambda >= 2.20), and what Option-HPC 100 Gbps RoCEv2 RDMA decoder architecture overcomes the real-time syndrome backlog wall across d=7..37 surface codes and [[144,12,12]] qLDPC?",
+  "upstream_inputs_readonly": [
+    "results/exp137_echoed_m4_bus_gate/exp137.json",
+    "results/exp138_defective_surface_code_ft/exp138.json",
+    "results/exp139_epi_cap_process_integration/exp139.json",
+    "results/exp140_cryo_fpga_boed_mux_readout/exp140.json",
+    "results/exp136_tb_sp3d5s_hyperfine/exp136.json",
+    "results/exp126_atom_cell_programming/exp126.json"
+  ],
+  "model": {
+    "bus_physics": "12D Hilbert space Q1(2) x Q2(2) x NbTiN Cavity(3), CUDA complex128 Strang-split Lindblad + M=40 multi-OU colored 1/f^alpha charge noise (reusing Exp137 noise_ou137 & Exp131 Best-of-6 donor pairs)",
+    "optimal_control": "PyTorch CUDA autograd K=8 Fourier-basis GRAPE shaping (s_1(t), s_2(t), Delta_1(t), Delta_2(t)) embedded in XY4 echo with double-sweet-spot bias (d_omega/d_eps ~ 0, Bessel-stationary d_g/d_eps ~ 0), hard coupling cap |g_k(t)| <= g_{k,0}, and <=300 MHz AWG spectral filtering",
+    "qec_verification": "Direct import of Exp138 rotated_surface_code138.py exact Edmonds Blossom MWPM decoder (d=3,5,7,9, >=2000 shots/pt) fed with freshly extracted 16-Pauli D3 GRAPE channel",
+    "hpc_decoder_model": "End-to-end 20mK TWPA -> ZU48DR RFSoC (~320 ns) -> 100GbE RoCEv2 RDMA (~450 ns) -> parallel windowed Fusion-Blossom/GPU-FPGA MWPM (d=7,11,21,37) and [[144,12,12]] BP-OSD latency & backlog-free analysis at T_cyc = 2.62 us and 8.93 us"
+  },
+  "predictions": [
+    {
+      "id": "DH1_GRAPE_UNITARY_AND_AWG_BANDWIDTH",
+      "description": "K=8 Fourier GRAPE achieves noiseless p_unitary <= 0.0005 (F_avg >= 0.9996), cavity leakage p_leak <= 1e-4, obeys physical coupling ceiling |g_k(t)| <= g_{k,0}, retains >= 99.5% spectral energy below 300 MHz AWG cutoff, and accelerates t_gate <= 0.90 us (>= 1.8x faster than Exp137 P4 1.737 us).",
+      "criterion": "noiseless_p_err <= 0.0005 and noiseless_p_leak <= 1e-4 and coupling_cap_obeyed and bw_300mhz_frac >= 0.995 and mean_t_gate_us <= 0.90"
+    },
+    {
+      "id": "DH2_D3_GATE_FIDELITY_UNDER_CONSERVATIVE_EXP137_NOISE",
+      "description": "Under exact conservative Exp137 noise (M=40 1/f OU S_eps=0.25 uev/rtHz, Q_r=1e6, eps_rot=1.5%, conservative un-echoed gamma_phi_nuc=0.5 kHz, N_traj=512/pair across 5 fast pairs), double-sweet-spot GRAPE achieves p_2q <= 0.0050 (F_avg >= 0.9960, F_Bell >= 0.9965) and improves over Exp137 P4 (0.00868) by >= 1.7x.",
+      "criterion": "cons_Q1e6_S0p25_p_err <= 0.0050 and cons_Q1e6_S0p25_F_avg >= 0.9960 and cons_Q1e6_S0p25_F_Bell >= 0.9965 and gain_vs_P4 >= 1.70"
+    },
+    {
+      "id": "DH3_D3_GATE_FIDELITY_AT_NOMINAL_ROTA_C_AND_ECHOED_NUC",
+      "description": "With physically consistent Exp136 echoed 29Si nuclear bath (T_2e,XY8=14.135 ms -> gamma_phi_nuc_echo=0.0225 kHz), GRAPE achieves p_2q <= 0.0045 (F_avg >= 0.9964) even at Exp139 nominal S_eps=0.3897 uev/rtHz & Q_r=5e5, and p_2q <= 0.0035 at Q_r=1e6 & S_eps=0.25 uev/rtHz.",
+      "criterion": "echo_Q5e5_S0p39_p_err <= 0.0045 and echo_Q1e6_S0p25_p_err <= 0.0035"
+    },
+    {
+      "id": "DH4_LIVE_EXP138_MWPM_LAMBDA_D3_PHYS",
+      "description": "Feeding the extracted 16-Pauli D3 GRAPE channel directly into Exp138's live Edmonds Blossom MWPM surface code decoder (d=3,5,7,9, >=2000 shots/pt, Exp140 p_meas=0.003861) achieves empirical Lambda_D3_phys >= 2.20 and compresses 100-logical-qubit 10^-9 cryostat fleet from 679 (Exp138 D2) down to <= 130 cryostats (>= 5x reduction).",
+      "criterion": "Lambda_D3_phys_cons >= 2.20 and cryostats_100L_1e9_D3_phys <= 130"
+    },
+    {
+      "id": "DH5_OPTION_HPC_REALTIME_DECODER_WALL_AND_BACKLOG",
+      "description": "Option-HPC latency budget proves single-core CPU MWPM hits the 8.93 us backlog wall by d=37 (and 2.62 us wall by d=21), whereas parallel windowed Option-HPC GPU/FPGA MWPM stays strictly backlog-free (< 8.93 us) through d=37, qLDPC [[144,12,12]] mean BP-OSD stays < 2.62 us, and 100L d=37 hard syndrome bandwidth <= 25 Gbps fits in redundant 2x 100G QSFP28 fiber links.",
+      "criterion": "cpu_single_fails_d37_8p93us and hpc_parallel_passes_d37_8p93us and qldpc_mean_lt_2p62us and bw_100L_d37_hard_gbps <= 25.0"
+    },
+    {
+      "id": "DH6_S9HPC_HARDWARE_SPEC_COMPLETE_FOR_CAD_BOM_V6",
+      "description": "s9hpc_hardware_spec.json exports CAD v6.0 / BOM v6.0 Option-HPC 4U 2-node 100G RoCEv2 RDMA decoder rack + QSFP28 fiber bridge with complete mass (kg), envelope_mm, rack_U, power (W), zero cryo load (0.0 W), low/nom/high USD estimates, no_supplier_quotes=true, and epistemic tags.",
+      "criterion": "s9hpc_schema_valid and s9hpc_cryo_load_zero and s9hpc_cost_ordered"
+    },
+    {
+      "id": "DH7_CPTP_AUDIT_PORTABILITY_VISUAL_AND_TESTS",
+      "description": "All extracted 12x12 Choi channels satisfy exact CPTP audit (trace_err<1e-10, herm_err<1e-10, min_eig>-1e-9, |pauli_sum-1|<1e-10), zero hardcoded user paths, valid 2400x1400 PNG figure, 0 GFM table errors in summary_exp143.md, and >= 8 passing pytest checks in tests/test_exp143.py.",
+      "criterion": "all_cptp_clean and hardcoded_path_hits == 0 and no_lab_measurement == True"
+    }
+  ],
+  "success_rule": "At least 5/7 pre-registered predictions PASS with 100% honest reporting of any FAIL (no post-hoc threshold modification) and zero CPTP/unitarity/portability defects."
+}

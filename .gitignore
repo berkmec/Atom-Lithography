@@ -1,5 +1,5 @@
-# Strict Allowlist .gitignore — Atom Lithography Machine v5.0
-# Ignore everything by default; explicitly whitelist only the clean v5.0 release
+# Strict Allowlist .gitignore — Atom Lithography Machine v6.0
+# Ignore everything by default; explicitly whitelist only the clean v6.0 release
 # package and the exact minimal legacy helper/JSON anchors needed for full pytest.
 *
 
@@ -8,14 +8,14 @@
 !README.md
 !requirements.txt
 
-# Master engineering documentation, BOM v5.0, 8-RFQ & Parametric CAD v5.0
+# Master engineering documentation, BOM v6.0, 9-RFQ & Parametric CAD v6.0
 !research/
 !research/atom_lithography_machine/
 !research/atom_lithography_machine/**
 !research/hypotheses/
 !research/hypotheses/hypotheses.md
 
-# Software control stack (BOED + FPGA DSP + CellISA v3.5), 0-ERC IBIC board & verified RTL
+# Software control stack (BOED + Q16.16 FPGA + CellISA v4.0 + IBM QPU + auto_recal), 0-ERC IBIC board & verified RTL
 !src/
 !src/README.md
 !src/machine_control/
@@ -30,7 +30,7 @@
 !src/rtl/BLANKER_TILE.md
 !src/rtl/bmc64.ys
 
-# v3.0, v4.0 & v5.0 First-principles experiment suites (Exp124-Exp141)
+# v3.0, v4.0, v5.0 & v6.0 First-principles experiment suites (Exp124-Exp146)
 !experiments/
 !experiments/exp124_ion_column_optics/
 !experiments/exp124_ion_column_optics/**
@@ -68,6 +68,16 @@
 !experiments/exp140_cryo_fpga_boed_mux_readout/**
 !experiments/exp141_v5_digital_twin/
 !experiments/exp141_v5_digital_twin/**
+!experiments/exp142_option_q_multispecies_qram/
+!experiments/exp142_option_q_multispecies_qram/**
+!experiments/exp143_d3_grape_m4_and_hpc_decoder/
+!experiments/exp143_d3_grape_m4_and_hpc_decoder/**
+!experiments/exp144_qldpc_bivariate_bicycle_m4/
+!experiments/exp144_qldpc_bivariate_bicycle_m4/**
+!experiments/exp145_cloud_qpu_ibm_validation/
+!experiments/exp145_cloud_qpu_ibm_validation/**
+!experiments/exp146_v6_digital_twin/
+!experiments/exp146_v6_digital_twin/**
 
 # Minimal legacy physics helpers required by AtlasSelector & Exp124-136 pytest
 !experiments/exp25_universal_atom/
@@ -82,7 +92,7 @@
 !experiments/exp48_pulse_aware_selection/
 !experiments/exp48_pulse_aware_selection/pulse_select48.py
 
-# v3.0, v4.0 & v5.0 Verified experiment results & plots (Exp124-Exp141)
+# v3.0, v4.0, v5.0 & v6.0 Verified experiment results & plots (Exp124-Exp146)
 !results/
 !results/exp124_ion_column_optics/
 !results/exp124_ion_column_optics/**
@@ -120,6 +130,16 @@
 !results/exp140_cryo_fpga_boed_mux_readout/**
 !results/exp141_v5_digital_twin/
 !results/exp141_v5_digital_twin/**
+!results/exp142_option_q_multispecies_qram/
+!results/exp142_option_q_multispecies_qram/**
+!results/exp143_d3_grape_m4_and_hpc_decoder/
+!results/exp143_d3_grape_m4_and_hpc_decoder/**
+!results/exp144_qldpc_bivariate_bicycle_m4/
+!results/exp144_qldpc_bivariate_bicycle_m4/**
+!results/exp145_cloud_qpu_ibm_validation/
+!results/exp145_cloud_qpu_ibm_validation/**
+!results/exp146_v6_digital_twin/
+!results/exp146_v6_digital_twin/**
 
 # Minimal legacy JSON anchors required by Atom Lithography pytest & audit gates
 !results/exp42/
@@ -157,7 +177,7 @@
 !results/exp122_budget_cap/
 !results/exp122_budget_cap/exp122.json
 
-# Atom Lithography v5.0 verification test suite (23/23 staged test files, 198/198 pytest)
+# Atom Lithography v6.0 verification test suite (28/28 staged test files, 252/252 pytest)
 !tests/
 !tests/conftest.py
 !tests/test_machine_control.py
@@ -181,6 +201,11 @@
 !tests/test_exp139.py
 !tests/test_exp140.py
 !tests/test_exp141.py
+!tests/test_exp142.py
+!tests/test_exp143.py
+!tests/test_exp144.py
+!tests/test_exp145.py
+!tests/test_exp146.py
 !tests/test_rtl_contract.py
 !tests/test_blanker_tile.py
 

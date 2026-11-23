@@ -1,4 +1,4 @@
-"""Automated verification suite for BOM_DETAILED.csv (v5.0), Exp128 Monte Carlo & RFQ-01..08 docs.
+"""Automated verification suite for BOM_DETAILED.csv (v6.0), Exp128 Monte Carlo & RFQ-01..09 docs.
 
 100% portable: resolves repository root strictly via Path(__file__).resolve().parents[1].
 """
@@ -20,6 +20,8 @@ BOM_ENG_MD = ROOT / "research" / "atom_lithography_machine" / "BOM_ENGINEERING.m
 RFQ_MD = ROOT / "research" / "atom_lithography_machine" / "RFQ_SPECIFICATIONS.md"
 S56_SPEC_JSON = ROOT / "results" / "exp139_epi_cap_process_integration" / "s56_hardware_spec.json"
 S65_SPEC_JSON = ROOT / "results" / "exp140_cryo_fpga_boed_mux_readout" / "s65_hardware_spec.json"
+S9Q_SPEC_JSON = ROOT / "results" / "exp142_option_q_multispecies_qram" / "s9q_hardware_spec.json"
+S9HPC_SPEC_JSON = ROOT / "results" / "exp143_d3_grape_m4_and_hpc_decoder" / "s9hpc_hardware_spec.json"
 EXP128_CODE_DIR = ROOT / "experiments" / "exp128_bom_sensitivity"
 EXP128_DIR = ROOT / "results" / "exp128_bom_sensitivity"
 EXP128_JSON = EXP128_DIR / "exp128.json"
@@ -113,10 +115,10 @@ def test_portability_no_hardcoded_user_paths() -> None:
             assert bad not in text, f"Hardcoded path '{bad}' found in {path.name}"
 
 
-def test_bom_detailed_v5_schema_and_value_invariants() -> None:
+def test_bom_detailed_v6_schema_and_value_invariants() -> None:
     df = pd.read_csv(BOM_DETAILED)
     assert list(df.columns) == EXPECTED_COLUMNS
-    assert len(df) == 167
+    assert len(df) == 174
     assert df["part_id"].is_unique
     for col in EXPECTED_COLUMNS:
         assert df[col].notna().all(), f"NaN detected in column {col}"
@@ -131,7 +133,7 @@ def test_bom_detailed_v5_schema_and_value_invariants() -> None:
         assert r["subsystem"] == r["parent_bom_id"].split(".")[0]
 
 
-def test_canonical_40_rows_and_v3_v4_v5_deltas_anti_double_count() -> None:
+def test_canonical_40_rows_and_v3_v4_v5_v6_modular_parity() -> None:
     canon_ids = set()
     with BOM_CSV.open(encoding="utf-8-sig") as fh:
         for row in csv.DictReader(fh):
@@ -146,7 +148,7 @@ def test_canonical_40_rows_and_v3_v4_v5_deltas_anti_double_count() -> None:
 
     part_ids = set(df["part_id"].unique())
     # v3.0 Exp124 / Exp125 / Exp127 deltas
-    for pid in ("S1.3-02", "S1.5-01", "S1.6-01", "S6.3-01", "S6.6-07", "S3.2-01"):
+    for pid in ("S1.3-02", "S1.5-01", "S1.6-01", "S1.6-02", "S6.3-01", "S6.6-07", "S3.2-01"):
         assert pid in part_ids
     # v4.0 deltas (S5.5, S6.9, S6.10, S7.1-04, S8.3-03)
     for pid in ("S5.5-01", "S6.9-01", "S6.10-01", "S6.10-02", "S6.10-03", "S6.10-04", "S7.1-04", "S8.3-03"):
@@ -154,17 +156,26 @@ def test_canonical_40_rows_and_v3_v4_v5_deltas_anti_double_count() -> None:
     # v5.0 deltas (S5.6 Exp139 + S6.11/Exp140 S6.5) — canonical S6.5 RF/ENDOR preserved untouched!
     for pid in ("S6.5-01", "S6.5-02", "S6.5-03", "S5.6-01", "S5.6-02", "S5.6-03", "S5.6-04", "S6.11-01", "S6.11-02", "S6.11-03", "S6.11-04"):
         assert pid in part_ids
+    # v6.0 modular options (Option-Q S1.7-01 & S9.4-01..03; Option-HPC S9.HPC-01..03) — canonical S9.1 preserved untouched!
+    for pid in ("S9.1-01", "S9.1-02", "S1.7-01", "S9.4-01", "S9.4-02", "S9.4-03", "S9.HPC-01", "S9.HPC-02", "S9.HPC-03"):
+        assert pid in part_ids
 
     # Anti-double-counting check: superseded v4.0 rows zeroed cleanly & S6.10-04 halved to $20k DC-only
     assert float(df.loc[df["part_id"] == "S6.10-02", "usd_nom"].iloc[0]) == 0.0
     assert float(df.loc[df["part_id"] == "S7.1-04", "usd_nom"].iloc[0]) == 0.0
     assert float(df.loc[df["part_id"] == "S6.10-04", "usd_nom"].iloc[0]) == 20_000.0
 
-    # Exact parity against primary Exp139 (S5.6) & Exp140 (S6.5) hardware spec JSONs
+    # Exact parity against primary Exp139 (S5.6), Exp140 (S6.5), Exp142 (Option-Q) & Exp143 (Option-HPC) spec JSONs
     s56_spec = json.loads(S56_SPEC_JSON.read_text(encoding="utf-8"))["s56_hardware_spec"]
     s65_spec = json.loads(S65_SPEC_JSON.read_text(encoding="utf-8"))
+    s9q_spec = json.loads(S9Q_SPEC_JSON.read_text(encoding="utf-8"))
+    s9hpc_spec = json.loads(S9HPC_SPEC_JSON.read_text(encoding="utf-8"))
+
     s56_df = df[df["parent_bom_id"] == "S5.6"]
     s611_df = df[df["parent_bom_id"] == "S6.11"]
+    optq_df = df[df["notes"].astype(str).str.contains("DELTA-V6.0-OPTQ", na=False)]
+    opthpc_df = df[df["notes"].astype(str).str.contains("DELTA-V6.0-OPTHPC", na=False)]
+    base_v5_df = df[~df["notes"].astype(str).str.contains("DELTA-V6.0", na=False)]
 
     assert float(s56_df["usd_low"].sum()) == pytest.approx(s56_spec["bom_v5_cost_estimate_usd"]["total_p10_usd"], abs=1e-6)
     assert float(s56_df["usd_nom"].sum()) == pytest.approx(s56_spec["bom_v5_cost_estimate_usd"]["total_p50_usd"], abs=1e-6)
@@ -174,8 +185,22 @@ def test_canonical_40_rows_and_v3_v4_v5_deltas_anti_double_count() -> None:
     assert float(s611_df["usd_nom"].sum()) == pytest.approx(s65_spec["totals_1024_cell_module"]["cost_usd_nom"], abs=1e-6)
     assert float(s611_df["usd_high"].sum()) == pytest.approx(s65_spec["totals_1024_cell_module"]["cost_usd_high"], abs=1e-6)
 
-    # Exact M3 v5.0 grand total = $4,609,600 (v4.0) + $724,200 (v5.0 gross) - $86,000 (credit) = $5,247,800
-    assert float(df["usd_nom"].sum()) == pytest.approx(5_247_800.0, abs=1e-6)
+    assert len(optq_df) == 4
+    assert float(optq_df["usd_low"].sum()) == pytest.approx(s9q_spec["totals_option_q_plus_s1_multi"]["cost_usd_low"], abs=1e-6)
+    assert float(optq_df["usd_nom"].sum()) == pytest.approx(s9q_spec["totals_option_q_plus_s1_multi"]["cost_usd_nom"], abs=1e-6)
+    assert float(optq_df["usd_high"].sum()) == pytest.approx(s9q_spec["totals_option_q_plus_s1_multi"]["cost_usd_high"], abs=1e-6)
+
+    assert len(opthpc_df) == 3
+    assert float(opthpc_df["usd_low"].sum()) == pytest.approx(s9hpc_spec["totals_base_4u_option_hpc_module"]["cost_usd_low"], abs=1e-6)
+    assert float(opthpc_df["usd_nom"].sum()) == pytest.approx(s9hpc_spec["totals_base_4u_option_hpc_module"]["cost_usd_nom"], abs=1e-6)
+    assert float(opthpc_df["usd_high"].sum()) == pytest.approx(s9hpc_spec["totals_base_4u_option_hpc_module"]["cost_usd_high"], abs=1e-6)
+
+    # Modular sums preserved to $0.00!
+    assert len(base_v5_df) == 167
+    assert float(base_v5_df["usd_nom"].sum()) == pytest.approx(5_247_800.0, abs=1e-6)
+    assert float(base_v5_df["usd_nom"].sum() + optq_df["usd_nom"].sum()) == pytest.approx(5_415_800.0, abs=1e-6)
+    assert float(base_v5_df["usd_nom"].sum() + opthpc_df["usd_nom"].sum()) == pytest.approx(5_379_800.0, abs=1e-6)
+    assert float(df["usd_nom"].sum()) == pytest.approx(5_547_800.0, abs=1e-6)
 
 
 def test_rollup_reconciliation_mass_parity_and_exp114_122() -> None:
@@ -190,27 +215,44 @@ def test_rollup_reconciliation_mass_parity_and_exp114_122() -> None:
     assert gate["nl55_b_abs"] == pytest.approx(2159.00039876329, abs=1e-9)
     assert gate["nl163_central_usd_u720"] == pytest.approx(2531244.3664524374, abs=1e-4)
 
-    # Exact bottom-up pandas roll-up vs exp128.json
+    # Exact bottom-up pandas roll-up vs exp128.json (v6.0 modular bridge)
     bds = data["bom_detailed_summary"]
-    assert bds["bom_version"] == "v5.0"
-    assert bds["total_parts"] == len(df) == 167
+    assert bds["bom_version"] == "v6.0"
+    assert bds["total_parts"] == len(df) == 174
+    assert bds["v5_base_parts"] == 167
+    assert bds["v6_option_parts"] == 7
     assert bds["m3_v3_base_nom_usd"] == pytest.approx(4_189_600.0, abs=1e-6)
     assert bds["m3_v4_base_nom_usd"] == pytest.approx(4_609_600.0, abs=1e-6)
+    assert bds["m3_v5_base_nom_usd"] == pytest.approx(5_247_800.0, abs=1e-6)
     assert bds["v5_gross_new_nom_usd"] == pytest.approx(724_200.0, abs=1e-6)
     assert bds["v5_anti_double_count_credit_usd"] == pytest.approx(-86_000.0, abs=1e-6)
     assert bds["v5_net_delta_nom_usd"] == pytest.approx(638_200.0, abs=1e-6)
+    assert bds["v6_option_q_nom_usd"] == pytest.approx(168_000.0, abs=1e-6)
+    assert bds["v6_option_hpc_nom_usd"] == pytest.approx(132_000.0, abs=1e-6)
+    assert bds["v6_net_delta_nom_usd"] == pytest.approx(300_000.0, abs=1e-6)
+    assert bds["m3_v6_plus_option_q_nom_usd"] == pytest.approx(5_415_800.0, abs=1e-6)
+    assert bds["m3_v6_plus_option_hpc_nom_usd"] == pytest.approx(5_379_800.0, abs=1e-6)
+    assert bds["m3_v6_full_nom_usd"] == pytest.approx(5_547_800.0, abs=1e-6)
+    assert bds["m1_nom_usd"] == pytest.approx(2_466_120.0, abs=1e-6)
     assert bds["m3_low_usd"] == pytest.approx(float(df["usd_low"].sum()), abs=1e-6)
     assert bds["m3_nom_usd"] == pytest.approx(float(df["usd_nom"].sum()), abs=1e-6)
     assert bds["m3_high_usd"] == pytest.approx(float(df["usd_high"].sum()), abs=1e-6)
     assert bds["reconciliation_error_usd"] < 1e-6
-    assert bds["m1_nom_usd"] < bds["m3_v5_pilot_256_nom_usd"] < bds["m3_nom_usd"]
+    assert bds["m1_nom_usd"] < bds["m3_v5_pilot_256_nom_usd"] < bds["m3_v5_base_nom_usd"] < bds["m3_nom_usd"]
 
-    # Exact mass parity against s56 (22.4 kg) and s65 (19.27 kg = 11.50 rack + 7.77 cold)
-    mr = data["v5_hardware_mass_reconciliation"]
-    assert mr["S5.6_bom_total_mass_kg"] == pytest.approx(22.4, abs=1e-9)
-    assert mr["S6.11_bom_total_mass_kg"] == pytest.approx(19.27, abs=1e-9)
-    assert mr["S6.11_bom_cold_mass_kg"] == pytest.approx(7.77, abs=1e-9)
-    assert mr["mass_reconciliation_error_kg"] < 1e-9
+    # Exact mass parity against v5 (s56=22.4, s65=19.27) and v6 (Option-Q=9.20, Option-HPC=64.00 -> CAD v6=1108.14 kg)
+    mr5 = data["v5_hardware_mass_reconciliation"]
+    assert mr5["S5.6_bom_total_mass_kg"] == pytest.approx(22.4, abs=1e-9)
+    assert mr5["S6.11_bom_total_mass_kg"] == pytest.approx(19.27, abs=1e-9)
+    assert mr5["S6.11_bom_cold_mass_kg"] == pytest.approx(7.77, abs=1e-9)
+    assert mr5["mass_reconciliation_error_kg"] < 1e-9
+
+    mr6 = data["v6_hardware_mass_reconciliation"]
+    assert mr6["Option_Q_bom_total_mass_kg"] == pytest.approx(9.20, abs=1e-9)
+    assert mr6["Option_HPC_bom_total_mass_kg"] == pytest.approx(64.00, abs=1e-9)
+    assert mr6["v6_total_addon_mass_kg"] == pytest.approx(73.20, abs=1e-9)
+    assert mr6["cad_v6_full_mass_kg"] == pytest.approx(1108.137, abs=1e-9)
+    assert mr6["mass_reconciliation_error_kg"] < 1e-9
 
     # Exact Exp114 56-chain bill ($680,400) & S6.8 DR ($720,000) parity
     s66_6 = float(df[df["part_id"].isin([f"S6.6-0{i}" for i in range(1, 7)])]["usd_nom"].sum())
@@ -229,7 +271,7 @@ def test_rollup_reconciliation_mass_parity_and_exp114_122() -> None:
     assert db["bridge_arithmetic_error_usd"] < 1e-6
 
 
-def test_exp128_v5_monte_carlo_8rfq_and_evpi_invariants() -> None:
+def test_exp128_v6_monte_carlo_9rfq_modular_and_evpi_invariants() -> None:
     data = json.loads(EXP128_JSON.read_text(encoding="utf-8"))
     assert data["no_lab_measurement"] is True
     assert data["no_supplier_quotes"] is True
@@ -247,6 +289,16 @@ def test_exp128_v5_monte_carlo_8rfq_and_evpi_invariants() -> None:
         seq = [d["p05"], d["p10"], d["p25"], d["p50"], d["p75"], d["p90"], d["p95"], d["p99"]]
         assert seq == sorted(seq), f"Non-monotonic percentiles in {key}"
 
+    # Verify strict ordering across all 4 modular MC configurations
+    mod = data["v6_modular_mc_comparison"]
+    assert (
+        mod["M3_v5_0_Base"]["bom_mc_usd"]["p50"]
+        < mod["M3_v6_0_Plus_Option_HPC"]["bom_mc_usd"]["p50"]
+        < mod["M3_v6_0_Plus_Option_Q"]["bom_mc_usd"]["p50"]
+        < mod["M3_v6_0_Full_Option_Q_and_HPC"]["bom_mc_usd"]["p50"]
+    )
+    assert mod["M3_v5_0_Base"]["P_Program_stoch_gt_100M"] < 0.05
+
     ep = mc["exceedance_probabilities"]
     for pval in ep.values():
         assert 0.0 <= pval <= 1.0
@@ -254,14 +306,14 @@ def test_exp128_v5_monte_carlo_8rfq_and_evpi_invariants() -> None:
     assert ep["P_Program_stoch_gt_100M"] < 0.05
     assert ep["P_Program_x3_gt_50M"] <= ep["P_Program_stoch_gt_50M"] <= ep["P_Program_x10_gt_50M"]
 
-    # Tornado covariance variance shares must sum to 1.0 & 8-RFQ must exceed 75% nom and 90% MC variance
+    # Tornado covariance variance shares must sum to 1.0 & 9-RFQ must exceed 75% nom and 90% MC variance
     var_sum = sum(t["variance_contrib_share"] for t in data["tornado_bom_scope"])
     assert var_sum == pytest.approx(1.0, abs=1e-6)
     assert data["tornado_bom_scope"][0]["driver"].startswith("S6.6")
     rc = data["rfq_coverage"]
-    assert rc["rfq8_nom_share"] >= 0.75
-    assert rc["rfq8_variance_share_mc"] >= 0.90
-    assert rc["rfq8_total_nom_usd"] > rc["rfq7_total_nom_usd"] > rc["rfq6_total_nom_usd"]
+    assert rc["rfq9_nom_share"] >= 0.75
+    assert rc["rfq9_variance_share_mc"] >= 0.90
+    assert rc["rfq9_total_nom_usd"] > rc["rfq8_total_nom_usd"] > rc["rfq7_total_nom_usd"] > rc["rfq6_total_nom_usd"]
 
     # EVPI 20 mK baseline vindication
     ev = data["evpi_20mk_vs_1k"]
@@ -269,12 +321,13 @@ def test_exp128_v5_monte_carlo_8rfq_and_evpi_invariants() -> None:
     assert ev["cu5_ref_1mach_2M_p50_env_usd"] < 0.0
     assert ev["cu5_ref_breakeven_machines_hw"] >= 4.0
 
-    # All 6 pre-registered verdicts PASS on v5.0
+    # All 6 pre-registered verdicts PASS on v6.0 Full & Base
     v = data["verdicts"]
     for key in (
         "CU1_bom_integrity",
         "CU2_bom_cap_safety",
         "CU3_program_soft_hard_cap",
+        "CU3_base_v5_program_soft_hard_cap",
         "CU4_bc_wall_dominance",
         "CU5_evpi_20mk_vindication",
         "CU6_mc_convergence",
@@ -292,9 +345,9 @@ def test_deliverable_docs_figures_and_gfm_integrity() -> None:
         w, h = read_png_size(fig)
         assert (w, h) == (2200, 1260)
 
-    # Verify RFQ_SPECIFICATIONS covers all 8 RFQ packages (RFQ-01..RFQ-08)
+    # Verify RFQ_SPECIFICATIONS covers all 9 RFQ packages (RFQ-01..RFQ-09)
     rfq_text = RFQ_MD.read_text(encoding="utf-8")
-    for tag in ("RFQ-01", "RFQ-02", "RFQ-03", "RFQ-04", "RFQ-05", "RFQ-06", "RFQ-07", "RFQ-08"):
+    for tag in ("RFQ-01", "RFQ-02", "RFQ-03", "RFQ-04", "RFQ-05", "RFQ-06", "RFQ-07", "RFQ-08", "RFQ-09"):
         assert tag in rfq_text
 
     # Strict zero-mismatch GFM table verification across all 3 markdown deliverables

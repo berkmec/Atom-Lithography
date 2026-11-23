@@ -1,0 +1,46 @@
+{
+  "experiment": "exp146_v6_digital_twin",
+  "hypothesis_id": "H164",
+  "version": "6.0",
+  "registered": "2026-11-23 (pre-run registration prior to implementing digital_twin146.py and running Exp146)",
+  "epistemic_scope": {
+    "silicon_31P_fabrication_and_economics": "Model/Sayisal-Simulasyon/Varsayim/Liste-Capasi (M0, no_lab_measurement=true, no_supplier_quotes=true)",
+    "cloud_qpu_control_validation": "Canli-Donanim-IBM-QPU (ibm_marrakesh, 156Q Heron r2, job_id=dc1tdo2nj2vs73dfrfl0, zero secrets)"
+  },
+  "question": "Do all 22 experiment ledgers (Exp124-Exp145), live IBM QPU hardware validation (ibm_marrakesh), CAD v6.0 (199 parts, 1108.137 kg, 0 clashes, 40/40 clearances), BOM v6.0 (174 parts, M3 Base $5.248M / Full $5.548M, $0.00 bridge, 0.0000 kg mass match, 9-RFQ), D3 GRAPE M4 closure, qLDPC [[144,12,12]] 1-cryostat compression, Option-Q/HPC hardware, and live CellISA v4.0 + auto_recal close under a single cryptographically signed v6.0 Master Digital Twin Certificate?",
+  "predictions": [
+    {
+      "id": "DT6_1_LEDGER_CAD_BOM_SHA256_LOCK",
+      "statement": "All 24 primary ledgers & engineering artifacts (22 experiment JSONs Exp124-Exp145 + CAD v6.0 cad_verification.json + BOM v6.0 BOM_DETAILED.csv) plus live ibm_qpu_live_results.json load cleanly with 64-hex SHA-256 hashes; CAD v6.0 has 199 parts, 1108.137 kg, 0/19701 clashes, 40/40 clearances, 39536 watertight STL triangles; BOM v6.0 has 174 parts, M3 Base $5,247,800, M3 Full $5,547,800, $0.00 reconciliation error, 0.0000 kg CAD mass match, and 9-RFQ coverage >= 77% nominal / >= 92% MC variance."
+    },
+    {
+      "id": "DT6_2_D3_GRAPE_M4_PHYSICAL_CLOSURE",
+      "statement": "Exp143 K=8 Fourier GRAPE M4 CZ (t_gate <= 1.0 us, 100% BW <= 300 MHz) achieves echoed Q=1e6, S=0.390 p_2q <= 0.45% (0.395%) and S=0.25 p_2q <= 0.35% (0.337%, F_avg >= 99.7%, F_Bell >= 99.65%), driving live Exp138 MWPM Lambda_D3_phys >= 2.80 and reducing 100L 1e-9 surface-code cryostats from 679 to <= 100 (>= 6.7x)."
+    },
+    {
+      "id": "DT6_3_QLDPC_BB144_SINGLE_CRYOSTAT_REVOLUTION",
+      "statement": "Exp144 [[144,12,12]] Gross Code on 20 um pitch fits M4 L_max <= 300 um (268.3 um, zero resonator redesign), achieves >= 99.5% block / >= 99.9% spared-die yield at f*=1.5%+2MV/m N_cand=8, achieves D3+ p_L <= 3e-5/1L, and packs 120 logical qubits (10 blocks) into 1 LD400/PT420 cryostat (108L in 1 cryostat at <= $70k/L_sys: >= 200x cheaper than v5 D2 SC and >= 40x cheaper than v5 D3 SC; W3 silicon fab < $0.01/L_fab)."
+    },
+    {
+      "id": "DT6_4_OPTION_Q_AND_S1_MULTI_PLATFORM",
+      "statement": "Exp142 5-section Chebyshev 50 Ohm <-> 3 kOhm transformer achieves IL <= 0.01 dB and BW >= 5.0 GHz; 12x12 Lindblad qRAM SWAP achieves F_SWAP_rt(31P) >= 0.985 and >= 8,000x lifetime gain (XY8-DD 1s) at <= 1.0 uW @ 20 mK; 10 km 167Er 1536 nm fiber achieves >= 1,000 Hz at F >= 0.94; 7.5 keV 121Sb reduces lateral straggle >= 40% vs 5 keV 31P."
+    },
+    {
+      "id": "DT6_5_OPTION_HPC_ROCEV2_DECODER_CLOSURE",
+      "statement": "Exp143 Option-HPC 100G RoCEv2 RDMA (tau_ingest < 1.0 us) clears d=37 surface code backlog-free (< 6.70 us D3 cycle) and clears qLDPC [[144,12,12]] 108L mean E2E < 2.62 us in a single 4U $132k rack (<= 2.5 kW room-temp, 0.0 W cryo)."
+    },
+    {
+      "id": "DT6_6_LIVE_IBM_MARRAKESH_AND_CELLISA40_AUTOREKAL",
+      "statement": "Live src/machine_control/ CellISA v4.0 (20 opcodes in VALID_OPCODES_ALL, 17 preserved in VALID_OPCODES) + auto_recal.py pass 4/4 fault modes, and live 156Q ibm_marrakesh hardware run (job_id=dc1tdo2nj2vs73dfrfl0, 0 secret leaks) achieves XY4 > Bare (+50 pp), Bell F >= 0.95, d=3 suppression >= 5x (postsel 0.000%), and Q16.16 BOED 3-point Ramsey parity < 0.01 kHz vs FP64."
+    },
+    {
+      "id": "DT6_7_V3_TO_V6_EVOLUTION_AND_MODULAR_ECONOMICS",
+      "statement": "Complete v3.0 -> v4.0 -> v5.0 -> v6.0 trajectory verifies M3 Base $5,247,800 (P>100M < 5%) vs M3 Full $5,547,800 (point P>100M < 5% with honest 95% CI transparency), 100L cryostat compression 679 -> 100 -> 1, and deployed $/L_sys compression $14.94M -> $2.76M -> $63.8k (> 230x)."
+    },
+    {
+      "id": "DT6_8_CRYPTO_V6_CERT_PORTABILITY_AND_TESTS",
+      "statement": "v6_digital_twin_cert.json carries a canonical full 64-hex SHA-256 signature verifiable with tamper detection, zero hardcoded host paths, zero secrets, 0 GFM table errors, and 100% pass across all 28 Atom Lithography test files."
+    }
+  ],
+  "success_rule": "DT6_1, DT6_2, DT6_3, DT6_4, DT6_5, DT6_6, DT6_7, DT6_8 all PASS."
+}

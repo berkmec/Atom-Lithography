@@ -1,0 +1,109 @@
+{
+  "subsystem_id": "S9.HPC",
+  "option_name": "Option-HPC",
+  "title": "100 Gbps RoCEv2 RDMA Supercomputer Real-Time QEC Syndrome Decoder Module (v6.0 Optional Rack)",
+  "module_form_factor_U": 4,
+  "module_form_factor_with_1u_switch_U": 5,
+  "optional_addon_to_m3_v5": true,
+  "no_supplier_quotes": true,
+  "no_lab_measurement": true,
+  "epistemic_tags": [
+    "Model",
+    "Liste-Capasi",
+    "Varsayim"
+  ],
+  "totals_base_4u_option_hpc_module": {
+    "total_mass_kg": 64.0,
+    "cryo_cold_mass_kg": 0.0,
+    "room_temp_power_W": 2195.0,
+    "cryo_load_W": 0.0,
+    "envelope_mm_4u_direct_attach": [
+      482.6,
+      780.0,
+      177.8
+    ],
+    "envelope_mm_5u_with_1u_bridge": [
+      482.6,
+      780.0,
+      222.3
+    ],
+    "rdma_ports_100g_qsfp28": 4,
+    "one_way_ingest_latency_us": 0.777,
+    "cost_usd_low": 98000,
+    "cost_usd_nom": 132000,
+    "cost_usd_high": 181000
+  },
+  "capacity_and_100L_scaling": {
+    "base_module_capacity_surface_d21_logical": 32,
+    "base_module_capacity_surface_d37_logical": 16,
+    "base_module_capacity_qldpc_144_12_12_logical": 108,
+    "surface_d37_100L_modules_required": 7,
+    "surface_d37_100L_nodes_required": 13,
+    "surface_d37_100L_power_kW": 14.315,
+    "surface_d37_100L_hard_bw_v5_Gbps": 19.14464845499328,
+    "surface_d37_100L_hard_bw_d3_Gbps": 25.513903846510882,
+    "surface_d37_100L_100g_fibers_redundant": 2,
+    "qldpc_108L_modules_required": 1,
+    "qldpc_108L_power_kW": 2.195,
+    "qldpc_108L_hard_bw_d3_Gbps": 0.2417106680195768
+  },
+  "items": [
+    {
+      "part_id": "S9.HPC-01",
+      "name": "2U Dual-Accelerator QEC Decoder Node (2x H100/Alveo-U280-Class + Dual-100G ConnectX-7 RoCEv2 NIC)",
+      "qty": 2,
+      "stage": "300K_hpc_rack",
+      "rack_U": 4,
+      "envelope_mm": [
+        482.6,
+        780.0,
+        177.8
+      ],
+      "mass_kg_total": 56.0,
+      "power_W_total": 2100.0,
+      "cryo_load_W": 0.0,
+      "cost_usd_low": 84000,
+      "cost_usd_nom": 112000,
+      "cost_usd_high": 152000,
+      "epistemic_tag": "Varsayim"
+    },
+    {
+      "part_id": "S9.HPC-02",
+      "name": "1U Ultra-Low-Latency Cut-Through 100 GbE RoCEv2 Optical Bridge + 4x QSFP28-100G-SR4 + 20m OM4 MPO-12 Loom",
+      "qty": 1,
+      "stage": "300K_hpc_rack",
+      "rack_U": 1,
+      "envelope_mm": [
+        482.6,
+        380.0,
+        44.5
+      ],
+      "mass_kg_total": 4.2,
+      "power_W_total": 95.0,
+      "cryo_load_W": 0.0,
+      "cost_usd_low": 9500,
+      "cost_usd_nom": 13500,
+      "cost_usd_high": 19500,
+      "epistemic_tag": "Liste-Capasi"
+    },
+    {
+      "part_id": "S9.HPC-03",
+      "name": "Redundant 2.6 kW Titanium PSU Pack, Sliding Rack Rails & ZU48DR 100G CMAC RDMA Firmware Integration Kit",
+      "qty": 1,
+      "stage": "300K_hpc_rack",
+      "rack_U": 0,
+      "envelope_mm": [
+        482.6,
+        780.0,
+        177.8
+      ],
+      "mass_kg_total": 3.8,
+      "power_W_total": 0.0,
+      "cryo_load_W": 0.0,
+      "cost_usd_low": 4500,
+      "cost_usd_nom": 6500,
+      "cost_usd_high": 9500,
+      "epistemic_tag": "Varsayim"
+    }
+  ]
+}

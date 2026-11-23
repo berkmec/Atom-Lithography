@@ -1,0 +1,2665 @@
+{
+  "experiment": "exp144_qldpc_bivariate_bicycle_m4",
+  "hypothesis_id": "H162",
+  "version": "6.0-phaseA",
+  "date": "2026-11-23",
+  "no_lab_measurement": true,
+  "no_supplier_quotes": true,
+  "epistemic_tags": [
+    "Model",
+    "Sayisal-Simulasyon",
+    "Literatur",
+    "Varsayim"
+  ],
+  "runtime_s": 642.44,
+  "n_workers": 8,
+  "upstream_anchors": {
+    "exp136_f10_yield": 0.5275,
+    "exp136_f15_stark2_yield": 0.775,
+    "exp136_t2e_f15_ms": 14.135338345864659,
+    "exp139_p_ff_route_c": 0.977,
+    "exp139_s_eps_route_c_uev": 0.3897,
+    "exp137_t_gate_us": 1.6830918006516526,
+    "exp137_p4_pauli_16_S0p25": {
+      "II": 0.9842712356356346,
+      "IX": 0.0016944578114253294,
+      "IY": 0.0014590778786242927,
+      "IZ": 0.0019816219533593366,
+      "XI": 0.0015461725004736868,
+      "XX": 1.093732379023486e-05,
+      "XY": 0.0002712800598726703,
+      "XZ": 0.0007728331324984993,
+      "YI": 0.0007562977061743052,
+      "YX": 0.00043118400151580905,
+      "YY": 7.412250570952617e-05,
+      "YZ": 0.001570497301131175,
+      "ZI": 0.0012681304802407978,
+      "ZX": 0.0012710843648683688,
+      "ZY": 0.0017118180124418205,
+      "ZZ": 0.0009092493322448783
+    },
+    "exp126_p_1q": 0.0008294504388930424,
+    "exp140_p_meas_2us": 0.0038610000000000033,
+    "exp140_p_meas_3us": 0.0022320000000000118,
+    "exp140_cryo_cap_cells": 2887,
+    "exp140_n_mux_star": 32,
+    "t_cyc_bb_2us": 13.9816,
+    "t_cyc_bb_3us": 14.9816,
+    "p_idle_step_Z": 5.953135187686254e-05,
+    "p_idle_ro_2us_Z": 7.78130934304122e-05,
+    "p_idle_ro_3us_Z": 0.0001131786780151911,
+    "p_idle_full_cycle_bb_2us_Z": 0.0004943189095629186,
+    "exp138_D2_p2q": 0.009199768990112323,
+    "exp138_D2_d7_eps_round": 0.004630302894746197,
+    "exp138_D2_d11_eps_round": 0.002437406872075054,
+    "exp138_D3_p2q": 0.005,
+    "exp138_D3_d7_eps_round": 0.0005007056264813015,
+    "exp138_D3_d9_eps_round": 5.558026247121095e-05,
+    "exp138_D3_d11_eps_round": 0.00010921009943132276,
+    "exp136_verified_loaded": true,
+    "exp139_verified_loaded": true,
+    "exp140_verified_loaded": true
+  },
+  "predictions": {
+    "experiment": "exp144_qldpc_bivariate_bicycle_m4",
+    "hypothesis_id": "H162",
+    "registered": "2026-11-23 (before any Exp144 solver code or numerical run)",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "epistemic_tags": [
+      "Model",
+      "Sayisal-Simulasyon",
+      "Literatur",
+      "Varsayim"
+    ],
+    "question": "Can our long-range 300 um high-impedance 3 kOhm NbTiN M4 cavity-QED bus natively host Bravyi et al. (Nature 2024) Bivariate Bicycle qLDPC codes ([[72,12,6]], [[90,8,10]], and [[144,12,12]] Gross Code) in a thickness-2 planar layout, what circuit-level logical error rates does a pure-NumPy Min-Sum BP + OSD-0/OSD-2 decoder achieve at Exp137/138/140 D2/D3/D3+ machine noise points, and how dramatically does qLDPC compress 100-logical-qubit cryostat count and $/L_sys under Exp140's 2,887-cell MXC ceiling and Exp141's exact TCO model?",
+    "method": {
+      "algebra": "Exact GF(2) construction of H_X=[A|B], H_Z=[B^T|A^T] for [[72,12,6]], [[90,8,10]], and [[144,12,12]], verifying H_X H_Z^T = 0 mod 2, exact weight-6 regularity, GF(2) ranks (k=12, 8, 12), and exact symplectic logical operators L_X, L_Z.",
+      "layout_and_defects": "Exact thickness-2 folded-torus 2D planar embedding of [[144,12,12]] (24x12 grid, 288 cells) mapped to physical um coordinates (P_cell in [20, 50] um), checking max resonator length L_max <= 300-500 um, frequency shift, layer crossings, and defect-free 288-cell block yield under Exp136 f*=1.5%+2MV/m (N_cand=6..8).",
+      "bp_osd_decoder": "Pure-NumPy/SciPy Normalized Min-Sum Belief Propagation (alpha=0.625) + bit-packed GF(2) Gauss-Jordan OSD-0 and OSD-2 combination-sweep decoder evaluated on both code-capacity and full 3D space-time circuit-level 6-CNOT Bravyi Detector Error Models (DEM) at uniform p in [0.001, 0.010] and Exp137/138/140 D2 (0.92%), D3 (0.50%), D3+ (0.30%) machine noise points.",
+      "cryo_and_tco_compression": "Exact packing of 288-cell [[144,12,12]] blocks into Exp140's 2,887-cell LD400/PT420 MXC limit and exact apples-to-apples 100L cryostat count & $/L_sys comparison against Exp138/141 Surface Code using Exp141's wafer_econ141.py cost parameters."
+    },
+    "success_rule": "QL1 and QL2 and QL3 and QL4 and QL5 and QL6 and QL7 (at least 6/7 PASS with 0 algebra/portability errors; any honest physical threshold/regime limit reported transparently).",
+    "predictions": [
+      "QL1 EXACT BB CSS ALGEBRA: [[72,12,6]], [[90,8,10]], and [[144,12,12]] satisfy H_X H_Z^T == 0 (mod 2), exact row/column weight 6, exact GF(2) k = 12, 8, 12, and exact symplectic logical basis L_X L_Z^T == I_k (mod 2).",
+      "QL2 THICKNESS-2 M4 LAYOUT & DEFECT YIELD: Folded-torus thickness-2 embedding of [[144,12,12]] (288 cells) fits within L_max <= 300 um at P_cell = 20-30 um (matching Exp131 3 kOhm NbTiN lambda/2 = 300 um @ 5 GHz); under Exp136 f*=1.5%+2MV/m (p_slot=0.7557), N_cand=6 yields 93%-96% defect-free 288-cell blocks and N_cand=8 yields > 99.5%.",
+      "QL3 BP-OSD DECODER GAIN & CODE-CAPACITY SCALING: Pure-NumPy Min-Sum BP+OSD-2 outperforms standalone BP by >= 5x below threshold on [[144,12,12]], and code-capacity p_L at p=0.04 strictly satisfies p_L([[144,12,12]]) < p_L([[90,8,10]]) < p_L([[72,12,6]]) with >= 10x suppression from d=6 to d=12.",
+      "QL4 CIRCUIT-LEVEL THRESHOLD & D2/D3/D3+ MACHINE REGIMES: Under 3D space-time 6-CNOT Bravyi circuit DEM + BP-OSD, [[144,12,12]] exhibits circuit-level threshold p_th in [0.40%, 1.00%]; at D2 (p_2q=0.92%, p_meas=0.386%) it sits near/above its weight-6 threshold (honest limitation motivating D3), while at D3 (p_2q=0.50%) and D3+ (p_2q=0.30%) it achieves deep fault tolerance with p_L/round(D3+) < 1e-3 and beats Exp138 d=7 Surface Code at lower physical-qubit overhead per logical qubit.",
+      "QL5 CRYOSTAT & $/L_SYS COMPRESSION VS EXP138/141: Single LD400/PT420 (2,887 MXC ceiling) holds 10 Gross Code blocks = 120 logical qubits (2,880 active cells); a 100L (9-block = 108L, 2,592-cell) qLDPC system fits in 1 cryostat (>= 50x fewer cryostats than Exp138 D3 100 cryostats and 679x fewer than D2) and compresses $/L_sys by >= 20x vs Exp141 D3 Surface Code ($2.76M/L_sys), with honest side-by-side reporting of achieved p_L/round.",
+      "QL6 DEFECTIVE BLOCK RESILIENCE SENSITIVITY: Without Exp136 Stark enhancement (f=1.0%, N_cand=6, p_drop=1.31%), defect-free 288-cell Gross Code block yield collapses below 5%, whereas Exp136 f*=1.5%+2MV/m + N_cand=8 achieves > 99.5% per block and > 96% for an entire 10-block (120L) single-cryostat die.",
+      "QL7 PORTABILITY, VISUALIZATION & TESTS: Zero hardcoded host paths, 0 GFM table errors, visually verified 2400x1400 PNG, and >= 8 passing tests in tests/test_exp144.py with 0 regressions across existing repository tests."
+    ]
+  },
+  "verdicts": {
+    "QL1_EXACT_BB_CSS_ALGEBRA": true,
+    "QL2_THICKNESS2_M4_LAYOUT_AND_YIELD": true,
+    "QL3_BP_OSD_GAIN_AND_CODE_CAP_SCALING": true,
+    "QL4_CIRCUIT_THRESHOLD_AND_MACHINE_REGIMES": true,
+    "QL5_CRYOSTAT_AND_TCO_COMPRESSION": true,
+    "QL6_DEFECTIVE_BLOCK_RESILIENCE": true,
+    "QL7_PORTABILITY_AND_ARTIFACTS": true
+  },
+  "n_passed": 7,
+  "n_total": 7,
+  "success_rule_met": true,
+  "part1_bb_algebra_and_schedules": {
+    "BB_72_12_6": {
+      "label": "[[72, 12, 6]]",
+      "l": 6,
+      "m": 6,
+      "n_data": 72,
+      "n_physical_total": 144,
+      "k": 12,
+      "d_lit": 6,
+      "encoding_rate_k_over_n": 0.16667,
+      "active_cells_per_logical": 12.0,
+      "rank_X": 30,
+      "rank_Z": 30,
+      "css_commutes": true,
+      "exact_weight_6": true,
+      "symplectic_logical_valid": true,
+      "min_basis_logical_weight_X": 6,
+      "min_basis_logical_weight_Z": 6,
+      "schedule_depth": 7,
+      "schedule_total_cnots": 432,
+      "schedule_zero_collisions": true,
+      "schedule_zero_kickback": true,
+      "schedule_valid": true,
+      "schedule_steps": [
+        [
+          [
+            "XR",
+            0
+          ],
+          [
+            "ZL",
+            1
+          ]
+        ],
+        [
+          [
+            "ZL",
+            2
+          ]
+        ],
+        [
+          [
+            "XL",
+            0
+          ],
+          [
+            "ZR",
+            0
+          ]
+        ],
+        [
+          [
+            "XL",
+            1
+          ],
+          [
+            "ZR",
+            1
+          ]
+        ],
+        [
+          [
+            "XL",
+            2
+          ],
+          [
+            "ZR",
+            2
+          ]
+        ],
+        [
+          [
+            "XR",
+            1
+          ],
+          [
+            "ZL",
+            0
+          ]
+        ],
+        [
+          [
+            "XR",
+            2
+          ]
+        ]
+      ]
+    },
+    "BB_90_8_10": {
+      "label": "[[90, 8, 10]]",
+      "l": 15,
+      "m": 3,
+      "n_data": 90,
+      "n_physical_total": 180,
+      "k": 8,
+      "d_lit": 10,
+      "encoding_rate_k_over_n": 0.08889,
+      "active_cells_per_logical": 22.5,
+      "rank_X": 41,
+      "rank_Z": 41,
+      "css_commutes": true,
+      "exact_weight_6": true,
+      "symplectic_logical_valid": true,
+      "min_basis_logical_weight_X": 10,
+      "min_basis_logical_weight_Z": 10,
+      "schedule_depth": 7,
+      "schedule_total_cnots": 540,
+      "schedule_zero_collisions": true,
+      "schedule_zero_kickback": true,
+      "schedule_valid": true,
+      "schedule_steps": [
+        [
+          [
+            "XR",
+            0
+          ],
+          [
+            "ZL",
+            1
+          ]
+        ],
+        [
+          [
+            "ZL",
+            2
+          ]
+        ],
+        [
+          [
+            "XL",
+            0
+          ],
+          [
+            "ZR",
+            0
+          ]
+        ],
+        [
+          [
+            "XL",
+            1
+          ],
+          [
+            "ZR",
+            1
+          ]
+        ],
+        [
+          [
+            "XL",
+            2
+          ],
+          [
+            "ZR",
+            2
+          ]
+        ],
+        [
+          [
+            "XR",
+            1
+          ],
+          [
+            "ZL",
+            0
+          ]
+        ],
+        [
+          [
+            "XR",
+            2
+          ]
+        ]
+      ]
+    },
+    "BB_144_12_12": {
+      "label": "[[144, 12, 12]]",
+      "l": 12,
+      "m": 6,
+      "n_data": 144,
+      "n_physical_total": 288,
+      "k": 12,
+      "d_lit": 12,
+      "encoding_rate_k_over_n": 0.08333,
+      "active_cells_per_logical": 24.0,
+      "rank_X": 66,
+      "rank_Z": 66,
+      "css_commutes": true,
+      "exact_weight_6": true,
+      "symplectic_logical_valid": true,
+      "min_basis_logical_weight_X": 12,
+      "min_basis_logical_weight_Z": 12,
+      "schedule_depth": 7,
+      "schedule_total_cnots": 864,
+      "schedule_zero_collisions": true,
+      "schedule_zero_kickback": true,
+      "schedule_valid": true,
+      "schedule_steps": [
+        [
+          [
+            "XR",
+            0
+          ],
+          [
+            "ZL",
+            1
+          ]
+        ],
+        [
+          [
+            "ZL",
+            2
+          ]
+        ],
+        [
+          [
+            "XL",
+            0
+          ],
+          [
+            "ZR",
+            0
+          ]
+        ],
+        [
+          [
+            "XL",
+            1
+          ],
+          [
+            "ZR",
+            1
+          ]
+        ],
+        [
+          [
+            "XL",
+            2
+          ],
+          [
+            "ZR",
+            2
+          ]
+        ],
+        [
+          [
+            "XR",
+            1
+          ],
+          [
+            "ZL",
+            0
+          ]
+        ],
+        [
+          [
+            "XR",
+            2
+          ]
+        ]
+      ]
+    }
+  },
+  "part2_m4_layout_and_defect_yield": {
+    "grid_shape": [
+      24,
+      12
+    ],
+    "n_qubits": 288,
+    "n_edges_total": 864,
+    "n_edges_layer1_local": 576,
+    "n_edges_layer2_long_range": 288,
+    "torus_thickness": 2,
+    "layer1_torus_crossings": 0,
+    "flat_folded_layer1_airbridges": 220,
+    "flat_folded_layer2_airbridges": 10152,
+    "layout_by_pitch_um": {
+      "20um": {
+        "pitch_um": 20.0,
+        "block_size_um": [
+          480.0,
+          240.0
+        ],
+        "block_area_mm2": 0.1152,
+        "layer1_max_eucl_um": 40.0,
+        "layer2_median_eucl_um": 187.1,
+        "layer2_max_eucl_um": 268.3,
+        "L_max_um": 268.3,
+        "fits_300um_m4_resonator": true,
+        "fits_500um_extended_m4": true,
+        "f_r_fixed_100pH_ghz": 5.0,
+        "delta_f_r_fixed_100pH_ghz": 0.0,
+        "L_sq_pH_for_5GHz": 100.0
+      },
+      "25um": {
+        "pitch_um": 25.0,
+        "block_size_um": [
+          600.0,
+          300.0
+        ],
+        "block_area_mm2": 0.18,
+        "layer1_max_eucl_um": 50.0,
+        "layer2_median_eucl_um": 233.8,
+        "layer2_max_eucl_um": 335.4,
+        "L_max_um": 335.4,
+        "fits_300um_m4_resonator": false,
+        "fits_500um_extended_m4": true,
+        "f_r_fixed_100pH_ghz": 4.472,
+        "delta_f_r_fixed_100pH_ghz": -0.528,
+        "L_sq_pH_for_5GHz": 80.0
+      },
+      "30um": {
+        "pitch_um": 30.0,
+        "block_size_um": [
+          720.0,
+          360.0
+        ],
+        "block_area_mm2": 0.2592,
+        "layer1_max_eucl_um": 60.0,
+        "layer2_median_eucl_um": 280.6,
+        "layer2_max_eucl_um": 402.5,
+        "L_max_um": 402.5,
+        "fits_300um_m4_resonator": false,
+        "fits_500um_extended_m4": true,
+        "f_r_fixed_100pH_ghz": 3.727,
+        "delta_f_r_fixed_100pH_ghz": -1.273,
+        "L_sq_pH_for_5GHz": 55.6
+      },
+      "35um": {
+        "pitch_um": 35.0,
+        "block_size_um": [
+          840.0,
+          420.0
+        ],
+        "block_area_mm2": 0.3528,
+        "layer1_max_eucl_um": 70.0,
+        "layer2_median_eucl_um": 327.4,
+        "layer2_max_eucl_um": 469.6,
+        "L_max_um": 469.6,
+        "fits_300um_m4_resonator": false,
+        "fits_500um_extended_m4": true,
+        "f_r_fixed_100pH_ghz": 3.194,
+        "delta_f_r_fixed_100pH_ghz": -1.806,
+        "L_sq_pH_for_5GHz": 40.8
+      },
+      "40um": {
+        "pitch_um": 40.0,
+        "block_size_um": [
+          960.0,
+          480.0
+        ],
+        "block_area_mm2": 0.4608,
+        "layer1_max_eucl_um": 80.0,
+        "layer2_median_eucl_um": 374.1,
+        "layer2_max_eucl_um": 536.7,
+        "L_max_um": 536.7,
+        "fits_300um_m4_resonator": false,
+        "fits_500um_extended_m4": false,
+        "f_r_fixed_100pH_ghz": 2.795,
+        "delta_f_r_fixed_100pH_ghz": -2.205,
+        "L_sq_pH_for_5GHz": 31.2
+      },
+      "50um": {
+        "pitch_um": 50.0,
+        "block_size_um": [
+          1200.0,
+          600.0
+        ],
+        "block_area_mm2": 0.72,
+        "layer1_max_eucl_um": 100.0,
+        "layer2_median_eucl_um": 467.7,
+        "layer2_max_eucl_um": 670.8,
+        "L_max_um": 670.8,
+        "fits_300um_m4_resonator": false,
+        "fits_500um_extended_m4": false,
+        "f_r_fixed_100pH_ghz": 2.236,
+        "delta_f_r_fixed_100pH_ghz": -2.764,
+        "L_sq_pH_for_5GHz": 20.0
+      }
+    },
+    "recommended_pitch_um": 20.0,
+    "recommended_layout_summary": {
+      "pitch_um": 20.0,
+      "block_size_um": [
+        480.0,
+        240.0
+      ],
+      "block_area_mm2": 0.1152,
+      "layer1_max_eucl_um": 40.0,
+      "layer2_median_eucl_um": 187.1,
+      "layer2_max_eucl_um": 268.3,
+      "L_max_um": 268.3,
+      "fits_300um_m4_resonator": true,
+      "fits_500um_extended_m4": true,
+      "f_r_fixed_100pH_ghz": 5.0,
+      "delta_f_r_fixed_100pH_ghz": 0.0,
+      "L_sq_pH_for_5GHz": 100.0
+    },
+    "defect_yield_f1p0_Ez0_no_stark": {
+      "p_slot": 0.51433,
+      "by_N_cand": {
+        "N4": {
+          "N_cand": 4,
+          "p_drop": 0.055635969556569194,
+          "p_drop_pct": 5.5636,
+          "block_288_yield": 0.0,
+          "block_288_yield_pct": 0.0,
+          "cryo_10block_120L_yield_pct": 0.0,
+          "total_phys_candidates_per_block": 1152,
+          "phys_candidates_per_logical": 96.0
+        },
+        "N5": {
+          "N_cand": 5,
+          "p_drop": 0.027020574340969238,
+          "p_drop_pct": 2.70206,
+          "block_288_yield": 0.000375,
+          "block_288_yield_pct": 0.037,
+          "cryo_10block_120L_yield_pct": 0.0,
+          "total_phys_candidates_per_block": 1440,
+          "phys_candidates_per_logical": 120.0
+        },
+        "N6": {
+          "N_cand": 6,
+          "p_drop": 0.013123010950199887,
+          "p_drop_pct": 1.3123,
+          "block_288_yield": 0.022272,
+          "block_288_yield_pct": 2.227,
+          "cryo_10block_120L_yield_pct": 0.0,
+          "total_phys_candidates_per_block": 1728,
+          "phys_candidates_per_logical": 144.0
+        },
+        "N7": {
+          "N_cand": 7,
+          "p_drop": 0.006373418056401269,
+          "p_drop_pct": 0.63734,
+          "block_288_yield": 0.158592,
+          "block_288_yield_pct": 15.859,
+          "cryo_10block_120L_yield_pct": 0.0,
+          "total_phys_candidates_per_block": 2016,
+          "phys_candidates_per_logical": 168.0
+        },
+        "N8": {
+          "N_cand": 8,
+          "p_drop": 0.0030953611084994946,
+          "p_drop_pct": 0.30954,
+          "block_288_yield": 0.409488,
+          "block_288_yield_pct": 40.949,
+          "cryo_10block_120L_yield_pct": 0.013,
+          "total_phys_candidates_per_block": 2304,
+          "phys_candidates_per_logical": 192.0
+        },
+        "N9": {
+          "N_cand": 9,
+          "p_drop": 0.0015033158514351792,
+          "p_drop_pct": 0.15033,
+          "block_288_yield": 0.648378,
+          "block_288_yield_pct": 64.838,
+          "cryo_10block_120L_yield_pct": 1.313,
+          "total_phys_candidates_per_block": 2592,
+          "phys_candidates_per_logical": 216.0
+        },
+        "N10": {
+          "N_cand": 10,
+          "p_drop": 0.0007301114377158451,
+          "p_drop_pct": 0.07301,
+          "block_288_yield": 0.810301,
+          "block_288_yield_pct": 81.03,
+          "cryo_10block_120L_yield_pct": 12.203,
+          "total_phys_candidates_per_block": 2880,
+          "phys_candidates_per_logical": 240.0
+        }
+      }
+    },
+    "defect_yield_f1p5_Ez2MVm_v5_star": {
+      "p_slot": 0.75565,
+      "by_N_cand": {
+        "N4": {
+          "N_cand": 4,
+          "p_drop": 0.0035646485891109364,
+          "p_drop_pct": 0.35646,
+          "block_288_yield": 0.35756,
+          "block_288_yield_pct": 35.756,
+          "cryo_10block_120L_yield_pct": 0.003,
+          "total_phys_candidates_per_block": 1152,
+          "phys_candidates_per_logical": 96.0
+        },
+        "N5": {
+          "N_cand": 5,
+          "p_drop": 0.000871005511744147,
+          "p_drop_pct": 0.0871,
+          "block_288_yield": 0.778054,
+          "block_288_yield_pct": 77.805,
+          "cryo_10block_120L_yield_pct": 8.13,
+          "total_phys_candidates_per_block": 1440,
+          "phys_candidates_per_logical": 120.0
+        },
+        "N6": {
+          "N_cand": 6,
+          "p_drop": 0.00021282619661476906,
+          "p_drop_pct": 0.02128,
+          "block_288_yield": 0.940541,
+          "block_288_yield_pct": 94.054,
+          "cryo_10block_120L_yield_pct": 54.172,
+          "total_phys_candidates_per_block": 1728,
+          "phys_candidates_per_logical": 144.0
+        },
+        "N7": {
+          "N_cand": 7,
+          "p_drop": 5.200310371722824e-05,
+          "p_drop_pct": 0.0052,
+          "block_288_yield": 0.985134,
+          "block_288_yield_pct": 98.513,
+          "cryo_10block_120L_yield_pct": 86.09,
+          "total_phys_candidates_per_block": 2016,
+          "phys_candidates_per_logical": 168.0
+        },
+        "N8": {
+          "N_cand": 8,
+          "p_drop": 1.270671956385059e-05,
+          "p_drop_pct": 0.00127,
+          "block_288_yield": 0.996347,
+          "block_288_yield_pct": 99.635,
+          "cryo_10block_120L_yield_pct": 96.407,
+          "total_phys_candidates_per_block": 2304,
+          "phys_candidates_per_logical": 192.0
+        },
+        "N9": {
+          "N_cand": 9,
+          "p_drop": 3.1048285685466223e-06,
+          "p_drop_pct": 0.00031,
+          "block_288_yield": 0.999106,
+          "block_288_yield_pct": 99.911,
+          "cryo_10block_120L_yield_pct": 99.11,
+          "total_phys_candidates_per_block": 2592,
+          "phys_candidates_per_logical": 216.0
+        },
+        "N10": {
+          "N_cand": 10,
+          "p_drop": 7.586506014886833e-07,
+          "p_drop_pct": 8e-05,
+          "block_288_yield": 0.999782,
+          "block_288_yield_pct": 99.978,
+          "cryo_10block_120L_yield_pct": 99.782,
+          "total_phys_candidates_per_block": 2880,
+          "phys_candidates_per_logical": 240.0
+        }
+      }
+    },
+    "spared_9of10_cryostat_die_yield_f1p5": {
+      "N6_pct": 88.4189,
+      "N8_pct": 99.9411
+    }
+  },
+  "part3_code_capacity_bp_osd": {
+    "p_grid": [
+      0.02,
+      0.03,
+      0.04,
+      0.05,
+      0.06
+    ],
+    "n_shots_per_point": 2500,
+    "by_code_bp_osd2": {
+      "BB_72_12_6": {
+        "0.020": {
+          "n_shots": 2500,
+          "n_logical_errors": 30,
+          "p_L_block": 0.012,
+          "p_L_block_ci95": [
+            0.008419,
+            0.017079
+          ],
+          "p_L_round": 0.012,
+          "p_L_round_per_logical": 0.001006,
+          "bp_converged_frac": 0.99,
+          "n_osd_triggered": 25,
+          "syndrome_valid_frac": 1.0
+        },
+        "0.030": {
+          "n_shots": 2500,
+          "n_logical_errors": 67,
+          "p_L_block": 0.0268,
+          "p_L_block_ci95": [
+            0.021159,
+            0.033893
+          ],
+          "p_L_round": 0.0268,
+          "p_L_round_per_logical": 0.002261,
+          "bp_converged_frac": 0.9636,
+          "n_osd_triggered": 91,
+          "syndrome_valid_frac": 1.0
+        },
+        "0.040": {
+          "n_shots": 2500,
+          "n_logical_errors": 202,
+          "p_L_block": 0.0808,
+          "p_L_block_ci95": [
+            0.070749,
+            0.092137
+          ],
+          "p_L_round": 0.0808,
+          "p_L_round_per_logical": 0.006996,
+          "bp_converged_frac": 0.9228,
+          "n_osd_triggered": 193,
+          "syndrome_valid_frac": 1.0
+        },
+        "0.050": {
+          "n_shots": 2500,
+          "n_logical_errors": 380,
+          "p_L_block": 0.152,
+          "p_L_block_ci95": [
+            0.138461,
+            0.166607
+          ],
+          "p_L_round": 0.152,
+          "p_L_round_per_logical": 0.013646,
+          "bp_converged_frac": 0.8688,
+          "n_osd_triggered": 328,
+          "syndrome_valid_frac": 1.0
+        },
+        "0.060": {
+          "n_shots": 2500,
+          "n_logical_errors": 592,
+          "p_L_block": 0.2368,
+          "p_L_block_ci95": [
+            0.220547,
+            0.25386
+          ],
+          "p_L_round": 0.2368,
+          "p_L_round_per_logical": 0.022268,
+          "bp_converged_frac": 0.7936,
+          "n_osd_triggered": 516,
+          "syndrome_valid_frac": 1.0
+        }
+      },
+      "BB_90_8_10": {
+        "0.020": {
+          "n_shots": 2500,
+          "n_logical_errors": 1,
+          "p_L_block": 0.0004,
+          "p_L_block_ci95": [
+            7.1e-05,
+            0.002262
+          ],
+          "p_L_round": 0.0004,
+          "p_L_round_per_logical": 5e-05,
+          "bp_converged_frac": 0.9932,
+          "n_osd_triggered": 17,
+          "syndrome_valid_frac": 1.0
+        },
+        "0.030": {
+          "n_shots": 2500,
+          "n_logical_errors": 7,
+          "p_L_block": 0.0028,
+          "p_L_block_ci95": [
+            0.001357,
+            0.005769
+          ],
+          "p_L_round": 0.0028,
+          "p_L_round_per_logical": 0.00035,
+          "bp_converged_frac": 0.9776,
+          "n_osd_triggered": 56,
+          "syndrome_valid_frac": 1.0
+        },
+        "0.040": {
+          "n_shots": 2500,
+          "n_logical_errors": 32,
+          "p_L_block": 0.0128,
+          "p_L_block_ci95": [
+            0.009081,
+            0.018013
+          ],
+          "p_L_round": 0.0128,
+          "p_L_round_per_logical": 0.001609,
+          "bp_converged_frac": 0.9368,
+          "n_osd_triggered": 158,
+          "syndrome_valid_frac": 1.0
+        },
+        "0.050": {
+          "n_shots": 2500,
+          "n_logical_errors": 98,
+          "p_L_block": 0.0392,
+          "p_L_block_ci95": [
+            0.032273,
+            0.047541
+          ],
+          "p_L_round": 0.0392,
+          "p_L_round_per_logical": 0.004986,
+          "bp_converged_frac": 0.8592,
+          "n_osd_triggered": 352,
+          "syndrome_valid_frac": 1.0
+        },
+        "0.060": {
+          "n_shots": 2500,
+          "n_logical_errors": 249,
+          "p_L_block": 0.0996,
+          "p_L_block_ci95": [
+            0.088468,
+            0.11196
+          ],
+          "p_L_round": 0.0996,
+          "p_L_round_per_logical": 0.013029,
+          "bp_converged_frac": 0.756,
+          "n_osd_triggered": 610,
+          "syndrome_valid_frac": 1.0
+        }
+      },
+      "BB_144_12_12": {
+        "0.020": {
+          "n_shots": 2500,
+          "n_logical_errors": 0,
+          "p_L_block": 0.0,
+          "p_L_block_ci95": [
+            0.0,
+            0.001534
+          ],
+          "p_L_round": 0.0,
+          "p_L_round_per_logical": 0.0,
+          "bp_converged_frac": 0.9928,
+          "n_osd_triggered": 18,
+          "syndrome_valid_frac": 1.0
+        },
+        "0.030": {
+          "n_shots": 2500,
+          "n_logical_errors": 4,
+          "p_L_block": 0.0016,
+          "p_L_block_ci95": [
+            0.000622,
+            0.004107
+          ],
+          "p_L_round": 0.0016,
+          "p_L_round_per_logical": 0.000133,
+          "bp_converged_frac": 0.9776,
+          "n_osd_triggered": 56,
+          "syndrome_valid_frac": 1.0
+        },
+        "0.040": {
+          "n_shots": 2500,
+          "n_logical_errors": 13,
+          "p_L_block": 0.0052,
+          "p_L_block_ci95": [
+            0.003041,
+            0.008877
+          ],
+          "p_L_round": 0.0052,
+          "p_L_round_per_logical": 0.000434,
+          "bp_converged_frac": 0.9336,
+          "n_osd_triggered": 166,
+          "syndrome_valid_frac": 1.0
+        },
+        "0.050": {
+          "n_shots": 2500,
+          "n_logical_errors": 64,
+          "p_L_block": 0.0256,
+          "p_L_block_ci95": [
+            0.020099,
+            0.032557
+          ],
+          "p_L_round": 0.0256,
+          "p_L_round_per_logical": 0.002159,
+          "bp_converged_frac": 0.8524,
+          "n_osd_triggered": 369,
+          "syndrome_valid_frac": 1.0
+        },
+        "0.060": {
+          "n_shots": 2500,
+          "n_logical_errors": 184,
+          "p_L_block": 0.0736,
+          "p_L_block_ci95": [
+            0.064005,
+            0.084503
+          ],
+          "p_L_round": 0.0736,
+          "p_L_round_per_logical": 0.006351,
+          "bp_converged_frac": 0.7496,
+          "n_osd_triggered": 626,
+          "syndrome_valid_frac": 1.0
+        }
+      }
+    },
+    "decoder_ablation_BB_144_12_12": {
+      "0.030": {
+        "bp_only": {
+          "n_shots": 2500,
+          "n_logical_errors": 74,
+          "p_L_block": 0.0296,
+          "p_L_block_ci95": [
+            0.023644,
+            0.036999
+          ],
+          "p_L_round": 0.0296,
+          "p_L_round_per_logical": 0.002501,
+          "bp_converged_frac": 0.9708,
+          "n_osd_triggered": 0,
+          "syndrome_valid_frac": 0.9708
+        },
+        "bp_osd0": {
+          "n_shots": 2500,
+          "n_logical_errors": 35,
+          "p_L_block": 0.014,
+          "p_L_block_ci95": [
+            0.010084,
+            0.019408
+          ],
+          "p_L_round": 0.014,
+          "p_L_round_per_logical": 0.001174,
+          "bp_converged_frac": 0.9708,
+          "n_osd_triggered": 73,
+          "syndrome_valid_frac": 1.0
+        },
+        "bp_osd2": {
+          "n_shots": 2500,
+          "n_logical_errors": 4,
+          "p_L_block": 0.0016,
+          "p_L_block_ci95": [
+            0.000622,
+            0.004107
+          ],
+          "p_L_round": 0.0016,
+          "p_L_round_per_logical": 0.000133,
+          "bp_converged_frac": 0.9776,
+          "n_osd_triggered": 56,
+          "syndrome_valid_frac": 1.0
+        },
+        "osd2_gain_vs_bp_only": 18.5
+      },
+      "0.040": {
+        "bp_only": {
+          "n_shots": 2500,
+          "n_logical_errors": 168,
+          "p_L_block": 0.0672,
+          "p_L_block_ci95": [
+            0.058035,
+            0.077693
+          ],
+          "p_L_round": 0.0672,
+          "p_L_round_per_logical": 0.00578,
+          "bp_converged_frac": 0.9336,
+          "n_osd_triggered": 0,
+          "syndrome_valid_frac": 0.9336
+        },
+        "bp_osd0": {
+          "n_shots": 2500,
+          "n_logical_errors": 68,
+          "p_L_block": 0.0272,
+          "p_L_block_ci95": [
+            0.021513,
+            0.034338
+          ],
+          "p_L_round": 0.0272,
+          "p_L_round_per_logical": 0.002295,
+          "bp_converged_frac": 0.9336,
+          "n_osd_triggered": 166,
+          "syndrome_valid_frac": 1.0
+        },
+        "bp_osd2": {
+          "n_shots": 2500,
+          "n_logical_errors": 13,
+          "p_L_block": 0.0052,
+          "p_L_block_ci95": [
+            0.003041,
+            0.008877
+          ],
+          "p_L_round": 0.0052,
+          "p_L_round_per_logical": 0.000434,
+          "bp_converged_frac": 0.9336,
+          "n_osd_triggered": 166,
+          "syndrome_valid_frac": 1.0
+        },
+        "osd2_gain_vs_bp_only": 12.92
+      },
+      "0.050": {
+        "bp_only": {
+          "n_shots": 2500,
+          "n_logical_errors": 366,
+          "p_L_block": 0.1464,
+          "p_L_block_ci95": [
+            0.133085,
+            0.1608
+          ],
+          "p_L_round": 0.1464,
+          "p_L_round_per_logical": 0.013104,
+          "bp_converged_frac": 0.8552,
+          "n_osd_triggered": 0,
+          "syndrome_valid_frac": 0.8552
+        },
+        "bp_osd0": {
+          "n_shots": 2500,
+          "n_logical_errors": 172,
+          "p_L_block": 0.0688,
+          "p_L_block_ci95": [
+            0.059525,
+            0.079398
+          ],
+          "p_L_round": 0.0688,
+          "p_L_round_per_logical": 0.005922,
+          "bp_converged_frac": 0.8552,
+          "n_osd_triggered": 362,
+          "syndrome_valid_frac": 1.0
+        },
+        "bp_osd2": {
+          "n_shots": 2500,
+          "n_logical_errors": 64,
+          "p_L_block": 0.0256,
+          "p_L_block_ci95": [
+            0.020099,
+            0.032557
+          ],
+          "p_L_round": 0.0256,
+          "p_L_round_per_logical": 0.002159,
+          "bp_converged_frac": 0.8524,
+          "n_osd_triggered": 369,
+          "syndrome_valid_frac": 1.0
+        },
+        "osd2_gain_vs_bp_only": 5.72
+      }
+    },
+    "p04_ordering_72_90_144": [
+      0.0808,
+      0.0128,
+      0.0052
+    ],
+    "p04_d6_to_d12_suppression_x": 15.54,
+    "elapsed_s": 6.32
+  },
+  "part4_circuit_level_dem": {
+    "n_noisy_rounds_primary": 4,
+    "uniform_depolarizing_sweep": {
+      "p_grid": [
+        0.002,
+        0.003,
+        0.004,
+        0.005,
+        0.006,
+        0.007,
+        0.0085,
+        0.01
+      ],
+      "by_code": {
+        "BB_72_12_6": {
+          "0.0020": {
+            "n_shots": 2000,
+            "n_logical_errors": 13,
+            "p_L_block": 0.0065,
+            "p_L_block_ci95": [
+              0.003803,
+              0.01109
+            ],
+            "p_L_round": 0.001629,
+            "p_L_round_ci95": [
+              0.000952,
+              0.002784
+            ],
+            "p_L_round_per_logical": 0.000136,
+            "p_L_round_per_logical_ci95": [
+              7.9e-05,
+              0.000232
+            ],
+            "bp_converged_frac": 0.846,
+            "n_osd_triggered": 308,
+            "syndrome_valid_frac": 1.0,
+            "M_detectors": 180,
+            "N_fault_mechanisms": 1512,
+            "n_noisy_rounds": 4
+          },
+          "0.0030": {
+            "n_shots": 2000,
+            "n_logical_errors": 42,
+            "p_L_block": 0.021,
+            "p_L_block_ci95": [
+              0.015574,
+              0.028263
+            ],
+            "p_L_round": 0.005292,
+            "p_L_round_ci95": [
+              0.003916,
+              0.007142
+            ],
+            "p_L_round_per_logical": 0.000442,
+            "p_L_round_per_logical_ci95": [
+              0.000327,
+              0.000597
+            ],
+            "bp_converged_frac": 0.755,
+            "n_osd_triggered": 490,
+            "syndrome_valid_frac": 1.0,
+            "M_detectors": 180,
+            "N_fault_mechanisms": 1512,
+            "n_noisy_rounds": 4
+          },
+          "0.0040": {
+            "n_shots": 1000,
+            "n_logical_errors": 83,
+            "p_L_block": 0.083,
+            "p_L_block_ci95": [
+              0.067455,
+              0.101736
+            ],
+            "p_L_round": 0.021429,
+            "p_L_round_ci95": [
+              0.017308,
+              0.026466
+            ],
+            "p_L_round_per_logical": 0.001804,
+            "p_L_round_per_logical_ci95": [
+              0.001454,
+              0.002233
+            ],
+            "bp_converged_frac": 0.622,
+            "n_osd_triggered": 378,
+            "syndrome_valid_frac": 1.0,
+            "M_detectors": 180,
+            "N_fault_mechanisms": 1512,
+            "n_noisy_rounds": 4
+          },
+          "0.0050": {
+            "n_shots": 1000,
+            "n_logical_errors": 143,
+            "p_L_block": 0.143,
+            "p_L_block_ci95": [
+              0.122667,
+              0.166065
+            ],
+            "p_L_round": 0.037845,
+            "p_L_round_ci95": [
+              0.032188,
+              0.044385
+            ],
+            "p_L_round_per_logical": 0.00321,
+            "p_L_round_per_logical_ci95": [
+              0.002723,
+              0.003776
+            ],
+            "bp_converged_frac": 0.496,
+            "n_osd_triggered": 504,
+            "syndrome_valid_frac": 1.0,
+            "M_detectors": 180,
+            "N_fault_mechanisms": 1512,
+            "n_noisy_rounds": 4
+          },
+          "0.0060": {
+            "n_shots": 1000,
+            "n_logical_errors": 258,
+            "p_L_block": 0.258,
+            "p_L_block_ci95": [
+              0.231844,
+              0.286008
+            ],
+            "p_L_round": 0.071887,
+            "p_L_round_ci95": [
+              0.063814,
+              0.080772
+            ],
+            "p_L_round_per_logical": 0.006198,
+            "p_L_round_per_logical_ci95": [
+              0.00548,
+              0.006994
+            ],
+            "bp_converged_frac": 0.366,
+            "n_osd_triggered": 634,
+            "syndrome_valid_frac": 1.0,
+            "M_detectors": 180,
+            "N_fault_mechanisms": 1512,
+            "n_noisy_rounds": 4
+          },
+          "0.0070": {
+            "n_shots": 1000,
+            "n_logical_errors": 385,
+            "p_L_block": 0.385,
+            "p_L_block_ci95": [
+              0.355336,
+              0.415544
+            ],
+            "p_L_round": 0.114438,
+            "p_L_round_ci95": [
+              0.103948,
+              0.125645
+            ],
+            "p_L_round_per_logical": 0.010077,
+            "p_L_round_per_logical_ci95": [
+              0.009105,
+              0.011127
+            ],
+            "bp_converged_frac": 0.222,
+            "n_osd_triggered": 778,
+            "syndrome_valid_frac": 1.0,
+            "M_detectors": 180,
+            "N_fault_mechanisms": 1512,
+            "n_noisy_rounds": 4
+          },
+          "0.0085": {
+            "n_shots": 1000,
+            "n_logical_errors": 622,
+            "p_L_block": 0.622,
+            "p_L_block_ci95": [
+              0.591534,
+              0.651532
+            ],
+            "p_L_round": 0.215897,
+            "p_L_round_ci95": [
+              0.200554,
+              0.231683
+            ],
+            "p_L_round_per_logical": 0.020064,
+            "p_L_round_per_logical_ci95": [
+              0.01848,
+              0.021723
+            ],
+            "bp_converged_frac": 0.113,
+            "n_osd_triggered": 887,
+            "syndrome_valid_frac": 1.0,
+            "M_detectors": 180,
+            "N_fault_mechanisms": 1512,
+            "n_noisy_rounds": 4
+          },
+          "0.0100": {
+            "n_shots": 1000,
+            "n_logical_errors": 808,
+            "p_L_block": 0.808,
+            "p_L_block_ci95": [
+              0.782428,
+              0.831215
+            ],
+            "p_L_round": 0.33805,
+            "p_L_round_ci95": [
+              0.317031,
+              0.359036
+            ],
+            "p_L_round_per_logical": 0.033796,
+            "p_L_round_per_logical_ci95": [
+              0.031276,
+              0.036387
+            ],
+            "bp_converged_frac": 0.031,
+            "n_osd_triggered": 969,
+            "syndrome_valid_frac": 1.0,
+            "M_detectors": 180,
+            "N_fault_mechanisms": 1512,
+            "n_noisy_rounds": 4
+          }
+        },
+        "BB_90_8_10": {
+          "0.0020": {
+            "n_shots": 2000,
+            "n_logical_errors": 2,
+            "p_L_block": 0.001,
+            "p_L_block_ci95": [
+              0.000274,
+              0.003639
+            ],
+            "p_L_round": 0.00025,
+            "p_L_round_ci95": [
+              6.9e-05,
+              0.000911
+            ],
+            "p_L_round_per_logical": 3.1e-05,
+            "p_L_round_per_logical_ci95": [
+              9e-06,
+              0.000114
+            ],
+            "bp_converged_frac": 0.812,
+            "n_osd_triggered": 376,
+            "syndrome_valid_frac": 1.0,
+            "M_detectors": 225,
+            "N_fault_mechanisms": 1890,
+            "n_noisy_rounds": 4
+          },
+          "0.0030": {
+            "n_shots": 2000,
+            "n_logical_errors": 18,
+            "p_L_block": 0.009,
+            "p_L_block_ci95": [
+              0.005701,
+              0.014182
+            ],
+            "p_L_round": 0.002258,
+            "p_L_round_ci95": [
+              0.001428,
+              0.003565
+            ],
+            "p_L_round_per_logical": 0.000282,
+            "p_L_round_per_logical_ci95": [
+              0.000179,
+              0.000446
+            ],
+            "bp_converged_frac": 0.7145,
+            "n_osd_triggered": 571,
+            "syndrome_valid_frac": 1.0,
+            "M_detectors": 225,
+            "N_fault_mechanisms": 1890,
+            "n_noisy_rounds": 4
+          },
+          "0.0040": {
+            "n_shots": 1000,
+            "n_logical_errors": 41,
+            "p_L_block": 0.041,
+            "p_L_block_ci95": [
+              0.030365,
+              0.055148
+            ],
+            "p_L_round": 0.010411,
+            "p_L_round_ci95": [
+              0.007679,
+              0.014082
+            ],
+            "p_L_round_per_logical": 0.001307,
+            "p_L_round_per_logical_ci95": [
+              0.000963,
+              0.001771
+            ],
+            "bp_converged_frac": 0.548,
+            "n_osd_triggered": 452,
+            "syndrome_valid_frac": 1.0,
+            "M_detectors": 225,
+            "N_fault_mechanisms": 1890,
+            "n_noisy_rounds": 4
+          },
+          "0.0050": {
+            "n_shots": 1000,
+            "n_logical_errors": 99,
+            "p_L_block": 0.099,
+            "p_L_block_ci95": [
+              0.081995,
+              0.119074
+            ],
+            "p_L_round": 0.025726,
+            "p_L_round_ci95": [
+              0.021161,
+              0.031198
+            ],
+            "p_L_round_per_logical": 0.003253,
+            "p_L_round_per_logical_ci95": [
+              0.00267,
+              0.003954
+            ],
+            "bp_converged_frac": 0.407,
+            "n_osd_triggered": 593,
+            "syndrome_valid_frac": 1.0,
+            "M_detectors": 225,
+            "N_fault_mechanisms": 1890,
+            "n_noisy_rounds": 4
+          },
+          "0.0060": {
+            "n_shots": 1000,
+            "n_logical_errors": 199,
+            "p_L_block": 0.199,
+            "p_L_block_ci95": [
+              0.175427,
+              0.224876
+            ],
+            "p_L_round": 0.053963,
+            "p_L_round_ci95": [
+              0.047078,
+              0.061698
+            ],
+            "p_L_round_per_logical": 0.00691,
+            "p_L_round_per_logical_ci95": [
+              0.00601,
+              0.007929
+            ],
+            "bp_converged_frac": 0.293,
+            "n_osd_triggered": 707,
+            "syndrome_valid_frac": 1.0,
+            "M_detectors": 225,
+            "N_fault_mechanisms": 1890,
+            "n_noisy_rounds": 4
+          },
+          "0.0070": {
+            "n_shots": 1000,
+            "n_logical_errors": 393,
+            "p_L_block": 0.393,
+            "p_L_block_ci95": [
+              0.363193,
+              0.423626
+            ],
+            "p_L_round": 0.117332,
+            "p_L_round_ci95": [
+              0.10669,
+              0.128683
+            ],
+            "p_L_round_per_logical": 0.01548,
+            "p_L_round_per_logical_ci95": [
+              0.014004,
+              0.017071
+            ],
+            "bp_converged_frac": 0.17,
+            "n_osd_triggered": 830,
+            "syndrome_valid_frac": 1.0,
+            "M_detectors": 225,
+            "N_fault_mechanisms": 1890,
+            "n_noisy_rounds": 4
+          },
+          "0.0085": {
+            "n_shots": 1000,
+            "n_logical_errors": 601,
+            "p_L_block": 0.601,
+            "p_L_block_ci95": [
+              0.570318,
+              0.630909
+            ],
+            "p_L_round": 0.205227,
+            "p_L_round_ci95": [
+              0.19037,
+              0.220559
+            ],
+            "p_L_round_per_logical": 0.028304,
+            "p_L_round_per_logical_ci95": [
+              0.026052,
+              0.030667
+            ],
+            "bp_converged_frac": 0.057,
+            "n_osd_triggered": 943,
+            "syndrome_valid_frac": 1.0,
+            "M_detectors": 225,
+            "N_fault_mechanisms": 1890,
+            "n_noisy_rounds": 4
+          },
+          "0.0100": {
+            "n_shots": 1000,
+            "n_logical_errors": 793,
+            "p_L_block": 0.793,
+            "p_L_block_ci95": [
+              0.766791,
+              0.816967
+            ],
+            "p_L_round": 0.325483,
+            "p_L_round_ci95": [
+              0.305077,
+              0.345918
+            ],
+            "p_L_round_per_logical": 0.048028,
+            "p_L_round_per_logical_ci95": [
+              0.044475,
+              0.051682
+            ],
+            "bp_converged_frac": 0.023,
+            "n_osd_triggered": 977,
+            "syndrome_valid_frac": 1.0,
+            "M_detectors": 225,
+            "N_fault_mechanisms": 1890,
+            "n_noisy_rounds": 4
+          }
+        },
+        "BB_144_12_12": {
+          "0.0020": {
+            "n_shots": 2000,
+            "n_logical_errors": 1,
+            "p_L_block": 0.0005,
+            "p_L_block_ci95": [
+              8.8e-05,
+              0.002827
+            ],
+            "p_L_round": 0.000125,
+            "p_L_round_ci95": [
+              2.2e-05,
+              0.000707
+            ],
+            "p_L_round_per_logical": 1e-05,
+            "p_L_round_per_logical_ci95": [
+              2e-06,
+              5.9e-05
+            ],
+            "bp_converged_frac": 0.699,
+            "n_osd_triggered": 602,
+            "syndrome_valid_frac": 1.0,
+            "M_detectors": 360,
+            "N_fault_mechanisms": 3024,
+            "n_noisy_rounds": 4
+          },
+          "0.0030": {
+            "n_shots": 2000,
+            "n_logical_errors": 4,
+            "p_L_block": 0.002,
+            "p_L_block_ci95": [
+              0.000778,
+              0.005131
+            ],
+            "p_L_round": 0.0005,
+            "p_L_round_ci95": [
+              0.000195,
+              0.001285
+            ],
+            "p_L_round_per_logical": 4.2e-05,
+            "p_L_round_per_logical_ci95": [
+              1.6e-05,
+              0.000107
+            ],
+            "bp_converged_frac": 0.5755,
+            "n_osd_triggered": 849,
+            "syndrome_valid_frac": 1.0,
+            "M_detectors": 360,
+            "N_fault_mechanisms": 3024,
+            "n_noisy_rounds": 4
+          },
+          "0.0040": {
+            "n_shots": 1000,
+            "n_logical_errors": 28,
+            "p_L_block": 0.028,
+            "p_L_block_ci95": [
+              0.019442,
+              0.04017
+            ],
+            "p_L_round": 0.007075,
+            "p_L_round_ci95": [
+              0.004896,
+              0.010197
+            ],
+            "p_L_round_per_logical": 0.000591,
+            "p_L_round_per_logical_ci95": [
+              0.000409,
+              0.000854
+            ],
+            "bp_converged_frac": 0.448,
+            "n_osd_triggered": 552,
+            "syndrome_valid_frac": 1.0,
+            "M_detectors": 360,
+            "N_fault_mechanisms": 3024,
+            "n_noisy_rounds": 4
+          },
+          "0.0050": {
+            "n_shots": 1000,
+            "n_logical_errors": 93,
+            "p_L_block": 0.093,
+            "p_L_block_ci95": [
+              0.076524,
+              0.112591
+            ],
+            "p_L_round": 0.024108,
+            "p_L_round_ci95": [
+              0.019706,
+              0.029421
+            ],
+            "p_L_round_per_logical": 0.002032,
+            "p_L_round_per_logical_ci95": [
+              0.001657,
+              0.002485
+            ],
+            "bp_converged_frac": 0.27,
+            "n_osd_triggered": 730,
+            "syndrome_valid_frac": 1.0,
+            "M_detectors": 360,
+            "N_fault_mechanisms": 3024,
+            "n_noisy_rounds": 4
+          },
+          "0.0060": {
+            "n_shots": 1000,
+            "n_logical_errors": 224,
+            "p_L_block": 0.224,
+            "p_L_block_ci95": [
+              0.199243,
+              0.250869
+            ],
+            "p_L_round": 0.061433,
+            "p_L_round_ci95": [
+              0.054035,
+              0.069665
+            ],
+            "p_L_round_per_logical": 0.005269,
+            "p_L_round_per_logical_ci95": [
+              0.004618,
+              0.005999
+            ],
+            "bp_converged_frac": 0.155,
+            "n_osd_triggered": 845,
+            "syndrome_valid_frac": 1.0,
+            "M_detectors": 360,
+            "N_fault_mechanisms": 3024,
+            "n_noisy_rounds": 4
+          },
+          "0.0070": {
+            "n_shots": 1000,
+            "n_logical_errors": 441,
+            "p_L_block": 0.441,
+            "p_L_block_ci95": [
+              0.410511,
+              0.471941
+            ],
+            "p_L_round": 0.135325,
+            "p_L_round_ci95": [
+              0.123768,
+              0.147547
+            ],
+            "p_L_round_per_logical": 0.012044,
+            "p_L_round_per_logical_ci95": [
+              0.01095,
+              0.013215
+            ],
+            "bp_converged_frac": 0.063,
+            "n_osd_triggered": 937,
+            "syndrome_valid_frac": 1.0,
+            "M_detectors": 360,
+            "N_fault_mechanisms": 3024,
+            "n_noisy_rounds": 4
+          },
+          "0.0085": {
+            "n_shots": 1000,
+            "n_logical_errors": 714,
+            "p_L_block": 0.714,
+            "p_L_block_ci95": [
+              0.685215,
+              0.741147
+            ],
+            "p_L_round": 0.268707,
+            "p_L_round_ci95": [
+              0.250963,
+              0.286715
+            ],
+            "p_L_round_per_logical": 0.025741,
+            "p_L_round_per_logical_ci95": [
+              0.023793,
+              0.027763
+            ],
+            "bp_converged_frac": 0.01,
+            "n_osd_triggered": 990,
+            "syndrome_valid_frac": 1.0,
+            "M_detectors": 360,
+            "N_fault_mechanisms": 3024,
+            "n_noisy_rounds": 4
+          },
+          "0.0100": {
+            "n_shots": 1000,
+            "n_logical_errors": 885,
+            "p_L_block": 0.885,
+            "p_L_block_ci95": [
+              0.863737,
+              0.903317
+            ],
+            "p_L_round": 0.417663,
+            "p_L_round_ci95": [
+              0.392432,
+              0.44238
+            ],
+            "p_L_round_per_logical": 0.044059,
+            "p_L_round_per_logical_ci95": [
+              0.040674,
+              0.047508
+            ],
+            "bp_converged_frac": 0.004,
+            "n_osd_triggered": 996,
+            "syndrome_valid_frac": 1.0,
+            "M_detectors": 360,
+            "N_fault_mechanisms": 3024,
+            "n_noisy_rounds": 4
+          }
+        }
+      },
+      "p_th_crossing_72_vs_144": 0.006334,
+      "p_th_crossing_72_vs_90_perL": 0.00492,
+      "r6_round_depth_audit_BB144": {
+        "p_0.0030": {
+          "n_shots": 800,
+          "n_logical_errors": 5,
+          "p_L_block": 0.00625,
+          "p_L_block_ci95": [
+            0.002672,
+            0.014547
+          ],
+          "p_L_round": 0.001044,
+          "p_L_round_ci95": [
+            0.000446,
+            0.002439
+          ],
+          "p_L_round_per_logical": 8.7e-05,
+          "p_L_round_per_logical_ci95": [
+            3.7e-05,
+            0.000203
+          ],
+          "bp_converged_frac": 0.39375,
+          "n_osd_triggered": 485,
+          "syndrome_valid_frac": 1.0,
+          "M_detectors": 504,
+          "N_fault_mechanisms": 4464,
+          "n_noisy_rounds": 6
+        },
+        "p_0.0050": {
+          "n_shots": 800,
+          "n_logical_errors": 131,
+          "p_L_block": 0.16375,
+          "p_L_block_ci95": [
+            0.139725,
+            0.190988
+          ],
+          "p_L_round": 0.029365,
+          "p_L_round_ci95": [
+            0.024772,
+            0.034707
+          ],
+          "p_L_round_per_logical": 0.002481,
+          "p_L_round_per_logical_ci95": [
+            0.002088,
+            0.002939
+          ],
+          "bp_converged_frac": 0.105,
+          "n_osd_triggered": 716,
+          "syndrome_valid_frac": 1.0,
+          "M_detectors": 504,
+          "N_fault_mechanisms": 4464,
+          "n_noisy_rounds": 6
+        }
+      },
+      "subthreshold_power_law_fit_BB144": {
+        "slope_alpha": 6.903,
+        "d_eff_circuit": 12.81,
+        "p_unif_est_for_1e-6_block_round": 0.00117,
+        "p_unif_est_for_1e-9_block_round": 0.00043
+      },
+      "elapsed_s": 301.72
+    },
+    "machine_regimes_BB144_Z_and_X": {
+      "D2_Exp138_p0p92_depol": {
+        "label": "D2 v5.0 (S_eps=0.25, Q=5e5, 2us RO, depol 2Q)",
+        "p_2q": 0.009199768990112323,
+        "p_meas": 0.0038610000000000033,
+        "p_prep": 0.0008294504388930424,
+        "readout_mode": "2us",
+        "uses_exp137_p4_pauli": false,
+        "T_cycle_bb_us": 13.9816,
+        "n_shots_per_basis": 1000,
+        "p_L_block_combined": 0.470744,
+        "p_L_block_ci95": [
+          0.431203,
+          0.511298
+        ],
+        "p_L_round_block": 0.147064,
+        "p_L_round_block_ci95": [
+          0.131561,
+          0.163895
+        ],
+        "p_L_round_per_logical": 0.013168,
+        "p_L_round_per_logical_ci95": [
+          0.011686,
+          0.014806
+        ],
+        "syndrome_valid_frac_min": 1.0,
+        "bp_converged_frac_avg": 0.12,
+        "Z_memory": {
+          "n_shots": 1000,
+          "n_logical_errors": 273,
+          "p_L_block": 0.273,
+          "p_L_block_ci95": [
+            0.246296,
+            0.301441
+          ],
+          "p_L_round": 0.076613,
+          "p_L_round_ci95": [
+            0.068248,
+            0.08578
+          ],
+          "p_L_round_per_logical": 0.00662,
+          "p_L_round_per_logical_ci95": [
+            0.005873,
+            0.007446
+          ],
+          "bp_converged_frac": 0.118,
+          "n_osd_triggered": 882,
+          "syndrome_valid_frac": 1.0,
+          "M_detectors": 360,
+          "N_fault_mechanisms": 3024,
+          "n_noisy_rounds": 4
+        },
+        "X_memory": {
+          "n_shots": 1000,
+          "n_logical_errors": 272,
+          "p_L_block": 0.272,
+          "p_L_block_ci95": [
+            0.245331,
+            0.300414
+          ],
+          "p_L_round": 0.076296,
+          "p_L_round_ci95": [
+            0.06795,
+            0.085444
+          ],
+          "p_L_round_per_logical": 0.006592,
+          "p_L_round_per_logical_ci95": [
+            0.005847,
+            0.007415
+          ],
+          "bp_converged_frac": 0.122,
+          "n_osd_triggered": 878,
+          "syndrome_valid_frac": 1.0,
+          "M_detectors": 360,
+          "N_fault_mechanisms": 3024,
+          "n_noisy_rounds": 4
+        }
+      },
+      "D2_Exp138_p0p92_P4biased": {
+        "label": "D2 v5.0 (S_eps=0.25, Q=5e5, 2us RO, Exp137 P4 Pauli)",
+        "p_2q": 0.009199768990112323,
+        "p_meas": 0.0038610000000000033,
+        "p_prep": 0.0008294504388930424,
+        "readout_mode": "2us",
+        "uses_exp137_p4_pauli": true,
+        "T_cycle_bb_us": 13.9816,
+        "n_shots_per_basis": 1000,
+        "p_L_block_combined": 0.257581,
+        "p_L_block_ci95": [
+          0.222833,
+          0.296193
+        ],
+        "p_L_round_block": 0.071756,
+        "p_L_round_block_ci95": [
+          0.06108,
+          0.084068
+        ],
+        "p_L_round_per_logical": 0.006186,
+        "p_L_round_per_logical_ci95": [
+          0.005238,
+          0.007291
+        ],
+        "syndrome_valid_frac_min": 1.0,
+        "bp_converged_frac_avg": 0.21,
+        "Z_memory": {
+          "n_shots": 1000,
+          "n_logical_errors": 113,
+          "p_L_block": 0.113,
+          "p_L_block_ci95": [
+            0.09484,
+            0.134122
+          ],
+          "p_L_round": 0.029533,
+          "p_L_round_ci95": [
+            0.024603,
+            0.035362
+          ],
+          "p_L_round_per_logical": 0.002495,
+          "p_L_round_per_logical_ci95": [
+            0.002074,
+            0.002996
+          ],
+          "bp_converged_frac": 0.227,
+          "n_osd_triggered": 773,
+          "syndrome_valid_frac": 1.0,
+          "M_detectors": 360,
+          "N_fault_mechanisms": 3024,
+          "n_noisy_rounds": 4
+        },
+        "X_memory": {
+          "n_shots": 1000,
+          "n_logical_errors": 163,
+          "p_L_block": 0.163,
+          "p_L_block_ci95": [
+            0.141404,
+            0.187175
+          ],
+          "p_L_round": 0.043508,
+          "p_L_round_ci95": [
+            0.037397,
+            0.050491
+          ],
+          "p_L_round_per_logical": 0.0037,
+          "p_L_round_per_logical_ci95": [
+            0.003171,
+            0.004308
+          ],
+          "bp_converged_frac": 0.193,
+          "n_osd_triggered": 807,
+          "syndrome_valid_frac": 1.0,
+          "M_detectors": 360,
+          "N_fault_mechanisms": 3024,
+          "n_noisy_rounds": 4
+        }
+      },
+      "D3_Exp138_p0p50_RO2us_depol": {
+        "label": "D3 FT Target (p_2q=0.50%, 2us RO=0.386%, depol 2Q)",
+        "p_2q": 0.005,
+        "p_meas": 0.0038610000000000033,
+        "p_prep": 0.0008294504388930424,
+        "readout_mode": "2us",
+        "uses_exp137_p4_pauli": false,
+        "T_cycle_bb_us": 13.9816,
+        "n_shots_per_basis": 2000,
+        "p_L_block_combined": 0.02188,
+        "p_L_block_ci95": [
+          0.014508,
+          0.032916
+        ],
+        "p_L_round_block": 0.005515,
+        "p_L_round_block_ci95": [
+          0.003647,
+          0.008333
+        ],
+        "p_L_round_per_logical": 0.000461,
+        "p_L_round_per_logical_ci95": [
+          0.000304,
+          0.000697
+        ],
+        "syndrome_valid_frac_min": 1.0,
+        "bp_converged_frac_avg": 0.44875,
+        "Z_memory": {
+          "n_shots": 2000,
+          "n_logical_errors": 24,
+          "p_L_block": 0.012,
+          "p_L_block_ci95": [
+            0.008077,
+            0.017794
+          ],
+          "p_L_round": 0.003014,
+          "p_L_round_ci95": [
+            0.002025,
+            0.004478
+          ],
+          "p_L_round_per_logical": 0.000251,
+          "p_L_round_per_logical_ci95": [
+            0.000169,
+            0.000374
+          ],
+          "bp_converged_frac": 0.442,
+          "n_osd_triggered": 1116,
+          "syndrome_valid_frac": 1.0,
+          "M_detectors": 360,
+          "N_fault_mechanisms": 3024,
+          "n_noisy_rounds": 4
+        },
+        "X_memory": {
+          "n_shots": 2000,
+          "n_logical_errors": 20,
+          "p_L_block": 0.01,
+          "p_L_block_ci95": [
+            0.006483,
+            0.015396
+          ],
+          "p_L_round": 0.002509,
+          "p_L_round_ci95": [
+            0.001625,
+            0.003871
+          ],
+          "p_L_round_per_logical": 0.000209,
+          "p_L_round_per_logical_ci95": [
+            0.000135,
+            0.000323
+          ],
+          "bp_converged_frac": 0.4555,
+          "n_osd_triggered": 1089,
+          "syndrome_valid_frac": 1.0,
+          "M_detectors": 360,
+          "N_fault_mechanisms": 3024,
+          "n_noisy_rounds": 4
+        }
+      },
+      "D3_Exp138_p0p50_RO2us_P4biased": {
+        "label": "D3 FT Target (p_2q=0.50%, 2us RO=0.386%, Exp137 P4 Pauli)",
+        "p_2q": 0.005,
+        "p_meas": 0.0038610000000000033,
+        "p_prep": 0.0008294504388930424,
+        "readout_mode": "2us",
+        "uses_exp137_p4_pauli": true,
+        "T_cycle_bb_us": 13.9816,
+        "n_shots_per_basis": 2000,
+        "p_L_block_combined": 0.009478,
+        "p_L_block_ci95": [
+          0.005096,
+          0.017618
+        ],
+        "p_L_round_block": 0.002378,
+        "p_L_round_block_ci95": [
+          0.001276,
+          0.004434
+        ],
+        "p_L_round_per_logical": 0.000198,
+        "p_L_round_per_logical_ci95": [
+          0.000106,
+          0.00037
+        ],
+        "syndrome_valid_frac_min": 1.0,
+        "bp_converged_frac_avg": 0.53875,
+        "Z_memory": {
+          "n_shots": 2000,
+          "n_logical_errors": 8,
+          "p_L_block": 0.004,
+          "p_L_block_ci95": [
+            0.002028,
+            0.007873
+          ],
+          "p_L_round": 0.001002,
+          "p_L_round_ci95": [
+            0.000507,
+            0.001974
+          ],
+          "p_L_round_per_logical": 8.3e-05,
+          "p_L_round_per_logical_ci95": [
+            4.2e-05,
+            0.000165
+          ],
+          "bp_converged_frac": 0.573,
+          "n_osd_triggered": 854,
+          "syndrome_valid_frac": 1.0,
+          "M_detectors": 360,
+          "N_fault_mechanisms": 3024,
+          "n_noisy_rounds": 4
+        },
+        "X_memory": {
+          "n_shots": 2000,
+          "n_logical_errors": 11,
+          "p_L_block": 0.0055,
+          "p_L_block_ci95": [
+            0.003074,
+            0.009822
+          ],
+          "p_L_round": 0.001378,
+          "p_L_round_ci95": [
+            0.000769,
+            0.002465
+          ],
+          "p_L_round_per_logical": 0.000115,
+          "p_L_round_per_logical_ci95": [
+            6.4e-05,
+            0.000206
+          ],
+          "bp_converged_frac": 0.5045,
+          "n_osd_triggered": 991,
+          "syndrome_valid_frac": 1.0,
+          "M_detectors": 360,
+          "N_fault_mechanisms": 3024,
+          "n_noisy_rounds": 4
+        }
+      },
+      "D3_Exp138_p0p50_RO3us_depol": {
+        "label": "D3 FT Target + 3us RO (p_2q=0.50%, 3us RO=0.223%)",
+        "p_2q": 0.005,
+        "p_meas": 0.0022320000000000118,
+        "p_prep": 0.0008294504388930424,
+        "readout_mode": "3us",
+        "uses_exp137_p4_pauli": false,
+        "T_cycle_bb_us": 14.9816,
+        "n_shots_per_basis": 2000,
+        "p_L_block_combined": 0.019902,
+        "p_L_block_ci95": [
+          0.012948,
+          0.030536
+        ],
+        "p_L_round_block": 0.005013,
+        "p_L_round_block_ci95": [
+          0.003253,
+          0.007723
+        ],
+        "p_L_round_per_logical": 0.000419,
+        "p_L_round_per_logical_ci95": [
+          0.000271,
+          0.000646
+        ],
+        "syndrome_valid_frac_min": 1.0,
+        "bp_converged_frac_avg": 0.45525,
+        "Z_memory": {
+          "n_shots": 2000,
+          "n_logical_errors": 17,
+          "p_L_block": 0.0085,
+          "p_L_block_ci95": [
+            0.005314,
+            0.013571
+          ],
+          "p_L_round": 0.002132,
+          "p_L_round_ci95": [
+            0.001331,
+            0.00341
+          ],
+          "p_L_round_per_logical": 0.000178,
+          "p_L_round_per_logical_ci95": [
+            0.000111,
+            0.000285
+          ],
+          "bp_converged_frac": 0.4605,
+          "n_osd_triggered": 1079,
+          "syndrome_valid_frac": 1.0,
+          "M_detectors": 360,
+          "N_fault_mechanisms": 3024,
+          "n_noisy_rounds": 4
+        },
+        "X_memory": {
+          "n_shots": 2000,
+          "n_logical_errors": 23,
+          "p_L_block": 0.0115,
+          "p_L_block_ci95": [
+            0.007675,
+            0.017198
+          ],
+          "p_L_round": 0.002887,
+          "p_L_round_ci95": [
+            0.001924,
+            0.004327
+          ],
+          "p_L_round_per_logical": 0.000241,
+          "p_L_round_per_logical_ci95": [
+            0.000161,
+            0.000361
+          ],
+          "bp_converged_frac": 0.45,
+          "n_osd_triggered": 1100,
+          "syndrome_valid_frac": 1.0,
+          "M_detectors": 360,
+          "N_fault_mechanisms": 3024,
+          "n_noisy_rounds": 4
+        }
+      },
+      "D3plus_p0p30_RO2us_depol": {
+        "label": "D3+ Next-Gen (p_2q=0.30%, 2us RO=0.386%)",
+        "p_2q": 0.003,
+        "p_meas": 0.0038610000000000033,
+        "p_prep": 0.0008294504388930424,
+        "readout_mode": "2us",
+        "uses_exp137_p4_pauli": false,
+        "T_cycle_bb_us": 13.9816,
+        "n_shots_per_basis": 3000,
+        "p_L_block_combined": 0.001,
+        "p_L_block_ci95": [
+          0.00034,
+          0.004211
+        ],
+        "p_L_round_block": 0.00025,
+        "p_L_round_block_ci95": [
+          8.5e-05,
+          0.001054
+        ],
+        "p_L_round_per_logical": 2.1e-05,
+        "p_L_round_per_logical_ci95": [
+          7e-06,
+          8.8e-05
+        ],
+        "syndrome_valid_frac_min": 1.0,
+        "bp_converged_frac_avg": 0.64216,
+        "Z_memory": {
+          "n_shots": 3000,
+          "n_logical_errors": 3,
+          "p_L_block": 0.001,
+          "p_L_block_ci95": [
+            0.00034,
+            0.002936
+          ],
+          "p_L_round": 0.00025,
+          "p_L_round_ci95": [
+            8.5e-05,
+            0.000735
+          ],
+          "p_L_round_per_logical": 2.1e-05,
+          "p_L_round_per_logical_ci95": [
+            7e-06,
+            6.1e-05
+          ],
+          "bp_converged_frac": 0.65133,
+          "n_osd_triggered": 1046,
+          "syndrome_valid_frac": 1.0,
+          "M_detectors": 360,
+          "N_fault_mechanisms": 3024,
+          "n_noisy_rounds": 4
+        },
+        "X_memory": {
+          "n_shots": 3000,
+          "n_logical_errors": 0,
+          "p_L_block": 0.0,
+          "p_L_block_ci95": [
+            0.0,
+            0.001279
+          ],
+          "p_L_round": 0.0,
+          "p_L_round_ci95": [
+            0.0,
+            0.00032
+          ],
+          "p_L_round_per_logical": 0.0,
+          "p_L_round_per_logical_ci95": [
+            0.0,
+            2.7e-05
+          ],
+          "bp_converged_frac": 0.633,
+          "n_osd_triggered": 1101,
+          "syndrome_valid_frac": 1.0,
+          "M_detectors": 360,
+          "N_fault_mechanisms": 3024,
+          "n_noisy_rounds": 4
+        }
+      },
+      "D3plus_p0p30_RO3us_depol": {
+        "label": "D3+ Next-Gen + 3us RO (p_2q=0.30%, 3us RO=0.223%)",
+        "p_2q": 0.003,
+        "p_meas": 0.0022320000000000118,
+        "p_prep": 0.0008294504388930424,
+        "readout_mode": "3us",
+        "uses_exp137_p4_pauli": false,
+        "T_cycle_bb_us": 14.9816,
+        "n_shots_per_basis": 3000,
+        "p_L_block_combined": 0.0,
+        "p_L_block_ci95": [
+          0.0,
+          0.002556
+        ],
+        "p_L_round_block": 0.0,
+        "p_L_round_block_ci95": [
+          0.0,
+          0.00064
+        ],
+        "p_L_round_per_logical": 0.0,
+        "p_L_round_per_logical_ci95": [
+          0.0,
+          5.3e-05
+        ],
+        "syndrome_valid_frac_min": 1.0,
+        "bp_converged_frac_avg": 0.64233,
+        "Z_memory": {
+          "n_shots": 3000,
+          "n_logical_errors": 0,
+          "p_L_block": 0.0,
+          "p_L_block_ci95": [
+            0.0,
+            0.001279
+          ],
+          "p_L_round": 0.0,
+          "p_L_round_ci95": [
+            0.0,
+            0.00032
+          ],
+          "p_L_round_per_logical": 0.0,
+          "p_L_round_per_logical_ci95": [
+            0.0,
+            2.7e-05
+          ],
+          "bp_converged_frac": 0.63933,
+          "n_osd_triggered": 1082,
+          "syndrome_valid_frac": 1.0,
+          "M_detectors": 360,
+          "N_fault_mechanisms": 3024,
+          "n_noisy_rounds": 4
+        },
+        "X_memory": {
+          "n_shots": 3000,
+          "n_logical_errors": 0,
+          "p_L_block": 0.0,
+          "p_L_block_ci95": [
+            0.0,
+            0.001279
+          ],
+          "p_L_round": 0.0,
+          "p_L_round_ci95": [
+            0.0,
+            0.00032
+          ],
+          "p_L_round_per_logical": 0.0,
+          "p_L_round_per_logical_ci95": [
+            0.0,
+            2.7e-05
+          ],
+          "bp_converged_frac": 0.64533,
+          "n_osd_triggered": 1064,
+          "syndrome_valid_frac": 1.0,
+          "M_detectors": 360,
+          "N_fault_mechanisms": 3024,
+          "n_noisy_rounds": 4
+        }
+      },
+      "D3plusplus_p0p20_RO3us": {
+        "label": "D3++ Deep FT (p_2q=0.20%, 3us RO=0.223%)",
+        "p_2q": 0.002,
+        "p_meas": 0.0022320000000000118,
+        "p_prep": 0.0008294504388930424,
+        "readout_mode": "3us",
+        "uses_exp137_p4_pauli": false,
+        "T_cycle_bb_us": 14.9816,
+        "n_shots_per_basis": 3000,
+        "p_L_block_combined": 0.000666,
+        "p_L_block_ci95": [
+          0.000118,
+          0.003768
+        ],
+        "p_L_round_block": 0.000167,
+        "p_L_round_block_ci95": [
+          3e-05,
+          0.000943
+        ],
+        "p_L_round_per_logical": 1.4e-05,
+        "p_L_round_per_logical_ci95": [
+          2e-06,
+          7.9e-05
+        ],
+        "syndrome_valid_frac_min": 1.0,
+        "bp_converged_frac_avg": 0.746,
+        "Z_memory": {
+          "n_shots": 3000,
+          "n_logical_errors": 1,
+          "p_L_block": 0.000333,
+          "p_L_block_ci95": [
+            5.9e-05,
+            0.001886
+          ],
+          "p_L_round": 8.3e-05,
+          "p_L_round_ci95": [
+            1.5e-05,
+            0.000472
+          ],
+          "p_L_round_per_logical": 7e-06,
+          "p_L_round_per_logical_ci95": [
+            1e-06,
+            3.9e-05
+          ],
+          "bp_converged_frac": 0.75033,
+          "n_osd_triggered": 749,
+          "syndrome_valid_frac": 1.0,
+          "M_detectors": 360,
+          "N_fault_mechanisms": 3024,
+          "n_noisy_rounds": 4
+        },
+        "X_memory": {
+          "n_shots": 3000,
+          "n_logical_errors": 1,
+          "p_L_block": 0.000333,
+          "p_L_block_ci95": [
+            5.9e-05,
+            0.001886
+          ],
+          "p_L_round": 8.3e-05,
+          "p_L_round_ci95": [
+            1.5e-05,
+            0.000472
+          ],
+          "p_L_round_per_logical": 7e-06,
+          "p_L_round_per_logical_ci95": [
+            1e-06,
+            3.9e-05
+          ],
+          "bp_converged_frac": 0.74167,
+          "n_osd_triggered": 775,
+          "syndrome_valid_frac": 1.0,
+          "M_detectors": 360,
+          "N_fault_mechanisms": 3024,
+          "n_noisy_rounds": 4
+        }
+      }
+    },
+    "surface_code_comparison_anchors_exp138": {
+      "D2_p2q_0p92_d7_eps_round": 0.004630302894746197,
+      "D2_p2q_0p92_d11_eps_round": 0.002437406872075054,
+      "D3_p2q_0p50_d7_eps_round": 0.0005007056264813015,
+      "D3_p2q_0p50_d9_eps_round": 5.558026247121095e-05,
+      "D3_p2q_0p50_d11_eps_round": 0.00010921009943132276,
+      "d7_active_cells_per_L": 97,
+      "d11_active_cells_per_L": 241,
+      "gross_code_active_cells_per_L": 24
+    },
+    "machine_elapsed_s": 334.0
+  },
+  "part5_cryostat_and_tco_compression": {
+    "exp140_mxc_cap_cells": 2887,
+    "n_cand_qldpc": 8,
+    "gross_code_single_cryo_blocks": 10,
+    "gross_code_single_cryo_logical_qubits": 120,
+    "gross_code_single_cryo_active_cells": 2880,
+    "gross_code_single_cryo_mxc_margin_cells": 7,
+    "configs": {
+      "BB144_100L_9blk": {
+        "label": "[[144,12,12]] 9 Blocks = 108L (meets >=100L)",
+        "n_blocks_active": 9,
+        "n_blocks_on_die": 9,
+        "n_logical_delivered": 108,
+        "active_cells_total": 2592,
+        "die_cells_total": 2592,
+        "active_cells_per_logical": 24.0,
+        "placed_candidates_total": 20736,
+        "placed_candidates_per_logical": 192.0,
+        "n_cryostats": 1,
+        "mxc_utilization_pct": 89.78,
+        "n_readout_chains_mux32": 81,
+        "n_s65_1024_modules": 2.5312,
+        "fab_cost_by_wafer": {
+          "W1": {
+            "usd_per_logical_fab_p50": 0.04947,
+            "usd_per_logical_fab_raw_cand_p50": 0.0252,
+            "system_chip_fab_usd_p50": 26.72
+          },
+          "W2": {
+            "usd_per_logical_fab_p50": 0.01184,
+            "usd_per_logical_fab_raw_cand_p50": 0.00603,
+            "system_chip_fab_usd_p50": 6.39
+          },
+          "W3": {
+            "usd_per_logical_fab_p50": 0.00849,
+            "usd_per_logical_fab_raw_cand_p50": 0.00432,
+            "system_chip_fab_usd_p50": 4.58
+          }
+        },
+        "system_tco5_amort_wright_usd": {
+          "p10": 5653035.66,
+          "p50": 6893363.55,
+          "p90": 8661955.43
+        },
+        "system_tco5_amort_n1_usd": {
+          "p10": 6076390.98,
+          "p50": 7451708.44,
+          "p90": 9394067.67
+        },
+        "system_tco5_ded_fab_wright_usd": {
+          "p10": 22868477.57,
+          "p50": 24108805.47,
+          "p90": 25877397.35
+        },
+        "usd_per_logical_sys_amort_wright": {
+          "p10": 52342.92,
+          "p50": 63827.44,
+          "p90": 80203.29
+        },
+        "usd_per_logical_sys_amort_per100L": {
+          "p10": 56530.36,
+          "p50": 68933.64,
+          "p90": 86619.55
+        },
+        "usd_per_logical_sys_ded_wright": {
+          "p10": 211745.16,
+          "p50": 223229.68,
+          "p90": 239605.53
+        }
+      },
+      "BB144_100L_9plus1_spared": {
+        "label": "[[144,12,12]] 9 Active + 1 Spare = 108L (99.94% die yield)",
+        "n_blocks_active": 9,
+        "n_blocks_on_die": 10,
+        "n_logical_delivered": 108,
+        "active_cells_total": 2592,
+        "die_cells_total": 2880,
+        "active_cells_per_logical": 24.0,
+        "placed_candidates_total": 23040,
+        "placed_candidates_per_logical": 213.33,
+        "n_cryostats": 1,
+        "mxc_utilization_pct": 89.78,
+        "n_readout_chains_mux32": 81,
+        "n_s65_1024_modules": 2.5312,
+        "fab_cost_by_wafer": {
+          "W1": {
+            "usd_per_logical_fab_p50": 0.05497,
+            "usd_per_logical_fab_raw_cand_p50": 0.028,
+            "system_chip_fab_usd_p50": 29.68
+          },
+          "W2": {
+            "usd_per_logical_fab_p50": 0.01316,
+            "usd_per_logical_fab_raw_cand_p50": 0.0067,
+            "system_chip_fab_usd_p50": 7.11
+          },
+          "W3": {
+            "usd_per_logical_fab_p50": 0.00943,
+            "usd_per_logical_fab_raw_cand_p50": 0.0048,
+            "system_chip_fab_usd_p50": 5.09
+          }
+        },
+        "system_tco5_amort_wright_usd": {
+          "p10": 5653036.17,
+          "p50": 6893364.06,
+          "p90": 8661955.94
+        },
+        "system_tco5_amort_n1_usd": {
+          "p10": 6076391.49,
+          "p50": 7451708.95,
+          "p90": 9394068.18
+        },
+        "system_tco5_ded_fab_wright_usd": {
+          "p10": 22868478.08,
+          "p50": 24108805.98,
+          "p90": 25877397.86
+        },
+        "usd_per_logical_sys_amort_wright": {
+          "p10": 52342.93,
+          "p50": 63827.45,
+          "p90": 80203.3
+        },
+        "usd_per_logical_sys_amort_per100L": {
+          "p10": 56530.36,
+          "p50": 68933.64,
+          "p90": 86619.56
+        },
+        "usd_per_logical_sys_ded_wright": {
+          "p10": 211745.17,
+          "p50": 223229.69,
+          "p90": 239605.54
+        }
+      },
+      "BB144_120L_10blk_full_cryo": {
+        "label": "[[144,12,12]] 10 Blocks = 120L (Full 1-Cryostat Packing)",
+        "n_blocks_active": 10,
+        "n_blocks_on_die": 10,
+        "n_logical_delivered": 120,
+        "active_cells_total": 2880,
+        "die_cells_total": 2880,
+        "active_cells_per_logical": 24.0,
+        "placed_candidates_total": 23040,
+        "placed_candidates_per_logical": 192.0,
+        "n_cryostats": 1,
+        "mxc_utilization_pct": 99.76,
+        "n_readout_chains_mux32": 90,
+        "n_s65_1024_modules": 2.8125,
+        "fab_cost_by_wafer": {
+          "W1": {
+            "usd_per_logical_fab_p50": 0.04947,
+            "usd_per_logical_fab_raw_cand_p50": 0.0252,
+            "system_chip_fab_usd_p50": 29.68
+          },
+          "W2": {
+            "usd_per_logical_fab_p50": 0.01184,
+            "usd_per_logical_fab_raw_cand_p50": 0.00603,
+            "system_chip_fab_usd_p50": 7.11
+          },
+          "W3": {
+            "usd_per_logical_fab_p50": 0.00849,
+            "usd_per_logical_fab_raw_cand_p50": 0.00432,
+            "system_chip_fab_usd_p50": 5.09
+          }
+        },
+        "system_tco5_amort_wright_usd": {
+          "p10": 5799041.75,
+          "p50": 7085340.98,
+          "p90": 8912365.98
+        },
+        "system_tco5_amort_n1_usd": {
+          "p10": 6317966.94,
+          "p50": 7769147.21,
+          "p90": 9818280.75
+        },
+        "system_tco5_ded_fab_wright_usd": {
+          "p10": 23014483.67,
+          "p50": 24300782.9,
+          "p90": 26127807.9
+        },
+        "usd_per_logical_sys_amort_wright": {
+          "p10": 48325.35,
+          "p50": 59044.51,
+          "p90": 74269.72
+        },
+        "usd_per_logical_sys_amort_per100L": {
+          "p10": 57990.42,
+          "p50": 70853.41,
+          "p90": 89123.66
+        },
+        "usd_per_logical_sys_ded_wright": {
+          "p10": 191787.36,
+          "p50": 202506.52,
+          "p90": 217731.73
+        }
+      },
+      "BB288_100L_9blk_d18_ref": {
+        "label": "[[288,12,18]] High-d18 Ref: 9 Blocks = 108L (2 Cryostats)",
+        "n_blocks_active": 9,
+        "n_blocks_on_die": 9,
+        "n_logical_delivered": 108,
+        "active_cells_total": 5184,
+        "die_cells_total": 5184,
+        "active_cells_per_logical": 48.0,
+        "placed_candidates_total": 41472,
+        "placed_candidates_per_logical": 384.0,
+        "n_cryostats": 2,
+        "mxc_utilization_pct": 89.78,
+        "n_readout_chains_mux32": 162,
+        "n_s65_1024_modules": 5.0625,
+        "fab_cost_by_wafer": {
+          "W1": {
+            "usd_per_logical_fab_p50": 0.09895,
+            "usd_per_logical_fab_raw_cand_p50": 0.05039,
+            "system_chip_fab_usd_p50": 53.43
+          },
+          "W2": {
+            "usd_per_logical_fab_p50": 0.02368,
+            "usd_per_logical_fab_raw_cand_p50": 0.01206,
+            "system_chip_fab_usd_p50": 12.79
+          },
+          "W3": {
+            "usd_per_logical_fab_p50": 0.01698,
+            "usd_per_logical_fab_raw_cand_p50": 0.00865,
+            "system_chip_fab_usd_p50": 9.17
+          }
+        },
+        "system_tco5_amort_wright_usd": {
+          "p10": 9105451.32,
+          "p50": 11230924.37,
+          "p90": 14247054.86
+        },
+        "system_tco5_amort_n1_usd": {
+          "p10": 10952781.97,
+          "p50": 13703416.89,
+          "p90": 17588135.35
+        },
+        "system_tco5_ded_fab_wright_usd": {
+          "p10": 26320893.23,
+          "p50": 28446366.29,
+          "p90": 31462496.77
+        },
+        "usd_per_logical_sys_amort_wright": {
+          "p10": 84309.73,
+          "p50": 103990.04,
+          "p90": 131917.17
+        },
+        "usd_per_logical_sys_amort_per100L": {
+          "p10": 91054.51,
+          "p50": 112309.24,
+          "p90": 142470.55
+        },
+        "usd_per_logical_sys_ded_wright": {
+          "p10": 243711.97,
+          "p50": 263392.28,
+          "p90": 291319.41
+        }
+      }
+    },
+    "surface_code_baselines_exp141": {
+      "D2_1e-6": {
+        "d_star": 59,
+        "N_active": 6961,
+        "N_phys": 41766,
+        "cryostats_100L": 242,
+        "fab_usd_per_L_W1": 10.7596,
+        "fab_usd_per_L_W2": 2.5734,
+        "fab_usd_per_L_W3": 1.845,
+        "sys_100L_usd_per_L_amort_wright_p50": 6010332.31,
+        "sys_100L_usd_per_L_ded_wright_p50": 6181889.52,
+        "fab_share_of_deployed_tco": 1.5348957156254173e-06
+      },
+      "D2_1e-9": {
+        "d_star": 99,
+        "N_active": 19601,
+        "N_phys": 117606,
+        "cryostats_100L": 679,
+        "fab_usd_per_L_W1": 30.2972,
+        "fab_usd_per_L_W2": 7.2464,
+        "fab_usd_per_L_W3": 5.1953,
+        "sys_100L_usd_per_L_amort_wright_p50": 14939540.79,
+        "sys_100L_usd_per_L_ded_wright_p50": 15111098.0,
+        "fab_share_of_deployed_tco": 1.738788283002536e-06
+      },
+      "D3_1e-6": {
+        "d_star": 21,
+        "N_active": 881,
+        "N_phys": 5286,
+        "cryostats_100L": 34,
+        "fab_usd_per_L_W1": 1.3618,
+        "fab_usd_per_L_W2": 0.3257,
+        "fab_usd_per_L_W3": 0.2335,
+        "sys_100L_usd_per_L_amort_wright_p50": 1084933.32,
+        "sys_100L_usd_per_L_ded_wright_p50": 1256490.53,
+        "fab_share_of_deployed_tco": 1.0761643100426063e-06
+      },
+      "D3_1e-9": {
+        "d_star": 37,
+        "N_active": 2737,
+        "N_phys": 16422,
+        "cryostats_100L": 100,
+        "fab_usd_per_L_W1": 4.2306,
+        "fab_usd_per_L_W2": 1.0119,
+        "fab_usd_per_L_W3": 0.7255,
+        "sys_100L_usd_per_L_amort_wright_p50": 2759442.22,
+        "sys_100L_usd_per_L_ded_wright_p50": 2930999.43,
+        "fab_share_of_deployed_tco": 1.3144958429621062e-06
+      }
+    },
+    "compression_ratios_BB144_9blk_vs_surface_code": {
+      "cryostats_vs_D2_1e-9": 679.0,
+      "cryostats_vs_D3_1e-9": 100.0,
+      "cryostats_vs_D3_1e-6": 34.0,
+      "usd_per_L_sys_vs_D2_1e-9": 234.06,
+      "usd_per_L_sys_vs_D3_1e-9": 43.23,
+      "usd_per_L_sys_vs_D3_1e-6": 17.0,
+      "usd_per_100L_norm_vs_D3_1e-9": 40.03,
+      "active_cells_per_L_vs_d7_SC": 4.04,
+      "active_cells_per_L_vs_d11_SC": 10.04,
+      "active_cells_per_L_vs_D3_1e-9_SC": 114.04,
+      "active_cells_per_L_vs_D2_1e-9_SC": 816.71
+    }
+  },
+  "portability_hardcoded_hits": []
+}

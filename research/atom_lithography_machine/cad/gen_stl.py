@@ -380,6 +380,84 @@ def main() -> None:
             and clearances["exp140_s65_rfsoc_to_awg_z_mm"]["pass"]
         ),
     }
+    # Exp142 Option-Q (S1.6 Multi-Species Cartridge + S9.1 Cryo-qRAM/1550 nm Fiber Bridge) audit
+    s16_parts = ("s1_multi_species_neck", "s1_multi_species_cartridge")
+    s91_parts = ("s6_s91_ovc_feedthrough", "s6_s91_qram_bridge_20mk", "s6_s91_qram_fiber_loom")
+    s16_mass = round(sum(part_reports[k]["mass_kg"] for k in s16_parts if k in part_reports), 3)
+    s91_mass = round(sum(part_reports[k]["mass_kg"] for k in s91_parts if k in part_reports), 3)
+    s9q_total_mass = round(s16_mass + s91_mass, 3)
+    exp142_s9q_audit = {
+        "exp142_synced": ds["exp142_synced"],
+        "option_name": "Option-Q",
+        "s16_part_count": sum(1 for k in s16_parts if k in params.PARTS),
+        "s91_part_count": sum(1 for k in s91_parts if k in params.PARTS),
+        "s16_mass_kg": s16_mass,
+        "target_s16_mass_kg": ds["option_q_s16_mass_kg"],
+        "s91_mass_kg": s91_mass,
+        "target_s91_mass_kg": ds["option_q_s91_mass_kg"],
+        "total_mass_kg": s9q_total_mass,
+        "target_total_mass_kg": ds["option_q_total_mass_kg"],
+        "s16_cartridge_center_mm": list(params.PARTS["s1_multi_species_cartridge"]["center"]),
+        "s16_cartridge_dims_mm": list(params.PARTS["s1_multi_species_cartridge"]["dims"]),
+        "s91_chip_center_mm": list(params.PARTS["s6_s91_qram_bridge_20mk"]["center"]),
+        "s91_chip_dims_mm": list(params.PARTS["s6_s91_qram_bridge_20mk"]["dims"]),
+        "cryo_load_20mK_uW": ds["option_q_cryo_20mK_uW"],
+        "cryo_load_4K_W": ds["option_q_cryo_4K_W"],
+        "pass": (
+            ds["exp142_synced"]
+            and all(k in params.PARTS for k in s16_parts + s91_parts)
+            and abs(s16_mass - 4.80) < 0.02
+            and abs(s91_mass - 4.40) < 0.02
+            and abs(s9q_total_mass - 9.20) < 0.02
+            and clearances["exp142_s16_cartridge_to_duoplasmatron_y_mm"]["pass"]
+            and clearances["exp142_s16_cartridge_to_ph3_manifold_y_mm"]["pass"]
+            and clearances["exp142_s91_qram_chip_to_s65_twpa_z_mm"]["pass"]
+            and clearances["exp142_s91_ovc_port_to_valve_stand_x_mm"]["pass"]
+            and clearances["exp142_s91_fiber_loom_to_4k_50k_shields_mm"]["pass"]
+        ),
+    }
+    # Exp143 Option-HPC (S9.HPC 4U+1U 100 Gbps RoCEv2 RDMA QEC Decoder Stack) audit
+    s9hpc_parts = (
+        "s7_s9hpc_rail_psu_kit",
+        "s7_s9hpc_decoder_node_1",
+        "s7_s9hpc_decoder_node_2",
+        "s7_s9hpc_rocev2_switch",
+        "s7_s9hpc_qsfp28_fiber_duct",
+    )
+    s9hpc_mass = round(sum(part_reports[k]["mass_kg"] for k in s9hpc_parts if k in part_reports), 3)
+    node_h_4u = round(
+        params.PARTS["s7_s9hpc_decoder_node_1"]["dims"][2]
+        + params.PARTS["s7_s9hpc_decoder_node_2"]["dims"][2],
+        2,
+    )
+    exp143_s9hpc_audit = {
+        "exp143_synced": ds["exp143_synced"],
+        "option_name": "Option-HPC",
+        "subsystem_id": "S9.HPC",
+        "part_count": sum(1 for k in s9hpc_parts if k in params.PARTS),
+        "total_mass_kg": s9hpc_mass,
+        "target_mass_kg": ds["option_hpc_total_mass_kg"],
+        "decoder_nodes_4u_dims_mm": [
+            params.PARTS["s7_s9hpc_decoder_node_1"]["dims"][0],
+            params.PARTS["s7_s9hpc_decoder_node_1"]["dims"][1],
+            node_h_4u,
+        ],
+        "switch_1u_dims_mm": list(params.PARTS["s7_s9hpc_rocev2_switch"]["dims"]),
+        "room_temp_power_W": ds["option_hpc_power_W"],
+        "cryo_load_W": ds["option_hpc_cryo_load_W"],
+        "rdma_ports_100g": ds["option_hpc_rdma_ports_100g"],
+        "one_way_ingest_latency_us": ds["option_hpc_ingest_latency_us"],
+        "placement_note": "Adjacent 19-in Option-HPC expansion bay at x=[1340.0, 1822.6] mm (60.0 mm service aisle to S7 rack), 780.0 mm full server depth along Y",
+        "pass": (
+            ds["exp143_synced"]
+            and all(k in params.PARTS for k in s9hpc_parts)
+            and abs(s9hpc_mass - 64.00) < 0.02
+            and abs(node_h_4u - 177.8) < 0.05
+            and clearances["exp143_s9hpc_to_s7_rack_aisle_x_mm"]["pass"]
+            and clearances["exp143_s9hpc_node1_to_node2_airflow_z_mm"]["pass"]
+            and clearances["exp143_s9hpc_switch_to_node2_z_mm"]["pass"]
+        ),
+    }
     legacy_cleanup = {
         "maglev_removed": not any("maglev" in k.lower() for k in params.PARTS),
         "piezo_6dof_present": "s4_piezo_fine_6dof" in params.PARTS and "s4_piezo_coarse_xy" in params.PARTS,
@@ -391,6 +469,8 @@ def main() -> None:
         "exp133_pt420_decoupled_present": exp133_audit["pass"],
         "exp139_s56_mbe_capper_present": exp139_s56_audit["pass"],
         "exp140_s65_cryo_mux_rfsoc_present": exp140_s65_audit["pass"],
+        "exp142_option_q_present": exp142_s9q_audit["pass"],
+        "exp143_option_hpc_present": exp143_s9hpc_audit["pass"],
     }
 
     total_com = weighted_com / max(total_mass, 1e-12)
@@ -407,6 +487,8 @@ def main() -> None:
         and exp133_audit["pass"]
         and exp139_s56_audit["pass"]
         and exp140_s65_audit["pass"]
+        and exp142_s9q_audit["pass"]
+        and exp143_s9hpc_audit["pass"]
         and all(legacy_cleanup.values())
         and master_disk["is_watertight"]
     )
@@ -441,6 +523,8 @@ def main() -> None:
         "exp133_decoupling_audit": exp133_audit,
         "exp139_s56_audit": exp139_s56_audit,
         "exp140_s65_audit": exp140_s65_audit,
+        "exp142_s9q_audit": exp142_s9q_audit,
+        "exp143_s9hpc_audit": exp143_s9hpc_audit,
         "subsystems": sub_reports,
         "parts": part_reports,
     }

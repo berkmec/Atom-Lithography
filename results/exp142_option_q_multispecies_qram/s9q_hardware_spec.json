@@ -1,0 +1,138 @@
+{
+  "source_experiment": "exp142_option_q_multispecies_qram",
+  "hypothesis_id": "H160",
+  "module_type": "optional_plug_in_v6",
+  "no_lab_measurement": true,
+  "no_supplier_quotes": true,
+  "epistemic_tags": [
+    "{Model}",
+    "{Varsay\u0131m}"
+  ],
+  "totals_option_q_plus_s1_multi": {
+    "total_mass_kg": 9.2,
+    "s91_cryo_qram_mass_kg": 4.4,
+    "s16_multispecies_mass_kg": 4.8,
+    "room_temp_power_peak_W": 180.0,
+    "room_temp_power_qram_standby_W": 0.0,
+    "cryo_load_20mK_uW": 0.78,
+    "cryo_load_100mK_uW": 6.15,
+    "cryo_load_4K_W": 0.062,
+    "cryo_load_50K_W": 0.48,
+    "cost_usd_low": 118000,
+    "cost_usd_nom": 168000,
+    "cost_usd_high": 242000
+  },
+  "cad_v6_clearances_vs_v5": {
+    "s16_vs_s1_duoplasmatron_mm": 27.0,
+    "s16_vs_s1_ph3_manifold_mm": 136.0,
+    "s91_cold_chip_vs_s65_twpa_z_mm": 8.5,
+    "s91_ovc_port_mount": "External -X wall of s6_dr_ovc_upper at X=-825 mm, zero internal interference"
+  },
+  "items": [
+    {
+      "part_id": "S9.1-01",
+      "subsystem": "S9.1_option_q_cryo_qram",
+      "name": "Option-Q OVC -X CF63 Cryo-Coax (4-Port 4-8 GHz) & 1550 nm SMF-28 Vacuum Feedthrough",
+      "mount_host": "s6_dr_ovc_upper (-X outer side port, CF63)",
+      "stage": "300K_ovc_port",
+      "center_mm": [
+        -875.0,
+        0.0,
+        690.0
+      ],
+      "envelope_mm": [
+        100.0,
+        120.0,
+        120.0
+      ],
+      "qty": 1,
+      "mass_kg_total": 3.2,
+      "power_W_total": 0.0,
+      "cryo_load_20mK_uW": 0.0,
+      "cryo_load_4K_W": 0.0,
+      "cost_usd_low": 22000,
+      "cost_usd_nom": 32000,
+      "cost_usd_high": 46000,
+      "epistemic_tag": "Varsayim"
+    },
+    {
+      "part_id": "S9.1-02",
+      "subsystem": "S9.1_option_q_cryo_qram",
+      "name": "20 mK NbTiN 5-Section Chebyshev/Klopfenstein 50 Ohm <-> 3 kOhm Bridge Module (4-ch, Shielded)",
+      "mount_host": "s6_dr_flange_mxc (below s6_s65_twpa_purcell_pack, 8.5 mm Z clearance)",
+      "stage": "20mK_MXC",
+      "center_mm": [
+        -650.0,
+        0.0,
+        410.0
+      ],
+      "envelope_mm": [
+        60.0,
+        30.0,
+        16.0
+      ],
+      "qty": 1,
+      "mass_kg_total": 0.38,
+      "power_W_total": 0.0,
+      "cryo_load_20mK_uW": 0.78,
+      "cryo_load_4K_W": 0.0,
+      "cost_usd_low": 32000,
+      "cost_usd_nom": 46000,
+      "cost_usd_high": 68000,
+      "epistemic_tag": "Varsayim"
+    },
+    {
+      "part_id": "S9.1-03",
+      "subsystem": "S9.1_option_q_cryo_qram",
+      "name": "Option-Q 4x NbTi Superconducting qRAM Bridge Coax + 1x 1550 nm SMF-28 Cryo-Fiber Loom",
+      "mount_host": "s6_dr_ovc_upper (-X internal thermal anchor track 300K->20mK)",
+      "stage": "300K_to_20mK",
+      "center_mm": [
+        -770.0,
+        0.0,
+        560.0
+      ],
+      "envelope_mm": [
+        30.0,
+        30.0,
+        320.0
+      ],
+      "qty": 1,
+      "mass_kg_total": 0.82,
+      "power_W_total": 0.0,
+      "cryo_load_20mK_uW": 0.0,
+      "cryo_load_4K_W": 0.062,
+      "cryo_load_50K_W": 0.48,
+      "cost_usd_low": 16000,
+      "cost_usd_nom": 22000,
+      "cost_usd_high": 32000,
+      "epistemic_tag": "Varsayim"
+    },
+    {
+      "part_id": "S1.6-01",
+      "subsystem": "S1.6_multi_species_source",
+      "name": "S1-Multi Quick-Swap 3-Species Source Cartridge Bay (31P Gas / 121Sb 450C Oven / 167Er Micro-Paul/Oven)",
+      "mount_host": "s1_duoplasmatron (+Y side flange opposite s1_ph3_manifold)",
+      "stage": "300K_uhv_column",
+      "center_mm": [
+        0.0,
+        110.0,
+        992.66
+      ],
+      "envelope_mm": [
+        76.0,
+        76.0,
+        95.0
+      ],
+      "qty": 1,
+      "mass_kg_total": 4.8,
+      "power_W_total": 180.0,
+      "cryo_load_20mK_uW": 0.0,
+      "cryo_load_4K_W": 0.0,
+      "cost_usd_low": 48000,
+      "cost_usd_nom": 68000,
+      "cost_usd_high": 96000,
+      "epistemic_tag": "Varsayim"
+    }
+  ]
+}
