@@ -1,0 +1,3230 @@
+{
+  "experiment": "exp147_universal_qldpc_d18_magic_state",
+  "hypothesis_id": "H165",
+  "version": "7.0-phaseA",
+  "date": "2026-11-23",
+  "no_lab_measurement": true,
+  "no_supplier_quotes": true,
+  "epistemic_tags": [
+    "Model",
+    "Sayisal-Simulasyon",
+    "Literatur",
+    "Varsayim"
+  ],
+  "runtime_s": 518.63,
+  "n_workers": 8,
+  "upstream_anchors": {
+    "exp143_p2q_Q1e6_S0p25": 0.0033687346891404513,
+    "exp143_p2q_Q1e6_S0p39": 0.0039511415791169124,
+    "exp143_t_gate_grape_us": 1.125556992657014,
+    "exp143_T_cyc_SC_grape_us": 6.702227970628056,
+    "exp143_Lambda_SC_S0p25": 2.8252921206380086,
+    "exp143_A_SC_S0p25": 0.017377381999329873,
+    "exp143_Lambda_SC_highG": 2.9970134133471684,
+    "exp143_A_SC_highG": 0.03335619684257607,
+    "exp126_p_1q": 0.0008294504388930424,
+    "exp140_p_meas_2us": 0.0038610000000000033,
+    "exp140_p_meas_3us": 0.0022320000000000118,
+    "exp140_cryo_cap": 2887,
+    "exp136_t2e_ms": 14.135338345864659,
+    "t_cyc_bb_grape_2us": 10.0789,
+    "t_cyc_bb_grape_3us": 11.0789,
+    "p_idle_step_Z": 3.981200003311258e-05,
+    "p_idle_ro_2us_Z": 7.78130934304122e-05,
+    "p_idle_ro_3us_Z": 0.0001131786780151911,
+    "exp144_gross_p_th": 0.006334
+  },
+  "predictions": {
+    "experiment": "exp147_universal_qldpc_d18_magic_state",
+    "hypothesis_id": "H165",
+    "version": "7.0-phaseA",
+    "registered": "2026-11-23 (before any Exp147 solver code or numerical run)",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "epistemic_tags": [
+      "Model",
+      "Sayisal-Simulasyon",
+      "Literatur",
+      "Varsayim"
+    ],
+    "question": "Can our 300 um 3 kOhm NbTiN M4 bus and Exp143 D3 GRAPE gates (p_2q = 0.337%-0.395%) host the Bravyi [[288,12,18]] (d=18) qLDPC code plus universal Litinski/Gidney Magic State Factories (p_T <= 1e-10) to achieve deep 10^-9 fault tolerance and compress full FeMoco quantum chemistry (192L, 10^8 T) and RSA-2048 Shor (4096L, 10^10 T) cryostat count, electrical power, runtime, and TCO by >= 10x vs D3 Surface Code?",
+    "method": {
+      "bb288_algebra_and_layout": "Exact GF(2) construction of Bravyi [[288,12,18]] (l=12, m=12, A=x^3+y^2+y^7, B=y^3+x+x^2), depth-7 zero-kickback Bravyi Lemma-5 CNOT schedule, Z_12 automorphism b'=5b mod 12 + 24x24 folded-torus thickness-2 M4 layout (P_cell=15..30 um), and Exp136 f*=1.5%+2MV/m 576-cell defect-free block yield (N_cand=6..10).",
+      "d6_to_d18_circuit_dem": "Pure-NumPy Normalized Min-Sum BP + exact-prefix bit-packed GF(2) OSD-2 on full 3D space-time depth-7 circuit DEM across [[72,12,6]], [[90,8,10]], [[144,12,12]], and [[288,12,18]] for uniform depolarizing threshold scan and Exp143 D3 GRAPE (0.337%, 0.395%) + Exp140 readout (0.386%, 0.223%) regimes, with honest log-linear distance scaling to pinpoint the exact (d, p_2q) boundary reaching p_L/round <= 1e-9.",
+      "magic_state_factories": "Exact first-principles modeling of qLDPC lattice-surgery/Pauli measurement overhead, single-stage Litinski 15-to-1, two-stage Litinski (15-to-1) x (116-to-12), and Gidney (2024) cultivation + single-stage 15-to-1 using Exp143 empirical SC Lambda=2.825 and T_cyc,SC=6.70 us under Exp140's 2,887-cell MXC ceiling.",
+      "algorithm_resource_and_tco": "Full space-time volume, cryostat fleet, facility electrical power (25 kW/cryo + Option-HPC), wall-clock runtime, and Exp141 wafer_econ141.py 5-year TCO budgets for FeMoco (192L, 10^8 T-gates + Lee 2021 10^10 T sensitivity) and RSA-2048 Shor (4096L, 10^10 T-gates) comparing qLDPC + Magic State Factories vs Exp138/143 D3 Surface Code."
+    },
+    "success_rule": "UQ1 through UQ7 at least 6/7 PASS with UQ1 (algebra) and UQ7 (portability/tests) mandatory PASS; any physical threshold/regime limitation reported honestly without altering this file.",
+    "predictions": [
+      "UQ1_EXACT_BB288_ALGEBRA_AND_SCHEDULE: [[288,12,18]] (l=12, m=12, A=x^3+y^2+y^7, B=y^3+x+x^2) satisfies H_X H_Z^T == 0 mod 2, exact row/col weight 6, rank_X == rank_Z == 138, k == 12, symplectic L_X L_Z^T == I_12, and verified depth-7 zero-collision/zero-kickback schedule (1,728 CNOTs/round).",
+      "UQ2_THICKNESS2_M4_LAYOUT_AND_576_YIELD: Under Z_12 automorphism b'=5b mod 12 + 24x24 folded-torus thickness-2 embedding (1,152 L1 + 576 L2 edges), L_max <= 300 um at P_cell in [15, 20] um (matching Exp131 3 kOhm NbTiN 5 GHz bus); under Exp136 f*=1.5%+2MV/m (p_slot=0.75565), 576-cell yield exceeds 99.0% at N_cand=8 and 99.8% at N_cand=9 (while f=1.0%, N=6 collapses below 0.1%).",
+      "UQ3_D6_TO_D18_CIRCUIT_DEM_SCALING: Pure-NumPy BP+OSD-2 on 3D circuit DEM (100% syndrome validity) across d=6,10,12,18 yields uniform threshold p_th in [0.50%, 0.90%] with [[288,12,18]] strictly beating [[144,12,12]] below threshold, and at Exp143 D3 GRAPE (0.337%-0.395%) achieves deep fault tolerance (empirical p_L/rnd(1L) < 1e-4) with honest extraction of the exact (d, p_2q) boundary for p_L/round <= 1e-9.",
+      "UQ4_UNIVERSAL_MAGIC_STATE_FACTORIES: At Exp143 D3 GRAPE (p_2q=0.337%/0.395%, Lambda_SC=2.825), single-stage 15-to-1 fails p_T <= 1e-10 (honest limitation), whereas two-stage Litinski (15-to-1)x(116-to-12) and Gidney cultivation+15-to-1 both achieve p_T <= 1e-10 at R_T >= 5 kHz in <= 15 LD400 cryostats per factory (<= 6 cryostats with cultivation).",
+      "UQ5_FEMOCO_CHEMISTRY_RESOURCE_AND_COST: Full FeMoco catalyst calculation (192L, 10^8 T-gates, P_fail <= 2%) runs in <= 20 LD400 cryostats (>= 10x fewer cryostats than D3 Surface Code), <= 8 hours wall-clock runtime, and <= $25,000 amortized cost per calculation under Exp141 TCO.",
+      "UQ6_RSA2048_SHOR_CRYO_POWER_COMPRESSION: Full RSA-2048 Shor (4096L, 10^10 T-gates, honest space-time error audit) with qLDPC + Magic State Factories compresses cryostat fleet and electrical power by >= 10x vs D3 Surface Code (> 100 MW -> < 10 MW) with wall-clock runtime <= 48 hours.",
+      "UQ7_PORTABILITY_VISUALIZATION_AND_TESTS: Zero hardcoded host paths, 0 GFM table errors, no_lab_measurement=true, no_supplier_quotes=true, visually verified 2400x1400 PNG, and >= 9 passing tests in tests/test_exp147.py with 0 regressions across existing repository tests."
+    ]
+  },
+  "verdicts": {
+    "UQ1_EXACT_BB288_ALGEBRA_AND_SCHEDULE": true,
+    "UQ2_THICKNESS2_M4_LAYOUT_AND_576_YIELD": true,
+    "UQ3_D6_TO_D18_CIRCUIT_DEM_SCALING": true,
+    "UQ4_UNIVERSAL_MAGIC_STATE_FACTORIES": false,
+    "UQ5_FEMOCO_CHEMISTRY_RESOURCE_AND_COST": false,
+    "UQ6_RSA2048_SHOR_CRYO_POWER_COMPRESSION": true,
+    "UQ7_PORTABILITY_VISUALIZATION_AND_TESTS": true
+  },
+  "n_passed": 5,
+  "n_total": 7,
+  "success_rule_met": false,
+  "part1_bb288_algebra_and_family": {
+    "bb288_summary": {
+      "name": "[[288,12,18]]",
+      "l": 12,
+      "m": 12,
+      "n_data": 288,
+      "n_ancilla": 288,
+      "n_total_cells": 576,
+      "k": 12,
+      "d_lit": 18,
+      "encoding_rate_k_over_n": 0.04167,
+      "active_cells_per_logical": 48.0,
+      "rank_X": 138,
+      "rank_Z": 138,
+      "commutativity_H_X_H_ZT_zero": true,
+      "all_row_col_weight_6": true,
+      "symplectic_logical_valid": true,
+      "min_basis_logical_weight_X": 18,
+      "min_basis_logical_weight_Z": 18,
+      "schedule_depth": 7,
+      "schedule_total_cnots": 1728,
+      "schedule_zero_collisions": true,
+      "schedule_zero_kickback": true
+    },
+    "bb_family_4codes": {
+      "BB_72_12_6": {
+        "name": "[[72, 12, 6]]",
+        "l": 6,
+        "m": 6,
+        "n_data": 72,
+        "n_total_cells": 144,
+        "k": 12,
+        "d_lit": 6,
+        "active_cells_per_logical": 12.0,
+        "rank_X": 30,
+        "rank_Z": 30,
+        "commutes": true,
+        "weight_6": true,
+        "schedule_depth": 7,
+        "schedule_cnots": 432,
+        "zero_kickback": true
+      },
+      "BB_90_8_10": {
+        "name": "[[90, 8, 10]]",
+        "l": 15,
+        "m": 3,
+        "n_data": 90,
+        "n_total_cells": 180,
+        "k": 8,
+        "d_lit": 10,
+        "active_cells_per_logical": 22.5,
+        "rank_X": 41,
+        "rank_Z": 41,
+        "commutes": true,
+        "weight_6": true,
+        "schedule_depth": 7,
+        "schedule_cnots": 540,
+        "zero_kickback": true
+      },
+      "BB_144_12_12": {
+        "name": "[[144, 12, 12]]",
+        "l": 12,
+        "m": 6,
+        "n_data": 144,
+        "n_total_cells": 288,
+        "k": 12,
+        "d_lit": 12,
+        "active_cells_per_logical": 24.0,
+        "rank_X": 66,
+        "rank_Z": 66,
+        "commutes": true,
+        "weight_6": true,
+        "schedule_depth": 7,
+        "schedule_cnots": 864,
+        "zero_kickback": true
+      },
+      "BB_288_12_18": {
+        "name": "[[288,12,18]]",
+        "l": 12,
+        "m": 12,
+        "n_data": 288,
+        "n_total_cells": 576,
+        "k": 12,
+        "d_lit": 18,
+        "active_cells_per_logical": 48.0,
+        "rank_X": 138,
+        "rank_Z": 138,
+        "commutes": true,
+        "weight_6": true,
+        "schedule_depth": 7,
+        "schedule_cnots": 1728,
+        "zero_kickback": true
+      }
+    }
+  },
+  "part2_m4_layout_and_576_yield": {
+    "automorphism": "b' = 5*b mod 12 (Z_12 generator)",
+    "grid_shape": [
+      24,
+      24
+    ],
+    "n_qubits": 576,
+    "n_edges_total": 1728,
+    "n_edges_layer1_local": 1152,
+    "n_edges_layer2_long_range": 576,
+    "layer1_all_unit_torus_distance": true,
+    "layer1_torus_crossings": 0,
+    "layer2_torus_lengths_pitch": [
+      6.7082
+    ],
+    "layout_by_pitch_um": {
+      "15um": {
+        "pitch_um": 15.0,
+        "block_size_um": [
+          360.0,
+          360.0
+        ],
+        "block_area_mm2": 0.1296,
+        "layer1_max_eucl_um": 30.0,
+        "layer2_median_eucl_um": 185.5,
+        "layer2_max_eucl_um": 201.2,
+        "L_max_um": 201.2,
+        "fits_300um_m4_resonator": true,
+        "fits_500um_extended_m4": true,
+        "f_r_fixed_100pH_ghz": 5.0,
+        "L_sq_pH_for_5GHz": 100.0
+      },
+      "18um": {
+        "pitch_um": 18.0,
+        "block_size_um": [
+          432.0,
+          432.0
+        ],
+        "block_area_mm2": 0.1866,
+        "layer1_max_eucl_um": 36.0,
+        "layer2_median_eucl_um": 222.6,
+        "layer2_max_eucl_um": 241.5,
+        "L_max_um": 241.5,
+        "fits_300um_m4_resonator": true,
+        "fits_500um_extended_m4": true,
+        "f_r_fixed_100pH_ghz": 5.0,
+        "L_sq_pH_for_5GHz": 100.0
+      },
+      "20um": {
+        "pitch_um": 20.0,
+        "block_size_um": [
+          480.0,
+          480.0
+        ],
+        "block_area_mm2": 0.2304,
+        "layer1_max_eucl_um": 40.0,
+        "layer2_median_eucl_um": 247.4,
+        "layer2_max_eucl_um": 268.3,
+        "L_max_um": 268.3,
+        "fits_300um_m4_resonator": true,
+        "fits_500um_extended_m4": true,
+        "f_r_fixed_100pH_ghz": 5.0,
+        "L_sq_pH_for_5GHz": 100.0
+      },
+      "25um": {
+        "pitch_um": 25.0,
+        "block_size_um": [
+          600.0,
+          600.0
+        ],
+        "block_area_mm2": 0.36,
+        "layer1_max_eucl_um": 50.0,
+        "layer2_median_eucl_um": 309.2,
+        "layer2_max_eucl_um": 335.4,
+        "L_max_um": 335.4,
+        "fits_300um_m4_resonator": false,
+        "fits_500um_extended_m4": true,
+        "f_r_fixed_100pH_ghz": 4.472,
+        "L_sq_pH_for_5GHz": 80.0
+      },
+      "30um": {
+        "pitch_um": 30.0,
+        "block_size_um": [
+          720.0,
+          720.0
+        ],
+        "block_area_mm2": 0.5184,
+        "layer1_max_eucl_um": 60.0,
+        "layer2_median_eucl_um": 371.1,
+        "layer2_max_eucl_um": 402.5,
+        "L_max_um": 402.5,
+        "fits_300um_m4_resonator": false,
+        "fits_500um_extended_m4": true,
+        "f_r_fixed_100pH_ghz": 3.727,
+        "L_sq_pH_for_5GHz": 55.6
+      }
+    },
+    "recommended_pitch_um": 20.0,
+    "defect_yields_576cell": {
+      "f1p0_Ez0_no_stark": {
+        "p_slot": 0.51433,
+        "by_N_cand": {
+          "N6": {
+            "N_cand": 6,
+            "p_drop": 0.013123010950199887,
+            "p_drop_pct": 1.312301,
+            "block_576_yield": 0.000496,
+            "block_576_yield_pct": 0.0496,
+            "cryo_5block_60L_yield_pct": 0.0,
+            "cryo_4of5_spared_yield_pct": 0.0,
+            "femoco_16block_192L_yield_pct": 0.0,
+            "femoco_16of18_spared_yield_pct": 0.0,
+            "phys_candidates_per_block": 3456,
+            "phys_candidates_per_logical": 288.0
+          },
+          "N7": {
+            "N_cand": 7,
+            "p_drop": 0.006373418056401269,
+            "p_drop_pct": 0.637342,
+            "block_576_yield": 0.025152,
+            "block_576_yield_pct": 2.5152,
+            "cryo_5block_60L_yield_pct": 0.0,
+            "cryo_4of5_spared_yield_pct": 0.0002,
+            "femoco_16block_192L_yield_pct": 0.0,
+            "femoco_16of18_spared_yield_pct": 0.0,
+            "phys_candidates_per_block": 4032,
+            "phys_candidates_per_logical": 336.0
+          },
+          "N8": {
+            "N_cand": 8,
+            "p_drop": 0.0030953611084994946,
+            "p_drop_pct": 0.309536,
+            "block_576_yield": 0.167681,
+            "block_576_yield_pct": 16.7681,
+            "cryo_5block_60L_yield_pct": 0.0133,
+            "cryo_4of5_spared_yield_pct": 0.3423,
+            "femoco_16block_192L_yield_pct": 0.0,
+            "femoco_16of18_spared_yield_pct": 0.0,
+            "phys_candidates_per_block": 4608,
+            "phys_candidates_per_logical": 384.0
+          },
+          "N9": {
+            "N_cand": 9,
+            "p_drop": 0.0015033158514351792,
+            "p_drop_pct": 0.150332,
+            "block_576_yield": 0.420395,
+            "block_576_yield_pct": 42.0395,
+            "cryo_5block_60L_yield_pct": 1.3131,
+            "cryo_4of5_spared_yield_pct": 10.3648,
+            "femoco_16block_192L_yield_pct": 0.0001,
+            "femoco_16of18_spared_yield_pct": 0.0053,
+            "phys_candidates_per_block": 5184,
+            "phys_candidates_per_logical": 432.0
+          },
+          "N10": {
+            "N_cand": 10,
+            "p_drop": 0.0007301114377158451,
+            "p_drop_pct": 0.073011,
+            "block_576_yield": 0.656589,
+            "block_576_yield_pct": 65.6589,
+            "cryo_5block_60L_yield_pct": 12.203,
+            "cryo_4of5_spared_yield_pct": 44.1153,
+            "femoco_16block_192L_yield_pct": 0.1193,
+            "femoco_16of18_spared_yield_pct": 2.6885,
+            "phys_candidates_per_block": 5760,
+            "phys_candidates_per_logical": 480.0
+          },
+          "N11": {
+            "N_cand": 11,
+            "p_drop": 0.0003545912929572294,
+            "p_drop_pct": 0.035459,
+            "block_576_yield": 0.815233,
+            "block_576_yield_pct": 81.5233,
+            "cryo_5block_60L_yield_pct": 36.0089,
+            "cryo_4of5_spared_yield_pct": 76.8146,
+            "femoco_16block_192L_yield_pct": 3.8064,
+            "femoco_16of18_spared_yield_pct": 32.7315,
+            "phys_candidates_per_block": 6336,
+            "phys_candidates_per_logical": 528.0
+          }
+        }
+      },
+      "f1p5_Ez2MVm_v5_star": {
+        "p_slot": 0.75565,
+        "by_N_cand": {
+          "N6": {
+            "N_cand": 6,
+            "p_drop": 0.00021282619661476906,
+            "p_drop_pct": 0.021283,
+            "block_576_yield": 0.884617,
+            "block_576_yield_pct": 88.4617,
+            "cryo_5block_60L_yield_pct": 54.1721,
+            "cryo_4of5_spared_yield_pct": 89.5013,
+            "femoco_16block_192L_yield_pct": 14.0631,
+            "femoco_16of18_spared_yield_pct": 65.4884,
+            "phys_candidates_per_block": 3456,
+            "phys_candidates_per_logical": 288.0
+          },
+          "N7": {
+            "N_cand": 7,
+            "p_drop": 5.200310371722824e-05,
+            "p_drop_pct": 0.0052,
+            "block_576_yield": 0.97049,
+            "block_576_yield_pct": 97.049,
+            "cryo_5block_60L_yield_pct": 86.0904,
+            "cryo_4of5_spared_yield_pct": 99.1794,
+            "femoco_16block_192L_yield_pct": 61.9233,
+            "femoco_16of18_spared_yield_pct": 98.4955,
+            "phys_candidates_per_block": 4032,
+            "phys_candidates_per_logical": 336.0
+          },
+          "N8": {
+            "N_cand": 8,
+            "p_drop": 1.270671956385059e-05,
+            "p_drop_pct": 0.001271,
+            "block_576_yield": 0.992708,
+            "block_576_yield_pct": 99.2708,
+            "cryo_5block_60L_yield_pct": 96.4066,
+            "cryo_4of5_spared_yield_pct": 99.9476,
+            "femoco_16block_192L_yield_pct": 88.9491,
+            "femoco_16of18_spared_yield_pct": 99.9708,
+            "phys_candidates_per_block": 4608,
+            "phys_candidates_per_logical": 384.0
+          },
+          "N9": {
+            "N_cand": 9,
+            "p_drop": 3.1048285685466223e-06,
+            "p_drop_pct": 0.00031,
+            "block_576_yield": 0.998213,
+            "block_576_yield_pct": 99.8213,
+            "cryo_5block_60L_yield_pct": 99.1098,
+            "cryo_4of5_spared_yield_pct": 99.9968,
+            "femoco_16block_192L_yield_pct": 97.1791,
+            "femoco_16of18_spared_yield_pct": 99.9995,
+            "phys_candidates_per_block": 5184,
+            "phys_candidates_per_logical": 432.0
+          },
+          "N10": {
+            "N_cand": 10,
+            "p_drop": 7.586506014886833e-07,
+            "p_drop_pct": 7.6e-05,
+            "block_576_yield": 0.999563,
+            "block_576_yield_pct": 99.9563,
+            "cryo_5block_60L_yield_pct": 99.7817,
+            "cryo_4of5_spared_yield_pct": 99.9998,
+            "femoco_16block_192L_yield_pct": 99.3033,
+            "femoco_16of18_spared_yield_pct": 100.0,
+            "phys_candidates_per_block": 5760,
+            "phys_candidates_per_logical": 480.0
+          },
+          "N11": {
+            "N_cand": 11,
+            "p_drop": 1.8537279029500737e-07,
+            "p_drop_pct": 1.9e-05,
+            "block_576_yield": 0.999893,
+            "block_576_yield_pct": 99.9893,
+            "cryo_5block_60L_yield_pct": 99.9466,
+            "cryo_4of5_spared_yield_pct": 100.0,
+            "femoco_16block_192L_yield_pct": 99.8293,
+            "femoco_16of18_spared_yield_pct": 100.0,
+            "phys_candidates_per_block": 6336,
+            "phys_candidates_per_logical": 528.0
+          }
+        }
+      }
+    }
+  },
+  "part3_d6_to_d18_circuit_dem": {
+    "n_noisy_rounds_primary": 3,
+    "uniform_4code_sweep": {
+      "p_grid": [
+        0.004,
+        0.005,
+        0.006,
+        0.007,
+        0.008
+      ],
+      "by_code": {
+        "BB_72_12_6": {
+          "0.0040": {
+            "n_shots": 960,
+            "n_logical_errors": 41,
+            "p_L_block": 0.042708,
+            "p_L_block_ci95": [
+              0.031636,
+              0.057425
+            ],
+            "p_L_round": 0.014444,
+            "p_L_round_ci95": [
+              0.010659,
+              0.01952
+            ],
+            "p_L_round_per_logical": 0.001212,
+            "p_L_round_per_logical_ci95": [
+              0.000893,
+              0.001641
+            ],
+            "bp_converged_frac": 0.71354,
+            "n_osd_triggered": 275,
+            "syndrome_valid_frac": 1.0,
+            "M_detectors": 144,
+            "N_fault_mechanisms": 1152,
+            "n_noisy_rounds": 3
+          },
+          "0.0050": {
+            "n_shots": 960,
+            "n_logical_errors": 104,
+            "p_L_block": 0.108333,
+            "p_L_block_ci95": [
+              0.090211,
+              0.129578
+            ],
+            "p_L_round": 0.0375,
+            "p_L_round_ci95": [
+              0.031023,
+              0.045205
+            ],
+            "p_L_round_per_logical": 0.00318,
+            "p_L_round_per_logical_ci95": [
+              0.002623,
+              0.003847
+            ],
+            "bp_converged_frac": 0.62708,
+            "n_osd_triggered": 358,
+            "syndrome_valid_frac": 1.0,
+            "M_detectors": 144,
+            "N_fault_mechanisms": 1152,
+            "n_noisy_rounds": 3
+          },
+          "0.0060": {
+            "n_shots": 960,
+            "n_logical_errors": 197,
+            "p_L_block": 0.205208,
+            "p_L_block_ci95": [
+              0.18086,
+              0.231906
+            ],
+            "p_L_round": 0.073701,
+            "p_L_round_ci95": [
+              0.064337,
+              0.084191
+            ],
+            "p_L_round_per_logical": 0.00636,
+            "p_L_round_per_logical_ci95": [
+              0.005526,
+              0.007302
+            ],
+            "bp_converged_frac": 0.46771,
+            "n_osd_triggered": 511,
+            "syndrome_valid_frac": 1.0,
+            "M_detectors": 144,
+            "N_fault_mechanisms": 1152,
+            "n_noisy_rounds": 3
+          },
+          "0.0070": {
+            "n_shots": 960,
+            "n_logical_errors": 288,
+            "p_L_block": 0.3,
+            "p_L_block_ci95": [
+              0.271856,
+              0.329738
+            ],
+            "p_L_round": 0.112096,
+            "p_L_round_ci95": [
+              0.100352,
+              0.124852
+            ],
+            "p_L_round_per_logical": 0.009859,
+            "p_L_round_per_logical_ci95": [
+              0.008774,
+              0.011052
+            ],
+            "bp_converged_frac": 0.35521,
+            "n_osd_triggered": 619,
+            "syndrome_valid_frac": 1.0,
+            "M_detectors": 144,
+            "N_fault_mechanisms": 1152,
+            "n_noisy_rounds": 3
+          },
+          "0.0080": {
+            "n_shots": 960,
+            "n_logical_errors": 419,
+            "p_L_block": 0.436458,
+            "p_L_block_ci95": [
+              0.405401,
+              0.468022
+            ],
+            "p_L_round": 0.174009,
+            "p_L_round_ci95": [
+              0.159106,
+              0.189727
+            ],
+            "p_L_round_per_logical": 0.015805,
+            "p_L_round_per_logical_ci95": [
+              0.014337,
+              0.017379
+            ],
+            "bp_converged_frac": 0.25729,
+            "n_osd_triggered": 713,
+            "syndrome_valid_frac": 1.0,
+            "M_detectors": 144,
+            "N_fault_mechanisms": 1152,
+            "n_noisy_rounds": 3
+          }
+        },
+        "BB_90_8_10": {
+          "0.0040": {
+            "n_shots": 960,
+            "n_logical_errors": 25,
+            "p_L_block": 0.026042,
+            "p_L_block_ci95": [
+              0.017701,
+              0.038161
+            ],
+            "p_L_round": 0.008757,
+            "p_L_round_ci95": [
+              0.005935,
+              0.012886
+            ],
+            "p_L_round_per_logical": 0.001099,
+            "p_L_round_per_logical_ci95": [
+              0.000744,
+              0.00162
+            ],
+            "bp_converged_frac": 0.68437,
+            "n_osd_triggered": 303,
+            "syndrome_valid_frac": 1.0,
+            "M_detectors": 180,
+            "N_fault_mechanisms": 1440,
+            "n_noisy_rounds": 3
+          },
+          "0.0050": {
+            "n_shots": 960,
+            "n_logical_errors": 73,
+            "p_L_block": 0.076042,
+            "p_L_block_ci95": [
+              0.060912,
+              0.09455
+            ],
+            "p_L_round": 0.026018,
+            "p_L_round_ci95": [
+              0.020731,
+              0.032566
+            ],
+            "p_L_round_per_logical": 0.00329,
+            "p_L_round_per_logical_ci95": [
+              0.002615,
+              0.00413
+            ],
+            "bp_converged_frac": 0.50729,
+            "n_osd_triggered": 473,
+            "syndrome_valid_frac": 1.0,
+            "M_detectors": 180,
+            "N_fault_mechanisms": 1440,
+            "n_noisy_rounds": 3
+          },
+          "0.0060": {
+            "n_shots": 960,
+            "n_logical_errors": 117,
+            "p_L_block": 0.121875,
+            "p_L_block_ci95": [
+              0.102674,
+              0.14409
+            ],
+            "p_L_round": 0.042397,
+            "p_L_round_ci95": [
+              0.035468,
+              0.050541
+            ],
+            "p_L_round_per_logical": 0.005401,
+            "p_L_round_per_logical_ci95": [
+              0.004504,
+              0.006462
+            ],
+            "bp_converged_frac": 0.43333,
+            "n_osd_triggered": 544,
+            "syndrome_valid_frac": 1.0,
+            "M_detectors": 180,
+            "N_fault_mechanisms": 1440,
+            "n_noisy_rounds": 3
+          },
+          "0.0070": {
+            "n_shots": 960,
+            "n_logical_errors": 245,
+            "p_L_block": 0.255208,
+            "p_L_block_ci95": [
+              0.228643,
+              0.283725
+            ],
+            "p_L_round": 0.093548,
+            "p_L_round_ci95": [
+              0.082896,
+              0.105267
+            ],
+            "p_L_round_per_logical": 0.012202,
+            "p_L_round_per_logical_ci95": [
+              0.010759,
+              0.013808
+            ],
+            "bp_converged_frac": 0.26771,
+            "n_osd_triggered": 703,
+            "syndrome_valid_frac": 1.0,
+            "M_detectors": 180,
+            "N_fault_mechanisms": 1440,
+            "n_noisy_rounds": 3
+          },
+          "0.0080": {
+            "n_shots": 960,
+            "n_logical_errors": 398,
+            "p_L_block": 0.414583,
+            "p_L_block_ci95": [
+              0.38382,
+              0.446027
+            ],
+            "p_L_round": 0.163457,
+            "p_L_round_ci95": [
+              0.149053,
+              0.178711
+            ],
+            "p_L_round_per_logical": 0.022063,
+            "p_L_round_per_logical_ci95": [
+              0.019974,
+              0.02431
+            ],
+            "bp_converged_frac": 0.16979,
+            "n_osd_triggered": 797,
+            "syndrome_valid_frac": 1.0,
+            "M_detectors": 180,
+            "N_fault_mechanisms": 1440,
+            "n_noisy_rounds": 3
+          }
+        },
+        "BB_144_12_12": {
+          "0.0040": {
+            "n_shots": 960,
+            "n_logical_errors": 16,
+            "p_L_block": 0.016667,
+            "p_L_block_ci95": [
+              0.010285,
+              0.026901
+            ],
+            "p_L_round": 0.005587,
+            "p_L_round_ci95": [
+              0.00344,
+              0.009049
+            ],
+            "p_L_round_per_logical": 0.000467,
+            "p_L_round_per_logical_ci95": [
+              0.000287,
+              0.000757
+            ],
+            "bp_converged_frac": 0.52604,
+            "n_osd_triggered": 455,
+            "syndrome_valid_frac": 1.0,
+            "M_detectors": 288,
+            "N_fault_mechanisms": 2304,
+            "n_noisy_rounds": 3
+          },
+          "0.0050": {
+            "n_shots": 960,
+            "n_logical_errors": 71,
+            "p_L_block": 0.073958,
+            "p_L_block_ci95": [
+              0.059048,
+              0.092265
+            ],
+            "p_L_round": 0.025287,
+            "p_L_round_ci95": [
+              0.020083,
+              0.031753
+            ],
+            "p_L_round_per_logical": 0.002132,
+            "p_L_round_per_logical_ci95": [
+              0.001689,
+              0.002685
+            ],
+            "bp_converged_frac": 0.40208,
+            "n_osd_triggered": 574,
+            "syndrome_valid_frac": 1.0,
+            "M_detectors": 288,
+            "N_fault_mechanisms": 2304,
+            "n_noisy_rounds": 3
+          },
+          "0.0060": {
+            "n_shots": 640,
+            "n_logical_errors": 97,
+            "p_L_block": 0.151562,
+            "p_L_block_ci95": [
+              0.125865,
+              0.181418
+            ],
+            "p_L_round": 0.053313,
+            "p_L_round_ci95": [
+              0.04385,
+              0.06455
+            ],
+            "p_L_round_per_logical": 0.004555,
+            "p_L_round_per_logical_ci95": [
+              0.00373,
+              0.005545
+            ],
+            "bp_converged_frac": 0.24531,
+            "n_osd_triggered": 483,
+            "syndrome_valid_frac": 1.0,
+            "M_detectors": 288,
+            "N_fault_mechanisms": 2304,
+            "n_noisy_rounds": 3
+          },
+          "0.0070": {
+            "n_shots": 640,
+            "n_logical_errors": 170,
+            "p_L_block": 0.265625,
+            "p_L_block_ci95": [
+              0.232879,
+              0.301167
+            ],
+            "p_L_round": 0.097793,
+            "p_L_round_ci95": [
+              0.084578,
+              0.11259
+            ],
+            "p_L_round_per_logical": 0.008539,
+            "p_L_round_per_logical_ci95": [
+              0.007337,
+              0.009905
+            ],
+            "bp_converged_frac": 0.14531,
+            "n_osd_triggered": 547,
+            "syndrome_valid_frac": 1.0,
+            "M_detectors": 288,
+            "N_fault_mechanisms": 2304,
+            "n_noisy_rounds": 3
+          },
+          "0.0080": {
+            "n_shots": 640,
+            "n_logical_errors": 296,
+            "p_L_block": 0.4625,
+            "p_L_block_ci95": [
+              0.42421,
+              0.501237
+            ],
+            "p_L_round": 0.186933,
+            "p_L_round_ci95": [
+              0.168068,
+              0.206955
+            ],
+            "p_L_round_per_logical": 0.017097,
+            "p_L_round_per_logical_ci95": [
+              0.015217,
+              0.019137
+            ],
+            "bp_converged_frac": 0.08281,
+            "n_osd_triggered": 587,
+            "syndrome_valid_frac": 1.0,
+            "M_detectors": 288,
+            "N_fault_mechanisms": 2304,
+            "n_noisy_rounds": 3
+          }
+        },
+        "BB_288_12_18": {
+          "0.0040": {
+            "n_shots": 640,
+            "n_logical_errors": 4,
+            "p_L_block": 0.00625,
+            "p_L_block_ci95": [
+              0.002433,
+              0.015959
+            ],
+            "p_L_round": 0.002088,
+            "p_L_round_ci95": [
+              0.000812,
+              0.005348
+            ],
+            "p_L_round_per_logical": 0.000174,
+            "p_L_round_per_logical_ci95": [
+              6.8e-05,
+              0.000447
+            ],
+            "bp_converged_frac": 0.29063,
+            "n_osd_triggered": 454,
+            "syndrome_valid_frac": 1.0,
+            "M_detectors": 576,
+            "N_fault_mechanisms": 4608,
+            "n_noisy_rounds": 3
+          },
+          "0.0050": {
+            "n_shots": 640,
+            "n_logical_errors": 11,
+            "p_L_block": 0.017188,
+            "p_L_block_ci95": [
+              0.009624,
+              0.030513
+            ],
+            "p_L_round": 0.005762,
+            "p_L_round_ci95": [
+              0.003218,
+              0.010276
+            ],
+            "p_L_round_per_logical": 0.000481,
+            "p_L_round_per_logical_ci95": [
+              0.000269,
+              0.00086
+            ],
+            "bp_converged_frac": 0.14688,
+            "n_osd_triggered": 546,
+            "syndrome_valid_frac": 1.0,
+            "M_detectors": 576,
+            "N_fault_mechanisms": 4608,
+            "n_noisy_rounds": 3
+          },
+          "0.0060": {
+            "n_shots": 320,
+            "n_logical_errors": 30,
+            "p_L_block": 0.09375,
+            "p_L_block_ci95": [
+              0.066459,
+              0.130679
+            ],
+            "p_L_round": 0.032281,
+            "p_L_round_ci95": [
+              0.022663,
+              0.045608
+            ],
+            "p_L_round_per_logical": 0.002731,
+            "p_L_round_per_logical_ci95": [
+              0.001908,
+              0.003883
+            ],
+            "bp_converged_frac": 0.07812,
+            "n_osd_triggered": 295,
+            "syndrome_valid_frac": 1.0,
+            "M_detectors": 576,
+            "N_fault_mechanisms": 4608,
+            "n_noisy_rounds": 3
+          },
+          "0.0070": {
+            "n_shots": 320,
+            "n_logical_errors": 84,
+            "p_L_block": 0.2625,
+            "p_L_block_ci95": [
+              0.217313,
+              0.313321
+            ],
+            "p_L_round": 0.096516,
+            "p_L_round_ci95": [
+              0.078428,
+              0.117764
+            ],
+            "p_L_round_per_logical": 0.008422,
+            "p_L_round_per_logical_ci95": [
+              0.006783,
+              0.010387
+            ],
+            "bp_converged_frac": 0.01875,
+            "n_osd_triggered": 314,
+            "syndrome_valid_frac": 1.0,
+            "M_detectors": 576,
+            "N_fault_mechanisms": 4608,
+            "n_noisy_rounds": 3
+          },
+          "0.0080": {
+            "n_shots": 320,
+            "n_logical_errors": 142,
+            "p_L_block": 0.44375,
+            "p_L_block_ci95": [
+              0.390302,
+              0.498532
+            ],
+            "p_L_round": 0.177587,
+            "p_L_round_ci95": [
+              0.152047,
+              0.205524
+            ],
+            "p_L_round_per_logical": 0.016161,
+            "p_L_round_per_logical_ci95": [
+              0.01365,
+              0.01899
+            ],
+            "bp_converged_frac": 0.00313,
+            "n_osd_triggered": 319,
+            "syndrome_valid_frac": 1.0,
+            "M_detectors": 576,
+            "N_fault_mechanisms": 4608,
+            "n_noisy_rounds": 3
+          }
+        }
+      },
+      "p_th_72_vs_288": 0.007813,
+      "p_th_144_vs_288": null,
+      "p_th_72_vs_144": 0.007525,
+      "r5_round_depth_audit_BB288_p0p006": {
+        "n_shots": 240,
+        "n_logical_errors": 68,
+        "p_L_block": 0.283333,
+        "p_L_block_ci95": [
+          0.230085,
+          0.343408
+        ],
+        "p_L_round": 0.064458,
+        "p_L_round_ci95": [
+          0.050951,
+          0.080696
+        ],
+        "p_L_round_per_logical": 0.005537,
+        "p_L_round_per_logical_ci95": [
+          0.004348,
+          0.006987
+        ],
+        "bp_converged_frac": 0.0,
+        "n_osd_triggered": 240,
+        "syndrome_valid_frac": 1.0,
+        "M_detectors": 864,
+        "N_fault_mechanisms": 7488,
+        "n_noisy_rounds": 5
+      },
+      "bb288_power_law_fit_1L": {
+        "valid": true,
+        "alpha_slope": 7.121,
+        "intercept_ln": 30.4613,
+        "d_eff_circuit": 13.24,
+        "r2_log": 0.9788,
+        "eval_fn_params": [
+          30.461270944450895,
+          7.121441735266225
+        ],
+        "p_for_1e-9": 0.000756,
+        "p_for_1e-12": 0.000287,
+        "p_for_4e-14_femoco": 0.000182,
+        "pred_at_0p395pct": 0.00013009212927525283,
+        "pred_at_0p337pct": 4.1821960945557886e-05,
+        "pred_at_0p250pct": 4.997390225521075e-06,
+        "pred_at_0p200pct": 1.0200095826305711e-06
+      },
+      "elapsed_s": 161.32
+    },
+    "silicon_exp143_d3_direct_BB288": {
+      "BB288_D3_0p395_RO2us_depol": {
+        "p_2q": 0.0039511415791169124,
+        "p_meas": 0.0038610000000000033,
+        "readout_mode": "2us",
+        "uses_exp143_grape_p16": false,
+        "n_shots_per_basis": 600,
+        "p_L_block_combined": 0.0,
+        "p_L_round_block": 0.0,
+        "p_L_round_block_ci95": [
+          0.0,
+          0.004246
+        ],
+        "p_L_round_per_logical": 0.0,
+        "p_L_round_per_logical_ci95": [
+          0.0,
+          0.000355
+        ],
+        "syndrome_valid_frac_min": 1.0,
+        "bp_converged_frac_avg": 0.4125,
+        "Z_memory": {
+          "n_shots": 600,
+          "n_logical_errors": 0,
+          "p_L_block": 0.0,
+          "p_L_block_ci95": [
+            0.0,
+            0.006362
+          ],
+          "p_L_round": 0.0,
+          "p_L_round_ci95": [
+            0.0,
+            0.002125
+          ],
+          "p_L_round_per_logical": 0.0,
+          "p_L_round_per_logical_ci95": [
+            0.0,
+            0.000177
+          ],
+          "bp_converged_frac": 0.42833,
+          "n_osd_triggered": 343,
+          "syndrome_valid_frac": 1.0,
+          "M_detectors": 576,
+          "N_fault_mechanisms": 4608,
+          "n_noisy_rounds": 3
+        },
+        "X_memory": {
+          "n_shots": 600,
+          "n_logical_errors": 0,
+          "p_L_block": 0.0,
+          "p_L_block_ci95": [
+            0.0,
+            0.006362
+          ],
+          "p_L_round": 0.0,
+          "p_L_round_ci95": [
+            0.0,
+            0.002125
+          ],
+          "p_L_round_per_logical": 0.0,
+          "p_L_round_per_logical_ci95": [
+            0.0,
+            0.000177
+          ],
+          "bp_converged_frac": 0.39667,
+          "n_osd_triggered": 362,
+          "syndrome_valid_frac": 1.0,
+          "M_detectors": 576,
+          "N_fault_mechanisms": 4608,
+          "n_noisy_rounds": 3
+        }
+      },
+      "BB288_D3_0p395_RO2us_GRAPE_P16": {
+        "p_2q": 0.0039511415791169124,
+        "p_meas": 0.0038610000000000033,
+        "readout_mode": "2us",
+        "uses_exp143_grape_p16": true,
+        "n_shots_per_basis": 600,
+        "p_L_block_combined": 0.001667,
+        "p_L_round_block": 0.000556,
+        "p_L_round_block_ci95": [
+          9.8e-05,
+          0.005255
+        ],
+        "p_L_round_per_logical": 4.6e-05,
+        "p_L_round_per_logical_ci95": [
+          8e-06,
+          0.000439
+        ],
+        "syndrome_valid_frac_min": 1.0,
+        "bp_converged_frac_avg": 0.55666,
+        "Z_memory": {
+          "n_shots": 600,
+          "n_logical_errors": 0,
+          "p_L_block": 0.0,
+          "p_L_block_ci95": [
+            0.0,
+            0.006362
+          ],
+          "p_L_round": 0.0,
+          "p_L_round_ci95": [
+            0.0,
+            0.002125
+          ],
+          "p_L_round_per_logical": 0.0,
+          "p_L_round_per_logical_ci95": [
+            0.0,
+            0.000177
+          ],
+          "bp_converged_frac": 0.58333,
+          "n_osd_triggered": 250,
+          "syndrome_valid_frac": 1.0,
+          "M_detectors": 576,
+          "N_fault_mechanisms": 4608,
+          "n_noisy_rounds": 3
+        },
+        "X_memory": {
+          "n_shots": 600,
+          "n_logical_errors": 1,
+          "p_L_block": 0.001667,
+          "p_L_block_ci95": [
+            0.000294,
+            0.00938
+          ],
+          "p_L_round": 0.000556,
+          "p_L_round_ci95": [
+            9.8e-05,
+            0.003136
+          ],
+          "p_L_round_per_logical": 4.6e-05,
+          "p_L_round_per_logical_ci95": [
+            8e-06,
+            0.000262
+          ],
+          "bp_converged_frac": 0.53,
+          "n_osd_triggered": 282,
+          "syndrome_valid_frac": 1.0,
+          "M_detectors": 576,
+          "N_fault_mechanisms": 4608,
+          "n_noisy_rounds": 3
+        }
+      },
+      "BB288_D3_0p337_RO2us_depol": {
+        "p_2q": 0.0033687346891404513,
+        "p_meas": 0.0038610000000000033,
+        "readout_mode": "2us",
+        "uses_exp143_grape_p16": false,
+        "n_shots_per_basis": 600,
+        "p_L_block_combined": 0.0,
+        "p_L_round_block": 0.0,
+        "p_L_round_block_ci95": [
+          0.0,
+          0.004246
+        ],
+        "p_L_round_per_logical": 0.0,
+        "p_L_round_per_logical_ci95": [
+          0.0,
+          0.000355
+        ],
+        "syndrome_valid_frac_min": 1.0,
+        "bp_converged_frac_avg": 0.465,
+        "Z_memory": {
+          "n_shots": 600,
+          "n_logical_errors": 0,
+          "p_L_block": 0.0,
+          "p_L_block_ci95": [
+            0.0,
+            0.006362
+          ],
+          "p_L_round": 0.0,
+          "p_L_round_ci95": [
+            0.0,
+            0.002125
+          ],
+          "p_L_round_per_logical": 0.0,
+          "p_L_round_per_logical_ci95": [
+            0.0,
+            0.000177
+          ],
+          "bp_converged_frac": 0.48333,
+          "n_osd_triggered": 310,
+          "syndrome_valid_frac": 1.0,
+          "M_detectors": 576,
+          "N_fault_mechanisms": 4608,
+          "n_noisy_rounds": 3
+        },
+        "X_memory": {
+          "n_shots": 600,
+          "n_logical_errors": 0,
+          "p_L_block": 0.0,
+          "p_L_block_ci95": [
+            0.0,
+            0.006362
+          ],
+          "p_L_round": 0.0,
+          "p_L_round_ci95": [
+            0.0,
+            0.002125
+          ],
+          "p_L_round_per_logical": 0.0,
+          "p_L_round_per_logical_ci95": [
+            0.0,
+            0.000177
+          ],
+          "bp_converged_frac": 0.44667,
+          "n_osd_triggered": 332,
+          "syndrome_valid_frac": 1.0,
+          "M_detectors": 576,
+          "N_fault_mechanisms": 4608,
+          "n_noisy_rounds": 3
+        }
+      },
+      "BB288_D3_0p337_RO2us_GRAPE_P16": {
+        "p_2q": 0.0033687346891404513,
+        "p_meas": 0.0038610000000000033,
+        "readout_mode": "2us",
+        "uses_exp143_grape_p16": true,
+        "n_shots_per_basis": 600,
+        "p_L_block_combined": 0.0,
+        "p_L_round_block": 0.0,
+        "p_L_round_block_ci95": [
+          0.0,
+          0.004246
+        ],
+        "p_L_round_per_logical": 0.0,
+        "p_L_round_per_logical_ci95": [
+          0.0,
+          0.000355
+        ],
+        "syndrome_valid_frac_min": 1.0,
+        "bp_converged_frac_avg": 0.5825,
+        "Z_memory": {
+          "n_shots": 600,
+          "n_logical_errors": 0,
+          "p_L_block": 0.0,
+          "p_L_block_ci95": [
+            0.0,
+            0.006362
+          ],
+          "p_L_round": 0.0,
+          "p_L_round_ci95": [
+            0.0,
+            0.002125
+          ],
+          "p_L_round_per_logical": 0.0,
+          "p_L_round_per_logical_ci95": [
+            0.0,
+            0.000177
+          ],
+          "bp_converged_frac": 0.61667,
+          "n_osd_triggered": 230,
+          "syndrome_valid_frac": 1.0,
+          "M_detectors": 576,
+          "N_fault_mechanisms": 4608,
+          "n_noisy_rounds": 3
+        },
+        "X_memory": {
+          "n_shots": 600,
+          "n_logical_errors": 0,
+          "p_L_block": 0.0,
+          "p_L_block_ci95": [
+            0.0,
+            0.006362
+          ],
+          "p_L_round": 0.0,
+          "p_L_round_ci95": [
+            0.0,
+            0.002125
+          ],
+          "p_L_round_per_logical": 0.0,
+          "p_L_round_per_logical_ci95": [
+            0.0,
+            0.000177
+          ],
+          "bp_converged_frac": 0.54833,
+          "n_osd_triggered": 271,
+          "syndrome_valid_frac": 1.0,
+          "M_detectors": 576,
+          "N_fault_mechanisms": 4608,
+          "n_noisy_rounds": 3
+        }
+      },
+      "BB288_D3_0p337_RO3us_GRAPE_P16": {
+        "p_2q": 0.0033687346891404513,
+        "p_meas": 0.0022320000000000118,
+        "readout_mode": "3us",
+        "uses_exp143_grape_p16": true,
+        "n_shots_per_basis": 600,
+        "p_L_block_combined": 0.0,
+        "p_L_round_block": 0.0,
+        "p_L_round_block_ci95": [
+          0.0,
+          0.004246
+        ],
+        "p_L_round_per_logical": 0.0,
+        "p_L_round_per_logical_ci95": [
+          0.0,
+          0.000355
+        ],
+        "syndrome_valid_frac_min": 1.0,
+        "bp_converged_frac_avg": 0.59167,
+        "Z_memory": {
+          "n_shots": 600,
+          "n_logical_errors": 0,
+          "p_L_block": 0.0,
+          "p_L_block_ci95": [
+            0.0,
+            0.006362
+          ],
+          "p_L_round": 0.0,
+          "p_L_round_ci95": [
+            0.0,
+            0.002125
+          ],
+          "p_L_round_per_logical": 0.0,
+          "p_L_round_per_logical_ci95": [
+            0.0,
+            0.000177
+          ],
+          "bp_converged_frac": 0.64667,
+          "n_osd_triggered": 212,
+          "syndrome_valid_frac": 1.0,
+          "M_detectors": 576,
+          "N_fault_mechanisms": 4608,
+          "n_noisy_rounds": 3
+        },
+        "X_memory": {
+          "n_shots": 600,
+          "n_logical_errors": 0,
+          "p_L_block": 0.0,
+          "p_L_block_ci95": [
+            0.0,
+            0.006362
+          ],
+          "p_L_round": 0.0,
+          "p_L_round_ci95": [
+            0.0,
+            0.002125
+          ],
+          "p_L_round_per_logical": 0.0,
+          "p_L_round_per_logical_ci95": [
+            0.0,
+            0.000177
+          ],
+          "bp_converged_frac": 0.53667,
+          "n_osd_triggered": 278,
+          "syndrome_valid_frac": 1.0,
+          "M_detectors": 576,
+          "N_fault_mechanisms": 4608,
+          "n_noisy_rounds": 3
+        }
+      }
+    },
+    "silicon_BB288_p2q_calibration": {
+      "depol": {
+        "p_grid": [
+          0.0055,
+          0.0065,
+          0.0075,
+          0.0085
+        ],
+        "points": {
+          "0.0055": {
+            "p_L_block_combined": 0.002778,
+            "p_L_round_block": 0.000927,
+            "p_L_round_block_ci95": [
+              0.000164,
+              0.008729
+            ],
+            "p_L_round_per_logical": 7.7e-05,
+            "p_L_round_per_logical_ci95": [
+              1.4e-05,
+              0.00073
+            ],
+            "syndrome_valid_frac_min": 1.0,
+            "bp_converged_frac_avg": 0.30833,
+            "Z_memory": {
+              "n_shots": 360,
+              "n_logical_errors": 0,
+              "p_L_block": 0.0,
+              "p_L_block_ci95": [
+                0.0,
+                0.010558
+              ],
+              "p_L_round": 0.0,
+              "p_L_round_ci95": [
+                0.0,
+                0.003532
+              ],
+              "p_L_round_per_logical": 0.0,
+              "p_L_round_per_logical_ci95": [
+                0.0,
+                0.000295
+              ],
+              "bp_converged_frac": 0.31944,
+              "n_osd_triggered": 245,
+              "syndrome_valid_frac": 1.0,
+              "M_detectors": 576,
+              "N_fault_mechanisms": 4608,
+              "n_noisy_rounds": 3
+            },
+            "X_memory": {
+              "n_shots": 360,
+              "n_logical_errors": 1,
+              "p_L_block": 0.002778,
+              "p_L_block_ci95": [
+                0.000491,
+                0.015564
+              ],
+              "p_L_round": 0.000927,
+              "p_L_round_ci95": [
+                0.000164,
+                0.005215
+              ],
+              "p_L_round_per_logical": 7.7e-05,
+              "p_L_round_per_logical_ci95": [
+                1.4e-05,
+                0.000436
+              ],
+              "bp_converged_frac": 0.29722,
+              "n_osd_triggered": 253,
+              "syndrome_valid_frac": 1.0,
+              "M_detectors": 576,
+              "N_fault_mechanisms": 4608,
+              "n_noisy_rounds": 3
+            }
+          },
+          "0.0065": {
+            "p_L_block_combined": 0.016667,
+            "p_L_round_block": 0.005587,
+            "p_L_round_block_ci95": [
+              0.00256,
+              0.015595
+            ],
+            "p_L_round_per_logical": 0.000467,
+            "p_L_round_per_logical_ci95": [
+              0.000214,
+              0.001309
+            ],
+            "syndrome_valid_frac_min": 1.0,
+            "bp_converged_frac_avg": 0.18612,
+            "Z_memory": {
+              "n_shots": 360,
+              "n_logical_errors": 6,
+              "p_L_block": 0.016667,
+              "p_L_block_ci95": [
+                0.00766,
+                0.035879
+              ],
+              "p_L_round": 0.005587,
+              "p_L_round_ci95": [
+                0.00256,
+                0.012106
+              ],
+              "p_L_round_per_logical": 0.000467,
+              "p_L_round_per_logical_ci95": [
+                0.000214,
+                0.001014
+              ],
+              "bp_converged_frac": 0.18056,
+              "n_osd_triggered": 295,
+              "syndrome_valid_frac": 1.0,
+              "M_detectors": 576,
+              "N_fault_mechanisms": 4608,
+              "n_noisy_rounds": 3
+            },
+            "X_memory": {
+              "n_shots": 360,
+              "n_logical_errors": 0,
+              "p_L_block": 0.0,
+              "p_L_block_ci95": [
+                0.0,
+                0.010558
+              ],
+              "p_L_round": 0.0,
+              "p_L_round_ci95": [
+                0.0,
+                0.003532
+              ],
+              "p_L_round_per_logical": 0.0,
+              "p_L_round_per_logical_ci95": [
+                0.0,
+                0.000295
+              ],
+              "bp_converged_frac": 0.19167,
+              "n_osd_triggered": 291,
+              "syndrome_valid_frac": 1.0,
+              "M_detectors": 576,
+              "N_fault_mechanisms": 4608,
+              "n_noisy_rounds": 3
+            }
+          },
+          "0.0075": {
+            "p_L_block_combined": 0.038519,
+            "p_L_round_block": 0.013008,
+            "p_L_round_block_ci95": [
+              0.006332,
+              0.026552
+            ],
+            "p_L_round_per_logical": 0.001091,
+            "p_L_round_per_logical_ci95": [
+              0.000529,
+              0.00224
+            ],
+            "syndrome_valid_frac_min": 1.0,
+            "bp_converged_frac_avg": 0.12639,
+            "Z_memory": {
+              "n_shots": 360,
+              "n_logical_errors": 6,
+              "p_L_block": 0.016667,
+              "p_L_block_ci95": [
+                0.00766,
+                0.035879
+              ],
+              "p_L_round": 0.005587,
+              "p_L_round_ci95": [
+                0.00256,
+                0.012106
+              ],
+              "p_L_round_per_logical": 0.000467,
+              "p_L_round_per_logical_ci95": [
+                0.000214,
+                0.001014
+              ],
+              "bp_converged_frac": 0.125,
+              "n_osd_triggered": 315,
+              "syndrome_valid_frac": 1.0,
+              "M_detectors": 576,
+              "N_fault_mechanisms": 4608,
+              "n_noisy_rounds": 3
+            },
+            "X_memory": {
+              "n_shots": 360,
+              "n_logical_errors": 8,
+              "p_L_block": 0.022222,
+              "p_L_block_ci95": [
+                0.011302,
+                0.043231
+              ],
+              "p_L_round": 0.007463,
+              "p_L_round_ci95": [
+                0.003782,
+                0.014623
+              ],
+              "p_L_round_per_logical": 0.000624,
+              "p_L_round_per_logical_ci95": [
+                0.000316,
+                0.001227
+              ],
+              "bp_converged_frac": 0.12778,
+              "n_osd_triggered": 314,
+              "syndrome_valid_frac": 1.0,
+              "M_detectors": 576,
+              "N_fault_mechanisms": 4608,
+              "n_noisy_rounds": 3
+            }
+          },
+          "0.0085": {
+            "p_L_block_combined": 0.084259,
+            "p_L_round_block": 0.028914,
+            "p_L_round_block_ci95": [
+              0.01773,
+              0.046742
+            ],
+            "p_L_round_per_logical": 0.002442,
+            "p_L_round_per_logical_ci95": [
+              0.00149,
+              0.003981
+            ],
+            "syndrome_valid_frac_min": 1.0,
+            "bp_converged_frac_avg": 0.06945,
+            "Z_memory": {
+              "n_shots": 360,
+              "n_logical_errors": 15,
+              "p_L_block": 0.041667,
+              "p_L_block_ci95": [
+                0.025411,
+                0.067601
+              ],
+              "p_L_round": 0.014086,
+              "p_L_round_ci95": [
+                0.008543,
+                0.023061
+              ],
+              "p_L_round_per_logical": 0.001182,
+              "p_L_round_per_logical_ci95": [
+                0.000715,
+                0.001942
+              ],
+              "bp_converged_frac": 0.07222,
+              "n_osd_triggered": 334,
+              "syndrome_valid_frac": 1.0,
+              "M_detectors": 576,
+              "N_fault_mechanisms": 4608,
+              "n_noisy_rounds": 3
+            },
+            "X_memory": {
+              "n_shots": 360,
+              "n_logical_errors": 16,
+              "p_L_block": 0.044444,
+              "p_L_block_ci95": [
+                0.02754,
+                0.070969
+              ],
+              "p_L_round": 0.01504,
+              "p_L_round_ci95": [
+                0.009265,
+                0.024239
+              ],
+              "p_L_round_per_logical": 0.001262,
+              "p_L_round_per_logical_ci95": [
+                0.000775,
+                0.002043
+              ],
+              "bp_converged_frac": 0.06667,
+              "n_osd_triggered": 336,
+              "syndrome_valid_frac": 1.0,
+              "M_detectors": 576,
+              "N_fault_mechanisms": 4608,
+              "n_noisy_rounds": 3
+            }
+          }
+        },
+        "power_law_fit_1L": {
+          "valid": true,
+          "alpha_slope": 7.811,
+          "intercept_ln": 31.3668,
+          "d_eff_circuit": 14.62,
+          "r2_log": 0.9772,
+          "eval_fn_params": [
+            31.36677618423636,
+            7.811431275173693
+          ],
+          "p_for_1e-9": 0.00127,
+          "p_for_1e-12": 0.000525,
+          "p_for_4e-14_femoco": 0.000347,
+          "pred_at_0p395pct": 7.067404361091026e-06,
+          "pred_at_0p337pct": 2.0354567615186925e-06,
+          "pred_at_0p250pct": 1.9797256763719762e-07,
+          "pred_at_0p200pct": 3.464169305494421e-08
+        }
+      },
+      "GRAPE_P16": {
+        "p_grid": [
+          0.007,
+          0.008,
+          0.009,
+          0.01
+        ],
+        "points": {
+          "0.0070": {
+            "p_L_block_combined": 0.0,
+            "p_L_round_block": 0.0,
+            "p_L_round_block_ci95": [
+              0.0,
+              0.007051
+            ],
+            "p_L_round_per_logical": 0.0,
+            "p_L_round_per_logical_ci95": [
+              0.0,
+              0.00059
+            ],
+            "syndrome_valid_frac_min": 1.0,
+            "bp_converged_frac_avg": 0.29028,
+            "Z_memory": {
+              "n_shots": 360,
+              "n_logical_errors": 0,
+              "p_L_block": 0.0,
+              "p_L_block_ci95": [
+                0.0,
+                0.010558
+              ],
+              "p_L_round": 0.0,
+              "p_L_round_ci95": [
+                0.0,
+                0.003532
+              ],
+              "p_L_round_per_logical": 0.0,
+              "p_L_round_per_logical_ci95": [
+                0.0,
+                0.000295
+              ],
+              "bp_converged_frac": 0.35,
+              "n_osd_triggered": 234,
+              "syndrome_valid_frac": 1.0,
+              "M_detectors": 576,
+              "N_fault_mechanisms": 4608,
+              "n_noisy_rounds": 3
+            },
+            "X_memory": {
+              "n_shots": 360,
+              "n_logical_errors": 0,
+              "p_L_block": 0.0,
+              "p_L_block_ci95": [
+                0.0,
+                0.010558
+              ],
+              "p_L_round": 0.0,
+              "p_L_round_ci95": [
+                0.0,
+                0.003532
+              ],
+              "p_L_round_per_logical": 0.0,
+              "p_L_round_per_logical_ci95": [
+                0.0,
+                0.000295
+              ],
+              "bp_converged_frac": 0.23056,
+              "n_osd_triggered": 277,
+              "syndrome_valid_frac": 1.0,
+              "M_detectors": 576,
+              "N_fault_mechanisms": 4608,
+              "n_noisy_rounds": 3
+            }
+          },
+          "0.0080": {
+            "p_L_block_combined": 0.019399,
+            "p_L_round_block": 0.006509,
+            "p_L_round_block_ci95": [
+              0.002723,
+              0.017258
+            ],
+            "p_L_round_per_logical": 0.000544,
+            "p_L_round_per_logical_ci95": [
+              0.000227,
+              0.00145
+            ],
+            "syndrome_valid_frac_min": 1.0,
+            "bp_converged_frac_avg": 0.17917,
+            "Z_memory": {
+              "n_shots": 360,
+              "n_logical_errors": 1,
+              "p_L_block": 0.002778,
+              "p_L_block_ci95": [
+                0.000491,
+                0.015564
+              ],
+              "p_L_round": 0.000927,
+              "p_L_round_ci95": [
+                0.000164,
+                0.005215
+              ],
+              "p_L_round_per_logical": 7.7e-05,
+              "p_L_round_per_logical_ci95": [
+                1.4e-05,
+                0.000436
+              ],
+              "bp_converged_frac": 0.22778,
+              "n_osd_triggered": 278,
+              "syndrome_valid_frac": 1.0,
+              "M_detectors": 576,
+              "N_fault_mechanisms": 4608,
+              "n_noisy_rounds": 3
+            },
+            "X_memory": {
+              "n_shots": 360,
+              "n_logical_errors": 6,
+              "p_L_block": 0.016667,
+              "p_L_block_ci95": [
+                0.00766,
+                0.035879
+              ],
+              "p_L_round": 0.005587,
+              "p_L_round_ci95": [
+                0.00256,
+                0.012106
+              ],
+              "p_L_round_per_logical": 0.000467,
+              "p_L_round_per_logical_ci95": [
+                0.000214,
+                0.001014
+              ],
+              "bp_converged_frac": 0.13056,
+              "n_osd_triggered": 313,
+              "syndrome_valid_frac": 1.0,
+              "M_detectors": 576,
+              "N_fault_mechanisms": 4608,
+              "n_noisy_rounds": 3
+            }
+          },
+          "0.0090": {
+            "p_L_block_combined": 0.041281,
+            "p_L_round_block": 0.013954,
+            "p_L_round_block_ci95": [
+              0.007054,
+              0.027711
+            ],
+            "p_L_round_per_logical": 0.00117,
+            "p_L_round_per_logical_ci95": [
+              0.00059,
+              0.002339
+            ],
+            "syndrome_valid_frac_min": 1.0,
+            "bp_converged_frac_avg": 0.15972,
+            "Z_memory": {
+              "n_shots": 360,
+              "n_logical_errors": 5,
+              "p_L_block": 0.013889,
+              "p_L_block_ci95": [
+                0.005947,
+                0.032096
+              ],
+              "p_L_round": 0.004651,
+              "p_L_round_ci95": [
+                0.001986,
+                0.010815
+              ],
+              "p_L_round_per_logical": 0.000388,
+              "p_L_round_per_logical_ci95": [
+                0.000166,
+                0.000906
+              ],
+              "bp_converged_frac": 0.19722,
+              "n_osd_triggered": 289,
+              "syndrome_valid_frac": 1.0,
+              "M_detectors": 576,
+              "N_fault_mechanisms": 4608,
+              "n_noisy_rounds": 3
+            },
+            "X_memory": {
+              "n_shots": 360,
+              "n_logical_errors": 10,
+              "p_L_block": 0.027778,
+              "p_L_block_ci95": [
+                0.015157,
+                0.05037
+              ],
+              "p_L_round": 0.009346,
+              "p_L_round_ci95": [
+                0.005078,
+                0.01708
+              ],
+              "p_L_round_per_logical": 0.000782,
+              "p_L_round_per_logical_ci95": [
+                0.000424,
+                0.001435
+              ],
+              "bp_converged_frac": 0.12222,
+              "n_osd_triggered": 316,
+              "syndrome_valid_frac": 1.0,
+              "M_detectors": 576,
+              "N_fault_mechanisms": 4608,
+              "n_noisy_rounds": 3
+            }
+          },
+          "0.0100": {
+            "p_L_block_combined": 0.065748,
+            "p_L_round_block": 0.022415,
+            "p_L_round_block_ci95": [
+              0.013124,
+              0.038446
+            ],
+            "p_L_round_per_logical": 0.001887,
+            "p_L_round_per_logical_ci95": [
+              0.0011,
+              0.003262
+            ],
+            "syndrome_valid_frac_min": 1.0,
+            "bp_converged_frac_avg": 0.10834,
+            "Z_memory": {
+              "n_shots": 360,
+              "n_logical_errors": 7,
+              "p_L_block": 0.019444,
+              "p_L_block_ci95": [
+                0.00945,
+                0.039586
+              ],
+              "p_L_round": 0.006524,
+              "p_L_round_ci95": [
+                0.00316,
+                0.013373
+              ],
+              "p_L_round_per_logical": 0.000545,
+              "p_L_round_per_logical_ci95": [
+                0.000264,
+                0.001121
+              ],
+              "bp_converged_frac": 0.13056,
+              "n_osd_triggered": 313,
+              "syndrome_valid_frac": 1.0,
+              "M_detectors": 576,
+              "N_fault_mechanisms": 4608,
+              "n_noisy_rounds": 3
+            },
+            "X_memory": {
+              "n_shots": 360,
+              "n_logical_errors": 17,
+              "p_L_block": 0.047222,
+              "p_L_block_ci95": [
+                0.029689,
+                0.074316
+              ],
+              "p_L_round": 0.015995,
+              "p_L_round_ci95": [
+                0.009996,
+                0.025412
+              ],
+              "p_L_round_per_logical": 0.001343,
+              "p_L_round_per_logical_ci95": [
+                0.000837,
+                0.002143
+              ],
+              "bp_converged_frac": 0.08611,
+              "n_osd_triggered": 329,
+              "syndrome_valid_frac": 1.0,
+              "M_detectors": 576,
+              "N_fault_mechanisms": 4608,
+              "n_noisy_rounds": 3
+            }
+          }
+        },
+        "power_law_fit_1L": {
+          "valid": true,
+          "alpha_slope": 5.592,
+          "intercept_ln": 19.5183,
+          "d_eff_circuit": 10.18,
+          "r2_log": 0.9899,
+          "eval_fn_params": [
+            19.518332618125832,
+            5.592123580585608
+          ],
+          "p_for_1e-9": 0.000749,
+          "p_for_1e-12": 0.000218,
+          "p_for_4e-14_femoco": 0.000123,
+          "pred_at_0p395pct": 1.089413773140583e-05,
+          "pred_at_0p337pct": 4.468731410631689e-06,
+          "pred_at_0p250pct": 8.426808339913336e-07,
+          "pred_at_0p200pct": 2.4195263014335824e-07
+        }
+      }
+    },
+    "silicon_4code_distance_ladder": {
+      "D3_0p395_depol": {
+        "by_code": {
+          "BB_72_12_6": {
+            "p_L_block_combined": 0.027311,
+            "p_L_round_block": 0.009188,
+            "p_L_round_block_ci95": [
+              0.005704,
+              0.014761
+            ],
+            "p_L_round_per_logical": 0.000769,
+            "p_L_round_per_logical_ci95": [
+              0.000477,
+              0.001238
+            ],
+            "syndrome_valid_frac_min": 1.0,
+            "bp_converged_frac_avg": 0.79,
+            "Z_memory": {
+              "n_shots": 1200,
+              "n_logical_errors": 16,
+              "p_L_block": 0.013333,
+              "p_L_block_ci95": [
+                0.008224,
+                0.021549
+              ],
+              "p_L_round": 0.004464,
+              "p_L_round_ci95": [
+                0.002749,
+                0.007235
+              ],
+              "p_L_round_per_logical": 0.000373,
+              "p_L_round_per_logical_ci95": [
+                0.000229,
+                0.000605
+              ],
+              "bp_converged_frac": 0.7875,
+              "n_osd_triggered": 255,
+              "syndrome_valid_frac": 1.0,
+              "M_detectors": 144,
+              "N_fault_mechanisms": 1152,
+              "n_noisy_rounds": 3
+            },
+            "X_memory": {
+              "n_shots": 1200,
+              "n_logical_errors": 17,
+              "p_L_block": 0.014167,
+              "p_L_block_ci95": [
+                0.008864,
+                0.02257
+              ],
+              "p_L_round": 0.004745,
+              "p_L_round_ci95": [
+                0.002963,
+                0.007581
+              ],
+              "p_L_round_per_logical": 0.000396,
+              "p_L_round_per_logical_ci95": [
+                0.000247,
+                0.000634
+              ],
+              "bp_converged_frac": 0.7925,
+              "n_osd_triggered": 249,
+              "syndrome_valid_frac": 1.0,
+              "M_detectors": 144,
+              "N_fault_mechanisms": 1152,
+              "n_noisy_rounds": 3
+            }
+          },
+          "BB_90_8_10": {
+            "p_L_block_combined": 0.011636,
+            "p_L_round_block": 0.003894,
+            "p_L_round_block_ci95": [
+              0.001912,
+              0.007987
+            ],
+            "p_L_round_per_logical": 0.000488,
+            "p_L_round_per_logical_ci95": [
+              0.000239,
+              0.001002
+            ],
+            "syndrome_valid_frac_min": 1.0,
+            "bp_converged_frac_avg": 0.74292,
+            "Z_memory": {
+              "n_shots": 1200,
+              "n_logical_errors": 9,
+              "p_L_block": 0.0075,
+              "p_L_block_ci95": [
+                0.003951,
+                0.014192
+              ],
+              "p_L_round": 0.002506,
+              "p_L_round_ci95": [
+                0.001319,
+                0.004753
+              ],
+              "p_L_round_per_logical": 0.000314,
+              "p_L_round_per_logical_ci95": [
+                0.000165,
+                0.000595
+              ],
+              "bp_converged_frac": 0.75667,
+              "n_osd_triggered": 292,
+              "syndrome_valid_frac": 1.0,
+              "M_detectors": 180,
+              "N_fault_mechanisms": 1440,
+              "n_noisy_rounds": 3
+            },
+            "X_memory": {
+              "n_shots": 1200,
+              "n_logical_errors": 5,
+              "p_L_block": 0.004167,
+              "p_L_block_ci95": [
+                0.001781,
+                0.009717
+              ],
+              "p_L_round": 0.001391,
+              "p_L_round_ci95": [
+                0.000594,
+                0.003249
+              ],
+              "p_L_round_per_logical": 0.000174,
+              "p_L_round_per_logical_ci95": [
+                7.4e-05,
+                0.000407
+              ],
+              "bp_converged_frac": 0.72917,
+              "n_osd_triggered": 325,
+              "syndrome_valid_frac": 1.0,
+              "M_detectors": 180,
+              "N_fault_mechanisms": 1440,
+              "n_noisy_rounds": 3
+            }
+          },
+          "BB_144_12_12": {
+            "p_L_block_combined": 0.003333,
+            "p_L_round_block": 0.001112,
+            "p_L_round_block_ci95": [
+              0.000433,
+              0.003916
+            ],
+            "p_L_round_per_logical": 9.3e-05,
+            "p_L_round_per_logical_ci95": [
+              3.6e-05,
+              0.000327
+            ],
+            "syndrome_valid_frac_min": 1.0,
+            "bp_converged_frac_avg": 0.635,
+            "Z_memory": {
+              "n_shots": 1200,
+              "n_logical_errors": 4,
+              "p_L_block": 0.003333,
+              "p_L_block_ci95": [
+                0.001297,
+                0.008539
+              ],
+              "p_L_round": 0.001112,
+              "p_L_round_ci95": [
+                0.000433,
+                0.002855
+              ],
+              "p_L_round_per_logical": 9.3e-05,
+              "p_L_round_per_logical_ci95": [
+                3.6e-05,
+                0.000238
+              ],
+              "bp_converged_frac": 0.62667,
+              "n_osd_triggered": 448,
+              "syndrome_valid_frac": 1.0,
+              "M_detectors": 288,
+              "N_fault_mechanisms": 2304,
+              "n_noisy_rounds": 3
+            },
+            "X_memory": {
+              "n_shots": 1200,
+              "n_logical_errors": 0,
+              "p_L_block": 0.0,
+              "p_L_block_ci95": [
+                0.0,
+                0.003191
+              ],
+              "p_L_round": 0.0,
+              "p_L_round_ci95": [
+                0.0,
+                0.001065
+              ],
+              "p_L_round_per_logical": 0.0,
+              "p_L_round_per_logical_ci95": [
+                0.0,
+                8.9e-05
+              ],
+              "bp_converged_frac": 0.64333,
+              "n_osd_triggered": 428,
+              "syndrome_valid_frac": 1.0,
+              "M_detectors": 288,
+              "N_fault_mechanisms": 2304,
+              "n_noisy_rounds": 3
+            }
+          },
+          "BB_288_12_18": {
+            "p_2q": 0.0039511415791169124,
+            "p_meas": 0.0038610000000000033,
+            "readout_mode": "2us",
+            "uses_exp143_grape_p16": false,
+            "n_shots_per_basis": 600,
+            "p_L_block_combined": 0.0,
+            "p_L_round_block": 0.0,
+            "p_L_round_block_ci95": [
+              0.0,
+              0.004246
+            ],
+            "p_L_round_per_logical": 0.0,
+            "p_L_round_per_logical_ci95": [
+              0.0,
+              0.000355
+            ],
+            "syndrome_valid_frac_min": 1.0,
+            "bp_converged_frac_avg": 0.4125,
+            "Z_memory": {
+              "n_shots": 600,
+              "n_logical_errors": 0,
+              "p_L_block": 0.0,
+              "p_L_block_ci95": [
+                0.0,
+                0.006362
+              ],
+              "p_L_round": 0.0,
+              "p_L_round_ci95": [
+                0.0,
+                0.002125
+              ],
+              "p_L_round_per_logical": 0.0,
+              "p_L_round_per_logical_ci95": [
+                0.0,
+                0.000177
+              ],
+              "bp_converged_frac": 0.42833,
+              "n_osd_triggered": 343,
+              "syndrome_valid_frac": 1.0,
+              "M_detectors": 576,
+              "N_fault_mechanisms": 4608,
+              "n_noisy_rounds": 3
+            },
+            "X_memory": {
+              "n_shots": 600,
+              "n_logical_errors": 0,
+              "p_L_block": 0.0,
+              "p_L_block_ci95": [
+                0.0,
+                0.006362
+              ],
+              "p_L_round": 0.0,
+              "p_L_round_ci95": [
+                0.0,
+                0.002125
+              ],
+              "p_L_round_per_logical": 0.0,
+              "p_L_round_per_logical_ci95": [
+                0.0,
+                0.000177
+              ],
+              "bp_converged_frac": 0.39667,
+              "n_osd_triggered": 362,
+              "syndrome_valid_frac": 1.0,
+              "M_detectors": 576,
+              "N_fault_mechanisms": 4608,
+              "n_noisy_rounds": 3
+            }
+          }
+        },
+        "Lambda_BB_per_d2": 1.889,
+        "extrap_pL_1L_d18": 2.0761613714214265e-05,
+        "extrap_pL_1L_d24": 3.0800532966647662e-06,
+        "d_required_for_1e-9": 49.3,
+        "d_required_for_1e-14": 85.5
+      },
+      "D3_0p337_GRAPE": {
+        "by_code": {
+          "BB_72_12_6": {
+            "p_L_block_combined": 0.005825,
+            "p_L_round_block": 0.001945,
+            "p_L_round_block_ci95": [
+              0.000716,
+              0.005295
+            ],
+            "p_L_round_per_logical": 0.000162,
+            "p_L_round_per_logical_ci95": [
+              6e-05,
+              0.000442
+            ],
+            "syndrome_valid_frac_min": 1.0,
+            "bp_converged_frac_avg": 0.86166,
+            "Z_memory": {
+              "n_shots": 1200,
+              "n_logical_errors": 3,
+              "p_L_block": 0.0025,
+              "p_L_block_ci95": [
+                0.000851,
+                0.007324
+              ],
+              "p_L_round": 0.000834,
+              "p_L_round_ci95": [
+                0.000284,
+                0.002447
+              ],
+              "p_L_round_per_logical": 7e-05,
+              "p_L_round_per_logical_ci95": [
+                2.4e-05,
+                0.000204
+              ],
+              "bp_converged_frac": 0.8825,
+              "n_osd_triggered": 141,
+              "syndrome_valid_frac": 1.0,
+              "M_detectors": 144,
+              "N_fault_mechanisms": 1152,
+              "n_noisy_rounds": 3
+            },
+            "X_memory": {
+              "n_shots": 1200,
+              "n_logical_errors": 4,
+              "p_L_block": 0.003333,
+              "p_L_block_ci95": [
+                0.001297,
+                0.008539
+              ],
+              "p_L_round": 0.001112,
+              "p_L_round_ci95": [
+                0.000433,
+                0.002855
+              ],
+              "p_L_round_per_logical": 9.3e-05,
+              "p_L_round_per_logical_ci95": [
+                3.6e-05,
+                0.000238
+              ],
+              "bp_converged_frac": 0.84083,
+              "n_osd_triggered": 191,
+              "syndrome_valid_frac": 1.0,
+              "M_detectors": 144,
+              "N_fault_mechanisms": 1152,
+              "n_noisy_rounds": 3
+            }
+          },
+          "BB_90_8_10": {
+            "p_L_block_combined": 0.0,
+            "p_L_round_block": 0.0,
+            "p_L_round_block_ci95": [
+              0.0,
+              0.002128
+            ],
+            "p_L_round_per_logical": 0.0,
+            "p_L_round_per_logical_ci95": [
+              0.0,
+              0.000266
+            ],
+            "syndrome_valid_frac_min": 1.0,
+            "bp_converged_frac_avg": 0.85833,
+            "Z_memory": {
+              "n_shots": 1200,
+              "n_logical_errors": 0,
+              "p_L_block": 0.0,
+              "p_L_block_ci95": [
+                0.0,
+                0.003191
+              ],
+              "p_L_round": 0.0,
+              "p_L_round_ci95": [
+                0.0,
+                0.001065
+              ],
+              "p_L_round_per_logical": 0.0,
+              "p_L_round_per_logical_ci95": [
+                0.0,
+                0.000133
+              ],
+              "bp_converged_frac": 0.88833,
+              "n_osd_triggered": 134,
+              "syndrome_valid_frac": 1.0,
+              "M_detectors": 180,
+              "N_fault_mechanisms": 1440,
+              "n_noisy_rounds": 3
+            },
+            "X_memory": {
+              "n_shots": 1200,
+              "n_logical_errors": 0,
+              "p_L_block": 0.0,
+              "p_L_block_ci95": [
+                0.0,
+                0.003191
+              ],
+              "p_L_round": 0.0,
+              "p_L_round_ci95": [
+                0.0,
+                0.001065
+              ],
+              "p_L_round_per_logical": 0.0,
+              "p_L_round_per_logical_ci95": [
+                0.0,
+                0.000133
+              ],
+              "bp_converged_frac": 0.82833,
+              "n_osd_triggered": 206,
+              "syndrome_valid_frac": 1.0,
+              "M_detectors": 180,
+              "N_fault_mechanisms": 1440,
+              "n_noisy_rounds": 3
+            }
+          },
+          "BB_144_12_12": {
+            "p_L_block_combined": 0.0025,
+            "p_L_round_block": 0.000834,
+            "p_L_round_block_ci95": [
+              0.000284,
+              0.00351
+            ],
+            "p_L_round_per_logical": 7e-05,
+            "p_L_round_per_logical_ci95": [
+              2.4e-05,
+              0.000293
+            ],
+            "syndrome_valid_frac_min": 1.0,
+            "bp_converged_frac_avg": 0.76125,
+            "Z_memory": {
+              "n_shots": 1200,
+              "n_logical_errors": 0,
+              "p_L_block": 0.0,
+              "p_L_block_ci95": [
+                0.0,
+                0.003191
+              ],
+              "p_L_round": 0.0,
+              "p_L_round_ci95": [
+                0.0,
+                0.001065
+              ],
+              "p_L_round_per_logical": 0.0,
+              "p_L_round_per_logical_ci95": [
+                0.0,
+                8.9e-05
+              ],
+              "bp_converged_frac": 0.79667,
+              "n_osd_triggered": 244,
+              "syndrome_valid_frac": 1.0,
+              "M_detectors": 288,
+              "N_fault_mechanisms": 2304,
+              "n_noisy_rounds": 3
+            },
+            "X_memory": {
+              "n_shots": 1200,
+              "n_logical_errors": 3,
+              "p_L_block": 0.0025,
+              "p_L_block_ci95": [
+                0.000851,
+                0.007324
+              ],
+              "p_L_round": 0.000834,
+              "p_L_round_ci95": [
+                0.000284,
+                0.002447
+              ],
+              "p_L_round_per_logical": 7e-05,
+              "p_L_round_per_logical_ci95": [
+                2.4e-05,
+                0.000204
+              ],
+              "bp_converged_frac": 0.72583,
+              "n_osd_triggered": 329,
+              "syndrome_valid_frac": 1.0,
+              "M_detectors": 288,
+              "N_fault_mechanisms": 2304,
+              "n_noisy_rounds": 3
+            }
+          },
+          "BB_288_12_18": {
+            "p_2q": 0.0033687346891404513,
+            "p_meas": 0.0038610000000000033,
+            "readout_mode": "2us",
+            "uses_exp143_grape_p16": true,
+            "n_shots_per_basis": 600,
+            "p_L_block_combined": 0.0,
+            "p_L_round_block": 0.0,
+            "p_L_round_block_ci95": [
+              0.0,
+              0.004246
+            ],
+            "p_L_round_per_logical": 0.0,
+            "p_L_round_per_logical_ci95": [
+              0.0,
+              0.000355
+            ],
+            "syndrome_valid_frac_min": 1.0,
+            "bp_converged_frac_avg": 0.5825,
+            "Z_memory": {
+              "n_shots": 600,
+              "n_logical_errors": 0,
+              "p_L_block": 0.0,
+              "p_L_block_ci95": [
+                0.0,
+                0.006362
+              ],
+              "p_L_round": 0.0,
+              "p_L_round_ci95": [
+                0.0,
+                0.002125
+              ],
+              "p_L_round_per_logical": 0.0,
+              "p_L_round_per_logical_ci95": [
+                0.0,
+                0.000177
+              ],
+              "bp_converged_frac": 0.61667,
+              "n_osd_triggered": 230,
+              "syndrome_valid_frac": 1.0,
+              "M_detectors": 576,
+              "N_fault_mechanisms": 4608,
+              "n_noisy_rounds": 3
+            },
+            "X_memory": {
+              "n_shots": 600,
+              "n_logical_errors": 0,
+              "p_L_block": 0.0,
+              "p_L_block_ci95": [
+                0.0,
+                0.006362
+              ],
+              "p_L_round": 0.0,
+              "p_L_round_ci95": [
+                0.0,
+                0.002125
+              ],
+              "p_L_round_per_logical": 0.0,
+              "p_L_round_per_logical_ci95": [
+                0.0,
+                0.000177
+              ],
+              "bp_converged_frac": 0.54833,
+              "n_osd_triggered": 271,
+              "syndrome_valid_frac": 1.0,
+              "M_detectors": 576,
+              "N_fault_mechanisms": 4608,
+              "n_noisy_rounds": 3
+            }
+          }
+        },
+        "Lambda_BB_per_d2": 1.323,
+        "extrap_pL_1L_d18": 3.0246913580246855e-05,
+        "extrap_pL_1L_d24": 1.3069654016156024e-05,
+        "d_required_for_1e-9": 91.8,
+        "d_required_for_1e-14": 174.1
+      }
+    },
+    "elapsed_3b_s": 355.23
+  },
+  "part4_magic_state_factories": {
+    "primary_Exp143_D3_0p337pct_Lambda2p825": {
+      "inputs": {
+        "p_2q": 0.0033687346891404513,
+        "p_1q": 0.0008294504388930424,
+        "p_in_raw": 0.004198,
+        "p_in_postselected": 0.002021,
+        "A_SC": 0.017377381999329873,
+        "Lambda_SC": 2.8252921206380086,
+        "T_cyc_SC_us": 6.7022,
+        "p_T_target": 1e-10
+      },
+      "F1_single_stage_15to1_raw": {
+        "variant": "compact",
+        "d_X": 35,
+        "d_Z": 19,
+        "d_m": 15,
+        "n_rounds": 165,
+        "p_in": 0.004198185128033494,
+        "p_in_eff": 0.004274526560089717,
+        "p_distill_35p3": 2.73358198815719e-06,
+        "p_clifford_x_out": 1.089677158675039e-08,
+        "p_out": 2.7444787597439404e-06,
+        "p_accept": 0.93777,
+        "t_cycle_us": 1179.26,
+        "rate_khz": 0.848,
+        "active_cells": 12102,
+        "cryostats_ld400": 5,
+        "meets_1e10": false
+      },
+      "F1b_single_stage_15to1_postselected": {
+        "variant": "compact",
+        "d_X": 35,
+        "d_Z": 19,
+        "d_m": 15,
+        "n_rounds": 165,
+        "p_in": 0.0020212408134842705,
+        "p_in_eff": 0.002097582245540494,
+        "p_distill_35p3": 3.2301674724369434e-07,
+        "p_clifford_x_out": 1.089677158675039e-08,
+        "p_out": 3.339135188304447e-07,
+        "p_accept": 0.96899,
+        "t_cycle_us": 1141.25,
+        "rate_khz": 0.876,
+        "active_cells": 12102,
+        "cryostats_ld400": 5,
+        "meets_1e10": false
+      },
+      "F2_litinski_twostage_15to1_x_116to12": {
+        "name": "Litinski Two-Stage (fast 15-to-1)^17_{15,7,7} x (116-to-12)_{45,13,13}",
+        "n_stage1_tiles": 17,
+        "stage1": {
+          "variant": "fast",
+          "d_X": 15,
+          "d_Z": 7,
+          "d_m": 7,
+          "n_rounds": 42,
+          "p_in": 0.004198185128033494,
+          "p_in_eff": 0.011970954377637611,
+          "p_distill_35p3": 6.0041892328935464e-05,
+          "p_clifford_x_out": 8.988697735190665e-05,
+          "p_out": 0.00014992886968084212,
+          "p_accept": 0.83473,
+          "t_cycle_us": 337.23,
+          "rate_khz": 2.965,
+          "active_cells": 3870,
+          "cryostats_ld400": 2
+        },
+        "stage2": {
+          "d_X": 45,
+          "d_Z": 13,
+          "d_m": 13,
+          "n_rounds": 143,
+          "p_in": 0.00014992886968084212,
+          "p_in_eff": 0.0017159968443194143,
+          "p_distill_per_t": 2.980633966585378e-11,
+          "p_clifford_x_per_t": 5.246058743068015e-11,
+          "p_out": 8.226692709653392e-11,
+          "p_accept": 0.81936,
+          "t_cycle_us": 1169.71,
+          "rate_khz": 10.259,
+          "active_cells": 24856,
+          "cryostats_ld400": 9
+        },
+        "p_T": 8.226692709653392e-11,
+        "rate_khz": 5.214,
+        "time_per_T_us": 191.78,
+        "active_cells": 90646,
+        "cryostats_ld400": 32,
+        "meets_1e10": true
+      },
+      "F3_gidney_cultivation_plus_15to1_compact": {
+        "name": "Gidney Cultivation (p_cult=1e-4, 13x d=5) + compact (15-to-1)_{47,21,17}",
+        "p_cult_input": 0.0001,
+        "n_cult_patches": 13,
+        "cult_active_cells": 1430,
+        "distill_stage": {
+          "variant": "compact",
+          "d_X": 47,
+          "d_Z": 21,
+          "d_m": 17,
+          "n_rounds": 187,
+          "p_in": 0.0001,
+          "p_in_eff": 0.00012910847937037237,
+          "p_distill_35p3": 7.53238209854242e-11,
+          "p_clifford_x_out": 2.4281491509850807e-11,
+          "p_out": 9.960531249527501e-11,
+          "p_accept": 0.99807,
+          "t_cycle_us": 1255.75,
+          "rate_khz": 0.796,
+          "active_cells": 17606,
+          "cryostats_ld400": 7
+        },
+        "p_T": 9.960531249527501e-11,
+        "rate_khz": 0.796,
+        "time_per_T_us": 1256.28,
+        "active_cells": 19036,
+        "cryostats_ld400": 7,
+        "meets_1e10": true
+      },
+      "F4_gidney_cultivation_plus_116to12_highthroughput": {
+        "name": "Gidney Cultivation (p_cult=1e-4, 80x d=5) + (116-to-12)_{45,13,17}",
+        "p_cult_input": 0.0001,
+        "n_cult_patches": 80,
+        "cult_active_cells": 8800,
+        "distill_stage": {
+          "d_X": 45,
+          "d_Z": 13,
+          "d_m": 17,
+          "n_rounds": 187,
+          "p_in": 0.0001,
+          "p_in_eff": 0.001318583472489684,
+          "p_distill_per_t": 1.0391379798577935e-11,
+          "p_clifford_x_per_t": 6.860230664012019e-11,
+          "p_out": 7.899368643869813e-11,
+          "p_accept": 0.85808,
+          "t_cycle_us": 1460.6,
+          "rate_khz": 8.216,
+          "active_cells": 24856,
+          "cryostats_ld400": 9
+        },
+        "p_T": 7.899368643869813e-11,
+        "rate_khz": 8.216,
+        "time_per_T_us": 121.71,
+        "active_cells": 33656,
+        "cryostats_ld400": 12,
+        "meets_1e10": true
+      }
+    },
+    "nominal_RouteC_D3_0p395pct_Lambda2p69": {
+      "inputs": {
+        "p_2q": 0.0039511415791169124,
+        "p_1q": 0.0008294504388930424,
+        "p_in_raw": 0.004781,
+        "p_in_postselected": 0.002371,
+        "A_SC": 0.017377381999329873,
+        "Lambda_SC": 2.69,
+        "T_cyc_SC_us": 6.7022,
+        "p_T_target": 1e-10
+      },
+      "F1_single_stage_15to1_raw": {
+        "variant": "compact",
+        "d_X": 35,
+        "d_Z": 19,
+        "d_m": 15,
+        "n_rounds": 165,
+        "p_in": 0.004780592018009955,
+        "p_in_eff": 0.004900391454860404,
+        "p_distill_35p3": 4.11870195611831e-06,
+        "p_clifford_x_out": 2.635707768584552e-08,
+        "p_out": 4.145059033804156e-06,
+        "p_accept": 0.92896,
+        "t_cycle_us": 1190.43,
+        "rate_khz": 0.84,
+        "active_cells": 12102,
+        "cryostats_ld400": 5,
+        "meets_1e10": false
+      },
+      "F1b_single_stage_15to1_postselected": {
+        "variant": "compact",
+        "d_X": 35,
+        "d_Z": 19,
+        "d_m": 15,
+        "n_rounds": 165,
+        "p_in": 0.0023706849474701476,
+        "p_in_eff": 0.0024904843843205965,
+        "p_distill_35p3": 5.406541156262565e-07,
+        "p_clifford_x_out": 2.635707768584552e-08,
+        "p_out": 5.670111933121021e-07,
+        "p_accept": 0.96329,
+        "t_cycle_us": 1148.01,
+        "rate_khz": 0.871,
+        "active_cells": 12102,
+        "cryostats_ld400": 5,
+        "meets_1e10": false
+      },
+      "F2_litinski_twostage_15to1_x_116to12": null,
+      "F3_gidney_cultivation_plus_15to1_compact": {
+        "name": "Gidney Cultivation (p_cult=1e-4, 13x d=5) + compact (15-to-1)_{51,23,17}",
+        "p_cult_input": 0.0001,
+        "n_cult_patches": 13,
+        "cult_active_cells": 1430,
+        "distill_stage": {
+          "variant": "compact",
+          "d_X": 51,
+          "d_Z": 23,
+          "d_m": 17,
+          "n_rounds": 187,
+          "p_in": 0.0001,
+          "p_in_eff": 0.00012898953979262768,
+          "p_distill_35p3": 7.511583930935613e-11,
+          "p_clifford_x_out": 1.0895236929909703e-11,
+          "p_out": 8.601107623926584e-11,
+          "p_accept": 0.99807,
+          "t_cycle_us": 1255.74,
+          "rate_khz": 0.796,
+          "active_cells": 20934,
+          "cryostats_ld400": 8
+        },
+        "p_T": 8.601107623926584e-11,
+        "rate_khz": 0.796,
+        "time_per_T_us": 1256.28,
+        "active_cells": 22364,
+        "cryostats_ld400": 8,
+        "meets_1e10": true
+      },
+      "F4_gidney_cultivation_plus_116to12_highthroughput": {
+        "name": "Gidney Cultivation (p_cult=1e-4, 76x d=5) + (116-to-12)_{49,13,17}",
+        "p_cult_input": 0.0001,
+        "n_cult_patches": 76,
+        "cult_active_cells": 8360,
+        "distill_stage": {
+          "d_X": 49,
+          "d_Z": 13,
+          "d_m": 17,
+          "n_rounds": 187,
+          "p_in": 0.0001,
+          "p_in_eff": 0.0018308131208891927,
+          "p_distill_per_t": 3.862057822629731e-11,
+          "p_clifford_x_per_t": 2.930818734145711e-11,
+          "p_out": 6.792876556775441e-11,
+          "p_accept": 0.8085,
+          "t_cycle_us": 1550.17,
+          "rate_khz": 7.741,
+          "active_cells": 26104,
+          "cryostats_ld400": 10
+        },
+        "p_T": 6.792876556775441e-11,
+        "rate_khz": 7.741,
+        "time_per_T_us": 129.18,
+        "active_cells": 34464,
+        "cryostats_ld400": 12,
+        "meets_1e10": true
+      }
+    },
+    "nextgen_D3pp_0p200pct_Lambda4p50_sensitivity": {
+      "inputs": {
+        "p_2q": 0.002,
+        "p_1q": 0.0008294504388930424,
+        "p_in_raw": 0.002829,
+        "p_in_postselected": 0.0012,
+        "A_SC": 0.017377381999329873,
+        "Lambda_SC": 4.5,
+        "T_cyc_SC_us": 6.7022,
+        "p_T_target": 1e-10
+      },
+      "F1_single_stage_15to1_raw": {
+        "variant": "compact",
+        "d_X": 35,
+        "d_Z": 19,
+        "d_m": 15,
+        "n_rounds": 165,
+        "p_in": 0.0028294504388930424,
+        "p_in_eff": 0.0028306465471693797,
+        "p_distill_35p3": 7.938253730456747e-07,
+        "p_clifford_x_out": 2.503877333590357e-12,
+        "p_out": 7.938278769230083e-07,
+        "p_accept": 0.95837,
+        "t_cycle_us": 1153.9,
+        "rate_khz": 0.867,
+        "active_cells": 12102,
+        "cryostats_ld400": 5,
+        "meets_1e10": false
+      },
+      "F1b_single_stage_15to1_postselected": {
+        "variant": "compact",
+        "d_X": 35,
+        "d_Z": 19,
+        "d_m": 15,
+        "n_rounds": 165,
+        "p_in": 0.0012,
+        "p_in_eff": 0.001201196108276337,
+        "p_distill_35p3": 6.066103189632673e-08,
+        "p_clifford_x_out": 2.503877333590357e-12,
+        "p_out": 6.066353577366032e-08,
+        "p_accept": 0.98213,
+        "t_cycle_us": 1125.99,
+        "rate_khz": 0.888,
+        "active_cells": 12102,
+        "cryostats_ld400": 5,
+        "meets_1e10": false
+      },
+      "F2_litinski_twostage_15to1_x_116to12": {
+        "name": "Litinski Two-Stage (compact 15-to-1)^21_{11,5,5} x (116-to-12)_{39,13,13}",
+        "n_stage1_tiles": 21,
+        "stage1": {
+          "variant": "compact",
+          "d_X": 11,
+          "d_Z": 5,
+          "d_m": 5,
+          "n_rounds": 55,
+          "p_in": 0.0028294504388930424,
+          "p_in_eff": 0.009503890712984076,
+          "p_distill_35p3": 3.0045009470780122e-05,
+          "p_clifford_x_out": 5.754955360768284e-05,
+          "p_out": 8.759456307846297e-05,
+          "p_accept": 0.86655,
+          "t_cycle_us": 425.39,
+          "rate_khz": 2.351,
+          "active_cells": 982,
+          "cryostats_ld400": 1
+        },
+        "stage2": {
+          "d_X": 39,
+          "d_Z": 13,
+          "d_m": 13,
+          "n_rounds": 143,
+          "p_in": 8.759456307846297e-05,
+          "p_in_eff": 0.000147818136348725,
+          "p_distill_per_t": 1.6411701029946193e-15,
+          "p_clifford_x_per_t": 1.0716182826888771e-13,
+          "p_out": 1.0880299837188234e-13,
+          "p_accept": 0.983,
+          "t_cycle_us": 975.0,
+          "rate_khz": 12.308,
+          "active_cells": 22984,
+          "cryostats_ld400": 8
+        },
+        "p_T": 1.0880299837188234e-13,
+        "rate_khz": 5.107,
+        "time_per_T_us": 195.8,
+        "active_cells": 43606,
+        "cryostats_ld400": 16,
+        "meets_1e10": true
+      },
+      "F3_gidney_cultivation_plus_15to1_compact": {
+        "name": "Gidney Cultivation (p_cult=1e-4, 13x d=5) + compact (15-to-1)_{39,15,17}",
+        "p_cult_input": 0.0001,
+        "n_cult_patches": 13,
+        "cult_active_cells": 1430,
+        "distill_stage": {
+          "variant": "compact",
+          "d_X": 39,
+          "d_Z": 15,
+          "d_m": 17,
+          "n_rounds": 187,
+          "p_in": 0.0001,
+          "p_in_eff": 0.00010983488069135412,
+          "p_distill_35p3": 4.6375530664459035e-11,
+          "p_clifford_x_out": 1.4013469850546855e-13,
+          "p_out": 4.6515665362964504e-11,
+          "p_accept": 0.99835,
+          "t_cycle_us": 1255.38,
+          "rate_khz": 0.797,
+          "active_cells": 10422,
+          "cryostats_ld400": 4
+        },
+        "p_T": 4.6515665362964504e-11,
+        "rate_khz": 0.797,
+        "time_per_T_us": 1254.71,
+        "active_cells": 11852,
+        "cryostats_ld400": 5,
+        "meets_1e10": true
+      },
+      "F4_gidney_cultivation_plus_116to12_highthroughput": {
+        "name": "Gidney Cultivation (p_cult=1e-4, 92x d=5) + (116-to-12)_{39,13,17}",
+        "p_cult_input": 0.0001,
+        "n_cult_patches": 92,
+        "cult_active_cells": 10120,
+        "distill_stage": {
+          "d_X": 39,
+          "d_Z": 13,
+          "d_m": 17,
+          "n_rounds": 187,
+          "p_in": 0.0001,
+          "p_in_eff": 0.00014481387112455602,
+          "p_distill_per_t": 1.5117617728982829e-15,
+          "p_clifford_x_per_t": 1.4013469850546855e-13,
+          "p_out": 1.4164646027836684e-13,
+          "p_accept": 0.98334,
+          "t_cycle_us": 1274.55,
+          "rate_khz": 9.415,
+          "active_cells": 22984,
+          "cryostats_ld400": 8
+        },
+        "p_T": 1.4164646027836684e-13,
+        "rate_khz": 9.415,
+        "time_per_T_us": 106.21,
+        "active_cells": 33104,
+        "cryostats_ld400": 12,
+        "meets_1e10": true
+      }
+    }
+  },
+  "part5_flagship_algorithms": {
+    "FeMoco_192L_1e8T": {
+      "qLDPC_d18_Litinski_TwoStage": {
+        "label": "qLDPC [[288,12,18]] + 1x Litinski (15-to-1)x(116-to-12)",
+        "n_logical": 192,
+        "n_T_gates": 100000000.0,
+        "mem_active_cells": 9216,
+        "routing_active_cells": 1152,
+        "factory_name": "Litinski Two-Stage (fast 15-to-1)^17_{15,7,7} x (116-to-12)_{45,13,13}",
+        "n_factories": 1,
+        "factory_active_cells": 90646,
+        "total_active_cells": 101014,
+        "mem_route_cryostats": 4,
+        "factory_cryostats": 32,
+        "total_cryostats_ld400": 36,
+        "R_T_total_khz": 5.214,
+        "runtime_hours": 5.328,
+        "n_memory_rounds": 1902899433.8,
+        "spacetime_volume_L_rounds": 365356691286.87427,
+        "p_fail_memory": 1.0,
+        "p_fail_factory": 0.008192946077648422,
+        "p_fail_total": 1.0,
+        "tco_and_power": {
+          "n_cryostats": 36,
+          "n_readout_chains": 3157,
+          "n_hpc_4u_modules": 3,
+          "total_facility_power_kw": 906.59,
+          "total_facility_power_mw": 0.9066,
+          "chips_w3_usd_p50": 178.55,
+          "tco5_usd_p10": 95682402.59,
+          "tco5_usd_p50": 116788961.96,
+          "tco5_usd_p90": 145250553.07,
+          "tco5_musd_p50": 116.789
+        },
+        "solves_per_5yr_70pct_uptime": 5755.0,
+        "cost_per_solve_usd_p50": 20293.46
+      },
+      "qLDPC_d18_Gidney_Cult_116to12": {
+        "label": "qLDPC [[288,12,18]] + 1x Gidney Cult + (116-to-12)",
+        "n_logical": 192,
+        "n_T_gates": 100000000.0,
+        "mem_active_cells": 9216,
+        "routing_active_cells": 1152,
+        "factory_name": "Gidney Cultivation (p_cult=1e-4, 80x d=5) + (116-to-12)_{45,13,17}",
+        "n_factories": 1,
+        "factory_active_cells": 33656,
+        "total_active_cells": 44024,
+        "mem_route_cryostats": 4,
+        "factory_cryostats": 12,
+        "total_cryostats_ld400": 16,
+        "R_T_total_khz": 8.216,
+        "runtime_hours": 3.381,
+        "n_memory_rounds": 1207609256.1,
+        "spacetime_volume_L_rounds": 231860977162.82404,
+        "p_fail_memory": 1.0,
+        "p_fail_factory": 0.007868250622866557,
+        "p_fail_total": 1.0,
+        "tco_and_power": {
+          "n_cryostats": 16,
+          "n_readout_chains": 1376,
+          "n_hpc_4u_modules": 3,
+          "total_facility_power_kw": 406.58,
+          "total_facility_power_mw": 0.4066,
+          "chips_w3_usd_p50": 77.81,
+          "tco5_usd_p10": 48190767.98,
+          "tco5_usd_p50": 59278000.27,
+          "tco5_usd_p90": 74274801.35,
+          "tco5_musd_p50": 59.278
+        },
+        "solves_per_5yr_70pct_uptime": 9068.5,
+        "cost_per_solve_usd_p50": 6536.7
+      },
+      "qLDPC_d18_Gidney_Cult_Compact15to1": {
+        "label": "qLDPC [[288,12,18]] + 2x Gidney Cult + Compact (15-to-1)",
+        "n_logical": 192,
+        "n_T_gates": 100000000.0,
+        "mem_active_cells": 9216,
+        "routing_active_cells": 1152,
+        "factory_name": "Gidney Cultivation (p_cult=1e-4, 13x d=5) + compact (15-to-1)_{47,21,17}",
+        "n_factories": 2,
+        "factory_active_cells": 38072,
+        "total_active_cells": 48440,
+        "mem_route_cryostats": 4,
+        "factory_cryostats": 14,
+        "total_cryostats_ld400": 18,
+        "R_T_total_khz": 1.592,
+        "runtime_hours": 17.448,
+        "n_memory_rounds": 6232234703.4,
+        "spacetime_volume_L_rounds": 1196589063046.3333,
+        "p_fail_memory": 1.0,
+        "p_fail_factory": 0.009911089449837207,
+        "p_fail_total": 1.0,
+        "tco_and_power": {
+          "n_cryostats": 18,
+          "n_readout_chains": 1514,
+          "n_hpc_4u_modules": 3,
+          "total_facility_power_kw": 456.58,
+          "total_facility_power_mw": 0.4566,
+          "chips_w3_usd_p50": 85.62,
+          "tco5_usd_p10": 52968885.01,
+          "tco5_usd_p50": 64949959.5,
+          "tco5_usd_p90": 81560620.06,
+          "tco5_musd_p50": 64.95
+        },
+        "solves_per_5yr_70pct_uptime": 1757.2,
+        "cost_per_solve_usd_p50": 36962.49
+      },
+      "SurfaceCode_D3_Baseline": {
+        "label": "Exp143 D3 Surface Code (d=53) + 1x Litinski Two-Stage",
+        "n_logical": 192,
+        "n_T_gates": 100000000.0,
+        "mem_active_cells": 1078464,
+        "routing_active_cells": 539232,
+        "factory_name": "Litinski Two-Stage (fast 15-to-1)^17_{15,7,7} x (116-to-12)_{45,13,13}",
+        "n_factories": 1,
+        "factory_active_cells": 90646,
+        "total_active_cells": 1708342,
+        "mem_route_cryostats": 561,
+        "factory_cryostats": 32,
+        "total_cryostats_ld400": 593,
+        "R_T_total_khz": 5.214,
+        "runtime_hours": 5.328,
+        "n_memory_rounds": 2861605601.5,
+        "spacetime_volume_L_rounds": 549428275485.2646,
+        "p_fail_memory": 0.006306836257614634,
+        "p_fail_factory": 0.008192946077648422,
+        "p_fail_total": 0.014448110765883815,
+        "tco_and_power": {
+          "n_cryostats": 593,
+          "n_readout_chains": 53386,
+          "n_hpc_4u_modules": 14,
+          "total_facility_power_kw": 14855.73,
+          "total_facility_power_mw": 14.8557,
+          "chips_w3_usd_p50": 2264.67,
+          "tco5_usd_p10": 1116866242.07,
+          "tco5_usd_p50": 1327800263.59,
+          "tco5_usd_p90": 1598260237.24,
+          "tco5_musd_p50": 1327.8
+        },
+        "solves_per_5yr_70pct_uptime": 5755.0,
+        "cost_per_solve_usd_p50": 230720.97,
+        "d_surface_code": 53
+      },
+      "compression_vs_SC_Litinski": {
+        "cryostats_x": 16.47,
+        "power_x": 16.39,
+        "tco_x": 11.37,
+        "cost_per_solve_x": 11.37
+      },
+      "compression_vs_SC_Cultivation": {
+        "cryostats_x": 37.06,
+        "power_x": 36.54,
+        "tco_x": 22.4,
+        "cost_per_solve_x": 35.3
+      },
+      "lee2021_full_76orb_sensitivity": {
+        "n_logical": 2142,
+        "n_T_gates": 128000000000.0,
+        "bb288_blocks": 179,
+        "mem_route_cryostats": 42,
+        "n_cult_factories": 16,
+        "total_cryostats": 234,
+        "runtime_days": 11.27
+      },
+      "honest_memory_regime_audit": {
+        "spacetime_volume_L_rounds": 231860977162.82404,
+        "pL_req_for_1pct_memory_fail": 4.31e-14,
+        "bb288_pL_1L_at_D3_0p337pct": 4.468731410631689e-06,
+        "bb288_P_fail_total_at_D3_0p337pct": 1.0,
+        "bb288_pL_1L_at_D3pp_0p200pct": 2.4195263014335824e-07,
+        "bb288_P_fail_total_at_D3pp_0p200pct": 1.0,
+        "bb360_d24_pL_1L_at_D3_0p337pct": 1.3069654016156024e-05,
+        "bb360_d24_P_fail_total_at_D3_0p337pct": 1.0
+      }
+    },
+    "RSA2048_4096L_1e10T": {
+      "qLDPC_d18_D3pp_Litinski": {
+        "label": "qLDPC [[288,12,18]] (D3++ 0.20%) + 16x Litinski Two-Stage",
+        "code_label": "[[288,12,18]] @ D3++ (p_2q=0.20%)",
+        "n_logical": 4096,
+        "n_T_gates": 10000000000.0,
+        "mem_active_cells": 196992,
+        "routing_active_cells": 29548,
+        "factory_name": "Litinski Two-Stage (fast 15-to-1)^17_{15,7,7} x (116-to-12)_{45,13,13}",
+        "n_factories": 16,
+        "factory_active_cells": 1450336,
+        "total_active_cells": 1676876,
+        "mem_route_cryostats": 79,
+        "factory_cryostats": 512,
+        "total_cryostats_ld400": 591,
+        "R_T_total_khz": 83.42,
+        "runtime_hours": 33.3,
+        "runtime_days": 1.387,
+        "n_memory_rounds": 11893121461.161272,
+        "spacetime_volume_L_rounds": 48714225504916.57,
+        "p_L_mem_1L_used": 2.4195263014335824e-07,
+        "p_fail_memory": 1.0,
+        "p_fail_factory": 0.5607424092773048,
+        "p_fail_total": 1.0,
+        "tco_and_power": {
+          "n_cryostats": 591,
+          "n_readout_chains": 52403,
+          "n_hpc_4u_modules": 40,
+          "total_facility_power_kw": 14862.8,
+          "total_facility_power_mw": 14.8628,
+          "chips_w3_usd_p50": 2963.94,
+          "tco5_usd_p10": 1111852553.3,
+          "tco5_usd_p50": 1322198905.06,
+          "tco5_usd_p90": 1591299174.64,
+          "tco5_musd_p50": 1322.199
+        }
+      },
+      "qLDPC_d24_D3_GidneyCult": {
+        "label": "qLDPC [[360,12,24]] (D3 0.337%) + 16x Gidney Cult+(116-to-12)",
+        "code_label": "[[360,12,24]] @ D3 (p_2q=0.337%)",
+        "n_logical": 4096,
+        "n_T_gates": 10000000000.0,
+        "mem_active_cells": 246240,
+        "routing_active_cells": 36936,
+        "factory_name": "Gidney Cultivation (p_cult=1e-4, 80x d=5) + (116-to-12)_{45,13,17}",
+        "n_factories": 16,
+        "factory_active_cells": 538496,
+        "total_active_cells": 821672,
+        "mem_route_cryostats": 99,
+        "factory_cryostats": 192,
+        "total_cryostats_ld400": 291,
+        "R_T_total_khz": 131.46,
+        "runtime_hours": 21.13,
+        "runtime_days": 0.88,
+        "n_memory_rounds": 7547557850.3523445,
+        "spacetime_volume_L_rounds": 30914796955043.203,
+        "p_L_mem_1L_used": 1.3069654016156024e-05,
+        "p_fail_memory": 1.0,
+        "p_fail_factory": 0.546126550043723,
+        "p_fail_total": 1.0,
+        "tco_and_power": {
+          "n_cryostats": 291,
+          "n_readout_chains": 25678,
+          "n_hpc_4u_modules": 45,
+          "total_facility_power_kw": 7373.77,
+          "total_facility_power_mw": 7.3738,
+          "chips_w3_usd_p50": 1633.88,
+          "tco5_usd_p10": 592845730.69,
+          "tco5_usd_p50": 711304047.49,
+          "tco5_usd_p90": 862339990.55,
+          "tco5_musd_p50": 711.304
+        }
+      },
+      "qLDPC_d18_D3_HonestSTAudit": {
+        "label": "qLDPC [[288,12,18]] (D3 0.337% Audit) + 16x Gidney Cult+(116-to-12)",
+        "code_label": "[[288,12,18]] @ D3 (0.337%, honest ST audit)",
+        "n_logical": 4096,
+        "n_T_gates": 10000000000.0,
+        "mem_active_cells": 196992,
+        "routing_active_cells": 29548,
+        "factory_name": "Gidney Cultivation (p_cult=1e-4, 80x d=5) + (116-to-12)_{45,13,17}",
+        "n_factories": 16,
+        "factory_active_cells": 538496,
+        "total_active_cells": 765036,
+        "mem_route_cryostats": 79,
+        "factory_cryostats": 192,
+        "total_cryostats_ld400": 271,
+        "R_T_total_khz": 131.46,
+        "runtime_hours": 21.13,
+        "runtime_days": 0.88,
+        "n_memory_rounds": 7547557850.3523445,
+        "spacetime_volume_L_rounds": 30914796955043.203,
+        "p_L_mem_1L_used": 4.468731410631689e-06,
+        "p_fail_memory": 1.0,
+        "p_fail_factory": 0.546126550043723,
+        "p_fail_total": 1.0,
+        "tco_and_power": {
+          "n_cryostats": 271,
+          "n_readout_chains": 23908,
+          "n_hpc_4u_modules": 40,
+          "total_facility_power_kw": 6862.8,
+          "total_facility_power_mw": 6.8628,
+          "chips_w3_usd_p50": 1352.23,
+          "tco5_usd_p10": 556789598.73,
+          "tco5_usd_p50": 666983877.27,
+          "tco5_usd_p90": 809681747.32,
+          "tco5_musd_p50": 666.984
+        }
+      },
+      "SurfaceCode_D3_Baseline": {
+        "label": "Exp143 D3 Surface Code (d=59) + 16x Litinski Two-Stage",
+        "code_label": "Surface Code d=59 @ D3 (0.337%)",
+        "n_logical": 4096,
+        "n_T_gates": 10000000000.0,
+        "mem_active_cells": 28512256,
+        "routing_active_cells": 14256128,
+        "factory_name": "Litinski Two-Stage (fast 15-to-1)^17_{15,7,7} x (116-to-12)_{45,13,13}",
+        "n_factories": 16,
+        "factory_active_cells": 1450336,
+        "total_active_cells": 44218720,
+        "mem_route_cryostats": 14815,
+        "factory_cryostats": 512,
+        "total_cryostats_ld400": 15327,
+        "R_T_total_khz": 83.42,
+        "runtime_hours": 33.3,
+        "runtime_days": 1.387,
+        "n_memory_rounds": 17885035009.285957,
+        "spacetime_volume_L_rounds": 73257103398035.28,
+        "p_L_mem_1L_used": 5.106032790859531e-16,
+        "p_fail_memory": 0.03671438002814731,
+        "p_fail_factory": 0.5607424092773048,
+        "p_fail_total": 0.5768694793933462,
+        "tco_and_power": {
+          "n_cryostats": 15327,
+          "n_readout_chains": 1381835,
+          "n_hpc_4u_modules": 288,
+          "total_facility_power_kw": 383807.16,
+          "total_facility_power_mw": 383.8072,
+          "chips_w3_usd_p50": 58618.59,
+          "tco5_usd_p10": 21920189184.31,
+          "tco5_usd_p50": 25509196858.01,
+          "tco5_usd_p90": 29960140411.8,
+          "tco5_musd_p50": 25509.197
+        },
+        "d_surface_code": 59
+      },
+      "compression_d18_Litinski_vs_SC": {
+        "cryostats_x": 25.93,
+        "power_x": 25.82,
+        "tco_x": 19.29
+      },
+      "compression_d24_Cult_vs_SC": {
+        "cryostats_x": 52.67,
+        "power_x": 52.05,
+        "tco_x": 35.86
+      }
+    }
+  },
+  "portability_hardcoded_hits": []
+}

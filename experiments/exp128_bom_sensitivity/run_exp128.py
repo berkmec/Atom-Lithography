@@ -32,6 +32,7 @@ S56_SPEC_JSON = ROOT / "results" / "exp139_epi_cap_process_integration" / "s56_h
 S65_SPEC_JSON = ROOT / "results" / "exp140_cryo_fpga_boed_mux_readout" / "s65_hardware_spec.json"
 S9Q_SPEC_JSON = ROOT / "results" / "exp142_option_q_multispecies_qram" / "s9q_hardware_spec.json"
 S9HPC_SPEC_JSON = ROOT / "results" / "exp143_d3_grape_m4_and_hpc_decoder" / "s9hpc_hardware_spec.json"
+S_SAFETY_SPEC_JSON = ROOT / "results" / "exp150_industrial_safety_fmea_hazop" / "s_safety_spec.json"
 OUT_DIR = ROOT / "results" / "exp128_bom_sensitivity"
 PRED_JSON = OUT_DIR / "predictions_exp128.json"
 OUT_JSON = OUT_DIR / "exp128.json"
@@ -235,9 +236,11 @@ def m1_scale_factor(row: pd.Series) -> tuple[float, str]:
     # S8: SW $0 HW
     if row["subsystem"] == "S8":
         return 0.0, "Yazilim ($0 HW)"
-    # v6.0 optional plug-in modules (Option-Q & Option-HPC) are excluded from M1 Base ($2,466,120 preserved!)
+    # v6.0 optional plug-in modules & v7.0 facility safety add-on excluded from M1 Base ($2,466,120 preserved; M1+Safety=$2,611,120 noted!)
     if parent in {"S1.7", "S9.4", "S9.HPC"}:
         return 0.0, "v6.0 moduler opsiyon (Option-Q / Option-HPC) — M1 Base disinda"
+    if parent == "S7.SAFETY":
+        return 0.0, "v7.0 SEMI S2/SIL-3 tesis emniyet paketi (+$145k -> M1+Safety=$2,611,120; M1 Base korundu)"
     # S9: Reduced spares for M1
     if pid == "S9.3-01":
         return 0.0, "M1'de cok-demet MEMS yedegi yok"
@@ -269,6 +272,8 @@ def assign_rfq_package(row: pd.Series) -> str:
         return "RFQ-08 (v5.0 S5.6 MBE+S6.5 Cryo-MUX)"
     if parent in {"S1.7", "S9.4", "S9.HPC"}:
         return "RFQ-09 (v6.0 Option-Q + Option-HPC)"
+    if parent == "S7.SAFETY":
+        return "RFQ-10 (v7.0 SEMI S2/SIL-3 Emniyet)"
     return "Non-RFQ (COTS/Diğer)"
 
 
@@ -276,6 +281,8 @@ def assign_driver_group(row: pd.Series) -> str:
     pid = row["part_id"]
     parent = row["parent_bom_id"]
     sub = row["subsystem"]
+    if parent == "S7.SAFETY":
+        return "v7.0 Emniyet Paketi (SEMI S2/SIL-3)"
     if parent in {"S1.7", "S9.4"}:
         return "v6.0 Option-Q (qRAM + S1-Multi)"
     if parent == "S9.HPC":
@@ -313,6 +320,8 @@ def assign_delta_bucket(row: pd.Series) -> str:
     pid = row["part_id"]
     parent = row["parent_bom_id"]
     notes = str(row["notes"])
+    if "DELTA-V7.0-SAFETY" in notes:
+        return "V7_0_Safety_Compliance_Exp150"
     if "DELTA-V6.0-OPTQ" in notes:
         return "V6_0_Option_Q_Exp142"
     if "DELTA-V6.0-OPTHPC" in notes:
@@ -451,19 +460,21 @@ def main() -> None:
 
     # Explicit engineering delta bridge:
     # Exp122 ($2,531,244.37) -> M3 v3.0 ($4,189,600) -> M3 v4.0 ($4,609,600)
-    # -> M3 v5.0 Base ($5,247,800) -> M3 v6.0 Full ($5,547,800 = Base + Option-Q $168k + Option-HPC $132k)
+    # -> M3 v5.0 Base ($5,247,800) -> M3 v6.0 Full ($5,547,800) -> M3 v7.0 Safety-Certified Full ($5,692,800)
     s56_spec = json.loads(S56_SPEC_JSON.read_text(encoding="utf-8"))["s56_hardware_spec"]
     s65_spec = json.loads(S65_SPEC_JSON.read_text(encoding="utf-8"))
     s9q_spec = json.loads(S9Q_SPEC_JSON.read_text(encoding="utf-8"))
     s9hpc_spec = json.loads(S9HPC_SPEC_JSON.read_text(encoding="utf-8"))
+    s_safety_spec = json.loads(S_SAFETY_SPEC_JSON.read_text(encoding="utf-8"))
 
     notes_str = df["notes"].astype(str)
+    v7_safety_mask = notes_str.str.contains("DELTA-V7.0-SAFETY", na=False)
     v6_optq_mask = notes_str.str.contains("DELTA-V6.0-OPTQ", na=False)
     v6_opthpc_mask = notes_str.str.contains("DELTA-V6.0-OPTHPC", na=False)
     v6_mask_all = v6_optq_mask | v6_opthpc_mask
     v5_mask_all = notes_str.str.contains("DELTA-V5.0", na=False)
     v4_mask_all = notes_str.str.contains("DELTA-V4.0", na=False) & ~v5_mask_all
-    v3_mask_all = ~v4_mask_all & ~v5_mask_all & ~v6_mask_all
+    v3_mask_all = ~v4_mask_all & ~v5_mask_all & ~v6_mask_all & ~v7_safety_mask
 
     exp124_parts_nom = float(
         df[df["part_id"].isin(["S1.3-02", "S1.5-01", "S1.5-02", "S1.5-03", "S1.6-01", "S1.6-02"])]["usd_nom"].sum()
@@ -498,9 +509,9 @@ def main() -> None:
     v5_gross_nom = v5_s56_nom + v5_s611_nom
     v5_gross_high = v5_s56_high + v5_s611_high
     v5_net_delta_nom = v5_gross_nom - v5_credit_nom  # +$638,200 exact
-    m3_v5_base_low = float(df[~v6_mask_all]["usd_low"].sum())
-    m3_v5_base_nom = float(df[~v6_mask_all]["usd_nom"].sum())  # $5,247,800 exact
-    m3_v5_base_high = float(df[~v6_mask_all]["usd_high"].sum())
+    m3_v5_base_low = float(df[~v6_mask_all & ~v7_safety_mask]["usd_low"].sum())
+    m3_v5_base_nom = float(df[~v6_mask_all & ~v7_safety_mask]["usd_nom"].sum())  # $5,247,800 exact
+    m3_v5_base_high = float(df[~v6_mask_all & ~v7_safety_mask]["usd_high"].sum())
 
     # v6.0 Modular Optional Add-Ons (zero double-counting!)
     v6_optq_low = float(df[v6_optq_mask]["usd_low"].sum())
@@ -515,8 +526,20 @@ def main() -> None:
 
     m3_v6_plus_optq_nom = m3_v5_base_nom + v6_optq_nom  # $5,415,800 exact
     m3_v6_plus_opthpc_nom = m3_v5_base_nom + v6_opthpc_nom  # $5,379,800 exact
+    m3_v6_full_nom = m3_v5_base_nom + v6_net_delta_nom  # $5,547,800 exact
 
-    # Strict parity assertions against primary Exp139, Exp140, Exp142 & Exp143 hardware specs
+    # v7.0 SEMI S2 / ANSI Z136.1 / IEC 61508 SIL-3 Safety Compliance Package (Exp150; 355.0 kg facility)
+    v7_safety_low = float(df[v7_safety_mask]["usd_low"].sum())
+    v7_safety_nom = float(df[v7_safety_mask]["usd_nom"].sum())  # $145,000 exact
+    v7_safety_high = float(df[v7_safety_mask]["usd_high"].sum())
+    m3_base_plus_safety_nom = m3_v5_base_nom + v7_safety_nom  # $5,392,800 exact
+    m1_plus_safety_nom = m1_nom + v7_safety_nom  # $2,611,120 exact
+    # Transparent conservative gross vs potential starter-item replacement credit ($76.2k max if S1.6/S5.5-04/S7.1-03/S7.4-04 swapped rather than kept as redundant layers)
+    v7_max_potential_starter_overlap_usd = float(
+        df[df["part_id"].isin(["S1.6-01", "S1.6-02", "S5.5-04", "S7.1-03", "S7.4-04"])]["usd_nom"].sum()
+    )
+
+    # Strict parity assertions against primary Exp139, Exp140, Exp142, Exp143 & Exp150 hardware specs
     assert abs(m3_v3_base_nom - 4_189_600.0) < 1e-6, f"M3 v3.0 base mismatch: {m3_v3_base_nom}"
     assert abs(v5_credit_nom - 86_000.0) < 1e-6, f"v5.0 credit mismatch: {v5_credit_nom}"
     assert abs(v5_s56_nom - s56_spec["bom_v5_cost_estimate_usd"]["total_p50_usd"]) < 1e-6
@@ -525,7 +548,12 @@ def main() -> None:
     assert abs(m1_nom - 2_466_120.0) < 1e-6, f"M1 Base mismatch: {m1_nom}"
     assert abs(v6_optq_nom - s9q_spec["totals_option_q_plus_s1_multi"]["cost_usd_nom"]) < 1e-6
     assert abs(v6_opthpc_nom - s9hpc_spec["totals_base_4u_option_hpc_module"]["cost_usd_nom"]) < 1e-6
-    assert abs(m3_nom - 5_547_800.0) < 1e-6, f"M3 v6.0 Full total mismatch: {m3_nom}"
+    assert abs(m3_v6_full_nom - 5_547_800.0) < 1e-6, f"M3 v6.0 Full mismatch: {m3_v6_full_nom}"
+    assert abs(v7_safety_low - s_safety_spec["totals"]["cost_usd_low"]) < 1e-6
+    assert abs(v7_safety_nom - s_safety_spec["totals"]["cost_usd_nom"]) < 1e-6
+    assert abs(v7_safety_high - s_safety_spec["totals"]["cost_usd_high"]) < 1e-6
+    assert abs(m3_base_plus_safety_nom - 5_392_800.0) < 1e-6, f"M3 Base+Safety mismatch: {m3_base_plus_safety_nom}"
+    assert abs(m3_nom - 5_692_800.0) < 1e-6, f"M3 v7.0 Safety-Certified Full mismatch: {m3_nom}"
 
     # Alternative M3 v5.0 Pilot (256-cell / 8-chain S6.5 subset: 1x ZU48DR $29k + 1/4 cryo $142.8k = $171.8k -> +$171.8k + $95k - $86k = +$180.8k over v4.0)
     s611_pilot_256_nom = 0.5 * 58_000.0 + 0.25 * (336_000.0 + 144_000.0 + 91_200.0)  # $171,800
@@ -574,6 +602,27 @@ def main() -> None:
     }
     assert v6_hardware_mass_reconciliation["mass_reconciliation_error_kg"] < 1e-9
 
+    safety_parts_mass = {
+        "S7.SAFETY-01": 118.0,
+        "S7.SAFETY-02": 38.0,
+        "S7.SAFETY-03": 18.0,
+        "S7.SAFETY-04": 145.0,
+        "S7.SAFETY-05": 24.0,
+        "S7.SAFETY-06": 12.0,
+    }
+    safety_mass_tot = round(sum(safety_parts_mass.values()), 4)
+    v7_hardware_mass_reconciliation = {
+        "on_frame_cad_v6_mass_kg": v6_hardware_mass_reconciliation["cad_v6_full_mass_kg"],
+        "facility_safety_exp150_spec_mass_kg": float(s_safety_spec["totals"]["total_mass_kg"]),
+        "facility_safety_bom_parts_mass_kg": safety_parts_mass,
+        "facility_safety_bom_total_mass_kg": safety_mass_tot,
+        "facility_safety_steady_power_W": float(s_safety_spec["totals"]["steady_electrical_power_W"]),
+        "facility_safety_cryo_load_W": float(s_safety_spec["totals"]["cryo_load_W"]),
+        "total_facility_load_mass_kg": round(v6_hardware_mass_reconciliation["cad_v6_full_mass_kg"] + safety_mass_tot, 4),
+        "mass_reconciliation_error_kg": abs(safety_mass_tot - float(s_safety_spec["totals"]["total_mass_kg"])),
+    }
+    assert v7_hardware_mass_reconciliation["mass_reconciliation_error_kg"] < 1e-9
+
     other_cots_align_delta = (m3_v3_base_nom - exp122_central_usd) - (
         exp124_net_delta + exp125_net_delta + exp127_net_delta + mems_s2_net_delta + s9_spares_delta
     )
@@ -607,6 +656,11 @@ def main() -> None:
         "delta_v6_0_modular_addons_total_usd": v6_net_delta_nom,
         "bom_detailed_m3_v6_plus_option_q_nom_usd": m3_v6_plus_optq_nom,
         "bom_detailed_m3_v6_plus_option_hpc_nom_usd": m3_v6_plus_opthpc_nom,
+        "bom_detailed_m3_v6_full_nom_usd": m3_v6_full_nom,
+        "delta_v7_0_safety_compliance_exp150_usd": v7_safety_nom,
+        "bom_detailed_m3_base_plus_safety_nom_usd": m3_base_plus_safety_nom,
+        "bom_detailed_m1_plus_safety_nom_usd": m1_plus_safety_nom,
+        "v7_max_potential_starter_overlap_usd": v7_max_potential_starter_overlap_usd,
         "bom_detailed_m3_nom_usd": m3_nom,
         "total_delta_usd": m3_nom - exp122_central_usd,
         "bridge_arithmetic_error_usd": abs(
@@ -623,13 +677,14 @@ def main() -> None:
                 - v5_credit_nom
                 + v6_optq_nom
                 + v6_opthpc_nom
+                + v7_safety_nom
             )
             - m3_nom
         ),
     }
     assert delta_bridge["bridge_arithmetic_error_usd"] < 1e-6
 
-    # RFQ nominal coverage (RFQ-01..06, RFQ-01..07, RFQ-01..08 v5 Base, and RFQ-01..09 v6 Full)
+    # RFQ nominal coverage (RFQ-01..06, 01..07, 01..08 v5 Base, 01..09 v6 Full, 01..10 v7 Safety Full)
     rfq_summary = {}
     for pkg, g in df.groupby("rfq_package"):
         rfq_summary[pkg] = {
@@ -655,8 +710,14 @@ def main() -> None:
     )
     rfq8_nom_share = rfq8_nom / m3_nom
     rfq8_nom_share_of_v5_base = rfq8_nom / m3_v5_base_nom
-    rfq9_nom = sum(v["usd_nom"] for k, v in rfq_summary.items() if k.startswith("RFQ-"))
+    rfq9_nom = sum(
+        v["usd_nom"] for k, v in rfq_summary.items()
+        if k.startswith("RFQ-0")
+    )
     rfq9_nom_share = rfq9_nom / m3_nom
+    rfq9_nom_share_of_v6_full = rfq9_nom / m3_v6_full_nom
+    rfq10_nom = sum(v["usd_nom"] for k, v in rfq_summary.items() if k.startswith("RFQ-"))
+    rfq10_nom_share = rfq10_nom / m3_nom
 
     # -------------------------------------------------------------------------
     # 3. Model A — 100,000-Sample Correlated Log-Normal Monte Carlo (BOM_DETAILED)
@@ -695,7 +756,8 @@ def main() -> None:
     driver_col = priced["driver_group"].to_numpy(dtype=object)
     driver_names = sorted(priced["driver_group"].unique())
     drv_idx = {name: np.where(driver_col == name)[0] for name in driver_names}
-    rfq9_mask = priced["rfq_package"].str.startswith("RFQ-").to_numpy(dtype=bool)
+    rfq10_mask = priced["rfq_package"].str.startswith("RFQ-").to_numpy(dtype=bool)
+    rfq9_mask = priced["rfq_package"].str.startswith("RFQ-0").to_numpy(dtype=bool)
     rfq8_mask = (
         priced["rfq_package"].str.startswith("RFQ-0") & ~priced["rfq_package"].str.startswith("RFQ-09")
     ).to_numpy(dtype=bool)
@@ -706,9 +768,10 @@ def main() -> None:
         priced["rfq_package"].str.startswith("RFQ-0") & ~priced["rfq_package"].str.startswith(("RFQ-07", "RFQ-08", "RFQ-09"))
     ).to_numpy(dtype=bool)
     priced_notes = priced["notes"].astype(str)
+    safety_p_mask = priced_notes.str.contains("DELTA-V7.0-SAFETY", na=False).to_numpy(dtype=bool)
     optq_p_mask = priced_notes.str.contains("DELTA-V6.0-OPTQ", na=False).to_numpy(dtype=bool)
     opthpc_p_mask = priced_notes.str.contains("DELTA-V6.0-OPTHPC", na=False).to_numpy(dtype=bool)
-    base_v5_p_mask = ~(optq_p_mask | opthpc_p_mask)
+    base_v5_p_mask = ~(optq_p_mask | opthpc_p_mask | safety_p_mask)
     s66_chain_mask = priced["part_id"].isin([f"S6.6-0{i}" for i in range(1, 7)]).to_numpy(dtype=bool)
     s68_mask = (priced["parent_bom_id"] == "S6.8").to_numpy(dtype=bool)
 
@@ -731,10 +794,13 @@ def main() -> None:
 
     bom_samples = np.empty(N, dtype=np.float64)
     bom_v5_base_samples = np.empty(N, dtype=np.float64)
+    bom_base_plus_safety_samples = np.empty(N, dtype=np.float64)
     bom_plus_optq_samples = np.empty(N, dtype=np.float64)
     bom_plus_opthpc_samples = np.empty(N, dtype=np.float64)
+    bom_v6_full_samples = np.empty(N, dtype=np.float64)
     bom_no_bc_shock = np.empty(N, dtype=np.float64)
     rfq_cost_samples = np.empty(N, dtype=np.float64)
+    rfq9_cost_samples = np.empty(N, dtype=np.float64)
     rfq8_cost_samples = np.empty(N, dtype=np.float64)
     rfq7_cost_samples = np.empty(N, dtype=np.float64)
     rfq6_cost_samples = np.empty(N, dtype=np.float64)
@@ -759,11 +825,15 @@ def main() -> None:
         b_base = c_mat[:, base_v5_p_mask].sum(axis=1)
         b_optq = c_mat[:, optq_p_mask].sum(axis=1)
         b_opthpc = c_mat[:, opthpc_p_mask].sum(axis=1)
+        b_saf = c_mat[:, safety_p_mask].sum(axis=1)
         bom_v5_base_samples[start:end] = b_base
+        bom_base_plus_safety_samples[start:end] = b_base + b_saf
         bom_plus_optq_samples[start:end] = b_base + b_optq
         bom_plus_opthpc_samples[start:end] = b_base + b_opthpc
+        bom_v6_full_samples[start:end] = b_base + b_optq + b_opthpc
 
-        rfq_cost_samples[start:end] = c_mat[:, rfq9_mask].sum(axis=1)
+        rfq_cost_samples[start:end] = c_mat[:, rfq10_mask].sum(axis=1)
+        rfq9_cost_samples[start:end] = c_mat[:, rfq9_mask].sum(axis=1)
         rfq8_cost_samples[start:end] = c_mat[:, rfq8_mask].sum(axis=1)
         rfq7_cost_samples[start:end] = c_mat[:, rfq7_mask].sum(axis=1)
         rfq6_cost_samples[start:end] = c_mat[:, rfq6_mask].sum(axis=1)
@@ -781,12 +851,14 @@ def main() -> None:
     prog_x3 = bom_samples * 3.0
     prog_x10 = bom_samples * 10.0
 
-    # Common-random-number modular program comparisons (M3 v5.0 Base, +Option-Q, +Option-HPC, v6.0 Full)
+    # Common-random-number modular program comparisons across all 6 configurations
     prog_stoch_v5_base = bom_v5_base_samples * m_prog_samples
+    prog_stoch_base_plus_safety = bom_base_plus_safety_samples * m_prog_samples
     prog_stoch_plus_optq = bom_plus_optq_samples * m_prog_samples
     prog_stoch_plus_opthpc = bom_plus_opthpc_samples * m_prog_samples
+    prog_stoch_v6_full = bom_v6_full_samples * m_prog_samples
 
-    # Budget-cap probabilities (Model A — Full v6.0 & M3 v5.0 Base)
+    # Budget-cap probabilities (Model A — Full v7.0, v6.0 Full, Base+Safety & M3 v5.0 Base)
     p_bom_gt_50m = float(np.mean(bom_samples > 50e6))
     p_bom_gt_100m = float(np.mean(bom_samples > 100e6))
     p_prog_stoch_gt_50m = float(np.mean(prog_stoch > 50e6))
@@ -797,6 +869,10 @@ def main() -> None:
     p_prog_x10_gt_100m = float(np.mean(prog_x10 > 100e6))
     p_base_prog_stoch_gt_50m = float(np.mean(prog_stoch_v5_base > 50e6))
     p_base_prog_stoch_gt_100m = float(np.mean(prog_stoch_v5_base > 100e6))
+    p_base_saf_prog_stoch_gt_50m = float(np.mean(prog_stoch_base_plus_safety > 50e6))
+    p_base_saf_prog_stoch_gt_100m = float(np.mean(prog_stoch_base_plus_safety > 100e6))
+    p_v6_full_prog_stoch_gt_50m = float(np.mean(prog_stoch_v6_full > 50e6))
+    p_v6_full_prog_stoch_gt_100m = float(np.mean(prog_stoch_v6_full > 100e6))
 
     # Convergence check: first 50k vs full 100k
     half_p50 = float(np.percentile(prog_stoch[:50_000], 50))
@@ -833,7 +909,8 @@ def main() -> None:
     # 5. Tornado Sensitivity & Variance Decomposition (Model A)
     # -------------------------------------------------------------------------
     bom_var = float(np.var(bom_samples, ddof=1))
-    rfq9_var_share = float(np.cov(rfq_cost_samples, bom_samples, ddof=1)[0, 1] / bom_var)
+    rfq10_var_share = float(np.cov(rfq_cost_samples, bom_samples, ddof=1)[0, 1] / bom_var)
+    rfq9_var_share = float(np.cov(rfq9_cost_samples, bom_samples, ddof=1)[0, 1] / bom_var)
     rfq8_var_share = float(np.cov(rfq8_cost_samples, bom_samples, ddof=1)[0, 1] / bom_var)
     rfq7_var_share = float(np.cov(rfq7_cost_samples, bom_samples, ddof=1)[0, 1] / bom_var)
     rfq6_var_share = float(np.cov(rfq6_cost_samples, bom_samples, ddof=1)[0, 1] / bom_var)
@@ -852,7 +929,7 @@ def main() -> None:
     v5_fab_tco5 = install_mult * bom_samples + cleanroom_capex + v5_opex_5yr
     v5_foak_tco5 = prog_stoch + cleanroom_capex + v5_opex_5yr
 
-    # Modular 5-yr TCO & Program CAPEX comparison across all 4 v6.0 configurations (common random numbers)
+    # Modular 5-yr TCO & Program CAPEX comparison across all 6 configurations (common random numbers)
     def _cfg_block(nom_usd: float, b_s: np.ndarray, p_s: np.ndarray) -> dict:
         op5 = 5.0 * (opex_non_maint_yr + maint_frac * b_s)
         ft5 = install_mult * b_s + cleanroom_capex + op5
@@ -869,11 +946,22 @@ def main() -> None:
             "P_foak_5yr_tco_gt_100M": float(np.mean(fk5 > 100e6)),
         }
 
-    v6_modular_mc_comparison = {
+    v7_modular_mc_comparison = {
         "M3_v5_0_Base": _cfg_block(m3_v5_base_nom, bom_v5_base_samples, prog_stoch_v5_base),
-        "M3_v6_0_Plus_Option_Q": _cfg_block(m3_v6_plus_optq_nom, bom_plus_optq_samples, prog_stoch_plus_optq),
+        "M3_v5_0_Base_Plus_Safety": _cfg_block(m3_base_plus_safety_nom, bom_base_plus_safety_samples, prog_stoch_base_plus_safety),
         "M3_v6_0_Plus_Option_HPC": _cfg_block(m3_v6_plus_opthpc_nom, bom_plus_opthpc_samples, prog_stoch_plus_opthpc),
-        "M3_v6_0_Full_Option_Q_and_HPC": _cfg_block(m3_nom, bom_samples, prog_stoch),
+        "M3_v6_0_Plus_Option_Q": _cfg_block(m3_v6_plus_optq_nom, bom_plus_optq_samples, prog_stoch_plus_optq),
+        "M3_v6_0_Full_Option_Q_and_HPC": _cfg_block(m3_v6_full_nom, bom_v6_full_samples, prog_stoch_v6_full),
+        "M3_v7_0_Safety_Certified_Full": _cfg_block(m3_nom, bom_samples, prog_stoch),
+    }
+    v6_modular_mc_comparison = {
+        k: v7_modular_mc_comparison[k]
+        for k in (
+            "M3_v5_0_Base",
+            "M3_v6_0_Plus_Option_Q",
+            "M3_v6_0_Plus_Option_HPC",
+            "M3_v6_0_Full_Option_Q_and_HPC",
+        )
     }
 
     tornado_bom = []
@@ -1013,7 +1101,9 @@ def main() -> None:
         "CU2_bom_cap_safety": bool(p_bom_gt_50m < 0.001 and np.percentile(bom_samples, 95) < 15e6),
         "CU3_program_soft_hard_cap": bool(p_prog_stoch_gt_100m < 0.05 and p_prog_stoch_gt_50m < 0.30),
         "CU3_base_v5_program_soft_hard_cap": bool(p_base_prog_stoch_gt_100m < 0.05 and p_base_prog_stoch_gt_50m < 0.30),
-        "CU4_bc_wall_dominance": bool(top3_bom_var_share >= 0.50 and rfq9_nom_share >= 0.75),
+        "CU3_base_plus_safety_program_soft_hard_cap": bool(p_base_saf_prog_stoch_gt_100m < 0.05 and p_base_saf_prog_stoch_gt_50m < 0.30),
+        "CU3_v6_full_program_soft_hard_cap": bool(p_v6_full_prog_stoch_gt_100m < 0.05 and p_v6_full_prog_stoch_gt_50m < 0.30),
+        "CU4_bc_wall_dominance": bool(top3_bom_var_share >= 0.50 and rfq10_nom_share >= 0.75),
         "CU5_evpi_20mk_vindication": bool(cu5_env_1mach < 0.0 and cu5_n_be_hw >= 4.0),
         "CU6_mc_convergence": bool(conv_p50_rel <= 0.01 and conv_p95_rel <= 0.01 and se_p100 < 0.001),
     }
@@ -1034,6 +1124,7 @@ def main() -> None:
         "prog_x3_usd": [float(v) for v in np.percentile(prog_x3, [p * 100 for p in cdf_probs])],
         "prog_stoch_usd": [float(v) for v in np.percentile(prog_stoch, [p * 100 for p in cdf_probs])],
         "prog_stoch_v5_base_usd": [float(v) for v in np.percentile(prog_stoch_v5_base, [p * 100 for p in cdf_probs])],
+        "prog_stoch_base_plus_safety_usd": [float(v) for v in np.percentile(prog_stoch_base_plus_safety, [p * 100 for p in cdf_probs])],
         "prog_x10_usd": [float(v) for v in np.percentile(prog_x10, [p * 100 for p in cdf_probs])],
     }
 
@@ -1053,10 +1144,11 @@ def main() -> None:
             "gate_ok": gate_ok,
         },
         "bom_detailed_summary": {
-            "bom_version": "v6.0",
+            "bom_version": "v7.0",
             "total_parts": int(len(df)),
-            "v5_base_parts": int((~v6_mask_all).sum()),
+            "v5_base_parts": int((~v6_mask_all & ~v7_safety_mask).sum()),
             "v6_option_parts": int(v6_mask_all.sum()),
+            "v7_safety_parts": int(v7_safety_mask.sum()),
             "priced_parts": int(K),
             "software_zero_hw_parts": int((df["subsystem"] == "S8").sum()),
             "superseded_zero_hw_parts": int(df["notes"].astype(str).str.contains("SUPERSEDED-BY-V5.0", na=False).sum()),
@@ -1085,7 +1177,13 @@ def main() -> None:
             "v6_net_delta_high_usd": v6_net_delta_high,
             "m3_v6_plus_option_q_nom_usd": m3_v6_plus_optq_nom,
             "m3_v6_plus_option_hpc_nom_usd": m3_v6_plus_opthpc_nom,
-            "m3_v6_full_nom_usd": m3_nom,
+            "m3_v6_full_nom_usd": m3_v6_full_nom,
+            "v7_safety_low_usd": v7_safety_low,
+            "v7_safety_nom_usd": v7_safety_nom,
+            "v7_safety_high_usd": v7_safety_high,
+            "m3_base_plus_safety_nom_usd": m3_base_plus_safety_nom,
+            "m3_v7_safety_certified_full_nom_usd": m3_nom,
+            "m1_plus_safety_nom_usd": m1_plus_safety_nom,
             "m3_low_usd": m3_low,
             "m3_nom_usd": m3_nom,
             "m3_high_usd": m3_high,
@@ -1100,7 +1198,9 @@ def main() -> None:
         },
         "v5_hardware_mass_reconciliation": v5_hardware_mass_reconciliation,
         "v6_hardware_mass_reconciliation": v6_hardware_mass_reconciliation,
+        "v7_hardware_mass_reconciliation": v7_hardware_mass_reconciliation,
         "v6_modular_mc_comparison": v6_modular_mc_comparison,
+        "v7_modular_mc_comparison": v7_modular_mc_comparison,
         "v5_scaling_10k_cryostat_note": s65_spec["scaling_10000_cell_note"],
         "v5_fab_tco_5yr_context": {
             "fab_tool_n1_5yr_tco_no_wafers_usd": pct_summary(v5_fab_tco5),
@@ -1125,7 +1225,11 @@ def main() -> None:
             "rfq8_variance_share_mc": rfq8_var_share,
             "rfq9_total_nom_usd": rfq9_nom,
             "rfq9_nom_share": rfq9_nom_share,
+            "rfq9_nom_share_of_v6_full": rfq9_nom_share_of_v6_full,
             "rfq9_variance_share_mc": rfq9_var_share,
+            "rfq10_total_nom_usd": rfq10_nom,
+            "rfq10_nom_share": rfq10_nom_share,
+            "rfq10_variance_share_mc": rfq10_var_share,
         },
         "monte_carlo_model_a_detailed": {
             "n_samples": N,
@@ -1199,13 +1303,13 @@ def main() -> None:
 
     OUT_JSON.write_text(json.dumps(out, indent=2, ensure_ascii=False), encoding="utf-8")
 
-    print("=== EXP128 v6.0 MONTE CARLO & RECONCILIATION COMPLETE ===")
+    print("=== EXP128 v7.0 MONTE CARLO & RECONCILIATION COMPLETE ===")
     print(f"Canonical Gate OK: {gate_ok} | BOM.csv SHA-256 OK: {sha_ok}")
-    print(f"M3 v5.0 Base   : nom=${m3_v5_base_nom/1e6:.3f}M (167p) | +OptQ=${m3_v6_plus_optq_nom/1e6:.3f}M | +OptHPC=${m3_v6_plus_opthpc_nom/1e6:.3f}M | M3 v6.0 Full=${m3_nom/1e6:.3f}M (174p, low=${m3_low/1e6:.3f}M, high=${m3_high/1e6:.3f}M)")
-    print(f"M1 Base Proto  : nom=${m1_nom/1e6:.3f}M ({m1_nom/m3_v5_base_nom:.1%} of Base, {m1_nom/m3_nom:.1%} of Full) | Pilot 256c: ${m3_v5_pilot_256_nom/1e6:.3f}M")
-    print(f"9-RFQ Coverage : {rfq9_nom_share:.1%} of M3 v6 Full (${rfq9_nom/1e6:.3f}M; 8-RFQ/v5Base={rfq8_nom_share_of_v5_base:.1%}) | {rfq9_var_share:.1%} of BOM MC variance")
-    print("Modular 100k MC Comparison (Common Random Numbers):")
-    for cname, cdata in v6_modular_mc_comparison.items():
+    print(f"M3 v5.0 Base   : nom=${m3_v5_base_nom/1e6:.3f}M (167p) | Base+Safety=${m3_base_plus_safety_nom/1e6:.3f}M (173p) | v6 Full=${m3_v6_full_nom/1e6:.3f}M (174p) | v7 Full=${m3_nom/1e6:.3f}M (180p)")
+    print(f"M1 Base Proto  : nom=${m1_nom/1e6:.3f}M (M1+Safety=${m1_plus_safety_nom/1e6:.3f}M) | Pilot 256c: ${m3_v5_pilot_256_nom/1e6:.3f}M")
+    print(f"10-RFQ Coverage: {rfq10_nom_share:.1%} of M3 v7 Full (${rfq10_nom/1e6:.3f}M; 9-RFQ/v6Full={rfq9_nom_share_of_v6_full:.1%}) | {rfq10_var_share:.1%} of BOM MC variance")
+    print("Modular 100k MC Comparison (Common Random Numbers — 6 Configs):")
+    for cname, cdata in v7_modular_mc_comparison.items():
         print(
             f"  {cname:30s}: nom=${cdata['bom_nom_usd']/1e6:.3f}M | BOM P50=${cdata['bom_mc_usd']['p50']/1e6:.2f}M | "
             f"Prog P50=${cdata['program_stoch_usd']['p50']/1e6:.2f}M | P(>50M)={cdata['P_Program_stoch_gt_50M']:.4f} | "

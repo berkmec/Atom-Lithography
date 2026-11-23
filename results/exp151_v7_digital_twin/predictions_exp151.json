@@ -1,0 +1,46 @@
+{
+  "experiment": "exp151_v7_digital_twin",
+  "hypothesis_id": "H169",
+  "version": "7.0",
+  "registered": "2026-11-23 (pre-registered strictly before Exp151 solver creation or execution)",
+  "epistemic_scope": {
+    "silicon_31P_fab_rtl_safety_economics": "{Model} / {Sayisal-Simulasyon} / {Varsayim} / {Liste-Capasi} (M0, no_lab_measurement=true, no_supplier_quotes=true, no_external_eda_sim=true)",
+    "control_stack_cloud_qpu": "{Canli-Donanim-IBM-QPU} (ibm_marrakesh, 156Q Heron r2, job_id=dc1tdo2nj2vs73dfrfl0, zero secrets)"
+  },
+  "question": "Can all v7.0 breakthroughs (Exp147 Universal qLDPC d=18 + FeMoco/RSA-2048 37x-53x compression, Exp148 121Sb Q-Echo-8 450x infidelity closure, Exp149 894-LOC synthesizable Verilog RTL + live HTML5 twin, Exp150 7/7 SEMI S2/IEC 61508 Safety FMEA/HAZOP, BOM v7.0 180-part 10-RFQ phased procurement, CAD v6.0 199-part zero-clash, and live 156Q IBM ibm_marrakesh QPU) be unified into a single cryptographically SHA-256-locked v7.0 Master Digital Twin Certificate with 100% end-to-end regression parity?",
+  "predictions": [
+    {
+      "id": "DT7_1_LEDGER_CAD_BOM_RTL_TWIN_SHA256_LOCK",
+      "criterion": "All 38 primary v7.0 artifacts (27 experiment JSONs Exp124..Exp150 + ibm_qpu_live_results.json + CAD v6.0 [199 parts, 1108.137 kg, 0/19,701 clashes, 40/40 clearances] + BOM v7.0 [180 parts, $5,247,800 Base / $5,392,800 Base+Safety / $5,547,800 v6 Full / $5,692,800 v7 Full, $0.00 bridge, 0.0000 kg on-frame match + 355.0 kg facility safety, 10-RFQ >=78% nom / >=92% var] + 7 rtl/boed_fpga/ files + docs/digital_twin_interactive.html) load cleanly and are cryptographically locked with full 64-hex SHA-256 digests."
+    },
+    {
+      "id": "DT7_2_UNIVERSAL_QLDPC_D18_AND_ALGORITHMS",
+      "criterion": "Exp147 verifies [[288,12,18]] exact GF(2) algebra & depth-7 schedule, L_max <= 300 um (268.3 um), p_th >= 0.75% (0.781%), 576-cell block yield >= 99.0% at N=8 (99.27%) and >= 99.8% at N=9 (99.82%), FeMoco <= 20 cryostats (16) with >= 35x compression vs Surface Code (37.1x) alongside explicit honest UQ5 readout-ceiling disclosure, and RSA-2048 <= 300 cryostats (291) with <= 10 MW (7.37 MW) and >= 50x compression (52.7x)."
+    },
+    {
+      "id": "DT7_3_SB121_QECHO8_CLOSURE_AND_SU8_GRAPE",
+      "criterion": "Exp148 closes the Exp142 OQ6 static 500 Hz quadrupole wall: 121Sb Gross binomial fidelity restored from 0.5800 to >= 0.9990 (0.99908, >=400x infidelity reduction), |+-7/2> Cat restored from 0.9424 to >= 0.9990 (0.99914), SU(8) GRAPE X_L/Z_L/H_L >= 0.9950 (0.9954), with explicit honest Cywinski 1/f boundary disclosure (SQ4 single-cycle Q-Echo-8 8.39x vs multi-cycle Q-Echo-64 28.08x / 1.45 ms)."
+    },
+    {
+      "id": "DT7_4_VERILOG_RTL_AND_INTERACTIVE_TWIN",
+      "criterion": "Live verification of rtl/boed_fpga/ passes with 4 synthesizable IEEE 1364-2005 Verilog modules (894 LOC), 0 forbidden/port/width lint errors, 1,024/1,024 ROM .hex words 0-bit diff, 64/64 golden vectors 0 LSB, 1,000 isqrt 0 LSB, exact 584 clock cycles (2.336 us @ 250 MHz), 4-cycle SPRT, ZU48DR 16-ch DSP < 15% & 0 W cryo, honest no_external_eda_sim=true, and docs/digital_twin_interactive.html has 0 external CDN/HTTP links, 0 secrets, and live v7.0 embedded data."
+    },
+    {
+      "id": "DT7_5_INDUSTRIAL_SAFETY_FMEA_HAZOP_SEMI_S2",
+      "criterion": "Exp150 passes 7/7 safety criteria: 25-row FMEA + 10-node HAZOP with max RPN reduced from 280 to <= 60 (42, -86.3% mean, 0 residual > 60), OD=8 + 3 mm steel Laser+X-ray shield (< 1e-10 uSv/h @ 22 keV, <= 5 ms SIL-3 shutter), sub-atm SDS PH3 <= 0.01 ppm (0.00715 ppm << 0.05 TLV), dry-cryo He O2 >= 19.5% (20.57%), 15 kVA UPS >= 30 min full / >= 180 min Tier-1 with <= 100 ms UHV gate valve, and S7.SAFETY kit $145,000 / 355.0 kg / 0 W cryo."
+    },
+    {
+      "id": "DT7_6_LIVE_IBM_QPU_CELLISA40_AND_EPISTEMIC_BOUNDARY",
+      "criterion": "Independent raw shot-count verification of live ibm_marrakesh (156Q, job_id=dc1tdo2nj2vs73dfrfl0) yields 0 secret leaks, XY4 gain >= +50 pp (+59.55 pp), Bell F >= 0.95 (0.9733), d=3 MWPM suppression >= 5x & post-selection 0.000%, Q16.16 BOED <= 5 pts & < 0.01 kHz vs FP64 (1.6 Hz), live CellISA v4.0 (20 opcodes) + auto_recal (4/4 PASS), and strict epistemic separation between M0 simulation and live IBM QPU hardware."
+    },
+    {
+      "id": "DT7_7_MODULAR_V7_BUDGET_CAP_AND_PHASED_PROCUREMENT",
+      "criterion": "Exp128 v7.0 modular 100k MC validates phased procurement: M3 Base ($5,247,800, P>$100M=4.44% < 5%), Phase-1 M3 Base+Safety ($5,392,800, P>$100M=4.67% < 5%, 6/6 CU PASS), M3 v6 Full ($5,547,800, P>$100M=4.95% < 5%), and honest M3 v7 Full ($5,692,800, P>$100M=5.22% > 5% requiring Phase-1 Base+Safety -> RFQ-05 price lock -> Phase-2 +Option-Q/HPC), alongside v3->v7 100L fleet (679->100->1) and algorithm (37.1x-52.7x) trajectory."
+    },
+    {
+      "id": "DT7_8_CRYPTO_V7_CERT_PORTABILITY_AND_TESTS",
+      "criterion": "v7_digital_twin_cert.json canonical JSON (sort_keys=True, separators=(',', ':')) full 64-hex SHA-256 verifies cleanly and detects tampering, historical v4/v5/v6 master certificates remain untouched, and all Exp151 artifacts contain 0 hardcoded host paths and 0 secrets/CRNs/tokens."
+    }
+  ],
+  "success_rule": "8/8 DT7_1..DT7_8 PASS with full 64-hex SHA-256 cryptographic certificate and 100% PASS across all 33 Atom Lithography test suites."
+}

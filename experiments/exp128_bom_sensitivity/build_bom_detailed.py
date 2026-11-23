@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""Generate part-level BOM_DETAILED.csv (v6.0: 174 parts = 167 M3 v5.0 Base + 7 v6.0 Modular Options) and reconcile against canonical BOM.csv + Exp122 + Exp134 + Exp139 + Exp140 + Exp142 + Exp143.
+"""Generate part-level BOM_DETAILED.csv (v7.0: 180 parts = 167 M3 v5.0 Base + 7 v6.0 Options + 6 v7.0 Safety) and reconcile against canonical BOM.csv + Exp122..Exp150.
 
 Strictly READ-ONLY with respect to canonical BOM.csv (SHA-256 verified before and after) and
-primary v5.0/v6.0 hardware spec JSONs (s56, s65, s9q, s9hpc).
+primary v5.0/v6.0/v7.0 hardware spec JSONs (s56, s65, s9q, s9hpc, s_safety).
 Outputs: research/atom_lithography_machine/BOM_DETAILED.csv
-All USD figures are extended line-item totals for Golden Scale M3 v6.0 Full ($5,547,800 = M3 v5.0 Base $5,247,800
-+ Option-Q $168,000 [9.20 kg] + Option-HPC $132,000 [64.00 kg], zero double-counting) and carry explicit
-epistemic tags ({Model-Kalibrasyon-Exp114}, {Liste-Çapası}, {Varsayım}, {Program-NRE-Kapsam}).
+All USD figures are extended line-item totals for Golden Scale M3 v7.0 Safety-Certified Full
+($5,692,800 = M3 v5.0 Base $5,247,800 + Option-Q $168,000 + Option-HPC $132,000 + S7.SAFETY $145,000)
+and carry explicit epistemic tags ({Model-Kalibrasyon-Exp114}, {Liste-Çapası}, {Varsayım}, {Program-NRE-Kapsam}).
 No supplier quotes or physical hardware measurements exist.
 """
 from __future__ import annotations
@@ -23,6 +23,7 @@ S56_SPEC_JSON = ROOT / "results" / "exp139_epi_cap_process_integration" / "s56_h
 S65_SPEC_JSON = ROOT / "results" / "exp140_cryo_fpga_boed_mux_readout" / "s65_hardware_spec.json"
 S9Q_SPEC_JSON = ROOT / "results" / "exp142_option_q_multispecies_qram" / "s9q_hardware_spec.json"
 S9HPC_SPEC_JSON = ROOT / "results" / "exp143_d3_grape_m4_and_hpc_decoder" / "s9hpc_hardware_spec.json"
+S_SAFETY_SPEC_JSON = ROOT / "results" / "exp150_industrial_safety_fmea_hazop" / "s_safety_spec.json"
 EXPECTED_BOM_SHA256 = "cee02adfd207e37bbbc6b66982226b27fa87c2be528ede2b762f72840759cfc2"
 
 FIELDNAMES = [
@@ -886,6 +887,39 @@ PARTS: list[tuple] = [
      4000, 7000, 13000, "s7_electronics_rack_interconnect", "{Model-Kalibrasyon-Exp114}",
      "Personel ve ekipman guvenligi donanim kilidi"),
 
+    # S7.SAFETY — v7.0 SEMI S2 / ANSI Z136.1 / IEC 61508 SIL-3 Facility-Adjacent Safety Suite (Exp150; 355.0 kg, 1090 W, 0 W cryo; $92k/$145k/$220k)
+    # Note: External cleanroom/facility safety compliance suite; on-frame CAD v6.0 mass (1,108.137 kg) remains unchanged!
+    ("S7.SAFETY-01", "S7.SAFETY", "S7", "Sub-Atmosferik SDS PH3 Mikro-Tup Gaz Kabini (<650 Torr, 10 g), Vakum-Ceketli Hat, 250 CFM Kuru Yikayici & Cift 0.02 ppm Sensor (Exp150, 118.0 kg)", 1, "set",
+     "316L VAR cift-ceketli hat / 250 CFM kuru scrubber / elektrokimyasal sensor", "SDS <650 Torr (10 g envanter), operator maruziyeti 0.00715 ppm << 0.05 ppm TLV-TWA (%99.9 yikama, 12 s SIL-3 kesme), 600x500x1800 mm, 480 W / 0 W kriyo, kutle=118.0 kg", "PH3<=0.02 ppm alarm (SIL-3)",
+     "300 K (tesis gaz bolmesi)", "Atmosfer (250 CFM egzoz)", "COTS/CUS", "C(v7.0-Safety)",
+     28000, 42000, 62000, "s7_electronics_rack_interconnect", "{Varsayım}",
+     "DELTA-V7.0-SAFETY-EXP150 (S7.SAFETY 1/6, 118.0 kg tesis emniyeti, SIL-3; s_safety_spec.json birebir; RFQ-10)"),
+    ("S7.SAFETY-02", "S7.SAFETY", "S7", "ANSI Z136.1 OD>=8 (808 nm) Kilitli Sinif-1 3 mm Celik Lazer+X-Isini Kilifi & Cift-Kanalli SIL-3 Mekanik Perde (<5 ms, Exp150, 38.0 kg)", 1, "set",
+     "3 mm 304/316L celik cift-amacli OD8/X-isini kilifi + cift-bicakli perde", "S5.5 +Y pencere (280x260x220 mm): OD>=8 @ 808 nm (111.3 J/darbe), 22 keV X-isini 10.11 -> 1.19e-23 uSv/h (<<0.01 uSv/h), 3.2 ms 1oo2D perde, 45 W / 0 W kriyo, kutle=38.0 kg", "OD>=8, <0.01 uSv/h, <5 ms",
+     "300 K (S5.5 +Y cevre)", "Atmosfer", "CUS", "C(v7.0-Safety)",
+     14000, 22000, 34000, "s7_electronics_rack_interconnect", "{Varsayım}",
+     "DELTA-V7.0-SAFETY-EXP150 (S7.SAFETY 2/6, 38.0 kg tesis emniyeti, SIL-3; s_safety_spec.json birebir; RFQ-10)"),
+    ("S7.SAFETY-03", "S7.SAFETY", "S7", "IEC 61508 SIL-3 1oo2D Donanimsal Emniyet PLC, 4x E-Stop Mantar, Kapak Anahtarlari & 2 MOhm HV Crowbar Modulu (Exp150, 18.0 kg)", 1, "set",
+     "SIL-3 1oo2D emniyet PLC (3U) + 4x E-Stop + 2 MOhm aktif HV crowbar", "482.6x350x133.4 mm, 22 kV HV crowbar 18.26 ms < 50 ms (<50 V, E=0.363 J < 0.5 J), 3.2 ms lazer kesme, max FMEA RPN 280->42, 120 W / 0 W kriyo, kutle=18.0 kg", "SIL-3 1oo2D, <50 ms HV",
+     "300 K (S7 raf ustu)", "Atmosfer", "COTS/CUS", "C(v7.0-Safety)",
+     18000, 28000, 42000, "s7_electronics_rack_interconnect", "{Varsayım}",
+     "DELTA-V7.0-SAFETY-EXP150 (S7.SAFETY 3/6, 18.0 kg tesis emniyeti, SIL-3; s_safety_spec.json birebir; RFQ-10)"),
+    ("S7.SAFETY-04", "S7.SAFETY", "S7", "15 kVA / 10 kWh Online Cift-Donusumlu LFP UPS (0 ms Gecis) & Kademeli Yuk-Atma PDU (Exp150, 145.0 kg)", 1, "set",
+     "15 kVA / 13.5 kW online cift-donusumlu UPS + 10 kWh LFP aku + PDU", "440x720x780 mm (tesis guc bolmesi), 0.0 ms gecis, 40.0 dk tam yuk (>=30 dk) / 213.2 dk Tier-1 (>=180 dk), 350 W kayip / 0 W kriyo, kutle=145.0 kg", "0 ms gecis, >=30 dk tam",
+     "300 K (tesis guc bolmesi)", "Atmosfer", "COTS", "C(v7.0-Safety)",
+     15000, 24000, 36000, "s7_electronics_rack_interconnect", "{Liste-Çapası}",
+     "DELTA-V7.0-SAFETY-EXP150 (S7.SAFETY 4/6, 145.0 kg tesis emniyeti, SIL-2; s_safety_spec.json birebir; RFQ-10)"),
+    ("S7.SAFETY-05", "S7.SAFETY", "S7", "Temizoda O2 Eksikligi Izleyici (%19.5 Alarm), ASME DN50 0.5 barg OVC Patlama Diski & 1.563 Ohm Quench Bosaltma Bankasi (Exp150, 24.0 kg)", 1, "set",
+     "Zirkonya/elektrokimyasal O2 monitor + ASME DN50 disk + 1.563 Ohm direnc", "380x260x240 mm, kuru LD400+PT420 (1.098 m3 STP) O2=%20.57 >> %19.5, ASME DN50 16.37x He marji, 18.94 kJ quench 38.15 C < 55 C, 35 W / 0 W kriyo, kutle=24.0 kg", "O2>=19.5%, 0.5 barg ASME",
+     "300 K (OVC / duvar / raf)", "Kriyo OVC / Atmosfer", "COTS", "B(v7.0-Safety)",
+     8000, 14000, 22000, "s7_electronics_rack_interconnect", "{Liste-Çapası}",
+     "DELTA-V7.0-SAFETY-EXP150 (S7.SAFETY 5/6, 24.0 kg tesis emniyeti, SIL-3; s_safety_spec.json birebir; RFQ-10)"),
+    ("S7.SAFETY-06", "S7.SAFETY", "S7", "Hizli Yay-Donuslu UHV Izolasyon Surgu Vana Aktorleri (<80 ms), ISO 10156 %5 H2/N2 Orifis & X-Isini Dozimetresi (Exp150, 12.0 kg)", 1, "set",
+     "Pnomatik yay-donuslu UHV aktorler + ISO 10156 orifis + X-isini olcer", "220x180x160 mm, 80.0 ms UHV vana kapama (Si(100) oksitlenme 6.0e-4 ML << 0.01 ML), %5 H2/N2 sinirli akis, 60 W / 0 W kriyo, kutle=12.0 kg", "<80 ms vana, <=0.01 ML",
+     "300 K (S5 manifold / oda)", "UHV / Atmosfer", "COTS/CUS", "B(v7.0-Safety)",
+     9000, 15000, 24000, "s7_electronics_rack_interconnect", "{Varsayım}",
+     "DELTA-V7.0-SAFETY-EXP150 (S7.SAFETY 6/6, 12.0 kg tesis emniyeti, SIL-2; S7.SAFETY toplam 355.0 kg & $92k/$145k/$220k; s_safety_spec.json birebir; RFQ-10)"),
+
     # =========================================================================
     # S8 — IN-HOUSE SOFTWARE & RTL (8 parts: S8.1-S8.4; $0 direct HW, Program NRE)
     # =========================================================================
@@ -1058,11 +1092,12 @@ def main() -> None:
         for p in PARTS:
             w.writerow(p)
 
-    # 4. Print concise verification summary (strict v3.0 + v4.0 + v5.0 Base + v6.0 Option-Q/Option-HPC reconciliation)
+    # 4. Print concise verification summary (strict v3.0 + v4.0 + v5.0 Base + v6.0 Options + v7.0 Safety reconciliation)
     s56_spec = json.loads(S56_SPEC_JSON.read_text(encoding="utf-8"))["s56_hardware_spec"]
     s65_spec = json.loads(S65_SPEC_JSON.read_text(encoding="utf-8"))
     s9q_spec = json.loads(S9Q_SPEC_JSON.read_text(encoding="utf-8"))
     s9hpc_spec = json.loads(S9HPC_SPEC_JSON.read_text(encoding="utf-8"))
+    s_safety_spec = json.loads(S_SAFETY_SPEC_JSON.read_text(encoding="utf-8"))
 
     tot_lo = sum(p[13] for p in PARTS)
     tot_nom = sum(p[14] for p in PARTS)
@@ -1073,11 +1108,12 @@ def main() -> None:
     optq_parts = [p for p in PARTS if "DELTA-V6.0-OPTQ" in p[18]]
     opthpc_parts = [p for p in PARTS if "DELTA-V6.0-OPTHPC" in p[18]]
     v6_parts = optq_parts + opthpc_parts
+    v7_safety_parts = [p for p in PARTS if "DELTA-V7.0-SAFETY" in p[18]]
     v5_parts = [p for p in PARTS if "DELTA-V5.0" in p[18]]
     v4_net_parts = [p for p in PARTS if ("DELTA-V4.0" in p[18] and "DELTA-V5.0" not in p[18])]
     v3_parts = [
         p for p in PARTS
-        if ("DELTA-V4.0" not in p[18] and "DELTA-V5.0" not in p[18] and "DELTA-V6.0" not in p[18])
+        if ("DELTA-V4.0" not in p[18] and "DELTA-V5.0" not in p[18] and "DELTA-V6.0" not in p[18] and "DELTA-V7.0" not in p[18])
     ]
 
     v3_nom = sum(p[14] for p in v3_parts)
@@ -1086,14 +1122,16 @@ def main() -> None:
     s611_lo, s611_nom, s611_hi = sum(p[13] for p in s611_parts), sum(p[14] for p in s611_parts), sum(p[15] for p in s611_parts)
     optq_lo, optq_nom, optq_hi = sum(p[13] for p in optq_parts), sum(p[14] for p in optq_parts), sum(p[15] for p in optq_parts)
     opthpc_lo, opthpc_nom, opthpc_hi = sum(p[13] for p in opthpc_parts), sum(p[14] for p in opthpc_parts), sum(p[15] for p in opthpc_parts)
+    saf_lo, saf_nom, saf_hi = sum(p[13] for p in v7_safety_parts), sum(p[14] for p in v7_safety_parts), sum(p[15] for p in v7_safety_parts)
 
     v5_gross_nom = s56_nom + s611_nom
     v5_credit_nom = 420_000.0 - v4_net_nom  # $86,000 exact ($54k S6.10-02 + $20k S6.10-04 RF + $12k S7.1-04)
     v5_net_delta_nom = v5_gross_nom - v5_credit_nom  # $638,200 exact
     v5_base_nom = v3_nom + v4_net_nom + v5_gross_nom  # $5,247,800 exact
     v6_delta_nom = optq_nom + opthpc_nom  # $300,000 exact
+    v6_full_nom = v5_base_nom + v6_delta_nom  # $5,547,800 exact
 
-    assert len(PARTS) == 174, f"Expected 174 v6.0 parts, got {len(PARTS)}"
+    assert len(PARTS) == 180, f"Expected 180 v7.0 parts, got {len(PARTS)}"
     assert abs(v3_nom - 4_189_600.0) < 1e-6, f"v3.0 base drift: {v3_nom}"
     assert abs(v5_credit_nom - 86_000.0) < 1e-6, f"v5.0 anti-double-count credit drift: {v5_credit_nom}"
     assert abs(s56_lo - s56_spec["bom_v5_cost_estimate_usd"]["total_p10_usd"]) < 1e-6
@@ -1110,15 +1148,21 @@ def main() -> None:
     assert abs(opthpc_lo - s9hpc_spec["totals_base_4u_option_hpc_module"]["cost_usd_low"]) < 1e-6
     assert abs(opthpc_nom - s9hpc_spec["totals_base_4u_option_hpc_module"]["cost_usd_nom"]) < 1e-6
     assert abs(opthpc_hi - s9hpc_spec["totals_base_4u_option_hpc_module"]["cost_usd_high"]) < 1e-6
-    assert abs(tot_nom - 5_547_800.0) < 1e-6, f"M3 v6.0 Full total drift: {tot_nom}"
+    assert abs(v6_full_nom - 5_547_800.0) < 1e-6, f"M3 v6.0 Full drift: {v6_full_nom}"
+
+    assert abs(saf_lo - s_safety_spec["totals"]["cost_usd_low"]) < 1e-6
+    assert abs(saf_nom - s_safety_spec["totals"]["cost_usd_nom"]) < 1e-6
+    assert abs(saf_hi - s_safety_spec["totals"]["cost_usd_high"]) < 1e-6
+    assert abs((v5_base_nom + saf_nom) - 5_392_800.0) < 1e-6, f"M3 Base+Safety drift: {v5_base_nom + saf_nom}"
+    assert abs(tot_nom - 5_692_800.0) < 1e-6, f"M3 v7.0 Safety-Certified Full drift: {tot_nom}"
 
     print(f"BOM.csv SHA-256 verified: {bom_sha}")
-    print(f"Wrote {len(PARTS)} parts ({len(v3_parts)} v3.0 + {len(v4_net_parts)} v4.0 + {len(v5_parts)} v5.0 + {len(v6_parts)} v6.0) to {BOM_DETAILED}")
+    print(f"Wrote {len(PARTS)} parts ({len(v3_parts)} v3 + {len(v4_net_parts)} v4 + {len(v5_parts)} v5 + {len(v6_parts)} v6 + {len(v7_safety_parts)} v7 Safety) to {BOM_DETAILED}")
     print(f"Canonical parents covered: {len(canonical_ids)}/40; extra delta parents: {extra_parents}")
-    print(f"M3 v5.0 Base   : nom=${v5_base_nom:,.0f} (167 parts; v3=$4,189,600 | v4=$4,609,600 | v5 net=+${v5_net_delta_nom:,.0f})")
-    print(f"v6.0 Option-Q  : +${optq_nom:,.0f} [${optq_lo:,.0f}-${optq_hi:,.0f}] (4 parts, 9.20 kg) -> Base+OptQ = ${v5_base_nom + optq_nom:,.0f}")
-    print(f"v6.0 Option-HPC: +${opthpc_nom:,.0f} [${opthpc_lo:,.0f}-${opthpc_hi:,.0f}] (3 parts, 64.00 kg) -> Base+OptHPC = ${v5_base_nom + opthpc_nom:,.0f}")
-    print(f"M3 v6.0 Full   : low=${tot_lo:,.0f} | nom=${tot_nom:,.0f} (+${v6_delta_nom:,.0f}, +73.20 kg) | high=${tot_hi:,.0f}")
+    print(f"M3 v5.0 Base   : nom=${v5_base_nom:,.0f} (167p) | Base+Safety (173p) = ${v5_base_nom + saf_nom:,.0f}")
+    print(f"M3 v6.0 Full   : nom=${v6_full_nom:,.0f} (174p: +OptQ $168k [9.2 kg] +OptHPC $132k [64.0 kg])")
+    print(f"v7.0 Safety Kit: +${saf_nom:,.0f} [${saf_lo:,.0f}-${saf_hi:,.0f}] (6p, 355.0 kg facility, 1090 W, 0 W cryo)")
+    print(f"M3 v7.0 Full   : low=${tot_lo:,.0f} | nom=${tot_nom:,.0f} (+${saf_nom:,.0f}, +{saf_nom/v6_full_nom:.2%}) | high=${tot_hi:,.0f}")
     by_sub: dict[str, list[float]] = {}
     for p in PARTS:
         s = p[2]

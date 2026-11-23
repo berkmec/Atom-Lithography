@@ -1,0 +1,72 @@
+{
+  "experiment": "exp148_sb121_quadrupole_echo_qudit",
+  "hypothesis_id": "H166",
+  "closure_target": "Exp142 OQ6 FAIL (121Sb I=7/2 8-level qudit quadrupole strain wall: Gross binomial 0.5855 @ 1 ms, T2*=45 us)",
+  "registered_at": "2026-11-23T11:16:00+03:00",
+  "registered_before_computation": true,
+  "no_lab_measurement": true,
+  "epistemic_tags": [
+    "{Literatür}",
+    "{Analitik}",
+    "{Model}",
+    "{Sayısal-Simülasyon}"
+  ],
+  "question": "Can an exact SU(8) brickwork dynamic quadrupole echo (Q-Echo-4 / Q-Echo-8 using parallel multi-tone adjacent NMR pulses) and multi-tone SU(8) GRAPE logical gates overcome the Exp142 OQ6 500 Hz quadrupole-strain wall on a single 121Sb (I=7/2, 8-level) nuclear qudit in Silicon, under both quasistatic and colored 1/f^alpha strain noise?",
+  "fixed_parameters": {
+    "species": "121Sb in Silicon (I = 7/2, 8 nuclear levels, 16 electron-nuclear levels)",
+    "B0_T": 1.5,
+    "gamma_e_MHz_per_T": 28024.95,
+    "gamma_n_MHz_per_T": 10.19,
+    "A_hyperfine_MHz": 186.8,
+    "f_Q_nom_kHz": 35.0,
+    "eta_Q_nom": 0.15,
+    "T2_mag_bare_ms": 20.0,
+    "T1_n_s": 100.0,
+    "T1_e_s": 1.0,
+    "delta_f_Q_sweep_Hz": [10.0, 50.0, 100.0, 250.0, 500.0, 750.0, 1000.0],
+    "delta_f_Q_anchor_Hz": 500.0,
+    "ou_1f_band_Hz": [1.0, 100000.0],
+    "ou_modes_M": 20,
+    "ou_alpha": 1.0,
+    "rabi_neutral_kHz": 25.0,
+    "rabi_ionized_sweep_kHz": [5.0, 10.0, 15.0, 25.0],
+    "exp142_bare_anchors": {
+      "donor_min_nmr_spacing_kHz": 473.90,
+      "ionized_min_nmr_spacing_kHz": 70.00,
+      "gross_binomial_F_1ms": 0.5855,
+      "spin_cat_pm7_2_F_1ms": 0.9390,
+      "clock_pm1_2_F_1ms": 0.9987
+    }
+  },
+  "predictions": [
+    {
+      "id": "SQ1_BARE_ANCHOR_AND_CPTP",
+      "description": "Exact 8x8 and 16x16 121Sb Lindblad solver preserves CPTP (max |Tr(rho)-1| < 1e-12, min_eig >= -1e-12), matches Exp142 NMR spacings (473.9 / 70.0 kHz within +-1 kHz), and reproduces bare 1 ms 500 Hz strain anchors (Gross 0.585+-0.02, Cat77 0.939+-0.02, Clock > 0.995)."
+    },
+    {
+      "id": "SQ2_QECHO_ALGEBRAIC_CANCELLATION",
+      "description": "Even-odd brickwork Q-Echo-4 (C_4 + C_4) cancels static quadrupole I_z^2 to <1e-12 while leaving residual linear I_z, whereas full 8-cycle brickwork Q-Echo-8 (P_brick^8 = I_8) cancels BOTH static I_z^2 and static I_z simultaneously to <1e-12 across all 8 levels."
+    },
+    {
+      "id": "SQ3_QECHO_CLOSES_EXP142_OQ6_500HZ",
+      "description": "At the Exp142 OQ6 anchor (delta_f_Q = 500 Hz quasistatic + 20 ms magnetic noise, t = 1 ms), finite-pulse multi-tone brickwork Q-Echo-8 lifts Gross binomial fidelity from 0.5855 to >= 0.980 and |+-7/2> spin-cat from 0.9390 to >= 0.985 in the neutral 121Sb donor."
+    },
+    {
+      "id": "SQ4_COLORED_1F_STRAIN_SCALING",
+      "description": "Under colored 1/f multi-OU strain noise (500 Hz rms, alpha=1.0, 1 Hz - 100 kHz), Q-Echo-8 extends Gross binomial effective coherence T2_eff by >= 20x over bare T2* (~45 us -> >= 1.0 ms), and multi-cycle Q-Echo (N_cyc=2, 4) monotonically suppresses high-frequency 1/f strain across delta_f_Q in [10, 1000] Hz."
+    },
+    {
+      "id": "SQ5_FINITE_PULSE_CROSSTALK_AND_IONIZED_WALL",
+      "description": "Finite-pulse multi-tone brickwork Q-Echo-8 achieves >= 0.975 fidelity in neutral 121Sb (473.9 kHz spacing, Omega=25 kHz) and quantitatively maps the RF crosstalk speed-vs-leakage trade-off in ionized 121Sb+ (70.0 kHz spacing, Omega in [5, 25] kHz)."
+    },
+    {
+      "id": "SQ6_SU8_GRAPE_LOGICAL_GATES",
+      "description": "Multi-tone SU(8) GRAPE optimal control on the full 8x8 neutral 121Sb Hamiltonian (7 addressable transitions, RF <= 40 kHz) synthesizes Gross binomial logical gates (X_L, Z_L, H_L) with noiseless logical fidelity F_L >= 0.995, leakage p_leak <= 5e-3, and noisy (500 Hz strain) gate fidelity >= 0.985."
+    },
+    {
+      "id": "SQ7_PORTABILITY_VISUAL_AND_TESTS",
+      "description": "All code/results/tests have zero hardcoded host paths, 0 GFM table errors, visually verified 2400x1400 PNG fig_exp148_sb121_qudit_echo.png, no_lab_measurement=true, and >= 8 passing Exp148 tests with zero regression on existing tests."
+    }
+  ],
+  "success_rule": "SQ1, SQ2, SQ3, SQ4, SQ5, SQ6, SQ7 all PASS (closing Exp142 OQ6 via exact SU(8) brickwork Q-Echo & multi-tone GRAPE)."
+}

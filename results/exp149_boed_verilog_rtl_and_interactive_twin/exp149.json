@@ -1,0 +1,238 @@
+{
+  "experiment": "exp149_boed_verilog_rtl_and_interactive_twin",
+  "hypothesis_id": "H167",
+  "version": "7.0-phaseA",
+  "date": "2026-11-23",
+  "no_lab_measurement_rtl": true,
+  "no_external_eda_sim": true,
+  "epistemic_scope": {
+    "verilog_rtl_and_fpga_budget": "Model/Sayisal-Simulasyon/RTL-Structural-Verified (no_external_eda_sim=true, no_lab_measurement_rtl=true)",
+    "embedded_live_qpu_tab": "Canli-Donanim-IBM-QPU (ibm_marrakesh, 156Q, job_id=dc1tdo2nj2vs73dfrfl0)"
+  },
+  "runtime_s": 0.593,
+  "predictions": {
+    "experiment": "exp149_boed_verilog_rtl_and_interactive_twin",
+    "hypothesis_id": "H167",
+    "version": "7.0-phaseA",
+    "registered": "2026-11-23 (pre-run registration prior to implementing rtl/boed_fpga/, rtl_verifier149.py, and build_interactive_twin.py)",
+    "no_lab_measurement_rtl": true,
+    "no_external_eda_sim": true,
+    "epistemic_tags": [
+      "Model",
+      "Sayisal-Simulasyon",
+      "RTL-Structural-Verified",
+      "Interactive-Twin"
+    ],
+    "question": "Can the Exp140 bit-exact Q16.16 BOED-FPGA DSP architecture be realized as clean synthesizable IEEE 1364-2005 Verilog RTL (4-lane SIMD, 584 cycles = 2.336 us @ 250 MHz, 16-channel AXI4-Stream wrapper, Vivado ZU48DR XDC) verified to 0-bit ROM / 0-LSB golden-vector parity against fpga_boed_dsp.py, paired with a zero-dependency interactive HTML5 digital twin embedding all live primary JSONs and ibm_marrakesh hardware data?",
+    "predictions": [
+      {
+        "id": "RV1_SYNTHESIZABLE_RTL_LINT_ZERO_VIOLATIONS",
+        "statement": "All 4 synthesizable Verilog RTL modules (boed_lut_rom.v, boed_isqrt_cordic.v, boed_q16_core.v, boed_top_16ch.v) pass structural IEEE 1364-2005 synthesis linting with 0 forbidden non-synthesizable constructs (initial outside ROM $readmemh, #delay, real, $display, while), 0 balanced-block errors, and 0 port/width mismatches across the full 16-channel hierarchy."
+      },
+      {
+        "id": "RV2_ROM_HEX_BIT_EXACT_PARITY",
+        "statement": "Both 512-entry Q16.16 BRAM ROM hex files (rom_loglik_p0.hex Lorentzian kernel and rom_loglik_p1.hex exp(-x) kernel) match fpga_boed_dsp.py build_lorentzian_lut_q16()/build_exp_neg_lut_q16() across all 512/512 entries with exactly 0 bit differences."
+      },
+      {
+        "id": "RV3_GOLDEN_VECTORS_64_ZERO_LSB_PARITY",
+        "statement": "All N=64 golden_vectors.mem stimulus/expected vectors (and 1,000 pipelined 16-stage restoring isqrt vectors) match fpga_boed_dsp.Q1616BOEDCore with 0 LSB difference in mu_off_q8, std_q4, and next_probe_off_q4."
+      },
+      {
+        "id": "RV4_CYCLE_COUNT_584_AND_TIMING_XDC",
+        "statement": "boed_q16_core.v Stage-2 FSM completes in exactly 584 clock cycles (263 Pass-1 + 265 Pass-2 + 56 Post/CORDIC = 2.336 us @ 250 MHz), Stage-0 SPRT early-abort completes in exactly 4 cycles (16.0 ns), and zu48dr_boed_250mhz.xdc enforces a 4.000 ns (250 MHz) clock constraint on xczu48dr."
+      },
+      {
+        "id": "RV5_ZU48DR_16CH_RESOURCE_BUDGET_CLOSURE",
+        "statement": "16-channel AXI4-Stream wrapper boed_top_16ch.v fits comfortably inside Xilinx ZU48DR RFSoC (< 15% DSP48E2, < 10% BRAM36, < 20% LUT, 0.0 W cryogenic heat load) with full self-checking tb_boed_q16_core.v testbench."
+      },
+      {
+        "id": "RV6_INTERACTIVE_HTML5_TWIN_ZERO_CDN_LIVE_DATA",
+        "statement": "docs/digital_twin_interactive.html is a self-contained single-file HTML5 app with 0 external CDN/HTTP script/CSS dependencies, embedding live primary JSONs (CAD v6.0, BOM v6.0, Exp128-146, live ibm_marrakesh 156Q data, and Exp149 RTL metrics) with interactive sliders, clickable S1-S9 schematic, live QPU tab, RTL FSM view, and explicit epistemic boundary banner."
+      },
+      {
+        "id": "RV7_ARTIFACTS_PORTABILITY_VISUAL_AND_TESTS",
+        "statement": "Zero hardcoded host paths, zero secret leaks, 0 GFM table errors in summary_exp149.md, 2400x1400 visually verified fig_exp149_rtl_fpga_arch.png, and >= 9 new tests in tests/test_exp149.py plus existing test suite 100% PASS."
+      }
+    ],
+    "success_rule": "RV1, RV2, RV3, RV4, RV5, RV6, RV7 all PASS."
+  },
+  "rtl_verification": {
+    "no_external_eda_sim": true,
+    "no_lab_measurement_rtl": true,
+    "rom_generation": {
+      "rom_p0_path": "rtl/boed_fpga/rom_loglik_p0.hex",
+      "rom_p1_path": "rtl/boed_fpga/rom_loglik_p1.hex",
+      "rom_p0_words": 512,
+      "rom_p1_words": 512,
+      "rom_p0_guard_hex": "000001C4",
+      "rom_p1_guard_hex": "00000000"
+    },
+    "rom_verification": {
+      "rom_p0_entries": 512,
+      "rom_p1_entries": 512,
+      "rom_p0_bit_diffs": 0,
+      "rom_p1_bit_diffs": 0,
+      "total_words_checked": 1024,
+      "all_zero_bit_diff": true
+    },
+    "golden_vector_generation": {
+      "mem_path": "rtl/boed_fpga/golden_vectors.mem",
+      "n_vectors": 64,
+      "n_trajectories": 8,
+      "steps_per_trajectory": 8,
+      "sample_records": [
+        {
+          "vec_id": 0,
+          "traj_id": 0,
+          "step": 0,
+          "f_init_int": 30000,
+          "f_probe_int": 29307,
+          "y_q16": 60350,
+          "exp_mu_off_q8": -171749,
+          "exp_std_q4": 5711,
+          "exp_next_probe_off_q8": 5611
+        },
+        {
+          "vec_id": 1,
+          "traj_id": 0,
+          "step": 1,
+          "f_init_int": 30000,
+          "f_probe_int": 30022,
+          "y_q16": 48529,
+          "exp_mu_off_q8": -174130,
+          "exp_std_q4": 2784,
+          "exp_next_probe_off_q8": -351490
+        },
+        {
+          "vec_id": 2,
+          "traj_id": 0,
+          "step": 2,
+          "f_init_int": 30000,
+          "f_probe_int": 28627,
+          "y_q16": 65297,
+          "exp_mu_off_q8": -239579,
+          "exp_std_q4": 1749,
+          "exp_next_probe_off_q8": -62219
+        },
+        {
+          "vec_id": 3,
+          "traj_id": 0,
+          "step": 3,
+          "f_init_int": 30000,
+          "f_probe_int": 29757,
+          "y_q16": 55132,
+          "exp_mu_off_q8": -224330,
+          "exp_std_q4": 1417,
+          "exp_next_probe_off_q8": -401690
+        }
+      ]
+    },
+    "bit_exact_co_verification": {
+      "n_golden_vectors": 64,
+      "max_mu_off_q8_lsb_err": 0,
+      "max_std_q4_lsb_err": 0,
+      "max_next_probe_q8_lsb_err": 0,
+      "isqrt_vectors_tested": 1000,
+      "isqrt_max_lsb_err": 0,
+      "sprt_vectors_tested": 64,
+      "sprt_max_lsb_err": 0,
+      "sprt_latency_cycles": 4,
+      "sprt_latency_ns": 16.0,
+      "boed_cycles_min": 584,
+      "boed_cycles_max": 584,
+      "boed_latency_us_at_250MHz": 2.336,
+      "all_zero_lsb": true
+    },
+    "structural_lint": {
+      "synth_files_checked": [
+        "boed_lut_rom.v",
+        "boed_isqrt_cordic.v",
+        "boed_q16_core.v",
+        "boed_top_16ch.v"
+      ],
+      "loc_by_file": {
+        "boed_lut_rom.v": 82,
+        "boed_isqrt_cordic.v": 66,
+        "boed_q16_core.v": 574,
+        "boed_top_16ch.v": 172
+      },
+      "total_rtl_loc": 894,
+      "modules_parsed": [
+        "boed_isqrt_cordic",
+        "boed_lut_rom",
+        "boed_q16_core",
+        "boed_top_16ch"
+      ],
+      "instantiations_checked": 4,
+      "forbidden_construct_count": 0,
+      "forbidden_hits": [],
+      "balance_error_count": 0,
+      "balance_errors": [],
+      "port_error_count": 0,
+      "port_errors": [],
+      "width_mismatch_count": 0,
+      "width_mismatches": [],
+      "xdc_checks": {
+        "create_clock_period_ns": 4.0,
+        "target_freq_MHz": 250.0,
+        "has_clock_uncertainty": true,
+        "has_input_output_delay": true,
+        "has_multicycle_path": true,
+        "has_dsp_ram_hints": true
+      },
+      "lint_passed": true
+    },
+    "zu48dr_resource_budget": {
+      "target_fpga": "Xilinx Zynq UltraScale+ RFSoC ZU48DR (8x 5GSPS ADC / 8x 10GSPS DAC)",
+      "f_clk_MHz": 250.0,
+      "simd_lanes": 4,
+      "cycles_per_boed_step": 584,
+      "latency_per_boed_step_us": 2.336,
+      "cycles_per_home_step": 234,
+      "latency_per_home_step_us": 0.936,
+      "cycles_stage0_sprt_shot": 4,
+      "latency_stage0_sprt_ns": 16.0,
+      "per_engine": {
+        "dsp48e2": 28,
+        "bram36": 4,
+        "lut": 4200,
+        "ff": 5100,
+        "dynamic_power_W": 0.18
+      },
+      "parallel_engines": 16,
+      "total_16ch": {
+        "dsp48e2": 448,
+        "dsp48e2_pct": 10.49,
+        "bram36": 64,
+        "bram36_pct": 5.93,
+        "lut": 67200,
+        "lut_pct": 15.8,
+        "ff": 81600,
+        "ff_pct": 9.59,
+        "board_total_power_W": 37.98,
+        "cryo_heat_load_W": 0.0
+      }
+    }
+  },
+  "interactive_twin": {
+    "html_path": "docs/digital_twin_interactive.html",
+    "size_bytes": 53046,
+    "zero_external_cdn": true,
+    "embedded_subsystems": 9,
+    "embedded_live_qpu_backend": "ibm_marrakesh",
+    "embedded_v6_sha256": "ca3f0e0267263bacb973f46c3cc2d321c0f204075ea232f4094758e1a9abf1d7"
+  },
+  "hygiene_hits": [],
+  "verdicts": {
+    "RV1_SYNTHESIZABLE_RTL_LINT_ZERO_VIOLATIONS": true,
+    "RV2_ROM_HEX_BIT_EXACT_PARITY": true,
+    "RV3_GOLDEN_VECTORS_64_ZERO_LSB_PARITY": true,
+    "RV4_CYCLE_COUNT_584_AND_TIMING_XDC": true,
+    "RV5_ZU48DR_16CH_RESOURCE_BUDGET_CLOSURE": true,
+    "RV6_INTERACTIVE_HTML5_TWIN_ZERO_CDN_LIVE_DATA": true,
+    "RV7_ARTIFACTS_PORTABILITY_VISUAL_AND_TESTS": true
+  },
+  "n_passed": 7,
+  "n_total": 7,
+  "success_rule_met": true
+}

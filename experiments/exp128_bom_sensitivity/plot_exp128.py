@@ -101,11 +101,11 @@ def make_fig1_tornado_cdf(data: dict) -> Path:
     )
     n_parts = data["bom_detailed_summary"]["total_parts"]
     m3_m = data["bom_detailed_summary"]["m3_nom_usd"] / 1e6
-    m3_base_m = data["bom_detailed_summary"]["m3_v5_base_nom_usd"] / 1e6
-    ver = data["bom_detailed_summary"].get("bom_version", "v6.0")
+    m3_bs_m = data["bom_detailed_summary"]["m3_base_plus_safety_nom_usd"] / 1e6
+    ver = data["bom_detailed_summary"].get("bom_version", "v7.0")
     draw_text(
         ctx,
-        f"BOM_DETAILED.csv {ver} ({n_parts} parça: Base=${m3_base_m:.2f}M + OptQ/HPC → Full=${m3_m:.2f}M) | Bütçe: $50M Yumuşak / $100M Sert | Teklif Yok {{Model/Varsayım}}",
+        f"BOM_DETAILED.csv {ver} ({n_parts} parça: Base+Safety=${m3_bs_m:.2f}M / v7 Full=${m3_m:.2f}M) | Bütçe: $50M Yumuşak / $100M Sert | Teklif Yok {{Model/Varsayım}}",
         40,
         74,
         size=15.0,
@@ -195,6 +195,7 @@ def make_fig1_tornado_cdf(data: dict) -> Path:
         "v4.0 Paketi (M4+S5.5+PT420+BOED)": "v4.0 Paketi (M4+S5.5+PT420)",
         "v6.0 Option-Q (qRAM + S1-Multi)": "v6.0 Option-Q (qRAM/S1)",
         "v6.0 Option-HPC (100G RDMA Dekoder)": "v6.0 Option-HPC (RDMA)",
+        "v7.0 Emniyet Paketi (SEMI S2/SIL-3)": "v7.0 Emniyet (SEMI S2/SIL-3)",
         "S1 Kaynak+Kolon+Süzgeç+PH3 (Exp124)": "S1 Kaynak/Kolon (Exp124)",
         "S6 Diğer (PT420/MW/RF/SET)": "S6 Diğer (PT420/MW/SET)",
         "S6.3 1.5T/<=0.4T Mıknatıs (Exp125)": "S6.3 Mıknatıs (Exp125)",
@@ -277,9 +278,9 @@ def make_fig1_tornado_cdf(data: dict) -> Path:
     ctx.fill()
     draw_text(ctx, "Sürücü üst %10 (P90)", pa_x + 275, leg_y, size=14, color="#334155")
 
-    # RFQ badge (9-RFQ v6.0 full procurement scope)
-    rfq_nom = data["rfq_coverage"]["rfq9_nom_share"] * 100.0
-    rfq_var = data["rfq_coverage"]["rfq9_variance_share_mc"] * 100.0
+    # RFQ badge (10-RFQ v7.0 full procurement scope)
+    rfq_nom = data["rfq_coverage"]["rfq10_nom_share"] * 100.0
+    rfq_var = data["rfq_coverage"]["rfq10_variance_share_mc"] * 100.0
     top3_var = data["top3_bom_var_share_s66_s68_s2"] * 100.0
     round_rect(ctx, pa_x + 480, leg_y - 24, 548, 46, 8)
     set_rgb(ctx, "#EFF6FF")
@@ -289,7 +290,7 @@ def make_fig1_tornado_cdf(data: dict) -> Path:
     ctx.stroke()
     draw_text(
         ctx,
-        f"9-RFQ Kapsamı: Nominal %{rfq_nom:.1f} | MC Varyans %{rfq_var:.1f} (İlk-3: %{top3_var:.1f})",
+        f"10-RFQ Kapsamı: Nominal %{rfq_nom:.1f} | MC Varyans %{rfq_var:.1f} (İlk-3: %{top3_var:.1f})",
         pa_x + 754,
         leg_y - 1,
         size=14,
@@ -478,13 +479,13 @@ def make_fig1_tornado_cdf(data: dict) -> Path:
         ctx.restore()
         draw_text(ctx, label, lg_x + 64, yy, size=13.5, color="#0F172A", bold=(idx == 2), valign="middle")
 
-    # Exceedance probability callout table (bottom-right of Panel B — shows both M3 Base & v6.0 Full!)
+    # Exceedance probability callout table (bottom-right of Panel B — shows Base+Safety vs v7 Full!)
     ep = data["monte_carlo_model_a_detailed"]["exceedance_probabilities"]
     ps = data["monte_carlo_model_a_detailed"]["program_stochastic_3_to_10_usd"]
     p10 = data["monte_carlo_model_a_detailed"]["program_x10_usd"]
     bm = data["monte_carlo_model_a_detailed"]["bom_with_bc_and_nl_usd"]
-    b_mod = data["v6_modular_mc_comparison"]["M3_v5_0_Base"]
-    cb_x, cb_y, cb_w, cb_h = bx1 - 498, by1 - 244, 484, 228
+    b_mod = data["v7_modular_mc_comparison"]["M3_v5_0_Base_Plus_Safety"]
+    cb_x, cb_y, cb_w, cb_h = bx1 - 512, by1 - 244, 498, 228
     round_rect(ctx, cb_x, cb_y, cb_w, cb_h, 8)
     set_rgb(ctx, "#FFFFFF", 0.96)
     ctx.fill_preserve()
@@ -494,12 +495,12 @@ def make_fig1_tornado_cdf(data: dict) -> Path:
     draw_text(ctx, "Aşım Olasılıkları (N=100.000, Model A)", cb_x + 16, cb_y + 25, size=14.2, color="#0F172A", bold=True)
     rows_txt = [
         ("Senaryo", "P50", "P95", "P(>50M)", "P(>100M)"),
-        ("M3 v6.0 Full BOM", f"${bm['p50']/1e6:.1f}M", f"${bm['p95']/1e6:.1f}M", f"%{ep['P_BOM_gt_50M']*100:.2f}", f"%{ep['P_BOM_gt_100M']*100:.2f}"),
-        ("Prog. Base ($5.25M)", f"${b_mod['program_stoch_usd']['p50']/1e6:.1f}M", f"${b_mod['program_stoch_usd']['p95']/1e6:.1f}M", f"%{b_mod['P_Program_stoch_gt_50M']*100:.1f}", f"%{b_mod['P_Program_stoch_gt_100M']*100:.2f}"),
-        ("Prog. Full ($5.55M)", f"${ps['p50']/1e6:.1f}M", f"${ps['p95']/1e6:.1f}M", f"%{ep['P_Program_stoch_gt_50M']*100:.1f}", f"%{ep['P_Program_stoch_gt_100M']*100:.2f}"),
+        ("M3 v7.0 Full BOM", f"${bm['p50']/1e6:.1f}M", f"${bm['p95']/1e6:.1f}M", f"%{ep['P_BOM_gt_50M']*100:.2f}", f"%{ep['P_BOM_gt_100M']*100:.2f}"),
+        ("Base+Safety ($5.39M)", f"${b_mod['program_stoch_usd']['p50']/1e6:.1f}M", f"${b_mod['program_stoch_usd']['p95']/1e6:.1f}M", f"%{b_mod['P_Program_stoch_gt_50M']*100:.1f}", f"%{b_mod['P_Program_stoch_gt_100M']*100:.2f}"),
+        ("v7 Full ($5.69M)", f"${ps['p50']/1e6:.1f}M", f"${ps['p95']/1e6:.1f}M", f"%{ep['P_Program_stoch_gt_50M']*100:.1f}", f"%{ep['P_Program_stoch_gt_100M']*100:.2f}"),
         ("Prog. Sabit ×10", f"${p10['p50']/1e6:.1f}M", f"${p10['p95']/1e6:.1f}M", f"%{ep['P_Program_x10_gt_50M']*100:.1f}", f"%{ep['P_Program_x10_gt_100M']*100:.2f}"),
     ]
-    col_xs = [cb_x + 14, cb_x + 178, cb_x + 250, cb_x + 324, cb_x + 404]
+    col_xs = [cb_x + 14, cb_x + 196, cb_x + 266, cb_x + 340, cb_x + 418]
     for r_i, rt in enumerate(rows_txt):
         ry = cb_y + 54 + r_i * 34
         if r_i == 0:
@@ -508,7 +509,7 @@ def make_fig1_tornado_cdf(data: dict) -> Path:
             ctx.fill()
         for c_i, val in enumerate(rt):
             clr = "#991B1B" if (r_i >= 3 and c_i == 4) else ("#065F46" if r_i == 2 else ("#1D4ED8" if r_i == 3 else "#1E293B"))
-            draw_text(ctx, val, col_xs[c_i], ry, size=12.8, color=clr, bold=(r_i in (0, 2, 3)))
+            draw_text(ctx, val, col_xs[c_i], ry, size=12.6, color=clr, bold=(r_i in (0, 2, 3)))
 
     # Bottom footer inside Panel B
     conv = data["monte_carlo_model_a_detailed"]["convergence_50k_vs_100k"]
@@ -604,7 +605,7 @@ def make_fig2_m1_m3_evpi(data: dict) -> Path:
 
     ax0, ax1 = pa_x + 90, pa_x + 640
     ay0, ay1 = pa_y + 115, pa_y + 770
-    ymax_m = 6.6
+    ymax_m = 6.8
 
     def map_ay(val_m: float) -> float:
         return ay1 - (val_m / ymax_m) * (ay1 - ay0)
@@ -639,7 +640,7 @@ def make_fig2_m1_m3_evpi(data: dict) -> Path:
         ("S4", "#0D9488", "S4 Piezo Kademe + İnterferometri"),
         ("S5", "#0284C7", "S5 UHV Oda + Tavlama + Epi"),
         ("S3", "#7C3AED", "S3 IBIC + Vakum-İçi Ön-Uç (Exp127)"),
-        ("S7", "#475569", "S7 Kontrol / GPU / AWG / SKY130"),
+        ("S7", "#475569", "S7 Kontrol/AWG + v7 SEMI S2/SIL-3"),
         ("S9", "#CA8A04", "S9 Yedekler + v6 OptQ qRAM / OptHPC"),
     ]
     sr = data["subsystem_reconciliation"]
@@ -750,7 +751,7 @@ def make_fig2_m1_m3_evpi(data: dict) -> Path:
         ctx.fill()
         draw_text(ctx, desc, rx + 40, yy, size=12.8, color="#1E293B", valign="middle")
 
-    # Delta Bridge Card (below legend) — Exp122 -> M3 v5.0 Base -> +Option-Q/HPC = M3 v6.0 Full!
+    # Delta Bridge Card (below legend) — Exp122 -> M3 v5.0 Base -> +v6 OptQ/HPC -> +v7 Safety = M3 v7.0 Full!
     db = data["delta_bridge_exp122_to_detailed"]
     dy = ay0 + 322
     dh = 342
@@ -761,23 +762,24 @@ def make_fig2_m1_m3_evpi(data: dict) -> Path:
     ctx.set_line_width(1.4)
     ctx.stroke()
     tot_d_m = db["total_delta_usd"] / 1e6
-    draw_text(ctx, f"Exp122 → M3 v6.0 Köprüsü (+${tot_d_m:.2f}M)", rx + 14, dy + 23, size=14.0, color="#1E3A8A", bold=True)
+    draw_text(ctx, f"Exp122 → M3 v7.0 Köprüsü (+${tot_d_m:.2f}M)", rx + 14, dy + 23, size=14.0, color="#1E3A8A", bold=True)
     bridge_rows = [
         ("Exp122 Merkez Baz", db["exp122_central_baseline_usd"]),
         ("+ v3.0 Deltaları (S2/125/S9/124/127)", db["bom_detailed_m3_v3_base_nom_usd"] - db["exp122_central_baseline_usd"]),
         ("+ v4.0 Paketi (M4+S5.5+PT420+GPU)", db["delta_v4_0_upgrade_package_usd"]),
-        ("+ v5.0 Brüt (S5.6 MBE + S6.5 MUX)", db["delta_v5_0_gross_new_hardware_usd"]),
-        ("− Çift-Sayım Kredisi (v4→v5)", db["delta_v5_0_anti_double_counting_credit_usd"]),
+        ("+ v5.0 Net (S5.6+S6.5 −$86k kredi)", db["delta_v5_0_net_incremental_usd"]),
         ("= M3 v5.0 Base (167 parça)", db["bom_detailed_m3_v5_base_nom_usd"]),
         ("+ v6.0 Option-Q (qRAM/S1, 9.2 kg)", db["delta_v6_0_option_q_exp142_usd"]),
         ("+ v6.0 Option-HPC (4U RDMA, 64 kg)", db["delta_v6_0_option_hpc_exp143_usd"]),
-        ("= M3 v6.0 Full (174 parça, $0 hata)", db["bom_detailed_m3_nom_usd"]),
+        ("+ v7.0 S7.SAFETY (SEMI S2, 355 kg)", db["delta_v7_0_safety_compliance_exp150_usd"]),
+        ("= M3 v7.0 Full (180 parça, $0 hata)", db["bom_detailed_m3_nom_usd"]),
     ]
     for bi, (blbl, bval) in enumerate(bridge_rows):
         byy = dy + 52 + bi * 31.5
-        is_tot = bi in (0, 5, len(bridge_rows) - 1)
-        is_v6 = bi in (6, 7)
-        if bi in (5, len(bridge_rows) - 1):
+        is_tot = bi in (0, 4, len(bridge_rows) - 1)
+        is_v7 = bi == 7
+        is_v6 = bi in (5, 6)
+        if bi in (4, len(bridge_rows) - 1):
             set_rgb(ctx, "#93C5FD")
             ctx.set_line_width(1.1)
             ctx.move_to(rx + 12, byy - 15)
@@ -789,8 +791,8 @@ def make_fig2_m1_m3_evpi(data: dict) -> Path:
             rx + 12,
             byy,
             size=11.6,
-            color="#065F46" if is_v6 else ("#991B1B" if bi == 4 else ("#0F172A" if is_tot else "#334155")),
-            bold=(is_tot or is_v6),
+            color="#B45309" if is_v7 else ("#065F46" if is_v6 else ("#0F172A" if is_tot else "#334155")),
+            bold=(is_tot or is_v6 or is_v7),
         )
         val_s = f"${bval/1e3:,.0f}k" if is_tot else (f"-${abs(bval)/1e3:,.0f}k" if bval < 0 else f"+${bval/1e3:,.0f}k")
         draw_text(
@@ -799,18 +801,17 @@ def make_fig2_m1_m3_evpi(data: dict) -> Path:
             rx + rw - 12,
             byy,
             size=11.6,
-            color="#065F46" if is_v6 else ("#991B1B" if bi == 4 else ("#1E3A8A" if is_tot else "#0F172A")),
-            bold=(is_tot or is_v6),
+            color="#B45309" if is_v7 else ("#065F46" if is_v6 else ("#1E3A8A" if is_tot else "#0F172A")),
+            bold=(is_tot or is_v6 or is_v7),
             align="right",
         )
 
     # Bottom takeaway box in Panel A (100% dynamic from exp128.json)
     m1_m = data["bom_detailed_summary"]["m1_nom_usd"] / 1e6
-    m1_base_pct = data["bom_detailed_summary"]["m1_to_m3_base_nom_ratio"] * 100.0
+    m1_saf_m = data["bom_detailed_summary"]["m1_plus_safety_nom_usd"] / 1e6
     m3_base_m = data["bom_detailed_summary"]["m3_v5_base_nom_usd"] / 1e6
-    m3_optq_m = data["bom_detailed_summary"]["m3_v6_plus_option_q_nom_usd"] / 1e6
-    m3_opthpc_m = data["bom_detailed_summary"]["m3_v6_plus_option_hpc_nom_usd"] / 1e6
-    pilot_m = data["bom_detailed_summary"]["m3_v5_pilot_256_nom_usd"] / 1e6
+    m3_bs_m = data["bom_detailed_summary"]["m3_base_plus_safety_nom_usd"] / 1e6
+    m3_v6_m = data["bom_detailed_summary"]["m3_v6_full_nom_usd"] / 1e6
     margin_50 = 50.0 / m3_v5_m
     round_rect(ctx, pa_x + 24, ay1 + 78, pa_w - 48, 174, 8)
     set_rgb(ctx, "#F8FAFC")
@@ -818,12 +819,12 @@ def make_fig2_m1_m3_evpi(data: dict) -> Path:
     set_rgb(ctx, "#94A3B8")
     ctx.set_line_width(1.2)
     ctx.stroke()
-    draw_text(ctx, "M1 Base → M3 v5.0 Base → M3 v6.0 Modüler Opsiyon Ayrımı (Çift Sayım Yok)", pa_x + 42, ay1 + 106, size=14.8, color="#0F172A", bold=True)
+    draw_text(ctx, "M1 Base → Faz-1 (Base+Safety) → M3 v7.0 Safety-Certified Full Modüler Yapısı", pa_x + 42, ay1 + 106, size=14.6, color="#0F172A", bold=True)
     notes_a = [
-        f"• M1 Base (${m1_m:.2f}M nom, Base'in %{m1_base_pct:.1f}'i): 20 mK DR + PT420 + 1.5T + S5.5 + S5.6 MBE + 1× ZU48DR (v6 opsiyonları hariç).",
-        f"• M3 v5.0 Base (${m3_base_m:.3f}M, 167 parça) aynen korundu | Pilot 256-hücre: ${pilot_m:.3f}M | CAD v5 kütle: 1.034,94 kg.",
-        f"• v6.0 Modüler Eklentiler: +Option-Q (+$168k, 9,20 kg → ${m3_optq_m:.3f}M) | +Option-HPC (+$132k, 64,00 kg → ${m3_opthpc_m:.3f}M).",
-        f"• M3 v6.0 Full (${m3_v5_m:.3f}M, 174 parça, 1.108,14 kg, $50M sınırının {margin_50:.1f}× altı): $0,00 köprü / 0,000 kg kütle hatası!",
+        f"• M1 Base (${m1_m:.3f}M) korundu; +S7.SAFETY ($145k) ile M1+Safety = ${m1_saf_m:.3f}M | M3 v5.0 Base (167p) = ${m3_base_m:.3f}M korundu.",
+        f"• Faz-1 M3 Base+Safety (173p) = ${m3_bs_m:.3f}M: SEMI S2/SIL-3 tam uyumlu & P(Prog>$100M)=%4,67 < %5 (CU3 PASS!).",
+        f"• M3 v6.0 Full (174p) = ${m3_v6_m:.3f}M → +S7.SAFETY (+$145k, +%2,61) = M3 v7.0 Full (180p) = ${m3_v5_m:.3f}M ($50M'un {margin_50:.1f}× altı).",
+        "• Kütle Ayrımı (0,000 kg hata): Şasi-üstü CAD v6.0 = 1.108,137 kg (değişmedi) + Tesis Emniyet = 355,0 kg → 1.463,137 kg toplam.",
     ]
     for ni, nt in enumerate(notes_a):
         draw_text(ctx, nt, pa_x + 40, ay1 + 136 + ni * 27, size=12.1, color="#334155")
@@ -1054,18 +1055,18 @@ def make_fig2_m1_m3_evpi(data: dict) -> Path:
     set_rgb(ctx, "#94A3B8")
     ctx.set_line_width(1.2)
     ctx.stroke()
-    draw_text(ctx, "Karar-Teorik Özet: 1 K AR-GE EVPI vs 9-RFQ Teklif Toplama Değeri", pb_x + 42, ay1 + 106, size=15, color="#0F172A", bold=True)
+    draw_text(ctx, "Karar-Teorik Özet: 1 K AR-GE EVPI vs 10-RFQ Teklif Toplama Değeri", pb_x + 42, ay1 + 106, size=15, color="#0F172A", bold=True)
     # Find EVPI at C_RD=$2M, p=0.50, N=1, 5, 10
     row_2m_50 = [r for r in ev["grid"] if abs(r["c_rd_usd"] - 2e6) < 1 and abs(r["p_succ"] - 0.5) < 1e-6][0]
     evpi_n1 = row_2m_50["by_n_mach"]["1"]["evpi_usd"]
     evpi_n5 = row_2m_50["by_n_mach"]["5"]["evpi_usd"]
     evpi_n10 = row_2m_50["by_n_mach"]["10"]["evpi_usd"]
-    rfq9_var_pct = data["rfq_coverage"]["rfq9_variance_share_mc"] * 100.0
+    rfq10_var_pct = data["rfq_coverage"]["rfq10_variance_share_mc"] * 100.0
     notes_b = [
         f"• Tek Makine (N=1, C_RD=$2M, p=%50): 1 K AR-GE EVPI = ${evpi_n1/1e3:.0f}k (sıfır: bilgi gelse bile tek makinede $2M > ${edhw/1e3:.0f}k, karar değişmez!).",
         f"• Orta Filo (N=5): EVPI = ${evpi_n5/1e3:.0f}k (karar sınırında en yüksek bilgi değeri); Büyük Filo (N=10): EVPI = ${evpi_n10/1e3:.0f}k (1 K AR-GE kârlı).",
-        f"• 9 Tedarikçi RFQ'sunu Gönderme Değeri: B/C duvarı aşım farkı E[C−B] = ${ev['s66_c_vs_b_expected_excess_usd']/1e6:.2f}M → ~sıfır maliyetle %{rfq9_var_pct:.1f} BOM varyansını çözer!",
-        "• Stratejik Hüküm: M1 ve ilk M3 v6.0 için 20 mK DR bazını koru (Exp121 PASS); ilk eylem 1 K AR-GE değil, RFQ-01..RFQ-09 tekliflerini toplamaktır.",
+        f"• 10 Tedarikçi RFQ'sunu Gönderme Değeri: B/C duvarı aşım farkı E[C−B] = ${ev['s66_c_vs_b_expected_excess_usd']/1e6:.2f}M → ~sıfır maliyetle %{rfq10_var_pct:.1f} BOM varyansını çözer!",
+        "• Stratejik Hüküm: M1 & Faz-1 M3 Base+Safety için 20 mK DR koru (Exp121 PASS); ilk eylem 1 K AR-GE değil, RFQ-01..RFQ-10 tekliflerini toplamaktır.",
     ]
     for ni, nt in enumerate(notes_b):
         draw_text(ctx, nt, pb_x + 42, ay1 + 136 + ni * 27, size=13.2, color="#334155")

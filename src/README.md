@@ -1,9 +1,9 @@
-# Atom Litografi Makinesi — Yazılım, `Q16.16` FPGA DSP, `CellISA v4.0`, Canlı IBM QPU Köprüsü & Devre Paketi (`v4.0`)
+# Atom Litografi Makinesi — Yazılım, `Q16.16` FPGA Verilog RTL, İnteraktif Dijital İkiz, `CellISA v4.0`, Canlı IBM QPU Köprüsü & Devre Paketi (`v7.0`)
 
-Tasarım: `research/atom_lithography_machine/DESIGN.md v6.0` (`Exp124–Exp146` tam senkronu).
+Tasarım: `research/atom_lithography_machine/DESIGN.md v7.0` (`Exp124–Exp151` tam senkronu).
 
 > **Epistemik Sınır (Kristal Ayrım):**
-> - **Silikon `³¹P` fabrikasyon & `M1–M4` makine fiziği + `auto_recal.py` simülasyonu:** `M0` tasarım & sayısal fizibilite (`no_lab_measurement=true`, `no_supplier_quotes=true`, `tapeout_done=false`).
+> - **Silikon `³¹P/¹²¹Sb/¹⁶⁷Er` fabrikasyon, `M1–M4` makine fiziği, `rtl/boed_fpga/` Verilog RTL sentezi (`no_external_eda_sim=true`), `Exp150` emniyet & `auto_recal.py` simülasyonu:** `M0` tasarım & sayısal fizibilite (`no_lab_measurement=true`, `no_supplier_quotes=true`, `tapeout_done=false`).
 > - **Kontrol yığını (`CellISA v4.0 → OpenQASM 3.0`), `Echo/XY4` DD, `d=3` sendrom dekoderi ve bit-kesin `Q16.16` BOED:** **Gerçek `156`-kübitlik `ibm_marrakesh` (IBM Heron r2, `job_id = dc1tdo2nj2vs73dfrfl0`, `16 PUB × 4.096 shot`, `32,54 s`) süperiletken bulut QPU üzerinde canlı doğrulandı** (`{Canlı-Donanım-IBM-QPU}`, sıfır gizli anahtar sızıntısı).
 
 ## İçerik
@@ -34,18 +34,20 @@ Tasarım: `research/atom_lithography_machine/DESIGN.md v6.0` (`Exp124–Exp146` 
 - `detector_frontend.py` → Varsayılan kilitli **`COLD_100K`** profili (`RF = 1 GΩ`, `CS = CP = 600 pF → τ_s = 1,2 µs`, `Q_ION = 0,055 fC`, `V_THR = 4,23 mV`; isteğe bağlı `--profile rt300k`) ile ERC-doğrulamalı (`0` hata) `detector_frontend.net` (KiCad vD, **204 bileşen, 107 net**) ve `detector_frontend.cir` (SPICE3/ngspice destesi): `LTC6268` CSA + `ADA4817-1` tamponlu CR-RC şekillendirici (`×50` net tepe) + `DAC8568` 8-kanallı SPI eşik DAC + `TLV3501` histerezisli karşılaştırıcı (`{Aday-COTS}`).
 - Tam fiziksel Lindhard/Laplace/Parseval/MC analizi: `experiments/exp127_detector_frontend_sim/` & `src/board/BOARD.md`.
 
-### 3. `src/rtl/` — Sayılmış-İmplantasyon Blanker Çekirdeği & Karosu
-- `blanker_gate.v` (tek kanal, BMC kanıtlı) ve `blanker_tile.v` (64 kanal, zamansal tümevarım + Yosys TT sentezi `117.541 µm² / 11.835 hücre`; `1.024` `Arch-B` demetcik = `16` karo).
+### 3. `src/rtl/` & `rtl/boed_fpga/` (`v7.0` / `Exp149`) — Blanker Karosu & Sentezlenebilir `Q16.16` BOED-FPGA Verilog RTL
+- `src/rtl/`: `blanker_gate.v` (tek kanal, BMC kanıtlı) ve `blanker_tile.v` (64 kanal, zamansal tümevarım + Yosys TT sentezi `117.541 µm² / 11.835 hücre`; `1.024` `Arch-B` demetcik = `16` karo).
+- **`rtl/boed_fpga/` (`Exp149`, `10` dosya, `no_external_eda_sim=true`):** `fpga_boed_dsp.py` sabit-nokta motorunun **sentezlenebilir IEEE 1364-2005 Verilog RTL** gerçeklemesi (`boed_lut_rom.v`, `boed_isqrt_cordic.v`, `boed_q16_core.v`, `boed_top_16ch.v` — toplam **`894` satır**, `0` sentez/port/genişlik hatası; `rom_loglik_p0/p1.hex` `1.024/1.024` `0`-bit fark; `golden_vectors.mem` **`64/64` `0 LSB`** + `1.000` `isqrt` `0 LSB`; kesin **`584` çevrim = `2,336 µs @ 250 MHz`**, `4` çevrim SPRT; `zu48dr_boed_250mhz.xdc` + `tb_boed_q16_core.v` + [`rtl/boed_fpga/README.md`](../rtl/boed_fpga/README.md); `ZU48DR` `16` kanal `%10,49` DSP48E2, `%5,93` BRAM36, `0 W` kriyo).
+- **Canlı İnteraktif HTML5 Dijital İkiz (`docs/digital_twin_interactive.html`, `Exp149/Exp151`):** `66,6 KB` (`66.554` bayt), `5` sekme, `0` harici CDN/HTTP, `0` sızıntı — doğrudan diskteki birincil JSON'lardan derlenen etkileşimli tarayıcı ikizi (`SHA-256 = f9f45721c7dd67fe06616a29e3d98b72e10ded75221293ee5efbf15cefca2bc0`).
 
 ### 4. Yerel Arşiv Notu (`src/qcell/`)
 - Erken `Exp0–Exp22 / Exp32` faz-alanı / FEM / MOS / `4 K` kompakt model kütüphanesi (`src/qcell/`) yalnızca yerel arşivde tutulur; Atom Litografi Makinesi çekirdeği tarafından içe aktarılmaz ve GitHub yayın paketinde yer almaz.
 
-## Testler & Doğrulama (2026-11-23)
+## Testler & Doğrulama (2026-11-23, `v7.0`)
 ```bash
-PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src python3 -B -m pytest -p no:cacheprovider \
+PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=.:src python3 -B -m pytest -p no:cacheprovider \
     tests/test_machine_control.py tests/test_atom_programmer.py tests/test_exp132.py \
     tests/test_exp135.py tests/test_exp140.py tests/test_exp141.py \
-    tests/test_exp145.py tests/test_exp146.py \
+    tests/test_exp145.py tests/test_exp146.py tests/test_exp149.py tests/test_exp151.py \
     tests/test_detector_frontend.py tests/test_rtl_contract.py tests/test_blanker_tile.py
 ```
-- **Makine yazılımı (`BOED` + `Q16.16` FPGA + `CellISA v4.0` + `ibm_marrakesh` QPU köprüsü + `auto_recal`) + Dijital İkizler (`v4`/`v5`/`v6`) + IBIC ön-uç + RTL sözleşme testleri (`11` dosya):** **`85/85 PASS`** (`test_machine_control.py` `12`, `test_atom_programmer.py` `11`, `test_exp132.py` `6`, `test_exp135.py` `6`, `test_exp140.py` `7`, `test_exp141.py` `9`, `test_exp145.py` `12`, `test_exp146.py` `10`, `test_detector_frontend.py` `6`, `test_rtl_contract.py` `3`, `test_blanker_tile.py` `3`); tüm **`28/28`** staged Atom Litografi test paketi **`252/252 PASS`**.
+- **Makine yazılımı (`BOED` + `Q16.16` FPGA + `CellISA v4.0` + `ibm_marrakesh` QPU köprüsü + `auto_recal`) + Verilog RTL & İnteraktif İkiz (`Exp149`) + Dijital İkizler (`v4`/`v5`/`v6`/`v7`) + IBIC ön-uç + RTL sözleşme testleri (`13` dosya):** **`108/108 PASS`** (`test_machine_control.py` `12`, `test_atom_programmer.py` `11`, `test_exp132.py` `6`, `test_exp135.py` `6`, `test_exp140.py` `7`, `test_exp141.py` `9`, `test_exp145.py` `12`, `test_exp146.py` `10`, `test_exp149.py` `10`, `test_exp151.py` `13`, `test_detector_frontend.py` `6`, `test_rtl_contract.py` `3`, `test_blanker_tile.py` `3`); tüm **`33/33`** staged Atom Litografi test paketi **`306/306 PASS`**.

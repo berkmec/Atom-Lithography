@@ -1,0 +1,31 @@
+{
+  "experiment": "exp147_universal_qldpc_d18_magic_state",
+  "hypothesis_id": "H165",
+  "version": "7.0-phaseA",
+  "registered": "2026-11-23 (before any Exp147 solver code or numerical run)",
+  "no_lab_measurement": true,
+  "no_supplier_quotes": true,
+  "epistemic_tags": [
+    "Model",
+    "Sayisal-Simulasyon",
+    "Literatur",
+    "Varsayim"
+  ],
+  "question": "Can our 300 um 3 kOhm NbTiN M4 bus and Exp143 D3 GRAPE gates (p_2q = 0.337%-0.395%) host the Bravyi [[288,12,18]] (d=18) qLDPC code plus universal Litinski/Gidney Magic State Factories (p_T <= 1e-10) to achieve deep 10^-9 fault tolerance and compress full FeMoco quantum chemistry (192L, 10^8 T) and RSA-2048 Shor (4096L, 10^10 T) cryostat count, electrical power, runtime, and TCO by >= 10x vs D3 Surface Code?",
+  "method": {
+    "bb288_algebra_and_layout": "Exact GF(2) construction of Bravyi [[288,12,18]] (l=12, m=12, A=x^3+y^2+y^7, B=y^3+x+x^2), depth-7 zero-kickback Bravyi Lemma-5 CNOT schedule, Z_12 automorphism b'=5b mod 12 + 24x24 folded-torus thickness-2 M4 layout (P_cell=15..30 um), and Exp136 f*=1.5%+2MV/m 576-cell defect-free block yield (N_cand=6..10).",
+    "d6_to_d18_circuit_dem": "Pure-NumPy Normalized Min-Sum BP + exact-prefix bit-packed GF(2) OSD-2 on full 3D space-time depth-7 circuit DEM across [[72,12,6]], [[90,8,10]], [[144,12,12]], and [[288,12,18]] for uniform depolarizing threshold scan and Exp143 D3 GRAPE (0.337%, 0.395%) + Exp140 readout (0.386%, 0.223%) regimes, with honest log-linear distance scaling to pinpoint the exact (d, p_2q) boundary reaching p_L/round <= 1e-9.",
+    "magic_state_factories": "Exact first-principles modeling of qLDPC lattice-surgery/Pauli measurement overhead, single-stage Litinski 15-to-1, two-stage Litinski (15-to-1) x (116-to-12), and Gidney (2024) cultivation + single-stage 15-to-1 using Exp143 empirical SC Lambda=2.825 and T_cyc,SC=6.70 us under Exp140's 2,887-cell MXC ceiling.",
+    "algorithm_resource_and_tco": "Full space-time volume, cryostat fleet, facility electrical power (25 kW/cryo + Option-HPC), wall-clock runtime, and Exp141 wafer_econ141.py 5-year TCO budgets for FeMoco (192L, 10^8 T-gates + Lee 2021 10^10 T sensitivity) and RSA-2048 Shor (4096L, 10^10 T-gates) comparing qLDPC + Magic State Factories vs Exp138/143 D3 Surface Code."
+  },
+  "success_rule": "UQ1 through UQ7 at least 6/7 PASS with UQ1 (algebra) and UQ7 (portability/tests) mandatory PASS; any physical threshold/regime limitation reported honestly without altering this file.",
+  "predictions": [
+    "UQ1_EXACT_BB288_ALGEBRA_AND_SCHEDULE: [[288,12,18]] (l=12, m=12, A=x^3+y^2+y^7, B=y^3+x+x^2) satisfies H_X H_Z^T == 0 mod 2, exact row/col weight 6, rank_X == rank_Z == 138, k == 12, symplectic L_X L_Z^T == I_12, and verified depth-7 zero-collision/zero-kickback schedule (1,728 CNOTs/round).",
+    "UQ2_THICKNESS2_M4_LAYOUT_AND_576_YIELD: Under Z_12 automorphism b'=5b mod 12 + 24x24 folded-torus thickness-2 embedding (1,152 L1 + 576 L2 edges), L_max <= 300 um at P_cell in [15, 20] um (matching Exp131 3 kOhm NbTiN 5 GHz bus); under Exp136 f*=1.5%+2MV/m (p_slot=0.75565), 576-cell yield exceeds 99.0% at N_cand=8 and 99.8% at N_cand=9 (while f=1.0%, N=6 collapses below 0.1%).",
+    "UQ3_D6_TO_D18_CIRCUIT_DEM_SCALING: Pure-NumPy BP+OSD-2 on 3D circuit DEM (100% syndrome validity) across d=6,10,12,18 yields uniform threshold p_th in [0.50%, 0.90%] with [[288,12,18]] strictly beating [[144,12,12]] below threshold, and at Exp143 D3 GRAPE (0.337%-0.395%) achieves deep fault tolerance (empirical p_L/rnd(1L) < 1e-4) with honest extraction of the exact (d, p_2q) boundary for p_L/round <= 1e-9.",
+    "UQ4_UNIVERSAL_MAGIC_STATE_FACTORIES: At Exp143 D3 GRAPE (p_2q=0.337%/0.395%, Lambda_SC=2.825), single-stage 15-to-1 fails p_T <= 1e-10 (honest limitation), whereas two-stage Litinski (15-to-1)x(116-to-12) and Gidney cultivation+15-to-1 both achieve p_T <= 1e-10 at R_T >= 5 kHz in <= 15 LD400 cryostats per factory (<= 6 cryostats with cultivation).",
+    "UQ5_FEMOCO_CHEMISTRY_RESOURCE_AND_COST: Full FeMoco catalyst calculation (192L, 10^8 T-gates, P_fail <= 2%) runs in <= 20 LD400 cryostats (>= 10x fewer cryostats than D3 Surface Code), <= 8 hours wall-clock runtime, and <= $25,000 amortized cost per calculation under Exp141 TCO.",
+    "UQ6_RSA2048_SHOR_CRYO_POWER_COMPRESSION: Full RSA-2048 Shor (4096L, 10^10 T-gates, honest space-time error audit) with qLDPC + Magic State Factories compresses cryostat fleet and electrical power by >= 10x vs D3 Surface Code (> 100 MW -> < 10 MW) with wall-clock runtime <= 48 hours.",
+    "UQ7_PORTABILITY_VISUALIZATION_AND_TESTS: Zero hardcoded host paths, 0 GFM table errors, no_lab_measurement=true, no_supplier_quotes=true, visually verified 2400x1400 PNG, and >= 9 passing tests in tests/test_exp147.py with 0 regressions across existing repository tests."
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "experiment": "exp150_industrial_safety_fmea_hazop",
+  "hypothesis_id": "H168",
+  "date": "2026-11-23",
+  "status": "PRE_REGISTERED_BEFORE_RUN",
+  "no_lab_measurement": true,
+  "no_supplier_quotes": true,
+  "epistemic_tags": [
+    "{Model}",
+    "{Analitik}",
+    "{Literatür}",
+    "{Varsayım}"
+  ],
+  "standards_referenced": [
+    "ANSI Z136.1-2022 / IEC 60825-1:2014 (Class-4 808 nm Laser Safety)",
+    "OSHA 29 CFR 1910.1000 / ACGIH TLV-TWA / NIOSH IDLH (PH3 Phosphine) & ISO 10156 (5% H2/N2)",
+    "ICRP Publication 103 / NIST XCOM (10-22 keV Bremsstrahlung X-Ray) & IEC 61010-1 (HV Crowbar)",
+    "OSHA 29 CFR 1910.146 (ODH >= 19.5% O2) & ASME BPVC Sec VIII / CGA S-1.3 (0.5 barg Relief)",
+    "IEC 61508 (SIL-2/SIL-3 PFD_avg) & SEMI S2 (Semiconductor Equipment EHS & FMEA)"
+  ],
+  "predictions": {
+    "SF1_class4_808nm_laser_enclosure_and_sil3_shutter": {
+      "description": "ANSI Z136.1 808 nm 1.0 ms (43.49 J/cm^2) MPE, NOHD (>100 m collimated), NHZ_diffuse (>10 m), required OD in [6.3, 6.8], OD>=7+ interlocked enclosure & SIL-3 dual shutter (<5 ms, PFD_avg < 1e-3) achieve Class-1 embedded compliance",
+      "criterion": "NOHD_collimated_m > 100 and NHZ_diffuse_m > 10 and 6.3 <= OD_required_4pulse <= 6.8 and residual_ratio_OD8 < 0.05 and shutter_close_ms <= 5.0 and sil3_pfd_avg < 1e-3"
+    },
+    "SF2_ph3_sds_subatmospheric_and_forming_gas_safety": {
+      "description": "Unmitigated pressurized PH3 cylinder exceeds IDLH (50 ppm), while sub-atmospheric SDS (<650 Torr, 10 g) + vacuum-jacket + 250 CFM scrubber + 0.02 ppm SIL-3 shutoff yields operator exposure < 0.01 ppm (>=5x below 0.05 ppm TLV-TWA, >=5000x below IDLH), and 5% H2/N2 is ISO-10156 non-flammable (<5.7% limit)",
+      "criterion": "unmitigated_peak_ppm > 50.0 and mitigated_operator_ppm < 0.01 and tlv_margin >= 5.0 and idlh_margin >= 5000.0 and forming_gas_nonflammable is True"
+    },
+    "SF3_hv_bremsstrahlung_xray_and_crowbar": {
+      "description": "Kramers/NIST 10-22 keV Bremsstrahlung dose outside 6 mm 316L chamber wall << 1.0 uSv/h (<1e-6 uSv/h) and outside S5.5 sapphire window + OD8 steel/Al shroud < 0.01 uSv/h; HV stored energy < 0.5 J and crowbar discharges to < 50 V in < 50 ms",
+      "criterion": "dose_6mm_316L_22keV_uSv_h < 1e-6 and dose_s55_shrouded_22keV_uSv_h < 0.01 and hv_stored_energy_10kV_J < 0.5 and hv_stored_energy_22kV_J < 0.5 and hv_crowbar_50V_ms < 50.0"
+    },
+    "SF4_cryo_he_odh_rupture_disk_and_quench": {
+      "description": "Dry LD400+PT420 total He instantaneous release in 60 m^3 cleanroom maintains O2 > 20.5% (>>19.5% OSHA), ASME DN50 0.5 barg OVC rupture disk has >10x relief margin, and Exp125 18.94 kJ quench dump resistor stays < 55 C (T_hotspot = 64.6 K)",
+      "criterion": "cleanroom_60m3_O2_pct > 20.5 and dn50_relief_margin >= 10.0 and dump_resistor_peak_C < 55.0 and exp125_hotspot_K < 150.0"
+    },
+    "SF5_epo_ups_15kva_safe_shutdown": {
+      "description": "15 kVA / 10 kWh online double-conversion UPS achieves 0 ms transfer, <=5 ms laser cutoff, <=50 ms HV discharge, <=100 ms UHV gate valve closure (<0.01 ML wafer oxidation), >=30 min full-load and >=180 min Tier-1 safety/vacuum runtime",
+      "criterion": "ups_transfer_ms == 0.0 and uhv_gate_valve_close_ms <= 100.0 and wafer_oxidation_ML < 0.01 and full_load_runtime_min >= 30.0 and tier1_runtime_min >= 180.0"
+    },
+    "SF6_25row_fmea_and_hazop_closure": {
+      "description": "Complete 25-row FMEA (S x O x D = RPN) + 10-node HAZOP achieves max_RPN_pre >= 240 unmitigated and max_RPN_post <= 60 (0 unacceptable residual risks, mean RPN reduction >= 75%) after S7.SAFETY mitigations",
+      "criterion": "n_fmea_rows == 25 and n_hazop_nodes >= 10 and max_rpn_pre >= 240 and max_rpn_post <= 60 and mean_rpn_reduction_pct >= 75.0"
+    },
+    "SF7_safety_kit_spec_ready_for_bom_v7": {
+      "description": "s_safety_spec.json defines S7.SAFETY-01..06 lab safety kit with positive mass/power/cost ranges, 0.0 W cryogenic load, no_supplier_quotes=true, and total nominal cost <= 5% of M3 v6.0 Full BOM ($5.548M)",
+      "criterion": "n_items == 6 and total_mass_kg > 0 and cryo_load_W == 0.0 and pct_of_m3_v6_full <= 5.0 and no_supplier_quotes is True"
+    }
+  },
+  "success_rule": "At least 6 of 7 pre-registered criteria (SF1-SF7) PASS, including SF1, SF2, SF3, SF4, SF6"
+}

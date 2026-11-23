@@ -1,32 +1,33 @@
-# Atom Litografi Makinesi — Kapsamlı Teknik El Kitabı (`TECHNICAL_MANUAL.md`, v6.0)
+# Atom Litografi Makinesi — Kapsamlı Teknik El Kitabı (`TECHNICAL_MANUAL.md`, v7.0)
 
-**Sürüm:** `v6.0` (Tarih: `2026-11-23`; Tam Modüler Ölçekleme, `qLDPC` Devrimi & Canlı IBM QPU Kilidi — `Exp124`–`Exp146`, `CAD v6.0`, `BOM_DETAILED v6.0` + `9-RFQ`, `Option-Q` `qRAM`/`S1-Multi`, `D3` GRAPE `M4` + `Option-HPC` `100G` RDMA, `[[144,12,12]]` Gross Code `qLDPC`, `CellISA v4.0` + `auto_recal.py` + canlı `156Q` `ibm_marrakesh` QPU & `Exp146` Master `v6.0` Dijital İkiz)
-**Kapsam:** Tek-kriyostatlı, **`32×32 = 1.024` eş-adımlı (`0,50 mm`) demetçikli** Atom Litografi Makinesi'nin birinci-ilkeler fiziği (`Exp124–146`), `1530,1 K` flaş + `S5.6` MBE, `D3` `K=8` Fourier GRAPE `M4` (`p_2q = %0,337–%0,395`), **`[[144,12,12]]` Gross Code `qLDPC` (`108L = 1` kriyostat, `$63.827/L_sys`)**, `Option-Q` (`8.403×–25.122×` `qRAM`), `Option-HPC` (`100G` RDMA), **`CellISA v4.0` (`20` op) + `auto_recal` + canlı `156Q` `ibm_marrakesh`**, `CAD v6.0` (`199` parça / `40/40`), `BOM v6.0` (`174` parça / `9-RFQ`) ve `Exp146` Master `v6.0` Dijital İkiz el kitabı.
-**Ana Referanslar:** [DESIGN.md](DESIGN.md) (`v6.0`), [MODULAR.md](MODULAR.md) (`v6.0-ICD`), [M1_PROTOTYPE_BLUEPRINT.md](M1_PROTOTYPE_BLUEPRINT.md) (`v6.0`), [PROJECT_DOSSIER.md](PROJECT_DOSSIER.md) (`v6.0`), [BOM_ENGINEERING.md](BOM_ENGINEERING.md) (`v6.0`), [RFQ_SPECIFICATIONS.md](RFQ_SPECIFICATIONS.md) (`9-RFQ`), [LITERATURE.md](LITERATURE.md), `research/atom_lithography_machine/cad/cad_verification.json`, `results/exp124..146/`.
+**Sürüm:** `v7.0` (Tarih: `2026-11-23`; Bilimsel Kapanış, Sentezlenebilir Verilog RTL, İnteraktif HTML5 Dijital İkiz & Endüstriyel Emniyet Kilidi — `Exp124`–`Exp151`, `CAD v6.0`, `BOM_DETAILED v7.0` + `10-RFQ`, `[[288,12,18]]` evrensel `qLDPC` + FeMoco/RSA-2048, `¹²¹Sb` `Q-Echo-8` + `SU(8)` GRAPE, `rtl/boed_fpga/` Verilog RTL, `docs/digital_twin_interactive.html`, `Exp150` SEMI S2/SIL-3 `S7.SAFETY`, `CellISA v4.0` + `auto_recal.py` + canlı `156Q` `ibm_marrakesh` QPU & `Exp151` Master `v7.0` Dijital İkiz)
+**Kapsam:** Tek-kriyostatlı, `32×32 = 1.024` eş-adımlı (`0,50 mm`) demetçikli Atom Litografi Makinesi'nin birinci-ilkeler fiziği (`Exp124–151`), `[[144,12,12]]` / `[[288,12,18]]` evrensel `qLDPC`, `¹²¹Sb` `Q-Echo-8` (`0,99908`), `rtl/boed_fpga/` (`894` LOC IEEE-2005 Verilog RTL, `0 LSB`), `docs/digital_twin_interactive.html` (`66,6 KB`, `5` sekme, `0` CDN), `Exp150` SEMI S2/SIL-3 `S7.SAFETY`, canlı `156Q` `ibm_marrakesh`, `CAD v6.0` (`199` parça / `40/40`), `BOM v7.0` (`180` parça / `10-RFQ`) ve `Exp151` Master `v7.0` Dijital İkiz el kitabı.
+**Ana Referanslar:** [DESIGN.md](DESIGN.md) (`v7.0`), [MODULAR.md](MODULAR.md) (`v7.0-ICD`), [M1_PROTOTYPE_BLUEPRINT.md](M1_PROTOTYPE_BLUEPRINT.md) (`v7.0`), [PROJECT_DOSSIER.md](PROJECT_DOSSIER.md) (`v7.0`), [BOM_ENGINEERING.md](BOM_ENGINEERING.md) (`v7.0`), [RFQ_SPECIFICATIONS.md](RFQ_SPECIFICATIONS.md) (`10-RFQ`), [LITERATURE.md](LITERATURE.md), `rtl/boed_fpga/README.md`, `docs/digital_twin_interactive.html`, `research/atom_lithography_machine/cad/cad_verification.json`, `results/exp124..151/`.
 
 > **Epistemik Sözleşme (Kristal Ayrım):**
-> - **Silikon `³¹P` fabrikasyon, `CAD v6.0`, `BOM v6.0`, `M1–M4` makine fiziği ve `auto_recal.py`:** `M0` tasarım & sayısal fizibilite (**`no_lab_measurement=true`, `no_supplier_quotes=true`, `tapeout_done=false`**). Tüm ön-kayıtlı `FAIL` hükümleri (`Exp124, 126, 127, 129, 131, 134, 136, 137, 138, 139, 142, 143`) gizlenmeden raporlanır.
+> - **Silikon `³¹P/¹²¹Sb/¹⁶⁷Er` fabrikasyon, `CAD v6.0`, `BOM v7.0`, `M1–M4` makine fiziği, `rtl/boed_fpga/` Verilog RTL sentezi (`no_external_eda_sim=true`), `Exp150` emniyet & `auto_recal.py`:** `M0` tasarım & sayısal fizibilite (**`no_lab_measurement=true`, `no_supplier_quotes=true`, `no_external_eda_sim=true`, `tapeout_done=false`**). Tüm ön-kayıtlı `FAIL` hükümleri (`Exp124, 126, 127, 128 [v7 Full %5,22], 129, 131, 134, 136, 137, 138, 139, 142, 143, 147 [UQ4/5], 148 [SQ4]`) gizlenmeden raporlanır.
 > - **Kontrol yığını (`CellISA v4.0 → OpenQASM 3.0`), `Echo/XY4` DD, `d=3` sendrom dekoderi ve bit-kesin `Q16.16` BOED (`Exp145`):** **Gerçek `156`-kübitlik `ibm_marrakesh` (IBM Heron r2, `job_id = dc1tdo2nj2vs73dfrfl0`, `16 PUB × 4.096 shot`, `32,54 s`) süperiletken bulut QPU üzerinde canlı doğrulandı** (`{Canlı-Donanım-IBM-QPU}`, `SECRET_LEAKS = 0`).
 
 ---
 
 ## İçindekiler
 
-- [Bölüm 1: Sistem Mimarisi, Çalışma Noktası (`v6.0`) ve Fiziksel Gerçeklik Sınırları](#bölüm-1-sistem-mimarisi-çalışma-noktası-v60-ve-fiziksel-gerçeklik-sınırları)
+- [Bölüm 1: Sistem Mimarisi, Çalışma Noktası (`v7.0`) ve Fiziksel Gerçeklik Sınırları](#bölüm-1-sistem-mimarisi-çalışma-noktası-v70-ve-fiziksel-gerçeklik-sınırları)
 - [Bölüm 2: İyon Kolonu Optiği & Liouville/Scherzer Matematiği (`Exp124`)](#bölüm-2-iyon-kolonu-optiği--liouvillescherzer-matematiği-exp124)
 - [Bölüm 3: Kriyojenik `1,50 T / 22,3 µT` Mıknatıs, Meissner Kalkanı & 5-Kademe Termal/RF Bütçesi (`Exp125`)](#bölüm-3-kriyojenik-150-t--223-µt-mıknatıs-meissner-kalkanı--5-kademe-termalrf-bütçesi-exp125)
 - [Bölüm 4: IBIC Tek-İyon Algılama & Soğuk-Ada Ön-Uç Elektroniği (`Exp127` & `src/board/`)](#bölüm-4-ibic-tek-iyon-algılama--soğuk-ada-ön-uç-elektroniği-exp127--srcboard)
 - [Bölüm 5: Kuantum Kontrol, `Q16.16` FPGA, `CellISA v4.0`, `auto_recal` & Canlı IBM QPU Kılavuzu](#bölüm-5-kuantum-kontrol-q1616-fpga-cellisa-v40-auto_recal--canlı-ibm-qpu-kılavuzu)
 - [Bölüm 6: Parametrik CAD v6.0 Montaj, Kütle Bütçesi & `40/40` Tolerans Rehberi](#bölüm-6-parametrik-cad-v60-montaj-kütle-bütçesi--4040-tolerans-rehberi)
-- [Bölüm 7: Modüler BOM v6.0 (`174` Parça), `9-RFQ` Stratejisi, `Exp128 v6.0` MC & `qLDPC` Ekonomisi](#bölüm-7-modüler-bom-v60-174-parça-9-rfq-stratejisi-exp128-v60-mc--qldpc-ekonomisi)
+- [Bölüm 7: Fazlı BOM v7.0 (`180` Parça), `10-RFQ` Stratejisi, `Exp128 v7.0` MC & Evrensel `qLDPC` Ekonomisi](#bölüm-7-fazlı-bom-v70-180-parça-10-rfq-stratejisi-exp128-v70-mc--evrensel-qldpc-ekonomisi)
 - [Bölüm 8: Kurulum, Devreye Alma, Kalibrasyon SOP & EHS Güvenlik Protokolleri](#bölüm-8-kurulum-devreye-alma-kalibrasyon-sop--ehs-güvenlik-protokolleri)
 - [Bölüm 9: `v4.0` Yükseltme Paketi (`Exp129`–`Exp135`): `VOKL-6`, Flaş Tavlama, `M4` cQED, `BOED`, `PT420` & Birleşik Dijital İkiz](#bölüm-9-v40-yükseltme-paketi-exp129exp135-vokl-6-flaş-tavlama-m4-cqed-boed-pt420--birleşik-dijital-ikiz)
 - [Bölüm 10: `v5.0` Hata-Toleranslı Yükseltme Paketi (`Exp136`–`Exp141`): `sp³d⁵s*` TB, `P4 Echo CZ`, MWPM FT, `1530 K`+MBE, `N_mux*=32` & Master Dijital İkiz](#bölüm-10-v50-hata-toleranslı-yükseltme-paketi-exp136exp141-sp³d⁵s-tb-p4-echo-cz-mwpm-ft-1530-kmbe-n_mux32--master-dijital-ikiz)
 - [Bölüm 11: `v6.0` Modüler Ölçekleme, `qLDPC` Devrimi & Canlı IBM QPU Doğrulaması (`Exp142`–`Exp146`)](#bölüm-11-v60-modüler-ölçekleme-qldpc-devrimi--canlı-ibm-qpu-doğrulaması-exp142exp146)
+- [Bölüm 12: `v7.0` Bilimsel Kapanış, Verilog RTL, Etkileşimli Dijital İkiz & Endüstriyel Emniyet (`Exp147`–`Exp151`)](#bölüm-12-v70-bilimsel-kapanış-verilog-rtl-etkileşimli-dijital-ikiz--endüstriyel-emniyet-exp147exp151)
 
 ---
 
-## Bölüm 1: Sistem Mimarisi, Çalışma Noktası (`v6.0`) ve Fiziksel Gerçeklik Sınırları
+## Bölüm 1: Sistem Mimarisi, Çalışma Noktası (`v7.0`) ve Fiziksel Gerçeklik Sınırları
 
 ### 1.1 Tek-Kriyostatlı Entegre Sistem Blok Diyagramı
 
@@ -50,17 +51,17 @@ Atom Litografi Makinesi, ultra-yüksek vakumlu (UHV, `< 1×10⁻⁹ mbar`) tek b
           +--> [S4 Granit + Piezo + 3-Eksen He-Ne] <---> [S5 UHV Oda (34,86 L) + Yük-Kilidi + S6.8 DR]
 ```
 
-### 1.2 Kilitli `v6.0` Sistem Çalışma Noktası
+### 1.2 Kilitli `v7.0` Sistem Çalışma Noktası
 
-| Parametre | `v6.0` Kilitli Değer | Önceki (`v5.0` / `Exp136–141`) | Değişim Nedeni & Kaynak | Etiket |
+| Parametre | `v7.0` Kilitli Değer | Önceki (`v5.0` / `v6.0`) | Değişim Nedeni & Kaynak | Etiket |
 |---|---|---|---|---|
-| **`D3` `K=8` Fourier GRAPE `M4`** | **`p_2q = %0,337–%0,395`**, **`F_avg = %99,73`, `F_Bell = %99,69`**, **`Λ_D3_phys = 2,825`** (`0,894 µs` muhaf. / `1,126 µs` yankılı, `%100 ≤ 300 MHz`) | `P4` `p_err = %0,92`, `D2 Λ = 1,40` (`679` kriyo) | `100L` yüzey kodu `679 → 100` kriyo (`6,8×`); `Q=1e6` + Rota C `[Exp143]` | `{Sayısal-Simülasyon}` |
-| **`[[144,12,12]]` `qLDPC` Devrimi** | **`L_max = 268,3 µm ≤ 300 µm`** (`0` rezonatör değişikliği!), **`120L` tek `LD400`'de (`108L = 1` kriyo, `$63.827/L_sys`, `W3` `$0,0085/L`)** | Yüzey kodu `679` (`D2`) / `100` (`D3`) kriyo, `$14,94M / $2,76M` | **`234×` sistem maliyeti çöküşü**; `f*=%1,5+2 MV/m, N=8 → %99,94` `108L` yonga `[Exp144]` | `{Sayısal-Simülasyon}` |
-| **`Option-Q` (`qRAM` & `S1-Multi`)** | Chebyshev-5 `0,0004 dB`, `F_SWAP_rt = 0,9858`, **`8.403×–25.122×` ömür (`+0,78 µW @ 20 mK`)**; `10 km ¹⁶⁷Er 1.352,3 Hz`, `¹²¹Sb −%41,5` | Yok (yalnız `³¹P`) | Tak-çıkar `+$168k / +9,20 kg` (`S1.7-01` + `S9.4-01..03`) `[Exp142]` | `{Sayısal-Simülasyon}` |
-| **`Option-HPC` `100G` RDMA Dekoder** | `τ_ingest = 777 ns`, `d=37 SC 6,34 µs < 6,70 µs`, **`qLDPC 108L 2,32 µs < 2,62 µs`** (tek `4U`, `+$132k / +64 kg / 2.195 W`) | Gerçek-zamanlı dekoder gecikmesi çözülmemişti | `0 W` kriyo yüküyle `backlog-free` dekoder kapanışı `[Exp143]` | `{Sayısal-Simülasyon}` |
-| **Canlı IBM QPU & `CellISA v4.0`** | **Gerçek `156Q` `ibm_marrakesh` (`dc1tdo2nj2vs73dfrfl0`):** Bare `0,333` → Echo `0,922` → XY4 `0,928`, Bell `0,9733`, `d=3` `5,16×/7,83×`, `Q16.16 BOED` `1,6 Hz`; `20` op + `auto_recal` `4/4` | `CellISA v3.5` (`17` op), yalnızca simülasyon | Yazılım/DD/QEC/BOED canlı QPU'da doğrulandı; **`252/252` `pytest` (`28/28`)** `[Exp145]` | **`{Canlı-Donanım-IBM-QPU}`** + `{Model}` |
-| **CAD & Kütle (`v6.0`)** | **`199` parça, `1.108,137 kg`, `8/8` STL (`39.536` üçgen, `591,200 L`), `0/19.701` çakışma, `40/40` boşluk** | `189` parça, `1.034,94 kg`, `0/17.766`, `32/32` | `+ Option-Q` (`9,20 kg`) + `Option-HPC` (`64,00 kg`), `30/30` test `[cad_verification.json]` | `{EDA}` |
-| **Modüler BOM v6.0 & `9-RFQ`** | **`174` parça (`M1 Base $2,466M`, `M3 Base $5,248M`, `M3 Full $5,548M`), `9-RFQ %77,7 / %92,6` MC var**, `P(Prog>$100M) = %4,92 < %5` | `167` parça (`M3 $5,248M`), `8-RFQ %76,4` | `M1/M3 Base` korundu; `+$300k` tak-çıkar `Option-Q/HPC`; `0,000 kg` CAD uyumu `[Exp128 v6.0]` | `{Model}` |
+| **`D3` `K=8` Fourier GRAPE `M4`** | `p_2q = %0,337–%0,395`, `F_avg = %99,73`, `F_Bell = %99,69`, `Λ_D3_phys = 2,825` (`0,894 µs` muhaf. / `1,126 µs` yankılı, `%100 ≤ 300 MHz`) | `P4` `p_err = %0,92`, `D2 Λ = 1,40` (`679` kriyo) | `100L` yüzey kodu `679 → 100` kriyo (`6,8×`); `Q=1e6` + Rota C `[Exp143]` | `{Sayısal-Simülasyon}` |
+| **Evrensel `qLDPC d=12/18` & Algoritmalar** | `[[144,12,12]]`: `108L = 1` kriyo (`$63.827/L_sys`); **`[[288,12,18]]` `L_max = 268,3 µm`, `p_th = %0,781`: FeMoco `16` (`37,1×`, `3,38 sa`, `$6.537`) / RSA-2048 `291` (`52,7×`, `7,37 MW`, `21,1 sa`)** | Yalnız `[[144,12,12]]` belleği (`Exp144`) | `T`-fabrikası + gerçek-dünya algoritma bütçesi; dürüst `UQ4/5` okuma tavanı `p_meas ≤ %0,15` `[Exp144/147]` | `{Sayısal-Simülasyon}` |
+| **`Option-Q`, `S1-Multi` & `¹²¹Sb` `Q-Echo-8`** | `qRAM` `8.403×–25.122×` (`+0,78 µW`), `10 km ¹⁶⁷Er 1.352,3 Hz`; **`¹²¹Sb` `Q-Echo-8` statik `500 Hz` Gross `0,5800 → 0,99908` (`455,5×` ↓), `SU(8) ≥ 0,9954`** | `Exp142 OQ6 FAIL` (`0,580`) | Nötr-rejim `473,9 kHz` `OQ6` kapanışı; `1/f` dürüst Cywiński `Q-Echo-64: 28,08× (1,45 ms)` `[Exp142/148]` | `{Sayısal-Simülasyon}` |
+| **Verilog RTL & İnteraktif Dijital İkiz** | **`rtl/boed_fpga/` `894` LOC IEEE-2005 (`0` lint, `1.024/1.024` ROM `0`-bit, `64/64` `0 LSB`, `584` çevrim = `2,336 µs @ 250 MHz`) + `docs/digital_twin_interactive.html` (`66,6 KB`, `5` sekme, `0` CDN)** | Yalnız Python `fpga_boed_dsp.py` | Sentezlenebilir RTL + çevrimdışı tarayıcı dijital ikizi (`no_external_eda_sim=true`) `[Exp149/151]` | `{EDA}` / `{Model}` |
+| **Endüstriyel Emniyet (`S7.SAFETY`, `RFQ-10`)** | **`25` FMEA `max RPN 280 → 42` (`-%86,3`), `OD8+3 mm` çelik (`1,19e-23 µSv/h`), `SDS PH₃ 0,00715 ppm`, He `O₂ %20,57`, `15 kVA` UPS `40/213 dk`, `80 ms` UHV (`$145k / 355 kg` tesis)** | Ön EHS kontrol listesi | `SEMI S2 / ANSI Z136.1 / IEC 61508 SIL-3` tam fiziksel kapanış `[Exp150]` | `{Model}` |
+| **Canlı IBM QPU & `CellISA v4.0`** | **Gerçek `156Q` `ibm_marrakesh` (`dc1tdo2nj2vs73dfrfl0`):** Bare `0,333` → Echo `0,922` → XY4 `0,928`, Bell `0,9733`, `d=3` `5,16×/7,83×`, `Q16.16 BOED` `1,6 Hz`; `20` op + `auto_recal` `4/4` | `CellISA v3.5` (`17` op), yalnızca simülasyon | Yazılım/DD/QEC/BOED canlı QPU'da doğrulandı; **`306/306` `pytest` (`33/33`)** `[Exp145/151]` | **`{Canlı-Donanım-IBM-QPU}`** + `{Model}` |
+| **CAD v6.0, Fazlı `BOM v7.0` & `10-RFQ`** | **`199p` (`1.108,14 kg` şasi + `355,0 kg` tesis = `1.463,14 kg`, `0/19.701`, `40/40`); `180p` `10-RFQ %78,24/%92,58`, Faz-1 `Base+Safety $5,393M (%4,67 PASS)` / Full `$5,693M (%5,22)`** | `174p` `9-RFQ` (`$5,548M`, `%4,92`) | `M1/M3 Base` korundu; `S7.SAFETY` (`+$145k`) ile fazlı Faz-1 → `RFQ-05` → Faz-2 tedarik `[Exp128 v7.0]` | `{EDA}` / `{Model}` |
 
 ### 1.3 Baz Üretim Modu (Mod B) vs. Deterministik `²⁹Si` Opsiyonu (Mod A) ve Donör Saçılması Gerçeği
 
@@ -300,7 +301,7 @@ $$\text{ENC}^2 = \frac{1}{q^2 V_{\text{peak,1e}}^2} \int_0^\infty \left[ S_{v,\t
 
 ## Bölüm 5: Kuantum Kontrol, `Q16.16` FPGA, `CellISA v4.0`, `auto_recal` & Canlı IBM QPU Kılavuzu
 
-Bu bölüm, `src/machine_control/` **v4.0** yazılım yığınını (**`85/85`** yazılım/FPGA-DSP/IBM-QPU/auto_recal/Dijital-İkiz/ön-uç/RTL `pytest` [`11` dosya] / **`252/252`** toplam `28/28` staged Atom Litografi `pytest` PASS), `20`-komutlu **`CellISA v4.0`** derleyicisini, otonom **`auto_recal.py`** (`4/4 PASS`) denetleyicisini ve gerçek **`156Q` `ibm_marrakesh`** üzerinde canlı doğrulanan sıfır-`qiskit` **`cloud_qpu_bridge.py`** köprüsünü belgeler (`[Exp127–146 | src/machine_control/]`, `{Model}` + `{Canlı-Donanım-IBM-QPU}`).
+Bu bölüm, `src/machine_control/` **v4.0** yazılım yığınını + `rtl/boed_fpga/` Verilog RTL paketini (**`108/108`** yazılım/RTL/FPGA-DSP/IBM-QPU/auto_recal/Dijital-İkiz/ön-uç `pytest` [`13` dosya] / **`306/306`** toplam `33/33` staged Atom Litografi `pytest` PASS), `20`-komutlu **`CellISA v4.0`** derleyicisini, otonom **`auto_recal.py`** (`4/4 PASS`) denetleyicisini ve gerçek **`156Q` `ibm_marrakesh`** üzerinde canlı doğrulanan sıfır-`qiskit` **`cloud_qpu_bridge.py`** köprüsünü belgeler (`[Exp127–151 | src/machine_control/, rtl/boed_fpga/]`, `{Model}` + `{EDA}` + `{Canlı-Donanım-IBM-QPU}`).
 
 ### 5.1 Yazılım Modül Haritası & Yapılandırma Ön-Ayarları (`v4.0`)
 
@@ -463,75 +464,75 @@ Tüm mekanik tasarım tek bir parametrik kaynaktan (`research/atom_lithography_m
 
 ---
 
-## Bölüm 7: Modüler BOM v6.0 (`174` Parça), `9-RFQ` Stratejisi, `Exp128 v6.0` MC & `qLDPC` Ekonomisi
+## Bölüm 7: Fazlı BOM v7.0 (`180` Parça), `10-RFQ` Stratejisi, `Exp128 v7.0` MC & Evrensel `qLDPC` Ekonomisi
 
-Tüm maliyet hesapları değişmez `BOM.csv` (`$2.531.244`, SHA-256 değişmez) ile `$0,00` köprü hatasıyla ve `CAD v6.0` ile `0,000 kg` kütle eşitliğiyle bağlanan **`BOM_DETAILED.csv v6.0`** (`174` parça = `167` `M3 Base` + `4` `Option-Q` + `3` `Option-HPC`, `tests/test_bom_detailed.py` `7/7 PASS`), `Exp128 v6.0` (`6/6 PASS`) ve `Exp144/146` `qLDPC` ekonomisine dayanır (`no_supplier_quotes=true`).
+Tüm maliyet hesapları değişmez `BOM.csv` (`$2.531.244`, SHA-256 değişmez) ile `$0,00` köprü hatasıyla ve `CAD v6.0` şasi kütlesi (`1.108,137 kg`, `0,0000 kg` fark) + `355,0 kg` tesis emniyeti (`1.463,137 kg` toplam) ile bağlanan **`BOM_DETAILED.csv v7.0`** (`180` parça = `167` `M3 Base` + `7` `v6.0` Opsiyon + `6` `S7.SAFETY`, `tests/test_bom_detailed.py` `7/7 PASS`), `Exp128 v7.0` ve `Exp144/147/151` `qLDPC` ekonomisine dayanır (`no_supplier_quotes=true`).
 
-### 7.1 Modüler `v6.0` Yapılandırma & `9-RFQ` Paketleri (`%77,7` Nom / `%92,6` MC Varyansı)
+### 7.1 Fazlı `v7.0` Yapılandırma & `10-RFQ` Paketleri (`%78,24` Nom / `%92,58` MC Varyansı)
 
-| Paket / Yapılandırma | Parça | Düşük (`USD`) | Nominal (`USD`) | Yüksek (`USD`) | `M3 Full` Payı / Kütle |
+| Paket / Yapılandırma | Parça | Düşük (`USD`) | Nominal (`USD`) | Yüksek (`USD`) | `M3 v7 Full` Payı / Kütle & `P(>100M)` |
 |---|---:|---:|---:|---:|---:|
-| `RFQ-01..06` (`S1, S2, S4, S6.3, S6.6, S6.8/6.1`) | `58` | `$1.644.000` | `$2.950.900` | `$5.495.700` | `%53,19` |
-| `RFQ-07` (`v4.0` `S5.5` + `S6.9` + `S6.10` net) | `12` | `$187.000` | `$334.000` | `$621.000` | `%6,02` |
-| `RFQ-08` (`v5.0` `S5.6` MBE + `S6.5/S6.11` MUX) | `8` | `$523.400` | `$724.200` | `$1.070.200` | `%13,05` |
-| **`RFQ-09` (`v6.0` `Option-Q $168k` + `Option-HPC $132k`)** | **`7`** | **`$216.000`** | **`$300.000`** | **`$423.000`** | **`%5,41` (`+73,20 kg`)** |
-| **`9-RFQ` Toplamı (`CU4 PASS`)** | **`85`** | **`$2.570.400`** | **`$4.309.100`** | **`$7.609.900`** | **`%77,67` (`%92,61` MC varyansı)** |
-| `Non-RFQ` (COTS / UHV / Raf / Sarf / `$0` SW) | `89` | `$685.000` | `$1.238.700` | `$2.339.000` | `%22,33` |
-| **`M1 Base` Prototip *(korundu)*** | — | `$1.454.996` | **`$2.466.120`** | `$4.400.788` | `M3 Base`'in `%47,0`'ı |
-| **`M3 v5.0 Base` *(korundu, `256`-hücre pilot `$4,790M`)*** | `167` | `$3.039.400` | **`$5.247.800`** | `$9.525.900` | `1.034,94 kg` (`P>100M = %4,37`) |
-| **`M3 v6.0 Full` (`+Option-Q` `$5,416M` / `+Option-HPC` `$5,380M`)** | **`174`** | **`$3.255.400`** | **`$5.547.800`** | **`$9.948.900`** | **`1.108,14 kg` (`P>100M = %4,92`)** |
+| `RFQ-01..06` (`S1, S2, S4, S6.3, S6.6, S6.8/6.1`) | `58` | `$1.644.000` | `$2.950.900` | `$5.495.700` | `%51,84` |
+| `RFQ-07` (`v4.0` `S5.5` + `S6.9` + `S6.10` net) | `12` | `$187.000` | `$334.000` | `$621.000` | `%5,87` |
+| `RFQ-08` (`v5.0` `S5.6` MBE + `S6.5/S6.11` MUX) | `8` | `$523.400` | `$724.200` | `$1.070.200` | `%12,72` |
+| `RFQ-09` (`v6.0` `Option-Q $168k` + `Option-HPC $132k`) | `7` | `$216.000` | `$300.000` | `$423.000` | `%5,27` (`+73,20 kg` şasi) |
+| **`RFQ-10` (`v7.0` `S7.SAFETY-01..06` SEMI S2/SIL-3)** | **`6`** | **`$92.000`** | **`$145.000`** | **`$220.000`** | **`%2,55` (`+355,0 kg` tesis)** |
+| **`10-RFQ` Toplamı (`CU4 PASS`)** | **`91`** | **`$2.662.400`** | **`$4.454.100`** | **`$7.829.900`** | **`%78,24` (`%92,58` MC varyansı)** |
+| `Non-RFQ` (COTS / UHV / Raf / Sarf / `$0` SW) | `89` | `$685.000` | `$1.238.700` | `$2.339.000` | `%21,76` |
+| `M1 Base` / **`M1 + Safety`** *(korundu / emniyetli)* | — | `$1,45M / $1,55M` | **`$2.466.120` / `$2.611.120`** | `$4,40M / $4,62M` | `+355,0 kg` tesis |
+| **`M3 Base + Safety` *(Faz-1 Önerilen, `6/6 CU PASS`)*** | **`173`** | **`$3.131.400`** | **`$5.392.800`** | **`$9.745.900`** | **`1.034,94 + 355 kg` (`P>100M = %4,67 < %5`)** |
+| **`M3 v7.0 Full` (`+Safety+Q+HPC`, Faz-2)** | **`180`** | **`$3.347.400`** | **`$5.692.800`** | **`$10.168.900`** | **`1.108,14 + 355 kg` (dürüst `%5,22 > %5`)** |
 
-### 7.2 `Exp128 v6.0` 100k MC, EVPI & `Exp144/146` `qLDPC` `$63.827/L_sys` Devrimi
+### 7.2 `Exp128 v7.0` 100k MC, Fazlı Bütçe & `Exp144/147` `qLDPC` Ekonomisi
 
-- **`Exp128 v6.0` 100k MC (`CU1–CU6 6/6 PASS`):** `M3 Full` BOM `P50 = $6,46M` (`P95 = $12,98M`); Program `P50 = $36,25M ≤ $50M`, `P95 = $99,48M`, **`P(>$100M) = %4,92 < %5`** (`M3 Base: %4,37`; dürüst not: `FOAK` 5y TCO `%6,90`). Tornado: `#1 S6.6 %70,0`, `#2 S2 %6,0`, `#3 S6.8 %5,3`, `#4 v5.0 %3,3`. EVPI (`20 mK` vs `1 K`): `N=1`'de `$0`, `N_be = 6,02`.
-- **`Exp144/146` `100L` Sistem Maliyeti Sıkıştırması (`v5 D2 → v6 D3 → v6 qLDPC`):** `v5 D2 SC` (`679` kriyo, `$14.939.541/L_sys`) → `v6 D3 GRAPE SC` (`100` kriyo, `$2.759.442/L_sys`, `5,4×` ↓) → **`v6 [[144,12,12]] qLDPC 108L` (`1` kriyostat, `$63.827/L_sys` [`234,06×` ↓!], `W3` silikon fab `$0,0085/L_fab`)**!
+- **`Exp128 v7.0` 100k MC (`Faz-1 6/6 PASS`; `v7 Full` Dürüst `%5,22`):** `M3 Base` (`$5,248M`) `%4,44`; **Faz-1 `M3 Base+Safety` (`$5,393M`) `P50 = $35,48M`, `P(>$100M) = %4,67 < %5` (`6/6 CU PASS`)**; `M3 v6 Full` (`$5,548M`) `%4,95`; tek seferde **`M3 v7 Full` (`$5,693M`) `P50 = $37,24M`, `P95 = $101,49M`, `P(>$100M) = %5,22` (`CU3_v7_full FAIL`, FOAK 5y `%7,25`)** → bağlayıcı strateji: **Faz-1 `Base+Safety` → `RFQ-05` (`S6.6 %69,55` varyans) fiyat kilidi → Faz-2 `+Option-Q/HPC`**. EVPI (`20 mK` vs `1 K`): `N=1`'de `$0`, `N_be = 6,02`.
+- **`Exp144/147` Sistem & Algoritma Ekonomisi:** `108L` `[[144,12,12]]` `qLDPC` `1` kriyostat (`$63.827/L_sys`, `234,06×` ↓ vs `v5 D2`, `W3` `$0,0085/L_fab`); evrensel `[[288,12,18]]` + `T`-fabrikası **FeMoco `16` kriyo / `$59,3M` / `$6.537/çözüm` (`35,3×` ↓)** ve **RSA-2048 `291` kriyo / `7,37 MW` (`52,1×` ↓) / `$711,3M` (`35,9×` ↓)**!
 
 ---
 
 ## Bölüm 8: Kurulum, Devreye Alma, Kalibrasyon SOP & EHS Güvenlik Protokolleri
 
-Ayrıntılı `M1` yapım planı ve `10` alt-aşamalık iş kırılımı [M1_PROTOTYPE_BLUEPRINT.md](M1_PROTOTYPE_BLUEPRINT.md) içindedir; aşağıda saha işletmesi için zorunlu **Faz A–G kalibrasyon sırası**, **EHS güvenlik kilitleri** ve **`G1–G8` Go/No-Go kapıları** özetlenmiştir.
+Ayrıntılı `M1 + Safety` yapım planı ve `10` alt-aşamalık iş kırılımı [M1_PROTOTYPE_BLUEPRINT.md](M1_PROTOTYPE_BLUEPRINT.md) içindedir; aşağıda **Faz A–G kalibrasyon sırası**, **`Exp150` SEMI S2/SIL-3 EHS kilit matrisi (`S7.SAFETY-01..06`)** ve **`G1–G8` Go/No-Go kapıları** özetlenmiştir.
 
 ### 8.1 Devreye Alma & Kalibrasyon Standart İşletme Prosedürü (SOP)
 
-1. **Faz A — Saha, Granit & UHV Ön-Hazırlık:** `S4` granit sönümleme masası tesviyesi (`≤ 5 µm/m`), `S5` UHV odası (`34,86 L`) `150 °C` fırınlama ve `< 1×10⁻⁹ mbar` temel vakum + `He` kaçak testi (`< 1×10⁻¹⁰ mbar·L/s`).
-2. **Faz B — Kriyostat & Mıknatıs Enerjilendirme:** `S6.8` `20 mK` DR soğutma (`4K` yük `≤ 0,654 W`, `MXC ≤ 4,8 µW`); `S6.3` `8`-bobin `NbTi` basamaklı akım yükleme (`0 → 1,500000 T`); Hall/NMR probuyla `±17,81 ppm` homojenlik ve `z_loc = −155 mm` kalkan içinde `≤ 22,3 µT` doğrulaması.
-3. **Faz C — `100 K` Soğuk-Ada IBIC Kalibrasyonu:** `S3` soğuk adayı `100 K`'ye indirme; `55Fe` / `α` veya darbe-üreteci enjeksiyonuyla `ENC ≤ 25 e⁻ rms`, `τ_s = 1,2 µs`, kanal başı `DAC8568` `5,5σ` eşik kilidi ve `P_false < 10⁻³ / 1 ms` testi.
-4. **Faz D — `10 → 5 keV` İyon Kolonu & Wien/HDA Ayarı:** Önce `Ar⁺`/`Ne⁺` soy gaz ile `S1.1` ateşleme, `S1.2` Wien `0,45 T` kütle taraması (`R_m ≥ 100`), `S1.5` `HDA-HiRes` geçiş eğrisi (`ΔE_FWHM ≤ 0,50 eV`), ardından `PH₃` ile `³¹P⁺` / `³²PH⁺` (`0,785 mm`) ayrıştırma kilidi.
-5. **Faz E — `Arch-B` Odaklama & Tek-İyon Sayma Kapalı Çevrimi:** Bıçak-kenarı (`knife-edge`) taramasıyla `σ_spot ≤ 1,6 nm` doğrulaması; `S3` `COUNT_HIT[0:7]` → `FPGA` `blanker_tile.v` (`100 MHz`) kapalı-çevrim tek-iyon kesme gecikmesi (`< 100 ns`) ve `1 ms` watchdog testi.
-6. **Faz F — RF Yansıma Spektroskopisi & `CellISA` Doğrulaması:** `56` hat üzerinden `NbTiN` rezonatör taraması (`SNR = 10 @ ≤ 0,18 ms`); `AtlasSelector` + çift-`α` DD kapısıyla ilk sertifikalı yazmaç JSONL (`Certificate`) ve `bell/ghz4/repcode3/qft3` `ProgramCertificate` üretimi.
+1. **Faz A — Saha, `S7.SAFETY` FAT, Granit & UHV:** `S7.SAFETY-01..06` SEMI S2/SIL-3 FAT (`25` FMEA `max RPN ≤ 60`), `S4` granit tesviyesi (`≤ 5 µm/m`), `S5` UHV (`34,86 L`) `150 °C` bakeout ve `< 1×10⁻⁹ mbar` + `He` kaçak testi.
+2. **Faz B — Kriyostat & Mıknatıs Enerjilendirme:** `S6.8` `20 mK` DR soğutma (`4K ≤ 0,654 W`, `MXC ≤ 4,8 µW`); `S6.3` `8`-bobin `NbTi` (`1,500000 T ± 17,81 ppm`, `≤ 22,3 µT`, `ASME DN50` + `1,563 Ω` quench direnci `38,15 °C`).
+3. **Faz C — `100 K` Soğuk-Ada IBIC Kalibrasyonu:** `S3` `100 K` (`ENC ≤ 25 e⁻`, `τ_s = 1,2 µs`, `DAC8568` `5,5σ`, `P_false < 10⁻³ / 1 ms`).
+4. **Faz D — `10 → 5 keV` İyon Kolonu & Wien/HDA Ayarı:** Önce `Ar⁺`/`Ne⁺`, sonra sub-atm `SDS PH₃` ile `³¹P⁺` / `³²PH⁺` (`0,785 mm`, `R_m = 120,6`, `HDA ΔE ≤ 0,50 eV`).
+5. **Faz E — `Arch-B` Odaklama & Tek-İyon Sayma Kapalı Çevrimi:** Bıçak-kenarı `σ_spot ≤ 1,6 nm`; `S3` `COUNT_HIT` → `blanker_tile.v` (`< 100 ns`, `1 ms` watchdog); `S5.5` `1530,1 K` (`OD=8 + 3 mm` çelik kılıf kilitli) + `S5.6` MBE Rota C.
+6. **Faz F — RF Yansıma Spektroskopisi & `CellISA v4.0` Doğrulaması:** `rtl/boed_fpga/` (`584` çevrim, `2,336 µs`), `N_mux* = 32` (`F_RO = %99,61`), `AtlasSelector` + `XY8`-GRAPE + `ProgramCertificate`.
 
-### 8.2 Çevre, İş Sağlığı ve Güvenliği (EHS) Zorunlu Kilit Matrisi
+### 8.2 Çevre, İş Sağlığı ve Güvenliği (EHS) Zorunlu Kilit Matrisi (`Exp150` `S7.SAFETY-01..06` Kilitli)
 
-| Tehlike Sınıfı | Kaynak Alt-Sistem | Risk Sınırı | Zorunlu Mühendislik Kilidi & KKD |
+| Tehlike Sınıfı | Kaynak Alt-Sistem | Risk Sınırı (`Exp150`) | Zorunlu Mühendislik Kilidi (`S7.SAFETY` — `max RPN 280 → 42`) |
 |---|---|---|---|
-| **Toksik & Piroforik Gaz (`PH₃`)** | `S1.1` Duoplasmatron | `TLV-TWA = 0,3 ppm`, `IDLH = 50 ppm` | Çift-cidarlı vakum-izlemeli gaz kabini, nokta-kullanım kuru yıkayıcı (scrubber), elektrokimyasal `0,1 ppm` alarm + otomatik kesme vanası (`NC`) |
-| **Yüksek Gerilim (HV)** | `S1.1 (+5 kV)`, `S1.2–S2.3 (−5 kV)`, `S3 (−30 V)` | Ark & elektrik çarpması | Kapak açma mikro-anahtarı kilidi, `100 MΩ` boşaltma dirençleri, topraklama çubuğu, HV göstergeleri |
-| **Yüksek Manyetik Alan & Quench** | `S6.3` `1,50 T` `NbTi` Mıknatıs (`18,94 kJ`) | `5 G` kalp pili sınırı, mermi etkisi, `He` buharlaşması | `5 G` zemin işaretlemesi, ferromanyetik alet yasağı, pasif `1,563 Ω / 400 V` dump direnci, çatıya bağlı quench tahliye hattı |
-| **Kriyojenik (`LHe / LN₂ / 20 mK`)** | `S6.8` DR, `S6.1` `PT420`, `S3` `100 K` ada | `O₂` eksikliği (`< %19,5`), kriyo yanık, aşırı basınç | Oda `O₂` monitörü + sesli alarm, çift basınç tahliye vanası (`PRV`) + patlama diski, kriyo eldiven/yüz siperi |
-| **Lazer & Optik (`He-Ne`)** | `S4.3` 3-Eksen İnterferometre | Göz hasarı (`Class 2 / 3R`) | Kapalı ışın boruları, lazer emniyet gözlüğü, kapı uyarı lambası |
-| **ESD & Vakum Yoğuşma** | `S2` MEMS, `S3` `LTC6268` soğuk-ada | Kapı oksit delinmesi, `100 K` buzlanma | `ANSI/ESD S20.20` bileklik/zemin; `S3` soğutma yalnızca `P < 10⁻⁶ mbar` vakum kilidi aktifken açılır |
+| **Toksik & Piroforik Gaz (`PH₃` / `%5 H₂`)** | `S1.1` / `S5.6` | **`ACGIH TLV-TWA = 0,05 ppm`**, `OSHA PEL = 0,30 ppm`, `IDLH = 50 ppm` (önlemsiz `1.207 ppm`!) | **`S7.SAFETY-01`:** Sub-atm **`SDS` (`< 650 Torr`, `≤ 10 g`)**, çift-cidarlı vakum boru, `250 CFM` scrubber (`≥%99,9`), `0,02/0,05 ppm` SIL-3 kesme (`12 s`) → **`0,00715 ppm`** (`7×` TLV); `S5.6` `ISO 10156` `%5 H₂/N₂` yanıcı değil |
+| **Sınıf-4 `808 nm` Lazer + `22 keV` X-Işını** | `S5.5` Safir Pencere & `S1` HV | `NOHD = 1.472 m`; çıplak safir `22 keV` **`10,11 µSv/h`** (`> 1,0 µSv/h` halk sınırı!) | **`S7.SAFETY-02`:** Çift-amaçlı **`OD = 8` + `3 mm` çelik** gömülü Sınıf-1 kılıf → **`1,19×10⁻²³ µSv/h`**, **`3,2 ms`** `1oo2D` SIL-3 perde (`PFD = 2,34e-5`), `10 µs` pirometre `T > 1580 K` kesmesi |
+| **Yüksek Gerilim (`10–22 kV`) & `SIL-3` PLC** | `S1.1..S2.3` | Ark, depolanan enerji `> 0,5 J`, elektrik çarpması | **`S7.SAFETY-03`:** `1oo2D` TÜV `SIL-3` PLC + `4×` E-Stop + **`2 MΩ` aktif HV crowbar** (`E(22 kV) = 0,363 J < 0,5 J`, boşalım **`18,26 ms < 50 ms`**) |
+| **Kriyojenik He ODH, `ASME` & Quench** | `S6.8` DR, `S6.1` `PT420`, `S6.3` (`18,94 kJ`) | `O₂ < %19,5`, OVC aşırı basınç, `5 G` mermi etkisi | **`S7.SAFETY-05`:** Kuru `LD400+PT420` (`60 m³` **`O₂ = %20,57`**) + `%19,5 O₂` monitörü, **`ASME DN50 0,5 barg`** (`16,37× He / 25,72× N₂`), **`1,563 Ω` quench direnci (`38,15 °C < 55 °C`)** |
+| **Elektrik Kesintisi (EPO / UPS) & Vakum** | Tesis / `S5` UHV / `S9.HPC` | Anlık kesinti, `Si(100)` oksitlenme, kontrolsüz kapanma | **`S7.SAFETY-04/06`:** **`15 kVA / 10 kWh` Online LFP UPS** (`0,0 ms` geçiş, **`40,0 dk` tam / `213,2 dk` Tier-1**) + **`80,0 ms` fail-close UHV vana** (`6,0×10⁻⁴ ML << 0,01 ML`) + dozimetre |
 
 ### 8.3 `G1–G8` Go/No-Go Doğrulama Kapıları & Açık Mühendislik Borçları
 
-| Kapı | Konu | Geçiş Kriteri (`M1 → M3/M4`) | Şimdiki Statü (`v6.0`) |
+| Kapı | Konu | Geçiş Kriteri (`M1+Safety → Faz-1 M3 → Faz-2`) | Şimdiki Statü (`v7.0`) |
 |---|---|---|---|
-| `G1` | `9-RFQ` Fiyat & `S6.9` `PT420` | `9` paketten teklif (`%92,6` MC var); `CFG4` `σ_stage ≤ 0,25 nm` (`0,102 nm`) | `{Sayısal-Simülasyon}` PASS (`Exp133`); tedarikçi/lab açık |
+| `G1` | **`S7.SAFETY` SEMI S2/SIL-3**, `10-RFQ` & `S6.9` | `Exp150` `25` FMEA `max RPN ≤ 60` (`42`), `OD8+3 mm`, `SDS PH₃`, `15 kVA` UPS; `CFG4` `σ_stage ≤ 0,25 nm` | `{Sayısal-Simülasyon}` PASS (`Exp133/150`); TÜV/SEMI FAT & tedarikçi açık |
 | `G2` | `S1` İyon Kolonu & `HDA-HiRes` | `10 → 5 keV`, `ΔE ≤ 0,50 eV`, `R_m ≥ 100`, `σ_spot ≤ 1,6 nm` | `{Sayısal-Simülasyon}` PASS (`Exp124`); lab açık |
 | `G3` | `S3` `100 K` Soğuk-Ada IBIC | `ENC ≤ 25 e⁻`, `η(5 keV) ≥ 0,99`, `P_false < 10⁻³ / 1 ms` | `{Sayısal-Simülasyon}` PASS (`Exp127`); PCB/lab açık |
-| `G4` | `S5.5` `1530,1 K` + `S5.6` MBE & `S6.3` | `1530,1 K` `%99,99` temizlik (`σ_anneal = 0,430 nm`), Rota C `S_ε ≤ 0,40`; `1,50 T ± 20 ppm`, `≤ 50 µT` | `{Sayısal-Simülasyon}` PASS (`Exp125, Exp130, Exp139`); fab/lab açık |
-| `G5` | `S6.8/6.5` Termal, `N_mux*` & `Q16.16` | `4K ≤ 1,0 W`, `MXC ≤ 19 µW`, `N_mux* = 32` (`F_RO = %99,61`), `Q16.16` `2,336 µs` | **`{Canlı-Donanım-IBM-QPU}` (`Q16.16` `1,6 Hz`)** + `{Model}` PASS; silikon lab açık |
-| `G6` | `S2` MEMS, `CAD v6.0` & **`G6b` `ENDOR` (`R1`)** | `WD = 0,25 mm`, `0/19.701` CAD çakışma (`40/40`); **`G6b` `p_work(f*=%1,5) ≥ %50`** | `{EDA}` PASS (`CAD v6.0`); **`R1` (`Exp129/136`) lab kapısı AÇIK** |
-| `G7` | `CellISA v4.0`, `D3` GRAPE & `qLDPC` | `D3` `p_2q ≤ %0,45` (`%0,337–0,395`), `[[144,12,12]]` `108L = 1` kriyo, `auto_recal` `4/4` | **`{Canlı-Donanım-IBM-QPU}` (`ibm_marrakesh` `dc1tdo2nj2vs73dfrfl0`)** + `{Model}` PASS |
-| `G8` | `M2/M3` SKY130 Anten & Bütçe Onayı | `Exp123` `10` anten ihlali `→ 0` (`M2+`); `Exp128 v6.0` + `9-RFQ` | `M1` FPGA ile yürür (`R5` erteli); `M3 Base %4,37` / `M3 Full P50=$36,25M, P(>100M)=%4,92` |
+| `G4` | `S5.5` `1530,1 K` + `S5.6` MBE & `S6.3` | `1530,1 K` `%99,99` temizlik (`σ_anneal = 0,430 nm`), Rota C `S_ε ≤ 0,40`; `1,50 T ± 20 ppm`, `≤ 50 µT` | `{Sayısal-Simülasyon}` PASS (`Exp125/130/139`); fab/lab açık |
+| `G5` | `S6.8/6.5` Termal, `N_mux*` & **`rtl/boed_fpga/`** | `4K ≤ 1,0 W`, `MXC ≤ 19 µW`, `N_mux* = 32` (`F_RO = %99,61`), `584`-çevrim RTL `0 LSB` | **`{Canlı-Donanım-IBM-QPU}` (`Q16.16` `1,6 Hz`)** + `{EDA}` (`no_external_eda_sim=true`); Vivado/lab açık |
+| `G6` | `S2` MEMS, `CAD v6.0` & **`G6b` `ENDOR` (`R1`)** | `WD = 0,25 mm`, `0/19.701` (`40/40`); **`G6b` `p_work(f*=%1,5) ≥ %50`** (`d=18 %99,27 @ N=8`) | `{EDA}` PASS (`CAD v6.0`); **`R1` (`Exp129/136`) lab kapısı AÇIK** |
+| `G7` | `CellISA v4.0`, `D3` GRAPE, `qLDPC d=18` & `¹²¹Sb` | `D3` `p_2q ≤ %0,45`, `[[288,12,18]]` FeMoco/RSA, `¹²¹Sb Q-Echo-8 0,99908`, `306/306` `pytest` | **`{Canlı-Donanım-IBM-QPU}` (`ibm_marrakesh`)** + `{Model}` PASS; RO `p_meas ≤ %0,15` açık |
+| `G8` | `M2/M3` SKY130 Anten & **Fazlı `10-RFQ` Bütçesi** | `Exp123` `10` anten `→ 0` (`M2+`); **Faz-1 `Base+Safety $5,393M (%4,67 PASS)` → `RFQ-05` → Faz-2 `v7 Full $5,693M`** | `M1` FPGA ile yürür (`R5` erteli); `10-RFQ` `%78,24/%92,58` hazır (`no_supplier_quotes=true`) |
 
-**Açık Teknik Borçlar (Şeffaf Envanter, `v6.0`):** (1) `M1` **`G6b` `ENDOR` Risk `R1` ölçümü** (`Exp136` `R331 %21,1` & all-electron DFT); (2) `src/board/` 4-katmanlı KiCad PCB yerleşimi (`C_par ≤ 0,25 pF`) & `ngspice`; (3) `RFQ-01..09` gerçek tedarikçi fiyat/termin toplama (`no_supplier_quotes=true`) ve `W2/W3` `30 nm` SOI tedarik doğrulaması; (4) `Q_r = 10⁶` `NbTiN` + `S_ε ≤ 0,25 µeV/√Hz` (`D3` GRAPE) ve `[[144,12,12]]` `qLDPC` fiziksel testi + `Exp142` `¹²¹Sb` gerinim/derinlik sınırı (`OQ5/6 FAIL`); (5) `M2/M3` aşamasında `Exp123` `10` SKY130 anten ihlalinin kapanması (`R5` erteli); (6) `M1 Base` silikon laboratuvar ölçümleri (`no_lab_measurement=true` kapanışı — yazılım/QEC/BOED `ibm_marrakesh` üzerinde canlı doğrulanmıştır).
+**Açık Teknik Borçlar (Şeffaf Envanter, `v7.0`):** (1) `M1` **`G6b` `ENDOR` Risk `R1` ölçümü** (`Exp136` & all-electron DFT); (2) `rtl/boed_fpga/` için gerçek **Xilinx Vivado `ZU48DR`** sentezi/zamanlama kapanışı (`no_external_eda_sim=true`); (3) `Exp147` `UQ5` okuma tavanının (`p_meas ≤ %0,15` + `D3++` veya `d=24/34`) ve `Exp148` `SQ4` geniş-bant `1/f` gerinim kontrolünün fiziksel testi; (4) `src/board/` 4-katmanlı KiCad PCB (`C_par ≤ 0,25 pF`) & `ngspice`; (5) `RFQ-01..10` gerçek tedarikçi tekliflerinin toplanması (`no_supplier_quotes=true`) ve Faz-1 `Base+Safety` → `RFQ-05` → Faz-2 geçişi; (6) `M2/M3` aşamasında `Exp123` `10` SKY130 anten ihlalinin kapanması (`R5` erteli); (7) `M1 + Safety` silikon laboratuvar ölçümleri (`no_lab_measurement=true` kapanışı — yazılım/QEC/BOED `ibm_marrakesh` üzerinde canlı doğrulanmıştır).
 
 ---
 
 ## Bölüm 9: `v4.0` Yükseltme Paketi (`Exp129`–`Exp135`): `VOKL-6`, Flaş Tavlama, `M4` cQED, `BOED`, `PT420` & Birleşik Dijital İkiz
 
-Bu bölüm, tarihsel `v4.0` dalgasında üretilen ve her biri bağımsız `pytest` + `@verifier` QA onayı alan 7 birinci-ilkeler deneyini özetler (`tests/test_exp129..135.py`; `v4.0` dönem paketi `142/142 PASS`, güncel `v6.0` tam paketi Bölüm 11'de **`252/252 PASS`** [`28/28` dosya]; tümü `no_lab_measurement=true`).
+Bu bölüm, tarihsel `v4.0` dalgasında üretilen ve her biri bağımsız `pytest` + `@verifier` QA onayı alan 7 birinci-ilkeler deneyini özetler (`tests/test_exp129..135.py`; `v4.0` dönem paketi `142/142 PASS`, güncel `v7.0` tam paketi Bölüm 12'de **`306/306 PASS`** [`33/33` dosya]; tümü `no_lab_measurement=true`).
 
 ### 9.1 `Exp129` (`H147`, Risk `R1`) — `VOKL-6` 6-Vadi Merkez-Hücre Modeli (`3/7 PASS, 4/7 FAIL`, QA `#130`)
 - **Fizik Çekirdeği:** `216×216` 6-vadi merkez-hücre Kohn–Luttinger modeli (`0` `²⁹Si` uyumu): çıplak EMT `E_EMT = −31,262 meV` (Faulkner `−31,27`, `%0,03`); Morton–Preston `η_P/η_Si = 1,4178` tüm 4 `³¹P` değişmezini (`A1 = −45,5900`, `ΔT2 = 11,7000`, `ΔE = 13,0100 meV`, `A_P(0) = 117,530 MHz`) `< 10⁻¹⁰` (`~10⁻¹¹` mertebesi, maks `7,36×10⁻¹¹`) hassasiyetle tutturur (`a_⊥ / a_∥ = 1,748 / 0,959 nm`; `145`-PW `C_g(0,0,2) = 8,82×10⁻¹⁵`).
@@ -565,7 +566,7 @@ Bu bölüm, tarihsel `v4.0` dalgasında üretilen ve her biri bağımsız `pytes
 
 ## Bölüm 10: `v5.0` Hata-Toleranslı Yükseltme Paketi (`Exp136`–`Exp141`): `sp³d⁵s*` TB, `P4 Echo CZ`, MWPM FT, `1530 K`+MBE, `N_mux*=32` & Master Dijital İkiz
 
-Bu bölüm, tarihsel `v5.0` hata-toleranslı dalgasında eklenen 6 birinci-ilkeler deneyini özetler (`tests/test_exp136..141.py`; `v5.0` dönem paketi `198/198 PASS`, güncel `v6.0` tam paketi Bölüm 11'de **`252/252 PASS`** [`28/28` dosya]; tümü `no_lab_measurement=true`, `no_supplier_quotes=true`).
+Bu bölüm, tarihsel `v5.0` hata-toleranslı dalgasında eklenen 6 birinci-ilkeler deneyini özetler (`tests/test_exp136..141.py`; `v5.0` dönem paketi `198/198 PASS`, güncel `v7.0` tam paketi Bölüm 12'de **`306/306 PASS`** [`33/33` dosya]; tümü `no_lab_measurement=true`, `no_supplier_quotes=true`).
 
 - **`Exp136` (`H154`, `4/7 PASS`, `10/10` test):** `16.000` atom / `160.000` orbital `sp³d⁵s*` TB çözücüsü `Exp129` `R331` sapmasını `%64,73 →` **`%21,1`** (`α_cp=0`) / **`%25,7`** (`α_cp=0,015`, `log10-RMS = 0,2426`) indirdi; `f=%1 → %52,75 (%99,74 M4)`, **`f*=%1,5+2 MV/m → %77,50` / DDRF `%54,00` (`%99,88 M4`)**, `f*=%2,0 → %59,75 (%99,99 M4)`, `XY8 T₂e = 10,8–20,3 ms`.
 - **`Exp137` (`H155`, `4/7 PASS`, `8/8` test):** `12×12` CUDA + `M=40` OU `1/f^α` altında `P4` (`XY4-DRAG-Echo-CZ`) `δg` cezasını **`5,09×`** bastırır; pasivesiz `S_ε=1,0 µeV/√Hz` `F_Bell=0,9587` (`0,9824` hızlı); **`Exp139` Rota C ile `(Q=2e5, S=0,50) → F_Bell=0,9901`, `(Q=5e5, S=0,25) → F_Bell=0,9949, F_avg=0,9926, p_err=%0,92 < %1`**.
@@ -578,12 +579,28 @@ Bu bölüm, tarihsel `v5.0` hata-toleranslı dalgasında eklenen 6 birinci-ilkel
 
 ## Bölüm 11: `v6.0` Modüler Ölçekleme, `qLDPC` Devrimi & Canlı IBM QPU Doğrulaması (`Exp142`–`Exp146`)
 
-Bu bölüm, `v6.0` dalgasında eklenen 5 deney paketini özetler (`tests/test_exp142..146.py`; tüm **`28/28`** staged Atom Litografi test paketi **`252/252 PASS`**; silikon `³¹P` `M0` model, `Exp145` kontrol/DD/dekoder/BOED canlı `156Q` `ibm_marrakesh` donanımı).
+Bu bölüm, tarihsel `v6.0` dalgasında eklenen 5 deney paketini özetler (`tests/test_exp142..146.py`; `v6.0` dönem paketi `252/252 PASS` [`28/28` dosya], güncel `v7.0` tam paketi Bölüm 12'de **`306/306 PASS`** [`33/33` dosya]; silikon `³¹P` `M0` model, `Exp145` kontrol/DD/dekoder/BOED canlı `156Q` `ibm_marrakesh` donanımı).
 
 - **`Exp142` (`H160`, `5/7 PASS`, `10/10` test):** Tak-çıkar **`Option-Q`** (`$168k / 9,20 kg`) — `5`-kademe Chebyshev `50 Ω ↔ 3 kΩ` (`IL = 0,0004 dB`, `BW = 5,20 GHz`), `F_SWAP_rt = 0,9858`, **`8.403×` (`1 s DD`) – `25.122×` (`3 s`)** bellek ömrü (`+0,78 µW @ 20 mK`); `S1-Multi` `10 km` `¹⁶⁷Er` `1.352,3 Hz` (`F = 0,9474`), `7,5 keV ¹²¹Sb` `−%41,5` keskin saçılma (`OQ5/6` gerinim/derinlik sınırı dürüst `FAIL`).
 - **`Exp143` (`H161`, `4/7 PASS`, `9/9` test):** `D3` `K=8` Fourier GRAPE (`0,894 µs` muhaf. / `1,126 µs` yankılı, `%100 ≤ 300 MHz`): yankılı `Q=1e6, S=0,390 → p_2q = %0,395`, **`S=0,25 → p_2q = %0,337 (F_avg = %99,73, F_Bell = %99,69)`**, muhafazakar `high-g → %0,481`, canlı `Exp138` MWPM **`Λ_D3_phys = 2,825`** (`100L SC: 679 → 100` kriyo, `6,8×`); **`Option-HPC`** (`$132k / 64,0 kg / 2.195 W`, `0 W` kriyo): `τ_ingest = 777 ns`, `d=37 SC 6,34 µs < 6,70 µs`, **`qLDPC 108L 2,32 µs < 2,62 µs`**.
 - **`Exp144` (`H162`, `7/7 PASS`, `10/10` test):** **`[[144,12,12]]` Gross Code** `P_cell = 20 µm → L_max = 268,3 µm ≤ 300 µm` (`0` rezonatör değişikliği!), `f* = %1,5 + 2 MV/m, N_cand = 8 → %99,64` blok / `%99,94` `108L` yonga verimi; `p_th = %0,633`; `D3+` (`%0,30`) `2,1×10⁻⁵/1L` (`5,2×` iyi, `10,0×` az hücre vs `d=11` SC); **`120L` tek `LD400` kriyostatta (`108L = 1` kriyo, `$63.827/L_sys`, `234×` ucuz vs `v5 D2`, `W3` fab `$0,0085/L`)**.
 - **`Exp145` (`H163`, `7/7 PASS`, `12/12` test, `{Canlı-Donanım-IBM-QPU}` + `{Model}`):** Gerçek **`156Q` `ibm_marrakesh` (`dc1tdo2nj2vs73dfrfl0`, `[2,3,4,5,6]`, `16 PUB × 4.096 shot`, `32,54 s`, `0` gizli sızıntı):** Bare `0,3325` → Echo `0,9224` (`+59,0 pp`) → XY4 `0,9280` (`+59,5 pp`), Bell **`0,9733`**, `d=3` `p_phys = %2,96 → MWPM %0,57 (5,16×) / maj %0,38 (7,83×) / postsel %0,00`, `Q16.16 BOED` `3`-nokta `120,11 kHz` (`1,6 Hz` vs FP64); **`CellISA v4.0` (`20` op)** & **`auto_recal.py` (`4/4 PASS`)**.
-- **`Exp146` (`H164`, `8/8 DT6 PASS`, `10/10` test):** `24/24` birincil + canlı QPU `SHA-256` kilitli Master `v6.0` Dijital İkiz (`results/exp146_v6_digital_twin/v6_digital_twin_cert.json`):
+- **`Exp146` (`H164`, `8/8 DT6 PASS`, `10/10` test):** `24/24` birincil + canlı QPU `SHA-256` kilitli tarihsel `v6.0` Dijital İkiz (`results/exp146_v6_digital_twin/v6_digital_twin_cert.json`):
   - **Tam 64-Hex `v6_digital_twin_cert.json` `SHA-256`:** `ca3f0e0267263bacb973f46c3cc2d321c0f204075ea232f4094758e1a9abf1d7`
   - **Canlı `ibm_qpu_live_results.json` `SHA-256`:** `02b7a19d1704662c6424e76f4971e21b04a98d48230a917c9682853b3ca1fc5a`
+
+---
+
+## Bölüm 12: `v7.0` Bilimsel Kapanış, Verilog RTL, Etkileşimli Dijital İkiz & Endüstriyel Emniyet (`Exp147`–`Exp151`)
+
+Bu bölüm, `v7.0` dalgasında eklenen 5 deney paketini özetler (`tests/test_exp147..151.py`; tüm **`33/33`** staged Atom Litografi test paketi **`306/306 PASS`**; silikon `³¹P/¹²¹Sb/¹⁶⁷Er` + RTL EDA [`no_external_eda_sim=true`] + Emniyet + Tedarik = `M0`, `Exp145` kontrol/DD/dekoder/BOED = canlı `156Q` `ibm_marrakesh` donanımı).
+
+- **`Exp147` (`H165`, `5/7 PASS`, dürüst `UQ4/UQ5 FAIL`, `10/10` test):** Bravyi **`[[288,12,18]]` (`d=18`)** kesin `GF(2)` cebri (`rank=138`, derinlik-7 `1.728` CNOT `0` geri-tepme), `ℤ₁₂` otomorfizmli `24×24` kalınlık-2 `M4` yerleşimi (`L_max = 268,3 µm ≤ 300 µm`, `0` rezonatör değişikliği!), `p_th = %0,781`, `f*=%1,5+2 MV/m` `576`-hücreli blok verimi **`%99,27 (N=8) / %99,82 (N=9)`**. **FeMoco (`192L, 10⁸ T`):** **`16` kriyo (`37,1×` vs `593` SC), `3,38 sa`, `406,6 kW`, `$59,3M` TCO / `$6.537/çözüm` (`35,3×` ucuz)** *(dürüst `UQ5` okuma tavanı: `2–3 µs` `p_meas = %0,22–%0,39` `d=18` tabanını sınırlar → `p_meas ≤ %0,15` / `D3++` veya `d=24/34` gerekli)*; **`RSA-2048` (`4.096L, 10¹⁰ T`):** **`291` kriyo (`52,7×` vs `15.327` SC), `7,37 MW` (`52,1×` vs `383,8 MW`), `21,1 sa`, `$711,3M` (`35,9×` ucuz, `UQ6 PASS`)**.
+- **`Exp148` (`H166`, `6/7 PASS`, dürüst `SQ4 FAIL`, `9/9` test):** `Exp142 OQ6` kapanışı — nötr `¹²¹Sb` (`I=7/2`, `473,9 kHz`) Levitt–Freeman `90–240–90` + kuadratür **`Q-Echo-8` (`P_brick^8 = I_8`)** statik `500 Hz` Gross sadakatini **`0,5800 → 0,99908` (`455,5×` infidelite ↓)**, `|±7/2⟩` Cat sadakatini **`0,9424 → 0,99914`** düzeyine çıkarır; `SU(8)` Fourier GRAPE (`≤ 22,89 kHz`, `104 µs`): **`X_L = 0,9954 / Z_L = 0,9971 / H_L = 0,9959`**; geniş-bant `1 Hz–100 kHz` `1/f` dürüst Cywiński sınırı (`SQ4 FAIL`): `Q-Echo-8: 8,39×` → **`Q-Echo-64: 28,08× (1,45 ms)`**, Cat **`20,73 ms`**.
+- **`Exp149` (`H167`, `7/7 PASS`, `10/10` test, `no_external_eda_sim=true`):** `rtl/boed_fpga/` `10` dosya (`4` sentezlenebilir IEEE 1364-2005 `.v` = **`894` satır**, `0` sentez/port/genişlik hatası, `1.024/1.024` ROM `.hex` `0`-bit fark, `64/64` golden + `1.000` `isqrt` **`0 LSB`**, kesin **`584` çevrim = `2,336 µs @ 250 MHz`**, `4` çevrim SPRT, `ZU48DR` `%10,49` DSP / `0 W` kriyo) + canlı **`docs/digital_twin_interactive.html`** (`66,6 KB` [`66.554` bayt], `5` sekme, `0` CDN/HTTP, `0` sızıntı).
+- **`Exp150` (`H168`, `7/7 PASS`, `12/12` test):** `25` FMEA + `10` HAZOP **`max RPN 280 → 42 ≤ 60` (`-%86,3`, `0` artık `>60`)**; `OD=8 + 3 mm` çelik Lazer+X-ışını (`1,19×10⁻²³ µSv/h` vs çıplak safir `10,11 µSv/h`, `3,2 ms` SIL-3 perde); `SDS PH₃` `0,00715 ppm << 0,05 ppm` TLV; dry-cryo He `O₂ = %20,57`; `15 kVA` UPS `40/213 dk`; `80 ms` UHV vana; **`S7.SAFETY-01..06 = $145.000 / 355,0 kg` tesis / `1.090 W` / `0,0 W` kriyo (`RFQ-10`)**.
+- **`Exp151` (`H169`, `8/8 DT7 PASS`, `13/13` test):** `38/38` birincil eser `SHA-256` kilitli Master `v7.0` Dijital İkiz (`results/exp151_v7_digital_twin/v7_digital_twin_cert.json`):
+  - **Tam 64-Hex `v7_digital_twin_cert.json` `SHA-256`:** `23a2800e5a31ef0157346eb6dac998f2824c18e79f895e77eeea187c9d68d7c0`
+  - **Canlı İnteraktif HTML5 İkiz (`docs/digital_twin_interactive.html`) `SHA-256`:** `f9f45721c7dd67fe06616a29e3d98b72e10ded75221293ee5efbf15cefca2bc0`
+  - **Canlı `ibm_qpu_live_results.json` `SHA-256`:** `02b7a19d1704662c6424e76f4971e21b04a98d48230a917c9682853b3ca1fc5a`
+  - *(Korunan tarihsel sertifikalar: `v6` `ca3f0e0267263bacb973f46c3cc2d321c0f204075ea232f4094758e1a9abf1d7` · `v5` `2828e8ce8d9388f7cba5490b2d05add930aadc5fe6d3ba4295f0380f816d43d1` · `v4` `feffc1d4ba2b0698c3f61015c6684da47f57ea863a8b3e0da845cc9c71914b57`)*

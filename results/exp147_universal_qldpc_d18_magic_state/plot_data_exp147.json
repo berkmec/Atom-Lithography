@@ -1,0 +1,264 @@
+{
+  "experiment": "exp147_universal_qldpc_d18_magic_state",
+  "no_lab_measurement": true,
+  "no_supplier_quotes": true,
+  "verdicts": {
+    "UQ1_EXACT_BB288_ALGEBRA_AND_SCHEDULE": true,
+    "UQ2_THICKNESS2_M4_LAYOUT_AND_576_YIELD": true,
+    "UQ3_D6_TO_D18_CIRCUIT_DEM_SCALING": true,
+    "UQ4_UNIVERSAL_MAGIC_STATE_FACTORIES": false,
+    "UQ5_FEMOCO_CHEMISTRY_RESOURCE_AND_COST": false,
+    "UQ6_RSA2048_SHOR_CRYO_POWER_COMPRESSION": true,
+    "UQ7_PORTABILITY_VISUALIZATION_AND_TESTS": true
+  },
+  "n_passed": 5,
+  "n_total": 7,
+  "panelA_4code_uniform_dem": {
+    "p_grid": [
+      0.004,
+      0.005,
+      0.006,
+      0.007,
+      0.008
+    ],
+    "BB_72": [
+      0.014444,
+      0.0375,
+      0.073701,
+      0.112096,
+      0.174009
+    ],
+    "BB_90": [
+      0.008757,
+      0.026018,
+      0.042397,
+      0.093548,
+      0.163457
+    ],
+    "BB_144": [
+      0.005587,
+      0.025287,
+      0.053313,
+      0.097793,
+      0.186933
+    ],
+    "BB_288": [
+      0.002088,
+      0.005762,
+      0.032281,
+      0.096516,
+      0.177587
+    ],
+    "p_th": 0.007813
+  },
+  "panelB_bb288_silicon_1e9": {
+    "depol_p_grid": [
+      0.0055,
+      0.0065,
+      0.0075,
+      0.0085
+    ],
+    "grape_p_grid": [
+      0.007,
+      0.008,
+      0.009,
+      0.01
+    ],
+    "depol_1L": [
+      7.7e-05,
+      0.000467,
+      0.001091,
+      0.002442
+    ],
+    "grape_1L": [
+      0.0,
+      0.000544,
+      0.00117,
+      0.001887
+    ],
+    "depol_fit": {
+      "valid": true,
+      "alpha_slope": 7.811,
+      "intercept_ln": 31.3668,
+      "d_eff_circuit": 14.62,
+      "r2_log": 0.9772,
+      "eval_fn_params": [
+        31.36677618423636,
+        7.811431275173693
+      ],
+      "p_for_1e-9": 0.00127,
+      "p_for_1e-12": 0.000525,
+      "p_for_4e-14_femoco": 0.000347,
+      "pred_at_0p395pct": 7.067404361091026e-06,
+      "pred_at_0p337pct": 2.0354567615186925e-06,
+      "pred_at_0p250pct": 1.9797256763719762e-07,
+      "pred_at_0p200pct": 3.464169305494421e-08
+    },
+    "grape_fit": {
+      "valid": true,
+      "alpha_slope": 5.592,
+      "intercept_ln": 19.5183,
+      "d_eff_circuit": 10.18,
+      "r2_log": 0.9899,
+      "eval_fn_params": [
+        19.518332618125832,
+        5.592123580585608
+      ],
+      "p_for_1e-9": 0.000749,
+      "p_for_1e-12": 0.000218,
+      "p_for_4e-14_femoco": 0.000123,
+      "pred_at_0p395pct": 1.089413773140583e-05,
+      "pred_at_0p337pct": 4.468731410631689e-06,
+      "pred_at_0p250pct": 8.426808339913336e-07,
+      "pred_at_0p200pct": 2.4195263014335824e-07
+    },
+    "d_ladder_0p337": {
+      "d_vals": [
+        6,
+        10,
+        12,
+        18
+      ],
+      "emp_1L": [
+        0.000162,
+        0.0,
+        7e-05,
+        0.0
+      ],
+      "Lambda_BB": 1.323
+    }
+  },
+  "panelC_layout_24x24": {
+    "pitches": [
+      15.0,
+      18.0,
+      20.0,
+      25.0,
+      30.0
+    ],
+    "L_max_um": [
+      201.2,
+      241.5,
+      268.3,
+      335.4,
+      402.5
+    ],
+    "N_cand": [
+      6,
+      7,
+      8,
+      9,
+      10,
+      11
+    ],
+    "y576_f10": [
+      0.0496,
+      2.5152,
+      16.7681,
+      42.0395,
+      65.6589,
+      81.5233
+    ],
+    "y576_f15": [
+      88.4617,
+      97.049,
+      99.2708,
+      99.8213,
+      99.9563,
+      99.9893
+    ],
+    "y16of18_f15": [
+      65.4884,
+      98.4955,
+      99.9708,
+      99.9995,
+      100.0,
+      100.0
+    ]
+  },
+  "panelD_magic_factories": {
+    "labels": [
+      "1-Stage\n15-to-1",
+      "Litinski\n2-Stage",
+      "Cult +\n15-to-1",
+      "Cult +\n116-to-12",
+      "D3++ 0.2%\nCult+15to1"
+    ],
+    "p_T": [
+      2.7444787597439404e-06,
+      8.226692709653392e-11,
+      9.960531249527501e-11,
+      7.899368643869813e-11,
+      4.6515665362964504e-11
+    ],
+    "cryos": [
+      5,
+      32,
+      7,
+      12,
+      5
+    ],
+    "rate_khz": [
+      0.848,
+      5.214,
+      0.796,
+      8.216,
+      0.797
+    ]
+  },
+  "panelE_femoco": {
+    "labels": [
+      "SC D3\n(d=53)",
+      "qLDPC d18\n+Litinski",
+      "qLDPC d18\n+Cult116"
+    ],
+    "cryos": [
+      593,
+      36,
+      16
+    ],
+    "cost_per_solve_k": [
+      230.72,
+      20.29,
+      6.54
+    ],
+    "runtime_h": [
+      5.328,
+      5.328,
+      3.381
+    ],
+    "compression": {
+      "cryostats_x": 37.06,
+      "power_x": 36.54,
+      "tco_x": 22.4,
+      "cost_per_solve_x": 35.3
+    }
+  },
+  "panelF_rsa2048": {
+    "labels": [
+      "SC D3\n(d=59)",
+      "qLDPC d18\nD3++ Lit",
+      "qLDPC d24\nD3 Cult"
+    ],
+    "cryos": [
+      15327,
+      591,
+      291
+    ],
+    "power_mw": [
+      383.8072,
+      14.8628,
+      7.3738
+    ],
+    "runtime_h": [
+      33.3,
+      33.3,
+      21.13
+    ],
+    "compression": {
+      "cryostats_x": 52.67,
+      "power_x": 52.05,
+      "tco_x": 35.86
+    }
+  }
+}

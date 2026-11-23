@@ -1,0 +1,140 @@
+{
+  "source_experiment": "exp150_industrial_safety_fmea_hazop",
+  "hypothesis_id": "H168",
+  "subsystem_id": "S7.SAFETY",
+  "title": "SEMI S2 / IEC 61508 Lab-Ready Industrial Safety & SIL-3 Interlock Kit (v7.0)",
+  "no_lab_measurement": true,
+  "no_supplier_quotes": true,
+  "epistemic_tags": [
+    "{Model}",
+    "{Liste-Capasi}",
+    "{Varsayım}"
+  ],
+  "totals": {
+    "n_items": 6,
+    "total_mass_kg": 355.0,
+    "cryo_cold_mass_kg": 0.0,
+    "steady_electrical_power_W": 1090.0,
+    "cryo_load_W": 0.0,
+    "cost_usd_low": 92000,
+    "cost_usd_nom": 145000,
+    "cost_usd_high": 220000,
+    "pct_of_m3_v6_full_bom": 2.61
+  },
+  "items": [
+    {
+      "part_id": "S7.SAFETY-01",
+      "name": "Sub-Atmospheric SDS PH3 Micro-Cylinder Gas Cabinet (<650 Torr, 10 g), Vacuum-Jacket Line, 250 CFM Dry Scrubber & Dual 0.02 ppm Sensors",
+      "qty": 1,
+      "location": "Facility gas bay adjacent to S1/S7",
+      "envelope_mm": [
+        600.0,
+        500.0,
+        1800.0
+      ],
+      "mass_kg_total": 118.0,
+      "power_W_total": 480.0,
+      "cryo_load_W": 0.0,
+      "cost_usd_low": 28000,
+      "cost_usd_nom": 42000,
+      "cost_usd_high": 62000,
+      "sil_level": "SIL-3",
+      "epistemic_tag": "Varsayim"
+    },
+    {
+      "part_id": "S7.SAFETY-02",
+      "name": "ANSI Z136.1 OD>=8 (808 nm) Interlocked Class-1 Laser/X-Ray Steel Shroud & Dual-Channel SIL-3 Mechanical Shutter (<5 ms)",
+      "qty": 1,
+      "location": "S5.5 +Y viewport perimeter",
+      "envelope_mm": [
+        280.0,
+        260.0,
+        220.0
+      ],
+      "mass_kg_total": 38.0,
+      "power_W_total": 45.0,
+      "cryo_load_W": 0.0,
+      "cost_usd_low": 14000,
+      "cost_usd_nom": 22000,
+      "cost_usd_high": 34000,
+      "sil_level": "SIL-3",
+      "epistemic_tag": "Varsayim"
+    },
+    {
+      "part_id": "S7.SAFETY-03",
+      "name": "IEC 61508 SIL-3 1oo2D Hardwired Safety PLC, 4x E-Stop Mushrooms, Guard Switches & 2 MOhm HV Crowbar Module",
+      "qty": 1,
+      "location": "S7 rack top / perimeter E-Stop loop",
+      "envelope_mm": [
+        482.6,
+        350.0,
+        133.4
+      ],
+      "mass_kg_total": 18.0,
+      "power_W_total": 120.0,
+      "cryo_load_W": 0.0,
+      "cost_usd_low": 18000,
+      "cost_usd_nom": 28000,
+      "cost_usd_high": 42000,
+      "sil_level": "SIL-3",
+      "epistemic_tag": "Varsayim"
+    },
+    {
+      "part_id": "S7.SAFETY-04",
+      "name": "15 kVA / 10 kWh Online Double-Conversion LFP UPS (0 ms Transfer) & Tiered Load-Shed PDU",
+      "qty": 1,
+      "location": "Facility power bay adjacent to S7/S9.HPC",
+      "envelope_mm": [
+        440.0,
+        720.0,
+        780.0
+      ],
+      "mass_kg_total": 145.0,
+      "power_W_total": 350.0,
+      "cryo_load_W": 0.0,
+      "cost_usd_low": 15000,
+      "cost_usd_nom": 24000,
+      "cost_usd_high": 36000,
+      "sil_level": "SIL-2",
+      "epistemic_tag": "Liste-Capasi"
+    },
+    {
+      "part_id": "S7.SAFETY-05",
+      "name": "Cleanroom O2 Deficiency Monitor (19.5% Alarm), ASME DN50 0.5 barg OVC Burst Disk/Relief & 1.563 Ohm Quench Dump Bank",
+      "qty": 1,
+      "location": "S6 DR OVC + Cleanroom wall + S7 dump bay",
+      "envelope_mm": [
+        380.0,
+        260.0,
+        240.0
+      ],
+      "mass_kg_total": 24.0,
+      "power_W_total": 35.0,
+      "cryo_load_W": 0.0,
+      "cost_usd_low": 8000,
+      "cost_usd_nom": 14000,
+      "cost_usd_high": 22000,
+      "sil_level": "SIL-3",
+      "epistemic_tag": "Liste-Capasi"
+    },
+    {
+      "part_id": "S7.SAFETY-06",
+      "name": "Fast Spring-Return UHV Isolation Gate Valve Actuators (<80 ms), ISO 10156 5% H2/N2 Orifice & X-Ray Survey Meter",
+      "qty": 1,
+      "location": "S5.2/S5.3/S5.6 vacuum manifolds & cleanroom",
+      "envelope_mm": [
+        220.0,
+        180.0,
+        160.0
+      ],
+      "mass_kg_total": 12.0,
+      "power_W_total": 60.0,
+      "cryo_load_W": 0.0,
+      "cost_usd_low": 9000,
+      "cost_usd_nom": 15000,
+      "cost_usd_high": 24000,
+      "sil_level": "SIL-2",
+      "epistemic_tag": "Varsayim"
+    }
+  ]
+}

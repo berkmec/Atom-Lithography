@@ -1,0 +1,46 @@
+{
+  "experiment": "exp149_boed_verilog_rtl_and_interactive_twin",
+  "hypothesis_id": "H167",
+  "version": "7.0-phaseA",
+  "registered": "2026-11-23 (pre-run registration prior to implementing rtl/boed_fpga/, rtl_verifier149.py, and build_interactive_twin.py)",
+  "no_lab_measurement_rtl": true,
+  "no_external_eda_sim": true,
+  "epistemic_tags": [
+    "Model",
+    "Sayisal-Simulasyon",
+    "RTL-Structural-Verified",
+    "Interactive-Twin"
+  ],
+  "question": "Can the Exp140 bit-exact Q16.16 BOED-FPGA DSP architecture be realized as clean synthesizable IEEE 1364-2005 Verilog RTL (4-lane SIMD, 584 cycles = 2.336 us @ 250 MHz, 16-channel AXI4-Stream wrapper, Vivado ZU48DR XDC) verified to 0-bit ROM / 0-LSB golden-vector parity against fpga_boed_dsp.py, paired with a zero-dependency interactive HTML5 digital twin embedding all live primary JSONs and ibm_marrakesh hardware data?",
+  "predictions": [
+    {
+      "id": "RV1_SYNTHESIZABLE_RTL_LINT_ZERO_VIOLATIONS",
+      "statement": "All 4 synthesizable Verilog RTL modules (boed_lut_rom.v, boed_isqrt_cordic.v, boed_q16_core.v, boed_top_16ch.v) pass structural IEEE 1364-2005 synthesis linting with 0 forbidden non-synthesizable constructs (initial outside ROM $readmemh, #delay, real, $display, while), 0 balanced-block errors, and 0 port/width mismatches across the full 16-channel hierarchy."
+    },
+    {
+      "id": "RV2_ROM_HEX_BIT_EXACT_PARITY",
+      "statement": "Both 512-entry Q16.16 BRAM ROM hex files (rom_loglik_p0.hex Lorentzian kernel and rom_loglik_p1.hex exp(-x) kernel) match fpga_boed_dsp.py build_lorentzian_lut_q16()/build_exp_neg_lut_q16() across all 512/512 entries with exactly 0 bit differences."
+    },
+    {
+      "id": "RV3_GOLDEN_VECTORS_64_ZERO_LSB_PARITY",
+      "statement": "All N=64 golden_vectors.mem stimulus/expected vectors (and 1,000 pipelined 16-stage restoring isqrt vectors) match fpga_boed_dsp.Q1616BOEDCore with 0 LSB difference in mu_off_q8, std_q4, and next_probe_off_q4."
+    },
+    {
+      "id": "RV4_CYCLE_COUNT_584_AND_TIMING_XDC",
+      "statement": "boed_q16_core.v Stage-2 FSM completes in exactly 584 clock cycles (263 Pass-1 + 265 Pass-2 + 56 Post/CORDIC = 2.336 us @ 250 MHz), Stage-0 SPRT early-abort completes in exactly 4 cycles (16.0 ns), and zu48dr_boed_250mhz.xdc enforces a 4.000 ns (250 MHz) clock constraint on xczu48dr."
+    },
+    {
+      "id": "RV5_ZU48DR_16CH_RESOURCE_BUDGET_CLOSURE",
+      "statement": "16-channel AXI4-Stream wrapper boed_top_16ch.v fits comfortably inside Xilinx ZU48DR RFSoC (< 15% DSP48E2, < 10% BRAM36, < 20% LUT, 0.0 W cryogenic heat load) with full self-checking tb_boed_q16_core.v testbench."
+    },
+    {
+      "id": "RV6_INTERACTIVE_HTML5_TWIN_ZERO_CDN_LIVE_DATA",
+      "statement": "docs/digital_twin_interactive.html is a self-contained single-file HTML5 app with 0 external CDN/HTTP script/CSS dependencies, embedding live primary JSONs (CAD v6.0, BOM v6.0, Exp128-146, live ibm_marrakesh 156Q data, and Exp149 RTL metrics) with interactive sliders, clickable S1-S9 schematic, live QPU tab, RTL FSM view, and explicit epistemic boundary banner."
+    },
+    {
+      "id": "RV7_ARTIFACTS_PORTABILITY_VISUAL_AND_TESTS",
+      "statement": "Zero hardcoded host paths, zero secret leaks, 0 GFM table errors in summary_exp149.md, 2400x1400 visually verified fig_exp149_rtl_fpga_arch.png, and >= 9 new tests in tests/test_exp149.py plus existing test suite 100% PASS."
+    }
+  ],
+  "success_rule": "RV1, RV2, RV3, RV4, RV5, RV6, RV7 all PASS."
+}
