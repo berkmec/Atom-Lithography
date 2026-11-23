@@ -541,6 +541,32 @@ def compute_critical_clearances(parts: dict[str, dict] | None = None) -> dict[st
     array_diag_mm = params.DESIGN_SPECS["write_field_mm"] * math.sqrt(2.0)
     array_bore_clr = round(float((min_beam_bore_d - array_diag_mm) / 2.0), 3)
 
+    # Exp130 S5.5 flash window clear aperture (Ø44 mm) vs Ø36 mm beam
+    flash_ca_r = p["s5_flash_anneal_duct"]["dims"][0]
+    flash_beam_r = params.DESIGN_SPECS["flash_beam_od_mm"] / 2.0
+    flash_beam_clr = round(float(flash_ca_r - flash_beam_r), 3)
+
+    # Exp131 M4 4K crossbar switch inside HEMT ring (r_in=88 mm) & clear of coax (|y|>=53 mm)
+    hemt_rin = p["s6_hemt_rack_4k"]["dims"][0]
+    cb_dx, cb_dy, _ = p["s6_m4_crossbar_4k_mount"]["dims"]
+    cb_corner_r = math.hypot(cb_dx / 2.0, cb_dy / 2.0)
+    cb_hemt_clr = round(float(hemt_rin - cb_corner_r), 3)
+    coax_inner_y = abs(p["s6_coax_4k_still_pos"]["center"][1]) - p["s6_coax_4k_still_pos"]["dims"][0]
+    cb_coax_y_clr = round(float(coax_inner_y - cb_dy / 2.0), 3)
+
+    # Exp133 OVC CF63 bellows (r_in=22 mm) vs 4K shield (r_out=10.5 mm) & 4x braids inside 4K shield (r_in=9.0 mm)
+    bel_rin = p["s6_ovc_bellows_cf63"]["dims"][0]
+    sh4_rout = p["s6_cryo_bridge_4k_shield"]["dims"][1]
+    bel_4k_clr = round(float(bel_rin - sh4_rout), 3)
+    braid_max_r = 0.0
+    for b_idx in range(1, 5):
+        bspec = p[f"s6_mxc_braid_{b_idx}"]
+        by_m = abs(bspec["center"][1]) + bspec["dims"][1] / 2.0
+        bz_m = abs(bspec["center"][2] - sh4_z) + bspec["dims"][2] / 2.0
+        braid_max_r = max(braid_max_r, math.hypot(by_m, bz_m))
+    braid_4k_clr = round(float(sh4_rin - braid_max_r), 3)
+    rv_dr_x_clr = x_gap("s6_pt420_remote_valve_box", "s6_dr_top_flange")
+
     checks = {
         "exp124_archB_wafer_to_minilens_WD_mm": {"value_mm": z_gap("s3_silicon_wafer", "s2_mini_lens_plate"), "min_req_mm": 0.20},
         "beam_array_diagonal_to_bore_clearance_mm": {"value_mm": array_bore_clr, "min_req_mm": 2.0},
@@ -561,6 +587,13 @@ def compute_critical_clearances(parts: dict[str, dict] | None = None) -> dict[st
         "granite_to_loadlock_stand_x_mm": {"value_mm": x_gap("s4_granite_base", "s5_loadlock_stand"), "min_req_mm": 10.0},
         "transfer_arm_to_s7_panel_x_mm": {"value_mm": x_gap("s5_transfer_arm", "s7_feedthrough_panel"), "min_req_mm": 25.0},
         "turbo_pump_to_granite_y_mm": {"value_mm": y_gap("s5_turbo_pump", "s4_granite_base"), "min_req_mm": 15.0},
+        # CAD v4.0 clearances (Exp130 S5.5, Exp131 M4, Exp133 PT420 decoupling)
+        "exp130_flash_window_beam_radial_mm": {"value_mm": flash_beam_clr, "min_req_mm": 2.0},
+        "exp131_m4_crossbar_to_hemt_radial_mm": {"value_mm": cb_hemt_clr, "min_req_mm": 15.0},
+        "exp131_m4_crossbar_to_coax_y_mm": {"value_mm": cb_coax_y_clr, "min_req_mm": 10.0},
+        "exp133_bellows_to_4k_shield_radial_mm": {"value_mm": bel_4k_clr, "min_req_mm": 8.0},
+        "exp133_braids_inside_4k_shield_radial_mm": {"value_mm": braid_4k_clr, "min_req_mm": 2.0},
+        "exp133_remote_valve_to_dr_flange_x_mm": {"value_mm": rv_dr_x_clr, "min_req_mm": 150.0},
     }
     for k, rec in checks.items():
         rec["pass"] = bool(rec["value_mm"] >= rec["min_req_mm"])

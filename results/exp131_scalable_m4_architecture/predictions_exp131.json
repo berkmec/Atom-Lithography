@@ -1,0 +1,72 @@
+{
+  "experiment": "exp131_scalable_m4_architecture",
+  "hypothesis_id": "H149",
+  "registered_at": "2026-11-23T03:09:00+03:00",
+  "status": "PRE_REGISTERED_BEFORE_COMPUTATION",
+  "no_lab_measurement": true,
+  "epistemic_scope": "Model / Open-Quantum-System Lindblad Master Equation + 3D Straggle & 2D Percolation Monte Carlo anchored to Exp109 (NbTiN Q_i >= 2e5), Exp124 (5 keV 31P+ 3D straggle R_p=6.46 nm, sigma_xy=3.67 nm, sigma_z=2.88 nm), Exp59/62/126 (Mod B f=1% p_spec=0.51), and published Tosi et al. Nat. Commun. 2017 / Harvey-Collard et al. PRX 2022 flip-flop & Si cQED literature. No physical device or laboratory measurement.",
+  "anchor_references": [
+    "results/exp109_sc_resonator/exp109.json",
+    "results/exp124_ion_column_optics/exp124.json",
+    "results/exp125_cryo_magnet_readout/exp125.json",
+    "results/exp126_atom_cell_programming/exp126.json",
+    "Tosi et al., Nat. Commun. 8, 450 (2017)",
+    "Harvey-Collard et al., Phys. Rev. X 12, 021026 (2022)",
+    "Samkharadze et al., Science 359, 1123 (2018)"
+  ],
+  "predictions": {
+    "CM1_capping_window_and_sweetspot_gain": {
+      "statement": "Under Exp124 5 keV 3D straggle (R_p=6.46 nm, sigma_xy=3.67 nm, sigma_z=2.88 nm) at Z_r=3 kOhm, Q_L=2e5, S_eps=1.0 ueV/sqrt(Hz): (a) uncapped (Delta_z_cap=0 nm) donors fail strong-coupling flip-flop yield (P(C>=100) < 0.25); (b) optimal thin epitaxial capping Delta_z_cap* in [6, 10] nm with local DC gate sweet-spot tuning lifts flip-flop yield P(C>=100) to >= 0.70 and increases median cooperativity by >= 3x over fixed eps=0.",
+      "thresholds": {
+        "max_uncapped_yield_C100": 0.25,
+        "min_capped_tuned_yield_C100": 0.70,
+        "min_tuning_coop_gain": 3.0
+      }
+    },
+    "CM2_high_impedance_vs_50ohm_wall": {
+      "statement": "In exact 12x12 Lindblad open-quantum-system simulation (2 flip-flop qubits x 3 Fock states, Q_L=2e5, S_eps=1.0 ueV/sqrt(Hz), optimal capping): a conventional 50 Ohm CPW resonator fails to reach F_Bell >= 0.90 (mean F_Bell < 0.90), whereas a high-impedance NbTiN resonator (Z_r=3 kOhm) achieves mean heterogeneous pair F_Bell >= 0.95 with Lindblad trace/Hermiticity error < 1e-10.",
+      "thresholds": {
+        "max_50ohm_bell_fidelity": 0.90,
+        "min_3kohm_bell_fidelity": 0.95,
+        "max_lindblad_trace_err": 1e-10
+      }
+    },
+    "CM3_surface_code_threshold_envelope": {
+      "statement": "Across the (Z_r, Q_L, S_eps) phase map, the 2-cell dispersive/resonant Bell gate reaches the F_2cell >= 0.99 surface-code threshold in the low-noise high-impedance corner (Z_r >= 3 kOhm, Q_L >= 2e5, S_eps <= 0.5 ueV/sqrt(Hz)), while high charge noise (S_eps = 5.0 ueV/sqrt(Hz)) combined with moderate Q_L = 5e4 pushes F_Bell below 0.95 (transparent failure boundary).",
+      "thresholds": {
+        "min_corner_surface_code_fidelity": 0.99,
+        "max_high_noise_low_Q_fidelity": 0.95
+      }
+    },
+    "CM4_cz_vs_bell_gate_overhead": {
+      "statement": "For heterogeneous pairs at nominal M4 operating point (Z_r=3 kOhm, Q_L=2e5, S_eps=1.0 ueV/sqrt(Hz), Delta_z_cap=8 nm), full 2-cell CZ process/Bell fidelity remains >= 0.90 (and strictly below single-step Bell/sqrt-iSWAP fidelity due to 2x interaction duration).",
+      "thresholds": {
+        "min_nominal_cz_fidelity": 0.90
+      }
+    },
+    "CM5_2d_square_percolation_and_redundancy": {
+      "statement": "Combining Mod B f=1% spectral yield (p_spec=0.51) with optimal M4 flip-flop coupling yield p_ff(Delta_z_cap*): (a) without node redundancy (N_cand=1), 2D square lattice percolation fails completely on L=21 (P_perc < 0.05 because p_M4 < p_c = 0.5927); (b) N_cand >= 3 candidate slots per logical node achieves P_perc(L=21) >= 0.99; (c) N_cand = 6 achieves defect-free L=5 (25-node) grid yield >= 0.60 and fault-tolerant (<=5% dead nodes) L=11 (121-node) yield >= 0.95.",
+      "thresholds": {
+        "max_ncand1_perc_L21": 0.05,
+        "min_ncand3_perc_L21": 0.99,
+        "min_ncand6_perfect_L5": 0.60,
+        "min_ncand6_ft_L11": 0.95
+      }
+    },
+    "CM6_heavy_hex_vs_square_percolation": {
+      "statement": "Because heavy-hex has lower average vertex degree (2.4 vs 4.0) and higher site percolation threshold than 2D square, at N_cand=2 heavy-hex spanning percolation probability on d=7 (145 nodes) is strictly lower than 2D square L=11 (121 nodes), while N_cand >= 4 restores heavy-hex d=7 spanning percolation to >= 0.99.",
+      "thresholds": {
+        "min_heavy_hex_ncand4_perc": 0.99
+      }
+    },
+    "CM7_cad_m4_bus_geometry_feasibility": {
+      "statement": "The specified high-impedance NbTiN lambda/2 bus resonator (Z_r=3 kOhm, f_r=5 GHz, L_sq=100 pH/sq, w=100 nm) has compact physical length L_res in [0.2, 2.0] mm, fits on-chip with inter-node pitch <= 20 um, and operates at B_M4 in [0.15, 0.25] T strictly inside Exp109's verified NbTiN field tolerance (<= 0.30 T).",
+      "thresholds": {
+        "min_L_res_mm": 0.2,
+        "max_L_res_mm": 2.0,
+        "max_B_M4_T": 0.30
+      }
+    }
+  },
+  "success_rule": "All 7 registered predictions CM1 through CM7 PASS."
+}

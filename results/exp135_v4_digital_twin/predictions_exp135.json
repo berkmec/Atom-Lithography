@@ -1,0 +1,55 @@
+{
+  "experiment": "exp135_v4_digital_twin",
+  "hypothesis_id": "H153",
+  "registered": "2026-11-23 (pre-run registration prior to implementing and executing digital_twin135.py)",
+  "no_lab_measurement": true,
+  "epistemic_tags": [
+    "Model",
+    "Sayisal-Simulasyon"
+  ],
+  "question": "When all 8 physics and engineering layers of Exp124-Exp134 and live src/machine_control/ v3.0 (BOED + CellISA v3.0) are coupled end-to-end into a unified v4.0 digital twin, what are the realized placement, throughput, M4 percolation (N_cand under Exp129 Risk R1 VOKL-6), quantum fidelity, and $/qubit gains vs v3.0?",
+  "primary_data_sources": [
+    "results/exp124_ion_column_optics/exp124.json",
+    "results/exp125_cryo_magnet_readout/exp125.json",
+    "results/exp126_atom_cell_programming/exp126.json",
+    "results/exp127_detector_frontend_sim/exp127.json",
+    "results/exp128_bom_sensitivity/exp128.json",
+    "results/exp129_valley_orbital_hyperfine/exp129.json",
+    "results/exp130_flash_anneal_diffusion/exp130.json",
+    "results/exp131_scalable_m4_architecture/exp131.json",
+    "results/exp132_bayesian_spectroscopy_cellisa3/exp132.json",
+    "results/exp133_coupled_vibration_thermal/exp133.json",
+    "results/exp134_fab_economics_tco/exp134.json"
+  ],
+  "predictions": [
+    {
+      "id": "DT1_PLACEMENT_BUDGET_V4",
+      "statement": "Coupled v4.0 placement RSS(sigma_BCA, sigma_spot, sigma_stage, sigma_pointing, sigma_thermal, sigma_anneal) is < 3.65 nm at 15 ms canonical and < 3.60 nm at 10 ms (vs v3.0 3.715/3.674 nm and rigid CFG1 > 2,000 nm), with combined Cold-100K IBIC x 808 nm/1 ms flash-anneal survival eta * f_act >= 0.999."
+    },
+    {
+      "id": "DT2_BOED_WRITE_CEILING_ACROSS_R1",
+      "statement": "Adaptive BOED spectroscopy ($0 extra HW) accelerates further as bath yield drops under Exp129 Risk R1 (KL 51% -> VOKL-6 HM5962 33.25% -> VOKL-6 norm 4.75%), keeping the machine strictly write-limited across all 3 regimes (7.61x over v3.0 at 15 ms, 11.42x at 10 ms; >= 1.50e9 reg/day at KL 51% and >= 9.5e8 reg/day at VOKL-6 HM5962 33.25%)."
+    },
+    {
+      "id": "DT3_VOKL6_M4_PERCOLATION_PENALTY",
+      "statement": "Under Exp129 VOKL-6 HM5962 (p_B=0.3325, p_M4=0.31654), canonical N_cand=6 collapses below 10% L=11 FT 5%-defect wafer yield (vs 99.24% at KL 51%), requiring N_cand* in [10, 12] to restore >= 99% FT yield; worst-case VOKL-6 norm (p_B=0.0475) requires N_cand* > 50 (architectural red-line), whereas f=2% HM5962 (p_B=0.545) restores N_cand*=6."
+    },
+    {
+      "id": "DT4_UNIT_ECONOMICS_AND_BUDGET_CAP",
+      "statement": "Coupled v4.0 5-yr Fab N=1 TCO ($16.07M) cuts machine cost per register by >= 80% vs v3.0 ($52.89 -> <= $8.0 uUSD/reg at KL 51% @ 15 ms, <= $12.0 uUSD/reg even at VOKL-6 HM5962 33.25%), drops d=17 logical qubit cost below $0.01 (KL) and $0.025 (HM5962 1/p_B), while keeping P(v4 BOM > $50M) = 0% and P(v4 Prog > $100M) < 5%."
+    },
+    {
+      "id": "DT5_EXP126_QUANTUM_AND_BUS_BRIDGE",
+      "statement": "Quantum execution layer closes Exp126 32D 448-spectator benchmarks (Q_32D_alpha2 >= 0.94, Bell >= 0.94, GHZ4 >= 0.93, D0 leakage <= 1e-8) coupled to Exp131 3 kOhm NbTiN Lindblad cavity bus (mean F_Bell >= 0.96 vs 50 Ohm CPW < 0.80)."
+    },
+    {
+      "id": "DT6_LIVE_4X4_WAFER_DIGITAL_TWIN_CERT",
+      "statement": "Live integration run on src/machine_control/ (MachineConfig.v400_bayesian, Factory, MultiCellProgrammer) certifies a live 4x4 heterogeneous wafer (F_joint >= 0.95, min_bus_cz >= 0.98, Exp126 bridge linked) and emits a verified SHA-256 v4.0 Digital Twin Master Certificate."
+    },
+    {
+      "id": "DT7_PORTABILITY_AND_REGRESSION",
+      "statement": "All Exp135 code, results, and tests contain zero hardcoded host paths, 0 GFM table errors, and pass pytest 100%."
+    }
+  ],
+  "success_rule": "DT1, DT2, DT3, DT4, DT5, DT6, DT7 all PASS."
+}

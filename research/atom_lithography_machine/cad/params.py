@@ -1,10 +1,12 @@
-"""Single-source parametric CAD specification (mm) — Atom Lithography Machine v3.0.
+"""Single-source parametric CAD specification (mm) — Atom Lithography Machine v4.0.
 
-FULLY LOCKED to Exp124 (562.66 mm 10->5 keV decelerating ion column + Arch-B
-retarding mini-lens + HDA-HiRes dE=0.453 eV filter), Exp125 (8-coil active-bucking
-1.5 T / 22.3 uT cryo-magnet + Nb RRR>300 Meissner cup + Cryoperm-10 sleeve +
-Ø50 mm NbTiN resonator disk at z_loc=-155 mm + 5-stage 20 mK DR), and Exp127
-(100 K LTC6268 IBIC CSA frontend, ENC=24.1 e-, eta=0.99936).
+FULLY LOCKED to:
+- Exp124 (562.66 mm 10->5 keV decelerating ion column + Arch-B retarding mini-lens + HDA-HiRes dE=0.453 eV)
+- Exp125 (8-coil active-bucking 1.5 T / 22.3 uT cryo-magnet + Nb RRR>300 Meissner cup + Cryoperm-10 + 20 mK DR)
+- Exp127 (100 K LTC6268 IBIC CSA frontend, ENC=24.1 e-, eta=0.99936)
+- Exp130 (S5.5 808 nm qCW ms-flash anneal head 84x88x84 mm + dichroic 10 us pyrometer + safety shutter, Ø44 mm CA)
+- Exp131 (M4 cavity-QED 3 kOhm NbTiN bus L_res=300 um, B_M4=0.1785 T, dz_cap*=8±1 nm 28Si cap, 4K 968-gate SKY130 crossbar)
+- Exp133 (PT420 500 mm remote rotary valve + 600 mm flex He line + CF63 edge-welded bellows k=2000 N/m + 4x OFHC Cu braids k=52.7 N/m)
 
 Coordinate Reference:
 - Floor: z = 0.0 mm
@@ -20,7 +22,7 @@ from __future__ import annotations
 
 import math
 
-CAD_VERSION = "3.0-exp124-exp125-locked"
+CAD_VERSION = "4.0-exp130-exp131-exp133-locked"
 UNITS = "mm"
 GOLDEN_SCALE_S = 0.5
 GENERAL_TOLERANCE_STD = "ISO 2768-mK"
@@ -75,6 +77,40 @@ DESIGN_SPECS = {
     # Exp127 locked IBIC frontend specs
     "exp127_synced": True,
     "ibic_csa_ic": "LTC6268 @ 100 K (1,2 µs / 1 GΩ, ENC=24,1 e⁻, η=0,99936)",
+    # Exp130 locked S5.5 ms-flash annealing optical head specs
+    "exp130_synced": True,
+    "flash_laser_wavelength_nm": 808.0,
+    "flash_pulse_ms": 1.0,
+    "flash_fluence_J_cm2": 41.15,
+    "flash_window_ca_mm": 44.0,            # CF63 sapphire Ø50x8 mm, clear aperture Ø44 mm
+    "flash_beam_od_mm": 36.0,              # 4.0 mm radial margin to Ø44 mm duct
+    "flash_pyrometer_dt_us": 10.0,         # 2-color InGaAs/Si dichroic pyrometer
+    "flash_sigma_anneal_nm": 0.328,        # Exp130 f_act=99.98%, sigma_iso=0.0314 nm
+    # Exp131 locked M4 scalable cavity-QED bus & 4K crossbar specs
+    "exp131_synced": True,
+    "m4_epi_cap_nm": 8.0,                  # Optimal 28Si epi cap Δz_cap* = 8 ± 1 nm
+    "m4_bus_impedance_ohm": 3000.0,        # 3 kOhm high-Z NbTiN resonator (t=9 nm, w=100 nm)
+    "m4_bus_L_res_um": 300.0,              # L_res = 300 um (0.300 mm) @ f_r = 5.0 GHz
+    "m4_B_field_T": 0.1785,                # 40.5% below 0.30 T NbTiN limit (M4 mode)
+    "m4_crossbar_gates_4k": 968,           # L=11 surface code, SKY130 4K multiplexed crossbar
+    # Exp133 locked PT420 mechanical decoupling & closed-loop control specs
+    "exp133_synced": True,
+    "pt420_remote_valve": True,
+    "pt420_valve_offset_mm": 500.0,        # Decoupled floor valve box at x = -1150 mm
+    "pt420_flex_he_length_mm": 600.0,      # Braided flexible He U-loop line
+    "ovc_bellows_id_mm": 44.0,             # Edge-welded 316L CF63 bellows
+    "ovc_bellows_od_mm": 68.0,
+    "ovc_bellows_active_L_mm": 120.0,
+    "ovc_bellows_k_N_m": 2000.0,           # <= 6281.6 N/m bound (3.14x safety)
+    "ovc_bellows_k_max_N_m": 6281.6,
+    "mxc_braid_count": 4,                  # 4x parallel S-loop OFHC Cu braids (2550xØ50 um, L=100 mm)
+    "mxc_braid_k_N_m": 52.7,               # <= 4197.0 N/m bound (70x safety vs 60 N/m rating)
+    "mxc_braid_k_max_N_m": 4197.0,
+    "mxc_braid_dT_mK": 3.7,                # G_total(20 mK) = 0.675 mW/K @ 2.5 uW load
+    "exp133_sigma_stage_nm": 0.102,
+    "exp133_sigma_pointing_nm": 0.147,
+    "exp133_sigma_thermal_nm": 0.028,
+    "exp133_min_vc_grade": "VC-E",
     # Exp80 s=0.5 & Exp84 modal specs
     "wafer_diameter_mm": 50.0,
     "carrier_size_mm": 80.0,               # Exp80 BC1: >= 25 mm (diag 113.1 < 150 bore)
@@ -131,7 +167,7 @@ SUBSYSTEMS = {
     "s1_ion_source_column": {
         "code": "S1",
         "title_tr": "Exp124 İyon Kaynağı & 10→5 keV Yavaşlatmalı Kolon",
-        "drawing_no": "ALM-300-S1",
+        "drawing_no": "ALM-400-S1",
         "explode_vec": (0.0, 0.0, 250.0),
         "notes": [
             "Exp124 kilitli kolon: toplam 562,66 mm (S1+S2), maks. OD=110 mm, 25,92 kg",
@@ -143,7 +179,7 @@ SUBSYSTEMS = {
     "s2_mems_write_head": {
         "code": "S2",
         "title_tr": "Exp124 Arch-B Mini-Lens, Blanker & MEMS Yazma Kafası (32×32)",
-        "drawing_no": "ALM-300-S2",
+        "drawing_no": "ALM-400-S2",
         "explode_vec": (0.0, 0.0, 120.0),
         "notes": [
             "Aktif Arch-B: 32×32=1.024 demetcik, eş-adımlı 0,50 mm (16,0×16,0 mm, köşegen 22,63 mm)",
@@ -154,56 +190,56 @@ SUBSYSTEMS = {
     },
     "s3_ibic_detector_assembly": {
         "code": "S3",
-        "title_tr": "IBIC Yonga Algılama & 100 K LTC6268 Ön-Uç (Exp127)",
-        "drawing_no": "ALM-300-S3",
+        "title_tr": "IBIC Yonga Algılama, 100 K CSA (Exp127) & M4 Veri Yolu (Exp131)",
+        "drawing_no": "ALM-400-S3",
         "explode_vec": (0.0, 0.0, 48.0),
         "notes": [
             "Exp127: 100 K soğuk adada LTC6268 CSA (1,2 µs / 1 GΩ, ENC=24,1 e⁻, η=0,99936)",
-            "S5.4 Ø50 mm ²⁸Si/²⁹Si (f=%1) yonga + 80×80 mm AlN taşıyıcı (Exp80 BC1; diag 113 < Ø150 bore)",
-            "S3.1 BeCu/Au p-i-n IBIC kontak halkası (Ø64/Ø78 mm, Ø60 Arch-B lense 2 mm radyal pay)",
-            "S3.3 Yan HV/Faraday kalkanları (+X transfer ve −X 20 mK parmak yolu tamamen açık)",
+            "S5.4 Ø50 mm ²⁸Si/²⁹Si yonga + 80×80 AlN taşıyıcı (Exp131 M4: Δz_cap*=8±1 nm ²⁸Si kaplama)",
+            "Exp131 M4 çip-üstü 3 kΩ NbTiN veri yolu (L_res=300 µm, f_r=5 GHz, B_M4=0,1785 T)",
+            "S3.1 BeCu/Au IBIC halka (Ø64/Ø78, 2 mm pay) & yan Faraday kalkanları (+X/−X açık)",
         ],
     },
     "s4_piezo_stage_interferometry": {
         "code": "S4",
         "title_tr": "6-DOF Piezo Kademe, Titreşim İzolasyonu & İnterferometri",
-        "drawing_no": "ALM-300-S4",
+        "drawing_no": "ALM-400-S4",
         "explode_vec": (0.0, 0.0, -140.0),
         "notes": [
-            "S4.1 Optik granit blok (900×700×120 mm) + 4× hava yayı (1–2 Hz)",
-            "S4.2 Aktif sönümleme tablası (0,5–100 Hz); S4.3 6-DOF piezo (Exp79 — maglev yok)",
+            "S4.1 Optik granit (900×700×120) + 4× 1,5 Hz hava yayı; S4.2 0,5–100 Hz aktif tabla (VC-E)",
+            "Exp133 kapalı çevrim: σ_stage=0,102 nm, σ_pointing=0,147 nm, σ_thermal=0,028 nm (PM=55,2°)",
             "Invar tüp kaide (R=45..52 mm) Cryoperm (R=41) ile B-bobin (R=56) arasından 4 mm payla geçer",
-            "S4.4/S4.5 Zerodur metroloji halkası (R=104..132 mm) + 3-eksen lazer interferometre",
+            "S4.4/S4.5 Zerodur halka (R=104..132) + 3-eksen interferometre (t_fid≤300 s, ±10 mK HVAC)",
         ],
     },
     "s5_uhv_chamber_loadlock": {
         "code": "S5",
-        "title_tr": "s=0,5 UHV Ana Oda (Ø384/Ø364), Pompalar, Load-Lock & Flaş",
-        "drawing_no": "ALM-300-S5",
+        "title_tr": "s=0,5 UHV Ana Oda (Ø384/Ø364), Pompalar, LL & Exp130 S5.5 Flaş",
+        "drawing_no": "ALM-400-S5",
         "explode_vec": (220.0, 0.0, 0.0),
         "notes": [
-            "S5.1 UHV oda: R_dış=192, R_iç=182 mm (Ø352 Exp125 mıknatısa 6 mm vakum payı), V_iç=34,86 L (Exp80 BC4 PASS)",
-            "4 açık ekvatoryal port (+X load-lock, −X kriyo, +Y flaş, −Y pompa) 36 mm mıknatıs yarığına hizalı",
-            "S5.2 Mag-lev turbo (300 L/s) + İyon/TSP pompa istasyonu (−Y)",
-            "S5.3 Titreşim-ayrık load-lock & transfer kolu (+X); S5.5 Safir ms-flaş tavlama (+Y)",
+            "S5.1 UHV oda: R_dış=192/R_iç=182 mm (Ø352 mıknatısa 6 mm pay), V_iç=34,86 L (Exp80 BC4)",
+            "Exp130 S5.5 (+Y, CF63 Ø44 CA, Ø36 demet): 808 nm qCW 84×88×84 homojenleştirici (41,2 J/cm²)",
+            "S5.5 dikroik 10 µs iki-renkli pirometre + MXC<1 K / UHV vana kilitli mekanik deklanşör",
+            "S5.2 Mag-lev turbo (300 L/s) + İyon/TSP (−Y); S5.3 Titreşim-ayrık load-lock & kol (+X)",
         ],
     },
     "s6_cryo_dr_magnet_readout": {
         "code": "S6",
-        "title_tr": "Exp125 8-Bobinli 1,5 T / 22,3 µT Mıknatıs, 20 mK DR & Okuma",
-        "drawing_no": "ALM-300-S6",
+        "title_tr": "Exp125 8-Bobin, Exp131 M4 4K Anahtar & Exp133 PT420 Ayrıştırma",
+        "drawing_no": "ALM-400-S6",
         "explode_vec": (-260.0, 0.0, 0.0),
         "notes": [
-            "Exp125 8 bobin (M/S/A/B üst-alt): Ø150 mm delik, 36 mm yarık, Ø352 mm dış çap, 1,50 T (17,8 ppm)",
-            "z_loc=−155 mm'de Ø50 mm NbTiN rezonatör diski (22,3 µT) + Nb RRR>300 Meissner (R=32..34,5, baca r=8 h=11)",
-            "Cryoperm-10 dış kılıf (R=39..41, z_loc=−180..−124 mm); 20 mK OFHC parmak 36 mm yarıktan geçer",
-            "S6.8 5-kademe DR (50K/4K/Still/CP/MXC 20 mK) + PT415/420 + 4 K HEMT + 56–82 koaksiyel",
+            "Exp125 8 bobin (Ø150 bore, 36 mm yarık, Ø352 OD, 1,50 T) + z=−155 NbTiN (22,3 µT) + Nb/Cryoperm",
+            "Exp131 M4: 4 K kademesinde SKY130 968-kapılı çapraz-anahtar kartı (3 kΩ NbTiN, B_M4=0,1785 T)",
+            "Exp133 OVC CF63 kenar-kaynaklı körük (Ø44/Ø68, L=120, k=2000 N/m) + 4× OFHC Cu örgü (52,7 N/m)",
+            "Exp133 PT420 500 mm uzak döner valf kutusu (x=−1150) + 600 mm esnek He hattı (ΔT=3,7 mK)",
         ],
     },
     "s7_electronics_rack_interconnect": {
         "code": "S7",
         "title_tr": "19\" Kontrol, RF/AWG, FPGA Kabini & Kriyo/UHV Geçiş Paneli",
-        "drawing_no": "ALM-300-S7",
+        "drawing_no": "ALM-400-S7",
         "explode_vec": (340.0, 0.0, 0.0),
         "notes": [
             "30U 19\" EMI korumalı kabin (500×600×1400 mm, transfer koluna 34 mm servis boşluğu)",
@@ -328,7 +364,7 @@ def _build_parts() -> dict[str, dict]:
         "AlN Yonga Taşıyıcı (80×80×5 mm, Exp80 BC1)", "box", (80.0, 80.0, 5.0), (0, 0, zw - 3.5),
         "aln_ceramic", 0.02)
     add("s3_silicon_wafer", "s3_ibic_detector_assembly", "S5.4",
-        "Ø50 mm ²⁸Si/²⁹Si (f=%1) Epitaksiyel Yonga (0 V)", "cyl", (25.0, 1.0, "z"), (0, 0, zw - 0.5),
+        "Ø50 ²⁸Si/²⁹Si Yonga (0 V, M4 Δz_cap*=8±1 nm)", "cyl", (25.0, 1.0, "z"), (0, 0, zw - 0.5),
         "si_mems", 0.01)
     add("s3_ibic_contact_ring", "s3_ibic_detector_assembly", "S3.1",
         "BeCu/Au IBIC Kontak Halkası (Ø64/Ø78, WD paylı)", "tube", (32.0, 39.0, 2.0, "z"), (0, 0, zw),
@@ -435,14 +471,23 @@ def _build_parts() -> dict[str, dict]:
         "Pompa İstasyonu Zemin Şasisi", "box", (120.0, 120.0, 285.0), (0, -430.0, 142.5),
         "rack_chassis", 0.50)
     add("s5_flash_anneal_duct", "s5_uhv_chamber_loadlock", "S5.5",
-        "Flaş Tavlama Optik Port Boğazı (+Y)", "tube", (22.0, 27.0, 103.0, "y"), (0, 243.5, zw),
+        "Flaş Tavlama Optik Port Boğazı (+Y, Ø44 CA)", "tube", (22.0, 27.0, 103.0, "y"), (0, 243.5, zw),
         "ss316ln", 0.10)
     add("s5_flash_window", "s5_uhv_chamber_loadlock", "S5.5",
-        "CF63 Optik Safir Flaş Tavlama Penceresi", "cyl", (25.0, 8.0, "y"), (0, 299.0, zw),
+        "CF63 Optik Safir Flaş Penceresi (Ø50×8, AR)", "cyl", (25.0, 8.0, "y"), (0, 299.0, zw),
         "sapphire", 0.05)
+    add("s5_flash_safety_shutter", "s5_uhv_chamber_loadlock", "S5.5",
+        "MXC<1 K & UHV Kilitli Mekanik Deklanşör", "box", (74.0, 20.0, 74.0), (0, 313.1, zw),
+        "ss316ln", 0.10, mass_override_kg=0.78)
     add("s5_flash_anneal_head", "s5_uhv_chamber_loadlock", "S5.5",
-        "ms-Flaş Tavlama Lamba/Lazer Başlığı", "box", (84.0, 88.0, 84.0), (0, 347.0, zw),
-        "al6061", 0.20)
+        "808 nm qCW Homojenleştirici Kafa (84×88×84)", "box", (84.0, 88.0, 84.0), (0, 367.2, zw),
+        "al6061", 0.10, mass_override_kg=1.85)
+    add("s5_flash_dichroic_pyrometer", "s5_uhv_chamber_loadlock", "S5.5",
+        "Dikroik & 10 µs İki-Renkli Pirometre Modülü", "box", (52.0, 56.0, 44.0), (0, 367.2, zw + 64.1),
+        "al6061", 0.10, mass_override_kg=0.38)
+    add("s5_flash_fiber_collimator", "s5_uhv_chamber_loadlock", "S5.5",
+        "808 nm Fiber Demet Kolimatör Girişi", "cyl", (16.0, 36.0, "y"), (0, 429.3, zw),
+        "ss316ln", 0.10, mass_override_kg=0.22)
 
     # ==================== S6: EXP125 LOCKED 8-COIL CRYO-MAGNET, SHIELDS & 20 mK DR ==========
     # Exact 8 coils relative to z_loc = 0 at zw = 500.0 mm
@@ -523,15 +568,39 @@ def _build_parts() -> dict[str, dict]:
     add("s6_mxc_cold_chuck", "s6_cryo_dr_magnet_readout", "S6.2",
         "20 mK MXC Lokal Soğuk Ada (OFHC Cu, Ø116)", "cyl", (58.0, 8.0, "z"), (0, 0, zw - 10.0),
         "ofhc_cu", 0.02)
+    # Exp133 v4.0 Decoupled 20 mK Thermal Link: Ø12x397 mm DR OFHC busbar + 4x S-loop braids (L=100 mm, k=52.7 N/m)
+    z_cryo = zw - 7.0  # 493.0 mm (coaxial inside 36 mm magnet split gap z=[482, 518])
     add("s6_mxc_cold_finger", "s6_cryo_dr_magnet_readout", "S6.2",
-        "20 mK OFHC Bakır Soğuk Parmak Köprüsü", "cyl", (3.5, 497.0, "x"), (-306.5, 0, zw - 10.0),
+        "20 mK DR OFHC Bakır Bara (Ø12×397 mm, Exp133)", "cyl", (6.0, 397.0, "x"), (-356.5, 0, z_cryo),
         "ofhc_cu", 0.05)
+    for b_idx, (by_o, bz_o) in enumerate(((-3.2, -2.0), (3.2, -2.0), (-3.2, 0.2), (3.2, 0.2)), start=1):
+        add(f"s6_mxc_braid_{b_idx}", "s6_cryo_dr_magnet_readout", "S6.2",
+            f"20 mK OFHC Cu S-İlmek Örgü #{b_idx} (2550×Ø50 µm)", "box", (99.8, 3.6, 1.4), (-108.0, by_o, z_cryo + bz_o),
+            "ofhc_cu", 0.05, mass_override_kg=0.0045)
     add("s6_cryo_bridge_4k_shield", "s6_cryo_dr_magnet_readout", "S6.2",
-        "4 K Radyasyon Kalkan Tüpü (36 mm Yarıktan Geçiş)", "tube", (7.5, 9.0, 450.0, "x"), (-287.0, 0, zw - 8.5),
+        "4 K Radyasyon Kalkan Tüpü (Ø18/Ø21, 36 mm Yarık)", "tube", (9.0, 10.5, 443.0, "x"), (-290.5, 0, z_cryo),
         "ofhc_cu", 0.05, cutaway_mode="section")
+    # Exp133 v4.0 Edge-Welded 316L CF63 UHV Bellows Bridge (ID=44/OD=68/L_aktif=120 mm, k=2000 N/m)
     add("s6_cryo_bridge_ovc", "s6_cryo_dr_magnet_readout", "S6.2",
-        "Kriyo Köprü Dış Vakum Ceketi (DR↔UHV)", "tube", (22.0, 28.0, 283.0, "x"), (-333.5, 0, zw - 8.5),
-        "ss316ln", 0.10, alpha=0.45, cutaway_mode="section")
+        "Kriyo Köprü UHV Tarafı CF63 Geçiş Boğazı", "tube", (22.0, 28.0, 81.4, "x"), (-232.7, 0, z_cryo),
+        "ss316ln", 0.10, alpha=0.55, cutaway_mode="section")
+    add("s6_ovc_bellows_flange_uhv", "s6_cryo_dr_magnet_readout", "S6.2",
+        "CF63 Körük Bağlantı Flanşı (UHV Tarafı)", "tube", (22.0, 42.0, 8.0, "x"), (-277.5, 0, z_cryo),
+        "ss316ln", 0.05, cutaway_mode="section")
+    add("s6_ovc_bellows_cf63", "s6_cryo_dr_magnet_readout", "S6.2",
+        "Kenar-Kaynaklı 316L CF63 Körük (Ø44/Ø68, k=2000 N/m)", "tube", (22.0, 25.0, 103.8, "x"), (-333.5, 0, z_cryo),
+        "ss316ln", 0.05, cutaway_mode="section", mass_override_kg=0.62)
+    for r_idx in range(7):
+        rx_rib = -288.5 - r_idx * 15.0
+        add(f"s6_ovc_bellows_rib_{r_idx + 1}", "s6_cryo_dr_magnet_readout", "S6.2",
+            f"CF63 Körük Boğum Halkası #{r_idx + 1} (OD=68)", "tube", (25.1, 34.0, 5.0, "x"), (rx_rib, 0, z_cryo),
+            "ss316ln", 0.05, cutaway_mode="section", mass_override_kg=0.04)
+    add("s6_ovc_bellows_flange_dr", "s6_cryo_dr_magnet_readout", "S6.2",
+        "CF63 Körük Bağlantı Flanşı (DR Tarafı)", "tube", (22.0, 42.0, 8.0, "x"), (-389.5, 0, z_cryo),
+        "ss316ln", 0.05, cutaway_mode="section")
+    add("s6_ovc_bridge_dr_stub", "s6_cryo_dr_magnet_readout", "S6.2",
+        "Kriyo Köprü DR Tarafı CF63 Geçiş Boğazı", "tube", (22.0, 28.0, 81.4, "x"), (-434.3, 0, z_cryo),
+        "ss316ln", 0.10, alpha=0.55, cutaway_mode="section")
 
     # Dilution Refrigerator Tower (S6.8 — 50K/4K/Still/CP/MXC 20 mK) at x = -650, y = 0
     drx = -650.0
@@ -554,8 +623,31 @@ def _build_parts() -> dict[str, dict]:
         "DR 300 K Üst Ana Flanş", "cyl", (195.0, 25.0, "z"), (drx, 0, 972.5),
         "ss316ln", 0.10, cutaway_mode="section")
     add("s6_pt420_coldhead", "s6_cryo_dr_magnet_readout", "S6.1",
-        "Cryomech PT415/420 Darbeli-Tüp Soğutucu", "cyl", (64.0, 235.0, "z"), (drx, 0, 1102.5),
+        "Cryomech PT420 Darbeli-Tüp Soğutucu (Uzak Valf)", "cyl", (64.0, 235.0, "z"), (drx, 0, 1102.5),
         "al6061", 0.20)
+    # Exp133 v4.0 PT420 Remote Rotary Valve Box (500 mm offset @ x=-1150) + 600 mm Flex He U-Loop
+    rvx = drx - 500.0  # -1150.0 mm
+    add("s6_pt420_valve_stand", "s6_cryo_dr_magnet_readout", "S6.1",
+        "PT420 Uzak Döner Valf Akustik Zemin Sehpası", "frame", (160.0, 160.0, 128.0, 128.0, 1009.8), (rvx, 0, 504.9),
+        "rack_chassis", 0.50)
+    add("s6_pt420_remote_valve_box", "s6_cryo_dr_magnet_readout", "S6.1",
+        "PT420 Uzak Döner Valf Kutusu (500 mm Ofset)", "box", (180.0, 160.0, 180.0), (rvx, 0, 1100.0),
+        "al6061", 0.20, mass_override_kg=9.50)
+    add("s6_pt420_flex_he_upper_l", "s6_cryo_dr_magnet_readout", "S6.1",
+        "PT420 Esnek He Hattı Sol Üst (L_top=600 mm)", "cyl", (11.0, 99.0, "x"), (-1010.0, 0, 1130.0),
+        "ss316ln", 0.20, mass_override_kg=0.25)
+    add("s6_pt420_flex_he_drop_l", "s6_cryo_dr_magnet_readout", "S6.1",
+        "PT420 Esnek He Hattı Sol İniş (U-İlmek)", "cyl", (11.0, 116.5, "z"), (-960.0, 0, 1060.25),
+        "ss316ln", 0.20, mass_override_kg=0.30)
+    add("s6_pt420_flex_he_bottom", "s6_cryo_dr_magnet_readout", "S6.1",
+        "PT420 Esnek He Hattı Alt U-İlmek (600 mm)", "cyl", (11.0, 122.0, "x"), (-887.5, 0, 1002.0),
+        "ss316ln", 0.20, mass_override_kg=0.32)
+    add("s6_pt420_flex_he_rise_r", "s6_cryo_dr_magnet_readout", "S6.1",
+        "PT420 Esnek He Hattı Sağ Çıkış (U-İlmek)", "cyl", (11.0, 116.5, "z"), (-815.0, 0, 1071.75),
+        "ss316ln", 0.20, mass_override_kg=0.30)
+    add("s6_pt420_flex_he_upper_r", "s6_cryo_dr_magnet_readout", "S6.1",
+        "PT420 Esnek He Hattı Sağ Üst (PT420 Girişi)", "cyl", (11.0, 89.0, "x"), (-759.0, 0, 1130.0),
+        "ss316ln", 0.20, mass_override_kg=0.23)
     add("s6_dr_flange_50k", "s6_cryo_dr_magnet_readout", "S6.8",
         "DR 50 K Radyasyon Kademesi Flanşı", "cyl", (156.0, 14.0, "z"), (drx, 0, 847.0),
         "al6061", 0.10)
@@ -583,6 +675,13 @@ def _build_parts() -> dict[str, dict]:
     add("s6_hemt_rack_4k", "s6_cryo_dr_magnet_readout", "S6.6",
         "4 K InP HEMT LNA Rafı (56–82 Kanal, ≤1,0 W)", "tube", (88.0, 122.0, 46.0, "z"), (drx, 0, 697.0),
         "fr4_rogers", 0.10, cutaway_mode="section")
+    # Exp131 v4.0 M4 4K SKY130 968-Gate Crossbar Multiplexer (central bay inside HEMT ring, clear of coax)
+    add("s6_m4_crossbar_4k_mount", "s6_cryo_dr_magnet_readout", "S6.6",
+        "4 K M4 Çapraz-Anahtar OFHC Termal Taşıyıcı", "box", (100.0, 72.0, 8.0), (drx, 0, 715.9),
+        "ofhc_cu", 0.05)
+    add("s6_m4_crossbar_4k_pcb", "s6_cryo_dr_magnet_readout", "S6.6",
+        "4 K SKY130 968-Kapı M4 Çapraz-Anahtar Kartı", "box", (96.0, 68.0, 16.0), (drx, 0, 703.8),
+        "fr4_rogers", 0.05)
     add("s6_dr_flange_still", "s6_cryo_dr_magnet_readout", "S6.8",
         "DR Still (~800 mK) Kademesi Flanşı", "cyl", (116.0, 12.0, "z"), (drx, 0, 616.0),
         "ofhc_cu", 0.10)
@@ -648,7 +747,7 @@ PARTS = _build_parts()
 BEAM = ((0.0, 0.0, Z_WAFER + 422.66), (0.0, 0.0, Z_WAFER))
 
 # Overall machine envelope (mm)
-ENVELOPE = dict(x=(-860.0, 1320.0), y=(-520.0, 420.0), z=(0.0, 1440.0))
+ENVELOPE = dict(x=(-1260.0, 1320.0), y=(-520.0, 470.0), z=(0.0, 1440.0))
 
 
 def subsystem_parts(sub_key: str) -> dict[str, dict]:

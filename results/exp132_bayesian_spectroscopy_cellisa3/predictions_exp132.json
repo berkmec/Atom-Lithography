@@ -1,0 +1,41 @@
+{
+  "experiment": "exp132_bayesian_spectroscopy_cellisa3",
+  "hypothesis_id": "H150",
+  "registered": "2026-11-23 (pre-run registration before executing run_exp132.py)",
+  "no_lab_measurement": true,
+  "epistemic_tag": "Model",
+  "question": "Can closed-loop 3-stage Bayesian Optimal Experimental Design (BOED) spectroscopy anchored to Exp125 RF SNR (0.0627 ms/pt @ 20 mK) break the 1.0 s/candidate readout bottleneck by 5-15x at $0 extra hardware cost while sharpening frequency precision to <=100 Hz, and can CellISA v3.0 compile/route multi-cell M4 cavity-bus programs on heterogeneous 51%-yield wafers?",
+  "model": {
+    "rf_snr": "Exp125 20 mK Elzerman readout (1.4 K LNA, -100 dBm/tone, Ql=1000, |dGamma|=0.05): tau_SNR10 = 0.062705 ms, SNR(tau) = 10 * sqrt(tau / 0.062705 ms); sensitivity check at 3.0 K LNA (0.1332 ms) and 1 K PSB (0.179 ms + 3.165x averaging).",
+    "candidate_population": "N = 2,000 Mode B f=1% candidates: 51.0% working (K=8 lines in [55, 3500] kHz, min gap >= 5 kHz), 24.5% crowded (donor present, min gap < 5 kHz or <8 isolated lines), 24.5% blank (no donor).",
+    "boed_stages": "Stage 0: ESR presence SPRT (~0.5-2 ms); Stage 1: broadband power-broadened survey + local de-crowding early-abort (<15 ms); Stage 2: sequential Fisher-optimal inflection-point (f_hat +/- gamma/sqrt(3)) Bayesian grid updates with stopping rule sigma_post <= 85 Hz.",
+    "cellisa_v3": "Adds BUS_TUNE, BUS_CZ, LOGICAL_ENCODE, WAFER_MAP_ROUTE with full 2-cell cavity-QED dispersive bus simulation (NbTiN Z_r, g, Delta, kappa), dynamic wafer routing on 4x4 heterogeneous grids, SHA-256 certificates, and portable Exp126 32D verification bridge."
+  },
+  "predictions": [
+    {
+      "id": "DA1_EARLY_ABORT_LATENCY",
+      "statement": "Mean abort latency is < 3.0 ms for blank slots and < 15.0 ms for crowded (< 5 kHz) candidates (vs 1,000 ms legacy fixed sweep)."
+    },
+    {
+      "id": "DA2_PRECISION_SIGMA_100HZ",
+      "statement": "Stage-2 BOED frequency estimation achieves empirical RMS localization error sigma_f <= 100.0 Hz across all 8 hyperfine lines on working candidates (>=2x sharper than legacy 200 Hz)."
+    },
+    {
+      "id": "DA3_CLASSIFICATION_INTEGRITY",
+      "statement": "Across N=2,000 MC candidates, False Negative Rate (valid register rejected) < 1.0% and False Positive Rate (blank/crowded falsely accepted) < 0.5%."
+    },
+    {
+      "id": "DA4_SPEEDUP_AND_WRITE_CEILING",
+      "statement": "Effective mean spectroscopy time per attempt drops below 150 ms (>=6.7x readout speedup at $0 hardware cost), lifting factory throughput from 1.97e8 to >= 1.0e9 certified registers/day and reaching/approaching the Arch-B 1024-beamlet @ 15 ms write ceiling (1.49e9 registers/day at 7.54x crossover)."
+    },
+    {
+      "id": "DA5_CELLISA3_MULTICELL_ROUTING",
+      "statement": "WAFER_MAP_ROUTE achieves >= 90% routability for 4-cell logical clusters on 51%-yield 4x4 wafers; BUS_TUNE + BUS_CZ delivers two-cell entangled state fidelity >= 0.94 with verified SHA-256 MultiCellCertificate and Exp126 32D provenance."
+    },
+    {
+      "id": "DA6_PORTABILITY_AND_TESTS",
+      "statement": "All existing v2.0/v2.1 tests and new Exp132 tests pass 100% with zero hardcoded host paths."
+    }
+  ],
+  "success_rule": "DA1, DA2, DA3, DA4, DA5, DA6 all PASS."
+}

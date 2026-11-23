@@ -1,4 +1,7 @@
-"""Automated verification suite for BOM_DETAILED.csv, Exp128 Monte Carlo & RFQ/Engineering docs."""
+"""Automated verification suite for BOM_DETAILED.csv (v4.0), Exp128 Monte Carlo & RFQ-01..07 docs.
+
+100% portable: resolves repository root strictly via Path(__file__).resolve().parents[1].
+"""
 from __future__ import annotations
 
 import csv
@@ -15,6 +18,7 @@ BOM_CSV = ROOT / "research" / "atom_lithography_machine" / "BOM.csv"
 BOM_DETAILED = ROOT / "research" / "atom_lithography_machine" / "BOM_DETAILED.csv"
 BOM_ENG_MD = ROOT / "research" / "atom_lithography_machine" / "BOM_ENGINEERING.md"
 RFQ_MD = ROOT / "research" / "atom_lithography_machine" / "RFQ_SPECIFICATIONS.md"
+EXP128_CODE_DIR = ROOT / "experiments" / "exp128_bom_sensitivity"
 EXP128_DIR = ROOT / "results" / "exp128_bom_sensitivity"
 EXP128_JSON = EXP128_DIR / "exp128.json"
 PRED128_JSON = EXP128_DIR / "predictions_exp128.json"
@@ -71,15 +75,46 @@ def read_png_size(path: Path) -> tuple[int, int]:
     return w, h
 
 
+def _check_gfm_tables(md_path: Path) -> int:
+    lines = md_path.read_text(encoding="utf-8").splitlines()
+    expected_cols = None
+    mismatches = 0
+    for ln in lines:
+        s = ln.strip()
+        if s.startswith("|") and s.endswith("|"):
+            cols = s.count("|") - 1
+            if expected_cols is None:
+                expected_cols = cols
+            elif cols != expected_cols:
+                mismatches += 1
+        else:
+            expected_cols = None
+    return mismatches
+
+
 def test_canonical_bom_csv_untouched_sha256() -> None:
     actual = hashlib.sha256(BOM_CSV.read_bytes()).hexdigest()
     assert actual == EXPECTED_BOM_SHA256
 
 
-def test_bom_detailed_schema_and_value_invariants() -> None:
+def test_portability_no_hardcoded_user_paths() -> None:
+    forbidden = ("/" + "home" + "/" + "berk", "/" + "run" + "/" + "media" + "/" + "berk")
+    targets = [
+        EXP128_CODE_DIR / "build_bom_detailed.py",
+        EXP128_CODE_DIR / "run_exp128.py",
+        EXP128_CODE_DIR / "plot_exp128.py",
+        Path(__file__).resolve(),
+    ]
+    for path in targets:
+        text = path.read_text(encoding="utf-8")
+        for bad in forbidden:
+            assert bad not in text, f"Hardcoded path '{bad}' found in {path.name}"
+
+
+def test_bom_detailed_v4_schema_and_value_invariants() -> None:
     df = pd.read_csv(BOM_DETAILED)
     assert list(df.columns) == EXPECTED_COLUMNS
-    assert len(df) >= 120
+    assert len(df) == 159
     assert df["part_id"].is_unique
     for col in EXPECTED_COLUMNS:
         assert df[col].notna().all(), f"NaN detected in column {col}"
@@ -94,7 +129,7 @@ def test_bom_detailed_schema_and_value_invariants() -> None:
         assert r["subsystem"] == r["parent_bom_id"].split(".")[0]
 
 
-def test_canonical_40_rows_and_exp124_125_127_deltas_covered() -> None:
+def test_canonical_40_rows_and_v3_plus_v4_deltas_covered() -> None:
     canon_ids = set()
     with BOM_CSV.open(encoding="utf-8-sig") as fh:
         for row in csv.DictReader(fh):
@@ -117,6 +152,22 @@ def test_canonical_40_rows_and_exp124_125_127_deltas_covered() -> None:
     # Exp127 in-vacuum 8-ch ultra-low-C IBIC frontend
     for pid in ("S3.2-01", "S3.2-02", "S3.2-03", "S3.2-04"):
         assert pid in part_ids
+    # v4.0 upgrade packages: S5.5 (Exp130), S6.9 PT420 (Exp133), S6.10 M4 (Exp131), S7.1-04 & S8.3-03 BOED (Exp132/134)
+    for pid in (
+        "S5.5-01", "S5.5-02", "S5.5-03", "S5.5-04",
+        "S6.9-01", "S6.9-02", "S6.9-03", "S6.9-04",
+        "S6.10-01", "S6.10-02", "S6.10-03", "S6.10-04",
+        "S7.1-04", "S8.3-03",
+    ):
+        assert pid in part_ids
+
+    # Exact v3.0 ($4,189,600) + v4.0 (+$420,000) = M3 v4.0 ($4,609,600) reconciliation
+    v4_mask = df["notes"].astype(str).str.contains("DELTA-V4.0", na=False)
+    assert float(df[~v4_mask]["usd_nom"].sum()) == pytest.approx(4_189_600.0, abs=1e-6)
+    assert float(df[v4_mask]["usd_low"].sum()) == pytest.approx(235_000.0, abs=1e-6)
+    assert float(df[v4_mask]["usd_nom"].sum()) == pytest.approx(420_000.0, abs=1e-6)
+    assert float(df[v4_mask]["usd_high"].sum()) == pytest.approx(782_000.0, abs=1e-6)
+    assert float(df["usd_nom"].sum()) == pytest.approx(4_609_600.0, abs=1e-6)
 
 
 def test_rollup_reconciliation_and_exp114_122_parity() -> None:
@@ -133,7 +184,10 @@ def test_rollup_reconciliation_and_exp114_122_parity() -> None:
 
     # Exact bottom-up pandas roll-up vs exp128.json
     bds = data["bom_detailed_summary"]
-    assert bds["total_parts"] == len(df)
+    assert bds["bom_version"] == "v4.0"
+    assert bds["total_parts"] == len(df) == 159
+    assert bds["m3_v3_base_nom_usd"] == pytest.approx(4_189_600.0, abs=1e-6)
+    assert bds["v4_delta_nom_usd"] == pytest.approx(420_000.0, abs=1e-6)
     assert bds["m3_low_usd"] == pytest.approx(float(df["usd_low"].sum()), abs=1e-6)
     assert bds["m3_nom_usd"] == pytest.approx(float(df["usd_nom"].sum()), abs=1e-6)
     assert bds["m3_high_usd"] == pytest.approx(float(df["usd_high"].sum()), abs=1e-6)
@@ -154,8 +208,9 @@ def test_rollup_reconciliation_and_exp114_122_parity() -> None:
             sr[sub]["detailed_m3_nom_usd"] - sr[sub]["exp122_central_usd"], abs=1e-6
         )
 
-    # Zero-error delta bridge
+    # Zero-error delta bridge including v4.0 step
     db = data["delta_bridge_exp122_to_detailed"]
+    assert db["delta_v4_0_upgrade_package_usd"] == pytest.approx(420_000.0, abs=1e-6)
     assert db["bridge_arithmetic_error_usd"] < 1e-6
 
 
@@ -188,7 +243,8 @@ def test_exp128_monte_carlo_and_evpi_invariants() -> None:
     var_sum = sum(t["variance_contrib_share"] for t in data["tornado_bom_scope"])
     assert var_sum == pytest.approx(1.0, abs=1e-6)
     assert data["tornado_bom_scope"][0]["driver"].startswith("S6.6")
-    assert data["rfq_coverage"]["rfq6_variance_share_mc"] >= 0.85
+    assert data["rfq_coverage"]["rfq7_variance_share_mc"] >= 0.90
+    assert data["rfq_coverage"]["rfq7_total_nom_usd"] > data["rfq_coverage"]["rfq6_total_nom_usd"]
 
     # EVPI 20 mK baseline vindication
     ev = data["evpi_20mk_vs_1k"]
@@ -202,18 +258,24 @@ def test_exp128_monte_carlo_and_evpi_invariants() -> None:
     assert v["CU2_bom_cap_safety"] is True
     assert v["CU3_program_soft_hard_cap"] is True
     assert v["CU5_evpi_20mk_vindication"] is True
+    assert v["CU6_mc_convergence"] is True
+    assert v["success"] is True
 
 
-def test_deliverable_docs_and_figures_exist_and_valid() -> None:
+def test_deliverable_docs_figures_and_gfm_integrity() -> None:
     for p in (BOM_DETAILED, BOM_ENG_MD, RFQ_MD, PRED128_JSON, EXP128_JSON, SUMMARY128_MD):
         assert p.exists() and p.stat().st_size > 1000, f"Missing or tiny file: {p}"
 
     for fig in (FIG_TORNADO, FIG_M1M3):
         assert fig.exists() and fig.stat().st_size > 50_000
         w, h = read_png_size(fig)
-        assert w >= 1800 and h >= 1000
+        assert (w, h) == (2200, 1260)
 
-    # Verify RFQ_SPECIFICATIONS covers all 6 RFQ packages
+    # Verify RFQ_SPECIFICATIONS covers all 7 RFQ packages (RFQ-01..RFQ-07)
     rfq_text = RFQ_MD.read_text(encoding="utf-8")
-    for tag in ("RFQ-01", "RFQ-02", "RFQ-03", "RFQ-04", "RFQ-05", "RFQ-06"):
+    for tag in ("RFQ-01", "RFQ-02", "RFQ-03", "RFQ-04", "RFQ-05", "RFQ-06", "RFQ-07"):
         assert tag in rfq_text
+
+    # Strict zero-mismatch GFM table verification across all 3 markdown deliverables
+    for md in (BOM_ENG_MD, RFQ_MD, SUMMARY128_MD):
+        assert _check_gfm_tables(md) == 0, f"GFM table mismatch in {md.name}"

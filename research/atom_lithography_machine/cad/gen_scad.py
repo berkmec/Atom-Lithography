@@ -8,7 +8,7 @@ from pathlib import Path
 
 import params
 
-CAD_DIR = Path(__file__).parent
+CAD_DIR = Path(__file__).resolve().parent
 PARTS_DIR = CAD_DIR / "parts"
 
 

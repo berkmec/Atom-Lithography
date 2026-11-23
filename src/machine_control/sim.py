@@ -18,6 +18,8 @@ from .programmer import AtomCellProgrammer, builtin_program
 
 def config_from_preset(preset: str) -> MachineConfig:
     key = preset.strip().lower()
+    if key == "v400":
+        return MachineConfig.v400_bayesian()
     if key == "v300":
         return MachineConfig.v300_baseline()
     if key == "v224":
@@ -26,13 +28,13 @@ def config_from_preset(preset: str) -> MachineConfig:
         return MachineConfig.v224_1k_upgrade()
     if key == "legacy":
         return MachineConfig.legacy_exp65()
-    raise ValueError(f"Unknown preset '{preset}'; expected v300, v224, legacy, or 1k")
+    raise ValueError(f"Unknown preset '{preset}'; expected v400, v300, v224, legacy, or 1k")
 
 
 def main(argv: list[str] | None = None):
-    ap = argparse.ArgumentParser(description="Atom Lithography Machine control & CellISA CLI (v2.1)")
+    ap = argparse.ArgumentParser(description="Atom Lithography Machine control & CellISA v3.0 CLI")
     ap.add_argument("--slots", type=int, default=2000)
-    ap.add_argument("--preset", choices=["v300", "v224", "legacy", "1k"], default="v300")
+    ap.add_argument("--preset", choices=["v400", "v300", "v224", "legacy", "1k"], default="v300")
     ap.add_argument(
         "--atlas",
         action="store_true",

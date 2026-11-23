@@ -13,7 +13,7 @@ import numpy as np
 import mesh_engine
 import params
 
-CAD_DIR = Path(__file__).parent
+CAD_DIR = Path(__file__).resolve().parent
 STL_DIR = CAD_DIR / "stl"
 
 
@@ -218,12 +218,90 @@ def main() -> None:
         "margin_ratio_over_servo": round(ds["blanker_f1_fea_hz"] / 1000.0, 1),
         "pass": ds["blanker_f1_fea_hz"] > 100_000.0,
     }
+    # Exp130 S5.5 ms-flash annealing optical head audit
+    s55_parts = ("s5_flash_window", "s5_flash_safety_shutter", "s5_flash_anneal_head", "s5_flash_dichroic_pyrometer", "s5_flash_fiber_collimator")
+    exp130_audit = {
+        "exp130_synced": ds["exp130_synced"],
+        "wavelength_nm": ds["flash_laser_wavelength_nm"],
+        "pulse_ms": ds["flash_pulse_ms"],
+        "fluence_J_cm2": ds["flash_fluence_J_cm2"],
+        "window_ca_mm": round(2.0 * params.PARTS["s5_flash_anneal_duct"]["dims"][0], 2),
+        "beam_od_mm": ds["flash_beam_od_mm"],
+        "homogenizer_dims_mm": list(params.PARTS["s5_flash_anneal_head"]["dims"]),
+        "pyrometer_dt_us": ds["flash_pyrometer_dt_us"],
+        "sigma_anneal_nm": ds["flash_sigma_anneal_nm"],
+        "all_s55_parts_present": all(k in params.PARTS for k in s55_parts),
+        "pass": (
+            ds["exp130_synced"]
+            and all(k in params.PARTS for k in s55_parts)
+            and clearances["exp130_flash_window_beam_radial_mm"]["pass"]
+        ),
+    }
+    # Exp131 M4 cavity-QED bus & 4K crossbar switch audit
+    exp131_audit = {
+        "exp131_synced": ds["exp131_synced"],
+        "epi_cap_nm": ds["m4_epi_cap_nm"],
+        "bus_impedance_ohm": ds["m4_bus_impedance_ohm"],
+        "bus_L_res_um": ds["m4_bus_L_res_um"],
+        "B_M4_T": ds["m4_B_field_T"],
+        "crossbar_gates_4k": ds["m4_crossbar_gates_4k"],
+        "crossbar_pcb_present": "s6_m4_crossbar_4k_pcb" in params.PARTS and "s6_m4_crossbar_4k_mount" in params.PARTS,
+        "pass": (
+            ds["exp131_synced"]
+            and ("s6_m4_crossbar_4k_pcb" in params.PARTS)
+            and clearances["exp131_m4_crossbar_to_hemt_radial_mm"]["pass"]
+            and clearances["exp131_m4_crossbar_to_coax_y_mm"]["pass"]
+        ),
+    }
+    # Exp133 PT420 mechanical decoupling & closed-loop jitter audit
+    bellows_span = round(
+        part_reports["s6_ovc_bellows_flange_uhv"]["bbox_max_mm"][0]
+        - part_reports["s6_ovc_bellows_flange_dr"]["bbox_min_mm"][0],
+        2,
+    )
+    valve_offset = round(
+        abs(params.PARTS["s6_pt420_coldhead"]["center"][0] - params.PARTS["s6_pt420_remote_valve_box"]["center"][0]),
+        2,
+    )
+    braid_keys = [f"s6_mxc_braid_{i}" for i in range(1, 5)]
+    exp133_audit = {
+        "exp133_synced": ds["exp133_synced"],
+        "bellows_id_mm": round(2.0 * params.PARTS["s6_ovc_bellows_cf63"]["dims"][0], 2),
+        "bellows_od_mm": round(2.0 * params.PARTS["s6_ovc_bellows_rib_1"]["dims"][1], 2),
+        "bellows_active_length_mm": bellows_span,
+        "bellows_k_N_m": ds["ovc_bellows_k_N_m"],
+        "bellows_k_max_N_m": ds["ovc_bellows_k_max_N_m"],
+        "braid_count": sum(1 for k in braid_keys if k in params.PARTS),
+        "braid_k_N_m": ds["mxc_braid_k_N_m"],
+        "braid_k_max_N_m": ds["mxc_braid_k_max_N_m"],
+        "braid_dT_mK": ds["mxc_braid_dT_mK"],
+        "dr_busbar_od_mm": round(2.0 * params.PARTS["s6_mxc_cold_finger"]["dims"][0], 2),
+        "dr_busbar_length_mm": round(params.PARTS["s6_mxc_cold_finger"]["dims"][1], 2),
+        "remote_valve_offset_mm": valve_offset,
+        "flex_he_length_mm": ds["pt420_flex_he_length_mm"],
+        "sigma_stage_nm": ds["exp133_sigma_stage_nm"],
+        "sigma_pointing_nm": ds["exp133_sigma_pointing_nm"],
+        "sigma_thermal_nm": ds["exp133_sigma_thermal_nm"],
+        "pass": (
+            ds["exp133_synced"]
+            and abs(bellows_span - 120.0) < 0.2
+            and abs(valve_offset - 500.0) < 0.2
+            and all(k in params.PARTS for k in braid_keys)
+            and ("s6_pt420_remote_valve_box" in params.PARTS)
+            and clearances["exp133_bellows_to_4k_shield_radial_mm"]["pass"]
+            and clearances["exp133_braids_inside_4k_shield_radial_mm"]["pass"]
+            and clearances["exp133_remote_valve_to_dr_flange_x_mm"]["pass"]
+        ),
+    }
     legacy_cleanup = {
         "maglev_removed": not any("maglev" in k.lower() for k in params.PARTS),
         "piezo_6dof_present": "s4_piezo_fine_6dof" in params.PARTS and "s4_piezo_coarse_xy" in params.PARTS,
         "dr_s68_present": "s6_dr_flange_mxc" in params.PARTS and "s6_pt420_coldhead" in params.PARTS,
         "energy_filter_hda_present": "s1_energy_filter" in params.PARTS,
         "exp125_8coil_magnet_present": all(k in params.PARTS for k in exp125_coil_keys),
+        "exp130_s55_flash_present": exp130_audit["all_s55_parts_present"],
+        "exp131_m4_4k_crossbar_present": exp131_audit["crossbar_pcb_present"],
+        "exp133_pt420_decoupled_present": exp133_audit["pass"],
     }
 
     total_com = weighted_com / max(total_mass, 1e-12)
@@ -235,6 +313,9 @@ def main() -> None:
         and exp124_audit["pass"]
         and exp125_audit["pass"]
         and exp84_modal["pass"]
+        and exp130_audit["pass"]
+        and exp131_audit["pass"]
+        and exp133_audit["pass"]
         and all(legacy_cleanup.values())
         and master_disk["is_watertight"]
     )
@@ -264,6 +345,9 @@ def main() -> None:
         "exp124_column_audit": exp124_audit,
         "exp125_magnet_audit": exp125_audit,
         "exp84_modal_audit": exp84_modal,
+        "exp130_flash_audit": exp130_audit,
+        "exp131_m4_audit": exp131_audit,
+        "exp133_decoupling_audit": exp133_audit,
         "subsystems": sub_reports,
         "parts": part_reports,
     }

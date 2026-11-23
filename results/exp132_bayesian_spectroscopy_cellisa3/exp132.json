@@ -1,0 +1,541 @@
+{
+  "experiment": "exp132_bayesian_spectroscopy_cellisa3",
+  "hypothesis_id": "H150",
+  "date": "2026-11-23",
+  "no_lab_measurement": true,
+  "epistemic_tag": "Model",
+  "runtime_s": 34.35,
+  "predictions": {
+    "experiment": "exp132_bayesian_spectroscopy_cellisa3",
+    "hypothesis_id": "H150",
+    "registered": "2026-11-23 (pre-run registration before executing run_exp132.py)",
+    "no_lab_measurement": true,
+    "epistemic_tag": "Model",
+    "question": "Can closed-loop 3-stage Bayesian Optimal Experimental Design (BOED) spectroscopy anchored to Exp125 RF SNR (0.0627 ms/pt @ 20 mK) break the 1.0 s/candidate readout bottleneck by 5-15x at $0 extra hardware cost while sharpening frequency precision to <=100 Hz, and can CellISA v3.0 compile/route multi-cell M4 cavity-bus programs on heterogeneous 51%-yield wafers?",
+    "model": {
+      "rf_snr": "Exp125 20 mK Elzerman readout (1.4 K LNA, -100 dBm/tone, Ql=1000, |dGamma|=0.05): tau_SNR10 = 0.062705 ms, SNR(tau) = 10 * sqrt(tau / 0.062705 ms); sensitivity check at 3.0 K LNA (0.1332 ms) and 1 K PSB (0.179 ms + 3.165x averaging).",
+      "candidate_population": "N = 2,000 Mode B f=1% candidates: 51.0% working (K=8 lines in [55, 3500] kHz, min gap >= 5 kHz), 24.5% crowded (donor present, min gap < 5 kHz or <8 isolated lines), 24.5% blank (no donor).",
+      "boed_stages": "Stage 0: ESR presence SPRT (~0.5-2 ms); Stage 1: broadband power-broadened survey + local de-crowding early-abort (<15 ms); Stage 2: sequential Fisher-optimal inflection-point (f_hat +/- gamma/sqrt(3)) Bayesian grid updates with stopping rule sigma_post <= 85 Hz.",
+      "cellisa_v3": "Adds BUS_TUNE, BUS_CZ, LOGICAL_ENCODE, WAFER_MAP_ROUTE with full 2-cell cavity-QED dispersive bus simulation (NbTiN Z_r, g, Delta, kappa), dynamic wafer routing on 4x4 heterogeneous grids, SHA-256 certificates, and portable Exp126 32D verification bridge."
+    },
+    "predictions": [
+      {
+        "id": "DA1_EARLY_ABORT_LATENCY",
+        "statement": "Mean abort latency is < 3.0 ms for blank slots and < 15.0 ms for crowded (< 5 kHz) candidates (vs 1,000 ms legacy fixed sweep)."
+      },
+      {
+        "id": "DA2_PRECISION_SIGMA_100HZ",
+        "statement": "Stage-2 BOED frequency estimation achieves empirical RMS localization error sigma_f <= 100.0 Hz across all 8 hyperfine lines on working candidates (>=2x sharper than legacy 200 Hz)."
+      },
+      {
+        "id": "DA3_CLASSIFICATION_INTEGRITY",
+        "statement": "Across N=2,000 MC candidates, False Negative Rate (valid register rejected) < 1.0% and False Positive Rate (blank/crowded falsely accepted) < 0.5%."
+      },
+      {
+        "id": "DA4_SPEEDUP_AND_WRITE_CEILING",
+        "statement": "Effective mean spectroscopy time per attempt drops below 150 ms (>=6.7x readout speedup at $0 hardware cost), lifting factory throughput from 1.97e8 to >= 1.0e9 certified registers/day and reaching/approaching the Arch-B 1024-beamlet @ 15 ms write ceiling (1.49e9 registers/day at 7.54x crossover)."
+      },
+      {
+        "id": "DA5_CELLISA3_MULTICELL_ROUTING",
+        "statement": "WAFER_MAP_ROUTE achieves >= 90% routability for 4-cell logical clusters on 51%-yield 4x4 wafers; BUS_TUNE + BUS_CZ delivers two-cell entangled state fidelity >= 0.94 with verified SHA-256 MultiCellCertificate and Exp126 32D provenance."
+      },
+      {
+        "id": "DA6_PORTABILITY_AND_TESTS",
+        "statement": "All existing v2.0/v2.1 tests and new Exp132 tests pass 100% with zero hardcoded host paths."
+      }
+    ],
+    "success_rule": "DA1, DA2, DA3, DA4, DA5, DA6 all PASS."
+  },
+  "verdicts": {
+    "DA1_EARLY_ABORT_LATENCY": true,
+    "DA2_PRECISION_SIGMA_100HZ": true,
+    "DA3_CLASSIFICATION_INTEGRITY": true,
+    "DA4_SPEEDUP_AND_WRITE_CEILING": true,
+    "DA5_CELLISA3_MULTICELL_ROUTING": true,
+    "DA6_PORTABILITY_AND_TESTS": true
+  },
+  "success_rule_met": true,
+  "boed_20mK_LNA1p4K_N2000": {
+    "n_candidates": 2000,
+    "tau_snr10_ms": 0.062705,
+    "mean_time_all_ms": 41.028,
+    "median_time_all_ms": 23.043,
+    "raw_readout_speedup_vs_1s": 24.374,
+    "by_class": {
+      "working": {
+        "count": 996,
+        "accepted": 994,
+        "rejected": 2,
+        "mean_time_ms": 74.488,
+        "median_time_ms": 73.848,
+        "p90_time_ms": 82.726,
+        "mean_stage0_ms": 0.728,
+        "mean_stage1_ms": 21.302,
+        "mean_stage2_ms": 52.458,
+        "mean_probes": 199.44
+      },
+      "crowded": {
+        "count": 515,
+        "accepted": 0,
+        "rejected": 515,
+        "mean_time_ms": 14.583,
+        "median_time_ms": 15.332,
+        "p90_time_ms": 17.738,
+        "mean_stage0_ms": 0.728,
+        "mean_stage1_ms": 13.745,
+        "mean_stage2_ms": 0.11,
+        "mean_probes": 103.01
+      },
+      "blank": {
+        "count": 489,
+        "accepted": 0,
+        "rejected": 489,
+        "mean_time_ms": 0.728,
+        "median_time_ms": 0.728,
+        "p90_time_ms": 0.728,
+        "mean_stage0_ms": 0.728,
+        "mean_stage1_ms": 0.0,
+        "mean_stage2_ms": 0.0,
+        "mean_probes": 3.0
+      }
+    },
+    "fn_count": 2,
+    "fp_count": 0,
+    "fnr": 0.002008,
+    "fpr": 0.0,
+    "n_lines_localized": 7952,
+    "rms_freq_error_Hz": 72.67,
+    "mae_freq_error_Hz": 57.43,
+    "p95_freq_error_Hz": 141.33,
+    "max_freq_error_Hz": 779.26,
+    "mean_posterior_sigma_Hz": 70.93,
+    "mean_stage2_probes_per_line": 6.81,
+    "analytical_crlb_Hz": 58.19,
+    "legacy_sigma_Hz": 200.0,
+    "precision_improvement_factor": 2.75
+  },
+  "boed_sensitivity_N400": {
+    "20mK_LNA3p0K": {
+      "n_candidates": 400,
+      "tau_snr10_ms": 0.133227,
+      "mean_time_all_ms": 48.069,
+      "median_time_all_ms": 25.784,
+      "raw_readout_speedup_vs_1s": 20.803,
+      "by_class": {
+        "working": {
+          "count": 188,
+          "accepted": 188,
+          "rejected": 0,
+          "mean_time_ms": 89.66,
+          "median_time_ms": 89.402,
+          "p90_time_ms": 98.83,
+          "mean_stage0_ms": 0.94,
+          "mean_stage1_ms": 32.069,
+          "mean_stage2_ms": 56.652,
+          "mean_probes": 201.38
+        },
+        "crowded": {
+          "count": 105,
+          "accepted": 0,
+          "rejected": 105,
+          "mean_time_ms": 21.628,
+          "median_time_ms": 23.004,
+          "p90_time_ms": 25.784,
+          "mean_stage0_ms": 0.94,
+          "mean_stage1_ms": 20.688,
+          "mean_stage2_ms": 0.0,
+          "mean_probes": 100.96
+        },
+        "blank": {
+          "count": 107,
+          "accepted": 0,
+          "rejected": 107,
+          "mean_time_ms": 0.94,
+          "median_time_ms": 0.94,
+          "p90_time_ms": 0.94,
+          "mean_stage0_ms": 0.94,
+          "mean_stage1_ms": 0.0,
+          "mean_stage2_ms": 0.0,
+          "mean_probes": 3.0
+        }
+      },
+      "fn_count": 0,
+      "fp_count": 0,
+      "fnr": 0.0,
+      "fpr": 0.0,
+      "n_lines_localized": 1504,
+      "rms_freq_error_Hz": 70.59,
+      "mae_freq_error_Hz": 55.42,
+      "p95_freq_error_Hz": 135.4,
+      "max_freq_error_Hz": 286.21,
+      "mean_posterior_sigma_Hz": 70.85,
+      "mean_stage2_probes_per_line": 6.85,
+      "analytical_crlb_Hz": 58.19,
+      "legacy_sigma_Hz": 200.0,
+      "precision_improvement_factor": 2.83
+    },
+    "1K_PSB_3p165x": {
+      "n_candidates": 400,
+      "tau_snr10_ms": 0.566535,
+      "mean_time_all_ms": 106.435,
+      "median_time_all_ms": 86.576,
+      "raw_readout_speedup_vs_1s": 9.395,
+      "by_class": {
+        "working": {
+          "count": 195,
+          "accepted": 193,
+          "rejected": 2,
+          "mean_time_ms": 179.611,
+          "median_time_ms": 179.142,
+          "p90_time_ms": 194.826,
+          "mean_stage0_ms": 2.24,
+          "mean_stage1_ms": 98.081,
+          "mean_stage2_ms": 79.291,
+          "mean_probes": 198.72
+        },
+        "crowded": {
+          "count": 105,
+          "accepted": 0,
+          "rejected": 105,
+          "mean_time_ms": 69.769,
+          "median_time_ms": 72.763,
+          "p90_time_ms": 83.83,
+          "mean_stage0_ms": 2.24,
+          "mean_stage1_ms": 67.529,
+          "mean_stage2_ms": 0.0,
+          "mean_probes": 100.71
+        },
+        "blank": {
+          "count": 100,
+          "accepted": 0,
+          "rejected": 100,
+          "mean_time_ms": 2.24,
+          "median_time_ms": 2.24,
+          "p90_time_ms": 2.24,
+          "mean_stage0_ms": 2.24,
+          "mean_stage1_ms": 0.0,
+          "mean_stage2_ms": 0.0,
+          "mean_probes": 3.0
+        }
+      },
+      "fn_count": 2,
+      "fp_count": 0,
+      "fnr": 0.010256,
+      "fpr": 0.0,
+      "n_lines_localized": 1544,
+      "rms_freq_error_Hz": 85.26,
+      "mae_freq_error_Hz": 57.66,
+      "p95_freq_error_Hz": 141.21,
+      "max_freq_error_Hz": 1817.56,
+      "mean_posterior_sigma_Hz": 71.01,
+      "mean_stage2_probes_per_line": 6.76,
+      "analytical_crlb_Hz": 58.19,
+      "legacy_sigma_Hz": 200.0,
+      "precision_improvement_factor": 2.35
+    }
+  },
+  "throughput_and_crossover": {
+    "exp_attempts_per_register": 1.9614,
+    "shots_per_register": 1.9626,
+    "v300_fixed_1s_per_day": 197347480.2120636,
+    "v400_boed_readout_capacity_per_day": 4810068251.244603,
+    "archB_1024_15ms_write_ceiling_per_day": 1502697689.3252292,
+    "archB_1024_10ms_write_ceiling_per_day": 2254046533.987844,
+    "archB_2048_15ms_write_ceiling_per_day": 3005395378.6504583,
+    "v400_realized_1024_15ms_per_day": 1502697689.3252292,
+    "v400_realized_1024_10ms_per_day": 2254046533.987844,
+    "v400_realized_2048_15ms_per_day": 3005395378.6504583,
+    "realized_speedup_1024_15ms": 7.614,
+    "realized_speedup_1024_10ms": 11.422,
+    "crossover_1024_15ms_t_spec_ms": 131.33,
+    "crossover_1024_15ms_speedup": 7.614,
+    "crossover_1024_10ms_t_spec_ms": 87.55,
+    "crossover_1024_10ms_speedup": 11.422,
+    "extra_hardware_usd": 0.0,
+    "curve": [
+      {
+        "t_spec_ms": 15.0,
+        "readout_capacity_per_day": 13156498680.80424,
+        "write_ceiling_1024_15ms_per_day": 1502697689.3252292,
+        "write_ceiling_1024_10ms_per_day": 2254046533.987844,
+        "net_1024_15ms_per_day": 1502697689.3252292,
+        "net_1024_10ms_per_day": 2254046533.987844
+      },
+      {
+        "t_spec_ms": 25.0,
+        "readout_capacity_per_day": 7893899208.482543,
+        "write_ceiling_1024_15ms_per_day": 1502697689.3252292,
+        "write_ceiling_1024_10ms_per_day": 2254046533.987844,
+        "net_1024_15ms_per_day": 1502697689.3252292,
+        "net_1024_10ms_per_day": 2254046533.987844
+      },
+      {
+        "t_spec_ms": 40.0,
+        "readout_capacity_per_day": 4933687005.30159,
+        "write_ceiling_1024_15ms_per_day": 1502697689.3252292,
+        "write_ceiling_1024_10ms_per_day": 2254046533.987844,
+        "net_1024_15ms_per_day": 1502697689.3252292,
+        "net_1024_10ms_per_day": 2254046533.987844
+      },
+      {
+        "t_spec_ms": 41.03,
+        "readout_capacity_per_day": 4809833785.329358,
+        "write_ceiling_1024_15ms_per_day": 1502697689.3252292,
+        "write_ceiling_1024_10ms_per_day": 2254046533.987844,
+        "net_1024_15ms_per_day": 1502697689.3252292,
+        "net_1024_10ms_per_day": 2254046533.987844
+      },
+      {
+        "t_spec_ms": 70.0,
+        "readout_capacity_per_day": 2819249717.3151937,
+        "write_ceiling_1024_15ms_per_day": 1502697689.3252292,
+        "write_ceiling_1024_10ms_per_day": 2254046533.987844,
+        "net_1024_15ms_per_day": 1502697689.3252292,
+        "net_1024_10ms_per_day": 2254046533.987844
+      },
+      {
+        "t_spec_ms": 100.0,
+        "readout_capacity_per_day": 1973474802.1206357,
+        "write_ceiling_1024_15ms_per_day": 1502697689.3252292,
+        "write_ceiling_1024_10ms_per_day": 2254046533.987844,
+        "net_1024_15ms_per_day": 1502697689.3252292,
+        "net_1024_10ms_per_day": 1973474802.1206357
+      },
+      {
+        "t_spec_ms": 131.33,
+        "readout_capacity_per_day": 1502683927.6027079,
+        "write_ceiling_1024_15ms_per_day": 1502697689.3252292,
+        "write_ceiling_1024_10ms_per_day": 2254046533.987844,
+        "net_1024_15ms_per_day": 1502683927.6027079,
+        "net_1024_10ms_per_day": 1502683927.6027079
+      },
+      {
+        "t_spec_ms": 200.0,
+        "readout_capacity_per_day": 986737401.0603179,
+        "write_ceiling_1024_15ms_per_day": 1502697689.3252292,
+        "write_ceiling_1024_10ms_per_day": 2254046533.987844,
+        "net_1024_15ms_per_day": 986737401.0603179,
+        "net_1024_10ms_per_day": 986737401.0603179
+      },
+      {
+        "t_spec_ms": 350.0,
+        "readout_capacity_per_day": 563849943.4630388,
+        "write_ceiling_1024_15ms_per_day": 1502697689.3252292,
+        "write_ceiling_1024_10ms_per_day": 2254046533.987844,
+        "net_1024_15ms_per_day": 563849943.4630388,
+        "net_1024_10ms_per_day": 563849943.4630388
+      },
+      {
+        "t_spec_ms": 500.0,
+        "readout_capacity_per_day": 394694960.4241272,
+        "write_ceiling_1024_15ms_per_day": 1502697689.3252292,
+        "write_ceiling_1024_10ms_per_day": 2254046533.987844,
+        "net_1024_15ms_per_day": 394694960.4241272,
+        "net_1024_10ms_per_day": 394694960.4241272
+      },
+      {
+        "t_spec_ms": 750.0,
+        "readout_capacity_per_day": 263129973.6160848,
+        "write_ceiling_1024_15ms_per_day": 1502697689.3252292,
+        "write_ceiling_1024_10ms_per_day": 2254046533.987844,
+        "net_1024_15ms_per_day": 263129973.6160848,
+        "net_1024_10ms_per_day": 263129973.6160848
+      },
+      {
+        "t_spec_ms": 1000.0,
+        "readout_capacity_per_day": 197347480.2120636,
+        "write_ceiling_1024_15ms_per_day": 1502697689.3252292,
+        "write_ceiling_1024_10ms_per_day": 2254046533.987844,
+        "net_1024_15ms_per_day": 197347480.2120636,
+        "net_1024_10ms_per_day": 197347480.2120636
+      }
+    ]
+  },
+  "live_factory_200slot_check": {
+    "v300_certified": 176,
+    "v300_mean_spec_ms": 1000.0,
+    "v300_analytic_per_day": 197347480.2120636,
+    "v400_certified": 170,
+    "v400_mean_spec_ms": 39.75,
+    "v400_early_aborts": 191,
+    "v400_analytic_per_day": 1502697689.3252292
+  },
+  "cellisa_v3_wafer_routing_N200": {
+    "n_wafers": 200,
+    "grid_shape": [
+      4,
+      4
+    ],
+    "mean_working_sites": 8.27,
+    "routability_4cell_pct": 97.0,
+    "routability_6cell_pct": 89.0,
+    "mean_bus_hops_4cell": 1.009
+  },
+  "showcase_4x4_multicell_cert": {
+    "isa_version": "3.0",
+    "program_name": "multicell_bitflip3_plus_ancilla",
+    "routed_cell_ids": [
+      "W000-R0C0",
+      "W000-R1C0",
+      "W000-R2C0",
+      "W000-R1C1"
+    ],
+    "routed_coords": [
+      [
+        0,
+        0
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        1,
+        1
+      ]
+    ],
+    "bus_links": [
+      {
+        "cell_a": "W000-R0C0",
+        "cell_b": "W000-R1C0",
+        "j_bus_MHz": 1.5,
+        "cz_duration_us": 0.1667,
+        "bus_cz_fidelity": 0.988923,
+        "bus_kraus_bell_fidelity": 0.994452,
+        "local_fidelity_product": 1.0,
+        "joint_bell_fidelity": 0.994452,
+        "local_pulses": 4,
+        "total_duration_us": 1000.2667,
+        "hop_distance": 1
+      },
+      {
+        "cell_a": "W000-R1C0",
+        "cell_b": "W000-R2C0",
+        "j_bus_MHz": 1.5,
+        "cz_duration_us": 0.1667,
+        "bus_cz_fidelity": 0.988923,
+        "bus_kraus_bell_fidelity": 0.994452,
+        "local_fidelity_product": 1.0,
+        "joint_bell_fidelity": 0.994452,
+        "local_pulses": 4,
+        "total_duration_us": 1000.2667,
+        "hop_distance": 1
+      },
+      {
+        "cell_a": "W000-R1C0",
+        "cell_b": "W000-R1C1",
+        "j_bus_MHz": 1.5,
+        "cz_duration_us": 0.1667,
+        "bus_cz_fidelity": 0.988923,
+        "bus_kraus_bell_fidelity": 0.994452,
+        "local_fidelity_product": 1.0,
+        "joint_bell_fidelity": 0.994452,
+        "local_pulses": 4,
+        "total_duration_us": 1000.2667,
+        "hop_distance": 1
+      }
+    ],
+    "logical_code": "bitflip3_plus_ancilla",
+    "local_pulse_count": 12,
+    "bus_cz_count": 3,
+    "total_duration_us": 3000.8001,
+    "joint_state_fidelity": 0.983448,
+    "min_bus_cz_fidelity": 0.988923,
+    "logical_error_rate": 0.00036538,
+    "exp126_bridge": {
+      "exp126_ledger_found": true,
+      "n_cells_checked": 4,
+      "min_spectral_gap_Hz": 25889.71,
+      "all_clear_5kHz_gate": true,
+      "min_vandermonde_rank": 8,
+      "dd_sweetspot_pulses": 32,
+      "abstraction_note": "CellISA v3.0 fast compiler verified locally on 2^(N+1) + cavity-bus model; full 32D 448-spectator interleaved XY8-GRAPE benchmark anchored to Exp126.",
+      "exp126_Q32D_f1_N64_alpha1": 0.9209167898340067,
+      "exp126_Q32D_f1_N64_alpha2": 0.9432595654087503,
+      "exp126_P126_4_pass": true,
+      "exp126_16cell_bell_mean": 0.9501494932571927,
+      "exp126_16cell_ghz4_mean": 0.9400888785242649,
+      "exp126_16cell_bitflip3_mean": 0.8878344374637237
+    },
+    "certified": true,
+    "epistemic_tag": "Model",
+    "sha256": "0f4684194d061e8720004314a517bfc6ae13bc8e77f186e8ec7709fcace182cd"
+  },
+  "showcase_4x4_route": {
+    "working_sites": 10,
+    "dead_sites": 6,
+    "assigned_coords": [
+      [
+        0,
+        0
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        1,
+        1
+      ]
+    ],
+    "assigned_cell_ids": [
+      "W000-R0C0",
+      "W000-R1C0",
+      "W000-R2C0",
+      "W000-R1C1"
+    ],
+    "bus_edges": [
+      [
+        "W000-R0C0",
+        "W000-R1C0",
+        1
+      ],
+      [
+        "W000-R1C0",
+        "W000-R2C0",
+        1
+      ],
+      [
+        "W000-R1C0",
+        "W000-R1C1",
+        1
+      ]
+    ],
+    "bypassed_dead_coords": [
+      [
+        0,
+        1
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        1,
+        3
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        3,
+        0
+      ],
+      [
+        3,
+        2
+      ]
+    ],
+    "mean_bus_hops": 1.0
+  },
+  "portability_hardcoded_hits": []
+}

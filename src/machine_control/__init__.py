@@ -1,14 +1,15 @@
-"""Atom Lithography Machine control & CellISA programming stack (v2.0).
+"""Atom Lithography Machine control, BOED spectroscopy & CellISA v3.0 stack.
 
-Implements the write -> detect -> measure -> select -> calibrate factory loop
-(Exp57-122/127) plus the CellISA quantum/atom-cell pulse compiler and full
-Hilbert-space verifier. No physical hardware exists; all device parameters
-are model-anchored ({Model}).
+Implements the write -> detect -> adaptive-BOED-measure -> select -> calibrate
+factory loop (Exp57-132) plus the CellISA v3.0 single-cell and multi-cell (M4)
+cavity-bus compiler, heterogeneous wafer router, and Exp126 32D provenance bridge.
+No physical hardware exists; all device parameters are model-anchored ({Model}).
 """
 __all__ = [
     "config",
     "writer",
     "spectroscopy",
+    "adaptive_spectroscopy",
     "selector",
     "pulse_engine",
     "calibrator",
@@ -16,4 +17,4 @@ __all__ = [
     "factory",
     "sim",
 ]
-__version__ = "2.0.0"
+__version__ = "3.0.0"

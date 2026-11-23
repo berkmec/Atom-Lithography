@@ -81,6 +81,19 @@ def test_params_v3_sync_and_no_legacy_maglev():
     assert params.DESIGN_SPECS["exp124_synced"] is True
     assert params.DESIGN_SPECS["exp125_synced"] is True
     assert params.DESIGN_SPECS["exp127_synced"] is True
+    assert params.DESIGN_SPECS["exp130_synced"] is True
+    assert params.DESIGN_SPECS["exp131_synced"] is True
+    assert params.DESIGN_SPECS["exp133_synced"] is True
+    assert params.CAD_VERSION.startswith("4.0-")
+    # CAD v4.0 required new solid parts (Exp130 S5.5, Exp131 M4 4K, Exp133 PT420 decoupling)
+    for v4_key in (
+        "s5_flash_safety_shutter", "s5_flash_anneal_head", "s5_flash_dichroic_pyrometer", "s5_flash_fiber_collimator",
+        "s6_m4_crossbar_4k_mount", "s6_m4_crossbar_4k_pcb",
+        "s6_ovc_bellows_flange_uhv", "s6_ovc_bellows_cf63", "s6_ovc_bellows_flange_dr", "s6_ovc_bridge_dr_stub",
+        "s6_mxc_braid_1", "s6_mxc_braid_2", "s6_mxc_braid_3", "s6_mxc_braid_4",
+        "s6_pt420_valve_stand", "s6_pt420_remote_valve_box", "s6_pt420_flex_he_bottom",
+    ):
+        assert v4_key in params.PARTS, f"Missing CAD v4.0 part: {v4_key}"
     # Option A co-pitched Arch-B 32x32 @ 0.50 mm = 16.0x16.0 mm (diag 22.627 mm), Ø28.0 mm bore
     assert params.DESIGN_SPECS["beamlet_count"] == 1024
     assert params.DESIGN_SPECS["beamlet_pitch_mm"] == pytest.approx(0.50)
@@ -167,8 +180,35 @@ def test_verification_json_and_exp80_exp84_compliance():
     # Exp84 modal compliance
     assert ver["exp84_modal_audit"]["pass"] is True
     assert ver["exp84_modal_audit"]["blanker_f1_fea_hz"] == pytest.approx(2591027.0)
+    # CAD v4.0 audits (Exp130 S5.5, Exp131 M4, Exp133 PT420 decoupling)
+    e130 = ver["exp130_flash_audit"]
+    assert e130["pass"] is True and e130["exp130_synced"] is True
+    assert e130["window_ca_mm"] == pytest.approx(44.0, abs=0.05)
+    assert e130["homogenizer_dims_mm"] == [84.0, 88.0, 84.0]
+    e131 = ver["exp131_m4_audit"]
+    assert e131["pass"] is True and e131["exp131_synced"] is True
+    assert e131["crossbar_gates_4k"] == 968
+    assert e131["epi_cap_nm"] == pytest.approx(8.0)
+    assert e131["B_M4_T"] == pytest.approx(0.1785)
+    e133 = ver["exp133_decoupling_audit"]
+    assert e133["pass"] is True and e133["exp133_synced"] is True
+    assert e133["bellows_id_mm"] == pytest.approx(44.0, abs=0.1)
+    assert e133["bellows_od_mm"] == pytest.approx(68.0, abs=0.1)
+    assert e133["bellows_active_length_mm"] == pytest.approx(120.0, abs=0.2)
+    assert e133["braid_count"] == 4
+    assert e133["remote_valve_offset_mm"] == pytest.approx(500.0, abs=0.2)
+    assert e133["flex_he_length_mm"] == pytest.approx(600.0, abs=0.5)
+    assert len(ver["critical_clearances"]) >= 25
     # Legacy cleanup
     assert all(ver["legacy_cleanup"].values())
+
+
+def test_cad_portability_no_hardcoded_host_paths():
+    forbidden = ["/" + "home/" + "berk", "/" + "run/" + "media/" + "berk"]
+    for p in list(CAD_DIR.glob("*.py")) + [CAD_DIR / "README.md", CAD_DIR / "cad_verification.json", Path(__file__).resolve()]:
+        txt = p.read_text(encoding="utf-8")
+        for needle in forbidden:
+            assert needle not in txt, f"Hardcoded path '{needle}' in {p.name}"
 
 
 @pytest.mark.parametrize("stem", EXPECTED_DRAWINGS)

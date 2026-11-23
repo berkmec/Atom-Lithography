@@ -34,9 +34,10 @@ class MachineConfig:
     stray_survival: float = 0.5         # Exp67 contamination factor s
     shot_cycle_s: float = 1e-3          # legacy Exp65; v224/v300 uses 0.015 s (Exp124 HDA-HiRes)
     spot_sigma_nm: float = 2.0          # Exp66 EUV class; P91 uses 1.5 nm
-    # Spectroscopy / loop (Exp50/65/67/116/117)
-    spec_sigma_Hz: float = 200.0        # measured-line uncertainty class
-    spec_time_s: float = 1.0
+    # Spectroscopy / loop (Exp50/65/67/116/117/132)
+    spec_sigma_Hz: float = 200.0        # measured-line uncertainty class (v400 BOED: <=75 Hz)
+    spec_time_s: float = 1.0            # v300 fixed=1.0 s; v400 BOED effective ~0.043 s
+    spectroscopy_mode: str = "fixed"    # "fixed" (v2/v3) or "bayesian" (v4 Exp132 BOED)
     blank_prob: float = 0.5             # failed attempt classified retryable
     max_retries: int = 3
     # Parallelism (Exp65 / Exp70 / Exp78 / Exp112 / Exp124 Arch-B)
@@ -117,6 +118,24 @@ class MachineConfig:
         """DESIGN.md v3.0 / Exp124-128 canonical baseline (identical locked Arch-B/Cold-100K params)."""
         overrides.setdefault("preset_name", "v300_baseline")
         return cls.v224_baseline(**overrides)
+
+    @classmethod
+    def v400_bayesian(cls, **overrides) -> "MachineConfig":
+        """DESIGN.md v4.0 / Exp132 BOED adaptive spectroscopy baseline ($0 extra hardware):
+        - Same locked Arch-B 1024 beamlets @ 15 ms, 5 keV P91, Cold-100K IBIC (eta=0.9994),
+          56 RF chains x NL=160 (8960 ch), S6.8=D MXC 20 mK.
+        - Replaces fixed 1.0 s sweep with 3-stage BOED spectroscopy (Exp132: effective
+          mean ~41.0 ms/attempt -> 24.4x raw readout speedup, sharpening line precision
+          from 200 Hz to ~73 Hz and saturating the 1.50e9 registers/day write ceiling!).
+        """
+        params = dict(
+            spec_sigma_Hz=73.0,
+            spec_time_s=0.0411,
+            spectroscopy_mode="bayesian",
+            preset_name="v400_bayesian",
+        )
+        params.update(overrides)
+        return cls.v224_baseline(**params)
 
     @classmethod
     def v224_1k_upgrade(cls, **overrides) -> "MachineConfig":

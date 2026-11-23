@@ -72,17 +72,24 @@
 - **Dinamik Ayrıştırma — CPMG ve Sağlam `XY8` (`Exp63`, `Exp68`, `Exp126`):**
   - Tek-eksenli çok-darbeli yankı dizisi: **H. Y. Carr, E. M. Purcell (*Phys. Rev.* 94, 630, 1954)** ve **S. Meiboom, D. Gill (*Rev. Sci. Instrum.* 29, 688, 1958)** (`CPMG`) `{Literatür}`.
   - Darbe hatasına (`ε`) ve eksen sapmasına karşı iki-eksenli simetrik faz-çevrimli dizi: **T. Gullion, D. B. Baker, M. S. Conradi, *J. Magn. Reson.* 89, 479–484 (1990)** (`XY4 / XY8`) `{Literatür}` — `Exp126` iç-içe elektron-π DD + çekirdek kapı sentezinde `CPMG` ile birlikte kullanılmaktadır.
-- **Kohn–Luttinger `³¹P` Aşırı-İnce Bağ Modeli ve ENDOR Çapaları (`Exp25`, `Exp42`, `Exp56`, `Exp60`, `Exp69`, `Exp75`):**
-  - Etkin-kütle kuramı (**W. Kohn, J. M. Luttinger, *Phys. Rev.* 97–98, 1955**) ve Si:P ENDOR kabuk ölçümleri (**G. Feher, *Phys. Rev.* 114, 1219 (1959)**; **E. B. Hale, R. L. Mieher, *Phys. Rev.* 184, 739 (1969)**) `{Literatür}`. `Exp56/60/69/75`, EMT/KL zarfının `(3,3,1)` kabuğunda `%49,0` hata verdiğini ve eksik fiziğin vadiler-arası merkez-hücre karışımı (atomistik TB/DFT) olduğunu göstermiştir (`R1`).
+- **Kohn–Luttinger `³¹P` Aşırı-İnce Bağ Modeli ve ENDOR Çapaları (`Exp25`, `Exp42`, `Exp56`, `Exp60`, `Exp69`, `Exp75`, `Exp129`):**
+  - Etkin-kütle kuramı (**W. Kohn, J. M. Luttinger, *Phys. Rev.* 97–98, 1955**; **R. A. Faulkner, *Phys. Rev.* 184, 713, 1969** `E_EMT = -31,27 meV`), Si:P ENDOR kabuk ölçümleri (**G. Feher, *Phys. Rev.* 114, 1219 (1959)**; **E. B. Hale, R. L. Mieher, *Phys. Rev.* 184, 739 (1969)**; **J. L. Ivey, R. L. Mieher, *Phys. Rev. B* 11, 822 (1975)**), `3s` çekirdek yoğunluğu oranı (**J. R. Morton, K. F. Preston, *J. Magn. Reson.* 30, 577 (1978)**) ve atomistik DFT/TB çekirdek-polarizasyon referansları (**H. Overhof, U. Gerstmann, *Phys. Rev. Lett.* 92, 087602 (2004)**; **W. Ma vd., *npj Comput. Mater.* 8, 2022**) `{Literatür}`. `Exp129` (`VOKL-6`), tek-bant süreklilik EMT'nin `[110]` kovalent zikzak zincirindeki (`R331 %64,7`) yapısal sınırını ve Risk `R1`'in gerçek bir aşağı-yönlü Mod B verim riski olduğunu (`VOKL-6 HM5962 %33,25`, `norm %4,75`) kanıtlamıştır.
+
+## 6B. `v4.0` Ek Literatür Çapaları: Flaş-Tavlama, `M4` Kavite-QED, Titreşim & TCO (`Exp130`–`Exp134`)
+- **Milisaniye Flaş/Lazer Tavlama & SPE/TED (`Exp130`):** Katı-faz epitaksisi (**G. L. Olson, J. A. Roth, *Mater. Sci. Rep.* 3, 1 (1988)**), geçişli hızlandırılmış difüzyon (`TED`) ve `³¹P` `600 °C/10 dk` yüzey göçü / `800 °C` vakum kaçışı (`doi:10.1063/1.331355`) `{Literatür}` — `Exp130`'da `808 nm / 1,0 ms / 1440 K` (`41,15 J/cm²`) penceresiyle `f_act = %99,98`, `σ_anneal = 0,328 nm` kapatıldı.
+- **`M4` Flip-Flop Kübit & Yüksek-Empedanslı `NbTiN` Kavite-QED (`Exp131`):** `³¹P` elektrik-dipol flip-flop kübiti (**G. Tosi vd., *Nat. Commun.* 8, 450 (2017)**) ve yüksek-empedanslı (`3 kΩ`) `NbTiN` mikrodalga rezonatör veri yolu (**N. Samkharadze vd., *Science* 359, 1123 (2018)**; **X. Mi vd., *Nature* 555, 599 (2018)**; **A. J. Landig vd., *Nature* 560, 179 (2018)**) `{Literatür}` — `Exp131`'de `Δz_cap* = 8±1 nm`, `3 kΩ NbTiN` `F_Bell = 0,9655` vs `50 Ω` `0,7908` ve 2B yüzey kodu perkolasyonu (`N_cand* = 6` [KL] / `11` [VOKL-6]) doğrulandı.
+- **Bayesyen Uyarlamalı Deney Tasarımı (`Exp132`):** Sıralı Bayesyen frekans kestirimi / CRLB (`BOED`, **C. Ferrie, C. E. Granade, D. G. Cory, *Quantum Inf. Process.* 12, 611 (2013)**) `{Literatür}` — `Exp132` `41,0 ms` (`24,4×` ham okuma, `7,61×–11,42×` net fabrika hızlanması, `$0` ek donanım).
+- **Titreşim İzolasyonu (`Exp133`) & Öğrenme Eğrisi (`Exp134`):** Temiz oda titreşim sınıfları (**ISO / IEST-RP-CC012 `VC-C / VC-E / VC-G`**) ve üretim öğrenme yasası (**T. P. Wright, *J. Aeronaut. Sci.* 3, 122 (1936)**, `b = %85`) `{Literatür}`.
 
 ---
 
 ## 7. Tasarıma Çapraz Geri Besleme Özeti
-| Alan | Literatür Çapası | Tasarıma Bağlayıcı Etki (`DESIGN` / `MODULAR` / `BOM`) |
+| Alan | Literatür Çapası | Tasarıma Bağlayıcı Etki (`DESIGN v4.0` / `MODULAR v4.0` / `BOM v4.0`) |
 |---|---|---|
-| Tek-iyon sayımı | IBIC `%99,87` (`2009.02892`), SE `%82` (`2510.01035`), `PF₂⁺` (`2308.04117`) | Mod B IBIC `η ≥ 0,99 @ 5 keV` baz; SE yedek mod; `PF₂⁺` Mod A adayı |
-| Blanker & kademe | NuFlare `32 µm` (`US10658158B2`), PI `P-561..563` (`0,2 nm`) | Altın bant `10³–10⁴` (`3,2 mm`), `S4.3` piezo (`D→C`, `Exp79`) |
-| Kaynak & tavlama | Duoplazmatron `10 mA/cm²` (`US11289299B2`), `³¹P` göçü (`10.1063/1.331355`) | `S1.1` sınıf `C`, `ΔE ≤ 2 eV` süzgeç + `10→5 keV` yavaşlatma, ms flaş tavlama |
-| Çoklamalı okuma | Toplu-LC `Q≈18` (`1811.04414`), NbTiN `Qi~2×10⁵` / `≤0,4 T` (`2112.08296`, `2509.20782`), Rebelo `2,1 mW` (`202501018`), `LNF-LNC4_8C`, Krinner (`1806.07862`) | Süperiletken `NL=110–160` (`56–82` zincir), `ton ≤ −100 dBm`, `B_rez ≤ 0,4 T`, `4 K < 1,0 W` / `MXC < 19 µW` |
-| Spektroskopi sıcaklığı | Morello `~100 mK` (`Nat. Commun. 4:2017`), Diraq `1 K %99,6` (`Nature 2024`), Geng `3,7 K %97,8` (`Nat. Commun. 2025`), House `100×` (`Nat. Commun. 6:8848`) | `4 K` reddedildi; `S6.8=D` (`MXC ~20 mK`) BAZ (`Exp121`); `1 K` PSB maliyet-indirme alternatifi |
-| Kuantum kontrol & DD | Khaneja GRAPE (`2005`), CPMG (`1958`), Gullion `XY8` (`1990`) | Yazmaç-özgü GRAPE + iç-içe `XY8`/CPMG (`Exp61/63/126`, `CellISA`) |
+| Tek-iyon sayımı | IBIC `%99,87` (`2009.02892`), SE `%82` (`2510.01035`), `PF₂⁺` (`2308.04117`) | `COLD_100K` (`100 K / 1,2 µs / 1 GΩ`) IBIC `η = %99,94 @ 5 keV` baz (`Exp127`) |
+| Blanker & kademe | NuFlare `32 µm` (`US10658158B2`, tarihsel `Arch-C`), PI `P-561..563` (`0,2 nm`), `VC-E/G` | Kilitli `Arch-B` `32×32 = 1.024 @ 0,50 mm` (`Ø28 mm`), `PT420` dekuplaj (`σ_stage = 0,102 nm`, `Exp124/133`) |
+| Kaynak & tavlama | Duoplazmatron `10 mA/cm²` (`US11289299B2`), `³¹P` göçü (`10.1063/1.331355`), Olson–Roth SPE | `10→5 keV`, `HDA-HiRes ΔE_FWHM = 0,453 eV`; `S5.5` `808 nm / 1 ms / 41,15 J/cm²` (`f_act = %99,98`, `Exp124/130`) |
+| Çoklamalı okuma | NbTiN `Qi~2×10⁵` / `≤0,4 T` (`2112.08296`, `2509.20782`), Rebelo `2,1 mW`, Krinner (`1806.07862`) | `8`-bobin `1,500000 T / 22,3 µT` (`R7` kapalı), `56–82` hat `4 K ≤ 0,899 W / MXC ≤ 4,8 µW`, `BOED 41 ms` (`Exp125/132`) |
+| Spektroskopi sıcaklığı | Morello `~100 mK`, Diraq `1 K %99,6` (`Nature 2024`), Geng `3,7 K %97,8`, House `100×` | `S6.8=D` (`20 mK` DR) BAZ (`EVPI@N=1 = $0`, `N_be = 6,01` makine, `Exp121/125/128`) |
+| Kuantum kontrol & `M4` | Khaneja GRAPE (`2005`), Gullion `XY8` (`1990`), Tosi (`2017`), Samkharadze/Mi (`2018`) | Zorunlu `XY8 N=32–64`, `10–15 kHz` RF (`R3` kapalı); `M4` `3 kΩ NbTiN` `F_Bell = 0,966`, `Δz_cap* = 8 nm` (`Exp126/131`) |
+| Bağ modeli & TCO | Hale–Mieher (`1969`), Overhof–Gerstmann (`2004`), Wright (`1936`, `b = %85`) | `R1` aşağı-yönlü risk (`VOKL-6 %33,25` → `M1` ENDOR kapısı); `v4.0` birim maliyet `−%86,2` (`Exp129/134/135`) |

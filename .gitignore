@@ -30,7 +30,7 @@
 !src/rtl/BLANKER_TILE.md
 !src/rtl/bmc64.ys
 
-# v3.0 First-principles experiment suites (Exp124-Exp128)
+# v3.0 & v4.0 First-principles experiment suites (Exp124-Exp135)
 !experiments/
 !experiments/exp124_ion_column_optics/
 !experiments/exp124_ion_column_optics/**
@@ -42,6 +42,20 @@
 !experiments/exp127_detector_frontend_sim/**
 !experiments/exp128_bom_sensitivity/
 !experiments/exp128_bom_sensitivity/**
+!experiments/exp129_valley_orbital_hyperfine/
+!experiments/exp129_valley_orbital_hyperfine/**
+!experiments/exp130_flash_anneal_diffusion/
+!experiments/exp130_flash_anneal_diffusion/**
+!experiments/exp131_scalable_m4_architecture/
+!experiments/exp131_scalable_m4_architecture/**
+!experiments/exp132_bayesian_spectroscopy_cellisa3/
+!experiments/exp132_bayesian_spectroscopy_cellisa3/**
+!experiments/exp133_coupled_vibration_thermal/
+!experiments/exp133_coupled_vibration_thermal/**
+!experiments/exp134_fab_economics_tco/
+!experiments/exp134_fab_economics_tco/**
+!experiments/exp135_v4_digital_twin/
+!experiments/exp135_v4_digital_twin/**
 
 # Minimal legacy physics helpers required by AtlasSelector & Exp124 (89/89 pytest)
 !experiments/exp25_universal_atom/
@@ -56,7 +70,7 @@
 !experiments/exp48_pulse_aware_selection/
 !experiments/exp48_pulse_aware_selection/pulse_select48.py
 
-# v3.0 Verified experiment results & plots (Exp124-Exp128)
+# v3.0 & v4.0 Verified experiment results & plots (Exp124-Exp135)
 !results/
 !results/exp124_ion_column_optics/
 !results/exp124_ion_column_optics/**
@@ -68,6 +82,20 @@
 !results/exp127_detector_frontend_sim/**
 !results/exp128_bom_sensitivity/
 !results/exp128_bom_sensitivity/**
+!results/exp129_valley_orbital_hyperfine/
+!results/exp129_valley_orbital_hyperfine/**
+!results/exp130_flash_anneal_diffusion/
+!results/exp130_flash_anneal_diffusion/**
+!results/exp131_scalable_m4_architecture/
+!results/exp131_scalable_m4_architecture/**
+!results/exp132_bayesian_spectroscopy_cellisa3/
+!results/exp132_bayesian_spectroscopy_cellisa3/**
+!results/exp133_coupled_vibration_thermal/
+!results/exp133_coupled_vibration_thermal/**
+!results/exp134_fab_economics_tco/
+!results/exp134_fab_economics_tco/**
+!results/exp135_v4_digital_twin/
+!results/exp135_v4_digital_twin/**
 
 # Minimal legacy JSON anchors required by 89/89 pytest & Exp124/126/128 audit gates
 !results/exp42/
@@ -105,7 +133,7 @@
 !results/exp122_budget_cap/
 !results/exp122_budget_cap/exp122.json
 
-# Atom Lithography verification test suite (10 test files, 89/89 pytest)
+# Atom Lithography verification test suite (17 test files, 142/142 pytest)
 !tests/
 !tests/conftest.py
 !tests/test_machine_control.py
@@ -116,6 +144,13 @@
 !tests/test_exp124.py
 !tests/test_exp125.py
 !tests/test_exp126.py
+!tests/test_exp129.py
+!tests/test_exp130.py
+!tests/test_exp131.py
+!tests/test_exp132.py
+!tests/test_exp133.py
+!tests/test_exp134.py
+!tests/test_exp135.py
 !tests/test_rtl_contract.py
 !tests/test_blanker_tile.py
 

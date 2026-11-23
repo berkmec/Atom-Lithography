@@ -12,7 +12,7 @@ from PIL import Image
 import gen_drawings as gd
 import params
 
-OUT = Path(__file__).parent
+OUT = Path(__file__).resolve().parent
 PW, PH = 2000, 1020
 
 
@@ -38,14 +38,14 @@ def main() -> None:
     )
     gd._draw_text(
         ctx, 26, 52,
-        f"{ma['part_count']} Katı Parça (S1–S7) | Exp124 562,66 mm Kolon & Exp125 8-Bobin Kilitli | Kütle: {ma['total_mass_kg']:.1f} kg | 8/8 STL | 0 Çakışma",
-        11.5, color=(0.86, 0.92, 0.98),
+        f"{ma['part_count']} Katı Parça (S1–S7) | Exp124/125/127 + Exp130 S5.5 + Exp131 M4 + Exp133 PT420 Ayrıştırma | Kütle: {ma['total_mass_kg']:.1f} kg | 8/8 STL | 0 Çakışma",
+        11.2, color=(0.86, 0.92, 0.98),
     )
 
     # Left panel: 3D Shaded Isometric (full assembly)
     gd.draw_iso_panel(
         ctx, (24, 80, 960, 916), params.PARTS,
-        "3B GÖLGELİ İZOMETRİK MONTAJ (S1–S7, UHV & DR YARI-SAYDAM)",
+        "3B GÖLGELİ İZOMETRİK MONTAJ v4.0 (S1–S7, UHV & DR YARI-SAYDAM)",
         azim_deg=-58.0, elev_deg=22.0, show_beam=True, n_seg=22,
     )
 
@@ -53,17 +53,18 @@ def main() -> None:
     core_parts = {k: v for k, v in params.PARTS.items() if v["subsystem"] != "s7_electronics_rack_interconnect"}
     gd.draw_ortho_panel(
         ctx, (1012, 80, 964, 916), core_parts, "xz",
-        "MERKEZ KESİT A–A (X–Z) — EXP124 562,7 mm KOLON, EXP125 8-BOBİN MIKNATIS & 20 mK DR",
+        "MERKEZ KESİT A–A (X–Z) — EXP124/125 + EXP131 M4 4K ANAHTAR + EXP133 PT420 AYRIŞTIRMA",
         section_mode=True,
         callouts=[
             ("s1_duoplasmatron", "[S1.1] Duoplazmatron +5kV"),
+            ("s6_pt420_remote_valve_box", "[S6.1] PT420 Uzak Valf"),
             ("s1_wien_filter", "[S1.2] Wien 0,45T h=150"),
             ("s1_energy_filter", "[S1.5] HDA ΔE=0,453eV"),
-            ("s6_dr_flange_50k", "[S6.8] 50K/4K/Still/MXC"),
+            ("s6_m4_crossbar_4k_pcb", "[S6.6] 4K M4 968-Kapı"),
             ("s6_coil_s_upper", "[S6.3] 8-Bobin Ø150 Bore"),
             ("s2_aperture_plate", "[S2] Arch-B WD=0,25mm"),
-            ("s3_silicon_wafer", "[S3] Yonga+100K LTC6268"),
-            ("s6_mxc_cold_finger", "[S6.2] 20mK Parmak"),
+            ("s6_ovc_bellows_cf63", "[S6.2] CF63 Körük 2kN/m"),
+            ("s6_mxc_braid_1", "[S6.2] 4× OFHC Örgü 53N/m"),
             ("s4_piezo_fine_6dof", "[S4.3] 6-DOF Piezo"),
             ("s6_nbtin_resonator_carrier", "[S6.6] NbTiN z=−155 22µT"),
             ("s4_granite_base", "[S4.1] Granit & Aktif"),

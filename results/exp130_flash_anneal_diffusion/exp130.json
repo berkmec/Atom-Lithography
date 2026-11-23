@@ -1,0 +1,678 @@
+{
+  "experiment": "exp130_flash_anneal_diffusion",
+  "hypothesis_id": "H148",
+  "verdict": "PASS",
+  "no_lab_measurement": true,
+  "epistemic_scope": "Model + numerical PDE simulation anchored to literature (Glassbrenner-Slack, Fahey, Bracht, Stolk/Cowern, Olson-Roth, Exp108 doi:10.1063/1.331355); physical M1 G4 lab verification remains required for hardware closure.",
+  "runtime_s": 22.17,
+  "evaluations": {
+    "EA1": {
+      "pass": true,
+      "summary": "600C/10min: pileup=93.2% (>=15%), escape=0.06% (<5%); 800C/10min: escape=52.7% (>=30%); mass_err=6.33e-15"
+    },
+    "EA2": {
+      "pass": true,
+      "summary": "Thermal PDE conv=0.184% (<1%), E_err=0.0033% (<0.5%); 808nm 1.0ms T_peak=1440.3K (<1552K), F=41.15 J/cm^2 ([10,45]), t_quench=0.333ms (<10ms), T_back=592.9K (<700K)"
+    },
+    "EA3": {
+      "pass": true,
+      "summary": "Furnace 600C (sig=6.11nm, loss=9.0%), Furnace 800C (sig=3.13nm, loss=4.4%), RTA 1000C/10s (sig=4.97nm, loss=21.2%) all FAIL"
+    },
+    "EA4": {
+      "pass": true,
+      "summary": "Contiguous ms window t=[0.0774, 12.9199] ms, T=[1223.6, 1543.6] K (32/42 box pts PASS); opt 808nm 1.0ms/1440K: f_act=99.98%, sig=0.328nm, loss=0.022%, sig_iso=0.0314nm"
+    },
+    "EA5": {
+      "pass": true,
+      "summary": "Exp124 Arch-B sigma_tot=3.655nm (baseline 3.674nm, ceiling 3.80nm); cryo cooldown to 20mK: 16x16mm=3.18min (<=15min), 50mm wafer=11.03min, load-lock RT=0.0min"
+    },
+    "EA6": {
+      "pass": true,
+      "summary": "S5.5 CF63 sapphire \u00d844mm CA (\u00d836mm beam), T_uncoated=85.9% (>=85%), T_AR=98.0% (>=97%); LIDT margin vs 100 J/cm^2 floor: 9.47x (16x16mm AR), 8.30x (uncoated), 3.36x (1:1 0.5ms)"
+    }
+  },
+  "thermal_pde_convergence": {
+    "runs": [
+      {
+        "n_cells": 80,
+        "n_steps_pulse": 40,
+        "T_peak_K": 1439.8298,
+        "T_back_max_K": 592.8528,
+        "t_quench_to_900K_ms": 0.3629,
+        "energy_balance_rel_err": 3.2737063599062576e-05
+      },
+      {
+        "n_cells": 120,
+        "n_steps_pulse": 80,
+        "T_peak_K": 1440.2638,
+        "T_back_max_K": 592.8845,
+        "t_quench_to_900K_ms": 0.3331,
+        "energy_balance_rel_err": 9.616824927794796e-06
+      },
+      {
+        "n_cells": 160,
+        "n_steps_pulse": 160,
+        "T_peak_K": 1442.9132,
+        "T_back_max_K": 592.8997,
+        "t_quench_to_900K_ms": 0.3422,
+        "energy_balance_rel_err": 3.810959775282681e-06
+      }
+    ],
+    "T_peak_rel_diff_120_vs_160": 0.001836,
+    "max_energy_balance_rel_err": 3.2737063599062576e-05
+  },
+  "ted_pde_convergence": {
+    "runs": [
+      {
+        "n_cells": 100,
+        "dz_nm": 0.6,
+        "f_act_bulk": 0.999787,
+        "sigma_anneal_nm": 0.32807,
+        "f_total_surface_loss": 0.000211,
+        "sigma_iso_nm": 0.031367,
+        "mass_conservation_err": 5.551115123125783e-16
+      },
+      {
+        "n_cells": 150,
+        "dz_nm": 0.4,
+        "f_act_bulk": 0.999782,
+        "sigma_anneal_nm": 0.328,
+        "f_total_surface_loss": 0.000217,
+        "sigma_iso_nm": 0.03136,
+        "mass_conservation_err": 1.1102230246251565e-15
+      },
+      {
+        "n_cells": 200,
+        "dz_nm": 0.3,
+        "f_act_bulk": 0.999778,
+        "sigma_anneal_nm": 0.32794,
+        "f_total_surface_loss": 0.000221,
+        "sigma_iso_nm": 0.031355,
+        "mass_conservation_err": 6.661338147750939e-16
+      }
+    ],
+    "sigma_anneal_rel_diff_150_vs_200": 0.000183
+  },
+  "exp108_anchor_doi_10_1063_1_331355": {
+    "600C_10min_uhv_blanket": {
+      "T_C": 600.0,
+      "T_K": 873.15,
+      "duration_s": 600.0,
+      "geometry": "1D planar blanket high-dose (~1e15 cm^-2, r_casc=None)",
+      "f_act_bulk": 0.06727,
+      "f_inact_bulk": 0.0,
+      "f_surface_pileup": 0.93213,
+      "f_vacuum_escape": 0.0006,
+      "f_total_surface_loss": 0.93273,
+      "sigma_anneal_nm": 78.311,
+      "mass_conservation_err": 6.328271240363392e-15
+    },
+    "800C_10min_uhv_blanket": {
+      "T_C": 800.0,
+      "T_K": 1073.15,
+      "duration_s": 600.0,
+      "geometry": "1D planar blanket high-dose (~1e15 cm^-2, r_casc=None)",
+      "f_act_bulk": 0.33401,
+      "f_inact_bulk": 0.0,
+      "f_surface_pileup": 0.13877,
+      "f_vacuum_escape": 0.52722,
+      "f_total_surface_loss": 0.66599,
+      "sigma_anneal_nm": 33.774,
+      "mass_conservation_err": 6.661338147750939e-16
+    }
+  },
+  "conventional_anneal_benchmarks": {
+    "furnace_600C_10min": {
+      "T_C": 600.0,
+      "T_K": 873.15,
+      "duration_s": 600.0,
+      "f_act_bulk": 0.91025,
+      "f_surface_pileup": 0.08972,
+      "f_vacuum_escape": 4e-05,
+      "f_total_surface_loss": 0.08975,
+      "sigma_anneal_nm": 6.1091,
+      "sigma_iso_nm": 0.04069,
+      "exp124_sigma_tot_nm": 7.1114,
+      "mass_conservation_err": 4.440892098500626e-16,
+      "criteria_10nm": {
+        "pass_act_ge_95pct": false,
+        "pass_sigma_anneal": false,
+        "pass_surface_loss_lt_2pct": false,
+        "pass_sigma_iso_le_05nm": true,
+        "pass_non_melting_092Tm": true,
+        "pass_all": false
+      },
+      "pass_strict_05nm": false,
+      "pass_limit_10nm": false
+    },
+    "furnace_800C_10min": {
+      "T_C": 800.0,
+      "T_K": 1073.15,
+      "duration_s": 600.0,
+      "f_act_bulk": 0.95579,
+      "f_surface_pileup": 0.01833,
+      "f_vacuum_escape": 0.02588,
+      "f_total_surface_loss": 0.04421,
+      "sigma_anneal_nm": 3.1327,
+      "sigma_iso_nm": 0.06889,
+      "exp124_sigma_tot_nm": 4.8025,
+      "mass_conservation_err": 8.881784197001252e-16,
+      "criteria_10nm": {
+        "pass_act_ge_95pct": true,
+        "pass_sigma_anneal": false,
+        "pass_surface_loss_lt_2pct": false,
+        "pass_sigma_iso_le_05nm": true,
+        "pass_non_melting_092Tm": true,
+        "pass_all": false
+      },
+      "pass_strict_05nm": false,
+      "pass_limit_10nm": false
+    },
+    "rta_1000C_10s": {
+      "T_C": 1000.0,
+      "T_K": 1273.15,
+      "duration_s": 10.0,
+      "f_act_bulk": 0.78784,
+      "f_surface_pileup": 0.03686,
+      "f_vacuum_escape": 0.1753,
+      "f_total_surface_loss": 0.21216,
+      "sigma_anneal_nm": 4.9686,
+      "sigma_iso_nm": 0.3999,
+      "exp124_sigma_tot_nm": 6.1593,
+      "mass_conservation_err": 3.3306690738754696e-16,
+      "criteria_10nm": {
+        "pass_act_ge_95pct": false,
+        "pass_sigma_anneal": false,
+        "pass_surface_loss_lt_2pct": false,
+        "pass_sigma_iso_le_05nm": true,
+        "pass_non_melting_092Tm": true,
+        "pass_all": false
+      },
+      "pass_strict_05nm": false,
+      "pass_limit_10nm": false
+    }
+  },
+  "wavelength_and_pulse_benchmarks": {
+    "308nm_excimer_50us_1440K": {
+      "wavelength_nm": 308.0,
+      "t_pulse_ms": 0.05,
+      "T_peak_K": 1440.8,
+      "T_peak_over_Tmelt": 0.8541,
+      "fluence_J_per_cm2": 15.398,
+      "E_absorbed_J_cm2": 6.159,
+      "T_back_max_K": 370.66,
+      "t_quench_to_900K_ms": 0.0173,
+      "energy_balance_rel_err": 5.285288479308983e-06,
+      "f_act_bulk": 0.49957,
+      "f_total_surface_loss": 9e-06,
+      "sigma_anneal_nm": 0.1084,
+      "sigma_iso_nm": 0.00972,
+      "exp124_sigma_tot_nm": 3.6417,
+      "mass_conservation_err": 3.3306690738754696e-16,
+      "pass_strict_05nm": false,
+      "pass_limit_10nm": false
+    },
+    "308nm_excimer_1ms_1440K": {
+      "wavelength_nm": 308.0,
+      "t_pulse_ms": 1.0,
+      "T_peak_K": 1440.48,
+      "T_peak_over_Tmelt": 0.8539,
+      "fluence_J_per_cm2": 68.742,
+      "E_absorbed_J_cm2": 27.497,
+      "T_back_max_K": 592.17,
+      "t_quench_to_900K_ms": 0.3456,
+      "energy_balance_rel_err": 1.0662647987474737e-05,
+      "f_act_bulk": 0.99978,
+      "f_total_surface_loss": 0.000219,
+      "sigma_anneal_nm": 0.3293,
+      "sigma_iso_nm": 0.03145,
+      "exp124_sigma_tot_nm": 3.655,
+      "mass_conservation_err": 1.1102230246251565e-16,
+      "pass_strict_05nm": true,
+      "pass_limit_10nm": true
+    },
+    "532nm_green_1ms_1440K": {
+      "wavelength_nm": 532.0,
+      "t_pulse_ms": 1.0,
+      "T_peak_K": 1440.39,
+      "T_peak_over_Tmelt": 0.8538,
+      "fluence_J_per_cm2": 43.669,
+      "E_absorbed_J_cm2": 27.511,
+      "T_back_max_K": 592.32,
+      "t_quench_to_900K_ms": 0.3456,
+      "energy_balance_rel_err": 1.0621508937127646e-05,
+      "f_act_bulk": 0.99978,
+      "f_total_surface_loss": 0.000219,
+      "sigma_anneal_nm": 0.3291,
+      "sigma_iso_nm": 0.03143,
+      "exp124_sigma_tot_nm": 3.6549,
+      "mass_conservation_err": 5.551115123125783e-16,
+      "pass_strict_05nm": true,
+      "pass_limit_10nm": true
+    },
+    "808nm_diode_0.5ms_1440K": {
+      "wavelength_nm": 808.0,
+      "t_pulse_ms": 0.5,
+      "T_peak_K": 1440.78,
+      "T_peak_over_Tmelt": 0.854,
+      "fluence_J_per_cm2": 29.172,
+      "E_absorbed_J_cm2": 19.545,
+      "T_back_max_K": 512.64,
+      "t_quench_to_900K_ms": 0.1666,
+      "energy_balance_rel_err": 5.314736977473641e-06,
+      "f_act_bulk": 0.99879,
+      "f_total_surface_loss": 0.000127,
+      "sigma_anneal_nm": 0.2675,
+      "sigma_iso_nm": 0.02597,
+      "exp124_sigma_tot_nm": 3.6499,
+      "mass_conservation_err": 0.0,
+      "pass_strict_05nm": true,
+      "pass_limit_10nm": true
+    },
+    "808nm_diode_1.0ms_1440K": {
+      "wavelength_nm": 808.0,
+      "t_pulse_ms": 1.0,
+      "T_peak_K": 1440.26,
+      "T_peak_over_Tmelt": 0.8537,
+      "fluence_J_per_cm2": 41.148,
+      "E_absorbed_J_cm2": 27.569,
+      "T_back_max_K": 592.88,
+      "t_quench_to_900K_ms": 0.3331,
+      "energy_balance_rel_err": 9.616824927794796e-06,
+      "f_act_bulk": 0.99978,
+      "f_total_surface_loss": 0.000217,
+      "sigma_anneal_nm": 0.328,
+      "sigma_iso_nm": 0.03136,
+      "exp124_sigma_tot_nm": 3.6548,
+      "mass_conservation_err": 1.1102230246251565e-15,
+      "pass_strict_05nm": true,
+      "pass_limit_10nm": true
+    },
+    "808nm_diode_1.5ms_1440K": {
+      "wavelength_nm": 808.0,
+      "t_pulse_ms": 1.5,
+      "T_peak_K": 1439.75,
+      "T_peak_over_Tmelt": 0.8534,
+      "fluence_J_per_cm2": 50.163,
+      "E_absorbed_J_cm2": 33.609,
+      "T_back_max_K": 651.92,
+      "t_quench_to_900K_ms": 0.5489,
+      "energy_balance_rel_err": 7.7841222085958e-06,
+      "f_act_bulk": 0.99971,
+      "f_total_surface_loss": 0.000285,
+      "sigma_anneal_nm": 0.3611,
+      "sigma_iso_nm": 0.03398,
+      "exp124_sigma_tot_nm": 3.658,
+      "mass_conservation_err": 2.220446049250313e-16,
+      "pass_strict_05nm": true,
+      "pass_limit_10nm": true
+    },
+    "808nm_diode_2.0ms_1440K": {
+      "wavelength_nm": 808.0,
+      "t_pulse_ms": 2.0,
+      "T_peak_K": 1439.33,
+      "T_peak_over_Tmelt": 0.8532,
+      "fluence_J_per_cm2": 57.522,
+      "E_absorbed_J_cm2": 38.539,
+      "T_back_max_K": 699.41,
+      "t_quench_to_900K_ms": 0.7801,
+      "energy_balance_rel_err": 6.939861886074899e-06,
+      "f_act_bulk": 0.99965,
+      "f_total_surface_loss": 0.000345,
+      "sigma_anneal_nm": 0.3848,
+      "sigma_iso_nm": 0.0357,
+      "exp124_sigma_tot_nm": 3.6604,
+      "mass_conservation_err": 3.3306690738754696e-16,
+      "pass_strict_05nm": true,
+      "pass_limit_10nm": true
+    }
+  },
+  "fluence_pulse_curve_808nm_1440K": [
+    {
+      "t_pulse_ms": 0.1,
+      "fluence_J_per_cm2": 13.142,
+      "T_back_max_K": 400.19,
+      "t_quench_to_900K_ms": 0.0354,
+      "sigma_anneal_nm": 0.1439,
+      "f_act_bulk": 0.73973,
+      "exp124_sigma_tot_nm": 3.6429
+    },
+    {
+      "t_pulse_ms": 0.2,
+      "fluence_J_per_cm2": 18.509,
+      "T_back_max_K": 438.7,
+      "t_quench_to_900K_ms": 0.0666,
+      "sigma_anneal_nm": 0.1908,
+      "f_act_bulk": 0.93395,
+      "exp124_sigma_tot_nm": 3.6451
+    },
+    {
+      "t_pulse_ms": 0.3,
+      "fluence_J_per_cm2": 22.632,
+      "T_back_max_K": 467.64,
+      "t_quench_to_900K_ms": 0.0999,
+      "sigma_anneal_nm": 0.2235,
+      "f_act_bulk": 0.98317,
+      "exp124_sigma_tot_nm": 3.6469
+    },
+    {
+      "t_pulse_ms": 0.5,
+      "fluence_J_per_cm2": 29.172,
+      "T_back_max_K": 512.64,
+      "t_quench_to_900K_ms": 0.1666,
+      "sigma_anneal_nm": 0.2675,
+      "f_act_bulk": 0.99879,
+      "exp124_sigma_tot_nm": 3.6499
+    },
+    {
+      "t_pulse_ms": 0.8,
+      "fluence_J_per_cm2": 36.846,
+      "T_back_max_K": 564.34,
+      "t_quench_to_900K_ms": 0.2665,
+      "sigma_anneal_nm": 0.3089,
+      "f_act_bulk": 0.9998,
+      "exp124_sigma_tot_nm": 3.6532
+    },
+    {
+      "t_pulse_ms": 1.0,
+      "fluence_J_per_cm2": 41.148,
+      "T_back_max_K": 592.88,
+      "t_quench_to_900K_ms": 0.3331,
+      "sigma_anneal_nm": 0.328,
+      "f_act_bulk": 0.99978,
+      "exp124_sigma_tot_nm": 3.6548
+    },
+    {
+      "t_pulse_ms": 1.5,
+      "fluence_J_per_cm2": 50.163,
+      "T_back_max_K": 651.92,
+      "t_quench_to_900K_ms": 0.5489,
+      "sigma_anneal_nm": 0.3611,
+      "f_act_bulk": 0.99971,
+      "exp124_sigma_tot_nm": 3.658
+    },
+    {
+      "t_pulse_ms": 2.0,
+      "fluence_J_per_cm2": 57.522,
+      "T_back_max_K": 699.41,
+      "t_quench_to_900K_ms": 0.7801,
+      "sigma_anneal_nm": 0.3848,
+      "f_act_bulk": 0.99965,
+      "exp124_sigma_tot_nm": 3.6604
+    },
+    {
+      "t_pulse_ms": 3.0,
+      "fluence_J_per_cm2": 69.175,
+      "T_back_max_K": 773.52,
+      "t_quench_to_900K_ms": 1.3108,
+      "sigma_anneal_nm": 0.4207,
+      "f_act_bulk": 0.99955,
+      "exp124_sigma_tot_nm": 3.6643
+    },
+    {
+      "t_pulse_ms": 5.0,
+      "fluence_J_per_cm2": 85.594,
+      "T_back_max_K": 875.94,
+      "t_quench_to_900K_ms": 4.1406,
+      "sigma_anneal_nm": 0.4738,
+      "f_act_bulk": 0.99934,
+      "exp124_sigma_tot_nm": 3.6708
+    }
+  ],
+  "phase_diagram_summary": {
+    "grid_shape": [
+      34,
+      36
+    ],
+    "t_pulse_range_s": [
+      1e-05,
+      600.0
+    ],
+    "T_peak_range_K": [
+      700.0,
+      1660.0
+    ],
+    "T_non_melting_limit_K": 1552.04,
+    "n_pass_strict_05nm": 50,
+    "n_pass_limit_10nm": 128,
+    "strict_05nm_window_t_pulse_ms": [
+      0.0774,
+      12.9199
+    ],
+    "strict_05nm_window_T_peak_K": [
+      1223.6,
+      1543.6
+    ],
+    "limit_10nm_window_t_pulse_ms": [
+      0.0774,
+      774.6823
+    ],
+    "ms_target_box_pass_count": 32,
+    "ms_target_box_total_count": 42,
+    "ms_target_box_pass_fraction": 0.7619
+  },
+  "uq_stress_tests": {
+    "nominal_808nm_1ms_1440K": {
+      "fluence_J_per_cm2": 41.148,
+      "T_peak_K": 1440.26,
+      "f_act_bulk": 0.99978,
+      "sigma_anneal_nm": 0.328,
+      "f_total_surface_loss": 0.000217,
+      "sigma_iso_nm": 0.03136,
+      "exp124_sigma_tot_nm": 3.6548,
+      "pass_strict_05nm": true,
+      "pass_limit_10nm": true
+    },
+    "fluence_minus_5pct": {
+      "fluence_J_per_cm2": 39.09,
+      "T_peak_K": 1361.51,
+      "f_act_bulk": 0.97498,
+      "sigma_anneal_nm": 0.2745,
+      "f_total_surface_loss": 0.000103,
+      "sigma_iso_nm": 0.01961,
+      "exp124_sigma_tot_nm": 3.6504,
+      "pass_strict_05nm": true,
+      "pass_limit_10nm": true
+    },
+    "fluence_plus_5pct": {
+      "fluence_J_per_cm2": 43.205,
+      "T_peak_K": 1519.03,
+      "f_act_bulk": 0.99944,
+      "sigma_anneal_nm": 0.3786,
+      "f_total_surface_loss": 0.000563,
+      "sigma_iso_nm": 0.04737,
+      "exp124_sigma_tot_nm": 3.6597,
+      "pass_strict_05nm": true,
+      "pass_limit_10nm": true
+    },
+    "slow_spe_0.5x_nu_act": {
+      "fluence_J_per_cm2": 41.148,
+      "T_peak_K": 1440.26,
+      "f_act_bulk": 0.99868,
+      "sigma_anneal_nm": 0.328,
+      "f_total_surface_loss": 0.000193,
+      "sigma_iso_nm": 0.03136,
+      "exp124_sigma_tot_nm": 3.6548,
+      "pass_strict_05nm": true,
+      "pass_limit_10nm": true
+    },
+    "wide_cascade_r_4nm": {
+      "fluence_J_per_cm2": 41.148,
+      "T_peak_K": 1440.26,
+      "f_act_bulk": 0.99952,
+      "sigma_anneal_nm": 0.481,
+      "f_total_surface_loss": 0.000479,
+      "sigma_iso_nm": 0.04453,
+      "exp124_sigma_tot_nm": 3.6717,
+      "pass_strict_05nm": true,
+      "pass_limit_10nm": true
+    },
+    "damage_3x_9e19_cm3": {
+      "fluence_J_per_cm2": 41.148,
+      "T_peak_K": 1440.26,
+      "f_act_bulk": 0.99953,
+      "sigma_anneal_nm": 0.5501,
+      "f_total_surface_loss": 0.000466,
+      "sigma_iso_nm": 0.05097,
+      "exp124_sigma_tot_nm": 3.6814,
+      "pass_strict_05nm": false,
+      "pass_limit_10nm": true
+    },
+    "blanket_1D_upper_bound_r_None": {
+      "fluence_J_per_cm2": 41.148,
+      "T_peak_K": 1440.26,
+      "f_act_bulk": 0.98934,
+      "sigma_anneal_nm": 1.9888,
+      "f_total_surface_loss": 0.010657,
+      "sigma_iso_nm": 0.1426,
+      "exp124_sigma_tot_nm": 4.1479,
+      "pass_strict_05nm": false,
+      "pass_limit_10nm": false
+    }
+  },
+  "exp124_placement_budget_impact": {
+    "fixed_non_anneal_rss_nm": 3.6401,
+    "baseline_sigma_anneal_0.50nm_tot_nm": 3.6743,
+    "optimal_808nm_1ms_1440K_tot_nm": 3.6548,
+    "compact_808nm_0.5ms_1440K_tot_nm": 3.6499,
+    "damage_3x_stress_tot_nm": 3.6814,
+    "rta_1000C_10s_tot_nm": 6.1593,
+    "furnace_600C_10min_tot_nm": 7.1114,
+    "exp124_ceiling_nm": 3.8
+  },
+  "cryo_cooldown_to_20mK": {
+    "in_line_loadlock_rt_baseline": {
+      "description": "In-line RT UHV load-lock flash post-implant (recommended production baseline)",
+      "E_absorbed_J": 0.0,
+      "T_bulk_eq_post_flash_K": 0.02,
+      "t_cool_total_s": 0.0,
+      "t_cool_total_min": 0.0
+    },
+    "insitu_s55_16x16mm_active_field": {
+      "wafer_mass_g": 2.2864904031908213,
+      "cu_carrier_mass_kg": 0.15,
+      "E_absorbed_J": 70.57641802974473,
+      "T_pre_K": 4.0,
+      "T_bulk_eq_post_flash_K": 39.89490684381189,
+      "H_stage_4K_to_20mK_mJ": 7.3277063954587875,
+      "t_cool_above_4K_s": 70.57641802974473,
+      "t_cool_4K_to_20mK_s": 0.29644817976668786,
+      "t_contact_settling_s": 120.0,
+      "t_cool_total_s": 190.87286620951141,
+      "t_cool_total_min": 3.1812144368251905
+    },
+    "insitu_s55_4x4mm_single_tile": {
+      "wafer_mass_g": 2.2864904031908213,
+      "cu_carrier_mass_kg": 0.15,
+      "E_absorbed_J": 4.411026126859046,
+      "T_pre_K": 4.0,
+      "T_bulk_eq_post_flash_K": 19.775006741481086,
+      "H_stage_4K_to_20mK_mJ": 7.3277063954587875,
+      "t_cool_above_4K_s": 4.411026126859046,
+      "t_cool_4K_to_20mK_s": 0.29644817976668786,
+      "t_contact_settling_s": 120.0,
+      "t_cool_total_s": 124.70747430662573,
+      "t_cool_total_min": 2.0784579051104286
+    },
+    "insitu_s55_50mm_full_wafer": {
+      "wafer_mass_g": 2.2864904031908213,
+      "cu_carrier_mass_kg": 0.15,
+      "E_absorbed_J": 541.314346677071,
+      "T_pre_K": 4.0,
+      "T_bulk_eq_post_flash_K": 71.38322675353763,
+      "H_stage_4K_to_20mK_mJ": 7.3277063954587875,
+      "t_cool_above_4K_s": 541.314346677071,
+      "t_cool_4K_to_20mK_s": 0.29644817976668786,
+      "t_contact_settling_s": 120.0,
+      "t_cool_total_s": 661.6107948568376,
+      "t_cool_total_min": 11.026846580947295
+    }
+  },
+  "s55_optical_hardware_spec": {
+    "cad_v3_anchor": {
+      "port_id": "S5.5",
+      "location": "Equatorial +Y viewport at Z_WAFER = 500.0 mm (CAD v3.0 params.py L437-444)",
+      "duct_clear_aperture_mm": 44.0,
+      "viewport_flange": "CF63 UHV bakeable sapphire viewport (Al2O3 single crystal)",
+      "sapphire_disc_od_mm": 50.0,
+      "sapphire_thickness_mm": 8.0,
+      "external_head_envelope_mm": [
+        84.0,
+        88.0,
+        84.0
+      ],
+      "optical_beam_diam_at_window_mm": 36.0,
+      "radial_clearance_mm": 4.0
+    },
+    "primary_source_spec": {
+      "technology": "808 nm qCW macro-channel diode-laser bar stack (fiber-bundle coupled to S5.5 homogenizer head)",
+      "wavelength_nm": 808.0,
+      "backup_wavelength_nm": 532.0,
+      "pulse_duration_ms": 1.0,
+      "pulse_shape": "Flat-top raised-cosine (10% rise / 80% plateau / 10% fall), uniformity <= +-2% across die",
+      "wafer_fluence_J_per_cm2": 41.15,
+      "fluence_tolerance_pct": 5.0,
+      "peak_surface_T_K": 1440.3,
+      "peak_surface_T_C": 1167.1,
+      "margin_below_Tmelt_K": 246.7,
+      "self_quench_to_900K_ms": 0.333,
+      "wafer_backside_max_T_K": 592.9
+    },
+    "sapphire_window_optics": {
+      "refractive_index_808nm": 1.76,
+      "transmission_uncoated": 0.859,
+      "transmission_AR_808nm": 0.98,
+      "optical_train_throughput_AR": 0.9314,
+      "lidt_1ms_conservative_floor_J_per_cm2": 100.0,
+      "lidt_1ms_uncoated_typical_J_per_cm2": 250.0,
+      "lidt_1ms_iso21254_intrinsic_J_per_cm2": 3162.3
+    },
+    "delivery_modes": {
+      "mode1_single_shot_16x16mm": {
+        "field_mm": "16 x 16 mm (2.56 cm^2, single shot, zero stitch seams)",
+        "wafer_pulse_energy_J": 105.34,
+        "source_pulse_energy_J": 113.1,
+        "source_peak_power_kW": 125.66,
+        "window_fluence_AR_J_per_cm2": 10.56,
+        "window_fluence_uncoated_J_per_cm2": 12.05,
+        "lidt_safety_margin_vs_100J_floor_AR": 9.47,
+        "lidt_safety_margin_vs_100J_floor_uncoated": 8.3,
+        "cryo_recovery_to_20mK_min": 3.18
+      },
+      "mode2_step_and_flash_4x4mm": {
+        "field_mm": "4 x 4 mm (0.16 cm^2, 16 stitched shots via XY stage \u2014 compact BOM option)",
+        "wafer_pulse_energy_J": 6.58,
+        "source_pulse_energy_J": 7.07,
+        "source_peak_power_kW": 7.85,
+        "window_fluence_AR_J_per_cm2": 0.66,
+        "lidt_safety_margin_vs_100J_floor_AR": 151.5,
+        "cryo_recovery_single_tile_min": 2.08
+      },
+      "mode3_collimated_1to1_0.5ms": {
+        "field_mm": "\u00d836 mm collimated 1:1 (0.5 ms / 1440 K, zero relay demagnification)",
+        "wafer_fluence_J_per_cm2": 29.17,
+        "window_fluence_AR_J_per_cm2": 29.77,
+        "lidt_safety_margin_vs_100J_floor_AR": 3.36
+      },
+      "mode4_inline_loadlock_rt_baseline": {
+        "location": "RT UHV load-lock post-implant flash station (same 808 nm 1.0 ms recipe)",
+        "cryo_heat_load_J": 0.0,
+        "cryo_recovery_min": 0.0,
+        "role": "Recommended high-throughput production baseline; S5.5 viewport retained for in-situ re-anneal"
+      }
+    },
+    "diagnostics_and_interlocks": [
+      "Fast InGaAs/Si two-color pyrometer (10 us response, 900-1700 K) via dichroic beamsplitter on S5.5",
+      "Inline photodiode pulse-energy integrator (closed-loop +-1.5% fluence calibration per shot)",
+      "Hardwired laser-shutter interlock tied to MXC temperature (< 1 K) & UHV gate-valve status"
+    ]
+  },
+  "artifacts": {
+    "predictions": "results/exp130_flash_anneal_diffusion/predictions_exp130.json",
+    "results_json": "results/exp130_flash_anneal_diffusion/exp130.json",
+    "plot_data_json": "results/exp130_flash_anneal_diffusion/plot_data_exp130.json",
+    "summary_md": "results/exp130_flash_anneal_diffusion/summary_exp130.md",
+    "fig_window": "results/exp130_flash_anneal_diffusion/fig_exp130_anneal_window.png",
+    "fig_profiles": "results/exp130_flash_anneal_diffusion/fig_exp130_profiles_ted.png"
+  }
+}

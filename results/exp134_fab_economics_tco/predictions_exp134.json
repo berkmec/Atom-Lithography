@@ -1,0 +1,41 @@
+{
+  "experiment": "exp134_fab_economics_tco",
+  "hypothesis_id": "H152",
+  "registered": "2026-11-23 (before writing or running tco_model134.py)",
+  "question": "What are the 5-year Total Cost of Ownership (TCO = CAPEX + OPEX), unit economics ($/certified register, $/physical qubit, $/10k-cell chip, $/M4 surface-code logical qubit for d=7/11/17), Wright learning-curve scaling (N=1->10->100, b=82%-88%), and $50M/$100M budget-cap headroom when upgrading the Atom Lithography Machine from v3.0 (1.97e8 reg/day) to v4.0 (Bayesian 5x/10x adaptive spectroscopy + S5.5 flash-anneal + PT420 decoupling + M4 cavity-QED bus)?",
+  "method": {
+    "n_samples": 50000,
+    "seed": 2026134,
+    "anchors_read_from_disk": [
+      "research/atom_lithography_machine/BOM.csv (read-only SHA-256 verification)",
+      "research/atom_lithography_machine/BOM_DETAILED.csv (145 parts, M3=$4,189,600, M1=$2,189,770)",
+      "results/exp128_bom_sensitivity/exp128.json (Model A correlated BOM & program baseline)"
+    ],
+    "v4_hardware_deltas_usd": {
+      "S5.5_flash_anneal_optics": [55000, 95000, 175000],
+      "PT420_decoupling_feedforward": [38000, 68000, 125000],
+      "M4_cavity_bus_and_gate_elec": [135000, 245000, 460000],
+      "S8_bayesian_rt_gpu_node": [7000, 12000, 22000]
+    },
+    "tco_horizons_and_regimes": {
+      "horizon_years": 5,
+      "foak_program_tco": "Full stochastic Program CAPEX (M_prog P10=3x, P50=5.48x, P90=10x) + ISO-5/6 cleanroom bay ($1.5M-$4.5M, nom $2.5M) + 5-yr OPEX",
+      "fab_tool_tco": "Commercial N-th tool CAPEX (1.35x installed HW * Wright learning curve) + ISO-5/6 cleanroom bay + 5-yr OPEX (power 15-25 kW, cleanroom HVAC, PH3 EHS, 8%/yr maintenance/spares, 2-4.5 FTE, 200 mm 28Si/29Si epi wafers $5k-$25k/wafer)",
+      "regime_1_capacity": "Steady-state write/measure throughput limit (80% fab uptime, zero wafer-swap stall): v3.0 (1.97e8 reg/day) vs v4.0-5x vs v4.0-10x (@15 ms write-clamped and @10 ms unclamped)",
+      "regime_2_wafer_batch": "Realistic 200 mm wafer batch with thermal swap overhead (t_swap in {1, 4, 8} h/wafer) at standard die density (200 chips x 10k cells = 2e6 reg/wafer) and ultra-dense M4 wafer (5e7 reg/wafer)"
+    },
+    "logical_qubit_model": "Rotated surface code physical qubits n_phys(d) = 2*d^2 - 1 for d in {7, 11, 17} (97, 241, 577 cells), evaluated both at bare certified-cell count and with Mod B f=1% (51% yield) 2D percolation grid-redundancy factor (1/0.51 = 1.961x effective cell budget, plus N_cand=3 site-redundancy sensitivity).",
+    "wright_learning_curve": "C(N) = C(1) * N^(log2(b)) for b in {0.82, 0.85, 0.88} and N in {1, 5, 10, 25, 50, 100}."
+  },
+  "success_rule": "CX1 and CX2 and CX3 and CX6 PASS; CX4 and CX5 scored honestly as computed.",
+  "predictions": [
+    "CX1_BASELINE_GATE: Canonical BOM.csv SHA-256 unchanged, BOM_DETAILED.csv M3 nominal ($4,189,600) matches within $1, and v3.0 steady-state throughput matches Exp127 (1.973e8 reg/day within 1%).",
+    "CX2_V4_BUDGET_CAP_SURVIVAL: With v4.0 hardware deltas (+$420k nom) added to Exp128 Model A (50,000 MC samples), P(v4.0 BOM > $50M) < 0.001 and P(v4.0 Program_stoch > $100M) < 0.05.",
+    "CX3_BAYESIAN_UNIT_COST_COLLAPSE: In the steady-state capacity regime (5-yr Fab-Tool TCO), v4.0 5x Bayesian speedup cuts median $/register by >= 75% (and 10x @ 10 ms by >= 85%) vs v3.0; at 15 ms shot cycle, 10x Bayesian hits the 1,024-beamlet write ceiling (effective speedup < 8.0x).",
+    "CX4_AMDAHL_WAFER_FLOOR: In the 200 mm standard wafer-batch regime (2e6 reg/wafer, $12k/wafer, 8 h swap overhead), Amdahl swap overhead + epi wafer floor caps v4.0-5x $/chip reduction to < 15%, whereas dense wafers (5e7 reg/wafer) with 1 h cold-shuttle swap recover > 50% chip-cost reduction.",
+    "CX5_WRIGHT_LEARNING_100X: Under Wright learning curve b=85%, N=100 tools cut per-tool hardware CAPEX by >= 60% (to <= 40% of N=1), and N=100 v4.0 dense-fab (5e7 reg/wafer, 1 h swap) d=17 logical qubit cost (with 1/0.51 Mod B factor) falls below $50/logical_qubit.",
+    "CX6_MC_CONVERGENCE_50K: 50,000-sample MC v4.0 5-yr FOAK TCO P50 converges within <= 1.0% of the first 25,000 half-split, and SE(P(v4.0 Program > $100M)) < 0.002."
+  ],
+  "no_lab_measurement": true,
+  "no_supplier_quotes": true
+}

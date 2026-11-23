@@ -1,22 +1,24 @@
-# CAD Paketi v3.0 — Atom Litografi Makinesi (`Exp124` + `Exp125` + `Exp127` Kilitli)
+# CAD Paketi v4.0 — Atom Litografi Makinesi (`Exp124` + `Exp125` + `Exp127` + `Exp130` + `Exp131` + `Exp133` Kilitli)
 
-Sürüm: `3.0-exp124-exp125-locked` (2026-11-22) · Birim: `mm` · Genel Tolerans: `ISO 2768-mK`  
+Sürüm: `4.0-exp130-exp131-exp133-locked` (2026-11-23) · Birim: `mm` · Genel Tolerans: `ISO 2768-mK`  
 Durum: **Kâğıt üzerinde parametrik konsept / ön-mühendislik CAD modeli (`no_lab_measurement=true`).** Fiziksel donanım veya laboratuvar ölçümü değildir.
 
-## v3.0 Kilitli Mühendislik Mimarisi (`exp124_synced=True`, `exp125_synced=True`, `exp127_synced=True`)
-- Eski `maglev_stage` ve `s=1,0` kalıntıları tamamen kaldırıldı; `s=0,5` altın zarf (`Exp80`) korundu.
-- **`Exp124` Kilitli İyon Kolonu (`S1` + `S2`, Seçenek A Eş-Adımlı `Arch-B`):** Toplam yükseklik **`562,66 mm`** (`z_wafer = 500,00 → 1062,66 mm`), maks. `OD = 110,0 mm`, 8-kademe kolon kütlesi **`25,92 kg`**; HV şeması: wafer/kriyo/IBIC `0 V` toprak, üst kolon gömleği `−5,0 kV`, kaynak anodu `+5,0 kV`.
-  - Aktif `Arch-B` dizisi: **`32×32 = 1.024` demetcik**, `S2.1` apertür + `S2.2` blanker + `S2.3` `Arch-B` mini-lens **eş-adımlı `0,50 mm`** → aktif kare **`16,0×16,0 mm`** (köşegen **`22,63 mm`**), `S2.4` **`16×` 64-kanallı SKY130 karo** (`1.024` kanal).
-  - `S1.1` Duoplazmatron (`h=140, OD=90`), `S1.4` Kondansör (`h=45, OD=84`), `S1.2` Wien (`h=150, OD=110, 0,45 T`), `S1.5` `HDA-HiRes` enerji süzgeci (`h=95, OD=110, R₀=40 mm, ΔE_FWHM=0,453 eV`), `S1.6` Transfer lensi (`h=65, Ø28/Ø84`), `S2.1` Apertür & kinematik tutucu (`h=24, Ø28/Ø100` — köşegen `22,63 mm`'ye **`2,686 mm` temiz radyal marj**, sıfır demet kırpması), `S2.2` Eş-adımlı `0,50 mm` Blanker (`h=4, OD=60, Exp84 f₁=2,591 MHz`), `S2.3` `Arch-B` yavaşlatıcı mini-lens (`h=1,76, OD=60, WD=0,250 mm, E_gap=10,60 MV/m, C_c=2,660 mm`).
-- **`Exp125` Kilitli 8-Bobinli Kriyo-Mıknatıs & Sessiz Rezonatör Bölgesi (`S6`):**
-  - 8 kesin NbTi bobin (`M_upper/lower`, `S_upper/lower`, `A_upper/lower`, `B_upper/lower`): açık iç delik **`Ø150,0 mm`** (`r=75 mm`), orta düzlem yarığı **`36,0 mm`** (`z=482..518 mm`), dış karkas çapı **`Ø352,0 mm`** (`r=176 mm`), vakum-içi montajlı (`s=0,5` UHV oda `R_iç=182 mm` içinde `6 mm` radyal vakum boşluğu).
-  - `z_loc = −155,0 mm` (`z = 345,0 mm`) konumunda **`Ø50 mm` NbTiN rezonatör diski (`|B| = 22,3 µT`)**, çevresinde **`Nb RRR>300` Meissner kabı** (`R=32..34,5 mm, z_loc=−174..−136 mm`, baca `r=8 mm, h=11 mm`) ve **`Cryoperm-10` dış kılıfı** (`R=39..41 mm, z_loc=−180..−124 mm`).
-  - `S6.8` 5-kademeli `50K/4K/Still/CP/MXC (20 mK)` kuru seyreltme kriyostatı + `PT415/420` (`S6.1`) + `4 K` InP HEMT rafı + `56–82` koaksiyel demet.
-- **`Exp127` Kilitli `S3` IBIC Ön-Uç:** `100 K` soğuk adada `LTC6268` CSA (`1,2 µs / 1 GΩ, ENC=24,1 e⁻, η=0,99936`) + `80×80 mm` AlN taşıyıcı (`Exp80 BC1`) + `Ø64/Ø78 mm` BeCu/Au kontak halkası.
-- **Konumlandırma & UHV (`S4` + `S5`):** `6-DOF` piezo kademe (`S4.3`, `Exp79`), `Cryoperm (R=41)` ile `B`-bobinler (`R=56`) arasından `4 mm` radyal boşlukla geçen Invar tüp kaide (`R=45..52 mm`), Zerodur metroloji halkası + 3-eksen interferometre (`S4.4–S4.5`), `V_iç = 34,86 L` (`Exp80 BC4 PASS`) 4-portlu UHV oda (`S5.1`), turbo+iyon/TSP (`S5.2`), load-lock (`S5.3`), safir ms-flaş tavlama (`S5.5`).
-- **Toplam Makine Özeti (`cad_verification.json`):** `143` katı parça (`S1`–`S7`), **`956,90 kg`**, `CoM = (141,3; -10,9; 443,3) mm`, **`0 / 10.153` katı çakışma**, **`19 / 19` kritik boşluk PASS** (`beam_array_diagonal_to_bore_clearance_mm = 2,686 mm`), **`8 / 8` su geçirmez STL (`30.048` üçgen)**.
+## v4.0 Kilitli Mühendislik Mimarisi (`exp124/125/127/130/131/133_synced=True`)
+
+- **Temel `v3.0` Çekirdeği (Korundu):** Eski `maglev_stage` ve `s=1,0` kalıntıları yok; `s=0,5` altın zarf (`Exp80`, `V_iç = 34,86 L` `BC4 PASS`), **`Exp124`** `562,66 mm / 25,92 kg` `10→5 keV` iyon kolonu (`32×32 @ 0,50 mm`, `16×16 mm` yazma alanı, `Ø28 mm` delikte `2,686 mm` radyal pay, `Arch-B WD=0,250 mm`, `HDA-HiRes ΔE=0,453 eV`), **`Exp125`** vakum-içi 8-bobinli `1,50 T` kriyo-mıknatıs (`Ø150 mm` bore, `36 mm` yarık, `Ø352 mm` OD, `z=−155 mm` `Ø50 mm` NbTiN `22,3 µT` + `Nb` Meissner + `Cryoperm-10`), **`Exp127`** `100 K` `LTC6268` IBIC CSA (`ENC=24,1 e⁻, η=0,99936`) ve `6-DOF` piezo kademe (`S4.3`).
+- **`Exp130` (`S5.5`) Flaş-Tavlama Optik Kafası (`+Y`, `Z=500 mm`, CF63 Safir `Ø44 mm` CA):**
+  - `s5_flash_window` (`Ø50×8 mm` AR kaplı safir, `Ø36 mm` demet → `4,0 mm` radyal marj), `s5_flash_safety_shutter` (`MXC < 1 K` & UHV vana kilitli mekanik deklanşör), `s5_flash_anneal_head` (`84×88×84 mm`, `808 nm` qCW `1,0 ms / 41,15 J/cm²` homojenleştirici), `s5_flash_dichroic_pyrometer` (`10 µs` iki-renkli InGaAs/Si pirometre) ve `s5_flash_fiber_collimator` (`σ_anneal = 0,328 nm`, `f_act = %99,98`).
+- **`Exp131` (`M4`) Kavite-QED Veri Yolu & `4 K` Çapraz-Anahtar Kartı (`S3` / `S6`):**
+  - `S6.8` DR `4 K` flanşı altında (`s6_hemt_rack_4k` iç boşluğunda, `HEMT`'e `26,4 mm` ve koaksiyellere `17,0 mm` payla) **`s6_m4_crossbar_4k_mount` + `s6_m4_crossbar_4k_pcb`** (`SKY130` `968`-kapılı çoklama kartı).
+  - Yonga şartnamesi kilitli: `Δz_cap* = 8 ± 1 nm` `²⁸Si` epi kaplama, `3 kΩ` yüksek-empedanslı `NbTiN` veri yolu (`L_res = 300 µm`, `f_r = 5,0 GHz`), `B_M4 = 0,1785 T`.
+- **`Exp133` (`PT420`) Mekanik Titreşim Ayrıştırma Paketi (`S6.1` / `S6.2`):**
+  - Rijit OVC borusu yerine **kenar-kaynaklı 316L UHV CF63 körük** (`s6_ovc_bellows_cf63` + `7×` boğum halkası + UHV/DR flanşlar; `ID=44 mm, OD=68 mm, L_aktif=120 mm, k=2.000 N/m ≤ 6.282 N/m`).
+  - Rijit `Ø7` bakır çubuk yerine **`Ø12×397 mm` DR OFHC barası (`s6_mxc_cold_finger`) + `4×` paralel S-ilmek OFHC Cu örgü (`s6_mxc_braid_1..4`, `2.550×Ø50 µm`, `L=100 mm`, `k=52,7 N/m ≤ 4.197 N/m`, `ΔT=3,7 mK @ 2,5 µW`)** — genişletilmiş `Ø18/Ø21 mm` `4 K` kalkan tüpü içinde (`3,0 mm` bara ve `3,32 mm` örgü radyal boşluk).
+  - **`500 mm` ofsetli (`x = −1150 mm`) `PT420` uzak döner valf kutusu (`s6_pt420_remote_valve_box`) + akustik zemin sehpası + `600 mm` esnek He U-ilmek hattı** → `VC-E` kapalı-çevrimde `σ_stage = 0,102 nm`, `σ_pointing = 0,147 nm`, `σ_thermal = 0,028 nm`.
+- **Toplam Makine Özeti (`cad_verification.json`):** `170` katı parça (`S1`–`S7`), **`993,27 kg`**, `CoM = (97,3; -9,9; 452,2) mm`, **`0 / 14.365` katı çakışma**, **`25 / 25` kritik boşluk PASS**, **`8 / 8` su geçirmez STL (`35.564` üçgen)**.
 
 ## Dosya Yapısı & Yeniden Üretim
+
 - `params.py`, `mesh_engine.py`, `gen_scad.py`, `gen_stl.py`, `gen_drawings.py`, `preview.py`
 - `parts/s1..s7.scad` + `atom_litho_machine.scad` (8 parametrik OpenSCAD dosyası)
 - `stl/s1..s7.stl` + `stl/atom_litho_machine.stl` (8 su geçirmez ikili STL) + `cad_verification.json`

@@ -180,12 +180,21 @@ def m1_scale_factor(row: pd.Series) -> tuple[float, str]:
         return 0.50, "M1 dar tarama kaba kademe"
     if pid in {"S4.4-02", "S4.4-03", "S4.4-04"}:
         return 0.67, "2-eksen XY interferometri (M1)"
-    # S5: Full UHV + anneal + small epi lot (5 wafers vs 25)
+    # S5: Full UHV + anneal + small epi lot (5 wafers vs 25) + M1 compact Mod-2 S5.5 flash-anneal
     if pid == "S5.4-01":
         return 0.30, "M1 5-yonga izotopik epi deneme lotu"
     if pid == "S5.4-02":
         return 0.50, "Tek lot SIMS/AFM"
-    # S6: DR (20 mK baseline) + PT420 + 1.5 T magnet still needed for single-donor ESR/ENDOR!
+    if pid == "S5.5-01":
+        return 0.50, "M1 Mod-2 kompakt 4x4 mm adim-flas 808 nm qCW kaynak (Exp130 G4)"
+    if pid in {"S5.5-02", "S5.5-03", "S5.5-04"}:
+        return 1.0, "M1: CF63 safir + 10 us pirometre + deklansor kilidi tam gerekli (Exp130)"
+    # S6: DR (20 mK baseline) + PT420 + PT420 decoupling (Exp133) + 1.5 T magnet still needed for M1!
+    # M4 cavity-QED bus & 968-gate crossbar (S6.10) are M3/M4 scaling hardware -> 0.0 in M1 single-donor lab.
+    if parent == "S6.9":
+        return 1.0, "M1: PT420 uzak valf + CF63 koruk + OFHC orgu + FF zorunlu (Exp133)"
+    if parent == "S6.10":
+        return 0.0, "M4 kavite-QED veri yolu & 968-kapi capraz-anahtar M3/M4 fazinda eklenir (Exp131)"
     # But readout scales from 56 chains -> 2 chains (1 active + 1 ref), 1 ZCU216 board instead of 14!
     if pid in {"S6.6-01", "S6.6-02", "S6.6-03", "S6.6-04", "S6.6-05"}:
         return 2.0 / 56.0, "M1: 2 okuma zinciri (56->2)"
@@ -201,9 +210,11 @@ def m1_scale_factor(row: pd.Series) -> tuple[float, str]:
         return 0.15, "M1: 2 SET/rf-SET test kanali"
     if pid == "S6.3-02":
         return 0.50, "M1 kucuk test rezonator kalkan/bucking (veya 1.5 T solenoide yakin)"
-    # S7: 1 GPU workstation, 1 AWG card, 1 EMI rack
+    # S7: 1 GPU workstation, 1 AWG card, 1 EMI rack, 1 BOED GPU node retained for M1
     if pid in {"S7.1-01", "S7.4-03"}:
         return 0.50, "M1: 1 is istasyonu / 1 EMI kabin"
+    if pid == "S7.1-04":
+        return 1.0, "M1: tek BOED gercek-zamanli Bayesyen GPU dugumu (Exp132/134)"
     if pid in {"S7.2-01", "S7.2-02"}:
         return 0.35, "M1: 1 AWG + 1 marker karti"
     if pid == "S7.3-01":
@@ -238,12 +249,17 @@ def assign_rfq_package(row: pd.Series) -> str:
         return "RFQ-05 (S6.6 Kriyo-LNA/Zincir+NbTiN)"
     if parent in {"S6.8", "S6.1"}:
         return "RFQ-06 (S6.8+S6.1 DR 20mK+PT420)"
+    if parent in {"S5.5", "S6.9", "S6.10"}:
+        return "RFQ-07 (v4.0 S5.5+PT420+M4)"
     return "Non-RFQ (COTS/Diğer)"
 
 
 def assign_driver_group(row: pd.Series) -> str:
+    pid = row["part_id"]
     parent = row["parent_bom_id"]
     sub = row["subsystem"]
+    if parent in {"S5.5", "S6.9", "S6.10"} or pid == "S7.1-04":
+        return "v4.0 Paketi (M4+S5.5+PT420+BOED)"
     if parent == "S6.6":
         return "S6.6 Okuma Zinciri (56x B/C Duvarı)"
     if parent == "S6.8":
@@ -273,6 +289,8 @@ def assign_delta_bucket(row: pd.Series) -> str:
     pid = row["part_id"]
     parent = row["parent_bom_id"]
     notes = str(row["notes"])
+    if "DELTA-V4.0" in notes and row["subsystem"] != "S8":
+        return "V4_0_Upgrade_Exp130_131_133_134"
     if "DELTA-EXP124" in notes or parent in {"S1.5", "S1.6"} or pid == "S1.3-02":
         return "Exp124_Decel_Filter_PH3"
     if "DELTA-EXP125" in notes or parent == "S6.3" or pid == "S6.6-07":
@@ -401,7 +419,7 @@ def main() -> None:
             "usd_high": float(bdf["usd_high"].sum()),
         }
 
-    # Explicit engineering delta bridge from Exp122 ($2,531,244.37) -> BOM_DETAILED ($4,189,600)
+    # Explicit engineering delta bridge from Exp122 ($2,531,244.37) -> M3 v3.0 ($4,189,600) -> M3 v4.0 ($4,609,600)
     # Every dollar accounted for cleanly:
     exp124_parts_nom = float(
         df[df["part_id"].isin(["S1.3-02", "S1.5-01", "S1.5-02", "S1.5-03", "S1.6-01", "S1.6-02"])]["usd_nom"].sum()
@@ -418,7 +436,21 @@ def main() -> None:
     exp127_net_delta = exp127_parts_nom - (100.0 * (9000 / 10000) ** 0.7 * 720.0)
     mems_s2_net_delta = sub_reconcil["S2"]["delta_vs_exp122_usd"]
     s9_spares_delta = sub_reconcil["S9"]["detailed_m3_nom_usd"]
-    other_cots_align_delta = (m3_nom - exp122_central_usd) - (
+
+    v4_mask_all = df["notes"].astype(str).str.contains("DELTA-V4.0", na=False)
+    v4_s55_nom = float(df[df["parent_bom_id"] == "S5.5"]["usd_nom"].sum())
+    v4_pt420_nom = float(df[df["parent_bom_id"] == "S6.9"]["usd_nom"].sum())
+    v4_m4_nom = float(df[df["parent_bom_id"] == "S6.10"]["usd_nom"].sum())
+    v4_s8_gpu_nom = float(df[df["part_id"] == "S7.1-04"]["usd_nom"].sum())
+    v4_total_delta_nom = float(df[v4_mask_all]["usd_nom"].sum())
+    v4_total_delta_low = float(df[v4_mask_all]["usd_low"].sum())
+    v4_total_delta_high = float(df[v4_mask_all]["usd_high"].sum())
+    m3_v3_base_nom = float(df[~v4_mask_all]["usd_nom"].sum())
+    assert abs(m3_v3_base_nom - 4_189_600.0) < 1e-6, f"M3 v3.0 base mismatch: {m3_v3_base_nom}"
+    assert abs(v4_total_delta_nom - 420_000.0) < 1e-6, f"v4.0 delta mismatch: {v4_total_delta_nom}"
+    assert abs((v4_s55_nom + v4_pt420_nom + v4_m4_nom + v4_s8_gpu_nom) - v4_total_delta_nom) < 1e-6
+
+    other_cots_align_delta = (m3_v3_base_nom - exp122_central_usd) - (
         exp124_net_delta + exp125_net_delta + exp127_net_delta + mems_s2_net_delta + s9_spares_delta
     )
     delta_bridge = {
@@ -429,6 +461,14 @@ def main() -> None:
         "delta_exp124_decel_filter_ph3_usd": exp124_net_delta,
         "delta_exp127_invac_ibic_frontend_usd": exp127_net_delta,
         "delta_other_cots_uhv_anchor_align_usd": other_cots_align_delta,
+        "bom_detailed_m3_v3_base_nom_usd": m3_v3_base_nom,
+        "delta_v4_0_upgrade_package_usd": v4_total_delta_nom,
+        "delta_v4_0_breakdown_usd": {
+            "S5.5_flash_anneal_exp130": v4_s55_nom,
+            "S6.9_pt420_decoupling_exp133": v4_pt420_nom,
+            "S6.10_m4_cavity_bus_exp131": v4_m4_nom,
+            "S7.1_04_s8_boed_gpu_exp132_134": v4_s8_gpu_nom,
+        },
         "bom_detailed_m3_nom_usd": m3_nom,
         "total_delta_usd": m3_nom - exp122_central_usd,
         "bridge_arithmetic_error_usd": abs(
@@ -440,13 +480,14 @@ def main() -> None:
                 + exp124_net_delta
                 + exp127_net_delta
                 + other_cots_align_delta
+                + v4_total_delta_nom
             )
             - m3_nom
         ),
     }
     assert delta_bridge["bridge_arithmetic_error_usd"] < 1e-6
 
-    # RFQ nominal coverage
+    # RFQ nominal coverage (both RFQ-01..06 baseline and RFQ-01..07 v4.0 full scope)
     rfq_summary = {}
     for pkg, g in df.groupby("rfq_package"):
         rfq_summary[pkg] = {
@@ -456,8 +497,10 @@ def main() -> None:
             "usd_high": float(g["usd_high"].sum()),
             "share_of_m3_nom": float(g["usd_nom"].sum() / m3_nom),
         }
-    rfq6_nom = sum(v["usd_nom"] for k, v in rfq_summary.items() if k.startswith("RFQ-"))
+    rfq6_nom = sum(v["usd_nom"] for k, v in rfq_summary.items() if k.startswith("RFQ-0") and not k.startswith("RFQ-07"))
     rfq6_nom_share = rfq6_nom / m3_nom
+    rfq7_nom = sum(v["usd_nom"] for k, v in rfq_summary.items() if k.startswith("RFQ-"))
+    rfq7_nom_share = rfq7_nom / m3_nom
 
     # -------------------------------------------------------------------------
     # 3. Model A — 100,000-Sample Correlated Log-Normal Monte Carlo (BOM_DETAILED)
@@ -497,6 +540,9 @@ def main() -> None:
     driver_names = sorted(priced["driver_group"].unique())
     drv_idx = {name: np.where(driver_col == name)[0] for name in driver_names}
     rfq_mask = priced["rfq_package"].str.startswith("RFQ-").to_numpy(dtype=bool)
+    rfq6_mask = (
+        priced["rfq_package"].str.startswith("RFQ-0") & ~priced["rfq_package"].str.startswith("RFQ-07")
+    ).to_numpy(dtype=bool)
     s66_chain_mask = priced["part_id"].isin([f"S6.6-0{i}" for i in range(1, 7)]).to_numpy(dtype=bool)
     s68_mask = (priced["parent_bom_id"] == "S6.8").to_numpy(dtype=bool)
 
@@ -520,6 +566,7 @@ def main() -> None:
     bom_samples = np.empty(N, dtype=np.float64)
     bom_no_bc_shock = np.empty(N, dtype=np.float64)
     rfq_cost_samples = np.empty(N, dtype=np.float64)
+    rfq6_cost_samples = np.empty(N, dtype=np.float64)
     s68_samples = np.empty(N, dtype=np.float64)
     driver_samples = {name: np.empty(N, dtype=np.float64) for name in driver_names}
 
@@ -539,6 +586,7 @@ def main() -> None:
 
         bom_samples[start:end] = c_mat.sum(axis=1)
         rfq_cost_samples[start:end] = c_mat[:, rfq_mask].sum(axis=1)
+        rfq6_cost_samples[start:end] = c_mat[:, rfq6_mask].sum(axis=1)
         s68_samples[start:end] = c_mat[:, s68_mask].sum(axis=1)
         for name, idxs in drv_idx.items():
             driver_samples[name][start:end] = c_mat[:, idxs].sum(axis=1)
@@ -598,7 +646,8 @@ def main() -> None:
     # 5. Tornado Sensitivity & Variance Decomposition (Model A)
     # -------------------------------------------------------------------------
     bom_var = float(np.var(bom_samples, ddof=1))
-    rfq_var_share = float(np.cov(rfq_cost_samples, bom_samples, ddof=1)[0, 1] / bom_var)
+    rfq7_var_share = float(np.cov(rfq_cost_samples, bom_samples, ddof=1)[0, 1] / bom_var)
+    rfq6_var_share = float(np.cov(rfq6_cost_samples, bom_samples, ddof=1)[0, 1] / bom_var)
 
     tornado_bom = []
     for name in driver_names:
@@ -736,7 +785,7 @@ def main() -> None:
         ),
         "CU2_bom_cap_safety": bool(p_bom_gt_50m < 0.001 and np.percentile(bom_samples, 95) < 15e6),
         "CU3_program_soft_hard_cap": bool(p_prog_stoch_gt_100m < 0.05 and p_prog_stoch_gt_50m < 0.30),
-        "CU4_bc_wall_dominance": bool(top3_bom_var_share >= 0.50 and rfq6_nom_share >= 0.75),
+        "CU4_bc_wall_dominance": bool(top3_bom_var_share >= 0.50 and rfq7_nom_share >= 0.75),
         "CU5_evpi_20mk_vindication": bool(cu5_env_1mach < 0.0 and cu5_n_be_hw >= 4.0),
         "CU6_mc_convergence": bool(conv_p50_rel <= 0.01 and conv_p95_rel <= 0.01 and se_p100 < 0.001),
     }
@@ -775,11 +824,16 @@ def main() -> None:
             "gate_ok": gate_ok,
         },
         "bom_detailed_summary": {
+            "bom_version": "v4.0",
             "total_parts": int(len(df)),
             "priced_parts": int(K),
             "software_zero_hw_parts": int(len(df) - K),
             "canonical_ids_covered": len(canonical_ids),
             "extra_delta_parent_ids": sorted(covered_ids - canonical_ids),
+            "m3_v3_base_nom_usd": m3_v3_base_nom,
+            "v4_delta_low_usd": v4_total_delta_low,
+            "v4_delta_nom_usd": v4_total_delta_nom,
+            "v4_delta_high_usd": v4_total_delta_high,
             "m3_low_usd": m3_low,
             "m3_nom_usd": m3_nom,
             "m3_high_usd": m3_high,
@@ -798,7 +852,10 @@ def main() -> None:
             "packages": rfq_summary,
             "rfq6_total_nom_usd": rfq6_nom,
             "rfq6_nom_share": rfq6_nom_share,
-            "rfq6_variance_share_mc": rfq_var_share,
+            "rfq6_variance_share_mc": rfq6_var_share,
+            "rfq7_total_nom_usd": rfq7_nom,
+            "rfq7_nom_share": rfq7_nom_share,
+            "rfq7_variance_share_mc": rfq7_var_share,
         },
         "monte_carlo_model_a_detailed": {
             "n_samples": N,
@@ -874,9 +931,9 @@ def main() -> None:
 
     print("=== EXP128 MONTE CARLO & RECONCILIATION COMPLETE ===")
     print(f"Canonical Gate OK: {gate_ok} | BOM.csv SHA-256 OK: {sha_ok}")
-    print(f"M3 BOM_DETAILED: low=${m3_low/1e6:.3f}M | nom=${m3_nom/1e6:.3f}M | high=${m3_high/1e6:.3f}M")
+    print(f"M3 v4.0 BOM    : low=${m3_low/1e6:.3f}M | nom=${m3_nom/1e6:.3f}M (v3=${m3_v3_base_nom/1e6:.3f}M + v4=${v4_total_delta_nom/1e3:.0f}k) | high=${m3_high/1e6:.3f}M")
     print(f"M1 Prototype   : low=${m1_low/1e6:.3f}M | nom=${m1_nom/1e6:.3f}M | high=${m1_high/1e6:.3f}M ({m1_nom/m3_nom:.1%} of M3)")
-    print(f"6-RFQ Coverage : {rfq6_nom_share:.1%} of M3 nom (${rfq6_nom/1e6:.3f}M) | {rfq_var_share:.1%} of BOM MC variance")
+    print(f"7-RFQ Coverage : {rfq7_nom_share:.1%} of M3 nom (${rfq7_nom/1e6:.3f}M; 6-RFQ={rfq6_nom_share:.1%}) | {rfq7_var_share:.1%} of BOM MC variance (6-RFQ={rfq6_var_share:.1%})")
     print(f"Model A BOM    : P50=${np.percentile(bom_samples,50)/1e6:.2f}M | P90=${np.percentile(bom_samples,90)/1e6:.2f}M | P95=${np.percentile(bom_samples,95)/1e6:.2f}M | P(>50M)={p_bom_gt_50m:.5f}")
     print(f"Model A ProgSt : P50=${full_p50/1e6:.2f}M | P90=${np.percentile(prog_stoch,90)/1e6:.2f}M | P95=${full_p95/1e6:.2f}M | P(>50M)={p_prog_stoch_gt_50m:.4f} | P(>100M)={p_prog_stoch_gt_100m:.4f}")
     print(f"Model A Progx10: P50=${np.percentile(prog_x10,50)/1e6:.2f}M | P90=${np.percentile(prog_x10,90)/1e6:.2f}M | P(>50M)={p_prog_x10_gt_50m:.4f} | P(>100M)={p_prog_x10_gt_100m:.4f}")
