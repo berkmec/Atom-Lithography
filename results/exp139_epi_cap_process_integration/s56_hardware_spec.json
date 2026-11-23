@@ -1,0 +1,98 @@
+{
+  "source_experiment": "exp139_epi_cap_process_integration",
+  "hypothesis_id": "H157",
+  "no_lab_measurement": true,
+  "no_supplier_quotes": true,
+  "s56_hardware_spec": {
+    "subsystem_id": "S5.6",
+    "name": "In-Situ 28Si UHV MBE Capper & Forming-Gas Passivation Module",
+    "cad_v5_geometry": {
+      "mount_host": "s5_loadlock_chamber (+Z top port, CF100 DN100CF flange)",
+      "center_mm": [
+        420.0,
+        0.0,
+        725.0
+      ],
+      "flange_od_mm": 152.0,
+      "bore_id_mm": 100.0,
+      "envelope_diam_mm": 152.0,
+      "envelope_height_mm": 280.0,
+      "z_span_mm": [
+        585.0,
+        865.0
+      ],
+      "clearances_vs_cad_v4_mm": {
+        "vs_s5_chamber_top_flange_mm": 119.0,
+        "vs_s5_transfer_arm_mm": 70.0,
+        "vs_s5_flash_anneal_head_mm": 500.6,
+        "min_clearance_mm": 70.0
+      }
+    },
+    "vacuum_and_deposition": {
+      "evaporator_type": "Crucible-free DC 28Si rod sublimation source (SUSI-63 / mini e-beam class) + cryo/water shroud + pneumatic shutter + QCM",
+      "isotope_feedstock": "Enriched 28Si rod (< 50 ppm 29Si, ~5 g charge -> >1,000 wafers @ 8 nm)",
+      "base_pressure_torr": 1.5e-10,
+      "growth_pressure_torr": 3.5e-10,
+      "growth_rate_range_nm_s": [
+        0.05,
+        0.2
+      ],
+      "nominal_growth_rate_nm_s": 0.1,
+      "target_cap_thickness_nm": 8.0,
+      "cap_thickness_tolerance_nm": 0.3,
+      "nominal_deposition_time_s": 80.0,
+      "deposition_time_range_s": [
+        40.0,
+        160.0
+      ],
+      "optimal_substrate_T_C": 345.0,
+      "substrate_heater": "Load-Lock UHV pyrolytic-BN radiative chuck (RT-450 C, PID +-2 C, 150 W max)",
+      "passivation_manifold_route_C": "Precision leak-valve 5% H2/N2 forming-gas (or UHV atomic-H thermal cracker), 350 C / 15 min, backed by 80 L/s TMP + NEG"
+    },
+    "mass_power_cryo": {
+      "mass_breakdown_kg": {
+        "cf100_28si_source_shroud_shutter_kg": 11.8,
+        "qcm_feedthrough_and_valve_kg": 3.4,
+        "pbn_heater_platen_and_h2_manifold_kg": 4.2,
+        "compact_neg_tmp_aux_package_kg": 3.0
+      },
+      "total_mass_kg": 22.4,
+      "electrical_power_growth_W": 400.0,
+      "electrical_power_standby_W": 25.0,
+      "cryo_thermal_leak_to_20mK_uW": 0.0,
+      "cryo_thermal_leak_to_4K_mW": 0.0,
+      "cryo_isolation_mechanism": "All-metal UHV gate valve on s5_loadlock_duct isolates Load-Lock S5.3/S5.6 from 20 mK DR chamber during growth & passivation"
+    },
+    "bom_v5_cost_estimate_usd": {
+      "epistemic_label": "{Varsayim}, no_supplier_quotes=true",
+      "cf100_28si_source_shroud_psu_p50": 48000,
+      "enriched_28si_rod_and_qcm_p50": 18000,
+      "pbn_heater_h2_passivation_neg_p50": 29000,
+      "total_p10_usd": 67000,
+      "total_p50_usd": 95000,
+      "total_p90_usd": 145000,
+      "pct_of_v4_m3_hw_bom": 2.06
+    },
+    "wafer_throughput_impact_exp134": {
+      "route_A_loadlock_time_min": 3.33,
+      "route_C_loadlock_time_min": 28.33,
+      "exp134_v4_5x_dense_m4_main_cycle_min": 72.96,
+      "pipelined_throughput_penalty_pct": 0.0,
+      "serial_route_A_overhead_vs_1h_shuttle_pct": 5.56,
+      "serial_route_C_overhead_vs_2p2h_total_cycle_pct": 21.31
+    }
+  },
+  "coupled_s55_v5_flash_upgrade": {
+    "recommended_recipe": "808 nm qCW, 1.0 ms single pulse, 43.49 J/cm^2, T_peak = 1530.1 K (0.907 T_melt)",
+    "alternative_recipe": "808 nm qCW, 4 x 1.0 ms @ 41.15 J/cm^2, T_peak = 1440.3 K (0.854 T_melt)",
+    "window_fluence_1530K_AR_J_cm2": 11.16,
+    "sapphire_lidt_margin_1530K_vs_100J_AR": 8.96,
+    "exp124_sigma_tot_v5_route_C_nm": 3.6653
+  },
+  "exp137_charge_noise_bridge_S_eps_ueV_rtHz": {
+    "optimistic_Dit_1e10_dox5": 0.283,
+    "low_Dit_1e10_dox8": 0.3194,
+    "nominal_Dit_1p5e10_dox8": 0.3897,
+    "conservative_Dit_3e10_dox8": 0.5491
+  }
+}

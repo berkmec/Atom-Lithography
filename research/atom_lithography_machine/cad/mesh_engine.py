@@ -567,6 +567,20 @@ def compute_critical_clearances(parts: dict[str, dict] | None = None) -> dict[st
     braid_4k_clr = round(float(sh4_rin - braid_max_r), 3)
     rv_dr_x_clr = x_gap("s6_pt420_remote_valve_box", "s6_dr_top_flange")
 
+    # Exp139 S5.6 MBE capper clearances (vs UHV top flange, transfer arm, S7 feedthrough panel)
+    s56_flange_x_clr = x_gap("s5_chamber_top_flange", "s5_mbe_cf100_flange")
+    s56_arm_z_clr = z_gap("s5_transfer_arm", "s5_mbe_cf100_flange")
+    s56_s7_x_clr = x_gap("s5_mbe_tmp_neg_pump", "s7_feedthrough_panel")
+
+    # Exp140 S6.5 Cryo-MUX (20 mK TWPA/Purcell, 4K 32-ch HEMT, 96-coax loom) & 2U RFSoC clearances
+    dr_sh4_rin = p["s6_shield_4k_lower"]["dims"][0]
+    twpa_dx, twpa_dy, _ = p["s6_s65_twpa_purcell_pack"]["dims"]
+    twpa_4k_clr = round(float(dr_sh4_rin - math.hypot(twpa_dx / 2.0, twpa_dy / 2.0)), 3)
+    s65_hemt_rout = p["s6_s65_hemt_bank_32ch"]["dims"][1]
+    s65_hemt_4k_clr = round(float(dr_sh4_rin - s65_hemt_rout), 3)
+    s65_loom_m4_x_clr = x_gap("s6_s65_coax_loom_4k_still_pos", "s6_m4_crossbar_4k_mount")
+    s65_rfsoc_awg_z_clr = z_gap("s7_awg_rf_mw_bay", "s7_s65_rfsoc_boed_bay")
+
     checks = {
         "exp124_archB_wafer_to_minilens_WD_mm": {"value_mm": z_gap("s3_silicon_wafer", "s2_mini_lens_plate"), "min_req_mm": 0.20},
         "beam_array_diagonal_to_bore_clearance_mm": {"value_mm": array_bore_clr, "min_req_mm": 2.0},
@@ -594,6 +608,14 @@ def compute_critical_clearances(parts: dict[str, dict] | None = None) -> dict[st
         "exp133_bellows_to_4k_shield_radial_mm": {"value_mm": bel_4k_clr, "min_req_mm": 8.0},
         "exp133_braids_inside_4k_shield_radial_mm": {"value_mm": braid_4k_clr, "min_req_mm": 2.0},
         "exp133_remote_valve_to_dr_flange_x_mm": {"value_mm": rv_dr_x_clr, "min_req_mm": 150.0},
+        # CAD v5.0 clearances (Exp139 S5.6 MBE capper, Exp140 S6.5 Cryo-MUX & 2U RFSoC)
+        "exp139_s56_to_chamber_top_flange_x_mm": {"value_mm": s56_flange_x_clr, "min_req_mm": 100.0},
+        "exp139_s56_to_transfer_arm_z_mm": {"value_mm": s56_arm_z_clr, "min_req_mm": 65.0},
+        "exp139_s56_to_s7_panel_x_mm": {"value_mm": s56_s7_x_clr, "min_req_mm": 100.0},
+        "exp140_s65_twpa_inside_4k_shield_radial_mm": {"value_mm": twpa_4k_clr, "min_req_mm": 15.0},
+        "exp140_s65_hemt_to_4k_shield_radial_mm": {"value_mm": s65_hemt_4k_clr, "min_req_mm": 8.0},
+        "exp140_s65_coax_loom_to_m4_crossbar_x_mm": {"value_mm": s65_loom_m4_x_clr, "min_req_mm": 5.0},
+        "exp140_s65_rfsoc_to_awg_z_mm": {"value_mm": s65_rfsoc_awg_z_clr, "min_req_mm": 10.0},
     }
     for k, rec in checks.items():
         rec["pass"] = bool(rec["value_mm"] >= rec["min_req_mm"])

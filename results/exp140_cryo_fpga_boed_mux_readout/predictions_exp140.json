@@ -1,0 +1,44 @@
+{
+  "experiment": "exp140_cryo_fpga_boed_mux_readout",
+  "hypothesis_id": "H158",
+  "registered": "2026-11-23 (pre-run registration before implementing fpga_boed_dsp.py, CellISA v3.5, and run_exp140.py)",
+  "no_lab_measurement": true,
+  "no_supplier_quotes": true,
+  "epistemic_tags": [
+    "Model",
+    "Sayisal-Simulasyon",
+    "Liste-Capasi"
+  ],
+  "question": "Can a bit-exact Q16.16 fixed-point FPGA BOED DSP engine replicate Exp132 FP64 performance in <25 us/step, what is the physical N_mux* ceiling of a 3 kOhm NbTiN + Purcell + 20 mK TWPA + 4 K HEMT readout chain (4-8 GHz), how do 1,024-cell vs 10,000-cell M4 arrays fit inside a single PT420/LD400 cryostat heat budget, and can CellISA v3.5 compile fault-tolerant syndrome cycles with 100% backward compatibility?",
+  "predictions": [
+    {
+      "id": "FM1_Q16_16_FP64_PARITY",
+      "statement": "On N=400 paired Exp132 synthetic candidates, bit-exact Q16.16 fixed-point BOED matches FP64 with |RMS_Q16 - RMS_FP64| < 1.0 Hz, |FNR_Q16 - FNR_FP64| < 0.05%, |FPR_Q16 - FPR_FP64| < 0.05%, and empirical RMS_Q16 <= 100.0 Hz."
+    },
+    {
+      "id": "FM2_FPGA_CYCLE_LATENCY_AND_RESOURCES",
+      "statement": "Cycle-exact 250 MHz Q16.16 BOED-FPGA DSP pipeline executes one Bayesian posterior update + argmax next-frequency selection in < 25.0 us and fits 16 parallel channels within < 25% of a single ZU48DR RFSoC (DSP48E2, BRAM36, LUT)."
+    },
+    {
+      "id": "FM3_PURCELL_AND_TWPA_SINGLE_SHOT_RO",
+      "statement": "3 kOhm NbTiN (4-8 GHz) with bandpass Purcell filter + 20 mK TWPA (T_N=0.30 K, G=20 dB, P_1dB=-98 dBm) + 4 K HEMT (T_N=2.0 K) delivers >100x Purcell T1 protection and single-shot readout fidelity F_RO >= 0.990 at tau_RO <= 2.0 us for N_mux <= 32."
+    },
+    {
+      "id": "FM4_PHYSICAL_NMUX_CEILING",
+      "statement": "TWPA P_1dB=-98 dBm compression/IM3 backoff combined with 3 kOhm NbTiN kinetic-inductance scatter (sigma_fab=15 MHz) degrades N_mux=64 below F_RO=0.990 at 2.0 us (or pushes collision/crosstalk penalty >1%), setting the physical optimum at N_mux* in {16, 32}."
+    },
+    {
+      "id": "FM5_CRYO_BUDGET_1024_CLOSES_10000_WALL",
+      "statement": "At N_mux*, a 1,024-cell M4 array closes all 4 single-cryostat stages (20 mK MXC <= 14 uW, 100 mK <= 400 uW, 4 K PT420 <= 2.0 W, 50 K <= 40 W), while a 10,000-cell M4 array honestly exceeds single PT420/LD400 MXC and 4 K limits (requiring >= 4 modular cryostats or XLD1000-class multi-PT420)."
+    },
+    {
+      "id": "FM6_CELLISA_V35_SYNDROME_AND_BACKCOMPAT",
+      "statement": "CellISA v3.5 adds ECHO_CZ, MUX_READOUT, and SYNDROME_CYCLE (17 total opcodes), demonstrates ECHO_CZ beating bare CZ under 1/f charge noise in a live 4x4 routed syndrome cycle with verified SHA-256 MultiCellCertificate (isa_version='3.5'), and remains 100% backward-compatible with v2.0/v3.0."
+    },
+    {
+      "id": "FM7_S65_SPEC_PORTABILITY_AND_TESTS",
+      "statement": "Exports machine-readable S6.5 hardware spec JSON for CAD v5.0/BOM v5.0, has zero hardcoded host paths, 0 GFM table errors, and passes >= 7 new Exp140 tests plus all existing repository tests."
+    }
+  ],
+  "success_rule": "FM1, FM2, FM3, FM4, FM5, FM6, FM7 all PASS."
+}

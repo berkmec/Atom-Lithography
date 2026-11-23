@@ -1,0 +1,49 @@
+{
+  "experiment": "exp141_v5_digital_twin",
+  "hypothesis_id": "H159",
+  "registered": "2026-11-23 (pre-run registration prior to implementing and executing digital_twin141.py / run_exp141.py)",
+  "no_lab_measurement": true,
+  "no_supplier_quotes": true,
+  "epistemic_tags": [
+    "Model",
+    "Sayisal-Simulasyon",
+    "Varsayim",
+    "Liste-Capasi"
+  ],
+  "question": "When all 17 primary experiments (Exp124-Exp140), CAD v5.0, BOM v5.0, wafer_econ141.py, and live src/machine_control/ (Q16.16 BOED-FPGA + CellISA v3.5) are unified into the v5.0 Master Fault-Tolerant Digital Twin, do all placement, atomistic/MBE/echo/readout, surface-code FT scaling, CX4 wafer-cost, logical-qubit economics, and SHA-256 provenance gates close?",
+  "predictions": [
+    {
+      "id": "DT5_1_LEDGER_CAD_BOM_INTEGRITY",
+      "statement": "All 17 primary experiment JSON ledgers (exp124..140), CAD v5.0 (189 parts, 1,034.94 kg, 0/17,766 clashes, 32/32 clearances PASS), and BOM v5.0 (167 parts, M3=$5,247,800, $0.00 reconciliation error) load cleanly with full 64-hex SHA-256 digests."
+    },
+    {
+      "id": "DT5_2_V5_PLACEMENT_BUDGET_CLOSURE",
+      "statement": "Coupled v5.0 placement RSS combining Exp124 beam optics + Exp133 CFG4 (0.1024/0.1473/0.0283 nm) + Exp139 v5 1530 K cluster-clearing flash (sigma_anneal=0.430 nm) closes <= 3.80 nm (strictly curing the v4 unmitigated hidden-TED 3.995 nm violation)."
+    },
+    {
+      "id": "DT5_3_ATOMISTIC_MBE_ECHO_MUX_CHAIN",
+      "statement": "Integrated Exp136 x Exp139 x Exp137 x Exp140 quantum chain confirms f*=1.5%+2 MV/m Stark yield >= 75% (d_eff/d >= 99%), Route C flip-flop yield >= 97% with S_eps <= 0.40 uev/rtHz, P4 Echo CZ F_Bell >= 0.985 at S_eps=0.25-0.50, and N_mux*=32 readout F_RO >= 0.995 with 2.34 us Q16.16 FPGA step."
+    },
+    {
+      "id": "DT5_4_LIVE_CELLISA35_AND_Q16_FPGA",
+      "statement": "Live execution of src/machine_control/ (fpga_boed_dsp.py + programmer.py CellISA v3.5 with 17 opcodes) within the digital twin achieves |dRMS_Q16| < 1.0 Hz, live ECHO_CZ fidelity >= 0.98 (beating bare CZ by >15 pp), and syndrome cycle T_cyc <= 3.0 us with verified SHA-256 certificate."
+    },
+    {
+      "id": "DT5_5_SURFACE_CODE_FT_THRESHOLD_CLOSURE",
+      "statement": "Exp138 rotated surface code (d=3..11 MWPM) demonstrates v4 bare P1 fails (Lambda < 1), while v5 Route C P4 achieves exponential suppression Lambda > 1 (D2: Lambda >= 1.35; D3 target p_2q=0.50%: Lambda >= 2.2), reducing 100L (1e-9) cryostat fleet by >= 6x (679 -> 100 cryostats)."
+    },
+    {
+      "id": "DT5_6_WAFER_CX4_SILICON_WALL_BROKEN",
+      "statement": "wafer_econ141.evaluate_v5_wafer_economics() confirms W1 ($12k thick epi) fails CX4 (<= -20%), while thin 30 nm 28Si-on-SOI W2 ($2.2k, >= 75% total reduction) and 300 mm W3 ($3.6k, >= 80% total reduction) break the Exp134 CX4 silicon wall (>= 40% reduction both vs v3-W1 and same-wafer)."
+    },
+    {
+      "id": "DT5_7_LOGICAL_QUBIT_ECONOMICS_D2_AND_D3",
+      "statement": "wafer_econ141.evaluate_logical_qubit_economics() executes on real Exp138 D2 and D3 targets (1e-6, 1e-9, 1e-12), explicitly separating silicon fab cost ($/L_fab < $10 at 1e-9 W3) from 100L deployed multi-cryostat system TCO ($/L_sys), confirming D3 cuts 100L deployed $/L by >= 5x vs D2."
+    },
+    {
+      "id": "DT5_8_CRYPTO_V5_CERT_PORTABILITY_AND_TESTS",
+      "statement": "Canonical SHA-256 v5_digital_twin_cert.json (full 64-hex) verifies on disk round-trip, matches every primary ledger SHA-256, matches summary_exp141.md full 64-hex digest, contains zero hardcoded host paths, 0 GFM table errors, and passes >= 8 Exp141 tests plus full repo regression."
+    }
+  ],
+  "success_rule": "DT5_1 through DT5_8 all PASS."
+}

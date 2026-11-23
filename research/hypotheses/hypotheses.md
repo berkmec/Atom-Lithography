@@ -761,3 +761,51 @@ durum: desteklendi (5/6 PASS: CX1,2,3,5,6 PASS; durust CX4 FAIL silisyum zemini;
 
 durum: desteklendi (7/7 PASS: DT1-DT7 PASS; success_rule_met=true; v4.0 dijital ikiz muhurlendi)
 
+## H154 (Exp136, 2026-11-23) — Atomistik 10-bant sp3d5s* tight-binding hiperince, R331 cekirdek polarizasyonu & optimal 29Si orani f*
+
+Elmas orgude `16.000` atom / `160.000` orbital Boykin-Klimeck `sp3d5s*` 10-bant TB + `31P` cozucusu (`results/exp136_tb_sp3d5s_hyperfine/exp136.json`, `tests/test_exp136.py` 10/10 PASS, `no_lab_measurement=true`):
+- **Atomistik `R331` atilimi (`TB1, TB2, TB3 PASS`):** `Exp129` `VOKL-6` `%64,73` sapmasi atomistik `sp3d5s*` ile **`%21,1`** (`alpha_cp = 0`) / **`%25,7`** (`alpha_cp = 0,015`) duzeyine dustu (`3x` iyilesme; `log10-RMS = 0,2426` vs `VOKL-6` `0,7445`). `TB4 FAIL`: cok-kabuklu tum-ENDOR hedefi hala all-electron DFT ister (`TB5 FAIL`: Stark kaymasi dogrulandi ama hedef tek-kabuk esigi tutmadi).
+- **Optimal `29Si` bollugu `f*` & `E_z` Stark taramasi (`TB6 PASS`, `TB7 FAIL`):** `f = %1,0` Mod B verimi **`%52,75`** (`M4` `%99,74`), **`f* = %1,5 + 2 MV/m` Stark** ile **`%77,50`** (DDRF `6,89 kHz` sinirli **`%54,00`**, `M4` **`%99,88`**), `f* = %2,0` **`%59,75`** (`M4` **`%99,99`**). `XY8` elektron koheransi **`T2e = 10,8–20,3 ms`** (`TB7 FAIL`: en siki ayni-anda `f*` + ciplak Hahn-echo `>= 10 ms` esigi `XY8` gerektirir).
+
+durum: kismen desteklendi (4/7 PASS: TB1,2,3,6 PASS; durust TB4,5,7 FAIL; R331 %64,73->%21,1 ve f*=%1,5+2 MV/m Stark kilidi)
+
+## H155 (Exp137, 2026-11-23) — 1/f gurultulu M4 3 kOhm NbTiN veri yolunda yankili (Echo) CZ kapisi (Exp131 CM4 kapanisi)
+
+`12x12` CUDA kesin Lindblad + `M = 40` Ornstein-Uhlenbeck renkli `1/f^alpha` zaman-serisi cozucusu (`results/exp137_echoed_m4_bus_gate/exp137.json`, `tests/test_exp137.py` 8/8 PASS, `no_lab_measurement=true`):
+- **Yankili `P4` protokolu & enine `dg` bastirma (`EC1, EC3, EC6, EC7 PASS`):** `P4` (`XY4-DRAG-Echo-CZ`) enine baglasim `dg` cezasini **`5,09x`** bastirir (`EC6 PASS`); tam `16`-elemanli Pauli kanali `Exp138` yuzey-kodu dekoderine ihrac edildi (`EC7 PASS`).
+- **Durust `1/f` esik duvarlari (`EC2, EC4, EC5 FAIL`):** Pasivesiz `S_eps = 1,0 ueV/rtHz`'de `P4` `F_Bell = 0,9587` (`0,9824` hizli ciftler) — tek basina yanki `S_eps = 1,0`'da `%99` esigini gecemez! **`Exp139` Rota C arayuz pasivasyonu ile birlikte:** `(Q_L = 2e5, S_eps = 0,50 ueV/rtHz)` -> **`F_Bell = 0,9901`**, **`(Q_L = 5e5, S_eps = 0,25 ueV/rtHz)` -> `F_Bell = 0,9949`, `F_avg = 0,9926`, `p_err = %0,92 < %1`** (yuzey kodu esigi altinda!).
+
+durum: kismen desteklendi (4/7 PASS: EC1,3,6,7 PASS; durust EC2,4,5 FAIL; pasivesiz 1,0 ueV/rtHz yetersiz, Rota C ile F_Bell=0,9949 / p_err=%0,92)
+
+## H156 (Exp138, 2026-11-23) — Kusurlu dondurulmus yuzey kodu (d=3..11) kesin Edmonds Blossom MWPM hata-tolerans kapanisi
+
+`d = 3, 5, 7, 9, 11` tam CSS cebiri + `Exp137` `pauli_16` + `Exp140` `p_meas = %0,386` + `Exp126` `p_1q = %0,083` + `Exp136` `p_idle,Z = %0,032` uzerinde kesin Edmonds Blossom MWPM dekoderi (`results/exp138_defective_surface_code_ft/exp138.json`, `tests/test_exp138.py` 10/10 PASS, `no_lab_measurement=true`):
+- **Hata-tolerans esigi & kriyostat filosu (`FT1, FT2, FT3, FT4, FT6, FT7 PASS`):** Dongu-basi esik **`p_2q,th = %1,60 +- %0,17`** (`Z: %1,62`, `X: %1,75`). Negatif kontrol `v4` ciplak `P1`: **`Lambda = 0,00`** (`FAIL`). `v5` Rota C gecisi: `C2 (Q=2e5, S=0,390)` **`Lambda = 1,04`**, `D1 (Q=5e5, S=0,390)` **`Lambda = 1,26`**, **`D2 (Q=5e5, S=0,25, p_2q=%0,92)` `Lambda = 1,40`** (`10^-9`: `d* = 99`, `679` kriyostat), **`D3 (p_2q=%0,50)` `Lambda = 2,52`** (`10^-9`: `d* = 37`, `100` kriyostat, `1 L/kriyo` bolunmez, **`6,8x` filo kuculmesi**).
+- **Durust kusurlu-kafes bulgusu (`FT5 FAIL`):** `f = %1, N_cand = 6` (`p_drop = %1,31`) Auger agirlik-8 delikleri nedeniyle `d_eff/d = %79,0 < %85` verir; **`f* = %1,5 + 2 MV/m Stark + N_cand = 6`** (`p_drop = %0,021`) **`d_eff/d = %99,5`** ile kusursuzluga ulasir.
+
+durum: desteklendi (6/7 PASS: FT1,2,3,4,6,7 PASS; durust FT5 FAIL; success_rule_met=true; D2 Lambda=1,40 / D3 Lambda=2,52)
+
+## H157 (Exp139, 2026-11-23) — 8 nm 28Si epitaksiyel kapak surec entegrasyonu, gizli TED kesfi, 1530 K cozum & S5.6 MBE donanimi
+
+`Exp131` `Delta z_cap* = 8 nm` kapagi icin kuple BCA + geri-tepme oksijen + LT-MBE + McWhorter 2B yuk-gurultusu + kuple TED modeli (`results/exp139_epi_cap_process_integration/exp139.json`, `tests/test_exp139.py` 9/9 PASS, `no_lab_measurement=true`):
+- **Kritik fiziksel kesif (`EP3, EP5, EP7 FAIL`):** `v4.0` `1440 K` (`41,15 J/cm2`) flas tavlamada `{311}` kusur kumelerinin `%13,6`'si sag kalir ve LT-MBE kaplama sirasinda **`+1,318 nm` gizli arka-uc TED** yaratarak toplam yerlestirmeyi **`3,995 nm > 3,80 nm` FAIL** eder!
+- **`v5.0` `1530 K` kume-temizleyici cozum & Rota C (`EP1, EP2, EP4, EP6 PASS`):** Flas sicakliginin **`1530 K` (`43,49 J/cm2`)** yukselmesiyle `{311}` kume temizligi **`%99,99`**, **`sigma_anneal = 0,430 nm`**, birlesik **`sigma_tot = 3,665 nm <= 3,80 nm` PASS** (`Exp141` `CFG4`: `3,6307 / 3,5883 nm`) olur. **Rota C** (`345 C` LT-MBE + `350 C` FG/H pasivasyonu) yuk gurultusunu **`S_eps = 0,390 ueV/rtHz`**'ye (`2,57x` dusus), flip-flop verimini **`p_ff = %97,70`**'e cikarir. **`S5.6` MBE kapak modulu:** `22,4 kg`, `` `$95k` `` (`RFQ-08`), `0 uW` kriyo yuku, `%0` akis cezasi.
+
+durum: kismen desteklendi (4/7 PASS: EP1,2,4,6 PASS; durust EP3,5,7 FAIL; v4 gizli TED kesfedilip v5 1530 K + Rota C + S5.6 MBE ile kapatildi)
+
+## H158 (Exp140, 2026-11-23) — Q16.16 FPGA BOED DSP, TWPA/Purcell N_mux* = 32, 1024/2887 kriyo tavani & CellISA v3.5
+
+`ZCU216` sabit-nokta `Q16.16` FPGA BOED DSP (`src/machine_control/fpga_boed_dsp.py`), Purcell-filtreli TWPA okuma ve `CellISA v3.5` (`17` opcode) (`results/exp140_cryo_fpga_boed_mux_readout/exp140.json`, `tests/test_exp140.py` 7/7 PASS, `no_lab_measurement=true`):
+- **FPGA DSP & `N_mux* = 32` (`FM1–FM4 PASS`):** `Q16.16` FPGA FP64 esitligi **`abs(Delta RMS) = 0,0502 Hz`**, dongu-kesin gecikme **`2,336 us/adim`**, kaynak **`%10,49` DSP48E2**. Fiziksel çoklama tavanı **`N_mux* = 32`** (`F_RO = %99,61`, **`625x` Purcell** bastirma; `N_mux = 64` `%94,13` FAIL).
+- **Kriyostat tavanı & `CellISA v3.5` (`FM5–FM7 PASS`):** **`1.024` hucre `4/4` termal kademede PASS**; tek `LD400/PT420` kriyostat fiziki tavani **`2.887` hucre** (`20 mK` MXC darbogazi); `10.000` hucre **`>= 4` moduler kriyostat** gerektirir. **`CellISA v3.5`** `17` komut (`+ ECHO_CZ, MUX_READOUT, SYNDROME_CYCLE`). **`S6.5` (`S6.11`) donanim:** `19,27 kg`, `` `$629,2k` `` (`RFQ-08`).
+
+durum: desteklendi (7/7 PASS: FM1-FM7 PASS; Q16.16 FPGA, N_mux*=32, 2.887 hucre/kriyo & CellISA v3.5 kilitlendi)
+
+## H159 (Exp141, 2026-11-23) — Master v5.0 uctan uca hata-toleransli dijital ikiz, wafer CX4 kapanisi & kriptografik sertifika
+
+`17/17` birincil deney (`Exp124–Exp140`) + `CAD v5.0` (`189` parca, `1.034,94 kg`, `38.876` STL ucgen, `0/17.766` cakisma, `32/32` bosluk, `27/27` test) + `BOM v5.0` (`167` parca, `` `M3 = $5.247.800` ``, `` `M1 = $2.466.120` ``, `8-RFQ = %76,4` nom / `%92,6` MC var, `` `P(Prog > $100M) = %4,23 < %5` `` [FOAK 5y TCO `%5,91`]) = `19/19` artefakti birlestiren master dijital ikiz (`results/exp141_v5_digital_twin/exp141.json`, `v5_digital_twin_cert.json`, `tests/test_exp141.py` 9/9 PASS, `23/23` staged test dosyasi `198/198` PASS, `no_lab_measurement=true`, `no_supplier_quotes=true`):
+- **Birlesik fizik & canli kontrol (`DT5_1–DT5_5 PASS`):** Yerlestirme **`3,6307 nm` (`15 ms`) / `3,5883 nm` (`10 ms`)** (`v4` gizli TED `3,9634 nm` FAIL'i kapatildi); canli `Q16.16` FPGA `abs(Delta RMS) = 0,0183 Hz`; canli `CellISA v3.5` `Bare CZ = 0,7791 ->` **`ECHO_CZ = 0,9818 (+20,27 pp)`**, `F_syn = 0,9427`, `T_cyc = 2,620 us`; yuzey kodu `P1 (Lambda=0) -> D2 (Lambda=1,40) -> D3 (Lambda=2,52, 679->100 kriyostat)`.
+- **Wafer `CX4` silisyum duvari kirildi & durust mantiksal kubit ekonomisi (`DT5_6–DT5_8 PASS`):** **`W2`** (`30 nm` `200 mm` SOI `` `$2,2k` ``, `` `$0` `` makine degisikligi -> `` `$0,616/cip` ``, **`-%79,5`**, `CX4 PASS`) ve **`W3`** (`300 mm` SOI `` `$3,6k` `` -> `` `$0,442/cip` ``, **`-%85,3`**, `CX4 PASS`). `10^-9` mantiksal kubit: **`D2`** fab `` `$/L_fab = $5,20` `` / dagitilmis 100L kriyo `` `$/L_sys = $14,94M` `` vs **`D3`** `` `$/L_fab = $0,73` `` / `` `$/L_sys = $2,76M` `` (**`5,41x` ucuz**). Tam 64-hex `v5_digital_twin_cert.json` **`SHA-256 = 2828e8ce8d9388f7cba5490b2d05add930aadc5fe6d3ba4295f0380f816d43d1`**.
+
+durum: desteklendi (8/8 PASS: DT5_1-DT5_8 PASS; v5.0 hata-toleransli dijital ikiz, CX4 SOI kapanisi & 19/19 SHA-256 sertifikasyon muhurlendi)
+

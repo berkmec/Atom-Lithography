@@ -1,0 +1,1244 @@
+{
+  "experiment": "exp140_cryo_fpga_boed_mux_readout",
+  "hypothesis_id": "H158",
+  "date": "2026-11-23",
+  "no_lab_measurement": true,
+  "no_supplier_quotes": true,
+  "epistemic_tags": [
+    "Model",
+    "Sayisal-Simulasyon",
+    "Liste-Capasi"
+  ],
+  "runtime_s": 3.75,
+  "predictions": {
+    "experiment": "exp140_cryo_fpga_boed_mux_readout",
+    "hypothesis_id": "H158",
+    "registered": "2026-11-23 (pre-run registration before implementing fpga_boed_dsp.py, CellISA v3.5, and run_exp140.py)",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "epistemic_tags": [
+      "Model",
+      "Sayisal-Simulasyon",
+      "Liste-Capasi"
+    ],
+    "question": "Can a bit-exact Q16.16 fixed-point FPGA BOED DSP engine replicate Exp132 FP64 performance in <25 us/step, what is the physical N_mux* ceiling of a 3 kOhm NbTiN + Purcell + 20 mK TWPA + 4 K HEMT readout chain (4-8 GHz), how do 1,024-cell vs 10,000-cell M4 arrays fit inside a single PT420/LD400 cryostat heat budget, and can CellISA v3.5 compile fault-tolerant syndrome cycles with 100% backward compatibility?",
+    "predictions": [
+      {
+        "id": "FM1_Q16_16_FP64_PARITY",
+        "statement": "On N=400 paired Exp132 synthetic candidates, bit-exact Q16.16 fixed-point BOED matches FP64 with |RMS_Q16 - RMS_FP64| < 1.0 Hz, |FNR_Q16 - FNR_FP64| < 0.05%, |FPR_Q16 - FPR_FP64| < 0.05%, and empirical RMS_Q16 <= 100.0 Hz."
+      },
+      {
+        "id": "FM2_FPGA_CYCLE_LATENCY_AND_RESOURCES",
+        "statement": "Cycle-exact 250 MHz Q16.16 BOED-FPGA DSP pipeline executes one Bayesian posterior update + argmax next-frequency selection in < 25.0 us and fits 16 parallel channels within < 25% of a single ZU48DR RFSoC (DSP48E2, BRAM36, LUT)."
+      },
+      {
+        "id": "FM3_PURCELL_AND_TWPA_SINGLE_SHOT_RO",
+        "statement": "3 kOhm NbTiN (4-8 GHz) with bandpass Purcell filter + 20 mK TWPA (T_N=0.30 K, G=20 dB, P_1dB=-98 dBm) + 4 K HEMT (T_N=2.0 K) delivers >100x Purcell T1 protection and single-shot readout fidelity F_RO >= 0.990 at tau_RO <= 2.0 us for N_mux <= 32."
+      },
+      {
+        "id": "FM4_PHYSICAL_NMUX_CEILING",
+        "statement": "TWPA P_1dB=-98 dBm compression/IM3 backoff combined with 3 kOhm NbTiN kinetic-inductance scatter (sigma_fab=15 MHz) degrades N_mux=64 below F_RO=0.990 at 2.0 us (or pushes collision/crosstalk penalty >1%), setting the physical optimum at N_mux* in {16, 32}."
+      },
+      {
+        "id": "FM5_CRYO_BUDGET_1024_CLOSES_10000_WALL",
+        "statement": "At N_mux*, a 1,024-cell M4 array closes all 4 single-cryostat stages (20 mK MXC <= 14 uW, 100 mK <= 400 uW, 4 K PT420 <= 2.0 W, 50 K <= 40 W), while a 10,000-cell M4 array honestly exceeds single PT420/LD400 MXC and 4 K limits (requiring >= 4 modular cryostats or XLD1000-class multi-PT420)."
+      },
+      {
+        "id": "FM6_CELLISA_V35_SYNDROME_AND_BACKCOMPAT",
+        "statement": "CellISA v3.5 adds ECHO_CZ, MUX_READOUT, and SYNDROME_CYCLE (17 total opcodes), demonstrates ECHO_CZ beating bare CZ under 1/f charge noise in a live 4x4 routed syndrome cycle with verified SHA-256 MultiCellCertificate (isa_version='3.5'), and remains 100% backward-compatible with v2.0/v3.0."
+      },
+      {
+        "id": "FM7_S65_SPEC_PORTABILITY_AND_TESTS",
+        "statement": "Exports machine-readable S6.5 hardware spec JSON for CAD v5.0/BOM v5.0, has zero hardcoded host paths, 0 GFM table errors, and passes >= 7 new Exp140 tests plus all existing repository tests."
+      }
+    ],
+    "success_rule": "FM1, FM2, FM3, FM4, FM5, FM6, FM7 all PASS."
+  },
+  "verdicts": {
+    "FM1_Q16_16_FP64_PARITY": true,
+    "FM2_FPGA_CYCLE_LATENCY_AND_RESOURCES": true,
+    "FM3_PURCELL_AND_TWPA_SINGLE_SHOT_RO": true,
+    "FM4_PHYSICAL_NMUX_CEILING": true,
+    "FM5_CRYO_BUDGET_1024_CLOSES_10000_WALL": true,
+    "FM6_CELLISA_V35_SYNDROME_AND_BACKCOMPAT": true,
+    "FM7_S65_SPEC_PORTABILITY_AND_TESTS": true
+  },
+  "n_passed": 7,
+  "n_total": 7,
+  "success_rule_met": true,
+  "fpga_boed_q16_benchmark": {
+    "n_candidates": 400,
+    "n_working": 215,
+    "n_nonworking": 185,
+    "n_lines_paired": 1712,
+    "stage0_sprt_disagreements": 0,
+    "fp64": {
+      "rms_freq_error_Hz": 73.329,
+      "mae_freq_error_Hz": 57.604,
+      "fnr_pct": 0.4651,
+      "fpr_pct": 0.0,
+      "mean_time_ms": 43.607
+    },
+    "q16_16": {
+      "rms_freq_error_Hz": 73.38,
+      "mae_freq_error_Hz": 57.643,
+      "fnr_pct": 0.4651,
+      "fpr_pct": 0.0,
+      "mean_time_ms": 41.62,
+      "total_fpga_steps": 10912,
+      "total_fpga_compute_ms": 25.49
+    },
+    "parity": {
+      "abs_delta_rms_Hz": 0.0502,
+      "rms_quantization_diff_Hz": 1.5926,
+      "p99_quantization_diff_Hz": 0.4477,
+      "max_quantization_diff_Hz": 31.1121,
+      "abs_delta_fnr_pct": 0.0,
+      "abs_delta_fpr_pct": 0.0
+    },
+    "fpga_resources": {
+      "target_fpga": "Xilinx Zynq UltraScale+ RFSoC ZU48DR (8x 5GSPS ADC / 8x 10GSPS DAC)",
+      "f_clk_MHz": 250.0,
+      "simd_lanes": 4,
+      "cycles_per_boed_step": 584,
+      "latency_per_boed_step_us": 2.336,
+      "cycles_per_home_step": 234,
+      "latency_per_home_step_us": 0.936,
+      "cycles_stage0_sprt_shot": 4,
+      "latency_stage0_sprt_ns": 16.0,
+      "per_engine": {
+        "dsp48e2": 28,
+        "bram36": 4,
+        "lut": 4200,
+        "ff": 5100,
+        "dynamic_power_W": 0.18
+      },
+      "parallel_engines": 16,
+      "total_16ch": {
+        "dsp48e2": 448,
+        "dsp48e2_pct": 10.49,
+        "bram36": 64,
+        "bram36_pct": 5.93,
+        "lut": 67200,
+        "lut_pct": 15.8,
+        "ff": 81600,
+        "ff_pct": 9.59,
+        "board_total_power_W": 37.98,
+        "cryo_heat_load_W": 0.0
+      }
+    }
+  },
+  "mux_readout_3kOhm_NbTiN": {
+    "chain_physics": {
+      "f_center_GHz": 6.0,
+      "chi_MHz": 0.24,
+      "kappa_ro_MHz": 2.0,
+      "n_crit": 625.0,
+      "n_bar_target": 40.0,
+      "p_tone_target_dBm": -120.0,
+      "sin2_half_theta": 0.05446,
+      "t1_purcell_bare_us": 198.94,
+      "purcell_protection_factor": 625.0,
+      "t1_purcell_filtered_ms": 124.34,
+      "t1_eff_bare_us": 159.32,
+      "t1_eff_filtered_us": 794.89,
+      "t_sql_K": 0.144,
+      "t_sys_with_twpa_K": 0.6719,
+      "t_sys_hemt_only_K": 4.6808,
+      "eta_meas_with_twpa": 0.2143,
+      "eta_meas_hemt_only": 0.0308
+    },
+    "by_nmux": {
+      "8": {
+        "n_mux": 8,
+        "channel_spacing_MHz": 400.0,
+        "spacing_over_sigma_fab": 26.67,
+        "papr_dB": 5.89,
+        "p_tot_nom_twpa_dBm": -112.47,
+        "p_peak_nom_twpa_dBm": -106.58,
+        "twpa_backoff_dB": 0.0,
+        "n_bar_effective": 40.0,
+        "im3_noise_penalty": 2e-05,
+        "lorentz_xt_dB": -49.03,
+        "pair_collision_prob_pct": 0.0,
+        "F_ro_at_2us": 0.998229,
+        "snr_at_2us": 6.572,
+        "best_F_ro": 0.998229,
+        "best_tau_us": 2.0,
+        "passes_99pct_at_2us": true,
+        "tau_curve": [
+          {
+            "tau_ro_us": 0.5,
+            "snr": 2.856,
+            "err_sep": 0.076619,
+            "err_t1": 0.000314,
+            "err_xt_collision": 6e-06,
+            "F_ro": 0.923061
+          },
+          {
+            "tau_ro_us": 1.0,
+            "snr": 4.443,
+            "err_sep": 0.013166,
+            "err_t1": 0.000629,
+            "err_xt_collision": 6e-06,
+            "F_ro": 0.986199
+          },
+          {
+            "tau_ro_us": 1.5,
+            "snr": 5.609,
+            "err_sep": 0.002519,
+            "err_t1": 0.000943,
+            "err_xt_collision": 6e-06,
+            "F_ro": 0.996532
+          },
+          {
+            "tau_ro_us": 2.0,
+            "snr": 6.572,
+            "err_sep": 0.000508,
+            "err_t1": 0.001256,
+            "err_xt_collision": 6e-06,
+            "F_ro": 0.998229
+          },
+          {
+            "tau_ro_us": 3.0,
+            "snr": 8.164,
+            "err_sep": 2.2e-05,
+            "err_t1": 0.001883,
+            "err_xt_collision": 6e-06,
+            "F_ro": 0.998088
+          },
+          {
+            "tau_ro_us": 4.0,
+            "snr": 9.493,
+            "err_sep": 1e-06,
+            "err_t1": 0.00251,
+            "err_xt_collision": 6e-06,
+            "F_ro": 0.997483
+          },
+          {
+            "tau_ro_us": 5.0,
+            "snr": 10.658,
+            "err_sep": 0.0,
+            "err_t1": 0.003135,
+            "err_xt_collision": 6e-06,
+            "F_ro": 0.996858
+          }
+        ]
+      },
+      "16": {
+        "n_mux": 16,
+        "channel_spacing_MHz": 200.0,
+        "spacing_over_sigma_fab": 13.33,
+        "papr_dB": 6.85,
+        "p_tot_nom_twpa_dBm": -109.46,
+        "p_peak_nom_twpa_dBm": -102.61,
+        "twpa_backoff_dB": 0.0,
+        "n_bar_effective": 40.0,
+        "im3_noise_penalty": 9e-05,
+        "lorentz_xt_dB": -43.01,
+        "pair_collision_prob_pct": 0.0,
+        "F_ro_at_2us": 0.99821,
+        "snr_at_2us": 6.571,
+        "best_F_ro": 0.99821,
+        "best_tau_us": 2.0,
+        "passes_99pct_at_2us": true,
+        "tau_curve": [
+          {
+            "tau_ro_us": 0.5,
+            "snr": 2.856,
+            "err_sep": 0.076641,
+            "err_t1": 0.000314,
+            "err_xt_collision": 2.5e-05,
+            "F_ro": 0.923019
+          },
+          {
+            "tau_ro_us": 1.0,
+            "snr": 4.442,
+            "err_sep": 0.013174,
+            "err_t1": 0.000629,
+            "err_xt_collision": 2.5e-05,
+            "F_ro": 0.986172
+          },
+          {
+            "tau_ro_us": 1.5,
+            "snr": 5.608,
+            "err_sep": 0.002522,
+            "err_t1": 0.000943,
+            "err_xt_collision": 2.5e-05,
+            "F_ro": 0.99651
+          },
+          {
+            "tau_ro_us": 2.0,
+            "snr": 6.571,
+            "err_sep": 0.000509,
+            "err_t1": 0.001256,
+            "err_xt_collision": 2.5e-05,
+            "F_ro": 0.99821
+          },
+          {
+            "tau_ro_us": 3.0,
+            "snr": 8.163,
+            "err_sep": 2.2e-05,
+            "err_t1": 0.001883,
+            "err_xt_collision": 2.5e-05,
+            "F_ro": 0.998069
+          },
+          {
+            "tau_ro_us": 4.0,
+            "snr": 9.492,
+            "err_sep": 1e-06,
+            "err_t1": 0.00251,
+            "err_xt_collision": 2.5e-05,
+            "F_ro": 0.997464
+          },
+          {
+            "tau_ro_us": 5.0,
+            "snr": 10.656,
+            "err_sep": 0.0,
+            "err_t1": 0.003135,
+            "err_xt_collision": 2.5e-05,
+            "F_ro": 0.99684
+          }
+        ]
+      },
+      "32": {
+        "n_mux": 32,
+        "channel_spacing_MHz": 100.0,
+        "spacing_over_sigma_fab": 6.67,
+        "papr_dB": 7.82,
+        "p_tot_nom_twpa_dBm": -106.45,
+        "p_peak_nom_twpa_dBm": -98.64,
+        "twpa_backoff_dB": 1.36,
+        "n_bar_effective": 29.22,
+        "im3_noise_penalty": 0.00019,
+        "lorentz_xt_dB": -36.99,
+        "pair_collision_prob_pct": 0.0009,
+        "F_ro_at_2us": 0.996139,
+        "snr_at_2us": 5.614,
+        "best_F_ro": 0.997768,
+        "best_tau_us": 3.0,
+        "passes_99pct_at_2us": true,
+        "tau_curve": [
+          {
+            "tau_ro_us": 0.5,
+            "snr": 2.44,
+            "err_sep": 0.11123,
+            "err_t1": 0.000314,
+            "err_xt_collision": 0.000105,
+            "F_ro": 0.88835
+          },
+          {
+            "tau_ro_us": 1.0,
+            "snr": 3.795,
+            "err_sep": 0.028881,
+            "err_t1": 0.000629,
+            "err_xt_collision": 0.000105,
+            "F_ro": 0.970386
+          },
+          {
+            "tau_ro_us": 1.5,
+            "snr": 4.791,
+            "err_sep": 0.008294,
+            "err_t1": 0.000943,
+            "err_xt_collision": 0.000105,
+            "F_ro": 0.990659
+          },
+          {
+            "tau_ro_us": 2.0,
+            "snr": 5.614,
+            "err_sep": 0.0025,
+            "err_t1": 0.001256,
+            "err_xt_collision": 0.000105,
+            "F_ro": 0.996139
+          },
+          {
+            "tau_ro_us": 3.0,
+            "snr": 6.974,
+            "err_sep": 0.000244,
+            "err_t1": 0.001883,
+            "err_xt_collision": 0.000105,
+            "F_ro": 0.997768
+          },
+          {
+            "tau_ro_us": 4.0,
+            "snr": 8.109,
+            "err_sep": 2.5e-05,
+            "err_t1": 0.00251,
+            "err_xt_collision": 0.000105,
+            "F_ro": 0.99736
+          },
+          {
+            "tau_ro_us": 5.0,
+            "snr": 9.104,
+            "err_sep": 3e-06,
+            "err_t1": 0.003135,
+            "err_xt_collision": 0.000105,
+            "F_ro": 0.996757
+          }
+        ]
+      },
+      "64": {
+        "n_mux": 64,
+        "channel_spacing_MHz": 50.0,
+        "spacing_over_sigma_fab": 3.33,
+        "papr_dB": 8.78,
+        "p_tot_nom_twpa_dBm": -103.44,
+        "p_peak_nom_twpa_dBm": -94.66,
+        "twpa_backoff_dB": 5.34,
+        "n_bar_effective": 11.7,
+        "im3_noise_penalty": 0.00012,
+        "lorentz_xt_dB": -30.97,
+        "pair_collision_prob_pct": 3.8063,
+        "F_ro_at_2us": 0.94132,
+        "snr_at_2us": 3.549,
+        "best_F_ro": 0.97543,
+        "best_tau_us": 5.0,
+        "passes_99pct_at_2us": false,
+        "tau_curve": [
+          {
+            "tau_ro_us": 0.5,
+            "snr": 1.542,
+            "err_sep": 0.220288,
+            "err_t1": 0.000314,
+            "err_xt_collision": 0.019431,
+            "F_ro": 0.759966
+          },
+          {
+            "tau_ro_us": 1.0,
+            "snr": 2.399,
+            "err_sep": 0.115169,
+            "err_t1": 0.000629,
+            "err_xt_collision": 0.019431,
+            "F_ro": 0.864772
+          },
+          {
+            "tau_ro_us": 1.5,
+            "snr": 3.029,
+            "err_sep": 0.064956,
+            "err_t1": 0.000943,
+            "err_xt_collision": 0.019431,
+            "F_ro": 0.91467
+          },
+          {
+            "tau_ro_us": 2.0,
+            "snr": 3.549,
+            "err_sep": 0.037992,
+            "err_t1": 0.001256,
+            "err_xt_collision": 0.019431,
+            "F_ro": 0.94132
+          },
+          {
+            "tau_ro_us": 3.0,
+            "snr": 4.409,
+            "err_sep": 0.013749,
+            "err_t1": 0.001883,
+            "err_xt_collision": 0.019431,
+            "F_ro": 0.964936
+          },
+          {
+            "tau_ro_us": 4.0,
+            "snr": 5.126,
+            "err_sep": 0.005186,
+            "err_t1": 0.00251,
+            "err_xt_collision": 0.019431,
+            "F_ro": 0.972873
+          },
+          {
+            "tau_ro_us": 5.0,
+            "snr": 5.755,
+            "err_sep": 0.002004,
+            "err_t1": 0.003135,
+            "err_xt_collision": 0.019431,
+            "F_ro": 0.97543
+          }
+        ]
+      }
+    },
+    "n_mux_star": 32
+  },
+  "cryo_heat_budgets": {
+    "m4_1024_hemt7p8mW": {
+      "n_cells": 1024,
+      "n_mux": 32,
+      "xy_mux": 32,
+      "hemt_power_mW": 7.8,
+      "n_ro_chains": 32,
+      "n_xy_lines": 32,
+      "total_rf_coax_lines": 96,
+      "loads": {
+        "mxc_20mK_uW": 6.256,
+        "cp_100mK_uW": 59.58,
+        "stage_4K_W": 0.488,
+        "stage_4K_sky130_W": 0.0154,
+        "stage_50K_W": 8.26
+      },
+      "limits": {
+        "mxc_20mK_uW": 14.0,
+        "cp_100mK_uW": 400.0,
+        "stage_4K_W": 2.0,
+        "stage_50K_W": 40.0
+      },
+      "utilization": {
+        "mxc_20mK_frac": 0.4469,
+        "cp_100mK_frac": 0.1489,
+        "stage_4K_frac": 0.244,
+        "stage_50K_frac": 0.2065
+      },
+      "closes_single_pt420_ld400": true,
+      "single_cryostat_max_cells": 2887,
+      "tightest_cryo_stage": "20mK_MXC",
+      "min_modular_ld400_pt420_cryostats": 1,
+      "fridges_by_stage": {
+        "20mK": 1,
+        "100mK": 1,
+        "4K": 1,
+        "50K": 1
+      }
+    },
+    "m4_1024_hemt2p1mW": {
+      "n_cells": 1024,
+      "n_mux": 32,
+      "xy_mux": 32,
+      "hemt_power_mW": 2.1,
+      "n_ro_chains": 32,
+      "n_xy_lines": 32,
+      "total_rf_coax_lines": 96,
+      "loads": {
+        "mxc_20mK_uW": 6.256,
+        "cp_100mK_uW": 59.58,
+        "stage_4K_W": 0.3056,
+        "stage_4K_sky130_W": 0.0154,
+        "stage_50K_W": 8.26
+      },
+      "limits": {
+        "mxc_20mK_uW": 14.0,
+        "cp_100mK_uW": 400.0,
+        "stage_4K_W": 2.0,
+        "stage_50K_W": 40.0
+      },
+      "utilization": {
+        "mxc_20mK_frac": 0.4469,
+        "cp_100mK_frac": 0.1489,
+        "stage_4K_frac": 0.1528,
+        "stage_50K_frac": 0.2065
+      },
+      "closes_single_pt420_ld400": true,
+      "single_cryostat_max_cells": 2887,
+      "tightest_cryo_stage": "20mK_MXC",
+      "min_modular_ld400_pt420_cryostats": 1,
+      "fridges_by_stage": {
+        "20mK": 1,
+        "100mK": 1,
+        "4K": 1,
+        "50K": 1
+      }
+    },
+    "m4_10000_hemt7p8mW": {
+      "n_cells": 10000,
+      "n_mux": 32,
+      "xy_mux": 32,
+      "hemt_power_mW": 7.8,
+      "n_ro_chains": 313,
+      "n_xy_lines": 313,
+      "total_rf_coax_lines": 939,
+      "loads": {
+        "mxc_20mK_uW": 43.629,
+        "cp_100mK_uW": 451.01,
+        "stage_4K_W": 3.9384,
+        "stage_4K_sky130_W": 0.15,
+        "stage_50K_W": 58.84
+      },
+      "limits": {
+        "mxc_20mK_uW": 14.0,
+        "cp_100mK_uW": 400.0,
+        "stage_4K_W": 2.0,
+        "stage_50K_W": 40.0
+      },
+      "utilization": {
+        "mxc_20mK_frac": 3.1164,
+        "cp_100mK_frac": 1.1275,
+        "stage_4K_frac": 1.9692,
+        "stage_50K_frac": 1.471
+      },
+      "closes_single_pt420_ld400": false,
+      "single_cryostat_max_cells": 2887,
+      "tightest_cryo_stage": "20mK_MXC",
+      "min_modular_ld400_pt420_cryostats": 4,
+      "fridges_by_stage": {
+        "20mK": 4,
+        "100mK": 2,
+        "4K": 3,
+        "50K": 2
+      }
+    },
+    "m4_10000_hemt2p1mW": {
+      "n_cells": 10000,
+      "n_mux": 32,
+      "xy_mux": 32,
+      "hemt_power_mW": 2.1,
+      "n_ro_chains": 313,
+      "n_xy_lines": 313,
+      "total_rf_coax_lines": 939,
+      "loads": {
+        "mxc_20mK_uW": 43.629,
+        "cp_100mK_uW": 451.01,
+        "stage_4K_W": 2.1543,
+        "stage_4K_sky130_W": 0.15,
+        "stage_50K_W": 58.84
+      },
+      "limits": {
+        "mxc_20mK_uW": 14.0,
+        "cp_100mK_uW": 400.0,
+        "stage_4K_W": 2.0,
+        "stage_50K_W": 40.0
+      },
+      "utilization": {
+        "mxc_20mK_frac": 3.1164,
+        "cp_100mK_frac": 1.1275,
+        "stage_4K_frac": 1.0772,
+        "stage_50K_frac": 1.471
+      },
+      "closes_single_pt420_ld400": false,
+      "single_cryostat_max_cells": 2887,
+      "tightest_cryo_stage": "20mK_MXC",
+      "min_modular_ld400_pt420_cryostats": 4,
+      "fridges_by_stage": {
+        "20mK": 4,
+        "100mK": 2,
+        "4K": 2,
+        "50K": 2
+      }
+    },
+    "array_scale_curve": [
+      {
+        "n_cells": 256,
+        "n_mux": 32,
+        "xy_mux": 32,
+        "hemt_power_mW": 7.8,
+        "n_ro_chains": 8,
+        "n_xy_lines": 8,
+        "total_rf_coax_lines": 24,
+        "loads": {
+          "mxc_20mK_uW": 3.064,
+          "cp_100mK_uW": 26.14,
+          "stage_4K_W": 0.1932,
+          "stage_4K_sky130_W": 0.0038,
+          "stage_50K_W": 3.94
+        },
+        "limits": {
+          "mxc_20mK_uW": 14.0,
+          "cp_100mK_uW": 400.0,
+          "stage_4K_W": 2.0,
+          "stage_50K_W": 40.0
+        },
+        "utilization": {
+          "mxc_20mK_frac": 0.2189,
+          "cp_100mK_frac": 0.0654,
+          "stage_4K_frac": 0.0966,
+          "stage_50K_frac": 0.0985
+        },
+        "closes_single_pt420_ld400": true,
+        "single_cryostat_max_cells": 2887,
+        "tightest_cryo_stage": "20mK_MXC",
+        "min_modular_ld400_pt420_cryostats": 1,
+        "fridges_by_stage": {
+          "20mK": 1,
+          "100mK": 1,
+          "4K": 1,
+          "50K": 1
+        }
+      },
+      {
+        "n_cells": 512,
+        "n_mux": 32,
+        "xy_mux": 32,
+        "hemt_power_mW": 7.8,
+        "n_ro_chains": 16,
+        "n_xy_lines": 16,
+        "total_rf_coax_lines": 48,
+        "loads": {
+          "mxc_20mK_uW": 4.128,
+          "cp_100mK_uW": 37.29,
+          "stage_4K_W": 0.2915,
+          "stage_4K_sky130_W": 0.0077,
+          "stage_50K_W": 5.38
+        },
+        "limits": {
+          "mxc_20mK_uW": 14.0,
+          "cp_100mK_uW": 400.0,
+          "stage_4K_W": 2.0,
+          "stage_50K_W": 40.0
+        },
+        "utilization": {
+          "mxc_20mK_frac": 0.2949,
+          "cp_100mK_frac": 0.0932,
+          "stage_4K_frac": 0.1457,
+          "stage_50K_frac": 0.1345
+        },
+        "closes_single_pt420_ld400": true,
+        "single_cryostat_max_cells": 2887,
+        "tightest_cryo_stage": "20mK_MXC",
+        "min_modular_ld400_pt420_cryostats": 1,
+        "fridges_by_stage": {
+          "20mK": 1,
+          "100mK": 1,
+          "4K": 1,
+          "50K": 1
+        }
+      },
+      {
+        "n_cells": 1024,
+        "n_mux": 32,
+        "xy_mux": 32,
+        "hemt_power_mW": 7.8,
+        "n_ro_chains": 32,
+        "n_xy_lines": 32,
+        "total_rf_coax_lines": 96,
+        "loads": {
+          "mxc_20mK_uW": 6.256,
+          "cp_100mK_uW": 59.58,
+          "stage_4K_W": 0.488,
+          "stage_4K_sky130_W": 0.0154,
+          "stage_50K_W": 8.26
+        },
+        "limits": {
+          "mxc_20mK_uW": 14.0,
+          "cp_100mK_uW": 400.0,
+          "stage_4K_W": 2.0,
+          "stage_50K_W": 40.0
+        },
+        "utilization": {
+          "mxc_20mK_frac": 0.4469,
+          "cp_100mK_frac": 0.1489,
+          "stage_4K_frac": 0.244,
+          "stage_50K_frac": 0.2065
+        },
+        "closes_single_pt420_ld400": true,
+        "single_cryostat_max_cells": 2887,
+        "tightest_cryo_stage": "20mK_MXC",
+        "min_modular_ld400_pt420_cryostats": 1,
+        "fridges_by_stage": {
+          "20mK": 1,
+          "100mK": 1,
+          "4K": 1,
+          "50K": 1
+        }
+      },
+      {
+        "n_cells": 2048,
+        "n_mux": 32,
+        "xy_mux": 32,
+        "hemt_power_mW": 7.8,
+        "n_ro_chains": 64,
+        "n_xy_lines": 64,
+        "total_rf_coax_lines": 192,
+        "loads": {
+          "mxc_20mK_uW": 10.512,
+          "cp_100mK_uW": 104.15,
+          "stage_4K_W": 0.8809,
+          "stage_4K_sky130_W": 0.0307,
+          "stage_50K_W": 14.02
+        },
+        "limits": {
+          "mxc_20mK_uW": 14.0,
+          "cp_100mK_uW": 400.0,
+          "stage_4K_W": 2.0,
+          "stage_50K_W": 40.0
+        },
+        "utilization": {
+          "mxc_20mK_frac": 0.7509,
+          "cp_100mK_frac": 0.2604,
+          "stage_4K_frac": 0.4405,
+          "stage_50K_frac": 0.3505
+        },
+        "closes_single_pt420_ld400": true,
+        "single_cryostat_max_cells": 2887,
+        "tightest_cryo_stage": "20mK_MXC",
+        "min_modular_ld400_pt420_cryostats": 1,
+        "fridges_by_stage": {
+          "20mK": 1,
+          "100mK": 1,
+          "4K": 1,
+          "50K": 1
+        }
+      },
+      {
+        "n_cells": 3000,
+        "n_mux": 32,
+        "xy_mux": 32,
+        "hemt_power_mW": 7.8,
+        "n_ro_chains": 94,
+        "n_xy_lines": 94,
+        "total_rf_coax_lines": 282,
+        "loads": {
+          "mxc_20mK_uW": 14.502,
+          "cp_100mK_uW": 145.94,
+          "stage_4K_W": 1.2492,
+          "stage_4K_sky130_W": 0.045,
+          "stage_50K_W": 19.42
+        },
+        "limits": {
+          "mxc_20mK_uW": 14.0,
+          "cp_100mK_uW": 400.0,
+          "stage_4K_W": 2.0,
+          "stage_50K_W": 40.0
+        },
+        "utilization": {
+          "mxc_20mK_frac": 1.0359,
+          "cp_100mK_frac": 0.3649,
+          "stage_4K_frac": 0.6246,
+          "stage_50K_frac": 0.4855
+        },
+        "closes_single_pt420_ld400": false,
+        "single_cryostat_max_cells": 2887,
+        "tightest_cryo_stage": "20mK_MXC",
+        "min_modular_ld400_pt420_cryostats": 2,
+        "fridges_by_stage": {
+          "20mK": 2,
+          "100mK": 1,
+          "4K": 1,
+          "50K": 1
+        }
+      },
+      {
+        "n_cells": 4096,
+        "n_mux": 32,
+        "xy_mux": 32,
+        "hemt_power_mW": 7.8,
+        "n_ro_chains": 128,
+        "n_xy_lines": 128,
+        "total_rf_coax_lines": 384,
+        "loads": {
+          "mxc_20mK_uW": 19.024,
+          "cp_100mK_uW": 193.3,
+          "stage_4K_W": 1.6668,
+          "stage_4K_sky130_W": 0.0614,
+          "stage_50K_W": 25.54
+        },
+        "limits": {
+          "mxc_20mK_uW": 14.0,
+          "cp_100mK_uW": 400.0,
+          "stage_4K_W": 2.0,
+          "stage_50K_W": 40.0
+        },
+        "utilization": {
+          "mxc_20mK_frac": 1.3589,
+          "cp_100mK_frac": 0.4833,
+          "stage_4K_frac": 0.8334,
+          "stage_50K_frac": 0.6385
+        },
+        "closes_single_pt420_ld400": false,
+        "single_cryostat_max_cells": 2887,
+        "tightest_cryo_stage": "20mK_MXC",
+        "min_modular_ld400_pt420_cryostats": 2,
+        "fridges_by_stage": {
+          "20mK": 2,
+          "100mK": 1,
+          "4K": 1,
+          "50K": 1
+        }
+      },
+      {
+        "n_cells": 6000,
+        "n_mux": 32,
+        "xy_mux": 32,
+        "hemt_power_mW": 7.8,
+        "n_ro_chains": 188,
+        "n_xy_lines": 188,
+        "total_rf_coax_lines": 564,
+        "loads": {
+          "mxc_20mK_uW": 27.004,
+          "cp_100mK_uW": 276.88,
+          "stage_4K_W": 2.4034,
+          "stage_4K_sky130_W": 0.09,
+          "stage_50K_W": 36.34
+        },
+        "limits": {
+          "mxc_20mK_uW": 14.0,
+          "cp_100mK_uW": 400.0,
+          "stage_4K_W": 2.0,
+          "stage_50K_W": 40.0
+        },
+        "utilization": {
+          "mxc_20mK_frac": 1.9289,
+          "cp_100mK_frac": 0.6922,
+          "stage_4K_frac": 1.2017,
+          "stage_50K_frac": 0.9085
+        },
+        "closes_single_pt420_ld400": false,
+        "single_cryostat_max_cells": 2887,
+        "tightest_cryo_stage": "20mK_MXC",
+        "min_modular_ld400_pt420_cryostats": 3,
+        "fridges_by_stage": {
+          "20mK": 3,
+          "100mK": 1,
+          "4K": 2,
+          "50K": 1
+        }
+      },
+      {
+        "n_cells": 8000,
+        "n_mux": 32,
+        "xy_mux": 32,
+        "hemt_power_mW": 7.8,
+        "n_ro_chains": 250,
+        "n_xy_lines": 250,
+        "total_rf_coax_lines": 750,
+        "loads": {
+          "mxc_20mK_uW": 35.25,
+          "cp_100mK_uW": 363.25,
+          "stage_4K_W": 3.165,
+          "stage_4K_sky130_W": 0.12,
+          "stage_50K_W": 47.5
+        },
+        "limits": {
+          "mxc_20mK_uW": 14.0,
+          "cp_100mK_uW": 400.0,
+          "stage_4K_W": 2.0,
+          "stage_50K_W": 40.0
+        },
+        "utilization": {
+          "mxc_20mK_frac": 2.5179,
+          "cp_100mK_frac": 0.9081,
+          "stage_4K_frac": 1.5825,
+          "stage_50K_frac": 1.1875
+        },
+        "closes_single_pt420_ld400": false,
+        "single_cryostat_max_cells": 2887,
+        "tightest_cryo_stage": "20mK_MXC",
+        "min_modular_ld400_pt420_cryostats": 3,
+        "fridges_by_stage": {
+          "20mK": 3,
+          "100mK": 1,
+          "4K": 2,
+          "50K": 2
+        }
+      },
+      {
+        "n_cells": 10000,
+        "n_mux": 32,
+        "xy_mux": 32,
+        "hemt_power_mW": 7.8,
+        "n_ro_chains": 313,
+        "n_xy_lines": 313,
+        "total_rf_coax_lines": 939,
+        "loads": {
+          "mxc_20mK_uW": 43.629,
+          "cp_100mK_uW": 451.01,
+          "stage_4K_W": 3.9384,
+          "stage_4K_sky130_W": 0.15,
+          "stage_50K_W": 58.84
+        },
+        "limits": {
+          "mxc_20mK_uW": 14.0,
+          "cp_100mK_uW": 400.0,
+          "stage_4K_W": 2.0,
+          "stage_50K_W": 40.0
+        },
+        "utilization": {
+          "mxc_20mK_frac": 3.1164,
+          "cp_100mK_frac": 1.1275,
+          "stage_4K_frac": 1.9692,
+          "stage_50K_frac": 1.471
+        },
+        "closes_single_pt420_ld400": false,
+        "single_cryostat_max_cells": 2887,
+        "tightest_cryo_stage": "20mK_MXC",
+        "min_modular_ld400_pt420_cryostats": 4,
+        "fridges_by_stage": {
+          "20mK": 4,
+          "100mK": 2,
+          "4K": 3,
+          "50K": 2
+        }
+      }
+    ]
+  },
+  "cellisa_v35_syndrome_demo": {
+    "route": {
+      "working_sites": 9,
+      "dead_sites": 7,
+      "assigned_cell_ids": [
+        "M4V35-R0C0",
+        "M4V35-R1C0",
+        "M4V35-R1C1",
+        "M4V35-R2C0"
+      ],
+      "assigned_coords": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          0
+        ]
+      ],
+      "bus_edges": [
+        [
+          "M4V35-R0C0",
+          "M4V35-R1C0",
+          1
+        ],
+        [
+          "M4V35-R1C0",
+          "M4V35-R1C1",
+          1
+        ],
+        [
+          "M4V35-R1C0",
+          "M4V35-R2C0",
+          1
+        ]
+      ]
+    },
+    "summary": {
+      "isa_version": "3.5",
+      "opcodes_used": [
+        "BUS_TUNE",
+        "ECHO_CZ",
+        "MUX_READOUT",
+        "SYNDROME_CYCLE",
+        "WAFER_MAP_ROUTE"
+      ],
+      "total_opcodes_supported": 17,
+      "rounds": 1,
+      "mean_bare_cz_fidelity": 0.779146,
+      "mean_echo_cz_fidelity": 0.981799,
+      "echo_fidelity_gain": 0.202653,
+      "mux_readout": {
+        "opcode": "MUX_READOUT",
+        "n_cells": 4,
+        "n_mux": 32,
+        "feedlines_used": 1,
+        "parallel_duration_us": 2.0,
+        "per_cell_readout_fidelity": 0.996139,
+        "batch_joint_readout_fidelity": 0.984645
+      },
+      "syndrome_round_fidelity": 0.942731,
+      "cycle_duration_us": 2.6201
+    },
+    "certificate": {
+      "isa_version": "3.5",
+      "program_name": "syndrome_stabilizer_z4_echo_mux",
+      "routed_cell_ids": [
+        "M4V35-R0C0",
+        "M4V35-R1C0",
+        "M4V35-R1C1",
+        "M4V35-R2C0"
+      ],
+      "routed_coords": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          0
+        ]
+      ],
+      "bus_links": [
+        {
+          "cell_a": "M4V35-R0C0",
+          "cell_b": "M4V35-R1C0",
+          "j_bus_MHz": 1.5,
+          "cz_duration_us": 0.2067,
+          "bare_cz_bell_fidelity": 0.779146,
+          "echo_cz_bell_fidelity": 0.981799,
+          "echo_fidelity_gain": 0.202653,
+          "bus_cz_fidelity": 0.981799,
+          "joint_bell_fidelity": 0.981799,
+          "echo_pulses": 1,
+          "s_eps_uev": 1.0,
+          "hop_distance": 1,
+          "local_pulses": 2,
+          "total_duration_us": 0.2067
+        },
+        {
+          "cell_a": "M4V35-R1C0",
+          "cell_b": "M4V35-R1C1",
+          "j_bus_MHz": 1.5,
+          "cz_duration_us": 0.2067,
+          "bare_cz_bell_fidelity": 0.779146,
+          "echo_cz_bell_fidelity": 0.981799,
+          "echo_fidelity_gain": 0.202653,
+          "bus_cz_fidelity": 0.981799,
+          "joint_bell_fidelity": 0.981799,
+          "echo_pulses": 1,
+          "s_eps_uev": 1.0,
+          "hop_distance": 1,
+          "local_pulses": 2,
+          "total_duration_us": 0.2067
+        },
+        {
+          "cell_a": "M4V35-R1C0",
+          "cell_b": "M4V35-R2C0",
+          "j_bus_MHz": 1.5,
+          "cz_duration_us": 0.2067,
+          "bare_cz_bell_fidelity": 0.779146,
+          "echo_cz_bell_fidelity": 0.981799,
+          "echo_fidelity_gain": 0.202653,
+          "bus_cz_fidelity": 0.981799,
+          "joint_bell_fidelity": 0.981799,
+          "echo_pulses": 1,
+          "s_eps_uev": 1.0,
+          "hop_distance": 1,
+          "local_pulses": 2,
+          "total_duration_us": 0.2067
+        }
+      ],
+      "logical_code": "stabilizer_z4_echo_mux",
+      "local_pulse_count": 6,
+      "bus_cz_count": 3,
+      "total_duration_us": 2.6201,
+      "joint_state_fidelity": 0.942731,
+      "min_bus_cz_fidelity": 0.981799,
+      "logical_error_rate": 0.00098177,
+      "exp126_bridge": {
+        "exp126_ledger_found": true,
+        "n_cells_checked": 4,
+        "min_spectral_gap_Hz": 31027.48,
+        "all_clear_5kHz_gate": true,
+        "min_vandermonde_rank": 8,
+        "dd_sweetspot_pulses": 32,
+        "abstraction_note": "CellISA v3.0 fast compiler verified locally on 2^(N+1) + cavity-bus model; full 32D 448-spectator interleaved XY8-GRAPE benchmark anchored to Exp126.",
+        "exp126_Q32D_f1_N64_alpha1": 0.9209167898340067,
+        "exp126_Q32D_f1_N64_alpha2": 0.9432595654087503,
+        "exp126_P126_4_pass": true,
+        "exp126_16cell_bell_mean": 0.9501494932571927,
+        "exp126_16cell_ghz4_mean": 0.9400888785242649,
+        "exp126_16cell_bitflip3_mean": 0.8878344374637237
+      },
+      "certified": true,
+      "epistemic_tag": "Model",
+      "sha256": "63b341f7277dd98b9ed108853840c56a6499ce1278b6a9a05cd73ba30cb2cd60"
+    },
+    "sha256_verified": true
+  },
+  "s65_hardware_spec": {
+    "subsystem_id": "S6.5",
+    "title": "Cryo-FPGA BOED Accelerator & 3 kOhm NbTiN Multiplexed TWPA Readout Stack (v5.0)",
+    "module_scale_cells": 1024,
+    "n_mux_star": 32,
+    "no_supplier_quotes": true,
+    "epistemic_tags": [
+      "Model",
+      "Liste-Capasi",
+      "Varsayim"
+    ],
+    "totals_1024_cell_module": {
+      "total_mass_kg": 19.27,
+      "cryo_cold_mass_kg": 7.77,
+      "room_temp_power_W": 87.96,
+      "cryo_loads_1024": {
+        "mxc_20mK_uW": 6.256,
+        "cp_100mK_uW": 59.58,
+        "stage_4K_W": 0.488,
+        "stage_4K_sky130_W": 0.0154,
+        "stage_50K_W": 8.26
+      },
+      "cost_usd_low": 456400,
+      "cost_usd_nom": 629200,
+      "cost_usd_high": 925200
+    },
+    "scaling_10000_cell_note": {
+      "closes_single_ld400_pt420": false,
+      "min_modular_ld400_pt420_cryostats": 4,
+      "single_cryostat_max_cells": 2887,
+      "tightest_stage": "20mK_MXC",
+      "total_4K_W_10000": 3.9384,
+      "total_20mK_uW_10000": 43.629
+    },
+    "items": [
+      {
+        "part_id": "S6.5-01",
+        "name": "ZU48DR RFSoC Q16.16 BOED-FPGA 2U Rack Chassis (2x Boards, 32 Direct-RF Chains)",
+        "qty": 1,
+        "stage": "300K_rack",
+        "envelope_mm": [
+          482.6,
+          520.0,
+          88.9
+        ],
+        "mass_kg_total": 11.5,
+        "power_W_total": 87.96,
+        "cryo_load_W": 0.0,
+        "cost_usd_low": 42000,
+        "cost_usd_nom": 58000,
+        "cost_usd_high": 82000,
+        "epistemic_tag": "Liste-Capasi"
+      },
+      {
+        "part_id": "S6.5-02",
+        "name": "20 mK Josephson TWPA + Bandpass Purcell Filter + Dual Cryo-Isolator Pack (32 ch)",
+        "qty": 32,
+        "stage": "20mK_MXC",
+        "envelope_mm": [
+          180.0,
+          140.0,
+          55.0
+        ],
+        "mass_kg_total": 2.72,
+        "power_W_total": 0.0,
+        "cryo_load_20mK_uW": 2.144,
+        "cost_usd_low": 240000,
+        "cost_usd_nom": 336000,
+        "cost_usd_high": 512000,
+        "epistemic_tag": "Varsayim"
+      },
+      {
+        "part_id": "S6.5-03",
+        "name": "4 K Ultra-Low-Noise HEMT Bank (LNF-LNC4_8C class, 32 units, 7.8 mW/ch)",
+        "qty": 32,
+        "stage": "4K_flange",
+        "envelope_mm": [
+          220.0,
+          120.0,
+          40.0
+        ],
+        "mass_kg_total": 1.02,
+        "power_W_total": 0.2496,
+        "cryo_load_4K_W": 0.2496,
+        "cost_usd_low": 112000,
+        "cost_usd_nom": 144000,
+        "cost_usd_high": 192000,
+        "epistemic_tag": "Liste-Capasi"
+      },
+      {
+        "part_id": "S6.5-04",
+        "name": "Cryo-Coax Loom & Attenuator Pack (96 lines: CuNi/NbTi, 0.86 mm)",
+        "qty": 96,
+        "stage": "300K_to_20mK",
+        "envelope_mm": [
+          95.0,
+          95.0,
+          620.0
+        ],
+        "mass_kg_total": 4.03,
+        "power_W_total": 0.0,
+        "cryo_load_50K_W": 5.76,
+        "cost_usd_low": 62400,
+        "cost_usd_nom": 91200,
+        "cost_usd_high": 139200,
+        "epistemic_tag": "Liste-Capasi"
+      }
+    ]
+  },
+  "portability_hardcoded_hits": []
+}

@@ -1,13 +1,14 @@
-"""Automated verification suite for Atom Lithography Machine CAD v3.0 (S1–S7).
+"""Automated verification suite for Atom Lithography Machine CAD v5.0 (S1–S7 + S5.6/S6.5).
 
 Verifies:
-1. `params.py` v2.24/v3.0 synchronization (no legacy maglev, golden s=0.5, S1–S7 complete).
+1. `params.py` v5.0 synchronization (no legacy maglev, golden s=0.5, Exp124..140 locked).
 2. All 8 parametric `.scad` files exist and match `gen_scad.py` deterministically.
 3. All 8 binary `.stl` files parse cleanly from disk, are strictly watertight
    (0 boundary edges, 0 non-manifold edges), and have strictly positive volume.
-4. Zero solid-solid clashes across all part pairs and 100% pass on critical clearances.
-5. `cad_verification.json` consistency + Exp80 s=0.5 & Exp84 modal compliance.
-6. All 10 ISO/ANSI technical drawings (.svg + .png >= 1800x1200) and `preview_machine.png`.
+4. Zero solid-solid clashes across all part pairs and 100% pass on 32/32 critical clearances.
+5. `cad_verification.json` consistency + Exp80/84/124/125/130/131/133/139/140 compliance.
+6. All 10 ISO/ANSI technical drawings (.svg + .png >= 1800x1200), `preview_machine.png`,
+   and preserved historical v3/v4 overview dashboards.
 """
 from __future__ import annotations
 
@@ -84,16 +85,23 @@ def test_params_v3_sync_and_no_legacy_maglev():
     assert params.DESIGN_SPECS["exp130_synced"] is True
     assert params.DESIGN_SPECS["exp131_synced"] is True
     assert params.DESIGN_SPECS["exp133_synced"] is True
-    assert params.CAD_VERSION.startswith("4.0-")
-    # CAD v4.0 required new solid parts (Exp130 S5.5, Exp131 M4 4K, Exp133 PT420 decoupling)
-    for v4_key in (
+    assert params.DESIGN_SPECS["exp139_synced"] is True
+    assert params.DESIGN_SPECS["exp140_synced"] is True
+    assert params.CAD_VERSION.startswith("5.0-")
+    # CAD v4.0/v5.0 required new solid parts (Exp130 S5.5, Exp131 M4 4K, Exp133 PT420, Exp139 S5.6, Exp140 S6.5)
+    for v5_key in (
         "s5_flash_safety_shutter", "s5_flash_anneal_head", "s5_flash_dichroic_pyrometer", "s5_flash_fiber_collimator",
+        "s5_mbe_cf100_flange", "s5_mbe_source_body", "s5_mbe_top_feedthrough",
+        "s5_mbe_qcm_valve", "s5_mbe_pbn_heater_fg", "s5_mbe_tmp_neg_pump",
         "s6_m4_crossbar_4k_mount", "s6_m4_crossbar_4k_pcb",
         "s6_ovc_bellows_flange_uhv", "s6_ovc_bellows_cf63", "s6_ovc_bellows_flange_dr", "s6_ovc_bridge_dr_stub",
         "s6_mxc_braid_1", "s6_mxc_braid_2", "s6_mxc_braid_3", "s6_mxc_braid_4",
         "s6_pt420_valve_stand", "s6_pt420_remote_valve_box", "s6_pt420_flex_he_bottom",
+        "s6_s65_twpa_purcell_pack", "s6_s65_hemt_bank_32ch",
+        "s6_s65_coax_loom_300k_50k_pos", "s6_s65_coax_loom_cp_mxc_neg",
+        "s7_s65_rfsoc_boed_bay",
     ):
-        assert v4_key in params.PARTS, f"Missing CAD v4.0 part: {v4_key}"
+        assert v5_key in params.PARTS, f"Missing CAD v5.0 part: {v5_key}"
     # Option A co-pitched Arch-B 32x32 @ 0.50 mm = 16.0x16.0 mm (diag 22.627 mm), Ø28.0 mm bore
     assert params.DESIGN_SPECS["beamlet_count"] == 1024
     assert params.DESIGN_SPECS["beamlet_pitch_mm"] == pytest.approx(0.50)
@@ -198,9 +206,64 @@ def test_verification_json_and_exp80_exp84_compliance():
     assert e133["braid_count"] == 4
     assert e133["remote_valve_offset_mm"] == pytest.approx(500.0, abs=0.2)
     assert e133["flex_he_length_mm"] == pytest.approx(600.0, abs=0.5)
-    assert len(ver["critical_clearances"]) >= 25
+    assert len(ver["critical_clearances"]) >= 32
     # Legacy cleanup
     assert all(ver["legacy_cleanup"].values())
+
+
+def test_cad_v5_exp139_s56_mbe_capper_locked():
+    ver = json.loads((CAD_DIR / "cad_verification.json").read_text(encoding="utf-8"))
+    spec_path = ROOT / "results" / "exp139_epi_cap_process_integration" / "s56_hardware_spec.json"
+    assert spec_path.is_file()
+    s56_spec = json.loads(spec_path.read_text(encoding="utf-8"))["s56_hardware_spec"]
+    e139 = ver["exp139_s56_audit"]
+    assert e139["pass"] is True and e139["exp139_synced"] is True
+    assert e139["part_count"] == 6
+    assert e139["total_mass_kg"] == pytest.approx(s56_spec["mass_power_cryo"]["total_mass_kg"], abs=0.02)
+    assert e139["flange_od_mm"] == pytest.approx(s56_spec["cad_v5_geometry"]["flange_od_mm"], abs=0.05)
+    assert e139["bore_id_mm"] == pytest.approx(s56_spec["cad_v5_geometry"]["bore_id_mm"], abs=0.05)
+    assert e139["z_span_mm"][0] == pytest.approx(585.1, abs=0.15)
+    assert e139["z_span_mm"][1] == pytest.approx(865.0, abs=0.1)
+    clr = ver["critical_clearances"]
+    assert clr["exp139_s56_to_chamber_top_flange_x_mm"]["pass"] is True
+    assert clr["exp139_s56_to_chamber_top_flange_x_mm"]["value_mm"] == pytest.approx(119.0, abs=0.2)
+    assert clr["exp139_s56_to_transfer_arm_z_mm"]["pass"] is True
+    assert clr["exp139_s56_to_transfer_arm_z_mm"]["value_mm"] >= 70.0
+    assert clr["exp139_s56_to_s7_panel_x_mm"]["pass"] is True
+
+
+def test_cad_v5_exp140_s65_cryo_mux_and_rfsoc_locked():
+    ver = json.loads((CAD_DIR / "cad_verification.json").read_text(encoding="utf-8"))
+    spec_path = ROOT / "results" / "exp140_cryo_fpga_boed_mux_readout" / "s65_hardware_spec.json"
+    assert spec_path.is_file()
+    s65_spec = json.loads(spec_path.read_text(encoding="utf-8"))
+    e140 = ver["exp140_s65_audit"]
+    assert e140["pass"] is True and e140["exp140_synced"] is True
+    assert e140["module_scale_cells"] == 1024
+    assert e140["cold_part_count"] == 12
+    assert e140["rack_part_count"] == 1
+    assert e140["cold_mass_kg"] == pytest.approx(s65_spec["totals_1024_cell_module"]["cryo_cold_mass_kg"], abs=0.02)
+    assert e140["rack_mass_kg"] == pytest.approx(11.50, abs=0.02)
+    assert e140["total_mass_kg"] == pytest.approx(s65_spec["totals_1024_cell_module"]["total_mass_kg"], abs=0.02)
+    assert e140["twpa_pack_dims_mm"] == [180.0, 140.0, 55.0]
+    assert e140["rfsoc_bay_dims_mm"][1:] == [482.6, 88.9]
+    clr = ver["critical_clearances"]
+    for k in (
+        "exp140_s65_twpa_inside_4k_shield_radial_mm",
+        "exp140_s65_hemt_to_4k_shield_radial_mm",
+        "exp140_s65_coax_loom_to_m4_crossbar_x_mm",
+        "exp140_s65_rfsoc_to_awg_z_mm",
+    ):
+        assert clr[k]["pass"] is True, f"Failed S6.5 clearance {k}: {clr[k]}"
+
+
+def test_legacy_overview_dashboards_preserved():
+    ddir = CAD_DIR / "drawings"
+    for fname in ("00_v3_overview_dashboard.png", "00_v4_overview_dashboard.png"):
+        p = ddir / fname
+        assert p.is_file() and p.stat().st_size > 100_000, f"Preserved dashboard missing/corrupt: {fname}"
+        w, h = _read_png_dimensions(p)
+        assert w >= 1800 and h >= 1200
 
 
 def test_cad_portability_no_hardcoded_host_paths():

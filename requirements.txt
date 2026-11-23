@@ -1,5 +1,7 @@
-# Core scientific stack (sufficient for all 89/89 Atom Lithography tests,
-# CellISA v2.0, IBIC 0-ERC netlist/SPICE generator, BOM/MC & CAD STL/SCAD)
+# Core scientific stack for Atom Lithography Machine v5.0
+# (All 23/23 Atom Lithography test suites [198/198 pytest], BOED + Q16.16 FPGA DSP,
+# CellISA v3.5, IBIC 0-ERC netlist/SPICE generator, BOM v5.0 / 8-RFQ MC,
+# CAD v5.0 STL/SCAD, and Exp124-Exp141 Digital Twin)
 numpy>=1.26
 scipy>=1.11
 pandas>=2.0

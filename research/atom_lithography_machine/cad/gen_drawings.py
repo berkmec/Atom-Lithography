@@ -966,7 +966,7 @@ def draw_iso_frame_and_title_block(
     ctx.set_source_rgb(*NAVY_HDR)
     ctx.rectangle(tx, ty, tw, 36)
     ctx.fill()
-    _draw_text(ctx, tx + 14, ty + 23, "ATOM LİTOGRAFİ MAKİNESİ — v4.0 (s=0,5 ALTIN ZARF)", 13.0, bold=True, color=(1, 1, 1))
+    _draw_text(ctx, tx + 14, ty + 23, "ATOM LİTOGRAFİ MAKİNESİ — v5.0 (s=0,5 ALTIN ZARF)", 13.0, bold=True, color=(1, 1, 1))
     _draw_text(ctx, tx + tw - 12, ty + 22, "MODEL / LAB ÖLÇÜMÜ YOK", 10.5, bold=True, color=(0.98, 0.85, 0.45), align="right")
 
     # Outer border & internal horizontal/vertical grid
@@ -983,7 +983,7 @@ def draw_iso_frame_and_title_block(
     ):
         ctx.move_to(vx, y1); ctx.line_to(vx, y2); ctx.stroke()
 
-    # Title row (auto-fit inside tw - 28 px so long v4.0 titles never touch border)
+    # Title row (auto-fit inside tw - 28 px so long v5.0 titles never touch border)
     t_fsz = 17.0
     ctx.select_font_face("DejaVu Sans", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_BOLD)
     ctx.set_font_size(t_fsz)
@@ -998,7 +998,7 @@ def draw_iso_frame_and_title_block(
         (tx + 10, "ÇİZİM NO", drawing_no),
         (tx + 185, "ÖLÇEK (A2) / BİRİM", f"{scale_label} | mm"),
         (tx + 360, "TOLERANS STD", params.GENERAL_TOLERANCE_STD),
-        (tx + 540, "REVİZYON", "v4.0 (2026-11-23)"),
+        (tx + 540, "REVİZYON", "v5.0 (2026-11-23)"),
     ]
     for cx0, lbl, val in cells_r3:
         _draw_text(ctx, cx0, ty + 122, lbl, 9.2, bold=True, color=INK_MED)
@@ -1066,6 +1066,8 @@ def draw_bom_and_notes_panel(
         clean_lbl = re.sub(r"\s*(#\d+|\([A-Z]{2}\)|\(\+Y\)|\(-Y\)|\([a-z0-9_]+\))$", "", spec["label_tr"]).strip()
         if pname.startswith("s6_coax_"):
             clean_lbl = "56–82 Çoklamalı Koaksiyel Demet (Kademe Arası)"
+        elif pname.startswith("s6_s65_coax_loom_"):
+            clean_lbl = "S6.5 96-Hat CuNi/NbTi Koaksiyel Demet (300K↔20mK)"
         elif pname.startswith("s6_shield_50k_"):
             clean_lbl = "50 K Alüminyum Termal Kalkan (3 Parça)"
         elif pname.startswith("s6_shield_4k_"):
@@ -1218,16 +1220,17 @@ SUBSYSTEM_CALLOUTS = {
         ("s4_air_isolator_2", "[S4.1] 4× Hava Yayı"),
     ],
     "s5_uhv_chamber_loadlock": [
+        ("s5_mbe_top_feedthrough", "[S5.6] ²⁸Si MBE Kapak"),
+        ("s5_mbe_source_body", "[S5.6] ²⁸Si Kaynak Ø136"),
+        ("s5_mbe_tmp_neg_pump", "[S5.6] 80 L/s TMP+NEG"),
+        ("s5_mbe_cf100_flange", "[S5.6] CF100 Ø152 (22,4kg)"),
         ("s5_chamber_top_flange", "[S5.1] CF400 Üst Flanş"),
-        ("s5_chamber_wall_upper", "[S5.1] UHV Oda 34,9 L"),
         ("s5_flash_dichroic_pyrometer", "[S5.5] 10µs Dikroik Pirom."),
         ("s5_flash_anneal_head", "[S5.5] 808nm Homojenl."),
-        ("s5_flash_safety_shutter", "[S5.5] Güvenlik Deklanş."),
         ("s5_ion_tsp_pump", "[S5.2] İyon+TSP Pompa"),
         ("s5_loadlock_chamber", "[S5.3] Load-Lock Oda"),
         ("s5_transfer_arm", "[S5.3] Transfer Kolu"),
         ("s5_turbo_pump", "[S5.2] Turbo 300 L/s"),
-        ("s5_chamber_bottom_flange", "[S5.1] Taban Flanşı"),
         ("s5_loadlock_stand", "[S5.3] Ayrık Sehpa"),
     ],
     "s6_cryo_dr_magnet_readout": [
@@ -1235,19 +1238,20 @@ SUBSYSTEM_CALLOUTS = {
         ("s6_pt420_coldhead", "[S6.1] PT420 + 600mm He"),
         ("s6_dr_flange_50k", "[S6.8] 50 K Flanş"),
         ("s6_m4_crossbar_4k_pcb", "[S6.6] 4K M4 968-Kapı"),
-        ("s6_hemt_rack_4k", "[S6.6] 4K HEMT Rafı"),
+        ("s6_s65_hemt_bank_32ch", "[S6.5] 4K 32× HEMT (1,0kg)"),
+        ("s6_s65_coax_loom_4k_still_pos", "[S6.5] 96-Hat Koaks (4,0kg)"),
         ("s6_coil_s_upper", "[S6.3] S_upper Şim"),
-        ("s6_coil_a_upper", "[S6.3] A_upper Kalkan"),
         ("s6_ovc_bellows_cf63", "[S6.2] CF63 Körük 2kN/m"),
         ("s6_mxc_braid_1", "[S6.2] 4× OFHC Örgü 53N/m"),
-        ("s6_coil_m_lower", "[S6.3] M_lower 1,5 T"),
+        ("s6_s65_twpa_purcell_pack", "[S6.5] 20mK TWPA/Purcell"),
         ("s6_coil_b_upper", "[S6.3] B_up/low Bucking"),
         ("s6_nbtin_resonator_carrier", "[S6.6] NbTiN 22,3 µT"),
         ("s6_pt420_valve_stand", "[S6.1] Akustik Valf Sehpa"),
     ],
     "s7_electronics_rack_interconnect": [
         ("s7_rack_top", "[S7.1] 30U Tavan/Fan"),
-        ("s7_clock_sync_bay", "[S7.4] 10MHz Rb Saat"),
+        ("s7_clock_sync_bay", "[S7.4] 3U 10MHz Rb Saat"),
+        ("s7_s65_rfsoc_boed_bay", "[S6.5] 2U ZU48DR RFSoC"),
         ("s7_awg_rf_mw_bay", "[S7.2] AWG & RF/MW"),
         ("s7_feedthrough_panel", "[S7.4] Kriyo/RF Panel"),
         ("s7_fpga_blanker_bay", "[S7.3] FPGA Blanker"),
@@ -1279,12 +1283,14 @@ SUBSYSTEM_EXTRA_DIMS = {
     "s5_uhv_chamber_loadlock": [
         ("v", 285.0, 620.0, -225.0, -66.0, "335 (34,9L)"),
         ("h", -192.0, 192.0, 645.0, -22.0, "Ø384 Oda"),
+        ("h", 344.0, 496.0, 865.0, -22.0, "Ø152 S5.6"),
     ],
     "s6_cryo_dr_magnet_readout": [
         ("v", 482.0, 518.0, -176.0, -18.0, "36 Yarık"),
         ("h", -75.0, 75.0, 612.0, -26.0, "Ø150 Bore"),
     ],
     "s7_electronics_rack_interconnect": [
+        ("v", 1120.0, 1208.9, 744.0, -64.0, "88,9 (2U)"),
         ("v", 800.0, 1100.0, 744.0, -64.0, "300 AWG"),
         ("v", 300.0, 540.0, 744.0, -64.0, "240 GPU"),
     ],
@@ -1390,8 +1396,8 @@ def build_master_assembly_sheet(ver: dict) -> None:
     def draw(ctx: cairo.Context) -> None:
         draw_iso_frame_and_title_block(
             ctx,
-            drawing_no="ALM-400-M1",
-            title_tr="TAM MONTAJ — ATOM LİTOGRAFİ MAKİNESİ v4.0 (S1–S7)",
+            drawing_no="ALM-500-M1",
+            title_tr="TAM MONTAJ — ATOM LİTOGRAFİ MAKİNESİ v5.0 (S1–S7 + S5.6/S6.5)",
             subtitle_tr=f"s=0,5 Altın Zarf | {span[0]:.0f}×{span[1]:.0f}×{span[2]:.0f} mm | CoM=({ma['center_of_mass_mm'][0]:.0f}, {ma['center_of_mass_mm'][1]:.0f}, {ma['center_of_mass_mm'][2]:.0f}) mm",
             mass_kg=ma["total_mass_kg"],
             part_count=ma["part_count"],
@@ -1403,6 +1409,8 @@ def build_master_assembly_sheet(ver: dict) -> None:
             ("s1_duoplasmatron", "[S1] Exp124 562,7mm Kolon"),
             ("s6_pt420_remote_valve_box", "[S6.1] PT420 Uzak Valf"),
             ("s6_pt420_coldhead", "[S6.1] PT420 + 600mm He"),
+            ("s7_s65_rfsoc_boed_bay", "[S6.5] 2U ZU48DR RFSoC"),
+            ("s5_mbe_source_body", "[S5.6] ²⁸Si MBE (22,4kg)"),
             ("s5_flash_dichroic_pyrometer", "[S5.5] 808nm Flaş+Pirom."),
             ("s6_ovc_bellows_cf63", "[S6.2] CF63 Körük 2kN/m"),
             ("s5_loadlock_chamber", "[S5.3] Load-Lock"),
@@ -1412,7 +1420,7 @@ def build_master_assembly_sheet(ver: dict) -> None:
         # Top-Left: Front View (X-Z)
         draw_ortho_panel(
             ctx, (62, 62, 1020, 885), params.PARTS, "xz",
-            "TAM MONTAJ ÖN GÖRÜNÜMÜ (X–Z) — 10→5 keV KOLON, s=0,5 UHV, 20 mK DR & 19\" KABİN",
+            "TAM MONTAJ ÖN GÖRÜNÜMÜ (X–Z) — EXP124/125/133 + S5.6 ²⁸Si MBE & S6.5 KRİYO-MUX / RFSoC",
             section_mode=False,
             callouts=master_callouts,
             show_beam=True,
@@ -1420,14 +1428,14 @@ def build_master_assembly_sheet(ver: dict) -> None:
         # Bottom-Left: Top View (X-Y)
         draw_ortho_panel(
             ctx, (62, 962, 1020, 580), params.PARTS, "xy",
-            "TAM MONTAJ ÜST GÖRÜNÜMÜ (X–Y TABAN İZİ) — 4 EKVATORYAL PORT (+X/-X/+Y/-Y)",
+            "TAM MONTAJ ÜST GÖRÜNÜMÜ (X–Y TABAN İZİ) — 4 EKVATORYAL PORT (+X/-X/+Y/-Y) + S5.6",
             section_mode=False,
             show_beam=False,
         )
         # Top-Right-Mid: Shaded 3D Isometric
         draw_iso_panel(
             ctx, (1098, 62, 526, 885), params.PARTS,
-            "3B İZOMETRİK MONTAJ",
+            "3B İZOMETRİK MONTAJ v5.0",
             azim_deg=-60.0, elev_deg=23.0, show_beam=True, n_seg=18,
         )
         # Bottom-Right-Mid: Side View (Y-Z)
@@ -1448,8 +1456,8 @@ def build_master_cutaway_sheet(ver: dict) -> None:
     def draw(ctx: cairo.Context) -> None:
         draw_iso_frame_and_title_block(
             ctx,
-            drawing_no="ALM-400-M2",
-            title_tr="KESİT GÖRÜNÜMÜ A–A — v4.0 İÇ MİMARİ, M4 4K & PT420 AYRIŞTIRMA",
+            drawing_no="ALM-500-M2",
+            title_tr="KESİT GÖRÜNÜMÜ A–A — v5.0 İÇ MİMARİ, S5.6 MBE & S6.5 KRİYO-MUX",
             subtitle_tr="Y=0 Merkez Kesiti + Büyütülmüş Yonga/MEMS/IBIC Detayı B + 3B Kesit İzometrik",
             mass_kg=ma["total_mass_kg"],
             part_count=ma["part_count"],
@@ -1460,14 +1468,14 @@ def build_master_cutaway_sheet(ver: dict) -> None:
         cut_callouts = [
             ("s1_duoplasmatron", "[S1.1] Duoplazmatron +5kV"),
             ("s6_pt420_remote_valve_box", "[S6.1] PT420 Uzak Valf"),
-            ("s1_wien_filter", "[S1.2] Wien 0,45T h=150"),
+            ("s5_mbe_source_body", "[S5.6] ²⁸Si MBE (22,4kg)"),
             ("s1_energy_filter", "[S1.5] HDA ΔE=0,453eV"),
             ("s6_m4_crossbar_4k_pcb", "[S6.6] 4K M4 968-Kapı"),
+            ("s6_s65_hemt_bank_32ch", "[S6.5] 4K 32× HEMT"),
             ("s6_coil_s_upper", "[S6.3] 8-Bobin Ø150 Bore"),
             ("s2_aperture_plate", "[S2] Arch-B + Blanker"),
             ("s6_ovc_bellows_cf63", "[S6.2] CF63 Körük 2kN/m"),
-            ("s6_mxc_braid_1", "[S6.2] 4× OFHC Örgü 53N/m"),
-            ("s4_piezo_fine_6dof", "[S4.3] 6-DOF Piezo"),
+            ("s6_s65_twpa_purcell_pack", "[S6.5] 20mK TWPA/Purcell"),
             ("s6_nbtin_resonator_carrier", "[S6.6] NbTiN z=−155 (22µT)"),
             ("s4_granite_base", "[S4.1] Granit+Aktif"),
         ]
@@ -1475,7 +1483,7 @@ def build_master_cutaway_sheet(ver: dict) -> None:
         core_parts = {k: v for k, v in params.PARTS.items() if v["subsystem"] != "s7_electronics_rack_interconnect"}
         draw_ortho_panel(
             ctx, (62, 62, 1080, 960), core_parts, "xz",
-            "MERKEZ KESİT A–A (Y = 0 DÜZLEMİ) — EXP124 562,7 mm KOLON, EXP125 8-BOBİN MIKNATIS & 20 mK DR",
+            "MERKEZ KESİT A–A (Y = 0) — EXP124/125/133 + S5.6 ²⁸Si MBE & S6.5 TWPA/HEMT/96-KOAKS",
             section_mode=True,
             dim_specs=[
                 ("v", 482.0, 518.0, 192.0, 18.0, "36 Yarık"),
@@ -1532,9 +1540,9 @@ def build_master_exploded_sheet(ver: dict) -> None:
     def draw(ctx: cairo.Context) -> None:
         draw_iso_frame_and_title_block(
             ctx,
-            drawing_no="ALM-400-M3",
-            title_tr="PATLATILMIŞ MONTAJ GÖRÜNÜMÜ v4.0 (EXPLODED S1–S7)",
-            subtitle_tr="7 Modüler Alt Sistemin (M1–M8) Ayrımlaşma Akışı, v4.0 Donanım Yükseltmeleri & Montaj Sırası",
+            drawing_no="ALM-500-M3",
+            title_tr="PATLATILMIŞ MONTAJ GÖRÜNÜMÜ v5.0 (EXPLODED S1–S7 + S5.6/S6.5)",
+            subtitle_tr="7 Modüler Alt Sistemin (M1–M8) Ayrımlaşma Akışı, v5.0 S5.6 MBE & S6.5 Kriyo-MUX Donanımı",
             mass_kg=ma["total_mass_kg"],
             part_count=ma["part_count"],
             scale_label="1:18 (Patl.)",
@@ -1544,7 +1552,7 @@ def build_master_exploded_sheet(ver: dict) -> None:
         # Huge 3D Exploded Isometric Canvas
         sub_pts = draw_iso_panel(
             ctx, (62, 62, 1562, 1480), params.PARTS,
-            "3B PATLATILMIŞ MODÜLER MONTAJ — 7 BAĞIMSIZ ALT SİSTEM (S1–S7) & EKSENEL/YANAL MONTAJ KILAVUZLARI",
+            "3B PATLATILMIŞ MODÜLER MONTAJ v5.0 — 7 BAĞIMSIZ ALT SİSTEM (S1–S7) & EKSENEL/YANAL MONTAJ KILAVUZLARI",
             azim_deg=-58.0, elev_deg=21.0,
             explode_scale=1.15, show_beam=True, show_explode_guides=True, n_seg=18,
         )
@@ -1556,9 +1564,9 @@ def build_master_exploded_sheet(ver: dict) -> None:
             "s2_mems_write_head":              (800, 405, f"S2 — Arch-B Mini-Lens & MEMS ({sm['s2_mems_write_head']:.1f} kg)"),
             "s3_ibic_detector_assembly":       (815, 510, f"S3 — Yonga & 100K LTC6268 ({sm['s3_ibic_detector_assembly']:.2f} kg)"),
             "s4_piezo_stage_interferometry":   (380, 1440, f"S4 — Granit, Aktif Tabla & 6-DOF Piezo ({sm['s4_piezo_stage_interferometry']:.1f} kg)"),
-            "s5_uhv_chamber_loadlock":         (910, 1345, f"S5 — s=0,5 UHV Oda 34,9L & Load-Lock ({sm['s5_uhv_chamber_loadlock']:.1f} kg)"),
-            "s6_cryo_dr_magnet_readout":       (95,  195, f"S6 — Exp125 8-Bobin & 20mK DR ({sm['s6_cryo_dr_magnet_readout']:.1f} kg)"),
-            "s7_electronics_rack_interconnect":(1080, 180, f"S7 — 19\" RF/AWG/FPGA/GPU Kabini ({sm['s7_electronics_rack_interconnect']:.1f} kg)"),
+            "s5_uhv_chamber_loadlock":         (880, 1345, f"S5 — UHV 34,9L, Flaş & S5.6 MBE ({sm['s5_uhv_chamber_loadlock']:.1f} kg)"),
+            "s6_cryo_dr_magnet_readout":       (95,  195, f"S6 — 8-Bobin, DR & S6.5 MUX ({sm['s6_cryo_dr_magnet_readout']:.1f} kg)"),
+            "s7_electronics_rack_interconnect":(1050, 180, f"S7 — 19\" Kabin + S6.5 RFSoC ({sm['s7_electronics_rack_interconnect']:.1f} kg)"),
         }
         for sub_key, (bx, by, label) in badge_pos.items():
             if sub_key not in sub_pts:
@@ -1665,34 +1673,34 @@ def _draw_master_summary_panel(
         _draw_text(ctx, tx + 12, ry + 24, "MODÜLER MONTAJ AKIŞ SIRASI (ICD M1–M8)", 12.0, bold=True, color=NAVY_HDR)
         steps = [
             "1. [S4.1–S4.2] 4× hava yayı + 900×700 granit blok + aktif sönümleme tablası kurulumu.",
-            "2. [S5.1] UHV taban flanşı (CF350) + [S4.3–S4.5] Invar kaide, 6-DOF piezo & Zerodur halka.",
+            "2. [S5.1] UHV taban flanşı (CF400) + [S4.3–S4.5] Invar kaide, 6-DOF piezo & Zerodur halka.",
             "3. [S6.2–S3] Vespel izolatör + 20 mK Cu ada + 80×80 AlN taşıyıcı + Ø50 yonga + IBIC/CSA.",
-            "4. [S5.1–S6.3] Ekvatoryal portlu UHV gövde + ayrık-çift 1,5 T bobin & karşı-sargı montajı.",
-            "5. [S6.8–S6.2] -X 5-kademe DR kulesi + PT420 + 20 mK parmak köprüsü + 4 K HEMT/koaksiyel.",
-            "6. [S5.2/S5.3/S5.5] -Y turbo/iyon pompa, +X load-lock & transfer kolu, +Y flaş tavlama portu.",
-            "7. [S6.6/S2/S1] Meissner kalkan + NbTiN rezonatör → MEMS yazma kafası → 10→5 keV iyon kolonu.",
-            "8. [S7] +X 19\" 30U RF/AWG/FPGA/GPU kabini (85 mm transfer boşluğu) + kriyo/UHV yama paneli.",
+            "4. [S5.1–S6.3] Ekvatoryal portlu UHV gövde + Exp125 8-bobinli 1,5 T mıknatıs & karşı-sargı.",
+            "5. [S6.8–S6.5] −X DR kulesi + PT420 uzak valf + CF63 körük + S6.5 TWPA/32×HEMT/96-koaks.",
+            "6. [S5.2–S5.6] −Y turbo/iyon, +Y S5.5 flaş, +X load-lock & +Z S5.6 ²⁸Si MBE kaplayıcı (22,4 kg).",
+            "7. [S6.6/S2/S1] Meissner + NbTiN → Arch-B MEMS yazma kafası → 10→5 keV iyon kolonu.",
+            "8. [S7/S6.5-01] +X 19\" 30U kabin + 2U ZU48DR BOED-RFSoC (11,5 kg) + kriyo/UHV yama paneli.",
         ]
         cy = ry + 50.0
         for s in steps:
-            _draw_text(ctx, tx + 12, cy, s, 10.6, color=INK_DARK)
+            _draw_text(ctx, tx + 12, cy, s, 10.4, color=INK_DARK)
             cy += 36.0
     else:
-        _draw_text(ctx, tx + 12, ry + 24, "KİLİT SİSTEM ŞARTNAMESİ (CAD v4.0 — EXP124/125/127/130/131/133)", 11.2, bold=True, color=NAVY_HDR)
+        _draw_text(ctx, tx + 12, ry + 24, "KİLİT SİSTEM ŞARTNAMESİ (CAD v5.0 — EXP124..140 KİLİTLİ)", 11.2, bold=True, color=NAVY_HDR)
         ds = ver["design_specs"]
         specs = [
             f"• Exp124 Kolon (562,66 mm, 25,92 kg): Arch-B WD={ds['working_distance_mm']} mm, HDA ΔE={ds['energy_filter_dE_eV']} eV, σ_spot={ds['spot_sigma_nm']} nm",
             f"• Exp125 8-Bobin Mıknatıs: Ø150 bore, 36 mm yarık, Ø352 OD, 1,50 T; z=−155 NbTiN (22,3 µT)",
-            f"• Exp130 S5.5 Flaş (+Y CF63 Ø44 CA): 808 nm qCW 1 ms (41,2 J/cm²), 10 µs pirom., σ_ann={ds['flash_sigma_anneal_nm']} nm",
-            f"• Exp131 M4 Veri Yolu: Δz_cap*=8±1 nm ²⁸Si, 3 kΩ NbTiN (L_res=300 µm, B_M4=0,1785 T), 4K 968-kapı anahtar",
-            f"• Exp133 PT420 Ayrıştırma: 500 mm uzak valf + 600 mm He + CF63 körük (2000 N/m) + 4× OFHC örgü (52,7 N/m)",
-            f"• Exp133 Kapalı Çevrim (VC-E): σ_stage={ds['exp133_sigma_stage_nm']} nm, σ_ptg={ds['exp133_sigma_pointing_nm']} nm, σ_th={ds['exp133_sigma_thermal_nm']} nm",
-            f"• Exp127 IBIC & CoM: 100 K LTC6268 (ENC=24,1 e⁻) | CoM=({ma['center_of_mass_mm'][0]:.1f}, {ma['center_of_mass_mm'][1]:.1f}, {ma['center_of_mass_mm'][2]:.1f}) mm",
-            f"• Epistemik Durum: Kâğıt üzerinde parametrik CAD v4.0 modeli (no_lab_measurement=true).",
+            f"• Exp130/139 S5.5 Flaş (+Y CF63 Ø44 CA): 808 nm qCW (43,49 J/cm², 1530 K), 10 µs pirom., σ_tot=3,665 nm",
+            f"• Exp139 S5.6 MBE (+Z LL CF100 Ø152, 22,40 kg): ²⁸Si 8,0±0,3 nm @ 345 °C + %5 H₂/N₂ 350 °C, 80 L/s TMP",
+            f"• Exp140 S6.5 Kriyo-MUX (1.024 hücre, 19,27 kg): 20 mK TWPA (2,72) + 4K 32×HEMT (1,02) + 96-koaks (4,03 kg)",
+            f"• Exp140 S6.5-01 (S7 2U, 11,50 kg, 88 W): 2× ZU48DR Q16.16 BOED-RFSoC (32 RF zinciri, 6,26 µW MXC)",
+            f"• Exp133 PT420 Ayrıştırma & CoM: 500 mm valf + CF63 körük (2 kN/m) | CoM=({ma['center_of_mass_mm'][0]:.1f}, {ma['center_of_mass_mm'][1]:.1f}, {ma['center_of_mass_mm'][2]:.1f}) mm",
+            f"• Epistemik Durum: Kâğıt üzerinde parametrik CAD v5.0 modeli (no_lab_measurement=true).",
         ]
         cy = ry + 50.0
         for s in specs:
-            _draw_text(ctx, tx + 12, cy, s, 10.1, color=INK_DARK)
+            _draw_text(ctx, tx + 12, cy, s, 9.8, color=INK_DARK)
             cy += 36.0
 
 
@@ -1727,18 +1735,25 @@ def _draw_clearances_panel(ctx: cairo.Context, rect: tuple[float, float, float, 
         "exp133_bellows_to_4k_shield_radial_mm": "Exp133 Körük ↔ 4K Tüp (R)",
         "exp133_braids_inside_4k_shield_radial_mm": "Exp133 4× Örgü ↔ 4K Tüp (R)",
         "exp133_remote_valve_to_dr_flange_x_mm": "Exp133 Uzak Valf ↔ DR (X)",
+        "exp139_s56_to_chamber_top_flange_x_mm": "Exp139 S5.6 ↔ UHV Flanş (X)",
+        "exp139_s56_to_transfer_arm_z_mm": "Exp139 S5.6 ↔ Transfer Kol (Z)",
+        "exp139_s56_to_s7_panel_x_mm": "Exp139 S5.6 TMP ↔ S7 Panel (X)",
+        "exp140_s65_twpa_inside_4k_shield_radial_mm": "Exp140 S6.5 TWPA ↔ 4K Kalkan",
+        "exp140_s65_hemt_to_4k_shield_radial_mm": "Exp140 S6.5 HEMT ↔ 4K Kalkan",
+        "exp140_s65_coax_loom_to_m4_crossbar_x_mm": "Exp140 96-Koaks ↔ 4K M4 (X)",
+        "exp140_s65_rfsoc_to_awg_z_mm": "Exp140 2U RFSoC ↔ AWG (Z)",
     }
-    ry = y0 + 38.0
-    rh = (ph - 44.0) / len(clr)
-    fsz = min(9.4, max(7.6, rh * 0.50))
+    ry = y0 + 36.0
+    rh = (ph - 42.0) / len(clr)
+    fsz = min(9.2, max(7.2, rh * 0.56))
     for i, (k, rec) in enumerate(clr.items()):
         if i % 2 == 1:
             ctx.set_source_rgb(0.955, 0.968, 0.982)
             ctx.rectangle(x0 + 8, ry, pw - 16, rh); ctx.fill()
-        yt = ry + rh * 0.74
+        yt = ry + rh * 0.76
         _draw_text(ctx, x0 + 12, yt, labels_tr.get(k, k), fsz, color=INK_DARK)
         val_str = f"{rec['value_mm']:.2f} mm" if rec["value_mm"] < 1.0 else f"{rec['value_mm']:.1f} mm"
-        _draw_text(ctx, x0 + pw - 86, yt, val_str, fsz, bold=True, mono=True, color=INK_DARK, align="right")
+        _draw_text(ctx, x0 + pw - 74, yt, val_str, fsz, bold=True, mono=True, color=INK_DARK, align="right")
         _draw_text(ctx, x0 + pw - 12, yt, "PASS" if rec["pass"] else "FAIL", fsz, bold=True,
                    color=ACCENT_GREEN if rec["pass"] else ACCENT_RED, align="right")
         ry += rh
@@ -1746,41 +1761,43 @@ def _draw_clearances_panel(ctx: cairo.Context, rect: tuple[float, float, float, 
 
 def _draw_cutaway_spec_panel(ctx: cairo.Context, rect: tuple[float, float, float, float], ver: dict) -> None:
     x0, y0, pw, ph = rect
-    _draw_panel_box(ctx, x0, y0, pw, ph, "CAD v4.0 KESİT MİMARİSİ & ISI / MANYETİK / TİTREŞİM KATMANLARI")
-    tx, ry = x0 + 16.0, y0 + 52.0
+    _draw_panel_box(ctx, x0, y0, pw, ph, "CAD v5.0 KESİT MİMARİSİ & EXP139 S5.6 / EXP140 S6.5 KATMANLARI")
+    tx, ry = x0 + 16.0, y0 + 50.0
     blocks = [
         ("1. EXP124 İYON KOLONU (562,66 mm) & EXP130 S5.5 FLAŞ", [
             "• S1/S2: 10→5 keV Duoplazmatron + Wien (0,45 T) + HDA (0,453 eV) + Arch-B WD=0,25 mm.",
             "• 32×32 @ 0,50 mm (16×16 mm, Ø28 bore → 2,69 mm pay) + 16× SKY130 karo.",
-            "• Exp130 S5.5 (+Y CF63 Ø44 CA): 808 nm qCW 84×88×84 homojenleştirici (41,2 J/cm²).",
-            "• 10 µs dikroik pirometre + MXC<1 K/UHV güvenlik deklanşörü (σ_anneal=0,328 nm).",
+            "• Exp130/139 S5.5 (+Y CF63 Ø44 CA): 808 nm qCW (43,5 J/cm², 1530 K) + 10 µs pirometre.",
         ]),
-        ("2. EXP125 8-BOBİN MIKNATIS & EXP131 M4 KAVİTE-QED", [
-            "• 8 Bobin (M/S/A/B): Ø150 bore, 36 mm yarık (Z=482..518), Ø352 OD, B=1,50 T (17,8 ppm).",
-            "• Z=345 mm (z=−155): Ø50 NbTiN disk (22,3 µT) + Nb Meissner + Cryoperm-10.",
-            "• Exp131 M4 yonga: Δz_cap*=8±1 nm ²⁸Si, 3 kΩ NbTiN bus (L_res=300 µm, B_M4=0,1785 T).",
-            "• 4 K kademesinde SKY130 968-kapılı M4 çapraz-anahtar kartı (HEMT'e 26,4 mm pay).",
+        ("2. EXP139 S5.6 ²⁸Si UHV MBE KAPLAYICI (+Z LOAD-LOCK, 22,40 kg)", [
+            "• CF100 DN100CF flanş (Ø152/Ø100, X=420, Z=585,1..865,0 mm): ana odaya 119 mm pay.",
+            "• Pota-sız ²⁸Si süblimasyon (0,1 nm/s, 8,0±0,3 nm) + 345 °C PBN ısıtıcı + %5 H₂/N₂ (350 °C).",
+            "• QCM kalınlık sensörü + 80 L/s TMP/NEG pompa; sürgülü vana ile 20 mK'ya 0 µW sızıntı.",
         ]),
-        ("3. EXP133 PT420 TİTREŞİM AYRIŞTIRMA & 20 mK DR", [
-            "• PT420 500 mm uzak döner valf kutusu (x=−1150) + 600 mm esnek He U-ilmek hattı.",
-            "• OVC CF63 kenar-kaynaklı 316L körük (Ø44/Ø68, L=120 mm, k=2.000 N/m ≤ 6.282).",
-            "• Ø12×397 mm DR barası + 4× S-ilmek OFHC Cu örgü (k=52,7 N/m ≤ 4.197, ΔT=3,7 mK).",
-            "• VC-E kapalı çevrim: σ_stage=0,102 nm, σ_pointing=0,147 nm, σ_thermal=0,028 nm.",
+        ("3. EXP125 8-BOBİN MIKNATIS, EXP131 M4 & EXP133 PT420 AYRIŞTIRMA", [
+            "• 8 Bobin (Ø150 bore, 36 mm yarık, Ø352 OD, 1,50 T) + z=−155 NbTiN (22,3 µT) + Nb/Cryoperm.",
+            "• Exp131 M4: 4 K kademesinde 968-kapılı SKY130 çapraz-anahtar (3 kΩ NbTiN, B_M4=0,1785 T).",
+            "• Exp133: 500 mm uzak PT420 valf + CF63 körük (2 kN/m) + 4× OFHC örgü (52,7 N/m, ΔT=3,7 mK).",
         ]),
-        ("4. KONUMLANDIRMA, 100 K IBIC (EXP127) & s=0,5 UHV", [
-            "• Z=0..260: 4× 1,5 Hz hava yayı + granit + 0,5–100 Hz aktif tabla; 6-DOF piezo.",
+        ("4. EXP140 S6.5 1.024-HÜCRE KRİYO-MUX & 2U ZU48DR RFSoC (19,27 kg)", [
+            "• 20 mK MXC altı: 32-ch Josephson TWPA + Purcell + izolatör paketi (180×140×55, 2,72 kg).",
+            "• 4 K halka: 32× LNF-LNC4_8C HEMT (1,02 kg, 0,25 W) + 96-hat CuNi/NbTi koaks (4,03 kg).",
+            "• S7 19\" Kabin (2U 88,9 mm, 11,50 kg, 88 W): 2× ZU48DR Q16.16 BOED-RFSoC (32 RF zinciri).",
+        ]),
+        ("5. KONUMLANDIRMA, 100 K IBIC (EXP127) & s=0,5 UHV ODA", [
+            "• Z=0..260: 4× 1,5 Hz hava yayı + granit + aktif tabla (VC-E, σ_stage=0,102 nm); 6-DOF piezo.",
             "• Exp127: 100 K LTC6268 CSA (ENC=24,1 e⁻, η=0,99936) + V_iç=34,86 L UHV oda.",
         ]),
     ]
     for hdr, lines in blocks:
         ctx.set_source_rgb(0.92, 0.945, 0.975)
-        ctx.rectangle(tx - 4, ry - 15, pw - 24, 22); ctx.fill()
-        _draw_text(ctx, tx + 2, ry, hdr, 10.9, bold=True, color=NAVY_HDR)
-        ry += 25.0
+        ctx.rectangle(tx - 4, ry - 14, pw - 24, 21); ctx.fill()
+        _draw_text(ctx, tx + 2, ry, hdr, 10.6, bold=True, color=NAVY_HDR)
+        ry += 23.0
         for ln in lines:
-            _draw_text(ctx, tx + 4, ry, ln, 10.1, color=INK_DARK)
-            ry += 21.5
-        ry += 14.0
+            _draw_text(ctx, tx + 4, ry, ln, 9.9, color=INK_DARK)
+            ry += 20.0
+        ry += 10.0
 
     # Hatch legend box at bottom
     ctx.set_source_rgb(0.985, 0.988, 0.995)

@@ -1,8 +1,9 @@
-"""Atom Lithography Machine control, BOED spectroscopy & CellISA v3.0 stack.
+"""Atom Lithography Machine control, BOED-FPGA DSP & CellISA v3.5 stack.
 
 Implements the write -> detect -> adaptive-BOED-measure -> select -> calibrate
-factory loop (Exp57-132) plus the CellISA v3.0 single-cell and multi-cell (M4)
-cavity-bus compiler, heterogeneous wafer router, and Exp126 32D provenance bridge.
+factory loop (Exp57-140), bit-exact Q16.16 BOED-FPGA DSP engine (Exp140), plus
+the CellISA v3.5 single-cell, multi-cell (M4) cavity-bus, echoed-CZ, multiplexed
+readout, and syndrome-cycle compiler with Exp126 32D provenance bridge.
 No physical hardware exists; all device parameters are model-anchored ({Model}).
 """
 __all__ = [
@@ -10,6 +11,7 @@ __all__ = [
     "writer",
     "spectroscopy",
     "adaptive_spectroscopy",
+    "fpga_boed_dsp",
     "selector",
     "pulse_engine",
     "calibrator",
@@ -17,4 +19,4 @@ __all__ = [
     "factory",
     "sim",
 ]
-__version__ = "3.0.0"
+__version__ = "3.5.0"

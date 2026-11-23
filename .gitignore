@@ -1,6 +1,6 @@
-# Strict Allowlist .gitignore — Atom Lithography Machine v3.0
-# Ignore everything by default; explicitly whitelist only the clean v3.0 release
-# package and the exact minimal legacy helper/JSON anchors needed for 89/89 pytest.
+# Strict Allowlist .gitignore — Atom Lithography Machine v5.0
+# Ignore everything by default; explicitly whitelist only the clean v5.0 release
+# package and the exact minimal legacy helper/JSON anchors needed for full pytest.
 *
 
 # Root metadata & showcase
@@ -8,14 +8,14 @@
 !README.md
 !requirements.txt
 
-# Master engineering documentation, BOM, RFQ & Parametric CAD v3.0
+# Master engineering documentation, BOM v5.0, 8-RFQ & Parametric CAD v5.0
 !research/
 !research/atom_lithography_machine/
 !research/atom_lithography_machine/**
 !research/hypotheses/
 !research/hypotheses/hypotheses.md
 
-# Software control stack (CellISA v2.0), 0-ERC IBIC board & verified RTL
+# Software control stack (BOED + FPGA DSP + CellISA v3.5), 0-ERC IBIC board & verified RTL
 !src/
 !src/README.md
 !src/machine_control/
@@ -30,7 +30,7 @@
 !src/rtl/BLANKER_TILE.md
 !src/rtl/bmc64.ys
 
-# v3.0 & v4.0 First-principles experiment suites (Exp124-Exp135)
+# v3.0, v4.0 & v5.0 First-principles experiment suites (Exp124-Exp141)
 !experiments/
 !experiments/exp124_ion_column_optics/
 !experiments/exp124_ion_column_optics/**
@@ -56,8 +56,20 @@
 !experiments/exp134_fab_economics_tco/**
 !experiments/exp135_v4_digital_twin/
 !experiments/exp135_v4_digital_twin/**
+!experiments/exp136_tb_sp3d5s_hyperfine/
+!experiments/exp136_tb_sp3d5s_hyperfine/**
+!experiments/exp137_echoed_m4_bus_gate/
+!experiments/exp137_echoed_m4_bus_gate/**
+!experiments/exp138_defective_surface_code_ft/
+!experiments/exp138_defective_surface_code_ft/**
+!experiments/exp139_epi_cap_process_integration/
+!experiments/exp139_epi_cap_process_integration/**
+!experiments/exp140_cryo_fpga_boed_mux_readout/
+!experiments/exp140_cryo_fpga_boed_mux_readout/**
+!experiments/exp141_v5_digital_twin/
+!experiments/exp141_v5_digital_twin/**
 
-# Minimal legacy physics helpers required by AtlasSelector & Exp124 (89/89 pytest)
+# Minimal legacy physics helpers required by AtlasSelector & Exp124-136 pytest
 !experiments/exp25_universal_atom/
 !experiments/exp25_universal_atom/ap25_control.py
 !experiments/exp25_universal_atom/ap25_register.py
@@ -70,7 +82,7 @@
 !experiments/exp48_pulse_aware_selection/
 !experiments/exp48_pulse_aware_selection/pulse_select48.py
 
-# v3.0 & v4.0 Verified experiment results & plots (Exp124-Exp135)
+# v3.0, v4.0 & v5.0 Verified experiment results & plots (Exp124-Exp141)
 !results/
 !results/exp124_ion_column_optics/
 !results/exp124_ion_column_optics/**
@@ -96,8 +108,20 @@
 !results/exp134_fab_economics_tco/**
 !results/exp135_v4_digital_twin/
 !results/exp135_v4_digital_twin/**
+!results/exp136_tb_sp3d5s_hyperfine/
+!results/exp136_tb_sp3d5s_hyperfine/**
+!results/exp137_echoed_m4_bus_gate/
+!results/exp137_echoed_m4_bus_gate/**
+!results/exp138_defective_surface_code_ft/
+!results/exp138_defective_surface_code_ft/**
+!results/exp139_epi_cap_process_integration/
+!results/exp139_epi_cap_process_integration/**
+!results/exp140_cryo_fpga_boed_mux_readout/
+!results/exp140_cryo_fpga_boed_mux_readout/**
+!results/exp141_v5_digital_twin/
+!results/exp141_v5_digital_twin/**
 
-# Minimal legacy JSON anchors required by 89/89 pytest & Exp124/126/128 audit gates
+# Minimal legacy JSON anchors required by Atom Lithography pytest & audit gates
 !results/exp42/
 !results/exp42/isotope42.json
 !results/exp45/
@@ -133,7 +157,7 @@
 !results/exp122_budget_cap/
 !results/exp122_budget_cap/exp122.json
 
-# Atom Lithography verification test suite (17 test files, 142/142 pytest)
+# Atom Lithography v5.0 verification test suite (23/23 staged test files, 198/198 pytest)
 !tests/
 !tests/conftest.py
 !tests/test_machine_control.py
@@ -151,6 +175,12 @@
 !tests/test_exp133.py
 !tests/test_exp134.py
 !tests/test_exp135.py
+!tests/test_exp136.py
+!tests/test_exp137.py
+!tests/test_exp138.py
+!tests/test_exp139.py
+!tests/test_exp140.py
+!tests/test_exp141.py
 !tests/test_rtl_contract.py
 !tests/test_blanker_tile.py
 

@@ -1,0 +1,77 @@
+{
+  "experiment": "exp137_echoed_m4_bus_gate",
+  "hypothesis_id": "H155",
+  "registered_at": "2026-11-23T05:11:00+03:00",
+  "status": "PRE_REGISTERED_BEFORE_COMPUTATION",
+  "no_lab_measurement": true,
+  "epistemic_scope": "Model / Exact 12x12 Open-Quantum-System Strang-Split Lindblad + Colored 1/f^alpha Ornstein-Uhlenbeck Trajectory Simulation (N_traj >= 512 on CUDA) anchored to Exp131 (3 kOhm NbTiN L_res=300 um, B_M4=0.1785 T, Delta_z_cap*=8.0 nm, Best-of-6 31P flip-flop pairs, Exp109 Q_r anchor). No laboratory measurement.",
+  "anchor_references": [
+    "results/exp131_scalable_m4_architecture/exp131.json",
+    "results/exp109_sc_resonator/exp109.json",
+    "results/exp124_ion_column_optics/exp124.json",
+    "Cywinski et al., Phys. Rev. B 77, 174509 (2008)",
+    "Tosi et al., Nat. Commun. 8, 450 (2017)",
+    "Motzoi et al., Phys. Rev. Lett. 103, 110501 (2009)",
+    "Didier et al., Phys. Rev. A 97, 022330 (2018)"
+  ],
+  "predictions": {
+    "EC1_ou_1f_noise_psd_and_cptp_precision": {
+      "statement": "Multi-OU 1/f^alpha noise generator (alpha in {0.8, 1.0, 1.2}, [1 Hz, 100 MHz]) matches target S(f)=S_0^2/f^alpha within <10% across [10 Hz, 10 MHz] and RMS within <5% of analytical integral; CUDA 12x12 Strang-split Lindblad maintains max|Tr(rho)-1| < 1e-9, max||rho-rho^dag|| < 1e-9, min_eigval >= -1e-9; noiseless XY4-DRAG-CZ achieves F_avg >= 0.999 and cavity leakage < 1e-4.",
+      "thresholds": {
+        "max_psd_rel_err": 0.10,
+        "max_rms_rel_err": 0.05,
+        "max_trace_err": 1e-9,
+        "min_noiseless_xy4_drag_F_avg": 0.999,
+        "max_noiseless_leak": 1e-4
+      }
+    },
+    "EC2_bare_cz_anchor_and_echo_breakthrough": {
+      "statement": "On heterogeneous 3 kOhm NbTiN Exp131 Best-of-6 donor pairs (Delta_z_cap=8 nm, Q_r=2e5, S_eps=1.0 ueV/rtHz, alpha=1.0, N_traj>=512): (a) Markovian bare CZ reproduces Exp131 CM4 collapse (F_avg in [0.72, 0.84]); (b) under real colored 1/f noise, (P2) FF-Echo-CZ strictly beats (P1) Bare Dispersive CZ, and (P3) XY4-Embedded DRAG-CZ achieves mean F_avg >= 0.95 and F_Bell >= 0.96.",
+      "thresholds": {
+        "markov_anchor_min": 0.72,
+        "markov_anchor_max": 0.84,
+        "min_p3_F_avg": 0.95,
+        "min_p3_F_bell": 0.96
+      }
+    },
+    "EC3_xy4_drag_beats_ff_echo_under_pulse_and_alpha_stress": {
+      "statement": "With finite 15 ns pi-pulses and 1.5% Rabi rotation error (eps_rot=0.015), (P3) XY4-Embedded DRAG-CZ strictly outperforms (P2) FF-Echo-CZ at S_eps=1.0 ueV/rtHz and reduces cavity leakage vs unshaped no-DRAG XY4; across noise color alpha in {0.8, 1.0, 1.2}, echoed CZ fidelity increases strictly monotonically with alpha (F(0.8) < F(1.0) < F(1.2)).",
+      "thresholds": {
+        "require_p3_gt_p2": true,
+        "require_drag_reduces_leak": true,
+        "require_alpha_monotonic": true
+      }
+    },
+    "EC4_sweetspot_p4_surface_code_threshold_at_nominal": {
+      "statement": "(P4) Sweet-Spot Parametric AC-Stark / Modulated g(t) Echo CZ (clock-transition partial omega_q/partial eps ~ 0 + Bessel-flattened parametric coupling + XY4-DRAG echo) achieves F_avg >= 0.985 and F_Bell >= 0.990 at nominal M4 (3 kOhm, Q_r=2e5, S_eps=1.0 ueV/rtHz, alpha=1.0), and strictly outperforms (P1)-(P3) at S_eps=2.0 ueV/rtHz.",
+      "thresholds": {
+        "min_p4_nominal_F_avg": 0.985,
+        "min_p4_nominal_F_bell": 0.990
+      }
+    },
+    "EC5_2d_fault_tolerance_envelope_and_failure_wall": {
+      "statement": "Across the 5x4 (S_eps in {0.25, 0.5, 1.0, 2.0, 5.0} ueV/rtHz x Q_r in {5e4, 1e5, 2e5, 5e5}) phase map, best echoed protocol (P4) clears F_Bell >= 0.990 across Q_r >= 2e5, S_eps <= 1.0 ueV/rtHz and reaches F_Bell >= 0.994 at (Q_r=5e5, S_eps=0.5), while extreme noise + low-Q (S_eps=5.0, Q_r=5e4) drops below F_avg < 0.96 (transparent failure wall).",
+      "thresholds": {
+        "min_nominal_zone_F_bell": 0.990,
+        "min_highQ_lowS_F_bell": 0.994,
+        "max_extreme_wall_F_avg": 0.96
+      }
+    },
+    "EC6_transverse_dg_jitter_honest_budget": {
+      "statement": "Explicitly activating full transverse coupling-strength 1/f jitter dg(t)=(dg/deps)*de(t) (which X-echo cannot cancel) degrades unmitigated (P2)/(P3) at S_eps=1.0 ueV/rtHz by Delta_F_dg > 0.005, while (P4) Bessel-stationary parametric modulation / flat-g operation suppresses the dg penalty by >= 3x.",
+      "thresholds": {
+        "min_p3_dg_penalty": 0.005,
+        "min_p4_dg_suppression_factor": 3.0
+      }
+    },
+    "EC7_exact_pauli_error_channel_for_exp138_decoder": {
+      "statement": "Full 16-element Choi/PTM Pauli error channel projection at S_eps=1.0 and 0.5 ueV/rtHz satisfies exact probability sum |sum(p_a)-1| < 1e-6, Nielsen identity |F_avg - (4*p_I+1)/5| < 1e-5, and residual cavity leakage p_leak < 0.005 for Exp138 surface-code decoding.",
+      "thresholds": {
+        "max_pauli_sum_err": 1e-6,
+        "max_nielsen_err": 1e-5,
+        "max_p_leak": 0.005
+      }
+    }
+  },
+  "success_rule": "All 7 pre-registered predictions EC1 through EC7 PASS (any FAIL documented transparently with physical root cause)."
+}

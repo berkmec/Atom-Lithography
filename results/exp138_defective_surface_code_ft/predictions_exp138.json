@@ -1,0 +1,63 @@
+{
+  "experiment": "exp138_defective_surface_code_ft",
+  "hypothesis_id": "H156",
+  "registered_before_execution": true,
+  "date": "2026-11-23",
+  "no_lab_measurement": true,
+  "epistemic_tag": "{Sayısal-Simülasyon}",
+  "question": "What is the exact circuit-level fault-tolerant threshold p_2q,th, logical error rate eps_L(d), suppression factor Lambda, missing-cell super-stabilizer degradation d_eff(N_cand), and physical-to-logical resource scaling (d*, N_active, N_phys_per_logical, LD400/PT420 modular cryostat count for 100 logical qubits) of the v5.0 Atom Lithography Machine M4 rotated surface code using exact Exp137 Pauli-16 + Exp140 MUX readout + Exp136 T2e/yield + Exp139 Rota C + Exp132 BOED FNR inputs?",
+  "upstream_inputs_readonly": [
+    "results/exp136_tb_sp3d5s_hyperfine/exp136.json",
+    "results/exp137_echoed_m4_bus_gate/exp137.json",
+    "results/exp139_epi_cap_process_integration/exp139.json",
+    "results/exp140_cryo_fpga_boed_mux_readout/exp140.json",
+    "results/exp132_bayesian_spectroscopy_cellisa3/exp132.json",
+    "results/exp126_atom_cell_programming/exp126.json"
+  ],
+  "model": {
+    "code_family": "Rotated planar surface code (d = 3, 5, 7, 9, 11), n_data = d^2, n_anc = d^2 - 1, n_total = 2 d^2 - 1",
+    "syndrome_rounds": "d rounds of circuit-level 4-step CZ syndrome extraction + final ideal transversal readout",
+    "decoder": "Exact Edmonds Blossom MWPM (networkx.min_weight_matching) over circuit-level 3D Detector Error Model (DEM) with separate left/right (top/bottom) virtual boundary nodes",
+    "two_qubit_noise": "Exact 15-term non-identity Pauli-16 channel from Exp137 part4_exp138_pauli_channels scaled to Exp137 part3_2d_phase_map (Q_r, S_eps) points, plus explicit leakage-to-depolarizing LRU sensitivity check",
+    "one_qubit_and_idle_noise": "p_1q from Exp126 Rx_pi2 (0.00083), p_meas from Exp140 N_mux*=32 at tau_ro=2us (0.003861) and 3us sensitivity (0.002232), p_idle from Exp136 XY8-N64 T2e over full 4-CZ + readout syndrome cycle T_cyc = 4*t_gate + tau_ro + 0.2 us",
+    "defect_model": "Exact gauge-deformed super-stabilizer merging around missing data qubits (preserving H_X_def @ H_Z_def^T = 0 mod 2), dead ancilla puncturing, weight-scaled measurement noise, and exact shortest-path effective distance d_eff"
+  },
+  "predictions": [
+    {
+      "id": "FT1_ROTATED_CODE_ALGEBRA_AND_THRESHOLD",
+      "description": "Exact rotated surface code algebra (2d^2-1 qubits, H_X H_Z^T = 0 mod 2, exact logical operators, d_eff = d at p_drop = 0) and circuit-level MWPM threshold p_2q,th under exact Exp137 Pauli-16 + Exp140 p_meas=0.003861 falls cleanly in [0.0070, 0.0200].",
+      "criterion": "all_algebra_exact == True and 0.0070 <= p_2q_th_combined <= 0.0200"
+    },
+    {
+      "id": "FT2_HONEST_NEGATIVE_CONTROLS_V4_AND_UNPASSIVATED",
+      "description": "Scenario A (v4.0 Bare P1, S=1.0, p_2q=0.3925) and Scenario B (v5.0 Unpassivated Route A + P4, S=1.0, both 6-pair p_2q=0.0665 and fast-pair p_2q=0.0279) are all strictly above threshold: Lambda < 1.0 and eps_L(d=7) > eps_L(d=3).",
+      "criterion": "scenario_A_above_th and scenario_B_6pair_above_th and scenario_B_fast_above_th"
+    },
+    {
+      "id": "FT3_V5_ROTA_C_THRESHOLD_CROSSING_AND_QR_HEADROOM",
+      "description": "Scenario D (v5.0 Rota C P4, Q_r=5e5, S_eps=0.25 uev/rtHz, p_2q=0.0092) crosses below circuit-level threshold with Lambda > 1.15 and eps_L(d=11) < eps_L(d=3), while deep-FT target D_target (p_2q=0.0050) achieves Lambda >= 2.0.",
+      "criterion": "D_S0p25_Lambda > 1.15 and D_S0p25_eps_d11 < D_S0p25_eps_d3 and D_target_Lambda >= 2.0"
+    },
+    {
+      "id": "FT4_EXACT_PAULI16_AND_MEMORY_BASIS_CONSISTENCY",
+      "description": "Both Z-memory and X-memory circuits are decoded independently under exact Exp137 Pauli-16; combined logical error eps_L_tot = 1 - (1 - eps_X)(1 - eps_Z) >= max(eps_X, eps_Z) everywhere, and mild Z-bias preserves p_2q_th_Zmem >= 0.90 * p_2q_th_Xmem.",
+      "criterion": "combined_bound_holds and p_2q_th_Zmem >= 0.90 * p_2q_th_Xmem"
+    },
+    {
+      "id": "FT5_DEFECTIVE_SUPER_STABILIZER_AND_BOED_FNR",
+      "description": "Gauge-deformed super-stabilizer matrices commute (H_X_def H_Z_def^T = 0 mod 2) on 100% of realizations. At f=1.0%: N_cand=1 (p_drop=48.6%) breaks patch (mean d_eff(d=7) < 2.0), N_cand=3 (p_drop=11.45%) degrades d_eff/d < 0.85, N_cand=6 (p_drop=1.31%) preserves mean d_eff/d >= 0.85 and survival >= 98%. At f*=1.5%+2MV/m: N_cand=3 preserves d_eff/d >= 0.85 and N_cand=6 preserves d_eff/d >= 0.99. Exp132 BOED FNR=0.201% shifts p_drop(N_cand=6) by < 0.0005.",
+      "criterion": "all_superstab_commute and f1_N1_broken and f1_N3_degraded and f1_N6_preserved and f15_N3_preserved and f15_N6_near_ideal and boed_fnr_delta_pdrop_N6 < 0.0005"
+    },
+    {
+      "id": "FT6_MACHINE_SCALING_AND_EXP141_INTERFACE",
+      "description": "Exponential fit eps_L(d) = A * Lambda^(-(d+1)/2) produces finite odd d*, N_active=2d*^2-1, N_phys_per_logical=N_cand*N_active, and LD400/PT420 modular cryostat counts for 100 logical qubits at eps_L in {1e-6, 1e-9, 1e-12}, exported under Exp141-compatible top-level key 'target_logical_error_rates'.",
+      "criterion": "has_target_logical_error_rates_1e6_1e9_1e12 and monotonic_d_star_and_cryostats"
+    },
+    {
+      "id": "FT7_STATISTICAL_PRECISION_PORTABILITY_AND_TESTS",
+      "description": "Primary Monte Carlo curves use >= 2000 shots/point with Wilson 95% CIs, zero hardcoded user paths across code/results/tests, valid 2400x1400 PNG figure, 0 GFM errors in summary_exp138.md, and >= 8 passing pytest checks in tests/test_exp138.py.",
+      "criterion": "min_shots >= 2000 and hardcoded_path_hits == 0 and no_lab_measurement == True"
+    }
+  ],
+  "success_rule": "At least 5/7 pre-registered predictions PASS with 100% honest reporting of any FAIL (no post-hoc threshold modification) and zero algebra/commutation/portability defects."
+}

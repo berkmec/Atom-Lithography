@@ -1,0 +1,766 @@
+{
+  "experiment": "exp139_epi_cap_process_integration",
+  "hypothesis_id": "H157",
+  "verdict": "PARTIAL_PASS_4_OF_7_WITH_V5_MITIGATION",
+  "pre_registered_pass_count": 4,
+  "pre_registered_total_count": 7,
+  "no_lab_measurement": true,
+  "no_supplier_quotes": true,
+  "epistemic_scope": "Coupled ZBL+LSS BCA, Exp130 1D thermal+TED PDE, Eaglesham/Gossmann/Nutzel-Abstreiter LT-MBE kinetics, exact 2D image-charge McWhorter electrostatics, and Exp131 4x4 Tosi flip-flop yield; physical lab & supplier verification remain required.",
+  "runtime_s": 129.13,
+  "evaluations": {
+    "EP1": {
+      "pass": true,
+      "summary": "Exp92 5/10/20 keV max diff=1.78% (<=5%); Route B 22 keV sig_lat=7.69nm (2.38x vs 5keV), sig_z=5.87nm (2.09x), Exp124 sig_tot=7.87nm (>3.80); recoil-O=1.02/ion @20keV & 1.04/ion @22keV (>=0.2)"
+    },
+    "EP2": {
+      "pass": true,
+      "summary": "Optimal T_epi*=345 C ([310,370], passing window 325-380 C): h_epi=236.0nm (>40), R_q=0.091nm (<=0.20), N_def=2.84e+14 (<=1e15), L_seg=2.08nm (<=3.5), sig_iso_tot=0.0314nm (<=0.05)"
+    },
+    "EP3": {
+      "pass": false,
+      "summary": "v4 1440K Route A: z=14.35+-3.14nm, yield=92.20% (Route C=95.00%); v5 1530K mitigated Route A=95.35% (sig_z=2.81nm), Route C=97.70% (med C=7557); Route B 22keV=53.35% (<80%), 14keV+8nm=31.75% (<40%)"
+    },
+    "EP4": {
+      "pass": true,
+      "summary": "McWhorter 2D image-charge S_eps: Route B=1.719 (>1.3), Route A=1.000 ([0.75,1.05]), Route C (350C FG/H, Dit=1.5e10)=0.390 ueV/rtHz ([0.25,0.45], 2.57x suppression; 1.0e10/5nm ox=0.283)"
+    },
+    "EP5": {
+      "pass": false,
+      "summary": "HONEST DISCOVERY @ v4 1x1440K (41.15 J/cm^2): 13.6% {311} clusters survive flash -> +1.32nm latent back-end TED during MBE+350C FG (tot=1.646nm, Exp124=3.995nm); v5 FIX (1x1530K / 43.49 J/cm^2): 99.99% cluster clear -> tot=0.430nm, Exp124=3.665nm (<=3.80)!"
+    },
+    "EP6": {
+      "pass": true,
+      "summary": "S5.6 CF100 top port on Load-Lock (420,0,585..865 mm): min clearance=70.0mm (>50), mass=22.4kg ([18,25]), P_growth=3.5e-10 Torr (<5e-10), t_cap=80s ([40,160]), cryo leak=0.0 uW, pipelined penalty=0.0% (serial Route A=5.56%)"
+    },
+    "EP7": {
+      "pass": false,
+      "summary": "BCA indep 2k vs 4k max diff=2.90% (4k vs 8k=2.67%), McWhorter radial conv=0.0009% (<0.5%), TED mass_err=1.55e-15 (<1e-12)"
+    }
+  },
+  "convergence_and_conservation": {
+    "bca_2k_vs_4k": {
+      "E5_Rp_rel_diff_2k_vs_4k": 0.00875,
+      "E5_sigx_rel_diff_2k_vs_4k": 0.02902,
+      "E22_Rp_rel_diff_2k_vs_4k": 0.01732,
+      "E22_sigx_rel_diff_2k_vs_4k": 0.00781
+    },
+    "bca_4k_vs_8k": {
+      "E5_Rp_rel_diff_4k_vs_8k": 0.0055,
+      "E5_sigx_rel_diff_4k_vs_8k": 0.0267,
+      "E22_Rp_rel_diff_4k_vs_8k": 0.00595,
+      "E22_sigx_rel_diff_4k_vs_8k": 0.00185
+    },
+    "bca_max_rel_diff_2k_4k": 0.02902,
+    "bca_max_rel_diff_4k_8k": 0.0267,
+    "exp92_anchor_check": {
+      "E5": {
+        "exp92_Rp_nm": 6.4582,
+        "exp139_Rp_nm": 6.4406,
+        "Rp_rel_diff": 0.00273,
+        "exp92_sigma_lat_nm": 3.2512,
+        "exp139_sigma_lat_nm": 3.2264,
+        "sigma_lat_rel_diff": 0.00763
+      },
+      "E10": {
+        "exp92_Rp_nm": 9.6004,
+        "exp139_Rp_nm": 9.5545,
+        "Rp_rel_diff": 0.00478,
+        "exp92_sigma_lat_nm": 4.8289,
+        "exp139_sigma_lat_nm": 4.9147,
+        "sigma_lat_rel_diff": 0.01776
+      },
+      "E20": {
+        "exp92_Rp_nm": 13.8569,
+        "exp139_Rp_nm": 13.8356,
+        "Rp_rel_diff": 0.00153,
+        "exp92_sigma_lat_nm": 7.3801,
+        "exp139_sigma_lat_nm": 7.3307,
+        "sigma_lat_rel_diff": 0.0067
+      }
+    },
+    "exp92_max_rel_diff": 0.01776,
+    "mcwhorter_radial_conv_800_vs_1600": 9e-06,
+    "ted_max_mass_conservation_err": 1.5543122344752192e-15
+  },
+  "bca_energy_sweep": {
+    "E5": {
+      "E_keV": 5.0,
+      "n_ions": 4000,
+      "n_implanted": 3975,
+      "backscatter_frac": 0.00625,
+      "Rp_nm": 6.4406,
+      "sigma_z_nm": 2.8046,
+      "sigma_x_nm": 3.2384,
+      "sigma_y_nm": 3.2143,
+      "sigma_lat_nm": 3.2264,
+      "exp124_sigma_tot_with_flash_nm": 3.6258
+    },
+    "E10": {
+      "E_keV": 10.0,
+      "n_ions": 4000,
+      "n_implanted": 3983,
+      "backscatter_frac": 0.00425,
+      "Rp_nm": 9.5545,
+      "sigma_z_nm": 3.9741,
+      "sigma_x_nm": 4.8558,
+      "sigma_y_nm": 4.9735,
+      "sigma_lat_nm": 4.9147,
+      "exp124_sigma_tot_with_flash_nm": 5.1856
+    },
+    "E14": {
+      "E_keV": 14.0,
+      "n_ions": 4000,
+      "n_implanted": 3972,
+      "backscatter_frac": 0.007,
+      "Rp_nm": 11.4711,
+      "sigma_z_nm": 4.7246,
+      "sigma_x_nm": 5.8477,
+      "sigma_y_nm": 5.967,
+      "sigma_lat_nm": 5.9073,
+      "exp124_sigma_tot_with_flash_nm": 6.1346
+    },
+    "E15": {
+      "E_keV": 15.0,
+      "n_ions": 4000,
+      "n_implanted": 3966,
+      "backscatter_frac": 0.0085,
+      "Rp_nm": 11.9353,
+      "sigma_z_nm": 4.9146,
+      "sigma_x_nm": 6.1625,
+      "sigma_y_nm": 6.1448,
+      "sigma_lat_nm": 6.1536,
+      "exp124_sigma_tot_with_flash_nm": 6.3721
+    },
+    "E18": {
+      "E_keV": 18.0,
+      "n_ions": 4000,
+      "n_implanted": 3957,
+      "backscatter_frac": 0.01075,
+      "Rp_nm": 12.9928,
+      "sigma_z_nm": 5.3601,
+      "sigma_x_nm": 6.9192,
+      "sigma_y_nm": 6.8312,
+      "sigma_lat_nm": 6.8752,
+      "exp124_sigma_tot_with_flash_nm": 7.0715
+    },
+    "E20": {
+      "E_keV": 20.0,
+      "n_ions": 4000,
+      "n_implanted": 3968,
+      "backscatter_frac": 0.008,
+      "Rp_nm": 13.8356,
+      "sigma_z_nm": 5.6636,
+      "sigma_x_nm": 7.369,
+      "sigma_y_nm": 7.2925,
+      "sigma_lat_nm": 7.3307,
+      "exp124_sigma_tot_with_flash_nm": 7.5151
+    },
+    "E22": {
+      "E_keV": 22.0,
+      "n_ions": 4000,
+      "n_implanted": 3971,
+      "backscatter_frac": 0.00725,
+      "Rp_nm": 14.5648,
+      "sigma_z_nm": 5.8719,
+      "sigma_x_nm": 7.657,
+      "sigma_y_nm": 7.724,
+      "sigma_lat_nm": 7.6905,
+      "exp124_sigma_tot_with_flash_nm": 7.8664
+    },
+    "E24": {
+      "E_keV": 24.0,
+      "n_ions": 4000,
+      "n_implanted": 3957,
+      "backscatter_frac": 0.01075,
+      "Rp_nm": 15.2229,
+      "sigma_z_nm": 5.9764,
+      "sigma_x_nm": 8.1414,
+      "sigma_y_nm": 8.1277,
+      "sigma_lat_nm": 8.1345,
+      "exp124_sigma_tot_with_flash_nm": 8.3011
+    }
+  },
+  "recoil_oxygen_route_B": {
+    "E20_1p5nm_SiO2": {
+      "E_keV": 20.0,
+      "oxide_thick_nm": 1.5,
+      "total_O_displaced_per_ion": 4.003,
+      "O_injected_into_Si_per_ion": 1.025,
+      "mean_O_depth_in_Si_nm": 0.8592,
+      "p90_O_depth_in_Si_nm": 1.5641,
+      "max_O_depth_in_Si_nm": 25.7013
+    },
+    "E22_1p5nm_SiO2": {
+      "E_keV": 22.0,
+      "oxide_thick_nm": 1.5,
+      "total_O_displaced_per_ion": 3.99,
+      "O_injected_into_Si_per_ion": 1.0428,
+      "mean_O_depth_in_Si_nm": 0.9011,
+      "p90_O_depth_in_Si_nm": 1.6322,
+      "max_O_depth_in_Si_nm": 24.5669
+    },
+    "E24_1p5nm_SiO2": {
+      "E_keV": 24.0,
+      "oxide_thick_nm": 1.5,
+      "total_O_displaced_per_ion": 3.9867,
+      "O_injected_into_Si_per_ion": 1.062,
+      "mean_O_depth_in_Si_nm": 0.9391,
+      "p90_O_depth_in_Si_nm": 1.6708,
+      "max_O_depth_in_Si_nm": 31.3431
+    }
+  },
+  "route_A_mbe_optimization": {
+    "optimal_point": {
+      "T_epi_C": 345.0,
+      "T_epi_K": 618.15,
+      "delta_z_cap_nm": 8.0,
+      "growth_rate_nm_s": 0.1,
+      "deposition_time_s": 80.0,
+      "h_epi_nm": 235.98,
+      "epi_margin_ratio": 29.5,
+      "R_q_nm": 0.091,
+      "N_def_cm3": 283605728346473.0,
+      "L_seg_nm": 2.0824,
+      "sigma_P_mbe_bulk_nm": 2.9839854329120176e-07,
+      "sigma_iso_mbe_nm": 1.2612993720325117e-10,
+      "quality_cost": 0.9538,
+      "meets_mbe_criteria": true
+    },
+    "passing_window_T_epi_C": [
+      325.0,
+      380.0
+    ],
+    "growth_rate_sensitivity_at_T_opt": {
+      "R_0.05_nm_s": {
+        "T_epi_C": 345.0,
+        "T_epi_K": 618.15,
+        "delta_z_cap_nm": 8.0,
+        "growth_rate_nm_s": 0.05,
+        "deposition_time_s": 160.0,
+        "h_epi_nm": 333.73,
+        "epi_margin_ratio": 41.72,
+        "R_q_nm": 0.0867,
+        "N_def_cm3": 283605728346473.0,
+        "L_seg_nm": 3.8945,
+        "sigma_P_mbe_bulk_nm": 4.2199926691479265e-07,
+        "sigma_iso_mbe_nm": 1.783746678141046e-10,
+        "quality_cost": 2.1226,
+        "meets_mbe_criteria": false
+      },
+      "R_0.10_nm_s": {
+        "T_epi_C": 345.0,
+        "T_epi_K": 618.15,
+        "delta_z_cap_nm": 8.0,
+        "growth_rate_nm_s": 0.1,
+        "deposition_time_s": 80.0,
+        "h_epi_nm": 235.98,
+        "epi_margin_ratio": 29.5,
+        "R_q_nm": 0.091,
+        "N_def_cm3": 283605728346473.0,
+        "L_seg_nm": 2.0824,
+        "sigma_P_mbe_bulk_nm": 2.9839854329120176e-07,
+        "sigma_iso_mbe_nm": 1.2612993720325117e-10,
+        "quality_cost": 0.9538,
+        "meets_mbe_criteria": true
+      },
+      "R_0.20_nm_s": {
+        "T_epi_C": 345.0,
+        "T_epi_K": 618.15,
+        "delta_z_cap_nm": 8.0,
+        "growth_rate_nm_s": 0.2,
+        "deposition_time_s": 40.0,
+        "h_epi_nm": 166.86,
+        "epi_margin_ratio": 20.86,
+        "R_q_nm": 0.0979,
+        "N_def_cm3": 283605728346473.0,
+        "L_seg_nm": 1.1016,
+        "sigma_P_mbe_bulk_nm": 2.1099963345739632e-07,
+        "sigma_iso_mbe_nm": 8.91873339070523e-11,
+        "quality_cost": 0.6652,
+        "meets_mbe_criteria": true
+      }
+    },
+    "combined_sigma_iso_flash_plus_mbe_nm": 0.031365
+  },
+  "coupled_thermal_chain_ted": {
+    "v4_1x1440K_41p15J_unmitigated": {
+      "n_flash_pulses": 1,
+      "fluence_per_pulse_J_per_cm2": 41.148,
+      "T_peak_K": 1440.26,
+      "T_peak_over_Tmelt": 0.8537,
+      "T_back_max_K": 592.88,
+      "cluster_dissolution_integral": 1.997,
+      "cluster_remaining_frac_post_flash": 0.135725,
+      "flash_only": {
+        "f_act_bulk": 0.999782,
+        "sigma_anneal_nm": 0.328,
+        "f_total_surface_loss": 0.000217,
+        "sigma_iso_nm": 0.03136,
+        "mass_conservation_err": 1.1102230246251565e-15
+      },
+      "route_A_flash_plus_mbe": {
+        "f_act_bulk": 0.995723,
+        "sigma_anneal_nm": 1.36263,
+        "f_total_surface_loss": 0.004276,
+        "sigma_iso_nm": 0.031363,
+        "mass_conservation_err": 1.5543122344752192e-15
+      },
+      "route_C_full_chain": {
+        "f_act_bulk": 0.993242,
+        "sigma_anneal_nm": 1.64649,
+        "f_total_surface_loss": 0.006756,
+        "sigma_iso_nm": 0.031365,
+        "mass_conservation_err": 1.5543122344752192e-15
+      },
+      "delta_sigma_anneal_route_A_nm": 1.03463,
+      "delta_sigma_anneal_route_C_nm": 1.318489,
+      "delta_surface_loss_route_C": 0.0065393,
+      "delta_sigma_iso_route_C_nm": 5e-06
+    },
+    "v5_1x1530K_43p49J_cluster_clearing": {
+      "n_flash_pulses": 1,
+      "fluence_per_pulse_J_per_cm2": 43.494,
+      "T_peak_K": 1530.11,
+      "T_peak_over_Tmelt": 0.907,
+      "T_back_max_K": 608.33,
+      "cluster_dissolution_integral": 9.071,
+      "cluster_remaining_frac_post_flash": 0.000115,
+      "flash_only": {
+        "f_act_bulk": 0.999336,
+        "sigma_anneal_nm": 0.39238,
+        "f_total_surface_loss": 0.000664,
+        "sigma_iso_nm": 0.051518,
+        "mass_conservation_err": 4.440892098500626e-16
+      },
+      "route_A_flash_plus_mbe": {
+        "f_act_bulk": 0.999248,
+        "sigma_anneal_nm": 0.41686,
+        "f_total_surface_loss": 0.000752,
+        "sigma_iso_nm": 0.051518,
+        "mass_conservation_err": 8.881784197001252e-16
+      },
+      "route_C_full_chain": {
+        "f_act_bulk": 0.999207,
+        "sigma_anneal_nm": 0.42952,
+        "f_total_surface_loss": 0.000793,
+        "sigma_iso_nm": 0.051518,
+        "mass_conservation_err": 2.220446049250313e-16
+      },
+      "delta_sigma_anneal_route_A_nm": 0.024487,
+      "delta_sigma_anneal_route_C_nm": 0.037144,
+      "delta_surface_loss_route_C": 0.0001299,
+      "delta_sigma_iso_route_C_nm": 0.0
+    },
+    "v5_4x1440K_41p15J_quad_pulse": {
+      "n_flash_pulses": 4,
+      "fluence_per_pulse_J_per_cm2": 41.148,
+      "T_peak_K": 1440.26,
+      "T_peak_over_Tmelt": 0.8537,
+      "T_back_max_K": 592.88,
+      "cluster_dissolution_integral": 7.989,
+      "cluster_remaining_frac_post_flash": 0.000339,
+      "flash_only": {
+        "f_act_bulk": 0.99948,
+        "sigma_anneal_nm": 0.39194,
+        "f_total_surface_loss": 0.00052,
+        "sigma_iso_nm": 0.040484,
+        "mass_conservation_err": 2.220446049250313e-15
+      },
+      "route_A_flash_plus_mbe": {
+        "f_act_bulk": 0.999304,
+        "sigma_anneal_nm": 0.44279,
+        "f_total_surface_loss": 0.000696,
+        "sigma_iso_nm": 0.040484,
+        "mass_conservation_err": 2.220446049250313e-15
+      },
+      "route_C_full_chain": {
+        "f_act_bulk": 0.99922,
+        "sigma_anneal_nm": 0.46782,
+        "f_total_surface_loss": 0.00078,
+        "sigma_iso_nm": 0.040484,
+        "mass_conservation_err": 2.4424906541753444e-15
+      },
+      "delta_sigma_anneal_route_A_nm": 0.050848,
+      "delta_sigma_anneal_route_C_nm": 0.075878,
+      "delta_surface_loss_route_C": 0.00026,
+      "delta_sigma_iso_route_C_nm": 1e-07
+    },
+    "lit_14keV_srim_15nm_v5_1530K": {
+      "n_flash_pulses": 1,
+      "fluence_per_pulse_J_per_cm2": 43.494,
+      "T_peak_K": 1530.11,
+      "T_peak_over_Tmelt": 0.907,
+      "T_back_max_K": 608.33,
+      "cluster_dissolution_integral": 9.071,
+      "cluster_remaining_frac_post_flash": 0.000115,
+      "flash_only": {
+        "f_act_bulk": 0.999958,
+        "sigma_anneal_nm": 0.40252,
+        "f_total_surface_loss": 4.2e-05,
+        "sigma_iso_nm": 0.052271,
+        "mass_conservation_err": 0.0
+      },
+      "route_A_flash_plus_mbe": {
+        "f_act_bulk": 0.999951,
+        "sigma_anneal_nm": 0.42693,
+        "f_total_surface_loss": 4.9e-05,
+        "sigma_iso_nm": 0.052271,
+        "mass_conservation_err": 2.220446049250313e-16
+      },
+      "route_C_full_chain": {
+        "f_act_bulk": 0.999948,
+        "sigma_anneal_nm": 0.43982,
+        "f_total_surface_loss": 5.2e-05,
+        "sigma_iso_nm": 0.052271,
+        "mass_conservation_err": 2.220446049250313e-16
+      },
+      "delta_sigma_anneal_route_A_nm": 0.024417,
+      "delta_sigma_anneal_route_C_nm": 0.037308,
+      "delta_surface_loss_route_C": 9.4e-06,
+      "delta_sigma_iso_route_C_nm": 0.0
+    },
+    "route_B_22keV_through_cap": {
+      "n_flash_pulses": 1,
+      "fluence_per_pulse_J_per_cm2": 41.148,
+      "T_peak_K": 1440.26,
+      "T_peak_over_Tmelt": 0.8537,
+      "T_back_max_K": 592.88,
+      "cluster_dissolution_integral": 1.997,
+      "cluster_remaining_frac_post_flash": 0.135725,
+      "flash_only": {
+        "f_act_bulk": 0.999963,
+        "sigma_anneal_nm": 0.34277,
+        "f_total_surface_loss": 3.6e-05,
+        "sigma_iso_nm": 0.032635,
+        "mass_conservation_err": 2.220446049250313e-16
+      },
+      "route_A_flash_plus_mbe": {
+        "f_act_bulk": 0.999962,
+        "sigma_anneal_nm": 0.34714,
+        "f_total_surface_loss": 3.6e-05,
+        "sigma_iso_nm": 0.032635,
+        "mass_conservation_err": 6.661338147750939e-16
+      },
+      "route_C_full_chain": {
+        "f_act_bulk": 0.999421,
+        "sigma_anneal_nm": 1.72846,
+        "f_total_surface_loss": 0.000578,
+        "sigma_iso_nm": 0.032641,
+        "mass_conservation_err": 3.3306690738754696e-16
+      },
+      "delta_sigma_anneal_route_A_nm": 0.004368,
+      "delta_sigma_anneal_route_C_nm": 1.385689,
+      "delta_surface_loss_route_C": 0.0005417,
+      "delta_sigma_iso_route_C_nm": 5.8e-06
+    },
+    "exp124_sigma_tot_v4_1440K_chain_nm": 3.9951,
+    "exp124_sigma_tot_v5_1530K_chain_nm": 3.6653,
+    "exp124_sigma_tot_v5_quad_chain_nm": 3.67,
+    "v5_s55_window_fluence_1530K_AR_J_cm2": 11.16,
+    "v5_s55_lidt_margin_1530K_vs_100J_AR": 8.96
+  },
+  "charge_noise_and_exp137_bridge": {
+    "routes": {
+      "route_B_22keV_through_cap": {
+        "z_donor_nm": 14.565,
+        "d_ox_nm": 8.0,
+        "D_it_base_cm2_eV": 180000000000.0,
+        "D_it_eff_cm2_eV": 294788000000.0,
+        "S_eps_ueV_rtHz": 1.7194,
+        "S_E_ratio_vs_14p5nm_1e11": 1.7059,
+        "S_E_ratio_vs_uncapped_5keV": 0.5857,
+        "I_ff_eV2_nm2": 0.12491047454658576,
+        "I_Ez_V2": 9.903114370667078e-05
+      },
+      "route_B_20keV_through_cap": {
+        "z_donor_nm": 13.836,
+        "d_ox_nm": 8.0,
+        "D_it_base_cm2_eV": 180000000000.0,
+        "D_it_eff_cm2_eV": 292830000000.0,
+        "S_eps_ueV_rtHz": 1.6846,
+        "S_E_ratio_vs_14p5nm_1e11": 1.8306,
+        "S_E_ratio_vs_uncapped_5keV": 0.6285,
+        "I_ff_eV2_nm2": 0.12070956075909048,
+        "I_Ez_V2": 0.00011479518355990389
+      },
+      "route_A_5keV_post_anneal_mbe_unpassivated": {
+        "z_donor_nm": 14.441,
+        "d_ox_nm": 8.0,
+        "D_it_base_cm2_eV": 100000000000.0,
+        "D_it_eff_cm2_eV": 100226884582.67719,
+        "S_eps_ueV_rtHz": 0.9998,
+        "S_E_ratio_vs_14p5nm_1e11": 1.0071,
+        "S_E_ratio_vs_uncapped_5keV": 0.3457,
+        "I_ff_eV2_nm2": 0.12421493883582134,
+        "I_Ez_V2": 0.00010151274109499981
+      },
+      "route_C_nominal_FG350C_Dit_1p5e10": {
+        "z_donor_nm": 14.441,
+        "d_ox_nm": 8.0,
+        "D_it_base_cm2_eV": 15000000000.0,
+        "D_it_eff_cm2_eV": 15226884582.677177,
+        "S_eps_ueV_rtHz": 0.3897,
+        "S_E_ratio_vs_14p5nm_1e11": 0.3925,
+        "S_E_ratio_vs_uncapped_5keV": 0.1348,
+        "I_ff_eV2_nm2": 0.12421493883582134,
+        "I_Ez_V2": 0.00010151274109499981
+      },
+      "route_C_conservative_Dit_3p0e10": {
+        "z_donor_nm": 14.441,
+        "d_ox_nm": 8.0,
+        "D_it_base_cm2_eV": 30000000000.0,
+        "D_it_eff_cm2_eV": 30226884582.677177,
+        "S_eps_ueV_rtHz": 0.5491,
+        "S_E_ratio_vs_14p5nm_1e11": 0.5531,
+        "S_E_ratio_vs_uncapped_5keV": 0.1899,
+        "I_ff_eV2_nm2": 0.12421493883582134,
+        "I_Ez_V2": 0.00010151274109499981
+      },
+      "route_C_optimistic_Dit_1p0e10_dox8": {
+        "z_donor_nm": 14.441,
+        "d_ox_nm": 8.0,
+        "D_it_base_cm2_eV": 10000000000.0,
+        "D_it_eff_cm2_eV": 10226884582.677177,
+        "S_eps_ueV_rtHz": 0.3194,
+        "S_E_ratio_vs_14p5nm_1e11": 0.3217,
+        "S_E_ratio_vs_uncapped_5keV": 0.1104,
+        "I_ff_eV2_nm2": 0.12421493883582134,
+        "I_Ez_V2": 0.00010151274109499981
+      },
+      "route_C_thin_oxide_Dit_1p0e10_dox5": {
+        "z_donor_nm": 14.441,
+        "d_ox_nm": 5.0,
+        "D_it_base_cm2_eV": 10000000000.0,
+        "D_it_eff_cm2_eV": 10226884582.677177,
+        "S_eps_ueV_rtHz": 0.283,
+        "S_E_ratio_vs_14p5nm_1e11": 0.253,
+        "S_E_ratio_vs_uncapped_5keV": 0.0869,
+        "I_ff_eV2_nm2": 0.09750827739536283,
+        "I_Ez_V2": 6.278557213911449e-05
+      },
+      "route_A_14keV_deep_23nm_unpassivated": {
+        "z_donor_nm": 23.0,
+        "d_ox_nm": 8.0,
+        "D_it_base_cm2_eV": 100000000000.0,
+        "D_it_eff_cm2_eV": 100226884582.67719,
+        "S_eps_ueV_rtHz": 1.1279,
+        "S_E_ratio_vs_14p5nm_1e11": 0.4992,
+        "S_E_ratio_vs_uncapped_5keV": 0.1714,
+        "I_ff_eV2_nm2": 0.15807502454607983,
+        "I_Ez_V2": 2.4941347795479527e-05
+      },
+      "route_C_14keV_deep_23nm_Dit_1p5e10": {
+        "z_donor_nm": 23.0,
+        "d_ox_nm": 8.0,
+        "D_it_base_cm2_eV": 15000000000.0,
+        "D_it_eff_cm2_eV": 15226884582.677177,
+        "S_eps_ueV_rtHz": 0.4396,
+        "S_E_ratio_vs_14p5nm_1e11": 0.1946,
+        "S_E_ratio_vs_uncapped_5keV": 0.0668,
+        "I_ff_eV2_nm2": 0.15807502454607983,
+        "I_Ez_V2": 2.4941347795479527e-05
+      }
+    },
+    "recommended_route_C_S_eps_band_ueV_rtHz": {
+      "optimistic_Dit_1e10_dox5": 0.283,
+      "low_Dit_1e10_dox8": 0.3194,
+      "nominal_Dit_1p5e10_dox8": 0.3897,
+      "conservative_Dit_3e10_dox8": 0.5491
+    },
+    "suppression_vs_1ueV_baseline": 2.566,
+    "suppression_vs_route_B_22keV": 4.412
+  },
+  "route_flipflop_yields_exp131": {
+    "bare_5keV_uncapped_ref": {
+      "n_donors": 2000,
+      "s_eps_uev": 1.0,
+      "mean_z_nm": 6.478,
+      "std_z_nm": 2.833,
+      "mean_r_xy_nm": 4.523,
+      "frac_too_shallow_lt_8p5nm": 0.7545,
+      "yield_C_ge_10": 0.2455,
+      "yield_C_ge_100": 0.2455,
+      "median_C_tuned": 0.0,
+      "certified_median_g_eff_mhz": 0.4126,
+      "certified_median_gamma_phi_khz": 42.57
+    },
+    "route_A_v4_1440K_5keV_8nm_mbe": {
+      "n_donors": 2000,
+      "s_eps_uev": 0.9998,
+      "mean_z_nm": 14.347,
+      "std_z_nm": 3.14,
+      "mean_r_xy_nm": 4.884,
+      "frac_too_shallow_lt_8p5nm": 0.0215,
+      "yield_C_ge_10": 0.9735,
+      "yield_C_ge_100": 0.922,
+      "median_C_tuned": 2253.25,
+      "certified_median_g_eff_mhz": 0.565,
+      "certified_median_gamma_phi_khz": 12.568
+    },
+    "route_C_v4_1440K_5keV_8nm_FG350C": {
+      "n_donors": 2000,
+      "s_eps_uev": 0.3897,
+      "mean_z_nm": 14.528,
+      "std_z_nm": 3.231,
+      "mean_r_xy_nm": 4.999,
+      "frac_too_shallow_lt_8p5nm": 0.022,
+      "yield_C_ge_10": 0.9755,
+      "yield_C_ge_100": 0.95,
+      "median_C_tuned": 5888.51,
+      "certified_median_g_eff_mhz": 0.7577,
+      "certified_median_gamma_phi_khz": 10.65
+    },
+    "route_A_v5_1530K_5keV_8nm_mbe": {
+      "n_donors": 2000,
+      "s_eps_uev": 0.9998,
+      "mean_z_nm": 14.403,
+      "std_z_nm": 2.81,
+      "mean_r_xy_nm": 4.609,
+      "frac_too_shallow_lt_8p5nm": 0.0055,
+      "yield_C_ge_10": 0.992,
+      "yield_C_ge_100": 0.9535,
+      "median_C_tuned": 2942.63,
+      "certified_median_g_eff_mhz": 0.5979,
+      "certified_median_gamma_phi_khz": 12.035
+    },
+    "route_C_v5_1530K_5keV_8nm_FG350C": {
+      "n_donors": 2000,
+      "s_eps_uev": 0.3897,
+      "mean_z_nm": 14.426,
+      "std_z_nm": 2.843,
+      "mean_r_xy_nm": 4.483,
+      "frac_too_shallow_lt_8p5nm": 0.0115,
+      "yield_C_ge_10": 0.988,
+      "yield_C_ge_100": 0.977,
+      "median_C_tuned": 7557.37,
+      "certified_median_g_eff_mhz": 0.7999,
+      "certified_median_gamma_phi_khz": 10.687
+    },
+    "route_B_22keV_through_cap_flash": {
+      "n_donors": 2000,
+      "s_eps_uev": 1.7194,
+      "mean_z_nm": 14.464,
+      "std_z_nm": 5.911,
+      "mean_r_xy_nm": 10.031,
+      "frac_too_shallow_lt_8p5nm": 0.167,
+      "yield_C_ge_10": 0.68,
+      "yield_C_ge_100": 0.5335,
+      "median_C_tuned": 166.23,
+      "certified_median_g_eff_mhz": 0.4083,
+      "certified_median_gamma_phi_khz": 19.508
+    },
+    "route_B_20keV_through_cap_flash": {
+      "n_donors": 2000,
+      "s_eps_uev": 1.6846,
+      "mean_z_nm": 13.931,
+      "std_z_nm": 5.708,
+      "mean_r_xy_nm": 9.448,
+      "frac_too_shallow_lt_8p5nm": 0.1785,
+      "yield_C_ge_10": 0.703,
+      "yield_C_ge_100": 0.5805,
+      "median_C_tuned": 286.27,
+      "certified_median_g_eff_mhz": 0.4217,
+      "certified_median_gamma_phi_khz": 20.403
+    },
+    "route_A_14keV_srim_15nm_plus_8nm_cap": {
+      "n_donors": 2000,
+      "s_eps_uev": 0.3897,
+      "mean_z_nm": 23.139,
+      "std_z_nm": 5.012,
+      "mean_r_xy_nm": 7.739,
+      "frac_too_shallow_lt_8p5nm": 0.0005,
+      "yield_C_ge_10": 0.5105,
+      "yield_C_ge_100": 0.3175,
+      "median_C_tuned": 11.35,
+      "certified_median_g_eff_mhz": 0.2595,
+      "certified_median_gamma_phi_khz": 10.336
+    }
+  },
+  "s56_hardware_spec": {
+    "subsystem_id": "S5.6",
+    "name": "In-Situ 28Si UHV MBE Capper & Forming-Gas Passivation Module",
+    "cad_v5_geometry": {
+      "mount_host": "s5_loadlock_chamber (+Z top port, CF100 DN100CF flange)",
+      "center_mm": [
+        420.0,
+        0.0,
+        725.0
+      ],
+      "flange_od_mm": 152.0,
+      "bore_id_mm": 100.0,
+      "envelope_diam_mm": 152.0,
+      "envelope_height_mm": 280.0,
+      "z_span_mm": [
+        585.0,
+        865.0
+      ],
+      "clearances_vs_cad_v4_mm": {
+        "vs_s5_chamber_top_flange_mm": 119.0,
+        "vs_s5_transfer_arm_mm": 70.0,
+        "vs_s5_flash_anneal_head_mm": 500.6,
+        "min_clearance_mm": 70.0
+      }
+    },
+    "vacuum_and_deposition": {
+      "evaporator_type": "Crucible-free DC 28Si rod sublimation source (SUSI-63 / mini e-beam class) + cryo/water shroud + pneumatic shutter + QCM",
+      "isotope_feedstock": "Enriched 28Si rod (< 50 ppm 29Si, ~5 g charge -> >1,000 wafers @ 8 nm)",
+      "base_pressure_torr": 1.5e-10,
+      "growth_pressure_torr": 3.5e-10,
+      "growth_rate_range_nm_s": [
+        0.05,
+        0.2
+      ],
+      "nominal_growth_rate_nm_s": 0.1,
+      "target_cap_thickness_nm": 8.0,
+      "cap_thickness_tolerance_nm": 0.3,
+      "nominal_deposition_time_s": 80.0,
+      "deposition_time_range_s": [
+        40.0,
+        160.0
+      ],
+      "optimal_substrate_T_C": 345.0,
+      "substrate_heater": "Load-Lock UHV pyrolytic-BN radiative chuck (RT-450 C, PID +-2 C, 150 W max)",
+      "passivation_manifold_route_C": "Precision leak-valve 5% H2/N2 forming-gas (or UHV atomic-H thermal cracker), 350 C / 15 min, backed by 80 L/s TMP + NEG"
+    },
+    "mass_power_cryo": {
+      "mass_breakdown_kg": {
+        "cf100_28si_source_shroud_shutter_kg": 11.8,
+        "qcm_feedthrough_and_valve_kg": 3.4,
+        "pbn_heater_platen_and_h2_manifold_kg": 4.2,
+        "compact_neg_tmp_aux_package_kg": 3.0
+      },
+      "total_mass_kg": 22.4,
+      "electrical_power_growth_W": 400.0,
+      "electrical_power_standby_W": 25.0,
+      "cryo_thermal_leak_to_20mK_uW": 0.0,
+      "cryo_thermal_leak_to_4K_mW": 0.0,
+      "cryo_isolation_mechanism": "All-metal UHV gate valve on s5_loadlock_duct isolates Load-Lock S5.3/S5.6 from 20 mK DR chamber during growth & passivation"
+    },
+    "bom_v5_cost_estimate_usd": {
+      "epistemic_label": "{Varsayim}, no_supplier_quotes=true",
+      "cf100_28si_source_shroud_psu_p50": 48000,
+      "enriched_28si_rod_and_qcm_p50": 18000,
+      "pbn_heater_h2_passivation_neg_p50": 29000,
+      "total_p10_usd": 67000,
+      "total_p50_usd": 95000,
+      "total_p90_usd": 145000,
+      "pct_of_v4_m3_hw_bom": 2.06
+    },
+    "wafer_throughput_impact_exp134": {
+      "route_A_loadlock_time_min": 3.33,
+      "route_C_loadlock_time_min": 28.33,
+      "exp134_v4_5x_dense_m4_main_cycle_min": 72.96,
+      "pipelined_throughput_penalty_pct": 0.0,
+      "serial_route_A_overhead_vs_1h_shuttle_pct": 5.56,
+      "serial_route_C_overhead_vs_2p2h_total_cycle_pct": 21.31
+    }
+  },
+  "artifacts": {
+    "predictions": "results/exp139_epi_cap_process_integration/predictions_exp139.json",
+    "results_json": "results/exp139_epi_cap_process_integration/exp139.json",
+    "plot_data_json": "results/exp139_epi_cap_process_integration/plot_data_exp139.json",
+    "summary_md": "results/exp139_epi_cap_process_integration/summary_exp139.md",
+    "figure": "results/exp139_epi_cap_process_integration/fig_exp139_epi_cap_integration.png"
+  }
+}

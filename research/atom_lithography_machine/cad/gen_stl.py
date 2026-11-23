@@ -293,6 +293,93 @@ def main() -> None:
             and clearances["exp133_remote_valve_to_dr_flange_x_mm"]["pass"]
         ),
     }
+    # Exp139 S5.6 In-Situ 28Si UHV MBE Capper & Forming-Gas Passivation audit
+    s56_parts = (
+        "s5_mbe_cf100_flange", "s5_mbe_source_body", "s5_mbe_top_feedthrough",
+        "s5_mbe_qcm_valve", "s5_mbe_pbn_heater_fg", "s5_mbe_tmp_neg_pump",
+    )
+    s56_mass = round(sum(part_reports[k]["mass_kg"] for k in s56_parts if k in part_reports), 3)
+    s56_z_min = round(min(part_reports[k]["bbox_min_mm"][2] for k in s56_parts), 2)
+    s56_z_max = round(max(part_reports[k]["bbox_max_mm"][2] for k in s56_parts), 2)
+    s56_flange_od = round(2.0 * params.PARTS["s5_mbe_cf100_flange"]["dims"][1], 2)
+    s56_bore_id = round(2.0 * params.PARTS["s5_mbe_cf100_flange"]["dims"][0], 2)
+    exp139_s56_audit = {
+        "exp139_synced": ds["exp139_synced"],
+        "subsystem_id": "S5.6",
+        "part_count": sum(1 for k in s56_parts if k in params.PARTS),
+        "mount_center_xy_mm": list(params.PARTS["s5_mbe_cf100_flange"]["center"][:2]),
+        "flange_od_mm": s56_flange_od,
+        "bore_id_mm": s56_bore_id,
+        "z_span_mm": [s56_z_min, s56_z_max],
+        "target_z_span_mm": ds["s56_z_span_mm"],
+        "total_mass_kg": s56_mass,
+        "target_mass_kg": ds["s56_total_mass_kg"],
+        "growth_rate_nm_s": ds["s56_growth_rate_nm_s"],
+        "target_cap_nm": ds["s56_target_cap_nm"],
+        "optimal_T_sub_C": ds["s56_optimal_T_sub_C"],
+        "forming_gas_T_C": ds["s56_forming_gas_T_C"],
+        "cryo_leak_20mK_uW": ds["s56_cryo_leak_20mK_uW"],
+        "all_s56_parts_present": all(k in params.PARTS for k in s56_parts),
+        "pass": (
+            ds["exp139_synced"]
+            and all(k in params.PARTS for k in s56_parts)
+            and abs(s56_mass - 22.40) < 0.02
+            and abs(s56_flange_od - 152.0) < 0.05
+            and abs(s56_bore_id - 100.0) < 0.05
+            and (585.0 <= s56_z_min <= 585.2)
+            and abs(s56_z_max - 865.0) < 0.1
+            and clearances["exp139_s56_to_chamber_top_flange_x_mm"]["pass"]
+            and clearances["exp139_s56_to_transfer_arm_z_mm"]["pass"]
+            and clearances["exp139_s56_to_s7_panel_x_mm"]["pass"]
+        ),
+    }
+    # Exp140 S6.5 1,024-Cell Cryo-MUX (Cold DR) + 2U ZU48DR BOED-FPGA RFSoC (S7 Rack) audit
+    s65_cold_parts = [
+        k for k, v in params.PARTS.items()
+        if v["bom_id"] == "S6.5" and v["subsystem"] == "s6_cryo_dr_magnet_readout"
+    ]
+    s65_rack_parts = [
+        k for k, v in params.PARTS.items()
+        if v["bom_id"] == "S6.5" and v["subsystem"] == "s7_electronics_rack_interconnect"
+    ]
+    s65_cold_mass = round(sum(part_reports[k]["mass_kg"] for k in s65_cold_parts), 3)
+    s65_rack_mass = round(sum(part_reports[k]["mass_kg"] for k in s65_rack_parts), 3)
+    s65_total_mass = round(s65_cold_mass + s65_rack_mass, 3)
+    exp140_s65_audit = {
+        "exp140_synced": ds["exp140_synced"],
+        "subsystem_id": "S6.5",
+        "module_scale_cells": ds["s65_module_scale_cells"],
+        "n_mux_star": ds["s65_n_mux_star"],
+        "cold_part_count": len(s65_cold_parts),
+        "rack_part_count": len(s65_rack_parts),
+        "cold_mass_kg": s65_cold_mass,
+        "target_cold_mass_kg": ds["s65_cold_mass_kg"],
+        "rack_mass_kg": s65_rack_mass,
+        "target_rack_mass_kg": ds["s65_rack_mass_kg"],
+        "total_mass_kg": s65_total_mass,
+        "target_total_mass_kg": ds["s65_total_mass_kg"],
+        "twpa_pack_dims_mm": list(params.PARTS["s6_s65_twpa_purcell_pack"]["dims"]),
+        "rfsoc_bay_dims_mm": list(params.PARTS["s7_s65_rfsoc_boed_bay"]["dims"]),
+        "rfsoc_rack_orientation_note": "482.6 mm 19-in width along Y, 88.9 mm (2U) along Z, 430.0 mm short-depth chassis along X inside 500x600x1400 mm 30U rack posts",
+        "cryo_load_20mK_uW": ds["s65_cryo_load_20mK_uW"],
+        "cryo_load_4K_W": ds["s65_cryo_load_4K_W"],
+        "room_temp_power_W": ds["s65_rfsoc_power_W"],
+        "pass": (
+            ds["exp140_synced"]
+            and ("s6_s65_twpa_purcell_pack" in params.PARTS)
+            and ("s6_s65_hemt_bank_32ch" in params.PARTS)
+            and ("s7_s65_rfsoc_boed_bay" in params.PARTS)
+            and len(s65_cold_parts) == 12
+            and len(s65_rack_parts) == 1
+            and abs(s65_cold_mass - 7.77) < 0.02
+            and abs(s65_rack_mass - 11.50) < 0.02
+            and abs(s65_total_mass - 19.27) < 0.02
+            and clearances["exp140_s65_twpa_inside_4k_shield_radial_mm"]["pass"]
+            and clearances["exp140_s65_hemt_to_4k_shield_radial_mm"]["pass"]
+            and clearances["exp140_s65_coax_loom_to_m4_crossbar_x_mm"]["pass"]
+            and clearances["exp140_s65_rfsoc_to_awg_z_mm"]["pass"]
+        ),
+    }
     legacy_cleanup = {
         "maglev_removed": not any("maglev" in k.lower() for k in params.PARTS),
         "piezo_6dof_present": "s4_piezo_fine_6dof" in params.PARTS and "s4_piezo_coarse_xy" in params.PARTS,
@@ -302,6 +389,8 @@ def main() -> None:
         "exp130_s55_flash_present": exp130_audit["all_s55_parts_present"],
         "exp131_m4_4k_crossbar_present": exp131_audit["crossbar_pcb_present"],
         "exp133_pt420_decoupled_present": exp133_audit["pass"],
+        "exp139_s56_mbe_capper_present": exp139_s56_audit["pass"],
+        "exp140_s65_cryo_mux_rfsoc_present": exp140_s65_audit["pass"],
     }
 
     total_com = weighted_com / max(total_mass, 1e-12)
@@ -316,6 +405,8 @@ def main() -> None:
         and exp130_audit["pass"]
         and exp131_audit["pass"]
         and exp133_audit["pass"]
+        and exp139_s56_audit["pass"]
+        and exp140_s65_audit["pass"]
         and all(legacy_cleanup.values())
         and master_disk["is_watertight"]
     )
@@ -348,6 +439,8 @@ def main() -> None:
         "exp130_flash_audit": exp130_audit,
         "exp131_m4_audit": exp131_audit,
         "exp133_decoupling_audit": exp133_audit,
+        "exp139_s56_audit": exp139_s56_audit,
+        "exp140_s65_audit": exp140_s65_audit,
         "subsystems": sub_reports,
         "parts": part_reports,
     }

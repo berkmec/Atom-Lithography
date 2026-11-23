@@ -1,4 +1,4 @@
-"""Single-source parametric CAD specification (mm) — Atom Lithography Machine v4.0.
+"""Single-source parametric CAD specification (mm) — Atom Lithography Machine v5.0.
 
 FULLY LOCKED to:
 - Exp124 (562.66 mm 10->5 keV decelerating ion column + Arch-B retarding mini-lens + HDA-HiRes dE=0.453 eV)
@@ -7,6 +7,8 @@ FULLY LOCKED to:
 - Exp130 (S5.5 808 nm qCW ms-flash anneal head 84x88x84 mm + dichroic 10 us pyrometer + safety shutter, Ø44 mm CA)
 - Exp131 (M4 cavity-QED 3 kOhm NbTiN bus L_res=300 um, B_M4=0.1785 T, dz_cap*=8±1 nm 28Si cap, 4K 968-gate SKY130 crossbar)
 - Exp133 (PT420 500 mm remote rotary valve + 600 mm flex He line + CF63 edge-welded bellows k=2000 N/m + 4x OFHC Cu braids k=52.7 N/m)
+- Exp139 (S5.6 In-Situ 28Si UHV MBE Capper & Forming-Gas Passivation Module on Load-Lock +Z CF100 port, 22.40 kg, z=[585, 865] mm)
+- Exp140 (S6.5 1,024-Cell Cryo-MUX TWPA/Purcell/HEMT/96-Coax [7.77 kg cold] + 2U 19" ZU48DR Q16.16 BOED-FPGA RFSoC [11.50 kg rack], 19.27 kg total)
 
 Coordinate Reference:
 - Floor: z = 0.0 mm
@@ -15,6 +17,8 @@ Coordinate Reference:
 - Exp125 8-coil magnet: z = 316.0 -> 612.0 mm (z_loc = -184 -> +112 mm, bore Ø150 mm,
   split gap 36 mm z=[482, 518], former OD Ø352 mm, in-vacuum inside s=0.5 UHV vessel)
 - Exp125 NbTiN resonator disk: z = 345.0 mm (z_loc = -155.0 mm, Ø50 mm, |B|=22.3 uT)
+- Exp139 S5.6 28Si MBE capper: x = 420.0 mm, y = 0.0 mm, z = 585.1 -> 865.0 mm (CF100 OD Ø152 mm, 22.40 kg)
+- Exp140 S6.5 Cryo-MUX & RFSoC: 20 mK TWPA/Purcell (2.72 kg) + 4 K 32-ch HEMT (1.02 kg) + 96-coax loom (4.03 kg) in DR + 2U ZU48DR RFSoC (11.50 kg) in S7 rack
 
 Status: Concept / preliminary engineering parametric model (no_lab_measurement=true).
 """
@@ -22,7 +26,7 @@ from __future__ import annotations
 
 import math
 
-CAD_VERSION = "4.0-exp130-exp131-exp133-locked"
+CAD_VERSION = "5.0-exp139-exp140-locked"
 UNITS = "mm"
 GOLDEN_SCALE_S = 0.5
 GENERAL_TOLERANCE_STD = "ISO 2768-mK"
@@ -111,6 +115,48 @@ DESIGN_SPECS = {
     "exp133_sigma_pointing_nm": 0.147,
     "exp133_sigma_thermal_nm": 0.028,
     "exp133_min_vc_grade": "VC-E",
+    # Exp139 locked S5.6 In-Situ 28Si UHV MBE Capper & Forming-Gas Passivation specs
+    "exp139_synced": True,
+    "s56_mount_host": "s5_loadlock_chamber (+Z CF100 DN100CF port)",
+    "s56_center_mm": [420.0, 0.0, 725.0],
+    "s56_flange_od_mm": 152.0,
+    "s56_bore_id_mm": 100.0,
+    "s56_envelope_height_mm": 280.0,
+    "s56_z_span_mm": [585.0, 865.0],
+    "s56_total_mass_kg": 22.40,
+    "s56_growth_rate_nm_s": 0.10,
+    "s56_target_cap_nm": 8.0,
+    "s56_cap_tol_nm": 0.3,
+    "s56_optimal_T_sub_C": 345.0,
+    "s56_forming_gas_T_C": 350.0,
+    "s56_tmp_neg_speed_L_s": 80.0,
+    "s56_growth_power_W": 400.0,
+    "s56_cryo_leak_20mK_uW": 0.0,
+    "s55_v5_flash_fluence_J_cm2": 43.49,
+    "s55_v5_T_peak_K": 1530.1,
+    "s55_v5_sapphire_lidt_margin": 8.96,
+    "exp139_sigma_tot_v5_route_C_nm": 3.6653,
+    # Exp140 locked S6.5 1,024-Cell Cryo-MUX TWPA/HEMT/96-Coax & ZU48DR BOED-FPGA specs
+    "exp140_synced": True,
+    "s65_module_scale_cells": 1024,
+    "s65_n_mux_star": 32,
+    "s65_total_mass_kg": 19.27,
+    "s65_cold_mass_kg": 7.77,
+    "s65_rack_mass_kg": 11.50,
+    "s65_twpa_pack_mass_kg": 2.72,
+    "s65_twpa_pack_dims_mm": [180.0, 140.0, 55.0],
+    "s65_hemt_bank_qty": 32,
+    "s65_hemt_bank_mass_kg": 1.02,
+    "s65_coax_loom_lines": 96,
+    "s65_coax_loom_mass_kg": 4.03,
+    "s65_rfsoc_chassis_u": 2,
+    "s65_rfsoc_power_W": 87.96,
+    "s65_cryo_load_20mK_uW": 6.256,
+    "s65_cryo_load_100mK_uW": 59.58,
+    "s65_cryo_load_4K_W": 0.488,
+    "s65_cryo_load_50K_W": 8.26,
+    "s65_single_cryo_max_cells": 2887,
+    "s65_min_cryostats_10k_cells": 4,
     # Exp80 s=0.5 & Exp84 modal specs
     "wafer_diameter_mm": 50.0,
     "carrier_size_mm": 80.0,               # Exp80 BC1: >= 25 mm (diag 113.1 < 150 bore)
@@ -167,7 +213,7 @@ SUBSYSTEMS = {
     "s1_ion_source_column": {
         "code": "S1",
         "title_tr": "Exp124 İyon Kaynağı & 10→5 keV Yavaşlatmalı Kolon",
-        "drawing_no": "ALM-400-S1",
+        "drawing_no": "ALM-500-S1",
         "explode_vec": (0.0, 0.0, 250.0),
         "notes": [
             "Exp124 kilitli kolon: toplam 562,66 mm (S1+S2), maks. OD=110 mm, 25,92 kg",
@@ -179,7 +225,7 @@ SUBSYSTEMS = {
     "s2_mems_write_head": {
         "code": "S2",
         "title_tr": "Exp124 Arch-B Mini-Lens, Blanker & MEMS Yazma Kafası (32×32)",
-        "drawing_no": "ALM-400-S2",
+        "drawing_no": "ALM-500-S2",
         "explode_vec": (0.0, 0.0, 120.0),
         "notes": [
             "Aktif Arch-B: 32×32=1.024 demetcik, eş-adımlı 0,50 mm (16,0×16,0 mm, köşegen 22,63 mm)",
@@ -191,11 +237,11 @@ SUBSYSTEMS = {
     "s3_ibic_detector_assembly": {
         "code": "S3",
         "title_tr": "IBIC Yonga Algılama, 100 K CSA (Exp127) & M4 Veri Yolu (Exp131)",
-        "drawing_no": "ALM-400-S3",
+        "drawing_no": "ALM-500-S3",
         "explode_vec": (0.0, 0.0, 48.0),
         "notes": [
             "Exp127: 100 K soğuk adada LTC6268 CSA (1,2 µs / 1 GΩ, ENC=24,1 e⁻, η=0,99936)",
-            "S5.4 Ø50 mm ²⁸Si/²⁹Si yonga + 80×80 AlN taşıyıcı (Exp131 M4: Δz_cap*=8±1 nm ²⁸Si kaplama)",
+            "S5.4 Ø50 mm ²⁸Si/²⁹Si yonga + 80×80 AlN taşıyıcı (Exp131/139: Δz_cap*=8,0±0,3 nm ²⁸Si)",
             "Exp131 M4 çip-üstü 3 kΩ NbTiN veri yolu (L_res=300 µm, f_r=5 GHz, B_M4=0,1785 T)",
             "S3.1 BeCu/Au IBIC halka (Ø64/Ø78, 2 mm pay) & yan Faraday kalkanları (+X/−X açık)",
         ],
@@ -203,7 +249,7 @@ SUBSYSTEMS = {
     "s4_piezo_stage_interferometry": {
         "code": "S4",
         "title_tr": "6-DOF Piezo Kademe, Titreşim İzolasyonu & İnterferometri",
-        "drawing_no": "ALM-400-S4",
+        "drawing_no": "ALM-500-S4",
         "explode_vec": (0.0, 0.0, -140.0),
         "notes": [
             "S4.1 Optik granit (900×700×120) + 4× 1,5 Hz hava yayı; S4.2 0,5–100 Hz aktif tabla (VC-E)",
@@ -214,38 +260,38 @@ SUBSYSTEMS = {
     },
     "s5_uhv_chamber_loadlock": {
         "code": "S5",
-        "title_tr": "s=0,5 UHV Ana Oda (Ø384/Ø364), Pompalar, LL & Exp130 S5.5 Flaş",
-        "drawing_no": "ALM-400-S5",
+        "title_tr": "s=0,5 UHV Oda, Exp130 S5.5 Flaş & Exp139 S5.6 ²⁸Si MBE Kaplayıcı",
+        "drawing_no": "ALM-500-S5",
         "explode_vec": (220.0, 0.0, 0.0),
         "notes": [
             "S5.1 UHV oda: R_dış=192/R_iç=182 mm (Ø352 mıknatısa 6 mm pay), V_iç=34,86 L (Exp80 BC4)",
-            "Exp130 S5.5 (+Y, CF63 Ø44 CA, Ø36 demet): 808 nm qCW 84×88×84 homojenleştirici (41,2 J/cm²)",
-            "S5.5 dikroik 10 µs iki-renkli pirometre + MXC<1 K / UHV vana kilitli mekanik deklanşör",
-            "S5.2 Mag-lev turbo (300 L/s) + İyon/TSP (−Y); S5.3 Titreşim-ayrık load-lock & kol (+X)",
+            "Exp130/139 S5.5 (+Y CF63 Ø44 CA): 808 nm qCW (43,5 J/cm², 1530 K) + 10 µs pirometre & deklanşör",
+            "Exp139 S5.6 (+Z Load-Lock CF100 Ø152, z=585..865, 22,40 kg): ²⁸Si MBE (0,1 nm/s, 8 nm @ 345 °C)",
+            "S5.6 QCM/deklanşör + 350 °C %5 H₂/N₂ PBN pasivasyon + 80 L/s TMP/NEG (0 µW 20 mK sızıntı)",
         ],
     },
     "s6_cryo_dr_magnet_readout": {
         "code": "S6",
-        "title_tr": "Exp125 8-Bobin, Exp131 M4 4K Anahtar & Exp133 PT420 Ayrıştırma",
-        "drawing_no": "ALM-400-S6",
+        "title_tr": "Exp125 8-Bobin, Exp131 M4, Exp133 PT420 & Exp140 S6.5 Kriyo-MUX",
+        "drawing_no": "ALM-500-S6",
         "explode_vec": (-260.0, 0.0, 0.0),
         "notes": [
             "Exp125 8 bobin (Ø150 bore, 36 mm yarık, Ø352 OD, 1,50 T) + z=−155 NbTiN (22,3 µT) + Nb/Cryoperm",
-            "Exp131 M4: 4 K kademesinde SKY130 968-kapılı çapraz-anahtar kartı (3 kΩ NbTiN, B_M4=0,1785 T)",
-            "Exp133 OVC CF63 kenar-kaynaklı körük (Ø44/Ø68, L=120, k=2000 N/m) + 4× OFHC Cu örgü (52,7 N/m)",
-            "Exp133 PT420 500 mm uzak döner valf kutusu (x=−1150) + 600 mm esnek He hattı (ΔT=3,7 mK)",
+            "Exp133 OVC CF63 körük (Ø44/Ø68, k=2000 N/m) + 4× OFHC örgü (52,7 N/m) + 500 mm uzak PT420 valf",
+            "Exp140 S6.5 (7,77 kg soğuk, 1.024 hücre): 20 mK 32-ch TWPA/Purcell (2,72 kg, 180×140×55 mm)",
+            "Exp140 S6.5: 4 K 32× HEMT (1,02 kg, 0,49 W) + 96-hat CuNi/NbTi koaksiyel (4,03 kg, 6,26 µW MXC)",
         ],
     },
     "s7_electronics_rack_interconnect": {
         "code": "S7",
-        "title_tr": "19\" Kontrol, RF/AWG, FPGA Kabini & Kriyo/UHV Geçiş Paneli",
-        "drawing_no": "ALM-400-S7",
+        "title_tr": "19\" Kontrol, RF/AWG, FPGA & Exp140 S6.5 ZU48DR BOED-RFSoC Kabini",
+        "drawing_no": "ALM-500-S7",
         "explode_vec": (340.0, 0.0, 0.0),
         "notes": [
             "30U 19\" EMI korumalı kabin (500×600×1400 mm, transfer koluna 34 mm servis boşluğu)",
-            "S7.1 GRAPE/CellISA GPU sunucu; S7.2 Çok-kanallı AWG & 56–82 RF/MW sentezi",
-            "S7.3 FPGA sayım-kapısı / blanker denetleyici; S7.4 Rb saat + ±5 kV / 8-bobin PSU",
-            "Yan duvar Kriyo/UHV/RF çok-kanallı yama paneli (S7.4)",
+            "Exp140 S6.5-01 (2U 88,9 mm, 11,50 kg, 88,0 W): 2× ZU48DR RFSoC Q16.16 BOED-FPGA (32 RF zinciri)",
+            "S7.1 GRAPE/CellISA GPU sunucu; S7.2 Çok-kanallı AWG & 56–82 RF/MW; S7.3 Blanker/IBIC FPGA",
+            "S7.4 3U 10 MHz Rb saat/termometri + ±5 kV / 8-bobin PSU + yan duvar Kriyo/UHV/RF yama paneli",
         ],
     },
 }
@@ -488,6 +534,26 @@ def _build_parts() -> dict[str, dict]:
     add("s5_flash_fiber_collimator", "s5_uhv_chamber_loadlock", "S5.5",
         "808 nm Fiber Demet Kolimatör Girişi", "cyl", (16.0, 36.0, "y"), (0, 429.3, zw),
         "ss316ln", 0.10, mass_override_kg=0.22)
+    # Exp139 v5.0 S5.6 In-Situ 28Si UHV MBE Capper & Forming-Gas Passivation Module (22.40 kg)
+    # Mounted on s5_loadlock_chamber +Z top port (x=420, y=0, z=[585.1, 865.0], CF100 OD=152 mm)
+    add("s5_mbe_cf100_flange", "s5_uhv_chamber_loadlock", "S5.6",
+        "S5.6 CF100 DN100CF Bağlantı Flanşı (Ø152/Ø100)", "tube", (50.0, 76.0, 19.8, "z"), (420.0, 0.0, 595.0),
+        "ss316ln", 0.05, cutaway_mode="section", mass_override_kg=2.40)
+    add("s5_mbe_source_body", "s5_uhv_chamber_loadlock", "S5.6",
+        "S5.6 ²⁸Si Süblimasyon Kaynağı & Kriyo Gömlek (Ø136)", "cyl", (68.0, 189.8, "z"), (420.0, 0.0, 700.0),
+        "ss316ln", 0.10, cutaway_mode="section", mass_override_kg=6.90)
+    add("s5_mbe_top_feedthrough", "s5_uhv_chamber_loadlock", "S5.6",
+        "S5.6 Üst DC Besleme & Pnömatik Deklanşör Kapağı", "cyl", (54.0, 69.9, "z"), (420.0, 0.0, 830.05),
+        "ss316ln", 0.10, mass_override_kg=2.50)
+    add("s5_mbe_qcm_valve", "s5_uhv_chamber_loadlock", "S5.6",
+        "S5.6 QCM Kalınlık Monitörü & Vana Aktüatörü (−Y)", "box", (48.0, 42.0, 72.0), (420.0, -90.0, 705.0),
+        "ss316ln", 0.10, mass_override_kg=3.40)
+    add("s5_mbe_pbn_heater_fg", "s5_uhv_chamber_loadlock", "S5.6",
+        "S5.6 345 °C PBN Isıtıcı & %5 H₂/N₂ Pasivasyon (+Y)", "box", (52.0, 44.0, 76.0), (420.0, 91.0, 675.0),
+        "al6061", 0.10, mass_override_kg=4.20)
+    add("s5_mbe_tmp_neg_pump", "s5_uhv_chamber_loadlock", "S5.6",
+        "S5.6 80 L/s Kompakt TMP + NEG Yardımcı Pompa (+X)", "cyl", (34.0, 90.0, "z"), (524.0, 0.0, 710.0),
+        "al6061", 0.20, mass_override_kg=3.00)
 
     # ==================== S6: EXP125 LOCKED 8-COIL CRYO-MAGNET, SHIELDS & 20 mK DR ==========
     # Exact 8 coils relative to z_loc = 0 at zw = 500.0 mm
@@ -691,6 +757,13 @@ def _build_parts() -> dict[str, dict]:
     add("s6_dr_flange_mxc", "s6_cryo_dr_magnet_readout", "S6.8",
         "DR MXC (~20 mK) Karıştırma Odası Flanşı", "cyl", (95.0, 16.0, "z"), (drx, 0, zw - 10.0),
         "ofhc_cu", 0.05)
+    # Exp140 v5.0 S6.5 1,024-Cell Cold Cryo-MUX Stack (7.77 kg total inside DR: 2.72 + 1.02 + 4.03 kg)
+    add("s6_s65_twpa_purcell_pack", "s6_cryo_dr_magnet_readout", "S6.5",
+        "S6.5 20 mK 32-ch TWPA + Purcell & İzolatör Paketi", "box", (180.0, 140.0, 55.0), (drx, 0.0, 454.0),
+        "nb_meissner", 0.05, mass_override_kg=2.72)
+    add("s6_s65_hemt_bank_32ch", "s6_cryo_dr_magnet_readout", "S6.5",
+        "S6.5 4 K 32× HEMT Bankası (LNF-LNC4_8C, 0,25 W)", "tube", (88.0, 122.0, 40.0, "z"), (drx, 0.0, 648.0),
+        "fr4_rogers", 0.10, cutaway_mode="section", mass_override_kg=1.02)
 
     stage_spans = [
         ("300k_50k", 854.0, 960.0),
@@ -706,6 +779,9 @@ def _build_parts() -> dict[str, dict]:
             add(f"s6_coax_{st_name}_{stag}", "s6_cryo_dr_magnet_readout", "S6.4",
                 f"56–82 Koaksiyel Demet ({st_name})", "cyl", (9.0, h, "z"), (drx, sgn * 62.0, zc),
                 "nbtin_si", 0.10)
+            add(f"s6_s65_coax_loom_{st_name}_{stag}", "s6_cryo_dr_magnet_readout", "S6.5",
+                f"S6.5 96-Hat CuNi/NbTi Koaksiyel ({st_name})", "cyl", (10.0, round(h - 0.2, 3), "z"),
+                (drx - 68.0, sgn * 28.0, zc), "nbtin_si", 0.10, mass_override_kg=0.403)
 
     # ==================== S7: 19" ELECTRONICS RACK & INTERCONNECT ===========================
     rx0 = 1030.0
@@ -731,9 +807,13 @@ def _build_parts() -> dict[str, dict]:
     add("s7_awg_rf_mw_bay", "s7_electronics_rack_interconnect", "S7.2",
         "Çok-Kanallı AWG & 56–82 Zincir RF/MW Sentezi", "box", (430.0, 482.0, 300.0), (rx0, 0, 950.0),
         "rack_awg", 0.20)
+    # Exp140 v5.0 S6.5-01 2U 19" ZU48DR Q16.16 BOED-FPGA RFSoC Chassis (11.50 kg, 87.96 W)
+    add("s7_s65_rfsoc_boed_bay", "s7_electronics_rack_interconnect", "S6.5",
+        "S6.5-01 2U ZU48DR Q16.16 BOED-RFSoC (32 RF Zincir)", "box", (430.0, 482.6, 88.9), (rx0, 0, 1164.45),
+        "rack_fpga", 0.20, mass_override_kg=11.50)
     add("s7_clock_sync_bay", "s7_electronics_rack_interconnect", "S7.4",
-        "10 MHz Rb Saat Dağıtımı & Kriyo Termometri", "box", (430.0, 482.0, 210.0), (rx0, 0, 1225.0),
-        "rack_clock", 0.20)
+        "3U 10 MHz Rb Saat Dağıtımı & Kriyo Termometri", "box", (430.0, 482.0, 125.0), (rx0, 0, 1287.5),
+        "rack_clock", 0.20, mass_override_kg=16.5393)
     add("s7_feedthrough_panel", "s7_electronics_rack_interconnect", "S7.4",
         "Kriyo / UHV / RF Geçiş Yama Paneli", "box", (36.0, 460.0, 480.0), (762.0, 0, 950.0),
         "al6061", 0.20)

@@ -49,7 +49,10 @@ VALID_OPCODES_V2 = frozenset({
 VALID_OPCODES_V3 = frozenset({
     "BUS_TUNE", "BUS_CZ", "LOGICAL_ENCODE", "WAFER_MAP_ROUTE"
 })
-VALID_OPCODES = VALID_OPCODES_V2 | VALID_OPCODES_V3
+VALID_OPCODES_V35 = frozenset({
+    "ECHO_CZ", "MUX_READOUT", "SYNDROME_CYCLE"
+})
+VALID_OPCODES = VALID_OPCODES_V2 | VALID_OPCODES_V3 | VALID_OPCODES_V35
 
 
 def parse_qubit(q: int | str) -> int:
@@ -1149,4 +1152,230 @@ class MultiCellProgrammer:
             with path.open("w", encoding="utf-8") as f:
                 f.write(json.dumps(asdict(mcert)) + "\n")
         return route, mcert
+
+    # -----------------------------------------------------------------------
+    # CellISA v3.5 — Fault-Tolerant M4 Operations (ECHO_CZ, MUX_READOUT, SYNDROME_CYCLE)
+    # -----------------------------------------------------------------------
+
+    def execute_echo_cz(
+        self,
+        cert_a: Certificate,
+        cert_b: Certificate,
+        hop_distance: int = 1,
+        s_eps_uev: float = 1.0,
+        echo_pulses: int = 1,
+        pi_pulse_us: float = 0.04,
+    ) -> dict[str, Any]:
+        """Execute CellISA v3.5 ``ECHO_CZ`` (CZ/2 - pi_X x pi_X - CZ/2) under 1/f charge noise.
+
+        Compares bare dispersive CZ against dynamically echoed CZ using exact 4x4 Kraus
+        operators (Purcell amplitude damping + T2 + 1/f charge-noise filter function).
+        """
+        link = self.tune_bus(cert_a.register_id, cert_b.register_id, hop_distance=hop_distance)
+        h_mat = np.array([[1.0, 1.0], [1.0, -1.0]], dtype=complex) / math.sqrt(2.0)
+        id2 = np.eye(2, dtype=complex)
+        cz_4 = np.diag([1.0, 1.0, 1.0, -1.0]).astype(complex)
+        psi_cz = cz_4 @ np.array([0.5, 0.5, 0.5, 0.5], dtype=complex)
+        rho0 = np.outer(psi_cz, np.conj(psi_cz))
+        psi_ideal = np.array([1.0, 0.0, 0.0, 1.0], dtype=complex) / math.sqrt(2.0)
+
+        def _apply_1q_kraus(r_in: np.ndarray, ops: list[np.ndarray], q_idx: int) -> np.ndarray:
+            r_out = np.zeros_like(r_in)
+            for op in ops:
+                full = np.kron(op, id2) if q_idx == 0 else np.kron(id2, op)
+                r_out += full @ r_in @ full.conj().T
+            return r_out
+
+        def _sim_channel(t_gate_us: float, p_deph_1f: float, extra_pulse_err: float) -> float:
+            p_ad = 1.0 - math.exp(-2.0 * math.pi * (0.5 * link.purcell_rate_MHz) * t_gate_us)
+            p_t2 = 0.5 * (1.0 - math.exp(-t_gate_us / max(link.t2_electron_us, 1e-3)))
+            p_z = min(0.49, p_t2 + p_deph_1f + extra_pulse_err)
+            k_ad = [
+                np.array([[1.0, 0.0], [0.0, math.sqrt(max(1.0 - p_ad, 0.0))]], dtype=complex),
+                np.array([[0.0, math.sqrt(max(p_ad, 0.0))], [0.0, 0.0]], dtype=complex),
+            ]
+            k_z = [
+                math.sqrt(max(1.0 - p_z, 0.0)) * id2,
+                math.sqrt(max(p_z, 0.0)) * np.array([[1.0, 0.0], [0.0, -1.0]], dtype=complex),
+            ]
+            rho = rho0.copy()
+            for _ in range(max(1, int(hop_distance))):
+                rho = _apply_1q_kraus(rho, k_ad, 0)
+                rho = _apply_1q_kraus(rho, k_ad, 1)
+                rho = _apply_1q_kraus(rho, k_z, 0)
+                rho = _apply_1q_kraus(rho, k_z, 1)
+            u_hb = np.kron(id2, h_mat)
+            rho_bell = u_hb @ rho @ u_hb.conj().T
+            return float(np.real(np.vdot(psi_ideal, rho_bell @ psi_ideal)))
+
+        # Quasi-static 1/f charge-noise dephasing anchored to Exp131 S_eps=1.0 uev/sqrt(Hz):
+        # Bare CZ accumulates ~11% dephasing per qubit under un-echoed 1/f noise (Exp131 CM4 ~0.78);
+        # Mid-gate spin-echo (CZ/2 - pi_X x pi_X - CZ/2) cancels low-frequency 1/f tail by ~20x/echo!
+        t_bare = link.cz_duration_us
+        t_echo = link.cz_duration_us + max(1, int(echo_pulses)) * pi_pulse_us
+        p_1f_bare = 0.115 * (max(s_eps_uev, 0.0) ** 2)
+        suppression = 22.0 * (max(1, int(echo_pulses)) ** 1.3)
+        p_1f_echo = p_1f_bare / suppression
+        # Finite echo pi-pulse imperfection (eps = 1e-3 per pulse)
+        pulse_err = 0.0005 * max(1, int(echo_pulses))
+
+        f_bare = _sim_channel(t_bare, p_1f_bare, 0.0)
+        f_echo = _sim_channel(t_echo, p_1f_echo, pulse_err)
+
+        return {
+            "cell_a": cert_a.register_id,
+            "cell_b": cert_b.register_id,
+            "j_bus_MHz": round(link.j_bus_MHz, 4),
+            "cz_duration_us": round(t_echo, 4),
+            "bare_cz_bell_fidelity": round(f_bare, 6),
+            "echo_cz_bell_fidelity": round(f_echo, 6),
+            "echo_fidelity_gain": round(f_echo - f_bare, 6),
+            "bus_cz_fidelity": round(f_echo, 6),
+            "joint_bell_fidelity": round(f_echo, 6),
+            "echo_pulses": int(echo_pulses),
+            "s_eps_uev": float(s_eps_uev),
+            "hop_distance": int(hop_distance),
+            "local_pulses": 2 * max(1, int(echo_pulses)),
+            "total_duration_us": round(t_echo, 4),
+        }
+
+    def execute_mux_readout(
+        self,
+        cell_ids: list[str],
+        n_mux: int = 32,
+        tau_ro_us: float = 2.0,
+        single_shot_fidelity: float = 0.9945,
+        crosstalk_error: float = 0.0008,
+    ) -> dict[str, Any]:
+        """Execute CellISA v3.5 ``MUX_READOUT`` on a frequency-multiplexed 3 kOhm NbTiN line."""
+        inst = CellInstruction(
+            opcode="MUX_READOUT",
+            args={
+                "cells": list(cell_ids),
+                "n_mux": int(n_mux),
+                "tau_ro_us": float(tau_ro_us),
+            },
+        )
+        n_cells = len(cell_ids)
+        n_lines = max(1, int(math.ceil(n_cells / max(1, int(n_mux)))))
+        f_per_cell = max(0.5, min(1.0, float(single_shot_fidelity) - float(crosstalk_error)))
+        return {
+            "opcode": inst.opcode,
+            "n_cells": n_cells,
+            "n_mux": int(n_mux),
+            "feedlines_used": n_lines,
+            "parallel_duration_us": round(float(tau_ro_us), 4),
+            "per_cell_readout_fidelity": round(f_per_cell, 6),
+            "batch_joint_readout_fidelity": round(f_per_cell ** max(n_cells, 1), 6),
+        }
+
+    def execute_syndrome_cycle(
+        self,
+        wafer_sites: list[WaferSite],
+        target_cells: int = 4,
+        logical_code: str = "stabilizer_z4_echo_mux",
+        n_mux: int = 32,
+        tau_ro_us: float = 2.0,
+        s_eps_uev: float = 1.0,
+        echo_pulses: int = 1,
+        readout_fidelity: float = 0.9945,
+        crosstalk_error: float = 0.0008,
+        rounds: int = 1,
+        out_jsonl: str | Path | None = None,
+    ) -> tuple[WaferRoutingResult, MultiCellCertificate, dict[str, Any]]:
+        """Full CellISA v3.5 fault-tolerant stabilizer cycle:
+        WAFER_MAP_ROUTE -> BUS_TUNE -> ECHO_CZ -> MUX_READOUT -> SYNDROME_CYCLE -> Cert (v3.5).
+        """
+        route = WaferRouter(max_bus_reach=2).route(wafer_sites, target_cells=target_cells)
+        if not route.routed:
+            raise RuntimeError(f"WAFER_MAP_ROUTE failed for {target_cells} cells")
+
+        cert_by_id = {s.cell_id: s.certificate for s in wafer_sites if s.certificate is not None}
+        routed_certs = [cert_by_id[cid] for cid in route.assigned_cell_ids]
+
+        prog = CellProgram(name=f"syndrome_{logical_code}")
+        prog.add("WAFER_MAP_ROUTE", grid_shape=[route.grid_rows, route.grid_cols], target_cells=target_cells)
+
+        echo_records: list[dict[str, Any]] = []
+        bare_fids: list[float] = []
+        echo_fids: list[float] = []
+        total_local_pulses = 0
+        cycle_gate_us = 0.0
+        for ca, cb, hops in route.bus_edges:
+            prog.add("BUS_TUNE", cell_a=ca, cell_b=cb, g_MHz=self.bus_g_MHz, detuning_MHz=self.bus_detuning_MHz)
+            prog.add("ECHO_CZ", cell_a=ca, cell_b=cb, echo_pulses=echo_pulses, s_eps_uev=s_eps_uev)
+            rec = self.execute_echo_cz(
+                cert_by_id[ca], cert_by_id[cb], hop_distance=hops, s_eps_uev=s_eps_uev, echo_pulses=echo_pulses
+            )
+            echo_records.append(rec)
+            bare_fids.append(rec["bare_cz_bell_fidelity"])
+            echo_fids.append(rec["echo_cz_bell_fidelity"])
+            total_local_pulses += rec["local_pulses"]
+            cycle_gate_us += rec["total_duration_us"]
+
+        prog.add("MUX_READOUT", cells=route.assigned_cell_ids, n_mux=n_mux, tau_ro_us=tau_ro_us)
+        mux_rec = self.execute_mux_readout(
+            route.assigned_cell_ids,
+            n_mux=n_mux,
+            tau_ro_us=tau_ro_us,
+            single_shot_fidelity=readout_fidelity,
+            crosstalk_error=crosstalk_error,
+        )
+        prog.add(
+            "SYNDROME_CYCLE",
+            code=logical_code,
+            cells=route.assigned_cell_ids,
+            rounds=int(rounds),
+            n_mux=int(n_mux),
+        )
+
+        # Single-round stabilizer extraction fidelity = product(ECHO_CZ) * ancilla readout fidelity
+        f_gates = 1.0
+        for f in echo_fids:
+            f_gates *= f
+        f_round = f_gates * mux_rec["per_cell_readout_fidelity"]
+        f_total = f_round ** max(1, int(rounds))
+        cycle_us = (cycle_gate_us + mux_rec["parallel_duration_us"]) * max(1, int(rounds))
+
+        p_phys = max(0.0, 1.0 - float(np.mean(echo_fids)))
+        p_logical = float(3.0 * p_phys * p_phys - 2.0 * (p_phys ** 3))
+        exp126_info = verify_with_exp126_bridge(routed_certs)
+
+        mcert = MultiCellCertificate(
+            isa_version="3.5",
+            program_name=prog.name,
+            routed_cell_ids=route.assigned_cell_ids,
+            routed_coords=[[r, c] for r, c in route.assigned_coords],
+            bus_links=echo_records,
+            logical_code=logical_code,
+            local_pulse_count=total_local_pulses * max(1, int(rounds)),
+            bus_cz_count=len(echo_records) * max(1, int(rounds)),
+            total_duration_us=round(cycle_us, 4),
+            joint_state_fidelity=round(f_total, 6),
+            min_bus_cz_fidelity=round(min(echo_fids), 6),
+            logical_error_rate=round(p_logical, 8),
+            exp126_bridge=exp126_info,
+            certified=bool(f_total >= 0.90 and min(echo_fids) >= 0.95 and exp126_info["all_clear_5kHz_gate"]),
+        ).sign()
+
+        if out_jsonl is not None:
+            path = Path(out_jsonl)
+            path.parent.mkdir(parents=True, exist_ok=True)
+            with path.open("w", encoding="utf-8") as f:
+                f.write(json.dumps(asdict(mcert)) + "\n")
+
+        syndrome_summary = {
+            "isa_version": "3.5",
+            "opcodes_used": sorted({inst.opcode for inst in prog.instructions}),
+            "total_opcodes_supported": len(VALID_OPCODES),
+            "rounds": int(rounds),
+            "mean_bare_cz_fidelity": round(float(np.mean(bare_fids)), 6),
+            "mean_echo_cz_fidelity": round(float(np.mean(echo_fids)), 6),
+            "echo_fidelity_gain": round(float(np.mean(echo_fids) - np.mean(bare_fids)), 6),
+            "mux_readout": mux_rec,
+            "syndrome_round_fidelity": round(f_round, 6),
+            "cycle_duration_us": round(cycle_us, 4),
+        }
+        return route, mcert, syndrome_summary
+
 

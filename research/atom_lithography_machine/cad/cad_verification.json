@@ -1,5 +1,5 @@
 {
-  "cad_version": "4.0-exp130-exp131-exp133-locked",
+  "cad_version": "5.0-exp139-exp140-locked",
   "units": "mm",
   "tolerance_std": "ISO 2768-mK",
   "no_lab_measurement": true,
@@ -88,6 +88,57 @@
     "exp133_sigma_pointing_nm": 0.147,
     "exp133_sigma_thermal_nm": 0.028,
     "exp133_min_vc_grade": "VC-E",
+    "exp139_synced": true,
+    "s56_mount_host": "s5_loadlock_chamber (+Z CF100 DN100CF port)",
+    "s56_center_mm": [
+      420.0,
+      0.0,
+      725.0
+    ],
+    "s56_flange_od_mm": 152.0,
+    "s56_bore_id_mm": 100.0,
+    "s56_envelope_height_mm": 280.0,
+    "s56_z_span_mm": [
+      585.0,
+      865.0
+    ],
+    "s56_total_mass_kg": 22.4,
+    "s56_growth_rate_nm_s": 0.1,
+    "s56_target_cap_nm": 8.0,
+    "s56_cap_tol_nm": 0.3,
+    "s56_optimal_T_sub_C": 345.0,
+    "s56_forming_gas_T_C": 350.0,
+    "s56_tmp_neg_speed_L_s": 80.0,
+    "s56_growth_power_W": 400.0,
+    "s56_cryo_leak_20mK_uW": 0.0,
+    "s55_v5_flash_fluence_J_cm2": 43.49,
+    "s55_v5_T_peak_K": 1530.1,
+    "s55_v5_sapphire_lidt_margin": 8.96,
+    "exp139_sigma_tot_v5_route_C_nm": 3.6653,
+    "exp140_synced": true,
+    "s65_module_scale_cells": 1024,
+    "s65_n_mux_star": 32,
+    "s65_total_mass_kg": 19.27,
+    "s65_cold_mass_kg": 7.77,
+    "s65_rack_mass_kg": 11.5,
+    "s65_twpa_pack_mass_kg": 2.72,
+    "s65_twpa_pack_dims_mm": [
+      180.0,
+      140.0,
+      55.0
+    ],
+    "s65_hemt_bank_qty": 32,
+    "s65_hemt_bank_mass_kg": 1.02,
+    "s65_coax_loom_lines": 96,
+    "s65_coax_loom_mass_kg": 4.03,
+    "s65_rfsoc_chassis_u": 2,
+    "s65_rfsoc_power_W": 87.96,
+    "s65_cryo_load_20mK_uW": 6.256,
+    "s65_cryo_load_100mK_uW": 59.58,
+    "s65_cryo_load_4K_W": 0.488,
+    "s65_cryo_load_50K_W": 8.26,
+    "s65_single_cryo_max_cells": 2887,
+    "s65_min_cryostats_10k_cells": 4,
     "wafer_diameter_mm": 50.0,
     "carrier_size_mm": 80.0,
     "chamber_r_out_mm": 192.0,
@@ -105,17 +156,19 @@
     "exp125_8coil_magnet_present": true,
     "exp130_s55_flash_present": true,
     "exp131_m4_4k_crossbar_present": true,
-    "exp133_pt420_decoupled_present": true
+    "exp133_pt420_decoupled_present": true,
+    "exp139_s56_mbe_capper_present": true,
+    "exp140_s65_cryo_mux_rfsoc_present": true
   },
   "master_assembly": {
-    "part_count": 170,
+    "part_count": 189,
     "subsystem_count": 7,
-    "total_mass_kg": 993.267,
-    "total_volume_L": 483.996,
+    "total_mass_kg": 1034.937,
+    "total_volume_L": 491.615,
     "center_of_mass_mm": [
-      97.25,
-      -9.9,
-      452.25
+      109.03,
+      -9.43,
+      467.67
     ],
     "bbox_min_mm": [
       -1240.0,
@@ -134,22 +187,22 @@
     ],
     "stl": {
       "file": "atom_litho_machine.stl",
-      "bytes": 1778284,
-      "triangles": 35564,
+      "bytes": 1943884,
+      "triangles": 38876,
       "is_watertight": true,
       "boundary_edges": 0,
       "non_manifold_edges": 0,
-      "volume_mm3": 483840140.149,
-      "surface_area_mm2": 21364407.32,
+      "volume_mm3": 491444304.973,
+      "surface_area_mm2": 22278143.36,
       "com_mm": [
-        536.746,
-        -5.595,
-        544.996
+        530.481,
+        -5.503,
+        548.658
       ]
     }
   },
   "interference_audit": {
-    "pairs_checked": 14365,
+    "pairs_checked": 17766,
     "solid_clashes": 0,
     "clashes": [],
     "mated_contact_pairs": 113,
@@ -280,6 +333,41 @@
       "value_mm": 215.0,
       "min_req_mm": 150.0,
       "pass": true
+    },
+    "exp139_s56_to_chamber_top_flange_x_mm": {
+      "value_mm": 119.0,
+      "min_req_mm": 100.0,
+      "pass": true
+    },
+    "exp139_s56_to_transfer_arm_z_mm": {
+      "value_mm": 70.1,
+      "min_req_mm": 65.0,
+      "pass": true
+    },
+    "exp139_s56_to_s7_panel_x_mm": {
+      "value_mm": 186.0,
+      "min_req_mm": 100.0,
+      "pass": true
+    },
+    "exp140_s65_twpa_inside_4k_shield_radial_mm": {
+      "value_mm": 17.982,
+      "min_req_mm": 15.0,
+      "pass": true
+    },
+    "exp140_s65_hemt_to_4k_shield_radial_mm": {
+      "value_mm": 10.0,
+      "min_req_mm": 8.0,
+      "pass": true
+    },
+    "exp140_s65_coax_loom_to_m4_crossbar_x_mm": {
+      "value_mm": 8.0,
+      "min_req_mm": 5.0,
+      "pass": true
+    },
+    "exp140_s65_rfsoc_to_awg_z_mm": {
+      "value_mm": 20.0,
+      "min_req_mm": 10.0,
+      "pass": true
     }
   },
   "exp80_golden_envelope_audit": {
@@ -394,11 +482,68 @@
     "sigma_thermal_nm": 0.028,
     "pass": true
   },
+  "exp139_s56_audit": {
+    "exp139_synced": true,
+    "subsystem_id": "S5.6",
+    "part_count": 6,
+    "mount_center_xy_mm": [
+      420.0,
+      0.0
+    ],
+    "flange_od_mm": 152.0,
+    "bore_id_mm": 100.0,
+    "z_span_mm": [
+      585.1,
+      865.0
+    ],
+    "target_z_span_mm": [
+      585.0,
+      865.0
+    ],
+    "total_mass_kg": 22.4,
+    "target_mass_kg": 22.4,
+    "growth_rate_nm_s": 0.1,
+    "target_cap_nm": 8.0,
+    "optimal_T_sub_C": 345.0,
+    "forming_gas_T_C": 350.0,
+    "cryo_leak_20mK_uW": 0.0,
+    "all_s56_parts_present": true,
+    "pass": true
+  },
+  "exp140_s65_audit": {
+    "exp140_synced": true,
+    "subsystem_id": "S6.5",
+    "module_scale_cells": 1024,
+    "n_mux_star": 32,
+    "cold_part_count": 12,
+    "rack_part_count": 1,
+    "cold_mass_kg": 7.77,
+    "target_cold_mass_kg": 7.77,
+    "rack_mass_kg": 11.5,
+    "target_rack_mass_kg": 11.5,
+    "total_mass_kg": 19.27,
+    "target_total_mass_kg": 19.27,
+    "twpa_pack_dims_mm": [
+      180.0,
+      140.0,
+      55.0
+    ],
+    "rfsoc_bay_dims_mm": [
+      430.0,
+      482.6,
+      88.9
+    ],
+    "rfsoc_rack_orientation_note": "482.6 mm 19-in width along Y, 88.9 mm (2U) along Z, 430.0 mm short-depth chassis along X inside 500x600x1400 mm 30U rack posts",
+    "cryo_load_20mK_uW": 6.256,
+    "cryo_load_4K_W": 0.488,
+    "room_temp_power_W": 87.96,
+    "pass": true
+  },
   "subsystems": {
     "s1_ion_source_column": {
       "code": "S1",
       "title_tr": "Exp124 İyon Kaynağı & 10→5 keV Yavaşlatmalı Kolon",
-      "drawing_no": "ALM-400-S1",
+      "drawing_no": "ALM-500-S1",
       "part_count": 11,
       "stl": {
         "file": "s1_ion_source_column.stl",
@@ -441,7 +586,7 @@
     "s2_mems_write_head": {
       "code": "S2",
       "title_tr": "Exp124 Arch-B Mini-Lens, Blanker & MEMS Yazma Kafası (32×32)",
-      "drawing_no": "ALM-400-S2",
+      "drawing_no": "ALM-500-S2",
       "part_count": 9,
       "stl": {
         "file": "s2_mems_write_head.stl",
@@ -484,7 +629,7 @@
     "s3_ibic_detector_assembly": {
       "code": "S3",
       "title_tr": "IBIC Yonga Algılama, 100 K CSA (Exp127) & M4 Veri Yolu (Exp131)",
-      "drawing_no": "ALM-400-S3",
+      "drawing_no": "ALM-500-S3",
       "part_count": 7,
       "stl": {
         "file": "s3_ibic_detector_assembly.stl",
@@ -527,7 +672,7 @@
     "s4_piezo_stage_interferometry": {
       "code": "S4",
       "title_tr": "6-DOF Piezo Kademe, Titreşim İzolasyonu & İnterferometri",
-      "drawing_no": "ALM-400-S4",
+      "drawing_no": "ALM-500-S4",
       "part_count": 18,
       "stl": {
         "file": "s4_piezo_stage_interferometry.stl",
@@ -569,30 +714,30 @@
     },
     "s5_uhv_chamber_loadlock": {
       "code": "S5",
-      "title_tr": "s=0,5 UHV Ana Oda (Ø384/Ø364), Pompalar, LL & Exp130 S5.5 Flaş",
-      "drawing_no": "ALM-400-S5",
-      "part_count": 23,
+      "title_tr": "s=0,5 UHV Oda, Exp130 S5.5 Flaş & Exp139 S5.6 ²⁸Si MBE Kaplayıcı",
+      "drawing_no": "ALM-500-S5",
+      "part_count": 29,
       "stl": {
         "file": "s5_uhv_chamber_loadlock.stl",
-        "bytes": 187484,
-        "triangles": 3748,
+        "bytes": 236684,
+        "triangles": 4732,
         "is_watertight": true,
         "boundary_edges": 0,
         "non_manifold_edges": 0,
-        "volume_mm3": 27535754.281,
-        "surface_area_mm2": 2385323.64,
+        "volume_mm3": 31771735.68,
+        "surface_area_mm2": 2636103.3,
         "com_mm": [
-          129.299,
-          -101.287,
-          395.413
+          169.124,
+          -87.696,
+          437.953
         ]
       },
-      "mass_kg": 171.541,
-      "volume_cm3": 27576.15,
+      "mass_kg": 193.941,
+      "volume_cm3": 31823.33,
       "com_mm": [
-        129.26,
-        -58.07,
-        442.23
+        164.45,
+        -50.97,
+        472.08
       ],
       "bbox_min_mm": [
         -225.0,
@@ -602,40 +747,40 @@
       "bbox_max_mm": [
         710.0,
         447.3,
-        675.0
+        865.0
       ],
       "bbox_span_mm": [
         935.0,
         937.3,
-        675.0
+        865.0
       ]
     },
     "s6_cryo_dr_magnet_readout": {
       "code": "S6",
-      "title_tr": "Exp125 8-Bobin, Exp131 M4 4K Anahtar & Exp133 PT420 Ayrıştırma",
-      "drawing_no": "ALM-400-S6",
-      "part_count": 90,
+      "title_tr": "Exp125 8-Bobin, Exp131 M4, Exp133 PT420 & Exp140 S6.5 Kriyo-MUX",
+      "drawing_no": "ALM-500-S6",
+      "part_count": 102,
       "stl": {
         "file": "s6_cryo_dr_magnet_readout.stl",
-        "bytes": 1133684,
-        "triangles": 22672,
+        "bytes": 1249484,
+        "triangles": 24988,
         "is_watertight": true,
         "boundary_edges": 0,
         "non_manifold_edges": 0,
-        "volume_mm3": 55392983.755,
-        "surface_area_mm2": 8546394.62,
+        "volume_mm3": 57929911.68,
+        "surface_area_mm2": 8787094.68,
         "com_mm": [
-          -663.511,
+          -663.22,
           -0.0,
-          574.061
+          573.033
         ]
       },
-      "mass_kg": 273.15,
-      "volume_cm3": 55487.52,
+      "mass_kg": 280.92,
+      "volume_cm3": 58027.74,
       "com_mm": [
-        -530.73,
+        -535.0,
         -0.0,
-        566.73
+        567.76
       ],
       "bbox_min_mm": [
         -1240.0,
@@ -655,30 +800,30 @@
     },
     "s7_electronics_rack_interconnect": {
       "code": "S7",
-      "title_tr": "19\" Kontrol, RF/AWG, FPGA Kabini & Kriyo/UHV Geçiş Paneli",
-      "drawing_no": "ALM-400-S7",
-      "part_count": 12,
+      "title_tr": "19\" Kontrol, RF/AWG, FPGA & Exp140 S6.5 ZU48DR BOED-RFSoC Kabini",
+      "drawing_no": "ALM-500-S7",
+      "part_count": 13,
       "stl": {
         "file": "s7_electronics_rack_interconnect.stl",
-        "bytes": 7284,
-        "triangles": 144,
+        "bytes": 7884,
+        "triangles": 156,
         "is_watertight": true,
         "boundary_edges": 0,
         "non_manifold_edges": 0,
-        "volume_mm3": 286304200.0,
-        "surface_area_mm2": 6786440.0,
+        "volume_mm3": 287135455.5,
+        "surface_area_mm2": 7208696.33,
         "com_mm": [
-          1022.559,
+          1022.581,
           0.0,
-          696.432
+          699.711
         ]
       },
-      "mass_kg": 218.247,
-      "volume_cm3": 286304.2,
+      "mass_kg": 229.747,
+      "volume_cm3": 287135.45,
       "com_mm": [
-        1003.65,
-        0.0,
-        671.35
+        1004.96,
+        -0.0,
+        700.53
       ],
       "bbox_min_mm": [
         744.0,
@@ -2600,6 +2745,174 @@
         16.0,
         447.3,
         516.0
+      ]
+    },
+    "s5_mbe_cf100_flange": {
+      "subsystem": "s5_uhv_chamber_loadlock",
+      "bom_id": "S5.6",
+      "label_tr": "S5.6 CF100 DN100CF Bağlantı Flanşı (Ø152/Ø100)",
+      "shape": "tube",
+      "material": "ss316ln",
+      "tol_mm": 0.05,
+      "triangles": 384,
+      "is_watertight": true,
+      "volume_analytic_mm3": 203778.779,
+      "volume_mesh_mm3": 203197.328,
+      "mass_kg": 2.4,
+      "com_mm": [
+        420.0,
+        0.0,
+        595.0
+      ],
+      "bbox_min_mm": [
+        344.0,
+        -76.0,
+        585.1
+      ],
+      "bbox_max_mm": [
+        496.0,
+        76.0,
+        604.9
+      ]
+    },
+    "s5_mbe_source_body": {
+      "subsystem": "s5_uhv_chamber_loadlock",
+      "bom_id": "S5.6",
+      "label_tr": "S5.6 ²⁸Si Süblimasyon Kaynağı & Kriyo Gömlek (Ø136)",
+      "shape": "cyl",
+      "material": "ss316ln",
+      "tol_mm": 0.1,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 2757172.297,
+      "volume_mesh_mm3": 2749305.14,
+      "mass_kg": 6.9,
+      "com_mm": [
+        420.0,
+        0.0,
+        700.0
+      ],
+      "bbox_min_mm": [
+        352.0,
+        -68.0,
+        605.1
+      ],
+      "bbox_max_mm": [
+        488.0,
+        68.0,
+        794.9
+      ]
+    },
+    "s5_mbe_top_feedthrough": {
+      "subsystem": "s5_uhv_chamber_loadlock",
+      "bom_id": "S5.6",
+      "label_tr": "S5.6 Üst DC Besleme & Pnömatik Deklanşör Kapağı",
+      "shape": "cyl",
+      "material": "ss316ln",
+      "tol_mm": 0.1,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 640345.804,
+      "volume_mesh_mm3": 638518.678,
+      "mass_kg": 2.5,
+      "com_mm": [
+        420.0,
+        0.0,
+        830.05
+      ],
+      "bbox_min_mm": [
+        366.0,
+        -54.0,
+        795.1
+      ],
+      "bbox_max_mm": [
+        474.0,
+        54.0,
+        865.0
+      ]
+    },
+    "s5_mbe_qcm_valve": {
+      "subsystem": "s5_uhv_chamber_loadlock",
+      "bom_id": "S5.6",
+      "label_tr": "S5.6 QCM Kalınlık Monitörü & Vana Aktüatörü (−Y)",
+      "shape": "box",
+      "material": "ss316ln",
+      "tol_mm": 0.1,
+      "triangles": 12,
+      "is_watertight": true,
+      "volume_analytic_mm3": 145152.0,
+      "volume_mesh_mm3": 145152.0,
+      "mass_kg": 3.4,
+      "com_mm": [
+        420.0,
+        -90.0,
+        705.0
+      ],
+      "bbox_min_mm": [
+        396.0,
+        -111.0,
+        669.0
+      ],
+      "bbox_max_mm": [
+        444.0,
+        -69.0,
+        741.0
+      ]
+    },
+    "s5_mbe_pbn_heater_fg": {
+      "subsystem": "s5_uhv_chamber_loadlock",
+      "bom_id": "S5.6",
+      "label_tr": "S5.6 345 °C PBN Isıtıcı & %5 H₂/N₂ Pasivasyon (+Y)",
+      "shape": "box",
+      "material": "al6061",
+      "tol_mm": 0.1,
+      "triangles": 12,
+      "is_watertight": true,
+      "volume_analytic_mm3": 173888.0,
+      "volume_mesh_mm3": 173888.0,
+      "mass_kg": 4.2,
+      "com_mm": [
+        420.0,
+        91.0,
+        675.0
+      ],
+      "bbox_min_mm": [
+        394.0,
+        69.0,
+        637.0
+      ],
+      "bbox_max_mm": [
+        446.0,
+        113.0,
+        713.0
+      ]
+    },
+    "s5_mbe_tmp_neg_pump": {
+      "subsystem": "s5_uhv_chamber_loadlock",
+      "bom_id": "S5.6",
+      "label_tr": "S5.6 80 L/s Kompakt TMP + NEG Yardımcı Pompa (+X)",
+      "shape": "cyl",
+      "material": "al6061",
+      "tol_mm": 0.2,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 326851.3,
+      "volume_mesh_mm3": 325918.681,
+      "mass_kg": 3.0,
+      "com_mm": [
+        524.0,
+        0.0,
+        710.0
+      ],
+      "bbox_min_mm": [
+        490.0,
+        -34.0,
+        665.0
+      ],
+      "bbox_max_mm": [
+        558.0,
+        34.0,
+        755.0
       ]
     },
     "s6_coil_m_upper": {
@@ -4842,6 +5155,62 @@
         498.0
       ]
     },
+    "s6_s65_twpa_purcell_pack": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.5",
+      "label_tr": "S6.5 20 mK 32-ch TWPA + Purcell & İzolatör Paketi",
+      "shape": "box",
+      "material": "nb_meissner",
+      "tol_mm": 0.05,
+      "triangles": 12,
+      "is_watertight": true,
+      "volume_analytic_mm3": 1386000.0,
+      "volume_mesh_mm3": 1386000.0,
+      "mass_kg": 2.72,
+      "com_mm": [
+        -650.0,
+        0.0,
+        454.0
+      ],
+      "bbox_min_mm": [
+        -740.0,
+        -70.0,
+        426.5
+      ],
+      "bbox_max_mm": [
+        -560.0,
+        70.0,
+        481.5
+      ]
+    },
+    "s6_s65_hemt_bank_32ch": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.5",
+      "label_tr": "S6.5 4 K 32× HEMT Bankası (LNF-LNC4_8C, 0,25 W)",
+      "shape": "tube",
+      "material": "fr4_rogers",
+      "tol_mm": 0.1,
+      "triangles": 384,
+      "is_watertight": true,
+      "volume_analytic_mm3": 897238.862,
+      "volume_mesh_mm3": 894678.732,
+      "mass_kg": 1.02,
+      "com_mm": [
+        -650.0,
+        -0.0,
+        648.0
+      ],
+      "bbox_min_mm": [
+        -772.0,
+        -122.0,
+        628.0
+      ],
+      "bbox_max_mm": [
+        -528.0,
+        122.0,
+        668.0
+      ]
+    },
     "s6_coax_300k_50k_pos": {
       "subsystem": "s6_cryo_dr_magnet_readout",
       "bom_id": "S6.4",
@@ -4868,6 +5237,34 @@
         -641.0,
         71.0,
         960.0
+      ]
+    },
+    "s6_s65_coax_loom_300k_50k_pos": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.5",
+      "label_tr": "S6.5 96-Hat CuNi/NbTi Koaksiyel (300k_50k)",
+      "shape": "cyl",
+      "material": "nbtin_si",
+      "tol_mm": 0.1,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 33238.05,
+      "volume_mesh_mm3": 33143.211,
+      "mass_kg": 0.403,
+      "com_mm": [
+        -718.0,
+        28.0,
+        907.0
+      ],
+      "bbox_min_mm": [
+        -728.0,
+        18.0,
+        854.1
+      ],
+      "bbox_max_mm": [
+        -708.0,
+        38.0,
+        959.9
       ]
     },
     "s6_coax_300k_50k_neg": {
@@ -4898,6 +5295,34 @@
         960.0
       ]
     },
+    "s6_s65_coax_loom_300k_50k_neg": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.5",
+      "label_tr": "S6.5 96-Hat CuNi/NbTi Koaksiyel (300k_50k)",
+      "shape": "cyl",
+      "material": "nbtin_si",
+      "tol_mm": 0.1,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 33238.05,
+      "volume_mesh_mm3": 33143.211,
+      "mass_kg": 0.403,
+      "com_mm": [
+        -718.0,
+        -28.0,
+        907.0
+      ],
+      "bbox_min_mm": [
+        -728.0,
+        -38.0,
+        854.1
+      ],
+      "bbox_max_mm": [
+        -708.0,
+        -18.0,
+        959.9
+      ]
+    },
     "s6_coax_50k_4k_pos": {
       "subsystem": "s6_cryo_dr_magnet_readout",
       "bom_id": "S6.4",
@@ -4924,6 +5349,34 @@
         -641.0,
         71.0,
         840.0
+      ]
+    },
+    "s6_s65_coax_loom_50k_4k_pos": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.5",
+      "label_tr": "S6.5 96-Hat CuNi/NbTi Koaksiyel (50k_4k)",
+      "shape": "cyl",
+      "material": "nbtin_si",
+      "tol_mm": 0.1,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 32609.732,
+      "volume_mesh_mm3": 32516.685,
+      "mass_kg": 0.403,
+      "com_mm": [
+        -718.0,
+        28.0,
+        788.0
+      ],
+      "bbox_min_mm": [
+        -728.0,
+        18.0,
+        736.1
+      ],
+      "bbox_max_mm": [
+        -708.0,
+        38.0,
+        839.9
       ]
     },
     "s6_coax_50k_4k_neg": {
@@ -4954,6 +5407,34 @@
         840.0
       ]
     },
+    "s6_s65_coax_loom_50k_4k_neg": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.5",
+      "label_tr": "S6.5 96-Hat CuNi/NbTi Koaksiyel (50k_4k)",
+      "shape": "cyl",
+      "material": "nbtin_si",
+      "tol_mm": 0.1,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 32609.732,
+      "volume_mesh_mm3": 32516.685,
+      "mass_kg": 0.403,
+      "com_mm": [
+        -718.0,
+        -28.0,
+        788.0
+      ],
+      "bbox_min_mm": [
+        -728.0,
+        -38.0,
+        736.1
+      ],
+      "bbox_max_mm": [
+        -708.0,
+        -18.0,
+        839.9
+      ]
+    },
     "s6_coax_4k_still_pos": {
       "subsystem": "s6_cryo_dr_magnet_readout",
       "bom_id": "S6.4",
@@ -4980,6 +5461,34 @@
         -641.0,
         71.0,
         720.0
+      ]
+    },
+    "s6_s65_coax_loom_4k_still_pos": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.5",
+      "label_tr": "S6.5 96-Hat CuNi/NbTi Koaksiyel (4k_still)",
+      "shape": "cyl",
+      "material": "nbtin_si",
+      "tol_mm": 0.1,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 30724.776,
+      "volume_mesh_mm3": 30637.108,
+      "mass_kg": 0.403,
+      "com_mm": [
+        -718.0,
+        28.0,
+        671.0
+      ],
+      "bbox_min_mm": [
+        -728.0,
+        18.0,
+        622.1
+      ],
+      "bbox_max_mm": [
+        -708.0,
+        38.0,
+        719.9
       ]
     },
     "s6_coax_4k_still_neg": {
@@ -5010,6 +5519,34 @@
         720.0
       ]
     },
+    "s6_s65_coax_loom_4k_still_neg": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.5",
+      "label_tr": "S6.5 96-Hat CuNi/NbTi Koaksiyel (4k_still)",
+      "shape": "cyl",
+      "material": "nbtin_si",
+      "tol_mm": 0.1,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 30724.776,
+      "volume_mesh_mm3": 30637.108,
+      "mass_kg": 0.403,
+      "com_mm": [
+        -718.0,
+        -28.0,
+        671.0
+      ],
+      "bbox_min_mm": [
+        -728.0,
+        -38.0,
+        622.1
+      ],
+      "bbox_max_mm": [
+        -708.0,
+        -18.0,
+        719.9
+      ]
+    },
     "s6_coax_still_cp_pos": {
       "subsystem": "s6_cryo_dr_magnet_readout",
       "bom_id": "S6.4",
@@ -5036,6 +5573,34 @@
         -641.0,
         71.0,
         610.0
+      ]
+    },
+    "s6_s65_coax_loom_still_cp_pos": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.5",
+      "label_tr": "S6.5 96-Hat CuNi/NbTi Koaksiyel (still_cp)",
+      "shape": "cyl",
+      "material": "nbtin_si",
+      "tol_mm": 0.1,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 17215.928,
+      "volume_mesh_mm3": 17166.805,
+      "mass_kg": 0.403,
+      "com_mm": [
+        -718.0,
+        28.0,
+        582.5
+      ],
+      "bbox_min_mm": [
+        -728.0,
+        18.0,
+        555.1
+      ],
+      "bbox_max_mm": [
+        -708.0,
+        38.0,
+        609.9
       ]
     },
     "s6_coax_still_cp_neg": {
@@ -5066,6 +5631,34 @@
         610.0
       ]
     },
+    "s6_s65_coax_loom_still_cp_neg": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.5",
+      "label_tr": "S6.5 96-Hat CuNi/NbTi Koaksiyel (still_cp)",
+      "shape": "cyl",
+      "material": "nbtin_si",
+      "tol_mm": 0.1,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 17215.928,
+      "volume_mesh_mm3": 17166.805,
+      "mass_kg": 0.403,
+      "com_mm": [
+        -718.0,
+        -28.0,
+        582.5
+      ],
+      "bbox_min_mm": [
+        -728.0,
+        -38.0,
+        555.1
+      ],
+      "bbox_max_mm": [
+        -708.0,
+        -18.0,
+        609.9
+      ]
+    },
     "s6_coax_cp_mxc_pos": {
       "subsystem": "s6_cryo_dr_magnet_readout",
       "bom_id": "S6.4",
@@ -5094,6 +5687,34 @@
         545.0
       ]
     },
+    "s6_s65_coax_loom_cp_mxc_pos": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.5",
+      "label_tr": "S6.5 96-Hat CuNi/NbTi Koaksiyel (cp_mxc)",
+      "shape": "cyl",
+      "material": "nbtin_si",
+      "tol_mm": 0.1,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 14702.654,
+      "volume_mesh_mm3": 14660.702,
+      "mass_kg": 0.403,
+      "com_mm": [
+        -718.0,
+        28.0,
+        521.5
+      ],
+      "bbox_min_mm": [
+        -728.0,
+        18.0,
+        498.1
+      ],
+      "bbox_max_mm": [
+        -708.0,
+        38.0,
+        544.9
+      ]
+    },
     "s6_coax_cp_mxc_neg": {
       "subsystem": "s6_cryo_dr_magnet_readout",
       "bom_id": "S6.4",
@@ -5120,6 +5741,34 @@
         -641.0,
         -53.0,
         545.0
+      ]
+    },
+    "s6_s65_coax_loom_cp_mxc_neg": {
+      "subsystem": "s6_cryo_dr_magnet_readout",
+      "bom_id": "S6.5",
+      "label_tr": "S6.5 96-Hat CuNi/NbTi Koaksiyel (cp_mxc)",
+      "shape": "cyl",
+      "material": "nbtin_si",
+      "tol_mm": 0.1,
+      "triangles": 192,
+      "is_watertight": true,
+      "volume_analytic_mm3": 14702.654,
+      "volume_mesh_mm3": 14660.702,
+      "mass_kg": 0.403,
+      "com_mm": [
+        -718.0,
+        -28.0,
+        521.5
+      ],
+      "bbox_min_mm": [
+        -728.0,
+        -38.0,
+        498.1
+      ],
+      "bbox_max_mm": [
+        -708.0,
+        -18.0,
+        544.9
       ]
     },
     "s7_rack_base": {
@@ -5402,32 +6051,60 @@
         1100.0
       ]
     },
+    "s7_s65_rfsoc_boed_bay": {
+      "subsystem": "s7_electronics_rack_interconnect",
+      "bom_id": "S6.5",
+      "label_tr": "S6.5-01 2U ZU48DR Q16.16 BOED-RFSoC (32 RF Zincir)",
+      "shape": "box",
+      "material": "rack_fpga",
+      "tol_mm": 0.2,
+      "triangles": 12,
+      "is_watertight": true,
+      "volume_analytic_mm3": 18448350.2,
+      "volume_mesh_mm3": 18448350.2,
+      "mass_kg": 11.5,
+      "com_mm": [
+        1030.0,
+        -0.0,
+        1164.45
+      ],
+      "bbox_min_mm": [
+        815.0,
+        -241.3,
+        1120.0
+      ],
+      "bbox_max_mm": [
+        1245.0,
+        241.3,
+        1208.9
+      ]
+    },
     "s7_clock_sync_bay": {
       "subsystem": "s7_electronics_rack_interconnect",
       "bom_id": "S7.4",
-      "label_tr": "10 MHz Rb Saat Dağıtımı & Kriyo Termometri",
+      "label_tr": "3U 10 MHz Rb Saat Dağıtımı & Kriyo Termometri",
       "shape": "box",
       "material": "rack_clock",
       "tol_mm": 0.2,
       "triangles": 12,
       "is_watertight": true,
-      "volume_analytic_mm3": 43524600.0,
-      "volume_mesh_mm3": 43524600.0,
+      "volume_analytic_mm3": 25907500.0,
+      "volume_mesh_mm3": 25907500.0,
       "mass_kg": 16.5393,
       "com_mm": [
         1030.0,
         0.0,
-        1225.0
+        1287.5
       ],
       "bbox_min_mm": [
         815.0,
         -241.0,
-        1120.0
+        1225.0
       ],
       "bbox_max_mm": [
         1245.0,
         241.0,
-        1330.0
+        1350.0
       ]
     },
     "s7_feedthrough_panel": {
