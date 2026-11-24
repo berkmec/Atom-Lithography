@@ -1,0 +1,19 @@
+{
+  "description": "Empirical baseline EDA run on unmodified boed_q16_core.v + tb_boed_q16_core.v prior to Bug 1-4 fixes.",
+  "verilator_lint_warnings": 40,
+  "verilator_lint_exit_nonzero": true,
+  "iverilog_original_tb_mismatches": 64,
+  "iverilog_original_tb_vectors": 64,
+  "iverilog_original_tb_symptom": "64/64 vectors failed with mu_off_q8=x, std_q4=0 (TB posedge clock race skipped odd prior banks -> X propagation).",
+  "iverilog_negedge_tb_mismatches": 64,
+  "iverilog_negedge_tb_vectors": 64,
+  "iverilog_negedge_tb_symptom": "64/64 vectors still failed even with race-free negedge TB: systematic +10240 LSB (+40.00 Hz = +1 beat / 4 lanes) mean shift from S_PASS2 1-cycle BRAM read lag (Bug 2), spurious beat-0 weight from stale lp_rd_lane=0, and std_q4=0 corruption from 48-bit (acc_m2 <<< 16) truncation & 32-bit post_ex2_q16 / post_mean_b_q8^2 overflow (Bug 3).",
+  "bugs_fixed": [
+    "Bug 1 (boed_q16_core.v L455-470): Replaced racy 4-lane non-blocking <= writes to max_lp_reg with clean combinational 4-way comparator tree (lane01_max, lane23_max, beat_max).",
+    "Bug 2 (boed_q16_core.v L483-486 vs L201-211): Fixed 1-cycle BRAM read lag in S_PASS2 by pipelining p2_rd_valid/p2_rd_beat_idx/p2_rd_act + overflow-safe 33-bit max_lp-lp subtraction so beats 0..250 align 1:1 with u_exp_lut.",
+    "Bug 3 (boed_q16_core.v L268-281, L519-536 & XDC L35-38): Replaced fake single-cycle combinational `/` operators and overflowing 32-bit post_ex2_q16 / post_mean_b_q8^2 with 3 parallel real bit-serial restoring shift-subtract dividers (18/21/35 cycles, ZERO `/` operators anywhere in RTL) + 36-bit/44-bit overflow-safe variance arithmetic; removed bogus XDC set_multicycle_path -setup 16.",
+    "Bug 4 (boed_q16_core.v L502-504): Replaced single-cycle chained 48b*16b*16b multiply + 4-way 48-bit add with pipelined df^2 pre-register -> single-DSP product register -> pairwise 48-bit adder tree -> final accumulate.",
+    "Bug 5 (boed_q16_core.v L324, caught by expanded next_probe_off_q8 testbench): Inverted Fisher alternating sign `next_sign_neg = ~r_step_idx[0]` caused opposite probe sign on all 64 steps; fixed to `next_sign_neg = r_step_idx[0]` matching Python `(step_idx + 1) % 2 == 0`.",
+    "Additional hygiene fixes: Clean reset-less synchronous BRAM inference in boed_lut_rom.v and boed_q16_core.v (12 RAMB18E2 / 12 DP16KD inferred instead of registers), 0-warning Verilator -Wall across all 4 modules, clean non-overlapping pending_out logic in boed_top_16ch.v, race-free negedge testbench driving."
+  ]
+}

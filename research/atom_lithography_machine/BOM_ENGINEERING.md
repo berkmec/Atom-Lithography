@@ -1,8 +1,8 @@
-# Atom Litografi Makinesi — Parça-Düzeyi Mühendislik BOM Analizi (`BOM_ENGINEERING.md` — `BOM v7.0 / Doküman v7.1`)
+# Atom Litografi Makinesi — Parça-Düzeyi Mühendislik BOM Analizi (`BOM_ENGINEERING.md` — `BOM v7.0 / Doküman v7.2`)
 
 > **Epistemik Beyan (`TRL 1–2 / M0`, `no_lab_measurement=true`, `no_supplier_quotes=true`):** Bu belge, kanonik 40 satırlık `BOM.csv` (`SHA-256: cee02adfd207e37bbbc6b66982226b27fa87c2be528ede2b762f72840759cfc2` — kesinlikle değiştirilmemiştir) dosyasının `BOM_DETAILED.csv` altında **`v7.0` için 180 fiziksel parça/alt-montaj satırına** (`167` `M3 v5.0 Base` + `7` `v6.0` Modüler Opsiyon [`4` `Option-Q` + `3` `Option-HPC`] + `6` `v7.0` `S7.SAFETY` sertifikasız ön emniyet tasarım paketi; `169` fiyatlı + `9` `$0` yazılım + `2` `v5.0`'da değiştirilen `$0` çift-sayım önleme satırı) açılmış parametrik maliyet çözümlemesidir. **Hiçbir satır gerçek tedarikçi fiyat teklifi değildir ve `S7.SAFETY` herhangi bir emniyet sertifikasyonu değildir** (`SEMI`, `SEMI S2` için sertifika vermez; `IEC 61508 SIL-3` bağımsız fonksiyonel emniyet değerlendirmesi gerektirir). Tüm USD değerleri satır-genişletilmiş toplamlar olup `{Liste-Çapası}` (`%13,4`), `{Model-Kalibrasyon-Exp114}` (`%42,7`), `{Varsayım}` (`%43,9`) veya `{Program-NRE-Kapsam}` (`S8` yazılım, `$0` donanım) etiketlidir.
 
-**Tarih:** 2026-11-24 *(`v7.1` epistemik temizlik & `v7.0` ön emniyet tasarım kiti entegrasyonu: `M3 Base` ve `M3 v6.0 Full` aynen korundu + `Exp150` `S7.SAFETY-01..06` ön tasarım hedefi eklendi)*  
+**Tarih:** 2026-11-25 *(`v7.2` senkronu & `v7.0` ön emniyet tasarım kiti entegrasyonu: `M3 Base` ve `M3 v6.0 Full` aynen korundu + `Exp150` `S7.SAFETY-01..06` sertifikasız `M0` ön tasarım hedefi eklendi)*  
 **Birincil Donanım Şartname Girdileri (Salt-Okunur Doğrulamalı):**
 - `results/exp139_epi_cap_process_integration/s56_hardware_spec.json` (`S5.6`: `22,40 kg`, `$67k/$95k/$145k`)
 - `results/exp140_cryo_fpga_boed_mux_readout/s65_hardware_spec.json` (`Exp140 S6.5` → BOM `S6.11`: `19,27 kg`, `$456,4k/$629,2k/$925,2k`)

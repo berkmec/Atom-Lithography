@@ -494,11 +494,14 @@ def test_auto_recal_all_4_fault_modes():
     assert uhv["beam_paused"] is True
     assert uhv["safe_resumed"] is True
 
-    # (c) 32x32 blanker 5% dead channels
+    # (c) 32x32 blanker 5% dead channels (honest wafer-stage step-and-stitch compensation)
     blank = out["S3_blanker_dead_channels"]
     assert blank["dead_channels_detected"] == 51
     assert blank["channels_remapped"] == 51
-    assert blank["throughput_after_recal_pct"] == 100.0
+    assert blank["wafer_site_coverage_after_pct"] == 100.0
+    assert 0.0 < blank["throughput_after_recal_pct"] < 100.0
+    assert blank["max_coordinate_mismatch_um"] == 0.0
+    assert blank["passed"] is True
 
     # (d) 31P +/-350 Hz thermal drift Q16.16 BOED relock
     therm = out["hyperfine_thermal_drift"]

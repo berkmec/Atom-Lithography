@@ -5,7 +5,7 @@
 //   idx     = addr_clamped[16:8]  (0..511)
 //   frac    = addr_clamped[7:0]   (0..255)
 //   y_out   = y0 + (((y1 - y0) * frac + 128) >>> 8)   if in_range else TAIL_WORD
-// Latency: 2 clock cycles (Stage 1: BRAM dual-port read; Stage 2: DSP48E2 linear interpolation).
+// Latency: 2 clock cycles (Stage 1: reset-less BRAM dual-port read; Stage 2: linear interpolation).
 `timescale 1ns/1ps
 
 module boed_lut_rom #(
@@ -41,34 +41,47 @@ module boed_lut_rom #(
     wire [8:0]  idx_b      = idx_a + 9'd1;
     wire [7:0]  frac_c     = addr_clmp[7:0];
 
-    // Pipeline Stage 1: Dual-port BRAM read
-    reg               v_s1;
-    reg               in_range_s1;
-    reg        [7:0]  frac_s1;
-    reg signed [31:0] y0_s1;
-    reg signed [31:0] y1_s1;
+    // Pipeline Stage 1A: Reset-less Dual-Port Synchronous BRAM Read (clean Yosys/Vivado BRAM inference)
+    reg [31:0] rom_dout_a;
+    reg [31:0] rom_dout_b;
+
+    always @(posedge clk) begin
+        rom_dout_a <= rom[idx_a];
+        rom_dout_b <= rom[idx_b];
+    end
+
+    // Pipeline Stage 1B: Control & Guard Metadata
+    reg        v_s1;
+    reg        in_range_s1;
+    reg        is_last_s1;
+    reg [7:0]  frac_s1;
 
     always @(posedge clk) begin
         if (!rst_n) begin
             v_s1        <= 1'b0;
             in_range_s1 <= 1'b0;
+            is_last_s1  <= 1'b0;
             frac_s1     <= 8'd0;
-            y0_s1       <= 32'sd0;
-            y1_s1       <= 32'sd0;
         end else begin
             v_s1        <= in_valid;
             in_range_s1 <= in_range_c;
+            is_last_s1  <= (idx_a == 9'd511);
             frac_s1     <= frac_c;
-            y0_s1       <= rom[idx_a];
-            y1_s1       <= (idx_a == 9'd511) ? GUARD_WORD : rom[idx_b];
         end
     end
 
     // Pipeline Stage 2: Signed 8-bit rounded linear interpolation
+    wire signed [31:0] y0_s1      = $signed(rom_dout_a);
+    wire signed [31:0] y1_s1      = is_last_s1 ? $signed(GUARD_WORD) : $signed(rom_dout_b);
     wire signed [32:0] dy_s1      = $signed({y1_s1[31], y1_s1}) - $signed({y0_s1[31], y0_s1});
-    wire signed [41:0] frac_prod  = dy_s1 * $signed({1'b0, frac_s1});
+    wire signed [41:0] dy_ext     = {{9{dy_s1[32]}}, dy_s1};
+    wire signed [41:0] frac_ext   = {34'd0, frac_s1};
+    wire signed [41:0] frac_prod  = dy_ext * frac_ext;
     wire signed [41:0] frac_round = frac_prod + 42'sd128;
-    wire signed [31:0] interp_s1  = y0_s1 + frac_round[39:8];
+    wire signed [31:0] interp_s1  = y0_s1 + $signed(frac_round[39:8]);
+
+    // Explicitly sink unused low-order rounding bits for clean -Wall linting
+    wire _unused_ok = &{1'b0, prod_addr[15:0], frac_round[41:40], frac_round[7:0]};
 
     always @(posedge clk) begin
         if (!rst_n) begin

@@ -1,13 +1,15 @@
 """First-principles industrial safety physics solvers for Atom Lithography Machine (Exp150 / H168).
 
 Covers the 5 critical/lethal cleanroom hazard domains anchored directly to upstream JSONs:
-  1. Class-4 808 nm qCW Flash Laser (S5.5, Exp130/Exp139) — ANSI Z136.1-2022 / IEC 60825-1
-  2. Toxic/Pyrophoric PH3 Phosphine (S1) & 5% H2/N2 Forming Gas (S5.6) — OSHA/ACGIH/NIOSH/ISO 10156
-  3. 10-22 keV High Voltage & Bremsstrahlung X-Ray Shielding (S1-S2, S5) — Kramers / NIST XCOM / IEC 61010-1
-  4. 20 mK / 4 K Cryogenic Helium ODH, ASME 0.5 barg OVC Relief & Exp125 Magnet Quench (S6)
+  1. Class-4 808 nm qCW Flash Laser (S5.5, Exp130/Exp139) — ANSI Z136.1-2022 / IEC 60825-1 reference
+  2. Toxic/Pyrophoric PH3 Phosphine (S1) & 5% H2/N2 Forming Gas (S5.6) — OSHA/ACGIH/NIOSH/ISO 10156 reference
+  3. 10-22 keV High Voltage & Bremsstrahlung X-Ray Shielding (S1-S2, S5) — Kramers / NIST XCOM / IEC 61010-1 reference
+  4. 20 mK / 4 K Cryogenic Helium ODH (instantaneous + room box-ODE transient), ASME 0.5 barg OVC Relief & Exp125 Magnet Quench (S6)
   5. Unplanned Power Loss (EPO / 15 kVA Online UPS Safe-Shutdown Timeline & Wafer Oxidation)
 
-Epistemic status: {Model}, {Analitik}, {Literatür}, {Varsayım} (no_lab_measurement=true, no_supplier_quotes=true).
+Epistemic status: {Model}, {Analitik}, {Literatür}, {Varsayım}
+(TRL 1-2 / M0 preliminary parametric screening — no_lab_measurement=true, no_supplier_quotes=true,
+iec61508_certified=false, semi_s2_certified=false, requires_third_party_assessment=true).
 """
 from __future__ import annotations
 
@@ -66,6 +68,126 @@ def load_upstream_anchors(root: Path) -> dict[str, Any]:
 
 
 # ---------------------------------------------------------------------------
+# 1oo2D Parametric PFD_avg Helpers (IEC 61508-6 Reference — Uncertified M0)
+# ---------------------------------------------------------------------------
+def compute_1oo2d_pfd_avg(lam_du_per_h: float, t_proof_h: float, beta_ccf: float) -> float:
+    """Compute simplified IEC 61508-6 1oo2/1oo2D average PFD on demand.
+
+    PFD_avg = (1 - beta)^2 * (lambda_DU * T_i)^2 / 3 + beta * lambda_DU * T_i / 2
+
+    Assumes lambda_DU is the dangerous-undetected failure rate (already incorporating
+    diagnostic coverage DC) and MTTR << T_i. Preliminary parametric formula only;
+    does NOT constitute IEC 61508 SIL certification.
+    """
+    x = lam_du_per_h * t_proof_h
+    return ((1.0 - beta_ccf) ** 2) * (x ** 2) / 3.0 + 0.5 * beta_ccf * x
+
+
+def classify_parametric_pfd_band(pfd_avg: float) -> str:
+    """Map parametric PFD_avg to its IEC 61508 numerical PFD band (not certification)."""
+    if pfd_avg < 1.0e-3:
+        return "SIL-3_BAND"
+    if pfd_avg < 1.0e-2:
+        return "SIL-2_BAND"
+    if pfd_avg < 1.0e-1:
+        return "SIL-1_BAND"
+    return "BELOW_SIL-1"
+
+
+def classify_iec61508_pfd_decadal_band(pfd_avg: float) -> str:
+    """Map PFD_avg to decadal IEC 61508-1 Table 2 band (noting HFT=1 cap at SIL-3)."""
+    if pfd_avg < 1.0e-4:
+        return "<1e-4 (SIL-4 PFD decade; capped at SIL-3 design target by HFT=1)"
+    if pfd_avg < 1.0e-3:
+        return "1e-4..1e-3 (SIL-3 PFD decade)"
+    if pfd_avg < 1.0e-2:
+        return "1e-3..1e-2 (SIL-2 PFD decade)"
+    if pfd_avg < 1.0e-1:
+        return "1e-2..1e-1 (SIL-1 PFD decade)"
+    return ">=1e-1 (Below SIL-1 PFD band)"
+
+
+def max_lambda_du_for_sil3_band(t_proof_h: float, beta_ccf: float, pfd_limit: float = 1.0e-3) -> float:
+    """Exact positive root of 1oo2D PFD_avg(lambda_DU, beta) = pfd_limit."""
+    a = ((1.0 - beta_ccf) ** 2) / 3.0
+    b = 0.5 * beta_ccf
+    disc = b * b + 4.0 * a * pfd_limit
+    x_max = (-b + math.sqrt(disc)) / (2.0 * a)
+    return x_max / t_proof_h
+
+
+def run_1oo2d_pfd_sensitivity_sweep(
+    lam_du_nominal: float = 2.5e-7,
+    t_proof_h: float = 8760.0,
+    multipliers: tuple[float, ...] = (0.5, 1.0, 3.0, 10.0, 25.0),
+    betas: tuple[float, ...] = (0.02, 0.05, 0.10),
+    sil3_limit: float = 1.0e-3,
+) -> dict[str, Any]:
+    """Sweep assumed lambda_DU uncertainty and common-cause beta to expose SIL-3 -> SIL-2 degradation."""
+    cases: list[dict[str, Any]] = []
+    by_beta: dict[str, list[dict[str, Any]]] = {}
+    boundaries_by_beta: dict[str, dict[str, Any]] = {}
+
+    for beta in betas:
+        b_key = f"beta_{int(round(beta * 100))}pct"
+        b_rows: list[dict[str, Any]] = []
+        lam_max = max_lambda_du_for_sil3_band(t_proof_h, beta, sil3_limit)
+        boundaries_by_beta[b_key] = {
+            "beta_ccf": beta,
+            "beta_ccf_pct": int(round(beta * 100)),
+            "max_lambda_du_for_sil3_band_per_h": float(f"{lam_max:.4e}"),
+            "max_multiplier_vs_nominal": round(lam_max / lam_du_nominal, 2),
+        }
+        for mult in multipliers:
+            lam = lam_du_nominal * mult
+            pfd_1ch = 0.5 * lam * t_proof_h
+            pfd_1oo2 = compute_1oo2d_pfd_avg(lam, t_proof_h, beta)
+            in_sil3 = bool(pfd_1oo2 < sil3_limit)
+            band = classify_parametric_pfd_band(pfd_1oo2)
+            row = {
+                "lambda_du_multiplier": mult,
+                "lambda_du_per_h": float(f"{lam:.4e}"),
+                "beta_ccf": beta,
+                "beta_ccf_pct": int(round(beta * 100)),
+                "pfd_single_channel": float(f"{pfd_1ch:.4e}"),
+                "pfd_avg_1oo2d": float(f"{pfd_1oo2:.4e}"),
+                "sil3_pfd_band_met": in_sil3,
+                "parametric_pfd_band": band,
+                "iec61508_pfd_decadal_band": classify_iec61508_pfd_decadal_band(pfd_1oo2),
+                "degraded_to_sil2": bool(sil3_limit <= pfd_1oo2 < 1.0e-2),
+            }
+            cases.append(row)
+            b_rows.append(row)
+        by_beta[b_key] = b_rows
+
+    n_sil3 = sum(1 for c in cases if c["sil3_pfd_band_met"])
+    n_sil2 = sum(1 for c in cases if c["degraded_to_sil2"])
+    n_worse = sum(1 for c in cases if c["pfd_avg_1oo2d"] >= 1.0e-2)
+    degraded_cases = [
+        f"{c['lambda_du_multiplier']:g}x_lambda_du_beta_{c['beta_ccf_pct']}pct (PFD={c['pfd_avg_1oo2d']:.3e}, {c['parametric_pfd_band']})"
+        for c in cases
+        if not c["sil3_pfd_band_met"]
+    ]
+    return {
+        "lambda_du_nominal_per_h": lam_du_nominal,
+        "proof_test_interval_h": t_proof_h,
+        "sil3_band_limit": sil3_limit,
+        "lambda_du_multipliers": list(multipliers),
+        "beta_ccf_values": list(betas),
+        "sil3_band_boundaries_by_beta": boundaries_by_beta,
+        "by_beta": by_beta,
+        "cases": cases,
+        "summary": {
+            "n_cases_total": len(cases),
+            "n_cases_in_sil3_pfd_band": n_sil3,
+            "n_cases_degraded_to_sil2": n_sil2,
+            "n_cases_degraded_below_sil2": n_worse,
+            "degraded_cases": degraded_cases,
+        },
+    }
+
+
+# ---------------------------------------------------------------------------
 # 1. Class-4 808 nm Flash Laser Safety (ANSI Z136.1-2022 / IEC 60825-1)
 # ---------------------------------------------------------------------------
 def analyze_laser_safety(anchors: dict[str, Any]) -> dict[str, Any]:
@@ -120,15 +242,25 @@ def analyze_laser_safety(anchors: dict[str, Any]) -> dict[str, Any]:
             "pass_class1_embedded": bool(res_wafer < mpe_eye_4pulse_J_cm2),
         }
 
-    # IEC 61508 SIL-3 dual-channel (1oo2D) shutter + diode-driver hardwire cutoff PFD_avg
-    # Standard 1oo2 formula: PFD_avg = (1 - beta)^2 * (lambda_DU * T_i)^2 / 3 + beta * lambda_DU * T_i / 2
-    # Dual redundant channel: lambda_DU = 2.5e-7 /h (high-integrity solenoid/blade + contactor),
-    # proof-test interval T_i = 8760 h (1 yr), common-cause beta = 0.02 (diverse mechanical + electrical cutoff)
+    # IEC 61508-6 preliminary parametric 1oo2D PFD_avg calculation (NOT certified)
+    # Assumed nominal per-channel lambda_DU = 2.5e-7 /h (high-integrity solenoid/blade + contactor),
+    # proof-test interval T_i = 8760 h (1 yr), common-cause beta = 0.02 (diverse mechanical + electrical cutoff).
+    # Sensitivity sweep over lambda_DU in {0.5x, 1x, 3x, 10x, 25x} and beta in {2%, 5%, 10%} explicitly
+    # identifies where PFD_avg degrades out of the <1e-3 SIL-3 band into the SIL-2 band.
     lam_du = 2.5e-7
     t_proof_h = 8760.0
     beta_ccf = 0.02
     pfd_single = 0.5 * lam_du * t_proof_h
-    pfd_sil3_1oo2d = ((1.0 - beta_ccf) ** 2) * ((lam_du * t_proof_h) ** 2) / 3.0 + 0.5 * beta_ccf * lam_du * t_proof_h
+    pfd_sil3_1oo2d = compute_1oo2d_pfd_avg(lam_du, t_proof_h, beta_ccf)
+    sil3_band_limit = 1.0e-3
+    sil3_pfd_band_met_nominal = bool(pfd_sil3_1oo2d < sil3_band_limit)
+    pfd_sensitivity_sweep = run_1oo2d_pfd_sensitivity_sweep(
+        lam_du_nominal=lam_du,
+        t_proof_h=t_proof_h,
+        multipliers=(0.5, 1.0, 3.0, 10.0, 25.0),
+        betas=(0.02, 0.05, 0.10),
+        sil3_limit=sil3_band_limit,
+    )
     shutter_close_ms = 3.2  # spring-return rotary blade + <0.1 ms diode-driver crowbar disable
 
     return {
@@ -153,13 +285,27 @@ def analyze_laser_safety(anchors: dict[str, Any]) -> dict[str, Any]:
         "nhz_diffuse_m": round(nhz_diffuse_m, 2),
         "od_sweep": od_sweep,
         "interlock_sil3": {
-            "architecture": "1oo2D (Diverse: <0.1 ms HV diode-driver cut + 3.2 ms spring-return blade shutter)",
+            "architecture": "1oo2D target (Diverse: <0.1 ms HV diode-driver cut + 3.2 ms spring-return blade shutter)",
             "shutter_close_ms": shutter_close_ms,
+            "nominal_assumptions": {
+                "lambda_du_per_h": lam_du,
+                "proof_test_interval_h": t_proof_h,
+                "beta_ccf": beta_ccf,
+                "hft": 1,
+                "epistemic_note": "Assumed nominal lambda_DU and beta_ccf; not vendor-FMEDA measured or certified.",
+            },
             "pfd_single_channel": float(f"{pfd_single:.4e}"),
             "pfd_avg_1oo2d": float(f"{pfd_sil3_1oo2d:.4e}"),
-            "sil3_band_limit": 1.0e-3,
-            "sil3_achieved": bool(1e-4 <= pfd_sil3_1oo2d < 1e-3 or pfd_sil3_1oo2d < 1e-3),
-            "embedded_class": "Class 1 (with interlocked OD8 enclosure & CF63 shutter)",
+            "sil3_band_limit": sil3_band_limit,
+            "sil3_pfd_band_met_at_nominal_assumed_lambda_du": sil3_pfd_band_met_nominal,
+            "parametric_pfd_band_at_nominal": classify_parametric_pfd_band(pfd_sil3_1oo2d),
+            "iec61508_pfd_decadal_band_at_nominal": classify_iec61508_pfd_decadal_band(pfd_sil3_1oo2d),
+            "iec61508_certified": False,
+            "semi_s2_certified": False,
+            "certification_status": "PRELIMINARY_PARAMETRIC_CALCULATION_NOT_CERTIFIED",
+            "requires_third_party_assessment": True,
+            "embedded_class_design_target": "Class 1 embedded target (interlocked OD8 enclosure & CF63 shutter; requires third-party IEC 60825-1 / ANSI Z136.1 verification)",
+            "pfd_sensitivity_sweep": pfd_sensitivity_sweep,
         },
     }
 
@@ -424,13 +570,75 @@ def analyze_hv_and_xray_safety(anchors: dict[str, Any]) -> dict[str, Any]:
             "discharge_to_50V_10kV_ms": round(t_50V_10kV_ms, 2),
             "discharge_to_50V_22kV_ms": round(t_50V_22kV_ms, 2),
             "iec61010_pass": bool(e_22kV_J < 0.50 and t_50V_22kV_ms < 50.0),
+            "iec61010_certified": False,
         },
     }
 
 
 # ---------------------------------------------------------------------------
-# 4. Cryogenic Helium ODH, ASME 0.5 barg OVC Relief & Exp125 Magnet Quench
+# 4. Cryogenic Helium ODH (Static + Room Box-ODE Transient), ASME Relief & Quench
 # ---------------------------------------------------------------------------
+def solve_room_odh_box_ode(
+    v_room_m3: float,
+    v_he_stp_m3: float,
+    t_release_s: float,
+    ach: float,
+    o2_amb_pct: float = 20.95,
+    t_end_s: float = 600.0,
+    dt_s: float = 0.25,
+) -> dict[str, Any]:
+    """Well-mixed constant-pressure room ODH box-ODE transient via RK4.
+
+    d(O2)/dt = (Q_vent / V_room) * O2_amb - ((Q_vent + Q_He(t)) / V_room) * O2(t)
+
+    For ach == 0 (HVAC loss), exact closed-form minimum is O2_amb * exp(-V_He / V_room).
+    """
+    q_vent = v_room_m3 * ach / 3600.0
+    q_he_const = v_he_stp_m3 / t_release_s
+    n_steps = int(round(t_end_s / dt_s))
+    t_arr = np.linspace(0.0, t_end_s, n_steps + 1)
+    o2_arr = np.empty_like(t_arr)
+    o2 = o2_amb_pct
+    o2_arr[0] = o2
+
+    for i in range(n_steps):
+        t0 = float(t_arr[i])
+        # Piecewise-constant release: steps wholly before t_release_s use q_he_const across all 4 RK4 stages
+        q_he_step = q_he_const if (t0 + 0.5 * dt_s) < t_release_s else 0.0
+
+        def _rhs_step(o2_val: float) -> float:
+            return (q_vent * o2_amb_pct - (q_vent + q_he_step) * o2_val) / v_room_m3
+
+        k1 = _rhs_step(o2)
+        k2 = _rhs_step(o2 + 0.5 * dt_s * k1)
+        k3 = _rhs_step(o2 + 0.5 * dt_s * k2)
+        k4 = _rhs_step(o2 + dt_s * k3)
+        o2 = max(0.0, min(o2_amb_pct, o2 + (dt_s / 6.0) * (k1 + 2.0 * k2 + 2.0 * k3 + k4)))
+        o2_arr[i + 1] = o2
+
+    idx_min = int(np.argmin(o2_arr))
+    o2_min = float(o2_arr[idx_min])
+    t_min_s = float(t_arr[idx_min])
+    time_below_19p5_s = float(np.sum(o2_arr < 19.5) * dt_s)
+    o2_zero_vent_exact = o2_amb_pct * math.exp(-v_he_stp_m3 / v_room_m3)
+    # Sample every 5 s (step=20 at dt=0.25 s) for compact JSON series
+    stride = max(1, int(round(5.0 / dt_s)))
+    return {
+        "room_volume_m3": v_room_m3,
+        "he_released_stp_m3": round(v_he_stp_m3, 3),
+        "release_duration_s": t_release_s,
+        "ventilation_ach": ach,
+        "o2_min_pct": round(o2_min, 4),
+        "t_at_o2_min_s": round(t_min_s, 2),
+        "o2_final_600s_pct": round(float(o2_arr[-1]), 4),
+        "time_below_osha_19p5pct_s": round(time_below_19p5_s, 2),
+        "passes_osha_19p5pct": bool(o2_min >= 19.5),
+        "analytical_zero_vent_limit_O2_pct": round(o2_zero_vent_exact, 4),
+        "t_s": [round(float(x), 1) for x in t_arr[::stride]],
+        "o2_pct": [round(float(x), 4) for x in o2_arr[::stride]],
+    }
+
+
 def analyze_cryo_odh_and_quench(anchors: dict[str, Any]) -> dict[str, Any]:
     # Dry closed-cycle LD400 + PT420 total gaseous He inventory (STP m^3)
     v_he_dr_mix_m3 = 0.065   # ~65 L STP 3He/4He dilution mixture
@@ -450,6 +658,15 @@ def analyze_cryo_odh_and_quench(anchors: dict[str, Any]) -> dict[str, Any]:
             "dry_passes_osha_19p5pct": bool(o2_dry >= 19.5),
             "wet_100L_LHe_comparison_O2_pct": round(o2_wet, 2),
         }
+
+    # Room ODH box-ODE transient sweep (active cleanroom 20 ACH vs HVAC failure 0 ACH, plus 15 m^3 closet & wet LHe)
+    box_ode_transient = {
+        "dry_60m3_20ACH": solve_room_odh_box_ode(60.0, v_he_total_m3, t_release_s=10.0, ach=20.0, o2_amb_pct=o2_amb),
+        "dry_60m3_0ACH_hvac_loss": solve_room_odh_box_ode(60.0, v_he_total_m3, t_release_s=10.0, ach=0.0, o2_amb_pct=o2_amb),
+        "dry_15m3_6ACH": solve_room_odh_box_ode(15.0, v_he_total_m3, t_release_s=10.0, ach=6.0, o2_amb_pct=o2_amb),
+        "dry_15m3_0ACH_hvac_loss": solve_room_odh_box_ode(15.0, v_he_total_m3, t_release_s=10.0, ach=0.0, o2_amb_pct=o2_amb),
+        "wet_100L_60m3_20ACH": solve_room_odh_box_ode(60.0, 75.7, t_release_s=60.0, ach=20.0, o2_amb_pct=o2_amb),
+    }
 
     # ASME Sec VIII Div 1 UG-125 / CGA S-1.3 OVC 0.5 barg Burst Disk & Relief Sizing
     # Exact Saint-Venant isentropic nozzle flow (handles both subsonic P2/P1 > pr_crit and choked regimes)
@@ -510,6 +727,7 @@ def analyze_cryo_odh_and_quench(anchors: dict[str, Any]) -> dict[str, Any]:
             "total_with_20pct_margin_stp_m3": round(v_he_total_m3, 3),
             "osha_limit_O2_pct": 19.5,
             "room_sweep": room_sweep,
+            "box_ode_transient": box_ode_transient,
         },
         "asme_ovc_relief": {
             "set_pressure_barg": p_set_barg,
@@ -581,7 +799,7 @@ def analyze_epo_ups_shutdown(anchors: dict[str, Any]) -> dict[str, Any]:
 
     sequence = [
         {"t_ms": 0.0,       "action": "Online double-conversion UPS zero-transfer hold (0 ms bus continuity)", "subsystem": "S7.SAFETY"},
-        {"t_ms": 3.2,       "action": "SIL-3 PLC cuts S5.5 808 nm diode driver & drops dual blade shutter", "subsystem": "S5.5"},
+        {"t_ms": 3.2,       "action": "SIL-3 target safety PLC cuts S5.5 808 nm diode driver & drops dual blade shutter", "subsystem": "S5.5"},
         {"t_ms": 18.3,      "action": "S1-S2 HV PSU inhibited; active 2 MOhm crowbar discharges 22 kV < 50 V", "subsystem": "S1/S2"},
         {"t_ms": 45.0,      "action": "S5.6 MBE pneumatic shutter closed; PBN heater (400 W) & SDS PH3 slam-shut", "subsystem": "S5.6/S1"},
         {"t_ms": t_valve_ms,"action": "Spring-return all-metal UHV gate valves (S5.3 LL + S5.2 foreline) seal", "subsystem": "S5"},

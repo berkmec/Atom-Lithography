@@ -116,8 +116,8 @@ class FPGACoreConfig:
     bin_step_Hz: int = 10             # integer Hz per grid step
     n_home_bins: int = 301            # Stage-1B Bayesian homing bins
     pipe_pass1_cycles: int = 12       # LUT + sub + sqr + mul + acc + max pipeline depth
-    pipe_pass2_cycles: int = 14       # sub-max + exp-LUT + Z/M1/M2 DSP48E2 MAC depth
-    div_cordic_argmax_cycles: int = 56  # Radix-4 divider + CORDIC isqrt + Fisher argmax + DDS
+    pipe_pass2_cycles: int = 14       # BRAM align + neg_x + exp-LUT + pipelined Z/M1/M2 MAC depth
+    div_cordic_argmax_cycles: int = 56  # 3x bit-serial restoring dividers (18/21/35 cyc) + 16-stage isqrt + Fisher argmax
     n_parallel_engines: int = 16      # 16 simultaneous BOED engines per ZU48DR board
 
     # ZU48DR RFSoC reference capacity (Xilinx DS926 datasheet anchor)
@@ -252,12 +252,17 @@ class Q1616BOEDCore:
         )
         return new_lp_q16, trace
 
-    def resource_budget(self) -> dict[str, Any]:
-        """Hardware synthesis resource & power estimate for ZU48DR RFSoC (1 & 16 engines)."""
+    def resource_budget(self, yosys_measured_pre_pnr: dict[str, Any] | None = None) -> dict[str, Any]:
+        """Hardware synthesis resource & power budget for ZU48DR RFSoC (1 & 16 engines).
+
+        Explicitly distinguishes the analytical Vivado post-P&R target estimate (which assumes
+        time-shared / Vivado-packed DSP48E2 inference) from direct Yosys pre-P&R cell counts
+        when ``yosys_measured_pre_pnr`` is supplied from real Yosys synthesis.
+        """
         c = self.cfg
-        # Per-engine resource breakdown (P=4 SIMD lanes):
+        # Analytical Vivado post-P&R target estimate (P=4 SIMD lanes):
         #   - 4 lanes x (1 LUT interp mul + 1 resid^2 + 1 inv_2var mul + 1 exp interp + 2 M1/M2 MAC) = 24 DSP48E2
-        #   - + 4 DSP48E2 for divider/NCO/Fisher argmax = 28 DSP48E2/engine
+        #   - + 4 DSP48E2 for divider/NCO/Fisher argmax = 28 DSP48E2/engine (assumes DSP packing/time-sharing)
         dsp_per_eng = 6 * c.simd_lanes + 4
         # BRAM36: 1 dual-port Lorentzian LUT + 1 exp LUT + 2 ping-pong posterior/grid SRAM = 4 BRAM36/engine
         bram_per_eng = 4
@@ -274,8 +279,10 @@ class Q1616BOEDCore:
         # Full ZU48DR board power: static + PS + 8x ADC/DAC RF tiles (~32 W) + 16 BOED engines (~2.9 W) + IO (~3.1 W)
         board_power_W = 32.0 + n * dyn_w_per_eng + 3.1
 
-        return {
+        out: dict[str, Any] = {
             "target_fpga": "Xilinx Zynq UltraScale+ RFSoC ZU48DR (8x 5GSPS ADC / 8x 10GSPS DAC)",
+            "estimation_kind": "analytical_vivado_post_pnr_estimate",
+            "no_vendor_vivado_pnr": True,
             "f_clk_MHz": c.f_clk_MHz,
             "simd_lanes": c.simd_lanes,
             "cycles_per_boed_step": self.cycles_per_step,
@@ -304,7 +311,55 @@ class Q1616BOEDCore:
                 "board_total_power_W": round(board_power_W, 2),
                 "cryo_heat_load_W": 0.0,
             },
+            "epistemic_note": (
+                "Analytical per-engine/16ch budget represents a vendor Vivado post-P&R estimate "
+                "(assuming 1-DSP packed multipliers; no Vivado run on host). Unshared full-32x32 "
+                "Q16.16 RTL measured by Yosys synth_xilinx -family xcup pre-P&R is tracked "
+                "separately under yosys_measured_pre_pnr."
+            ),
         }
+
+        if yosys_measured_pre_pnr is not None:
+            out["yosys_measured_pre_pnr"] = self.summarize_yosys_vs_analytical(yosys_measured_pre_pnr)
+        return out
+
+    def summarize_yosys_vs_analytical(self, yosys_stats: dict[str, Any]) -> dict[str, Any]:
+        """Compare real Yosys pre-P&R cell counts against ZU48DR capacity and analytical estimates."""
+        c = self.cfg
+        summary: dict[str, Any] = {
+            "measurement_kind": "yosys_pre_pnr_measured",
+            "no_vendor_vivado_pnr": True,
+            "targets": {},
+        }
+        for key, rec in yosys_stats.items():
+            if not isinstance(rec, dict) or "lut_total" not in rec:
+                continue
+            entry = {
+                "family": rec.get("family"),
+                "top_module": rec.get("top_module"),
+                "lut_total": int(rec["lut_total"]),
+                "ff_total": int(rec["ff_total"]),
+                "bram_blocks": int(rec["bram_blocks"]),
+                "bram36_equiv": float(rec["bram36_equiv"]),
+                "dsp_total": int(rec["dsp_total"]),
+                "carry_cells": int(rec.get("carry_cells", 0)),
+                "total_cells": int(rec.get("total_cells", 0)),
+            }
+            if rec.get("family") == "xcup":
+                entry["zu48dr_pct"] = {
+                    "dsp48e2_pct": round(100.0 * entry["dsp_total"] / c.rfsoc_total_dsp48e2, 2),
+                    "bram36_equiv_pct": round(100.0 * entry["bram36_equiv"] / c.rfsoc_total_bram36, 2),
+                    "lut_pct": round(100.0 * entry["lut_total"] / c.rfsoc_total_lut, 2),
+                    "ff_pct": round(100.0 * entry["ff_total"] / c.rfsoc_total_ff, 2),
+                }
+                entry["fits_zu48dr"] = bool(
+                    entry["dsp_total"] <= c.rfsoc_total_dsp48e2
+                    and entry["bram36_equiv"] <= c.rfsoc_total_bram36
+                    and entry["lut_total"] <= c.rfsoc_total_lut
+                    and entry["ff_total"] <= c.rfsoc_total_ff
+                )
+            summary["targets"][key] = entry
+        return summary
 
 
 def run_paired_fp64_vs_q16_benchmark(

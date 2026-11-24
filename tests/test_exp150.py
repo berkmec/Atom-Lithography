@@ -4,11 +4,14 @@ from __future__ import annotations
 import json
 import math
 import struct
+import sys
 from pathlib import Path
 
 import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 EXP_DIR = ROOT / "experiments/exp150_industrial_safety_fmea_hazop"
 RES_DIR = ROOT / "results/exp150_industrial_safety_fmea_hazop"
 
@@ -57,6 +60,117 @@ def test_sf1_ansi_laser_physics_and_sil3(exp150_data: dict) -> None:
     assert las["interlock_sil3"]["shutter_close_ms"] <= 5.0
     assert las["interlock_sil3"]["pfd_avg_1oo2d"] < 1e-3
     assert las["interlock_sil3"]["pfd_avg_1oo2d"] < las["interlock_sil3"]["pfd_single_channel"]
+
+
+def test_epistemic_certification_boundaries_and_no_false_sil3_claim(
+    exp150_data: dict, safety_spec: dict
+) -> None:
+    raw_exp150 = (RES_DIR / "exp150.json").read_text(encoding="utf-8")
+    raw_spec = (RES_DIR / "s_safety_spec.json").read_text(encoding="utf-8")
+    assert "sil3_achieved" not in raw_exp150
+    assert "sil3_achieved" not in raw_spec
+
+    il = exp150_data["hazard_1_laser_s55"]["interlock_sil3"]
+    assert "sil3_achieved" not in il
+
+    for container in (exp150_data, il):
+        assert container["iec61508_certified"] is False
+        assert container["semi_s2_certified"] is False
+        assert container["certification_status"] == "PRELIMINARY_PARAMETRIC_CALCULATION_NOT_CERTIFIED"
+        assert container["sil3_pfd_band_met_at_nominal_assumed_lambda_du"] is True
+        assert container["requires_third_party_assessment"] is True
+
+    assert safety_spec["iec61508_certified"] is False
+    assert safety_spec["semi_s2_certified"] is False
+    assert safety_spec["certification_status"] == "PRELIMINARY_PARAMETRIC_CALCULATION_NOT_CERTIFIED"
+    assert safety_spec["requires_third_party_assessment"] is True
+    assert "Lab-Ready" not in safety_spec["title"]
+    assert exp150_data["hazard_3_hv_and_xray"]["hv_crowbar"]["iec61010_certified"] is False
+
+    for row in exp150_data["fmea_25_rows"]:
+        assert row["sil_certification_status"] == "DESIGN_TARGET_ONLY_NOT_CERTIFIED"
+    for node in exp150_data["hazop_10_nodes"]:
+        assert node["sil_certification_status"] == "DESIGN_TARGET_ONLY_NOT_CERTIFIED"
+    for item in safety_spec["items"]:
+        assert item["sil_certification_status"] == "DESIGN_TARGET_ONLY_NOT_CERTIFIED"
+
+
+def test_1oo2d_pfd_lambda_du_and_beta_sensitivity_sweep(exp150_data: dict) -> None:
+    from experiments.exp150_industrial_safety_fmea_hazop.safety_physics150 import (
+        classify_parametric_pfd_band,
+        compute_1oo2d_pfd_avg,
+        max_lambda_du_for_sil3_band,
+    )
+
+    il = exp150_data["hazard_1_laser_s55"]["interlock_sil3"]
+    sw = il["pfd_sensitivity_sweep"]
+    lam_nom = sw["lambda_du_nominal_per_h"]
+    t_i = sw["proof_test_interval_h"]
+
+    assert set((0.5, 1.0, 3.0, 10.0)).issubset(set(sw["lambda_du_multipliers"]))
+    assert sw["beta_ccf_values"] == [0.02, 0.05, 0.10]
+    assert len(sw["cases"]) == len(sw["lambda_du_multipliers"]) * len(sw["beta_ccf_values"])
+
+    # Independently recompute every single grid cell from IEC 61508-6 1oo2 formula
+    for c in sw["cases"]:
+        lam = lam_nom * c["lambda_du_multiplier"]
+        beta = c["beta_ccf"]
+        expected_pfd = ((1.0 - beta) ** 2) * ((lam * t_i) ** 2) / 3.0 + 0.5 * beta * lam * t_i
+        assert math.isclose(c["pfd_avg_1oo2d"], expected_pfd, rel_tol=1e-3)
+        assert c["sil3_pfd_band_met"] is (expected_pfd < 1.0e-3)
+        assert c["parametric_pfd_band"] == classify_parametric_pfd_band(expected_pfd)
+
+    # Monotonicity in lambda_DU multiplier for each beta, and in beta for each multiplier
+    for b_key in ("beta_2pct", "beta_5pct", "beta_10pct"):
+        pfds = [r["pfd_avg_1oo2d"] for r in sw["by_beta"][b_key]]
+        assert pfds == sorted(pfds) and len(set(pfds)) == len(pfds)
+    for i in range(len(sw["lambda_du_multipliers"])):
+        p2 = sw["by_beta"]["beta_2pct"][i]["pfd_avg_1oo2d"]
+        p5 = sw["by_beta"]["beta_5pct"][i]["pfd_avg_1oo2d"]
+        p10 = sw["by_beta"]["beta_10pct"][i]["pfd_avg_1oo2d"]
+        assert p2 < p5 < p10
+
+    # Must clearly show BOTH SIL-3 retention (nominal) and SIL-2 degradation (10x @ beta=10%)
+    b10_10x = next(r for r in sw["by_beta"]["beta_10pct"] if r["lambda_du_multiplier"] == 10.0)
+    assert b10_10x["pfd_avg_1oo2d"] >= 1.0e-3
+    assert b10_10x["sil3_pfd_band_met"] is False
+    assert b10_10x["parametric_pfd_band"] == "SIL-2_BAND"
+    assert sw["summary"]["n_cases_in_sil3_pfd_band"] > 0
+    assert sw["summary"]["n_cases_degraded_to_sil2"] >= 4
+
+    # Analytical SIL-3 band boundaries invert the 1oo2D quadratic exactly
+    for b_info in sw["sil3_band_boundaries_by_beta"].values():
+        beta = b_info["beta_ccf"]
+        lam_lim = max_lambda_du_for_sil3_band(t_i, beta, 1.0e-3)
+        assert math.isclose(compute_1oo2d_pfd_avg(lam_lim, t_i, beta), 1.0e-3, rel_tol=1e-9)
+        assert math.isclose(b_info["max_lambda_du_for_sil3_band_per_h"], lam_lim, rel_tol=1e-3)
+
+
+def test_cryo_odh_room_box_ode_transient(exp150_data: dict) -> None:
+    odh = exp150_data["hazard_4_cryo_odh_and_quench"]["helium_odh"]
+    tr = odh["box_ode_transient"]
+    v_he = odh["total_with_20pct_margin_stp_m3"]
+
+    # Zero-ventilation RK4 ODE must match analytical exponential displacement O2_amb * exp(-V_He / V_room)
+    for key, v_room in (("dry_60m3_0ACH_hvac_loss", 60.0), ("dry_15m3_0ACH_hvac_loss", 15.0)):
+        exact = 20.95 * math.exp(-v_he / v_room)
+        assert math.isclose(tr[key]["o2_min_pct"], exact, abs_tol=1e-3)
+        assert math.isclose(tr[key]["o2_final_600s_pct"], exact, abs_tol=1e-3)
+
+    # Active ventilation improves minimum O2 and restores O2 by 600 s
+    assert tr["dry_60m3_20ACH"]["o2_min_pct"] > tr["dry_60m3_0ACH_hvac_loss"]["o2_min_pct"]
+    assert tr["dry_60m3_20ACH"]["o2_final_600s_pct"] > 20.9
+    assert tr["dry_60m3_20ACH"]["time_below_osha_19p5pct_s"] == 0.0
+    assert tr["dry_60m3_0ACH_hvac_loss"]["time_below_osha_19p5pct_s"] == 0.0
+
+    # Small 15 m^3 closet dips below 19.5% OSHA (justifying mandatory wall O2 monitor)
+    assert tr["dry_15m3_0ACH_hvac_loss"]["passes_osha_19p5pct"] is False
+    assert tr["dry_15m3_0ACH_hvac_loss"]["time_below_osha_19p5pct_s"] > 500.0
+    assert tr["dry_15m3_6ACH"]["o2_final_600s_pct"] > tr["dry_15m3_0ACH_hvac_loss"]["o2_final_600s_pct"]
+
+    # Wet 100 L LHe contrast drops catastrophically below 10% O2 even at 20 ACH
+    assert tr["wet_100L_60m3_20ACH"]["o2_min_pct"] < 10.0
+    assert tr["wet_100L_60m3_20ACH"]["passes_osha_19p5pct"] is False
 
 
 def test_sf2_ph3_dispersion_and_forming_gas(exp150_data: dict) -> None:

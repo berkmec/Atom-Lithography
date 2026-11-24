@@ -21,7 +21,7 @@ from digital_twin151 import run_v7_digital_twin  # noqa: E402
 def main() -> None:
     res = run_v7_digital_twin(write_outputs=True)
     cert = res["v7_master_certificate"]
-    print(f"Exp151 (H169) Master v7.0 Digital Twin finished in {res['runtime_s']:.3f}s")
+    print(f"Exp151 (H169) Master v{res['version']} Digital Twin finished in {res['runtime_s']:.3f}s")
     print(f"Verdicts: {res['n_passed']}/{res['n_total']} PASS | success_rule_met={res['success_rule_met']}")
     for k, v in res["verdicts"].items():
         print(f"  [{'PASS' if v else 'FAIL'}] {k}")

@@ -1,6 +1,6 @@
 # CAD Paketi v6.0 — Atom Litografi Makinesi (`Exp124`..`Exp140` + `Option-Q` [`Exp142`] + `Option-HPC` [`Exp143`] Kilitli)
 
-Sürüm: `6.0-exp142-exp143-option-qhpc-locked` (2026-11-24 `v7.1` epistemik kapsam notu) · Birim: `mm` · Genel Tolerans: `ISO 2768-mK`  
+Sürüm: `6.0-exp142-exp143-option-qhpc-locked` (2026-11-25 `v7.2` epistemik kapsam notu) · Birim: `mm` · Genel Tolerans: `ISO 2768-mK`  
 Durum: **TRL 1–2 (`M0`) nominal statik parametrik konsept CAD modeli (`no_lab_measurement = true`).** Fiziksel donanım veya laboratuvar ölçümü değildir.
 
 > [!NOTE]

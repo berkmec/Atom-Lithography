@@ -187,19 +187,25 @@ def render_summary_md(payload: dict[str, Any]) -> str:
     hazop = payload["hazop_10_nodes"]
     spec = payload["s_safety_spec"]
     verdicts = payload["preregistered_verdicts"]
+    il = las["interlock_sil3"]
+    pfd_sw = il["pfd_sensitivity_sweep"]
     n_pass = sum(1 for v in verdicts.values() if v["pass"])
 
     lines: list[str] = [
-        "# Exp150 (`H168`): Endüstriyel Emniyet, HAZOP, 25-Satırlı FMEA & Gerçek Laboratuvar Güvenlik Kiti (`S7.SAFETY`)",
+        "# Exp150 (`H168`): Ön Emniyet Tasarım Hedefi, HAZOP, 25-Satırlı FMEA & `S7.SAFETY` Kiti Taslağı (Sertifikasız `M0`)",
         "",
         f"- **Tarih:** {payload['date']}  ",
-        f"- **Hipotez:** `H168` (`Exp150_industrial_safety_fmea_hazop`, `v7.0` Wave A)  ",
-        f"- **Ön-Kayıtlı Kriter Kararı:** **{n_pass}/{len(verdicts)} PASS** (`{payload['overall_verdict']}`)  ",
-        "- **Epistemik Durum:** `{Model}`, `{Analitik}`, `{Literatür}`, `{Varsayım}` — `no_lab_measurement=true`, `no_supplier_quotes=true`. Tüm güvenlik limitleri uluslararası standartlara (`ANSI Z136.1-2022`, `IEC 60825-1`, `OSHA 29 CFR 1910.1000/146`, `ACGIH`, `NIOSH`, `ISO 10156`, `ICRP 103`, `NIST XCOM`, `IEC 61010-1`, `ASME BPVC Sec VIII`, `IEC 61508`, `SEMI S2`) göre analitik olarak hesaplanmıştır; gerçek laboratuvar saha ölçümü veya tedarikçi teklifi değildir. Kapanış onayı (`KABUL`) yalnızca sıfır-bağlamlı **Carbon** denetimiyle verilebilir.",
+        f"- **Hipotez:** `H168` (`Exp150_industrial_safety_fmea_hazop`, `v7.0` / `v7.2`)  ",
+        f"- **Ön-Kayıtlı Model Kriter Kararı:** **{n_pass}/{len(verdicts)} PASS** (`{payload['overall_verdict']}`, yazılım/analitik model kontrolü)  ",
+        f"- **Sertifikasyon Durumu:** `{payload['certification_status']}` — `iec61508_certified = {str(payload['iec61508_certified']).lower()}`, `semi_s2_certified = {str(payload['semi_s2_certified']).lower()}`, `sil3_pfd_band_met_at_nominal_assumed_lambda_du = {str(payload['sil3_pfd_band_met_at_nominal_assumed_lambda_du']).lower()}`, `requires_third_party_assessment = {str(payload['requires_third_party_assessment']).lower()}`  ",
+        "- **Epistemik Durum:** `{Model}`, `{Analitik}`, `{Literatür}`, `{Varsayım}` — `TRL 1–2 (M0)`, `no_lab_measurement = true`, `no_supplier_quotes = true`.",
         "",
-        "## 1. Yönetici Özeti & Ön-Kayıtlı Kriterler (`SF1–SF7`)",
+        "> [!NOTE]",
+        "> **Epistemik ve Sertifikasyon Sınırı (Zorunlu Beyan):** Bu belge Python tabanlı bir **`M0` ön FMEA/HAZOP tasarım taramasıdır**; herhangi bir sertifikasyon veya uygunluk beyanı değildir (`iec61508_certified = false`, `semi_s2_certified = false`, `requires_third_party_assessment = true`). **SEMI, kendi `SEMI S2` kılavuzu için sertifikasyon vermez** (üçüncü-taraf saha değerlendirmesi gerekir). Benzer biçimde **`IEC 61508 SIL-3`**, FMEA/RPN puanı düşürülerek veya varsayılan bir `λ_DU` ile tek-nokta PFD hesaplanarak kazanılan bir etiket olmayıp tam emniyet yaşam döngüsü, donanım mimari kısıtları (`HFT`, `SFF`), tedarikçi FMEDA verisi, sistematik yetkinlik ve bağımsız fonksiyonel emniyet değerlendirmesi gerektirir. Aşağıdaki tablolarda yer alan `SIL-3`, `SIL-2` ve `SIL-1` sınıfları yalnızca **hedeflenen emniyet düzeyini (`tasarım hedefi`)** belirtir; sertifikasyon iddiası değildir.",
         "",
-        "Atom Litografi Makinesi (`CAD v6.0`, `M3 v6.0 Full BOM = $5,547,800`), temizodada beş kritik/ölümcül mühendislik tehlikesini tek şaside barındırır: (1) `S5.5` Sınıf-4 `808 nm` `43,49 J/cm²` qCW flaş lazer, (2) `S1.1` zehirli/piroforik `PH₃` fosfin ve `S5.6` `%5 H₂/N₂` pasivasyon gazı, (3) `10–22 keV` yüksek gerilim ve Bremsstrahlung X-ışını, (4) `20 mK / 4 K` kriyojenik Helyum ODH + `ASME 0,5 barg` OVC tahliye + `Exp125` `18,94 kJ` mıknatıs quench, (5) plansız elektrik kesintisi (`EPO` / `15 kVA` çevrimiçi UPS). `S7.SAFETY-01..06` kiti (`355,0 kg`, `1.090 W`, `0,0 W` kriyo yükü, `$145.000` nominal = `M3 v6.0` BOM'un **`%2,61`**'i) eklendiğinde 25 satırlı FMEA'daki maksimum risk puanı `RPN_pre = 280` değerinden **`RPN_post = 42 ≤ 60`** düzeyine (ortalama **`%" + f"{fstat['mean_rpn_reduction_pct']:.1f}" + "`** azalma, `0` kabul edilemez artık risk) indirilmiştir.",
+        "## 1. Yönetici Özeti ve Ön-Kayıtlı Model Kriterleri (`SF1–SF7`)",
+        "",
+        "Atom Litografi Makinesi kavramsal tasarımı (`CAD v6.0`, `M3 v6.0 Full BOM = $5,547,800`), temizoda senaryosunda beş kritik mühendislik tehlikesi için ön koruma hedefleri tanımlar: (1) `S5.5` Sınıf-4 `808 nm` `43,49 J/cm²` qCW flaş lazer, (2) `S1.1` zehirli/piroforik `PH₃` fosfin ve `S5.6` `%5 H₂/N₂` pasivasyon gazı, (3) `10–22 keV` yüksek gerilim ve Bremsstrahlung X-ışını, (4) `20 mK / 4 K` kriyojenik Helyum ODH (statik + oda kutu-ODE geçişi) + `ASME 0,5 barg` OVC tahliye + `Exp125` `18,94 kJ` mıknatıs quench, (5) plansız elektrik kesintisi (`EPO` / `15 kVA` çevrimiçi UPS). Parametrik `S7.SAFETY-01..06` ön tasarım kiti (`355,0 kg`, `1.090 W`, `0,0 W` kriyo yükü, `$145.000` nominal = `M3 v6.0` BOM'un `%2,61`'i, `no_supplier_quotes = true`) modellendiğinde `25` satırlı ön FMEA taramasındaki maksimum risk puanı `RPN_pre = 280` değerinden **`RPN_post = 42 ≤ 60`** tasarım hedefine (ortalama `%" + f"{fstat['mean_rpn_reduction_pct']:.1f}" + "` azalma, `0` artık risk `> 60`) inmektedir.",
         "",
         "| Kriter | Kapsam | Gözlenen Değerler | Karar |",
         "|---|---|---|---|",
@@ -211,20 +217,51 @@ def render_summary_md(payload: dict[str, Any]) -> str:
 
     lines += [
         "",
-        "## 2. Beş Kritik Tehlike Alanının İlk-İlkelerden Fizik Analizi",
+        "## 2. Beş Kritik Tehlike Alanının İndirgenmiş-Mertebe Analitik Taraması",
         "",
-        "### 2.1. Tehlike-1: `S5.5` Sınıf-4 `808 nm` Flaş Lazer (`ANSI Z136.1-2022` / `IEC 60825-1`)",
+        "### 2.1. Tehlike-1: `S5.5` Sınıf-4 `808 nm` Flaş Lazer (`ANSI Z136.1-2022` / `IEC 60825-1` Referansı)",
         "",
         f"- **Çapalı Kaynak (`Exp130`/`Exp139`/`CAD v6.0`):** `λ = {las['wavelength_nm']} nm`, `t = {las['pulse_duration_ms']} ms`, yonga fluansı `{las['wafer_fluence_J_cm2']} J/cm²` (`16×16 mm` = `{las['wafer_pulse_energy_J']} J`, kaynak `{las['source_pulse_energy_J']} J`, tepe güç `{las['source_peak_power_kW']} kW`), AR safir pencere fluansı `{las['window_fluence_AR_J_cm2']} J/cm²` (`8,96×` LIDT marjı).",
         f"- **MPE ve Tehlike Mesafeleri (`C_A = {las['ansi_C_A_808nm']}`):** Tek-darbe göz MPE = **`{las['mpe_eye_1pulse_uJ_cm2']} µJ/cm²`**, 4-darbe MPE (`C_P = 4^-0.25`) = **`{las['mpe_eye_4pulse_uJ_cm2']} µJ/cm²`**, deri MPE = `{las['mpe_skin_1pulse_J_cm2']} J/cm²`. Kolime (`20 mrad`) `NOHD =` **`{las['nohd_collimated_20mrad_m']} m`**, fiber demeti (`150 mrad`) `NOHD =` **`{las['nohd_fiber_150mrad_m']} m`**, Lambertian yaygın yansıma (`ρ=1`) `NHZ_diff =` **`{las['nhz_diffuse_m']} m`**.",
-        f"- **Gerekli Optik Yoğunluk & SIL-3 Kilitleme:** Gerekli `OD` tek-darbe `{las['od_required_1pulse_wafer']}`, 4-darbe **`{las['od_required_4pulse_wafer']}`** → `OD ≥ 7+` zorunludur, tasarım standardı **`OD = 8`** olarak belirlenmiştir (`OD8` artık fluans oranı `{las['od_sweep']['OD8']['ratio_to_4pulse_MPE_at_wafer']}× MPE << 1`). `IEC 61508` `1oo2D` çift-kanallı perde (`{las['interlock_sil3']['shutter_close_ms']} ms` yay-dönüşlü mekanik bıçak + `<0,1 ms` diyot sürücü kesici) için `PFD_avg =` **`{las['interlock_sil3']['pfd_avg_1oo2d']:.3e}`** `< 1e-3` (donanım hata toleransı `HFT=1` altında **SIL-3** uyumlu, gömülü **Class-1** operasyon).",
+        f"- **Gerekli Optik Yoğunluk ve `1oo2D` Parametrik `PFD_avg` (Sertifikasız `M0`):** Gerekli `OD` tek-darbe `{las['od_required_1pulse_wafer']}`, 4-darbe **`{las['od_required_4pulse_wafer']}`** → `OD ≥ 7+` gerekir, tasarım hedefi **`OD = 8`** olarak belirlenmiştir (`OD8` artık fluans oranı `{las['od_sweep']['OD8']['ratio_to_4pulse_MPE_at_wafer']}× MPE << 1`). `IEC 61508-6` referans `1oo2D` çift-kanallı perde (`{il['shutter_close_ms']} ms` yay-dönüşlü mekanik bıçak + `<0,1 ms` diyot sürücü kesici) için varsayılan nominal `λ_DU = {il['nominal_assumptions']['lambda_du_per_h']:.2e} /h`, `T_i = {il['nominal_assumptions']['proof_test_interval_h']:.0f} h`, `β = {il['nominal_assumptions']['beta_ccf']*100:.0f}%` altında analitik `PFD_avg =` **`{il['pfd_avg_1oo2d']:.4e}`** `< 1e-3` (`sil3_pfd_band_met_at_nominal_assumed_lambda_du = true`, `iec61508_certified = false`; sertifikasyon değildir).",
         "",
-        "| Optik Yoğunluk | Yonga Artık Fluans (J/cm²) | Pencere Artık Fluans (J/cm²) | 4-Darbe MPE Oranı | Pencere Güvenlik Marjı | Gömülü Class-1 |",
+        "| Optik Yoğunluk | Yonga Artık Fluans (J/cm²) | Pencere Artık Fluans (J/cm²) | 4-Darbe MPE Oranı | Pencere Güvenlik Marjı | Gömülü Class-1 Hedefi |",
         "|---|---:|---:|---:|---:|---|",
     ]
     for odk, odv in las["od_sweep"].items():
         lines.append(
             f"| `{odk}` | `{odv['residual_wafer_J_cm2']:.3e}` | `{odv['residual_window_J_cm2']:.3e}` | `{odv['ratio_to_4pulse_MPE_at_wafer']:.5f}` | `{odv['margin_factor_at_window']}×` | `{'PASS' if odv['pass_class1_embedded'] else 'FAIL'}` |"
+        )
+
+    lines += [
+        "",
+        "#### 2.1.1. `1oo2D` Parametrik `PFD_avg` Belirsizlik ve Ortak-Neden (`λ_DU` × `β`) Duyarlılık Taraması",
+        "",
+        f"Nominal `λ_DU = {pfd_sw['lambda_du_nominal_per_h']:.2e} /h` varsayımı tedarikçi FMEDA ölçümü olmadığından, `λ_DU` çarpanı (`0,5× .. 25×`) ve ortak-neden arıza katsayısı (`β = 2%, 5%, 10%`) boyunca tam parametrik tarama yapılmıştır. Toplam `{pfd_sw['summary']['n_cases_total']}` durumun **`{pfd_sw['summary']['n_cases_in_sil3_pfd_band']}`** tanesi `SIL-3` PFD bandında (`< 1e-3`) kalırken, **`{pfd_sw['summary']['n_cases_degraded_to_sil2']}`** tanesi **`SIL-2` bandına (`1e-3 ≤ PFD < 1e-2`)** düşer — özellikle **`10× λ_DU` + `β = 10%`** kombinasyonunda (`PFD_avg = 1.2245e-03`) ve **`25× λ_DU`** düzeyinde tüm `β` değerlerinde `SIL-3` bandı kaybedilir.",
+        "",
+        "| `λ_DU` Çarpanı | `λ_DU` (/saat) | Tek-Kanal `PFD` | `β = 2%` `1oo2D PFD` (Bant) | `β = 5%` `1oo2D PFD` (Bant) | `β = 10%` `1oo2D PFD` (Bant) |",
+        "|---:|---:|---:|---|---|---|",
+    ]
+    by_b = pfd_sw["by_beta"]
+    for idx_m, mult in enumerate(pfd_sw["lambda_du_multipliers"]):
+        r2 = by_b["beta_2pct"][idx_m]
+        r5 = by_b["beta_5pct"][idx_m]
+        r10 = by_b["beta_10pct"][idx_m]
+        lines.append(
+            f"| `{mult:g}×` | `{r2['lambda_du_per_h']:.2e}` | `{r2['pfd_single_channel']:.3e}` "
+            f"| `{r2['pfd_avg_1oo2d']:.3e}` (`{r2['parametric_pfd_band']}`) "
+            f"| `{r5['pfd_avg_1oo2d']:.3e}` (`{r5['parametric_pfd_band']}`) "
+            f"| `{r10['pfd_avg_1oo2d']:.3e}` (`{r10['parametric_pfd_band']}`) |"
+        )
+
+    lines += [
+        "",
+        "| Ortak-Neden `β` | `SIL-3` PFD Bandı (`<1e-3`) Üst `λ_DU` Sınırı (/saat) | Nominal `λ_DU` Üzerinde İzin Verilen Maks. Çarpan |",
+        "|---:|---:|---:|",
+    ]
+    for b_info in pfd_sw["sil3_band_boundaries_by_beta"].values():
+        lines.append(
+            f"| `{b_info['beta_ccf_pct']}%` | `{b_info['max_lambda_du_for_sil3_band_per_h']:.3e}` | `{b_info['max_multiplier_vs_nominal']:.2f}×` |"
         )
 
     hp = gas["unmitigated_hp_cylinder"]
@@ -234,16 +271,16 @@ def render_summary_md(payload: dict[str, Any]) -> str:
         "",
         "### 2.2. Tehlike-2: Zehirli/Piroforik `PH₃` Fosfin (`S1.1`) & `%5 H₂/N₂` Pasivasyon Gazı (`S5.6`)",
         "",
-        f"- **Limitler:** `ACGIH TLV-TWA = 0,05 ppm`, `OSHA PEL = 0,30 ppm`, `NIOSH IDLH = 50,0 ppm` (ölümcül). L1 alarm = `0,02 ppm`, L2 SIL-3 kapatma = `0,05 ppm`.",
+        f"- **Limitler:** `ACGIH TLV-TWA = 0,05 ppm`, `OSHA PEL = 0,30 ppm`, `NIOSH IDLH = 50,0 ppm` (ölümcül). L1 alarm = `0,02 ppm`, L2 SIL-3 hedef kapatma = `0,05 ppm`.",
         f"- **Kötü Senaryo (Önlemsiz `40 bar / 100 g` Basınçlı Silindir):** `Ø2 mm` boru kopmasında kritik boğulmalı akış `{hp['choked_flow_g_s']} g/s`, silindir `{hp['empty_time_s']} s` içinde boşalır ve `60 m³` (`20 ACH`) temizodada tepe derişim **`{hp['room_60m3_peak_ppm']} ppm`** (`IDLH`'nin **`{hp['idlh_exceedance_factor']}×`** katı — kesin ölümcül).",
-        f"- **Önlemli Tasarım (`SDS <650 Torr / 10 g` + Vakum Ceket + `250 CFM` Scrubber + `0,02 ppm` SIL-3):** Atmosfer-altı basınç nedeniyle kopmada dışarı advektif akış **0**'dır (hava içeri çekilir); yalnızca saf Fick moleküler difüzyonu (`{sds['sds_fickian_diff_mg_min']} mg/dk = {sds['sds_fickian_diff_sccm']} sccm`) oluşur. `250 CFM` gaz dolabı + `%99,9` kuru kimyasal scrubber + `12 s` SIL-3 vana kesmesi altında `%2` kaçak fraksiyonlu dolap tepe oda derişimi `{sds['operator_peak_cabinet_fugitive_ppm']} ppm`, dolap bypass edilse bile doğrudan SDS difüzyon kararlı-hal oda derişimi **`{sds['operator_conservative_ppm']} ppm`** `< 0,01 ppm` kalır (`TLV-TWA` altında **`{sds['margin_below_tlv_twa']}×`**, `IDLH` altında **`{int(sds['margin_below_idlh'])}×`** güvenlik marjı).",
+        f"- **Önlemli Tasarım (`SDS <650 Torr / 10 g` + Vakum Ceket + `250 CFM` Scrubber + `0,02 ppm` SIL-3 hedefi):** Atmosfer-altı basınç nedeniyle kopmada dışarı advektif akış **0**'dır (hava içeri çekilir); yalnızca saf Fick moleküler difüzyonu (`{sds['sds_fickian_diff_mg_min']} mg/dk = {sds['sds_fickian_diff_sccm']} sccm`) oluşur. `250 CFM` gaz dolabı + `%99,9` kuru kimyasal scrubber + `12 s` SIL-3 hedef vana kesmesi altında `%2` kaçak fraksiyonlu dolap tepe oda derişimi `{sds['operator_peak_cabinet_fugitive_ppm']} ppm`, dolap bypass edilse bile doğrudan SDS difüzyon kararlı-hal oda derişimi **`{sds['operator_conservative_ppm']} ppm`** `< 0,01 ppm` kalır (`TLV-TWA` altında **`{sds['margin_below_tlv_twa']}×`**, `IDLH` altında **`{int(sds['margin_below_idlh'])}×`** güvenlik marjı).",
         f"- **`S5.6` `%5,0 H₂ / %95,0 N₂` Pasivasyon Gazı (`ISO 10156`):** `H₂` hacim oranı `{fg['h2_vol_pct']}% < {fg['iso10156_nonflammable_limit_pct']}%` (`ISO 10156 T_ci` sınırı) olduğundan havayla her seyreltmede **doğal olarak alevlenmez** (`intrinsically_nonflammable_in_air=true`).",
         "",
         "### 2.3. Tehlike-3: `10–22 keV` Yüksek Gerilim & Bremsstrahlung X-Işını (`Kramers` + `NIST XCOM`)",
         "",
         f"- **Muhafazakâr Varsayım:** `I_e = {hvx['assumptions']['leakage_electron_current_uA']} µA` geri-saçılan elektron akımı (nominal iyon demetinin `100×` katı), `Z = 42` (`Mo` elektrot), `r = 30 cm`, halk dozu limiti `1,0 µSv/h` (`ICRP 103`).",
         "- **Kritik Mühendislik Bulgusu (`S5.5` Safir Pencere):** `6 mm` muhafazakâr (`10 mm` gerçek `CAD v6.0`) `316L` paslanmaz çelik duvar `22 keV` Bremsstrahlung'u `1,06e-43 µSv/h` (`10 mm`'de `2,21e-73 µSv/h`) düzeyine bastırırken, **çıplak `8 mm` `Al₂O₃` safir pencere** düşük atom numarası nedeniyle `22 keV`'de **`10,11 µSv/h`** (`1,0 µSv/h` halk limitinin `10×` üstü!) sızdırır. Bu nedenle `S5.5` dışına eklenen **`3 mm` çelik `OD8` muhafaza kılıfı** çift-amaçlı (**Sınıf-4 Lazer + X-Işını**) zorunlu bariyerdir (`1,19e-23 µSv/h << 0,01 µSv/h`).",
-        f"- **HV Aktif Crowbar (`IEC 61010-1`):** Toplam kaçak kapasitans `{hvx['hv_crowbar']['total_capacitance_nF']} nF`, depolanan enerji `10 kV`'da `{hvx['hv_crowbar']['stored_energy_10kV_J']} J`, `22 kV`'da **`{hvx['hv_crowbar']['stored_energy_22kV_J']} J < 0,50 J`**. `2 MΩ` aktif crowbar ile `22 kV → < 50 V` boşalım süresi **`{hvx['hv_crowbar']['discharge_to_50V_22kV_ms']} ms < 50 ms`** (`PASS`).",
+        f"- **HV Aktif Crowbar (`IEC 61010-1` Referansı, `iec61010_certified=false`):** Toplam kaçak kapasitans `{hvx['hv_crowbar']['total_capacitance_nF']} nF`, depolanan enerji `10 kV`'da `{hvx['hv_crowbar']['stored_energy_10kV_J']} J`, `22 kV`'da **`{hvx['hv_crowbar']['stored_energy_22kV_J']} J < 0,50 J`**. `2 MΩ` aktif crowbar ile `22 kV → < 50 V` boşalım süresi **`{hvx['hv_crowbar']['discharge_to_50V_22kV_ms']} ms < 50 ms`** (analitik eşik `PASS`).",
         "",
         "| Enerji | Kalkan Yok (30 cm, µSv/h) | `6 mm` `316L` (µSv/h) | `10 mm` CAD `316L` (µSv/h) | Çıplak `8 mm` Safir (µSv/h) | `S5.5` Safir + `3 mm` Çelik Kılıf (µSv/h) |",
         "|---|---:|---:|---:|---:|---:|",
@@ -258,10 +295,10 @@ def render_summary_md(payload: dict[str, Any]) -> str:
     qch = cryo["magnet_quench_exp125"]
     lines += [
         "",
-        "### 2.4. Tehlike-4: `20 mK / 4 K` Kriyojenik Helyum ODH, `ASME 0,5 barg` Tahliye & `Exp125` Quench",
+        "### 2.4. Tehlike-4: `20 mK / 4 K` Kriyojenik Helyum ODH (Statik & Kutu-ODE), `ASME 0,5 barg` Tahliye & `Exp125` Quench",
         "",
         f"- **Kuru Kapalı-Çevrim Helyum ODH (`OSHA ≥ %19,5`):** `LD400` karışımı (`{odh['dr_mixture_stp_m3']} m³` STP) + `PT420` kompresör/hatları (`{odh['pt420_inventory_stp_m3']} m³` STP) + `%20` marj = **`{odh['total_with_20pct_margin_stp_m3']} m³` STP**. Tüm envanterin anlık salınımında `60 m³` temizodada oksijen oranı **`{odh['room_sweep']['60m3']['dry_ld400_pt420_O2_pct']}% >> %19,5`** kalır (aynı odada `100 L` ıslak sıvı Helyum kriyostatı `O₂ = {odh['room_sweep']['60m3']['wet_100L_LHe_comparison_O2_pct']}%` ile ölümcül boğulma yaratırdı). Yine de `15 m³` küçük servis odaları için duvara monteli `O₂` monitörü (`%19,5` alarm) zorunludur.",
-        f"- **`ASME BPVC Sec VIII` / `CGA S-1.3` OVC Tahliye (Tam Saint-Venant İzentropik Subsonik Akış):** `0,50 barg` ayarlı (`+10%` UG-125 birikimle `0,55 barg`) tek **`DN50` patlama diski** (`250 K`) He kapasitesi `{rel['dn50_relief_capacity_he_kg_s']} kg/s` (paralel yaylı tahliye vanası ek `2×` yedeklik sağlar); ilk-ilkeler en kötü He girişi (`PT420` `20 bar` `Ø2 mm` `50 K` kırığı + `LD400` `5 s` tam boşalım = `{rel['worst_case_he_inflow_kg_s']} kg/s`) karşısında **`{rel['relief_safety_margin_he']}×`**, `N₂` cryo-yoğuşma geri-buharlaşması (`{rel['worst_case_n2_inflow_kg_s']} kg/s` vs `{rel['dn50_relief_capacity_n2_kg_s']} kg/s`) karşısında **`{rel['relief_safety_margin_n2']}×`** (`≥ 10×`) güvenlik marjı sağlar.",
+        f"- **`ASME BPVC Sec VIII` / `CGA S-1.3` OVC Tahliye (Tam Saint-Venant İzentropik Subsonik Akış):** `0,50 barg` ayarlı (`+10%` UG-125 birikimle `0,55 barg`) tek **`DN50` patlama diski** (`250 K`) He kapasitesi `{rel['dn50_relief_capacity_he_kg_s']} kg/s` (paralel yaylı tahliye vanası ek `2×` yedeklik sağlar); analitik/fiziksel taşıma modeli en kötü He girişi (`PT420` `20 bar` `Ø2 mm` `50 K` kırığı + `LD400` `5 s` tam boşalım = `{rel['worst_case_he_inflow_kg_s']} kg/s`) karşısında **`{rel['relief_safety_margin_he']}×`**, `N₂` cryo-yoğuşma geri-buharlaşması (`{rel['worst_case_n2_inflow_kg_s']} kg/s` vs `{rel['dn50_relief_capacity_n2_kg_s']} kg/s`) karşısında **`{rel['relief_safety_margin_n2']}×`** (`≥ 10×`) güvenlik marjı sağlar.",
         f"- **`Exp125` 8-Bobin Mıknatıs Quench:** `1,50 T` tam alanda `{qch['E_mag_1p5T_kJ']} kJ` (`M4` `0,1785 T` modunda `{qch['E_mag_M4_0p1785T_kJ']} kJ`), `R_dump = {qch['R_dump_ohm']} Ω`, `τ = {qch['tau_decay_s']} s`, `V_max = {qch['V_max_V']} V`, bobin sıcak noktası `T_hotspot = {qch['T_hotspot_K']} K < 150 K`. Harici `{qch['dump_resistor_mass_kg']} kg` hava-soğutmalı boşaltma direnci yalnızca `ΔT = {qch['dump_resistor_dT_1p5T_K']} K` ısınarak **`{qch['dump_resistor_peak_1p5T_C']} °C < 55 °C`** güvenli dokunma eşiğinin altında kalır (`5 Gauss` sınırı `r < {qch['pacemaker_5gauss_radius_m']} m`).",
         "",
         "| Oda Hacmi | Kuru `LD400+PT420` `O₂` (%) | OSHA (`≥%19,5`) | Karşılaştırma: `100 L` Islak LHe `O₂` (%) |",
@@ -270,6 +307,21 @@ def render_summary_md(payload: dict[str, Any]) -> str:
     for rk, rv in odh["room_sweep"].items():
         lines.append(
             f"| `{rk}` | `{rv['dry_ld400_pt420_O2_pct']:.3f}%` | `{'PASS' if rv['dry_passes_osha_19p5pct'] else 'FAIL'}` | `{rv['wet_100L_LHe_comparison_O2_pct']:.2f}%` |"
+        )
+
+    lines += [
+        "",
+        "#### 2.4.1. Oda ODH Kutu-ODE Geçiş Analizi (RK4, `0–600 s`)",
+        "",
+        "| Senaryo | Oda (`m³`) | `ACH` | Salınım (`m³` STP / `s`) | Minimum `O₂` (%) | `t_min` (`s`) | `600 s` Sonu `O₂` (%) | `<%19,5` Süre (`s`) | OSHA |",
+        "|---|---:|---:|---|---:|---:|---:|---:|---|",
+    ]
+    for sk, sv in odh["box_ode_transient"].items():
+        lines.append(
+            f"| `{sk}` | `{sv['room_volume_m3']:.0f}` | `{sv['ventilation_ach']:.0f}` "
+            f"| `{sv['he_released_stp_m3']} / {sv['release_duration_s']:.0f}` "
+            f"| `{sv['o2_min_pct']:.4f}%` | `{sv['t_at_o2_min_s']:.1f}` | `{sv['o2_final_600s_pct']:.4f}%` "
+            f"| `{sv['time_below_osha_19p5pct_s']:.1f}` | `{'PASS' if sv['passes_osha_19p5pct'] else 'FAIL'}` |"
         )
 
     ups = epo["ups_spec"]
@@ -290,11 +342,11 @@ def render_summary_md(payload: dict[str, Any]) -> str:
 
     lines += [
         "",
-        "## 3. Tam 25-Satırlı FMEA (`S × O × D = RPN`, Önlem Öncesi vs Sonrası)",
+        "## 3. Tam 25-Satırlı Ön FMEA (`S × O × D = RPN`, Önlem Öncesi vs Sonrası — Sertifikasız `M0`)",
         "",
         f"- **Özet İstatistikler:** `25` satır, `RPN_pre`: ort. `{fstat['mean_rpn_pre']}`, maks. **`{fstat['max_rpn_pre']}`** (`FM-01`, `FM-10`); `RPN_post`: ort. `{fstat['mean_rpn_post']}`, maks. **`{fstat['max_rpn_post']} ≤ 60`** (`0` kabul edilemez artık risk), ortalama risk azalması **`%{fstat['mean_rpn_reduction_pct']}`**.",
         "",
-        "| ID | Alt-Sistem | Hata Modu | Etki | `S/O/D` (Önce) | `RPN_pre` | Mühendislik Önlemi (`S7.SAFETY`) | `S/O/D` (Sonra) | `RPN_post` | Azalma | Hedef SIL |",
+        "| ID | Alt-Sistem | Hata Modu | Etki | `S/O/D` (Önce) | `RPN_pre` | Mühendislik Önlemi (`S7.SAFETY` Tasarım Hedefi) | `S/O/D` (Sonra) | `RPN_post` | Azalma | Hedef SIL (Sertifikasız) |",
         "|---|---|---|---|---|---:|---|---|---:|---:|---|",
     ]
     for r in fmea:
@@ -306,9 +358,9 @@ def render_summary_md(payload: dict[str, Any]) -> str:
 
     lines += [
         "",
-        "## 4. 10-Düğümlü HAZOP Çalışması (`IEC 61882` / `SEMI S2`)",
+        "## 4. 10-Düğümlü Ön HAZOP Taraması (`IEC 61882` / `SEMI S2` Referansı — Sertifikasız `M0`)",
         "",
-        "| Düğüm | Sistem | Kılavuz Sözcük | Sapma | Birincil Koruma Bariyeri | SIL |",
+        "| Düğüm | Sistem | Kılavuz Sözcük | Sapma | Birincil Koruma Bariyeri (Tasarım Hedefi) | Hedef SIL (Sertifikasız) |",
         "|---|---|---|---|---|---|",
     ]
     for h in hazop:
@@ -319,11 +371,11 @@ def render_summary_md(payload: dict[str, Any]) -> str:
     tot = spec["totals"]
     lines += [
         "",
-        "## 5. Gerçek Laboratuvar Güvenlik Kiti (`s_safety_spec.json` — `BOM v7.0` Entegrasyon Paketi)",
+        "## 5. Ön Emniyet Kiti Tasarım Taslağı (`s_safety_spec.json` — `BOM v7.0` Parametrik Paketi, Sertifikasız `M0`)",
         "",
-        f"- **Toplam Kit Özeti (`S7.SAFETY-01..06`):** `{tot['n_items']}` kalem, toplam kütle **`{tot['total_mass_kg']} kg`**, elektrik gücü **`{tot['steady_electrical_power_W']} W`**, kriyojenik ısıl yük **`{tot['cryo_load_W']} W`**, bütçe aralığı **`${tot['cost_usd_low']:,} – ${tot['cost_usd_nom']:,} – ${tot['cost_usd_high']:,}`** (`M3 v6.0` Full BOM `$5,547,800`'ün **`%{tot['pct_of_m3_v6_full_bom']}`**'i). `no_supplier_quotes=true` (`{{Varsayım}}` / `{{Liste-Capasi}}`).",
+        f"- **Toplam Kit Özeti (`S7.SAFETY-01..06`):** `{tot['n_items']}` kalem, toplam kütle **`{tot['total_mass_kg']} kg`**, elektrik gücü **`{tot['steady_electrical_power_W']} W`**, kriyojenik ısıl yük **`{tot['cryo_load_W']} W`**, parametrik bütçe aralığı **`${tot['cost_usd_low']:,} – ${tot['cost_usd_nom']:,} – ${tot['cost_usd_high']:,}`** (`M3 v6.0` Full BOM `$5,547,800`'ün **`%{tot['pct_of_m3_v6_full_bom']}`**'i). `no_supplier_quotes=true`, `iec61508_certified=false`, `semi_s2_certified=false` (`{{Varsayım}}` / `{{Liste-Capasi}}`).",
         "",
-        "| Parça ID | Donanım Tanımı | Konum | Kütle (kg) | Güç (W) | Kriyo (W) | Maliyet Low / Nom / High (USD) | SIL | Epistemik |",
+        "| Parça ID | Donanım Tanımı | Konum | Kütle (kg) | Güç (W) | Kriyo (W) | Maliyet Low / Nom / High (USD) | Hedef SIL | Epistemik |",
         "|---|---|---|---:|---:|---:|---|---|---|",
     ]
     for it in spec["items"]:
@@ -335,10 +387,10 @@ def render_summary_md(payload: dict[str, Any]) -> str:
 
     lines += [
         "",
-        "## 6. Epistemik Sınırlar & Kapsam Dışı Maddeler",
+        "## 6. Epistemik Sınırlar ve Kapsam Dışı Maddeler",
         "",
-        "- Bu rapor ilk-ilkeler fizik modelleri (`{Model}` / `{Analitik}`), uluslararası emniyet standartları (`{Literatür}`) ve bütçe/donanım tahminlerine (`{Varsayım}`) dayanır.",
-        "- Gerçek saha `X-ışını` dozimetri ölçümü, `PH₃` sızıntı kalibrasyonu, `SIL-3` üçüncü-taraf `TÜV / SEMI S2` sertifikasyonu ve gerçek tedarikçi fiyat teklifleri (`no_lab_measurement=true`, `no_supplier_quotes=true`) laboratuvar kurulum fazında yapılmalıdır.",
+        "- Bu rapor indirgenmiş-mertebe analitik fizik modelleri (`{Model}` / `{Analitik}`), uluslararası emniyet standart/kılavuz referansları (`{Literatür}`) ve parametrik bütçe tahminlerine (`{Varsayım}`) dayanır (`TRL 1–2 / M0`).",
+        "- **Sertifikasyon Yoktur (`PRELIMINARY_PARAMETRIC_CALCULATION_NOT_CERTIFIED`):** `iec61508_certified = false`, `semi_s2_certified = false`, `requires_third_party_assessment = true`. SEMI kendi `SEMI S2` kılavuzu için sertifika vermez; `IEC 61508 SIL-3` ise tam emniyet yaşam döngüsü, donanım mimari kısıtları (`HFT`, `SFF`), tedarikçi FMEDA verisi, sistematik yetkinlik ve bağımsız fonksiyonel emniyet değerlendirmesi gerektirir. Gerçek saha `X-ışını` dozimetri ölçümü, `PH₃` sızıntı kalibrasyonu, üçüncü-taraf `SEMI S2` / `IEC 61508` saha değerlendirmesi ve gerçek tedarikçi fiyat teklifleri (`no_lab_measurement=true`, `no_supplier_quotes=true`) laboratuvar kurulum fazında yapılmalıdır.",
         "- **Global Carbon & Hydrogen Kuralı:** Bu belge `Hydrogen` (yazar) çıktısıdır; kapanış onayı (`KABUL`) sıfır-bağlamlı **Carbon** denetimine tabidir.",
         "",
     ]
@@ -404,6 +456,13 @@ def main() -> None:
         "date": str(date.today()),
         "no_lab_measurement": True,
         "no_supplier_quotes": True,
+        "iec61508_certified": False,
+        "semi_s2_certified": False,
+        "certification_status": "PRELIMINARY_PARAMETRIC_CALCULATION_NOT_CERTIFIED",
+        "sil3_pfd_band_met_at_nominal_assumed_lambda_du": bool(
+            laser["interlock_sil3"]["sil3_pfd_band_met_at_nominal_assumed_lambda_du"]
+        ),
+        "requires_third_party_assessment": True,
         "overall_verdict": overall,
         "criteria_passed": f"{n_pass}/{len(verdicts)}",
         "preregistered_file": prereg["experiment"],

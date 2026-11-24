@@ -1,23 +1,28 @@
-"""25-Row FMEA (IEC 61508 / SEMI S2), 10-Node HAZOP & S7.SAFETY Hardware Kit Spec (Exp150 / H168)."""
+"""Preliminary M0 Uncertified 25-Row FMEA, 10-Node HAZOP & S7.SAFETY Kit Target Spec (Exp150 / H168).
+
+References IEC 61508 and SEMI S2 as design-screening targets ONLY.
+NOT certified: iec61508_certified=False, semi_s2_certified=False, requires_third_party_assessment=True.
+"""
 from __future__ import annotations
 
 from typing import Any
 
 
 def build_fmea_25_rows() -> list[dict[str, Any]]:
-    """Return complete 25-row FMEA covering S1-S9 + Facility (S x O x D = RPN, pre vs post mitigation)."""
-    # Scale: S (Severity 1-10, 10=fatality/permanent disability), O (Occurrence 1-10), D (Detection 1-10, 1=automatic SIL-3)
+    """Return preliminary M0 25-row FMEA covering S1-S9 + Facility (S x O x D = RPN, pre vs post mitigation)."""
+    # Scale: S (Severity 1-10, 10=fatality/permanent disability), O (Occurrence 1-10),
+    # D (Detection 1-10, 1=automatic SIL-3 target interlock). All SIL labels are uncertified M0 design targets.
     raw_rows = [
         # --- S1: Ion Source, PH3, Multi-Species, HV (5 rows) ---
         ("FM-01", "S1.1", "PH3 silindir / pigtail kopması (basınçlı silindir vs SDS)",
          "Zehirli/piroforik PH3 salınımı (>IDLH 50 ppm, ölümcül)",
-         10, 4, 7, "Sub-atm SDS (<650 Torr, 10 g) + vakum ceket + 250 CFM scrubber + 0,02 ppm SIL-3 vana", 10, 1, 2, "SIL-3"),
+         10, 4, 7, "Sub-atm SDS (<650 Torr, 10 g) + vakum ceket + 250 CFM scrubber + 0,02 ppm SIL-3 hedef vana", 10, 1, 2, "SIL-3"),
         ("FM-02", "S1.1", "PH3 MFC/vana iç sızıntısı (1 sccm sürekli kaçak)",
          "Gaz dolabında PH3 birikimi, bakım sırasında maruziyet",
          9, 5, 6, "Çift elektrokimyasal sensör (0,02/0,05 ppm) + 250 CFM negatif basınç + otomatik N2 süpürme", 9, 2, 2, "SIL-3"),
         ("FM-03", "S1.3", "10–22 kV HV kablo/yalıtkan arkı veya panel açılması",
          "Elektrik çarpması / ark yanığı / HV güç kaynağı hasarı",
-         10, 4, 6, "SIL-2 kilitli HV muhafaza + 2 MOhm aktif crowbar (18,3 ms <50 V, <0,37 J)", 10, 1, 2, "SIL-2"),
+         10, 4, 6, "SIL-2 hedef kilitli HV muhafaza + 2 MOhm aktif crowbar (18,3 ms <50 V, <0,37 J)", 10, 1, 2, "SIL-2"),
         ("FM-04", "S1.1-S1.5", "14–22 keV geri-saçılan elektron Bremsstrahlung X-ışını",
          "Operatör iyonlaştırıcı radyasyon maruziyeti (özellikle S5.5 safir port)",
          8, 5, 7, "6–10 mm 316L duvar (<1,1e-43 uSv/h) + S5.5 3 mm çelik OD8 kılıf (1,2e-23 uSv/h) + yıllık ölçüm", 8, 2, 2, "SIL-2"),
@@ -42,13 +47,13 @@ def build_fmea_25_rows() -> list[dict[str, Any]]:
         # --- S5 / S5.5 / S5.6: UHV, Class-4 Laser, MBE & Forming Gas (6 rows) ---
         ("FM-10", "S5.5", "808 nm Sınıf-4 flaş lazer (43,49 J/cm^2) açık kapak ateşlemesi",
          "Anında kalıcı retina körlüğü (NOHD > 1.400 m, NHZ_diff = 14,6 m)",
-         10, 4, 7, "OD>=8 ışık-geçirmez muhafaza + 1oo2D SIL-3 mekanik perde (3,2 ms) + diyot kesici (PFD<1e-4)", 10, 1, 2, "SIL-3"),
+         10, 4, 7, "OD>=8 ışık-geçirmez muhafaza hedefi + 1oo2D SIL-3 hedef mekanik perde (3,2 ms) + diyot kesici (nominal PFD=2,34e-5; sertifikasız)", 10, 1, 2, "SIL-3"),
         ("FM-11", "S5.5", "CF63 safir pencere termal şok / lazer kaynaklı çatlama",
          "UHV ani atmosfer girişi + lazer demet kaçağı",
          9, 3, 6, "8,96x LIDT marjı (11,16 vs 100 J/cm^2) + 10 us pirometre + çift vakum/basınç kilidi", 9, 1, 3, "SIL-3"),
         ("FM-12", "S5.5", "MXC 20 mK soğukken yanlışlıkla flaş tavlama tetiklenmesi",
          "DR 20 mK kademesinde şiddetli ısınma ve vakum basınç sıçraması",
-         7, 4, 6, "Donanımsal MXC < 1 K & UHV sürgülü vana durum kilidi (Exp130/SIL-2)", 7, 1, 2, "SIL-2"),
+         7, 4, 6, "Donanımsal MXC < 1 K & UHV sürgülü vana durum kilidi (Exp130 / SIL-2 hedefi)", 7, 1, 2, "SIL-2"),
         ("FM-13", "S5.6", "S5.6 5% H2/N2 pasivasyon hattı sızıntısı",
          "H2 yangın/patlama riski kaygısı",
          8, 4, 5, "ISO 10156 <=%5,7 N2 karışımı (havada doğal alevlenmez) + akış sınırlayıcı orifis + egzoz", 8, 1, 2, "SIL-2"),
@@ -57,7 +62,7 @@ def build_fmea_25_rows() -> list[dict[str, Any]]:
          7, 4, 5, "Soğutma akış anahtarı + gövde RTD (>80 °C) sert güç kesici + otomatik deklanşör", 7, 2, 2, "SIL-2"),
         ("FM-15", "S5.2", "300 L/s Mag-Lev turbo pompa rotor arızası / ani hava girişi",
          "Mekanik parça fırlaması, UHV oda kontaminasyonu",
-         8, 3, 6, "ISO sertifikalı muhafaza + <80 ms yay-dönüşlü sürgülü vana + titreşim sensörü", 8, 2, 2, "SIL-2"),
+         8, 3, 6, "ISO-27892 rotor muhafaza hedefi + <80 ms yay-dönüşlü sürgülü vana + titreşim sensörü", 8, 2, 2, "SIL-2"),
 
         # --- S6 / S6.5 / S9.1: Cryo DR, He ODH, Magnet Quench & qRAM (5 rows) ---
         ("FM-16", "S6.8", "PT420 + LD400 kapalı-çevrim Helyum envanteri temizodaya salınımı",
@@ -82,13 +87,13 @@ def build_fmea_25_rows() -> list[dict[str, Any]]:
          8, 5, 5, "15 kVA / 10 kWh online UPS (0 ms) + <80 ms UHV vana (<0,001 ML) + 180 dk Tier-1", 8, 2, 2, "SIL-2"),
         ("FM-22", "S7.SAFETY", "Acil Durdurma (EPO) basımında tek-kanal röle yapışması",
          "HV veya lazerin acil durumda kesilememesi",
-         10, 3, 7, "1oo2D çift-kanallı SIL-3 emniyet PLC + zorlamalı-kılavuzlu (force-guided) kontaktörler", 10, 1, 2, "SIL-3"),
+         10, 3, 7, "1oo2D çift-kanallı SIL-3 hedef emniyet PLC + zorlamalı-kılavuzlu (force-guided) kontaktörler (sertifikasız M0)", 10, 1, 2, "SIL-3"),
         ("FM-23", "S9.HPC", "Option-HPC 4U 100G RDMA rafı (2.195 W) fan/soğutma arızası",
          "Sunucu aşırı ısınması, duman/yangın riski",
          7, 4, 5, "Yedekli 2,6 kW Titanium PSU + BMC 85 °C termal kesici + raf duman dedektörü", 7, 2, 2, "SIL-2"),
         ("FM-24", "S7.3", "Yazılım/FPGA bozuk komut gönderimi (yanlış lazer/HV tetiği)",
          "Otonom yazılımla emniyet sınırlarının aşılması",
-         9, 4, 6, "Yazılımdan tamamen bağımsız donanımsal SIL-3 emniyet PLC kilitleme katmanı", 9, 1, 2, "SIL-3"),
+         9, 4, 6, "Yazılımdan bağımsız donanımsal SIL-3 hedef emniyet PLC kilitleme katmanı (sertifikasız M0)", 9, 1, 2, "SIL-3"),
         ("FM-25", "Facility", "Temizoda HVAC/sıcaklık kayması veya su soğutma kaçağı",
          "Optik hizalama kayması, elektrik panosunda su kısa devresi",
          6, 5, 5, "Zemin su kaçağı sensörü + solenoid su kesici + ±10 mK HVAC alarmı (Exp133)", 6, 2, 2, "SIL-1"),
@@ -107,19 +112,20 @@ def build_fmea_25_rows() -> list[dict[str, Any]]:
             "S_post": s1, "O_post": o1, "D_post": d1, "RPN_post": rpn_post,
             "rpn_reduction_pct": round((1.0 - rpn_post / rpn_pre) * 100.0, 1),
             "target_sil": sil,
+            "sil_certification_status": "DESIGN_TARGET_ONLY_NOT_CERTIFIED",
         })
     return rows
 
 
 def build_hazop_10_nodes() -> list[dict[str, Any]]:
-    """Return 10-node HAZOP guideword study aligned with SEMI S2 & IEC 61882."""
-    return [
+    """Return preliminary M0 10-node HAZOP guideword screening referencing SEMI S2 & IEC 61882 (uncertified)."""
+    nodes = [
         {"node": "HZ-01", "system": "S5.5 808 nm Flaş Lazer", "guideword": "OTHER THAN (Kapak açık)",
          "deviation": "Sınıf-4 43,49 J/cm^2 demetin dış ortama kaçışı",
-         "safeguard": "OD>=8 muhafaza + 1oo2D SIL-3 3,2 ms perde + diyot kesici", "sil": "SIL-3"},
+         "safeguard": "OD>=8 muhafaza hedefi + 1oo2D SIL-3 hedef 3,2 ms perde + diyot kesici", "sil": "SIL-3"},
         {"node": "HZ-02", "system": "S1.1 PH3 Gaz Besleme", "guideword": "MORE (Sızıntı/Basınç)",
          "deviation": "Zehirli/piroforik PH3 salınımı (>0,05 ppm TLV / 50 ppm IDLH)",
-         "safeguard": "<650 Torr SDS + vakum ceket + 250 CFM scrubber + 0,02 ppm SIL-3 vana", "sil": "SIL-3"},
+         "safeguard": "<650 Torr SDS + vakum ceket + 250 CFM scrubber + 0,02 ppm SIL-3 hedef vana", "sil": "SIL-3"},
         {"node": "HZ-03", "system": "S1-S2 HV Kolon (10-22 kV)", "guideword": "MORE (Voltaj/Ark)",
          "deviation": "HV elektrik çarpması & 22 keV Bremsstrahlung X-ışını",
          "safeguard": "6-10 mm 316L + S5.5 çelik kılıf (<1,2e-23 uSv/h) + 2 MOhm crowbar (18,3 ms)", "sil": "SIL-2"},
@@ -137,7 +143,7 @@ def build_hazop_10_nodes() -> list[dict[str, Any]]:
          "safeguard": "<80 ms yay-dönüşlü all-metal UHV sürgülü vanalar (<0,001 ML oksit)", "sil": "SIL-2"},
         {"node": "HZ-08", "system": "S7.SAFETY Şebeke / EPO", "guideword": "NO (Şebeke Gücü)",
          "deviation": "Plansız elektrik kesintisi veya EPO aktivasyonu",
-         "safeguard": "15 kVA / 10 kWh online UPS (0 ms) + 40 dk tam / 213 dk Tier-1 + 1oo2D EPO", "sil": "SIL-3"},
+         "safeguard": "15 kVA / 10 kWh online UPS (0 ms) + 40 dk tam / 213 dk Tier-1 + 1oo2D EPO hedefi", "sil": "SIL-3"},
         {"node": "HZ-09", "system": "S9.HPC 100G RDMA Rafı", "guideword": "MORE (Termal Yük)",
          "deviation": "2.195 W soğutma kaybı & aşırı ısınma",
          "safeguard": "Yedekli 2,6 kW Titanium PSU + 85 °C BMC kesici + raf duman sensörü", "sil": "SIL-2"},
@@ -145,10 +151,13 @@ def build_hazop_10_nodes() -> list[dict[str, Any]]:
          "deviation": "450 °C Sb fırını termal kaçağı veya 1550 nm fiber açılması",
          "safeguard": "500 °C donanım kesici + ALS otomatik optik güç kesme + HEPA bakım", "sil": "SIL-2"},
     ]
+    for n in nodes:
+        n["sil_certification_status"] = "DESIGN_TARGET_ONLY_NOT_CERTIFIED"
+    return nodes
 
 
 def build_safety_hardware_spec(m3_v6_full_usd: float) -> dict[str, Any]:
-    """Build S7.SAFETY hardware specification JSON ready for BOM v7.0 / CAD v7.0 integration."""
+    """Build preliminary M0 S7.SAFETY hardware target specification JSON for BOM v7.0 / CAD v7.0."""
     items = [
         {
             "part_id": "S7.SAFETY-01",
@@ -163,11 +172,12 @@ def build_safety_hardware_spec(m3_v6_full_usd: float) -> dict[str, Any]:
             "cost_usd_nom": 42000,
             "cost_usd_high": 62000,
             "sil_level": "SIL-3",
+            "sil_certification_status": "DESIGN_TARGET_ONLY_NOT_CERTIFIED",
             "epistemic_tag": "Varsayim",
         },
         {
             "part_id": "S7.SAFETY-02",
-            "name": "ANSI Z136.1 OD>=8 (808 nm) Interlocked Class-1 Laser/X-Ray Steel Shroud & Dual-Channel SIL-3 Mechanical Shutter (<5 ms)",
+            "name": "ANSI Z136.1 OD>=8 (808 nm) Interlocked Class-1 Target Laser/X-Ray Steel Shroud & Dual-Channel SIL-3 Target Mechanical Shutter (<5 ms)",
             "qty": 1,
             "location": "S5.5 +Y viewport perimeter",
             "envelope_mm": [280.0, 260.0, 220.0],
@@ -178,11 +188,12 @@ def build_safety_hardware_spec(m3_v6_full_usd: float) -> dict[str, Any]:
             "cost_usd_nom": 22000,
             "cost_usd_high": 34000,
             "sil_level": "SIL-3",
+            "sil_certification_status": "DESIGN_TARGET_ONLY_NOT_CERTIFIED",
             "epistemic_tag": "Varsayim",
         },
         {
             "part_id": "S7.SAFETY-03",
-            "name": "IEC 61508 SIL-3 1oo2D Hardwired Safety PLC, 4x E-Stop Mushrooms, Guard Switches & 2 MOhm HV Crowbar Module",
+            "name": "IEC 61508 SIL-3 Target 1oo2D Hardwired Safety PLC, 4x E-Stop Mushrooms, Guard Switches & 2 MOhm HV Crowbar Module",
             "qty": 1,
             "location": "S7 rack top / perimeter E-Stop loop",
             "envelope_mm": [482.6, 350.0, 133.4],
@@ -193,6 +204,7 @@ def build_safety_hardware_spec(m3_v6_full_usd: float) -> dict[str, Any]:
             "cost_usd_nom": 28000,
             "cost_usd_high": 42000,
             "sil_level": "SIL-3",
+            "sil_certification_status": "DESIGN_TARGET_ONLY_NOT_CERTIFIED",
             "epistemic_tag": "Varsayim",
         },
         {
@@ -208,6 +220,7 @@ def build_safety_hardware_spec(m3_v6_full_usd: float) -> dict[str, Any]:
             "cost_usd_nom": 24000,
             "cost_usd_high": 36000,
             "sil_level": "SIL-2",
+            "sil_certification_status": "DESIGN_TARGET_ONLY_NOT_CERTIFIED",
             "epistemic_tag": "Liste-Capasi",
         },
         {
@@ -223,6 +236,7 @@ def build_safety_hardware_spec(m3_v6_full_usd: float) -> dict[str, Any]:
             "cost_usd_nom": 14000,
             "cost_usd_high": 22000,
             "sil_level": "SIL-3",
+            "sil_certification_status": "DESIGN_TARGET_ONLY_NOT_CERTIFIED",
             "epistemic_tag": "Liste-Capasi",
         },
         {
@@ -238,6 +252,7 @@ def build_safety_hardware_spec(m3_v6_full_usd: float) -> dict[str, Any]:
             "cost_usd_nom": 15000,
             "cost_usd_high": 24000,
             "sil_level": "SIL-2",
+            "sil_certification_status": "DESIGN_TARGET_ONLY_NOT_CERTIFIED",
             "epistemic_tag": "Varsayim",
         },
     ]
@@ -250,9 +265,13 @@ def build_safety_hardware_spec(m3_v6_full_usd: float) -> dict[str, Any]:
         "source_experiment": "exp150_industrial_safety_fmea_hazop",
         "hypothesis_id": "H168",
         "subsystem_id": "S7.SAFETY",
-        "title": "SEMI S2 / IEC 61508 Lab-Ready Industrial Safety & SIL-3 Interlock Kit (v7.0)",
+        "title": "Preliminary Parametric Safety Kit Design Target (S7.SAFETY, Uncertified M0; SEMI S2 / IEC 61508 Reference Only)",
         "no_lab_measurement": True,
         "no_supplier_quotes": True,
+        "iec61508_certified": False,
+        "semi_s2_certified": False,
+        "certification_status": "PRELIMINARY_PARAMETRIC_CALCULATION_NOT_CERTIFIED",
+        "requires_third_party_assessment": True,
         "epistemic_tags": ["{Model}", "{Liste-Capasi}", "{Varsayım}"],
         "totals": {
             "n_items": len(items),

@@ -1,6 +1,6 @@
-# Atom Litografi Makinesi (v7.1)
+# Atom Litografi Makinesi (v7.2)
 
-TRL 1–2 (`M0`) Kavramsal Sistem Tasarımı, İndirgenmiş-Mertebe Çok-Fizikli Fizibilite Çalışması, Verilog RTL ve Bulut Süperiletken-QPU Kontrol/Dekoder Kıyaslaması
+TRL 1–2 (`M0`) Kavramsal Sistem Tasarımı, İndirgenmiş-Mertebe Çok-Fizikli Fizibilite Çalışması, Gerçek-EDA Doğrulamalı Verilog RTL ve Bulut Süperiletken-QPU Kontrol/Dekoder Kıyaslaması
 
 Doğrudan Artefaktlar: [Etkileşimli HTML5 Model Gezgini (`docs/digital_twin_interactive.html`)](docs/digital_twin_interactive.html) · [Verilog RTL Paketi (`rtl/boed_fpga/README.md`)](rtl/boed_fpga/README.md) · [Ana Tasarım (`DESIGN.md`)](research/atom_lithography_machine/DESIGN.md) · [Teknik El Kitabı (`TECHNICAL_MANUAL.md`)](research/atom_lithography_machine/TECHNICAL_MANUAL.md)
 
@@ -8,11 +8,11 @@ Doğrudan Artefaktlar: [Etkileşimli HTML5 Model Gezgini (`docs/digital_twin_int
 
 ## Özet
 
-Atom Litografi Makinesi (`v7.1`), zenginleştirilmiş `²⁸Si` üzerinde deterministik tek-atom donör yerleşimi ve hata-toleranslı ölçekleme için geliştirilmiş **`TRL 1–2` (`M0`) düzeyinde kavramsal bir sistem mimarisi ve indirgenmiş-mertebe çok-fizikli fizibilite çalışmasıdır**. Depo, `28` ön-kayıtlı sayısal çalışmayı (`Exp124`–`Exp151`), `894` satırlık sentezlenebilir IEEE 1364-2005 `Q16.16` BOED-FPGA Verilog RTL modüllerini (`no_external_eda_sim = true`), `SEMI S2` kılavuzları ve `IEC 61508 SIL-3` mimari hedeflerini referans alan sertifikasız bir `M0` ön emniyet FMEA/HAZOP taramasını, `199` parçalık nominal statik 3B CAD montajını ve `180` parçalık parametrik `BOM v7.0` (`10-RFQ` taslağı, `no_supplier_quotes = true`) paketini birleştirir. Seçili alt-çözücüler mikroskobik veya cebirsel denklemleri doğrudan çözer (`Exp136` `160k`-orbital `sp³d⁵s*` tight-binding, `Exp137/143` `12×12` Lindblad ustalık denklemi, `Exp138` MWPM, `Exp144/147` GF(2) `BP-OSD`); buna karşılık sistem düzeyindeki proses, emniyet, maliyet ve kapasite kestirimleri **parametrik/indirgenmiş-mertebe modellere ve literatür varsayımlarına** dayanır. Ayrıca `CellISA v4.0 → OpenQASM 3.0` kontrol derleyicisi, dinamik dekupling, `d=3` tekrar dekoderi ve bit-kesin `Q16.16` BOED algoritmaları `156`-kübitlik süperiletken `ibm_marrakesh` bulut QPU işlemcisinde kontrol/dekoder proxy kıyaslaması olarak çalıştırılmıştır (`Exp145`; silikon fabrikasyonunu doğrulamaz).
+Atom Litografi Makinesi (`v7.2`), zenginleştirilmiş `²⁸Si` üzerinde deterministik tek-atom donör yerleşimi ve hata-toleranslı ölçekleme için geliştirilmiş **`TRL 1–2` (`M0`) düzeyinde kavramsal bir sistem mimarisi ve indirgenmiş-mertebe çok-fizikli fizibilite çalışmasıdır**. Depo, `28` ön-kayıtlı sayısal çalışmayı (`Exp124`–`Exp151`), konak makinede gerçek açık-kaynak EDA araçlarıyla (`iverilog 14.0`, `verilator 5.055`, `yosys 0.71+101`; `no_external_eda_sim = false`, `no_vendor_vivado_pnr = true`, `no_lab_measurement_rtl = true`) doğrulanmış `1.193` satırlık sentezlenebilir IEEE 1364-2005 `Q16.16` BOED-FPGA Verilog RTL modüllerini, gerçek `1% ²⁹Si` elmas-kübik örgü banyosu BOED kıyaslamasını (`results/boed_real_bath_benchmark.json`), fiziksel ODE/PDE/Lindblad/GF(2) tabanlı `auto_recal.py` ve `programmer.py` çözücülerini, `SEMI S2` kılavuzları ve `IEC 61508 SIL-3` mimari hedeflerini referans alan sertifikasız bir `M0` ön emniyet FMEA/HAZOP taramasını (`iec61508_certified = false`, `semi_s2_certified = false`, `15`-durumlu `λ_DU × β` duyarlılık taraması), `199` parçalık nominal statik 3B CAD montajını ve `180` parçalık parametrik `BOM v7.0` (`10-RFQ` taslağı, `no_supplier_quotes = true`) paketini birleştirir. Seçili alt-çözücüler mikroskobik veya cebirsel denklemleri doğrudan çözer (`Exp136` `160k`-orbital `sp³d⁵s*` tight-binding, `Exp137/143` & `programmer.py` exact 16B Lindblad + Gillespie-OU `1/f`, `Exp138` MWPM, `Exp144/147` & `programmer.py` GF(2) `BP-OSD`); buna karşılık sistem düzeyindeki proses, emniyet, maliyet ve kapasite kestirimleri **parametrik/indirgenmiş-mertebe modellere ve literatür varsayımlarına** dayanır. Ayrıca `CellISA v4.0 → OpenQASM 3.0` kontrol derleyicisi, dinamik dekupling, `d=3` tekrar dekoderi ve bit-kesin `Q16.16` BOED algoritmaları `156`-kübitlik süperiletken `ibm_marrakesh` bulut QPU işlemcisinde kontrol/dekoder proxy kıyaslaması olarak çalıştırılmıştır (`Exp145`; silikon fabrikasyonunu doğrulamaz).
 
 ## Abstract
 
-Atom Lithography Machine (`v7.1`) is a **`TRL 1–2` (`M0`) conceptual systems-architecture and reduced-order multiphysics feasibility study** for deterministic single-atom donor placement in enriched `²⁸Si` and fault-tolerant quantum scaling. The repository combines `28` preregistered numerical studies (`Exp124`–`Exp151`), synthesizable IEEE 1364-2005 `Q16.16` BOED-FPGA Verilog RTL modules (`no_external_eda_sim = true`), an uncertified `M0` preliminary safety FMEA/HAZOP screening referencing `SEMI S2` guidelines and `IEC 61508 SIL-3` architectural targets, a `199`-part nominal static 3D CAD assembly, and a parametric `180`-part `BOM v7.0` (`10-RFQ` draft, `no_supplier_quotes = true`). Specific sub-solvers evaluate microscopic or algebraic physics (`Exp136` `160k`-orbital `sp³d⁵s*` tight-binding, `Exp137/143` `12×12` Lindblad master equations, `Exp138` MWPM, `Exp144/147` GF(2) `BP-OSD`), whereas system-level process, safety, cost, and throughput estimates rely on **parametric/reduced-order models and literature assumptions**. Separately, the `CellISA v4.0 → OpenQASM 3.0` compiler, dynamical decoupling, `d=3` repetition decoding, and bit-exact `Q16.16` BOED routines were executed on the `156`-qubit superconducting `ibm_marrakesh` cloud QPU as a non-silicon control/decoder proxy (`Exp145`).
+Atom Lithography Machine (`v7.2`) is a **`TRL 1–2` (`M0`) conceptual systems-architecture and reduced-order multiphysics feasibility study** for deterministic single-atom donor placement in enriched `²⁸Si` and fault-tolerant quantum scaling. The repository combines `28` preregistered numerical studies (`Exp124`–`Exp151`), `1,193`-LOC synthesizable IEEE 1364-2005 `Q16.16` BOED-FPGA Verilog RTL modules verified with real open-source EDA tools on host (`iverilog 14.0`, `verilator 5.055`, `yosys 0.71+101`; `no_external_eda_sim = false`, `no_vendor_vivado_pnr = true`, `no_lab_measurement_rtl = true`), a real `1% ²⁹Si` diamond-cubic lattice-bath BOED benchmark (`results/boed_real_bath_benchmark.json`), physics-based ODE/PDE/Lindblad/GF(2) solvers in `auto_recal.py` and `programmer.py`, an uncertified `M0` preliminary parametric safety FMEA/HAZOP screening (`iec61508_certified = false`, `semi_s2_certified = false`, `15`-case `λ_DU × β` PFD sensitivity sweep and RK4 ODH box-ODE transient), a `199`-part nominal static 3D CAD assembly, and a parametric `180`-part `BOM v7.0` (`10-RFQ` draft, `no_supplier_quotes = true`). Specific sub-solvers evaluate microscopic or algebraic physics (`Exp136` `160k`-orbital `sp³d⁵s*` tight-binding, exact 16D Lindblad + Gillespie-OU `1/f` master equations, `Exp138` MWPM, GF(2) Bivariate Bicycle `BP-OSD`), whereas system-level process, safety, cost, and throughput estimates rely on **parametric/reduced-order models and literature assumptions**. Separately, the `CellISA v4.0 → OpenQASM 3.0` compiler, dynamical decoupling, `d=3` repetition decoding, and bit-exact `Q16.16` BOED routines were executed on the `156`-qubit superconducting `ibm_marrakesh` cloud QPU as a non-silicon control/decoder proxy (`Exp145`).
 
 ---
 
@@ -21,13 +21,14 @@ Atom Lithography Machine (`v7.1`) is a **`TRL 1–2` (`M0`) conceptual systems-a
 | Alan | Gösterilen (Demonstrated) | Kanıtlanmayan (Not Demonstrated) |
 |---|---|---|
 | Bulut QPU (`Exp145`, `ibm_marrakesh`) | `CellISA v4.0 → OpenQASM 3.0` derleyici, `Echo / XY4`, `d=3` tekrar dekoderi ve `Q16.16` BOED algoritmalarının süperiletken transmon bulut işlemcisinde (`job_id = dc1tdo2nj2vs73dfrfl0`) çalıştırıldığını gösterir. | Silikon `³¹P` implantasyonu, flaş tavlama, MBE, `100 K` IBIC veya herhangi bir atom-litografi donanımını doğrulamaz. |
-| Yazılım Regresyon Testleri (`306/306 pytest`) | Kod tabanının yeniden üretilebilirliğini, birim doğruluğunu, sıfır repo-içi yazma açmasını ve iç sayısal tutarlılığını gösterir. | Fiziksel modelin gerçek laboratuvar koşullarında doğru olduğunu kanıtlamaz. |
-| Dosya Bütünlüğü (`38/38 SHA-256`, `v7_digital_twin_cert.json`) | Üretilen artefaktların sonradan değiştirilmediğini doğrulayan dosya-bütünlüğü ve izlenebilirlik özetidir. | Bilimsel doğrulama, hakemli onay veya endüstriyel sertifikasyon değildir. |
-| Fizik ve Maliyet Modellemesi (`Exp124`–`Exp151`) | Seçili alt-çözücülerde atomistik/cebirsel hesabı (`sp³d⁵s*` TB, Lindblad, MWPM, BP-OSD) sistem düzeyinde indirgenmiş-mertebe parametrik analizle birleştirir; tüm ön-kayıtlı `FAIL` hükümlerini korur. | Uçtan uca deneysel fiziksel doğrulama veya tedarikçi teklifi değildir (`no_lab_measurement = true`, `no_supplier_quotes = true`, `no_external_eda_sim = true`, `tapeout_done = false`). |
-| Emniyet Analizi (`Exp150`, `SEMI S2` / `IEC 61508 SIL-3` referansları) | `25` satırlı ön `M0` tehlike taraması (`FMEA`), `10` düğümlü `HAZOP` ve hedeflenen kilitleme mimarisi parametrik bütçesidir. | Sertifikasyon değildir; SEMI kendi S2 kılavuzu için sertifika vermez, IEC 61508 SIL-3 ise tam emniyet yaşam döngüsü, sistematik yetkinlik ve bağımsız fonksiyonel emniyet değerlendirmesi gerektirir. |
+| Gerçek Açık-Kaynak EDA RTL Doğrulaması (`Exp149`, `rtl/boed_fpga/`) | `verilator 5.055 --lint-only -Wall` (`0` uyarı/hata), `iverilog 14.0 + vvp` (`64/64` vektör + `4`-kanal AXI4-Stream `0 LSB`, `584` çevrim, `0` kombinasyonel `/`) ve `yosys 0.71+101` ön-P&R sentezi (`xcup`/`xc7`/`ecp5`; `no_external_eda_sim = false`, `real_eda_verified = true`). | Ticari Xilinx Vivado P&R zamanlama kapanışı (`no_vendor_vivado_pnr = true`) ve fiziksel `ZU48DR` FPGA kart ölçümü (`no_lab_measurement_rtl = true`) henüz yapılmamıştır. |
+| Yazılım Regresyon Testleri (`333/333` temiz klon `pytest`; yerel çalışma alanında `400/400`) | Kod tabanının yeniden üretilebilirliğini, birim doğruluğunu, açık-kaynak EDA eş-doğrulamasını ve iç sayısal tutarlılığını gösterir (temiz `git clone`: `35/35` staged Atom Litografi suiti = `333/333`; `.gitignore` dışı `12` yerel eski `quantum_cell` suitiyle toplam `400/400`). | Fiziksel modelin gerçek laboratuvar koşullarında doğru olduğunu kanıtlamaz. |
+| Dosya Bütünlüğü (`39/39 SHA-256`, `v7_digital_twin_cert.json`) | Üretilen artefaktların sonradan değiştirilmediğini doğrulayan dosya-bütünlüğü ve izlenebilirlik özetidir. | Bilimsel doğrulama, hakemli onay veya endüstriyel sertifikasyon değildir. |
+| Fizik, `1% ²⁹Si` Banyo & Maliyet Modellemesi (`Exp124`–`Exp151`) | Seçili alt-çözücülerde atomistik/cebirsel hesabı (`sp³d⁵s*` TB, exact 16B Lindblad + Gillespie-OU, `45.214` konumlu `1% ²⁹Si` elmas-kübik banyo, MWPM, GF(2) BP-OSD, doğrusal-olmayan Si termal PDE, 2-oda UHV ODE) sistem düzeyinde parametrik analizle birleştirir; tüm ön-kayıtlı `FAIL` ve başarısızlık duvarlarını (`2 kHz` Fourier duvarı, `SNR ≤ 3` uçurumu, `%61,51` dürüst step-and-stitch verimi) korur. | Uçtan uca deneysel fiziksel doğrulama veya tedarikçi teklifi değildir (`no_lab_measurement = true`, `no_supplier_quotes = true`, `tapeout_done = false`). |
+| Emniyet Analizi (`Exp150`, `PRELIMINARY_PARAMETRIC_CALCULATION_NOT_CERTIFIED`) | `25` satırlı ön `M0` tehlike taraması (`FMEA`), `10` düğümlü `HAZOP`, `15`-durumlu `1oo2D` `λ_DU × β` duyarlılık taraması (`10× λ_DU @ β=%10 → SIL-2`'ye düşüş), RK4 oda ODH kutu-ODE geçişi ve hedeflenen kilitleme bütçesidir. | Sertifikasyon değildir (`iec61508_certified = false`, `semi_s2_certified = false`, `requires_third_party_assessment = true`); SEMI kendi S2 kılavuzu için sertifika vermez, IEC 61508 SIL-3 ise tedarikçi FMEDA verisi, tam emniyet yaşam döngüsü ve bağımsız fonksiyonel emniyet değerlendirmesi gerektirir. |
 | 3B CAD (`199` parça, `0/19.701` çakışma, `40/40` boşluk) | Yalnızca nominal statik geometrik çakışma ve zarf kontrolüdür. | Üretilebilirlik (`DFM`), GD&T tolerans yığılması, `300 K → 20 mK` termal büzülme, titreşim kuplajı, kablo/tesisat yönlendirme, UHV gaz salınımı, manyetik malzeme uyumu veya montaj sırası doğrulaması değildir. |
 | Simülasyonda `FAIL → PASS` İterasyonları (`Exp139`, `Exp141`, `Exp148`) | Kendi model uzayında yapılan tasarım ve parametre iterasyonlarını belgeler (`1440 K → 1530,1 K`, `W2/W3` SOI, `¹²¹Sb` `Q-Echo-8`). | Deneysel fiziksel engel giderimi veya laboratuvar doğrulaması değildir. |
-| Üretim Kapasitesi ve `MachineConfig` (`2,95×10⁹` atış/gün, `1,50–2,25×10⁹` yazmaç/gün) | Varsayılan model girdileri (`detector_eta = 0,9994`, `bath_yield = 0,51`, `spot_sigma_nm = 1,5 nm`, `readout_visibility = 0,99`) altında hesaplanan koşullu matematiksel üst-sınır kapasitesidir. | Fiziksel bir makinede ölçülmüş üretim hızı (throughput) değildir. |
+| Üretim Kapasitesi ve `MachineConfig` (`2,95×10⁹` atış/gün, `1,50–2,25×10⁹` yazmaç/gün) | Varsayılan model girdileri (`detector_eta = 0,9994`, `bath_yield = 0,51`, `spot_sigma_nm = 1,5 nm`, `readout_visibility = 0,99`) altında hesaplanan koşullu matematiksel üst-sınır kapasitesidir; `%5` ölü blanker kanalında dürüst step-and-stitch verimi `%61,51`'dir. | Fiziksel bir makinede ölçülmüş üretim hızı (throughput) değildir. |
 
 > [!NOTE]
 > **Ön-Kayıtlı Hükümler:** Tüm deneylerde başarı ölçütleri hesaplamadan önce `predictions_exp*.json` dosyalarına kaydedilmiştir. Karşılanmayan tüm `FAIL` hükümleri (`Exp124, 126, 127, 128 [v7 Full], 129, 131, 134, 136, 137, 138, 139, 142, 143, 147 [UQ4, UQ5], 148 [SQ4]`) gizlenmeden ve kök-nedeniyle raporlanmıştır.
@@ -36,7 +37,7 @@ Atom Lithography Machine (`v7.1`) is a **`TRL 1–2` (`M0`) conceptual systems-a
 
 ## Genel Görünüm
 
-![Atom Litografi Makinesi v7.1 M0 Kavramsal Tasarım Özet Panosu](research/atom_lithography_machine/cad/drawings/00_v7_overview_dashboard.png)
+![Atom Litografi Makinesi v7.2 M0 Kavramsal Tasarım Özet Panosu](research/atom_lithography_machine/cad/drawings/00_v7_overview_dashboard.png)
 
 | İzometrik Nominal 3B Montaj (`199` Parça) | Nominal Statik Kesit (`40/40` Zarf) | Patlatılmış Alt-Sistem Görünümü (`S1`–`S7`) |
 |---|---|---|
@@ -44,21 +45,22 @@ Atom Lithography Machine (`v7.1`) is a **`TRL 1–2` (`M0`) conceptual systems-a
 
 ---
 
-## 1. Sistem Özeti ve Başlıca Model Parametreleri (`v7.1`, `TRL 1–2 / M0`)
+## 1. Sistem Özeti ve Başlıca Model Parametreleri (`v7.2`, `TRL 1–2 / M0`)
 
 | Parametre | Model Çıktısı / Tasarım Hedefi | Kaynak / Deney |
 |---|---|---|
 | Yerleştirme belirsizliği (`5 keV ³¹P⁺`, `Arch-B`) | `σ_tot = 3,59–3,63 nm` (`1530,1 K` flaş + `S5.6` MBE modeli) | `Exp124`, `Exp139` |
 | Titreşim ve işaret kararlılığı (`S6.9 CFG4`) | `σ_stage = 0,102 nm`, `σ_pointing = 0,147 nm` (modal/PSD modeli) | `Exp133` |
 | Flaş tavlama ve epitaksiyel kapsülleme (`S5.5`, `S5.6`) | `1530,1 K` / `1,0 ms`, `8 nm` LT-MBE, `S_ε = 0,390 µeV/√Hz` | `Exp130`, `Exp139` |
-| Paralel yazma ve tek-kriyostat kapasitesi | `32×32 = 1.024` demetçik; `2.887` hücre (`N_mux* = 32`, `F_RO = %99,61`); koşullu üst-sınır `2,95×10⁹` atış/gün | `Exp124`, `Exp140` |
-| `M4` iki-kübit kapı modeli (`3 kΩ NbTiN`, `D3` GRAPE) | `p_2q = %0,337–%0,395`, `Λ = 2,825`, `100G` RDMA `BP-OSD 2,32 µs` | `Exp137`, `Exp143` |
+| Paralel yazma ve tek-kriyostat kapasitesi | `32×32 = 1.024` demetçik; `2.887` hücre (`N_mux* = 32`, `F_RO = %99,61`); koşullu üst-sınır `2,95×10⁹` atış/gün (`%5` ölü kanalda dürüst step-and-stitch verimi `%61,51`, `%100` kapsama) | `Exp124`, `Exp140`, `auto_recal.py` |
+| Gerçek `1% ²⁹Si` örgü banyosu BOED (`N = 260`) | `%91,15` vs `%84,62` Uniform (`10,46×` prob / `26,29×` zaman hızlanması, `A_par RMSE = 96,17 Hz`, eski `Exp132` `%100` FNR; dürüst `2 kHz` Fourier duvarı & `SNR ≤ 3` uçurumu) | `boed_real_bath_benchmark.json` |
+| `M4` iki-kübit kapı modeli (`3 kΩ NbTiN`, `D3` GRAPE) | `p_2q = %0,337–%0,395`, `Λ = 2,825`, `100G` RDMA `BP-OSD 2,32 µs`; `programmer.py` exact 16B Lindblad + Gillespie-OU Echo-CZ (`F_Bell = 0,9804`, `+0,212` kazanç) & GF(2) BB qLDPC | `Exp137`, `Exp143`, `programmer.py` |
 | `qLDPC` bellek (`[[144,12,12]]` Gross Code) | `L_max = 268,3 µm ≤ 300 µm`, `108L = 1` kriyostat (`$63.827/L_sys` model) | `Exp144` |
 | Evrensel `qLDPC` (`[[288,12,18]]`) ve `T`-fabrikası | `p_th = %0,781`, `576`-hücre verimi `%99,27` (`N=8`) / `%99,82` (`N=9`) | `Exp147` |
 | Algoritmik kaynak bütçeleri (FeMoco ve `RSA-2048`) | FeMoco: `16` kriyostat (`3,38 sa`, `$6.537/çözüm`, dürüst `UQ5` tavanı); `RSA-2048`: `291` kriyostat (`7,37 MW`, `21,1 sa`) | `Exp147` |
 | `¹²¹Sb` (`I=7/2`) kudit koruma ve `SU(8)` kontrol | `Q-Echo-8` statik `0,5800 → 0,99908` (`455,5×` hata azalması); `SU(8)` `≥ 0,9954`; `1/f` `Q-Echo-64` `28,08×` (`1,45 ms`) | `Exp148` |
-| Sentezlenebilir Verilog RTL (`rtl/boed_fpga/`) | `4` modül (`894` LOC), `584` çevrim (`2,336 µs @ 250 MHz`), `64/64` `0 LSB`, `ZU48DR` `%10,49` DSP (`no_external_eda_sim = true`) | `Exp149` |
-| Ön emniyet taraması (sertifikasız `M0` tasarım hedefi) | `25` FMEA `max RPN 280 → 42` (`−%86,3`), `OD8 + 3 mm` çelik, `SDS PH₃ 0,00715 ppm`, `S7.SAFETY $145k` (SEMI S2 sertifikasyonu yok; bağımsız SIL değerlendirmesi yok) | `Exp150` |
+| Gerçek-EDA doğrulamalı Verilog RTL (`rtl/boed_fpga/`) | `4` modül (`1.193` LOC, `0` `/` bölücü), `verilator 5.055 -Wall` `0` uyarı, `iverilog 14.0` `64/64` + `4`-ch `0 LSB` / `584` çevrim (`2,336 µs`), `yosys 0.71` `xcup_top16` `102.886` LUT (`%24,19`), `59.157` FF (`%6,96`), `192` RAMB18 (`%8,89`), `1.584` DSP (`%37,08`) (`no_external_eda_sim = false`, `no_vendor_vivado_pnr = true`) | `Exp149` |
+| Ön emniyet taraması (sertifikasız `M0` parametrik hesap) | `iec61508_certified = false`, `semi_s2_certified = false`, `25` FMEA `max RPN 280 → 42`, nominal `PFD = 2,34×10⁻⁵` (`15`-durumlu `λ_DU × β` taraması: `10× λ_DU @ β=%10 → 1,22×10⁻³` `SIL-2`), RK4 ODH `60 m³ 0 ACH = %20,57`, `S7.SAFETY $145k` | `Exp150` |
 | Nominal 3B CAD ve parametrik `BOM v7.0` (`10-RFQ` taslağı) | `199` CAD parçası (yalnız nominal statik: `1.108,14 kg` şasi + `355,0 kg` tesis), `180` BOM parçası, Faz-1 `Base+Safety $5,393M` (`%4,67`), `v7 Full $5,693M` (`%5,22`) | `Exp128 v7.0`, `Exp151` |
 
 ---
@@ -76,7 +78,7 @@ flowchart LR
 
 ---
 
-## 3. Sürüm Evrimi (`v3.0`–`v7.1`)
+## 3. Sürüm Evrimi (`v3.0`–`v7.2`)
 
 | Sürüm | Temel Modelleme ve Yazılım Değişimi | Nominal CAD / Parametrik BOM | `pytest` |
 |---|---|---|---|
@@ -84,7 +86,8 @@ flowchart LR
 | `v4.0` (`Exp129`–`Exp135`) | `VOKL-6` vadi-yörünge analizi, `S5.5` flaş tavlama, `3 kΩ` `M4` cQED, `BOED` (`24,4×`), `S6.9` titreşim modeli, 5y TCO | `170` parça / `$4,61M` | `142` |
 | `v5.0` (`Exp136`–`Exp141`) | `160k`-orbital `sp³d⁵s*` TB (`f*=%1,5`), yankılı `P4` `M4` kapısı, `1530,1 K` + `S5.6` MBE, `Q16.16` BOED, `N_mux*=32`, `W2/W3` SOI | `189` parça / `$5,25M` | `198` |
 | `v6.0` (`Exp142`–`Exp146`) | `Option-Q` (`S1-Multi` + `qRAM`), `D3` GRAPE + `Option-HPC` RDMA, `[[144,12,12]]` `qLDPC` (`108L=1` kriyo), `ibm_marrakesh` QPU kontrol proxy | `199` parça / `$5,55M` (`9-RFQ`) | `252` |
-| `v7.0` / `v7.1` (`Exp147`–`Exp151`) | Evrensel `[[288,12,18]]` + `T`-fabrikası, `¹²¹Sb` `Q-Echo-8` (`455,5×`), `894`-LOC Verilog RTL + HTML5 gezgin, sertifikasız `M0` FMEA/HAZOP (`RFQ-10`), `v7.1` epistemik bütünlük temizliği | `199` parça (+`355 kg` tesis) / `180p` Faz-1 `$5,39M` · Full `$5,69M` (`10-RFQ` taslağı) | `306` |
+| `v7.0` / `v7.1` (`Exp147`–`Exp151`) | Evrensel `[[288,12,18]]` + `T`-fabrikası, `¹²¹Sb` `Q-Echo-8` (`455,5×`), Verilog RTL + HTML5 gezgin, sertifikasız `M0` FMEA/HAZOP (`RFQ-10`), `v7.1` epistemik bütünlük temizliği | `199` parça (+`355 kg` tesis) / `180p` Faz-1 `$5,39M` · Full `$5,69M` (`10-RFQ` taslağı) | `306` |
+| `v7.2` (Gerçek EDA + `1% ²⁹Si` Banyo + Fizik) | Gerçek açık-kaynak EDA (`iverilog`/`verilator -Wall`/`yosys` `xcup`/`xc7`/`ecp5`, `1.193` LOC, `0` `/` bölücü, `no_external_eda_sim=false`), gerçek `1% ²⁹Si` örgü banyosu BOED (`%91,15`, `10,46×` prob), fiziksel `auto_recal`/`programmer` (UHV ODE, Si PDE, `%61,51` stitch, exact 16B Lindblad+Gillespie-OU, GF(2) BB qLDPC), `Exp150` `λ_DU×β` taraması + RK4 ODH | `199` parça (+`355 kg` tesis) / `180p` (`39/39` `SHA-256`) | `333` (`400` tam) |
 
 ---
 
@@ -149,24 +152,24 @@ Her deneyin tahminleri hesaplamadan önce `predictions_exp*.json` içine donduru
 | `Exp146` | `v6.0` bütünleşik artefakt özeti (`24/24` + QPU) | `8/8 PASS` | `24/24` + proxy QPU `SHA-256` dosya bütünlüğü özeti, `679 → 100 → 1` kriyostat sıkıştırma modeli | [`summary_exp146.md`](results/exp146_v6_digital_twin/summary_exp146.md) · [`test_exp146.py`](tests/test_exp146.py) |
 | `Exp147` | Evrensel `[[288,12,18]]` `qLDPC`, `T`-fabrikası, FeMoco/RSA | `5/7 PASS, 2/7 FAIL` | `UQ4,5 FAIL` (okuma tavanı `p_meas ≤ %0,15`); FeMoco `16` kriyo (`37,1×`, `3,38 sa`), `RSA-2048` `291` kriyo (`52,7×`, `7,37 MW`) | [`summary_exp147.md`](results/exp147_universal_qldpc_d18_magic_state/summary_exp147.md) · [`test_exp147.py`](tests/test_exp147.py) |
 | `Exp148` | `¹²¹Sb` `I=7/2` `Q-Echo-8` ve `SU(8)` GRAPE | `6/7 PASS, 1/7 FAIL` | `SQ4 FAIL` (Cywiński `1/f`); `OQ6` model uzayında giderildi: statik Gross `0,5800 → 0,99908` (`455,5×`), `SU(8) ≥ 0,9954` | [`summary_exp148.md`](results/exp148_sb121_quadrupole_echo_qudit/summary_exp148.md) · [`test_exp148.py`](tests/test_exp148.py) |
-| `Exp149` | Sentezlenebilir Verilog RTL ve HTML5 model gezgini | `7/7 PASS` | `no_external_eda_sim=true`; `894` LOC (`0` lint), `1.024/1.024` ROM `0`-bit, `64/64` `0 LSB`, `584` çevrim + `67,5 KB` HTML5 gezgin | [`summary_exp149.md`](results/exp149_boed_verilog_rtl_and_interactive_twin/summary_exp149.md) · [`test_exp149.py`](tests/test_exp149.py) |
-| `Exp150` | Ön emniyet taraması `FMEA/HAZOP` (sertifikasız `M0`) | `7/7 PASS` | `25` FMEA `max RPN 280 → 42` (`−%86,3`), `OD8+3 mm` (`1,19×10⁻²³ µSv/h`), `SDS PH₃ 0,00715 ppm`, `S7.SAFETY $145k` (`RFQ-10` taslağı) | [`summary_exp150.md`](results/exp150_industrial_safety_fmea_hazop/summary_exp150.md) · [`test_exp150.py`](tests/test_exp150.py) |
-| `Exp151` | `v7.0` / `v7.1` bütünleşik artefakt özeti (`38/38` `SHA-256`) | `8/8 PASS` | `38/38` dosya bütünlüğü `SHA-256` manifestosu (bilimsel kanıt değil), Faz-1 `Base+Safety $5,39M` → Faz-2 `v7 Full $5,69M`, `306/306` `pytest` | [`summary_exp151.md`](results/exp151_v7_digital_twin/summary_exp151.md) · [`test_exp151.py`](tests/test_exp151.py) |
+| `Exp149` | Gerçek-EDA doğrulamalı Verilog RTL ve HTML5 gezgin | `8/8 PASS` | `no_external_eda_sim=false`, `no_vendor_vivado_pnr=true`; `1.193` LOC (`0` `/` bölücü), `verilator -Wall` `0` uyarı, `iverilog` `64/64` + `4`-ch `0 LSB` / `584` çevrim, `yosys` `xcup_top16` (`102.886` LUT, `1.584` DSP, `96` BRAM36) + `78,7 KB` HTML5 gezgin | [`summary_exp149.md`](results/exp149_boed_verilog_rtl_and_interactive_twin/summary_exp149.md) · [`test_exp149.py`](tests/test_exp149.py) |
+| `Exp150` | Ön emniyet taraması `FMEA/HAZOP` (sertifikasız `M0`) | `7/7 PASS` | `iec61508_certified=false`, `semi_s2_certified=false`, `25` FMEA `max RPN 280 → 42`, `15`-durumlu `λ_DU×β` taraması (`10×@β=%10 → SIL-2`), RK4 ODH, `S7.SAFETY $145k` (`RFQ-10`) | [`summary_exp150.md`](results/exp150_industrial_safety_fmea_hazop/summary_exp150.md) · [`test_exp150.py`](tests/test_exp150.py) |
+| `Exp151` | `v7.2` bütünleşik artefakt özeti (`39/39` `SHA-256`) | `8/8 PASS` | `39/39` dosya bütünlüğü `SHA-256` manifestosu (gerçek EDA + `1% ²⁹Si` banyo + fiziksel `auto_recal`/`programmer` + sertifikasız `Exp150`), Faz-1 `$5,39M` → Faz-2 `$5,69M`, `400/400` (`333` AL) `pytest` | [`summary_exp151.md`](results/exp151_v7_digital_twin/summary_exp151.md) · [`test_exp151.py`](tests/test_exp151.py) |
 
 ---
 
 ## 7. Görseller ve Teknik Çizimler
 
 <details open>
-<summary>v7.0 / v7.1 Şekilleri (Exp147–Exp151, 5 adet 2400×1400 PNG)</summary>
+<summary>v7.0 / v7.2 Şekilleri (Exp147–Exp151, 5 adet 2400×1400 PNG)</summary>
 
 | `Exp147` Evrensel `[[288,12,18]]` `qLDPC` ve FeMoco / `RSA-2048` | `Exp148` `¹²¹Sb` `Q-Echo-8` ve `SU(8)` GRAPE |
 |---|---|
 | ![Exp147 Universal qLDPC](results/exp147_universal_qldpc_d18_magic_state/fig_exp147_universal_qldpc_magic.png) | ![Exp148 121Sb Q-Echo](results/exp148_sb121_quadrupole_echo_qudit/fig_exp148_sb121_qudit_echo.png) |
-| `Exp149` `Q16.16` BOED-FPGA Verilog RTL (`584` Çevrim) | `Exp150` Ön Emniyet Hedefi `FMEA/HAZOP` (`RPN 280→42`, Sertifikasız `M0`) |
+| `Exp149` Gerçek-EDA `Q16.16` BOED-FPGA Verilog RTL (`584` Çevrim) | `Exp150` Ön Emniyet Hedefi `FMEA/HAZOP` (`RPN 280→42`, Sertifikasız `M0`) |
 | ![Exp149 Verilog RTL](results/exp149_boed_verilog_rtl_and_interactive_twin/fig_exp149_rtl_fpga_arch.png) | ![Exp150 Industrial Safety](results/exp150_industrial_safety_fmea_hazop/fig_exp150_safety_fmea_hazop.png) |
 
-| `Exp151` Bütünleşik Artefakt Özeti ve Dosya Bütünlüğü (`38/38` `SHA-256`) Panosu |
+| `Exp151` Bütünleşik Artefakt Özeti ve Dosya Bütünlüğü (`39/39` `SHA-256`) Panosu |
 |---|
 | ![Exp151 v7 Twin](results/exp151_v7_digital_twin/fig_exp151_v7_digital_twin.png) |
 
@@ -247,12 +250,13 @@ Her deneyin tahminleri hesaplamadan önce `predictions_exp*.json` içine donduru
 
 ## 8. Etkileşimli Artefaktlar, Yazılım Regresyon Testleri ve Dosya Bütünlüğü
 
-- **Çevrimdışı HTML5 Model Gezgini:** [`docs/digital_twin_interactive.html`](docs/digital_twin_interactive.html) (`67,5 KB`, `5` sekme, `0` harici CDN/HTTP çağrısı; yerel tarayıcıda doğrudan açılır).
-- **Sentezlenebilir Verilog RTL:** [`rtl/boed_fpga/README.md`](rtl/boed_fpga/README.md) (`10` dosya, `4` sentezlenebilir IEEE 1364-2005 modülü = `894` satır, `584` çevrim, `64/64` `0 LSB` Python bit-kesin eş-doğrulama; `no_external_eda_sim = true`).
+- **Çevrimdışı HTML5 Model Gezgini:** [`docs/digital_twin_interactive.html`](docs/digital_twin_interactive.html) (`78,7 KB` / `78.675` bayt, `5` sekme, `0` harici CDN/HTTP çağrısı; yerel tarayıcıda doğrudan açılır).
+- **Gerçek-EDA Doğrulamalı Verilog RTL:** [`rtl/boed_fpga/README.md`](rtl/boed_fpga/README.md) (`4` sentezlenebilir IEEE 1364-2005 modülü = `1.193` satır, `0` kombinasyonel `/` bölücü, `verilator 5.055 -Wall` `0` uyarı/hata, `iverilog 14.0 + vvp` `64/64` + `4`-ch `0 LSB` / `584` çevrim, `yosys 0.71` `xcup`/`xc7`/`ecp5`; `no_external_eda_sim = false`, `no_vendor_vivado_pnr = true`, `no_lab_measurement_rtl = true`).
+- **Gerçek `1% ²⁹Si` Örgü Banyosu BOED Kıyaslaması:** [`results/boed_real_bath_benchmark.json`](results/boed_real_bath_benchmark.json) (`45.214` elmas-kübik örgü konumu, `N = 260`, `%91,15` vs `%84,62` Uniform, `10,46×` prob / `26,29×` zaman hızlanması, dürüst `2 kHz` Fourier duvarı & `SNR ≤ 3` uçurumu).
 
-### Yazılım Regresyon Testleri (`306/306 pytest`)
+### Yazılım Regresyon Testleri (Temiz Klon: `333/333` [`35/35` Suit]; Yerel Geliştirme Alanı: `400/400`)
 
-Aşağıdaki komut yalnızca kod tutarlılığını, birim doğruluğunu ve iç yeniden üretilebilirliği sınar; fiziksel laboratuvar doğrulaması değildir.
+Aşağıdaki komut yalnızca kod tutarlılığını, birim doğruluğunu, açık-kaynak EDA eş-doğrulamasını ve iç yeniden üretilebilirliği sınar; fiziksel laboratuvar doğrulaması değildir. Temiz bir `git clone` bu depodaki **`35/35` staged Atom Litografi test dosyasını (`333/333 PASS`)** yürütür; `.gitignore` tarafından yayın paketinin dışında tutulan `12` yerel eski `quantum_cell` test dosyasını (`67` test) da barındıran yerel geliştirme çalışma alanında aynı `tests/` taraması **`400/400 PASS`** verir.
 
 ```bash
 git clone https://github.com/berkmec/Atom-Lithography.git
@@ -260,8 +264,11 @@ cd Atom-Lithography
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 
-# Tüm 33 yazılım regresyon testi (306/306 PASS, 0 repo-içi yazma açması):
-PYTHONPATH=.:src python3 -B -m pytest -v -p no:cacheprovider
+# Temiz git clone (35/35 staged Atom Litografi test dosyası -> 333/333 PASS):
+PYTHONPATH=.:src python3 -B -m pytest tests/ -v -p no:cacheprovider
+
+# (Yalnızca .gitignore dışı 12 yerel eski quantum_cell suitini içeren tam yerel geliştirme alanında -> 400/400 PASS):
+# PYTHONPATH=.:src python3 -B -m pytest tests/ --ignore=tests/test_chain_phonon.py --ignore=tests/test_fem.py -v -p no:cacheprovider
 ```
 
 ### İsteğe Bağlı Yeniden Üretim Komutları
@@ -270,7 +277,7 @@ PYTHONPATH=.:src python3 -B -m pytest -v -p no:cacheprovider
 # 1. CellISA v4.0 + BOED (--preset v400) simülasyonu:
 PYTHONPATH=src python3 -m machine_control.sim --slots 4000 --preset v400 --program bell --program-mode grape
 
-# 2. Q16.16 BOED-FPGA Verilog RTL kontrolü ve HTML5 model gezgini derleme:
+# 2. Q16.16 BOED-FPGA gerçek EDA (iverilog/verilator/yosys) doğrulaması ve HTML5 model gezgini derleme:
 PYTHONPATH=.:src python3 experiments/exp149_boed_verilog_rtl_and_interactive_twin/run_exp149.py
 
 # 3. Nominal parametrik CAD v6.0 STL, geometri JSON ve özet panosu:
@@ -278,7 +285,7 @@ python3 research/atom_lithography_machine/cad/gen_scad.py
 python3 research/atom_lithography_machine/cad/gen_stl.py
 python3 research/atom_lithography_machine/cad/gen_v7_dashboard.py
 
-# 4. Parametrik BOM v7.0, Exp128 100k MC ve Exp151 dosya bütünlüğü manifestosu (38/38 SHA-256):
+# 4. Parametrik BOM v7.0, Exp128 100k MC ve Exp151 dosya bütünlüğü manifestosu (39/39 SHA-256):
 python3 experiments/exp128_bom_sensitivity/build_bom_detailed.py
 python3 experiments/exp128_bom_sensitivity/run_exp128.py
 PYTHONPATH=.:src python3 experiments/exp151_v7_digital_twin/run_exp151.py
@@ -290,8 +297,9 @@ Aşağıdaki `SHA-256` özetleri yalnızca depodaki çıktı dosyalarının sonr
 
 | Artefakt | Kapsam | `SHA-256` Özeti |
 |---|---|---|
-| [`v7_digital_twin_cert.json`](results/exp151_v7_digital_twin/v7_digital_twin_cert.json) | `v7.1` bütünleşik dosya-bütünlüğü manifestosu (`Exp151`, `38/38` dosya) | `7a3dca56839c1d4aefedf01c61fd5f6b1c62f498f45d9a2329568f04cc437d43` |
-| [`digital_twin_interactive.html`](docs/digital_twin_interactive.html) | Çevrimdışı HTML5 model gezgini (`67.505` bayt, `5` sekme) | `e78b7e9a61ecc19ce753765ed23be20d6544e2f37ccc23e2516ffd1d1197fc61` |
+| [`v7_digital_twin_cert.json`](results/exp151_v7_digital_twin/v7_digital_twin_cert.json) | `v7.2` bütünleşik dosya-bütünlüğü manifestosu (`Exp151`, `39/39` dosya) | `a72aa7150eb2c3407958671cb0f6a4eff6c21dc94deed799a88ca7e5fc32c3b8` |
+| [`digital_twin_interactive.html`](docs/digital_twin_interactive.html) | Çevrimdışı HTML5 model gezgini (`78.675` bayt, `5` sekme) | `b252fa2c29f1901f13cc0773a83b89241e84931b0f00b75d79c7a41c1f02cc68` |
+| [`boed_real_bath_benchmark.json`](results/boed_real_bath_benchmark.json) | Gerçek `1% ²⁹Si` elmas-kübik örgü banyosu BOED kıyaslaması (`N=260`) | `5ef83da01ffe635c362ec887a07f82ed043eaa03799403e3645e505551f055a8` |
 | [`ibm_qpu_live_results.json`](results/exp145_cloud_qpu_ibm_validation/ibm_qpu_live_results.json) | Bulut QPU proxy (`ibm_marrakesh`, `156Q`) ham sayım defteri | `02b7a19d1704662c6424e76f4971e21b04a98d48230a917c9682853b3ca1fc5a` |
 | [`v6_digital_twin_cert.json`](results/exp146_v6_digital_twin/v6_digital_twin_cert.json) | Tarihsel `v6.0` dosya-bütünlüğü manifestosu (`Exp146`) | `ca3f0e0267263bacb973f46c3cc2d321c0f204075ea232f4094758e1a9abf1d7` |
 | [`v5_digital_twin_cert.json`](results/exp141_v5_digital_twin/v5_digital_twin_cert.json) | Tarihsel `v5.0` dosya-bütünlüğü manifestosu (`Exp141`) | `2828e8ce8d9388f7cba5490b2d05add930aadc5fe6d3ba4295f0380f816d43d1` |
@@ -301,10 +309,10 @@ Aşağıdaki `SHA-256` özetleri yalnızca depodaki çıktı dosyalarının sonr
 
 ## 9. Dokümantasyon Dizini
 
-1. [`docs/digital_twin_interactive.html`](docs/digital_twin_interactive.html) ve [`rtl/boed_fpga/README.md`](rtl/boed_fpga/README.md) — Çevrimdışı etkileşimli model gezgini ve sentezlenebilir `Q16.16` BOED-FPGA Verilog RTL paketi.
-2. [`DESIGN.md`](research/atom_lithography_machine/DESIGN.md) — Ana kavramsal mimari tasarım belgesi (`TRL 1–2 / M0`), risk matrisi ve sürüm günlüğü.
+1. [`docs/digital_twin_interactive.html`](docs/digital_twin_interactive.html) ve [`rtl/boed_fpga/README.md`](rtl/boed_fpga/README.md) — Çevrimdışı etkileşimli model gezgini ve gerçek-EDA doğrulamalı `Q16.16` BOED-FPGA Verilog RTL paketi.
+2. [`DESIGN.md`](research/atom_lithography_machine/DESIGN.md) — Ana kavramsal mimari tasarım belgesi (`v7.2`, `TRL 1–2 / M0`), risk matrisi ve sürüm günlüğü.
 3. [`TECHNICAL_MANUAL.md`](research/atom_lithography_machine/TECHNICAL_MANUAL.md) — 12 bölümlü fizik, `CellISA v4.0`, `rtl/boed_fpga/`, nominal `CAD v6.0`, parametrik `BOM v7.0` / `10-RFQ` ve sertifikasız `M0` ön EHS el kitabı.
-4. [`MODULAR.md`](research/atom_lithography_machine/MODULAR.md) — `M1`–`M8`, `Option-Q`, `Option-HPC` ve `S7.SAFETY` arayüz kontrol belgesi (`v7.1-ICD`).
+4. [`MODULAR.md`](research/atom_lithography_machine/MODULAR.md) — `M1`–`M8`, `Option-Q`, `Option-HPC` ve `S7.SAFETY` arayüz kontrol belgesi (`v7.2-ICD`).
 5. [`M1_PROTOTYPE_BLUEPRINT.md`](research/atom_lithography_machine/M1_PROTOTYPE_BLUEPRINT.md) — İlk laboratuvar prototipi kavramsal planı (`M1 Base $2,466M`, `M1+Safety $2,611M`) ve `G1`–`G8` / `G6b` kabul kapıları.
 6. [`BOM_ENGINEERING.md`](research/atom_lithography_machine/BOM_ENGINEERING.md) ve [`RFQ_SPECIFICATIONS.md`](research/atom_lithography_machine/RFQ_SPECIFICATIONS.md) — `180` parçalık parametrik malzeme listesi ve `10` tedarikçi ön RFQ taslağı (`no_supplier_quotes = true`).
 7. [`PROJECT_DOSSIER.md`](research/atom_lithography_machine/PROJECT_DOSSIER.md) — `Exp0`–`Exp151` uçtan uca proje arşivi, bulut `ibm_marrakesh` kontrol proxy kıyaslaması ve nicel sicil.

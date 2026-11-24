@@ -1,15 +1,17 @@
 {
   "experiment": "exp149_boed_verilog_rtl_and_interactive_twin",
   "hypothesis_id": "H167",
-  "version": "7.0-phaseA",
-  "date": "2026-11-23",
+  "version": "7.2-real-eda",
+  "date": "2026-11-24",
   "no_lab_measurement_rtl": true,
-  "no_external_eda_sim": true,
+  "no_external_eda_sim": false,
+  "real_eda_verified": true,
+  "no_vendor_vivado_pnr": true,
   "epistemic_scope": {
-    "verilog_rtl_and_fpga_budget": "Model/Sayisal-Simulasyon/RTL-Structural-Verified (no_external_eda_sim=true, no_lab_measurement_rtl=true)",
+    "verilog_rtl_and_fpga_budget": "Real-EDA-Verified (Icarus Verilog + Verilator -Wall + Yosys pre-P&R synth_xilinx/synth_ecp5; no_external_eda_sim=false, no_vendor_vivado_pnr=true, no_lab_measurement_rtl=true)",
     "embedded_live_qpu_tab": "Canli-Donanim-IBM-QPU (ibm_marrakesh, 156Q, job_id=dc1tdo2nj2vs73dfrfl0)"
   },
-  "runtime_s": 0.593,
+  "runtime_s": 49.407,
   "predictions": {
     "experiment": "exp149_boed_verilog_rtl_and_interactive_twin",
     "hypothesis_id": "H167",
@@ -57,8 +59,35 @@
     "success_rule": "RV1, RV2, RV3, RV4, RV5, RV6, RV7 all PASS."
   },
   "rtl_verification": {
-    "no_external_eda_sim": true,
+    "no_external_eda_sim": false,
+    "real_eda_verified": true,
+    "no_vendor_vivado_pnr": true,
     "no_lab_measurement_rtl": true,
+    "eda_toolchain": {
+      "all_required_available": true,
+      "tools": {
+        "iverilog": {
+          "available": true,
+          "version": "Icarus Verilog version 14.0 (devel) (s20260301-1285-g231fb9245-dirty)"
+        },
+        "vvp": {
+          "available": true,
+          "version": "Icarus Verilog runtime version 14.0 (devel) (s20260301-1285-g231fb9245-dirty)"
+        },
+        "verilator": {
+          "available": true,
+          "version": "Verilator 5.055 devel rev v5.054-374-gb3a6da96b (mod)"
+        },
+        "yosys": {
+          "available": true,
+          "version": "Yosys 0.71+101 (git sha1 c20ecc62a, Release, Clang /usr/bin/clang++ 21.1.8)"
+        },
+        "nextpnr-ecp5": {
+          "available": true,
+          "version": "\"nextpnr-ecp5\" -- Next Generation Place and Route (Version nextpnr-0.11.1-123-ge4c78599)"
+        }
+      }
+    },
     "rom_generation": {
       "rom_p0_path": "rtl/boed_fpga/rom_loglik_p0.hex",
       "rom_p1_path": "rtl/boed_fpga/rom_loglik_p1.hex",
@@ -80,14 +109,28 @@
       "n_vectors": 64,
       "n_trajectories": 8,
       "steps_per_trajectory": 8,
+      "word_width_bits": 288,
+      "regimes_covered": [
+        "clean_neg",
+        "clean_pos",
+        "crowded_doublet",
+        "edge_of_grid_left",
+        "edge_of_grid_right",
+        "high_noise",
+        "zero_signal_dark_site",
+        "sharp_snr_int32_sat"
+      ],
       "sample_records": [
         {
           "vec_id": 0,
           "traj_id": 0,
+          "regime": "clean_neg",
           "step": 0,
           "f_init_int": 30000,
           "f_probe_int": 29307,
           "y_q16": 60350,
+          "gamma_hz": 1200.0,
+          "sigma_n": 0.08,
           "exp_mu_off_q8": -171749,
           "exp_std_q4": 5711,
           "exp_next_probe_off_q8": 5611
@@ -95,10 +138,13 @@
         {
           "vec_id": 1,
           "traj_id": 0,
+          "regime": "clean_neg",
           "step": 1,
           "f_init_int": 30000,
           "f_probe_int": 30022,
           "y_q16": 48529,
+          "gamma_hz": 1200.0,
+          "sigma_n": 0.08,
           "exp_mu_off_q8": -174130,
           "exp_std_q4": 2784,
           "exp_next_probe_off_q8": -351490
@@ -106,10 +152,13 @@
         {
           "vec_id": 2,
           "traj_id": 0,
+          "regime": "clean_neg",
           "step": 2,
           "f_init_int": 30000,
           "f_probe_int": 28627,
           "y_q16": 65297,
+          "gamma_hz": 1200.0,
+          "sigma_n": 0.08,
           "exp_mu_off_q8": -239579,
           "exp_std_q4": 1749,
           "exp_next_probe_off_q8": -62219
@@ -117,18 +166,87 @@
         {
           "vec_id": 3,
           "traj_id": 0,
+          "regime": "clean_neg",
           "step": 3,
           "f_init_int": 30000,
           "f_probe_int": 29757,
           "y_q16": 55132,
+          "gamma_hz": 1200.0,
+          "sigma_n": 0.08,
           "exp_mu_off_q8": -224330,
           "exp_std_q4": 1417,
           "exp_next_probe_off_q8": -401690
+        },
+        {
+          "vec_id": 4,
+          "traj_id": 0,
+          "regime": "clean_neg",
+          "step": 4,
+          "f_init_int": 30000,
+          "f_probe_int": 28431,
+          "y_q16": 56134,
+          "gamma_hz": 1200.0,
+          "sigma_n": 0.08,
+          "exp_mu_off_q8": -237553,
+          "exp_std_q4": 1206,
+          "exp_next_probe_off_q8": -60193
+        },
+        {
+          "vec_id": 5,
+          "traj_id": 0,
+          "regime": "clean_neg",
+          "step": 5,
+          "f_init_int": 30000,
+          "f_probe_int": 29765,
+          "y_q16": 50290,
+          "gamma_hz": 1200.0,
+          "sigma_n": 0.08,
+          "exp_mu_off_q8": -235837,
+          "exp_std_q4": 1076,
+          "exp_next_probe_off_q8": -413197
+        },
+        {
+          "vec_id": 6,
+          "traj_id": 0,
+          "regime": "clean_neg",
+          "step": 6,
+          "f_init_int": 30000,
+          "f_probe_int": 28386,
+          "y_q16": 44416,
+          "gamma_hz": 1200.0,
+          "sigma_n": 0.08,
+          "exp_mu_off_q8": -229970,
+          "exp_std_q4": 982,
+          "exp_next_probe_off_q8": -52610
+        },
+        {
+          "vec_id": 7,
+          "traj_id": 0,
+          "regime": "clean_neg",
+          "step": 7,
+          "f_init_int": 30000,
+          "f_probe_int": 29794,
+          "y_q16": 47603,
+          "gamma_hz": 1200.0,
+          "sigma_n": 0.08,
+          "exp_mu_off_q8": -231637,
+          "exp_std_q4": 904,
+          "exp_next_probe_off_q8": -408997
         }
       ]
     },
     "bit_exact_co_verification": {
       "n_golden_vectors": 64,
+      "regimes_covered": [
+        "clean_neg",
+        "clean_pos",
+        "crowded_doublet",
+        "edge_of_grid_left",
+        "edge_of_grid_right",
+        "high_noise",
+        "zero_signal_dark_site",
+        "sharp_snr_int32_sat"
+      ],
       "max_mu_off_q8_lsb_err": 0,
       "max_std_q4_lsb_err": 0,
       "max_next_probe_q8_lsb_err": 0,
@@ -151,12 +269,12 @@
         "boed_top_16ch.v"
       ],
       "loc_by_file": {
-        "boed_lut_rom.v": 82,
-        "boed_isqrt_cordic.v": 66,
-        "boed_q16_core.v": 574,
-        "boed_top_16ch.v": 172
+        "boed_lut_rom.v": 95,
+        "boed_isqrt_cordic.v": 88,
+        "boed_q16_core.v": 833,
+        "boed_top_16ch.v": 177
       },
-      "total_rtl_loc": 894,
+      "total_rtl_loc": 1193,
       "modules_parsed": [
         "boed_isqrt_cordic",
         "boed_lut_rom",
@@ -166,6 +284,7 @@
       "instantiations_checked": 4,
       "forbidden_construct_count": 0,
       "forbidden_hits": [],
+      "zero_combinational_div_operators": true,
       "balance_error_count": 0,
       "balance_errors": [],
       "port_error_count": 0,
@@ -177,13 +296,236 @@
         "target_freq_MHz": 250.0,
         "has_clock_uncertainty": true,
         "has_input_output_delay": true,
-        "has_multicycle_path": true,
+        "has_multicycle_path": false,
+        "single_cycle_clean_no_multicycle_waivers": true,
         "has_dsp_ram_hints": true
       },
       "lint_passed": true
     },
+    "verilator_lint": {
+      "tool": "verilator",
+      "flags": "--lint-only -Wall",
+      "targets": {
+        "boed_q16_core": {
+          "returncode": 0,
+          "warning_count": 0,
+          "error_count": 0,
+          "warnings": [],
+          "errors": [],
+          "passed": true
+        },
+        "boed_top_16ch": {
+          "returncode": 0,
+          "warning_count": 0,
+          "error_count": 0,
+          "warnings": [],
+          "errors": [],
+          "passed": true
+        }
+      },
+      "all_passed": true
+    },
+    "iverilog_simulation": {
+      "simulator": "iverilog -g2012 -Wall + vvp",
+      "boed_q16_core": {
+        "compile_returncode": 0,
+        "compile_warnings": [],
+        "vvp_returncode": 0,
+        "vectors_tested": 64,
+        "boed_errors": 0,
+        "sprt_errors": 0,
+        "isqrt_errors": 0,
+        "max_mu_off_q8_lsb_err": 0,
+        "max_std_q4_lsb_err": 0,
+        "max_next_probe_q8_lsb_err": 0,
+        "sprt_max_lsb_err": 0,
+        "boed_cycles_min": 584,
+        "boed_cycles_max": 584,
+        "regimes_tested": [
+          "clean_neg",
+          "clean_pos",
+          "crowded_doublet",
+          "edge_of_grid_left",
+          "edge_of_grid_right",
+          "high_noise",
+          "zero_signal_dark_site",
+          "sharp_snr_int32_sat"
+        ],
+        "passed": true
+      },
+      "boed_top_16ch": {
+        "compile_returncode": 0,
+        "compile_warnings": [],
+        "vvp_returncode": 0,
+        "channels_verified": 4,
+        "errors": 0,
+        "sprt_ch3_donor": 1,
+        "passed": true
+      },
+      "all_passed": true
+    },
+    "yosys_synthesis": {
+      "tool": "yosys",
+      "measurement_kind": "yosys_pre_pnr_measured",
+      "no_vendor_vivado_pnr": true,
+      "check_assert_passed": true,
+      "targets": {
+        "xcup_core": {
+          "family": "xcup",
+          "top_module": "boed_q16_core",
+          "measurement_kind": "yosys_pre_pnr_measured",
+          "lut_pure": 6229,
+          "srl_total": 128,
+          "lut_total": 6357,
+          "ff_total": 3690,
+          "bram_blocks": 12,
+          "bram36_equiv": 6.0,
+          "dsp_total": 99,
+          "carry_cells": 1076,
+          "total_cells": 11744,
+          "cells_by_type": {
+            "BUFG": 1,
+            "CARRY4": 1076,
+            "DSP48E2": 99,
+            "FDRE": 3564,
+            "FDSE": 126,
+            "IBUF": 376,
+            "INV": 324,
+            "LUT2": 2489,
+            "LUT3": 1207,
+            "LUT4": 1048,
+            "LUT5": 554,
+            "LUT6": 607,
+            "OBUF": 133,
+            "RAMB18E2": 12,
+            "SRL16E": 128
+          },
+          "synth_command": "synth_xilinx -family xcup -top boed_q16_core",
+          "returncode": 0,
+          "passed": true
+        },
+        "xc7_core": {
+          "family": "xc7",
+          "top_module": "boed_q16_core",
+          "measurement_kind": "yosys_pre_pnr_measured",
+          "lut_pure": 5339,
+          "srl_total": 128,
+          "lut_total": 5467,
+          "ff_total": 3080,
+          "bram_blocks": 12,
+          "bram36_equiv": 6.0,
+          "dsp_total": 99,
+          "carry_cells": 935,
+          "total_cells": 10103,
+          "cells_by_type": {
+            "BUFG": 1,
+            "CARRY4": 935,
+            "DSP48E1": 99,
+            "FDRE": 2954,
+            "FDSE": 126,
+            "IBUF": 376,
+            "INV": 322,
+            "LUT2": 2338,
+            "LUT3": 796,
+            "LUT4": 674,
+            "LUT5": 509,
+            "LUT6": 700,
+            "OBUF": 133,
+            "RAMB18E1": 12,
+            "SRL16E": 128
+          },
+          "synth_command": "synth_xilinx -family xc7 -top boed_q16_core",
+          "returncode": 0,
+          "passed": true
+        },
+        "ecp5_core": {
+          "family": "ecp5",
+          "top_module": "boed_q16_core",
+          "measurement_kind": "yosys_pre_pnr_measured",
+          "lut_pure": 3871,
+          "srl_total": 0,
+          "lut_total": 3871,
+          "ff_total": 4448,
+          "bram_blocks": 12,
+          "bram36_equiv": 6.0,
+          "dsp_total": 106,
+          "carry_cells": 2252,
+          "total_cells": 10842,
+          "cells_by_type": {
+            "CCU2C": 2252,
+            "DP16KD": 12,
+            "L6MUX21": 10,
+            "LUT4": 3871,
+            "MULT18X18D": 106,
+            "PFUMX": 134,
+            "TRELLIS_FF": 4448
+          },
+          "synth_command": "synth_ecp5 -top boed_q16_core",
+          "returncode": 0,
+          "passed": true
+        },
+        "xcup_top16": {
+          "family": "xcup",
+          "top_module": "boed_top_16ch",
+          "measurement_kind": "yosys_pre_pnr_measured",
+          "lut_pure": 100838,
+          "srl_total": 2048,
+          "lut_total": 102886,
+          "ff_total": 59157,
+          "bram_blocks": 192,
+          "bram36_equiv": 96.0,
+          "dsp_total": 1584,
+          "carry_cells": 17216,
+          "total_cells": 181568,
+          "cells_by_type": {
+            "BUFG": 1,
+            "CARRY4": 17216,
+            "DSP48E2": 1584,
+            "FDRE": 57141,
+            "FDSE": 2016,
+            "IBUF": 376,
+            "INV": 5185,
+            "LUT2": 39943,
+            "LUT3": 19785,
+            "LUT4": 17029,
+            "LUT5": 9282,
+            "LUT6": 9614,
+            "MUXF7": 14,
+            "MUXF8": 7,
+            "OBUF": 135,
+            "RAMB18E2": 192,
+            "SRL16E": 2048
+          },
+          "synth_command": "synth_xilinx -family xcup -top boed_top_16ch",
+          "returncode": 0,
+          "passed": true
+        }
+      },
+      "all_passed": true
+    },
+    "baseline_before_fixes": {
+      "description": "Empirical baseline EDA run on unmodified boed_q16_core.v + tb_boed_q16_core.v prior to Bug 1-4 fixes.",
+      "verilator_lint_warnings": 40,
+      "verilator_lint_exit_nonzero": true,
+      "iverilog_original_tb_mismatches": 64,
+      "iverilog_original_tb_vectors": 64,
+      "iverilog_original_tb_symptom": "64/64 vectors failed with mu_off_q8=x, std_q4=0 (TB posedge clock race skipped odd prior banks -> X propagation).",
+      "iverilog_negedge_tb_mismatches": 64,
+      "iverilog_negedge_tb_vectors": 64,
+      "iverilog_negedge_tb_symptom": "64/64 vectors still failed even with race-free negedge TB: systematic +10240 LSB (+40.00 Hz = +1 beat / 4 lanes) mean shift from S_PASS2 1-cycle BRAM read lag (Bug 2), spurious beat-0 weight from stale lp_rd_lane=0, and std_q4=0 corruption from 48-bit (acc_m2 <<< 16) truncation & 32-bit post_ex2_q16 / post_mean_b_q8^2 overflow (Bug 3).",
+      "bugs_fixed": [
+        "Bug 1 (boed_q16_core.v L455-470): Replaced racy 4-lane non-blocking <= writes to max_lp_reg with clean combinational 4-way comparator tree (lane01_max, lane23_max, beat_max).",
+        "Bug 2 (boed_q16_core.v L483-486 vs L201-211): Fixed 1-cycle BRAM read lag in S_PASS2 by pipelining p2_rd_valid/p2_rd_beat_idx/p2_rd_act + overflow-safe 33-bit max_lp-lp subtraction so beats 0..250 align 1:1 with u_exp_lut.",
+        "Bug 3 (boed_q16_core.v L268-281, L519-536 & XDC L35-38): Replaced fake single-cycle combinational `/` operators and overflowing 32-bit post_ex2_q16 / post_mean_b_q8^2 with 3 parallel real bit-serial restoring shift-subtract dividers (18/21/35 cycles, ZERO `/` operators anywhere in RTL) + 36-bit/44-bit overflow-safe variance arithmetic; removed bogus XDC set_multicycle_path -setup 16.",
+        "Bug 4 (boed_q16_core.v L502-504): Replaced single-cycle chained 48b*16b*16b multiply + 4-way 48-bit add with pipelined df^2 pre-register -> single-DSP product register -> pairwise 48-bit adder tree -> final accumulate.",
+        "Bug 5 (boed_q16_core.v L324, caught by expanded next_probe_off_q8 testbench): Inverted Fisher alternating sign `next_sign_neg = ~r_step_idx[0]` caused opposite probe sign on all 64 steps; fixed to `next_sign_neg = r_step_idx[0]` matching Python `(step_idx + 1) % 2 == 0`.",
+        "Additional hygiene fixes: Clean reset-less synchronous BRAM inference in boed_lut_rom.v and boed_q16_core.v (12 RAMB18E2 / 12 DP16KD inferred instead of registers), 0-warning Verilator -Wall across all 4 modules, clean non-overlapping pending_out logic in boed_top_16ch.v, race-free negedge testbench driving."
+      ]
+    },
     "zu48dr_resource_budget": {
       "target_fpga": "Xilinx Zynq UltraScale+ RFSoC ZU48DR (8x 5GSPS ADC / 8x 10GSPS DAC)",
+      "estimation_kind": "analytical_vivado_post_pnr_estimate",
+      "no_vendor_vivado_pnr": true,
       "f_clk_MHz": 250.0,
       "simd_lanes": 4,
       "cycles_per_boed_step": 584,
@@ -211,12 +553,77 @@
         "ff_pct": 9.59,
         "board_total_power_W": 37.98,
         "cryo_heat_load_W": 0.0
+      },
+      "epistemic_note": "Analytical per-engine/16ch budget represents a vendor Vivado post-P&R estimate (assuming 1-DSP packed multipliers; no Vivado run on host). Unshared full-32x32 Q16.16 RTL measured by Yosys synth_xilinx -family xcup pre-P&R is tracked separately under yosys_measured_pre_pnr.",
+      "yosys_measured_pre_pnr": {
+        "measurement_kind": "yosys_pre_pnr_measured",
+        "no_vendor_vivado_pnr": true,
+        "targets": {
+          "xcup_core": {
+            "family": "xcup",
+            "top_module": "boed_q16_core",
+            "lut_total": 6357,
+            "ff_total": 3690,
+            "bram_blocks": 12,
+            "bram36_equiv": 6.0,
+            "dsp_total": 99,
+            "carry_cells": 1076,
+            "total_cells": 11744,
+            "zu48dr_pct": {
+              "dsp48e2_pct": 2.32,
+              "bram36_equiv_pct": 0.56,
+              "lut_pct": 1.49,
+              "ff_pct": 0.43
+            },
+            "fits_zu48dr": true
+          },
+          "xc7_core": {
+            "family": "xc7",
+            "top_module": "boed_q16_core",
+            "lut_total": 5467,
+            "ff_total": 3080,
+            "bram_blocks": 12,
+            "bram36_equiv": 6.0,
+            "dsp_total": 99,
+            "carry_cells": 935,
+            "total_cells": 10103
+          },
+          "ecp5_core": {
+            "family": "ecp5",
+            "top_module": "boed_q16_core",
+            "lut_total": 3871,
+            "ff_total": 4448,
+            "bram_blocks": 12,
+            "bram36_equiv": 6.0,
+            "dsp_total": 106,
+            "carry_cells": 2252,
+            "total_cells": 10842
+          },
+          "xcup_top16": {
+            "family": "xcup",
+            "top_module": "boed_top_16ch",
+            "lut_total": 102886,
+            "ff_total": 59157,
+            "bram_blocks": 192,
+            "bram36_equiv": 96.0,
+            "dsp_total": 1584,
+            "carry_cells": 17216,
+            "total_cells": 181568,
+            "zu48dr_pct": {
+              "dsp48e2_pct": 37.08,
+              "bram36_equiv_pct": 8.89,
+              "lut_pct": 24.19,
+              "ff_pct": 6.96
+            },
+            "fits_zu48dr": true
+          }
+        }
       }
     }
   },
   "interactive_twin": {
     "html_path": "docs/digital_twin_interactive.html",
-    "size_bytes": 53046,
+    "size_bytes": 78675,
     "zero_external_cdn": true,
     "embedded_subsystems": 9,
     "embedded_live_qpu_backend": "ibm_marrakesh",
@@ -230,9 +637,10 @@
     "RV4_CYCLE_COUNT_584_AND_TIMING_XDC": true,
     "RV5_ZU48DR_16CH_RESOURCE_BUDGET_CLOSURE": true,
     "RV6_INTERACTIVE_HTML5_TWIN_ZERO_CDN_LIVE_DATA": true,
-    "RV7_ARTIFACTS_PORTABILITY_VISUAL_AND_TESTS": true
+    "RV7_ARTIFACTS_PORTABILITY_VISUAL_AND_TESTS": true,
+    "RV8_REAL_EDA_IVERILOG_VERILATOR_YOSYS": true
   },
-  "n_passed": 7,
-  "n_total": 7,
+  "n_passed": 8,
+  "n_total": 8,
   "success_rule_met": true
 }

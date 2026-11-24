@@ -1,4 +1,7 @@
 {
+  "version": "7.2",
+  "n_passed": 8,
+  "n_total": 8,
   "verdicts": {
     "DT7_1_LEDGER_CAD_BOM_RTL_TWIN_SHA256_LOCK": true,
     "DT7_2_UNIVERSAL_QLDPC_D18_AND_ALGORITHMS": true,
@@ -12,9 +15,10 @@
   "l1": {
     "n_experiment_ledgers": 27,
     "n_rtl_locked_files": 7,
-    "n_total_locked_artifacts": 38,
+    "n_total_locked_artifacts": 39,
     "live_qpu_artifact_sha256": "02b7a19d1704662c6424e76f4971e21b04a98d48230a917c9682853b3ca1fc5a",
-    "interactive_twin_html_sha256": "e78b7e9a61ecc19ce753765ed23be20d6544e2f37ccc23e2516ffd1d1197fc61",
+    "interactive_twin_html_sha256": "b252fa2c29f1901f13cc0773a83b89241e84931b0f00b75d79c7a41c1f02cc68",
+    "boed_real_bath_sha256": "5ef83da01ffe635c362ec887a07f82ed043eaa03799403e3645e505551f055a8",
     "cad_v6": {
       "version": "6.0-exp142-exp143-option-qhpc-locked",
       "overall_pass": true,
@@ -99,11 +103,16 @@
     "t2_qecho64_ms": 1.4495
   },
   "l4": {
-    "no_external_eda_sim": true,
-    "exp149_verdicts_passed": "7/7",
+    "no_external_eda_sim": false,
+    "real_eda_verified": true,
+    "no_vendor_vivado_pnr": true,
+    "no_lab_measurement_rtl": true,
+    "exp149_verdicts_passed": "8/8",
     "synth_files_count": 4,
-    "total_rtl_loc": 894,
+    "total_rtl_loc": 1193,
     "forbidden_constructs": 0,
+    "zero_combinational_div_operators": true,
+    "single_cycle_clean_no_multicycle_waivers": true,
     "port_errors": 0,
     "width_mismatches": 0,
     "rom_words_checked": 1024,
@@ -115,21 +124,124 @@
     "boed_cycles_exact": 584,
     "boed_latency_us_250MHz": 2.336,
     "sprt_latency_cycles": 4,
-    "zu48dr_16ch_dsp_pct": 10.49,
-    "zu48dr_16ch_bram_pct": 5.93,
+    "verilator_lint": {
+      "all_passed": true,
+      "boed_q16_core_warnings": 0,
+      "boed_q16_core_errors": 0,
+      "boed_top_16ch_warnings": 0,
+      "boed_top_16ch_errors": 0
+    },
+    "iverilog_simulation": {
+      "all_passed": true,
+      "vectors_tested": 64,
+      "boed_errors": 0,
+      "sprt_errors": 0,
+      "isqrt_errors": 0,
+      "max_mu_off_q8_lsb_err": 0,
+      "max_std_q4_lsb_err": 0,
+      "max_next_probe_q8_lsb_err": 0,
+      "boed_cycles_min": 584,
+      "boed_cycles_max": 584,
+      "top_16ch_passed": true,
+      "top_16ch_channels_verified": 4,
+      "top_16ch_errors": 0
+    },
+    "yosys_measured_pre_pnr": {
+      "all_passed": true,
+      "check_assert_passed": true,
+      "disk_stat_json_parity": true,
+      "no_vendor_vivado_pnr": true,
+      "targets": {
+        "xcup_core": {
+          "family": "xcup",
+          "top_module": "boed_q16_core",
+          "measurement_kind": "yosys_pre_pnr_measured",
+          "lut_total": 6357,
+          "ff_total": 3690,
+          "bram_blocks": 12,
+          "bram36_equiv": 6.0,
+          "dsp_total": 99,
+          "carry_cells": 1076,
+          "passed": true,
+          "zu48dr_pct": {
+            "dsp48e2_pct": 2.32,
+            "bram36_equiv_pct": 0.56,
+            "lut_pct": 1.49,
+            "ff_pct": 0.43
+          },
+          "fits_zu48dr": true
+        },
+        "xc7_core": {
+          "family": "xc7",
+          "top_module": "boed_q16_core",
+          "measurement_kind": "yosys_pre_pnr_measured",
+          "lut_total": 5467,
+          "ff_total": 3080,
+          "bram_blocks": 12,
+          "bram36_equiv": 6.0,
+          "dsp_total": 99,
+          "carry_cells": 935,
+          "passed": true
+        },
+        "ecp5_core": {
+          "family": "ecp5",
+          "top_module": "boed_q16_core",
+          "measurement_kind": "yosys_pre_pnr_measured",
+          "lut_total": 3871,
+          "ff_total": 4448,
+          "bram_blocks": 12,
+          "bram36_equiv": 6.0,
+          "dsp_total": 106,
+          "carry_cells": 2252,
+          "passed": true
+        },
+        "xcup_top16": {
+          "family": "xcup",
+          "top_module": "boed_top_16ch",
+          "measurement_kind": "yosys_pre_pnr_measured",
+          "lut_total": 102886,
+          "ff_total": 59157,
+          "bram_blocks": 192,
+          "bram36_equiv": 96.0,
+          "dsp_total": 1584,
+          "carry_cells": 17216,
+          "passed": true,
+          "zu48dr_pct": {
+            "dsp48e2_pct": 37.08,
+            "bram36_equiv_pct": 8.89,
+            "lut_pct": 24.19,
+            "ff_pct": 6.96
+          },
+          "fits_zu48dr": true
+        }
+      }
+    },
+    "zu48dr_16ch_dsp_pct_analytical_vivado_est": 10.49,
+    "zu48dr_16ch_bram_pct_analytical_vivado_est": 5.93,
+    "zu48dr_16ch_dsp_pct": 37.08,
+    "zu48dr_16ch_bram_pct": 8.89,
+    "zu48dr_16ch_lut_pct": 24.19,
+    "zu48dr_16ch_ff_pct": 6.96,
     "zu48dr_16ch_cryo_W": 0.0,
     "interactive_twin": {
-      "size_bytes": 67505,
+      "size_bytes": 78675,
       "zero_external_cdn": true,
       "zero_secret_and_path_leaks": true,
       "embedded_json_valid": true,
-      "embedded_v7_live_sections": true
+      "embedded_v7_live_sections": true,
+      "embedded_real_eda_verified": true
     }
   },
   "l5": {
     "overall_verdict": "PASS",
     "criteria_passed": "7/7",
     "all_7_verdicts_pass": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "certification_status": "PRELIMINARY_PARAMETRIC_CALCULATION_NOT_CERTIFIED",
+    "sil3_pfd_band_met_at_nominal_assumed_lambda_du": true,
+    "requires_third_party_assessment": true,
+    "zero_false_sil3_claim": true,
     "fmea_rows": 25,
     "hazop_nodes": 10,
     "max_rpn_pre": 280,
@@ -138,9 +250,26 @@
     "residual_gt_60_count": 0,
     "laser_od_spec": 8,
     "sil3_shutter_ms": 3.2,
+    "pfd_avg_1oo2d_nominal": 2.3435e-05,
+    "pfd_sensitivity_sweep": {
+      "n_cases_total": 15,
+      "n_cases_in_sil3_pfd_band": 11,
+      "n_cases_degraded_to_sil2": 4,
+      "pfd_10x_lambda_du_beta10pct": 0.0012245,
+      "band_10x_lambda_du_beta10pct": "SIL-2_BAND",
+      "max_multiplier_beta2pct": 19.37,
+      "max_multiplier_beta5pct": 13.48,
+      "max_multiplier_beta10pct": 8.31
+    },
     "xray_22kev_shrouded_uSv_h": 1.1939e-23,
     "ph3_operator_ppm": 0.007153,
     "he_60m3_O2_pct": 20.567,
+    "odh_box_ode_transient": {
+      "dry_60m3_20ACH_min_O2_pct": 20.5804,
+      "dry_60m3_0ACH_min_O2_pct": 20.5701,
+      "dry_15m3_0ACH_min_O2_pct": 19.4712,
+      "wet_100L_60m3_20ACH_min_O2_pct": 7.7408
+    },
     "ups_rating_kVA": 15.0,
     "ups_full_load_min": 40.0,
     "ups_tier1_min": 213.2,
@@ -153,8 +282,9 @@
   },
   "l6": {
     "epistemic_split": {
-      "silicon_31P_rtl_safety": "Model/Sayisal-Simulasyon (M0, no_lab_measurement=true, no_external_eda_sim=true)",
-      "ibm_qpu_metrics": "Canli-Donanim-IBM-QPU (ibm_marrakesh, 156Q Heron r2)"
+      "silicon_31P_bath_control_safety": "Model/Sayisal-Simulasyon (TRL 1-2 / M0, no_lab_measurement=true, iec61508_certified=false, semi_s2_certified=false)",
+      "rtl_eda_verification": "Real open-source EDA verified on host (iverilog + verilator -Wall + yosys pre-P&R; no_external_eda_sim=false, no_vendor_vivado_pnr=true)",
+      "ibm_qpu_metrics": "Canli-Donanim-IBM-QPU (ibm_marrakesh, 156Q Heron r2; superconducting control/decoder proxy, validates zero silicon 31P hardware)"
     },
     "secret_leaks": [],
     "live_ibm_qpu": {
@@ -183,12 +313,119 @@
         "QRAM_SWAP"
       ],
       "qram_swap_fidelity": 0.999893,
-      "qldpc_round_feedlines": 5
+      "echo_cz": {
+        "model": "exact_16d_lindblad_gillespie_ou_1f_choi",
+        "bare_cz_bell_fidelity": 0.805468,
+        "echo_cz_bell_fidelity": 0.976281,
+        "echo_fidelity_gain": 0.170813,
+        "echo_entangling_phase_over_pi": 1.00001,
+        "cavity_leakage_prob": 5e-06,
+        "cptp_max_trace_err": 3.999765278633479e-15,
+        "cptp_min_eigval": 4.250160932169551e-15
+      },
+      "mux_readout": {
+        "model": "exp140_dispersive_lorentzian_purcell_twpa_erfc",
+        "mux32_per_cell_fidelity": 0.995414,
+        "mux64_per_cell_fidelity": 0.937027,
+        "mux32_mean_snr": 5.458,
+        "mux64_mean_snr": 3.4478,
+        "exp140_n32_ceiling_reproduced": true
+      },
+      "qldpc_round": {
+        "decoder": "gf2_bb_normalized_min_sum_bp_osd",
+        "code_name": "BB_288_12_18",
+        "n_data": 288,
+        "n_logical": 12,
+        "distance": 18,
+        "css_commutativity_verified": true,
+        "symplectic_logical_verified": true,
+        "feedlines_required": 9,
+        "n_shots": 128,
+        "n_logical_errors": 0,
+        "syndrome_valid_frac": 1.0,
+        "bp_converged_frac": 1.0
+      },
+      "qldpc_round_feedlines": 9
     },
     "live_auto_recal": {
       "n_passed": 4,
       "n_fault_modes": 4,
-      "all_passed": true
+      "all_passed": true,
+      "laser_thermal_pde": {
+        "thermal_model": "1D_nonlinear_Si_FVM_PDE_kT_cpT_T4_rad_plus_AOM_lag_antiwindup_PID",
+        "reference_T_peak_K": 1532.82,
+        "reference_energy_balance_rel_err": 9.66e-06,
+        "worst_uncontrolled_sigma_nm": 0.8345,
+        "worst_controlled_sigma_nm": 0.4087,
+        "max_abs_delta_T_peak_K": 0.22
+      },
+      "uhv_langmuir_ode": {
+        "ode_solver": "scipy.integrate.solve_ivp(Radau)_2chamber_differential_pumping",
+        "peak_ch2_wafer_torr": 3.147e-10,
+        "exposure_langmuir_total": 0.00784,
+        "exposure_langmuir_burst_excess": 8e-05,
+        "valve_excess_protection_factor": 94.54,
+        "surface_monolayer_coverage_frac": 0.002214,
+        "pumpdown_recovery_s": 36.8
+      },
+      "blanker_step_and_stitch": {
+        "compensation_mode": "wafer_stage_step_and_stitch",
+        "dead_channels_detected": 51,
+        "stitch_passes_required": 2,
+        "wafer_site_coverage_after_pct": 100.0,
+        "throughput_after_recal_pct": 61.51,
+        "throughput_penalty_pct": 38.49,
+        "max_coordinate_mismatch_um": 0.0,
+        "zero_double_exposure": true
+      },
+      "hyperfine_boed_relock": {
+        "max_relock_time_ms": 4.1974,
+        "max_residual_error_Hz": 96.49
+      }
+    },
+    "real_si29_bath_boed": {
+      "benchmark": "boed_real_si29_lattice_bath_step2a",
+      "no_lab_measurement": true,
+      "abundance_pct": 1.0,
+      "lattice_total_sites": 45214,
+      "n_candidates": 260,
+      "n_donor_clouds": 218,
+      "mean_29Si_spins_per_donor": 452.49,
+      "natural_working_yield_pct": 50.46,
+      "median_t2_star_electron_us": 0.2251,
+      "median_t2_bath_dd_ms": 15.361,
+      "legacy_exp132_fnr_on_real_bath": 1.0,
+      "boed_identification_accuracy": 0.9115,
+      "boed_fnr": 0.0545,
+      "boed_fpr": 0.1133,
+      "boed_mean_probes": 351.22,
+      "boed_mean_time_ms": 130.374,
+      "boed_a_par_rmse_Hz": 96.17,
+      "boed_b_perp_median_abs_err_Hz": 147.3,
+      "boed_b_perp_secular_lt100kHz_rmse_Hz": 8179.3,
+      "uniform_identification_accuracy": 0.8462,
+      "uniform_fnr": 0.2455,
+      "uniform_mean_probes": 3673.83,
+      "uniform_a_par_rmse_Hz": 153.52,
+      "probe_speedup_vs_uniform_raw": 10.46,
+      "probe_speedup_vs_uniform_esr_gated": 8.87,
+      "time_speedup_vs_uniform_raw": 26.29,
+      "time_speedup_vs_uniform_esr_gated": 22.16,
+      "honest_failure_walls": {
+        "fourier_linewidth_1_over_Tmax_Hz": 2000.0,
+        "sub_5kHz_gap_leakage_pct": 6.1,
+        "sub_1p5kHz_fourier_limit_lines": 53,
+        "low_snr_cliff_fnr_at_snr3": 1.0,
+        "non_secular_first_shell_lines_ge100kHz": 12
+      },
+      "factory_15slot_real_si29": {
+        "slots": 15,
+        "certified": 11,
+        "slot_success": 0.7333,
+        "mean_spec_time_ms": 108.03,
+        "a_par_rmse_Hz": 90.28,
+        "b_perp_rmse_Hz": 9017.2
+      }
     }
   },
   "l7": {
@@ -250,13 +487,15 @@
     "certificate_type": "ATOM_LITHOGRAPHY_MACHINE_V7_MASTER_DIGITAL_TWIN",
     "experiment": "exp151_v7_digital_twin",
     "hypothesis_id": "H169",
-    "version": "7.0",
+    "version": "7.2",
     "epistemic_scope": {
-      "silicon_31P_fab_rtl_safety": "Model/Sayisal-Simulasyon/Varsayim/Liste-Capasi (M0, no_lab_measurement=true, no_supplier_quotes=true, no_external_eda_sim=true)",
-      "control_stack_cloud_qpu": "Canli-Donanim-IBM-QPU (ibm_marrakesh, 156Q, job_id=dc1tdo2nj2vs73dfrfl0)"
+      "silicon_31P_fab_bath_control_safety": "Model/Sayisal-Simulasyon/Varsayim/Liste-Capasi (TRL 1-2 / M0, no_lab_measurement=true, no_supplier_quotes=true, iec61508_certified=false, semi_s2_certified=false, PRELIMINARY_PARAMETRIC_CALCULATION_NOT_CERTIFIED)",
+      "rtl_eda_verification": "Real open-source EDA verified on host (iverilog + vvp + verilator -Wall + yosys pre-P&R; no_external_eda_sim=false, real_eda_verified=true, no_vendor_vivado_pnr=true, no_lab_measurement_rtl=true)",
+      "control_stack_cloud_qpu": "Canli-Donanim-IBM-QPU (ibm_marrakesh, 156Q, job_id=dc1tdo2nj2vs73dfrfl0; superconducting control/decoder proxy, validates zero silicon 31P hardware)"
     },
-    "n_locked_artifacts": 38,
+    "n_locked_artifacts": 39,
     "locked_artifacts_sha256": {
+      "boed_real_bath_benchmark": "5ef83da01ffe635c362ec887a07f82ed043eaa03799403e3645e505551f055a8",
       "bom_detailed_v7": "a07c717413b49c5bd7cfa7a065e3b7d29e57df60c070889a192922f953dcd5d2",
       "cad_v6": "1e2f9dae2fdaa891be663aafcad10e603610ffde2813cd5e19b13ddcf1fbecf9",
       "exp124": "68cb6442b335d80d311989d41e366a518da473fc80f07ad47de6897d5e37c2c2",
@@ -284,15 +523,15 @@
       "exp146": "ce56d16907436d98a2ec8ae105d9a33951ed352bb2f2ee290f75b8e246fd846a",
       "exp147": "617b147e173ce1d2858635a92ba56ff826cbf835195d626bb0e08c9a55b12af5",
       "exp148": "b8918584771b124d0bacdd8487aeb280d90a75ea2182e8b72d913a30d3dd0939",
-      "exp149": "7af8549c7645c91620a4c50f0b0ee8d56bad81bdc23525a8d72fa7d9c28a8397",
-      "exp150": "701d34bb368d711de829c26d19db9a5927aaeb61299e5a736019986f86ca32f3",
-      "interactive_twin_html": "e78b7e9a61ecc19ce753765ed23be20d6544e2f37ccc23e2516ffd1d1197fc61",
+      "exp149": "002fe174168846a8317769f284d829a2251989324570d1b0f900d936dfe10ea1",
+      "exp150": "68d7e3722f5bc3ff3e8e935f5a4f4348375f9827006be00ebe5bac590a6d1098",
+      "interactive_twin_html": "b252fa2c29f1901f13cc0773a83b89241e84931b0f00b75d79c7a41c1f02cc68",
       "live_ibm_qpu_results": "02b7a19d1704662c6424e76f4971e21b04a98d48230a917c9682853b3ca1fc5a",
-      "rtl_boed_isqrt_cordic": "dc5d95c7382a108dd66be64f4647b49de934aa3a1270e169fc13f4addc9641ad",
-      "rtl_boed_lut_rom": "2ff1579dca90b4d95a6d7f415a295c82822b96d0b77010bfcc0c87752942d8dc",
-      "rtl_boed_q16_core": "f5af4176abcb3e666ca5d4b5138024f1984bc69014acd9657399e5065fd05655",
-      "rtl_boed_top_16ch": "0a2d759b3ea0020c9050fb4eb09f1c0a5bd7f4aa8084262ebc2ac7f0ba08bd74",
-      "rtl_golden_vectors": "a4bc7a53b684653c8d0348d1fd9b05f06f861d66676589199e4c5a17f701479d",
+      "rtl_boed_isqrt_cordic": "a0a903228ecc37d5baa7c0e1450a62bb84b8604f56e4d43dd0285439b3691ce7",
+      "rtl_boed_lut_rom": "71ca32321857a11fc4f0e1af15768b6377c1057f7ba3b1aa4e85d6c0d0da4f47",
+      "rtl_boed_q16_core": "31224e8bcb2e4f6e444ec6acfdc2a9d7419aaf0739ab2ecadf9db0c7fc664e1d",
+      "rtl_boed_top_16ch": "499c74e2f772ecaf79a3ae145b127971c6b716109dcd4eaa0606819eda179e3b",
+      "rtl_golden_vectors": "599d51b3b76de27eb37ed3a00b8892615baa7ca604439805cf01a22abedcf3c2",
       "rtl_rom_loglik_p0": "03add8e700da20a4a0498aacd3445be9fa86bec8aba0f5318e5efdb8190697d6",
       "rtl_rom_loglik_p1": "4ae0cf67b6b1bdd6329299da97d748b8f3890e8f997ea4892fe73eb3d949e662"
     },
@@ -336,13 +575,36 @@
     "exp148_sb121_qecho8_cat77": 0.999142,
     "exp148_sb121_su8_grape_min_F": 0.9954,
     "exp148_sb121_qecho64_1f_gain_x": 28.08,
-    "exp149_rtl_loc": 894,
+    "exp149_rtl_loc": 1193,
     "exp149_rtl_cycles": 584,
     "exp149_rtl_latency_us": 2.336,
     "exp149_rtl_golden_zero_lsb": true,
     "exp149_rtl_rom_words": 1024,
-    "exp149_no_external_eda_sim": true,
+    "exp149_no_external_eda_sim": false,
+    "exp149_real_eda_verified": true,
+    "exp149_no_vendor_vivado_pnr": true,
+    "exp149_no_lab_measurement_rtl": true,
+    "exp149_verilator_warnings": 0,
+    "exp149_iverilog_vectors_64_zero_lsb": true,
+    "exp149_yosys_xcup_top16_measured": {
+      "lut_total": 102886,
+      "ff_total": 59157,
+      "bram_blocks": 192,
+      "bram36_equiv": 96.0,
+      "dsp_total": 1584,
+      "zu48dr_dsp_pct": 37.08,
+      "zu48dr_bram36_pct": 8.89,
+      "zu48dr_lut_pct": 24.19,
+      "zu48dr_ff_pct": 6.96
+    },
     "exp150_safety_criteria": "7/7",
+    "exp150_iec61508_certified": false,
+    "exp150_semi_s2_certified": false,
+    "exp150_certification_status": "PRELIMINARY_PARAMETRIC_CALCULATION_NOT_CERTIFIED",
+    "exp150_sil3_pfd_band_met_at_nominal_assumed_lambda_du": true,
+    "exp150_requires_third_party_assessment": true,
+    "exp150_pfd_avg_1oo2d_nominal": 2.3435e-05,
+    "exp150_pfd_10x_lambda_du_beta10pct": 0.0012245,
     "exp150_fmea_max_rpn_pre": 280,
     "exp150_fmea_max_rpn_post": 42,
     "exp150_fmea_mean_reduction_pct": 86.3,
@@ -353,13 +615,24 @@
       213.2
     ],
     "exp150_s_safety_nom_usd": 145000.0,
+    "real_si29_bath_boed_accuracy": 0.9115,
+    "real_si29_bath_boed_probe_speedup_raw": 10.46,
+    "real_si29_bath_boed_a_par_rmse_Hz": 96.17,
+    "real_si29_bath_legacy_fnr": 1.0,
+    "real_si29_bath_fourier_wall_Hz": 2000.0,
     "live_qpu_backend": "ibm_marrakesh",
     "live_qpu_job_id": "dc1tdo2nj2vs73dfrfl0",
     "live_qpu_bell_fidelity": 0.973267,
     "live_qpu_xy4_gain_pp": 59.55,
     "live_qpu_q16_vs_fp64_kHz": 0.0016,
     "live_cellisa_v40_opcodes": 20,
+    "live_cellisa_echo_cz_bell_fidelity": 0.976281,
+    "live_cellisa_mux32_fidelity": 0.995414,
+    "live_cellisa_qldpc_bb288_feedlines": 9,
     "live_auto_recal_passed": "4/4",
-    "sha256": "7a3dca56839c1d4aefedf01c61fd5f6b1c62f498f45d9a2329568f04cc437d43"
+    "live_auto_recal_blanker_coverage_pct": 100.0,
+    "live_auto_recal_blanker_honest_throughput_pct": 61.51,
+    "live_auto_recal_uhv_langmuir_total": 0.00784,
+    "sha256": "a72aa7150eb2c3407958671cb0f6a4eff6c21dc94deed799a88ca7e5fc32c3b8"
   }
 }

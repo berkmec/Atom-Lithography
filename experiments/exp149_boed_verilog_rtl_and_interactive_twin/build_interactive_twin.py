@@ -216,7 +216,7 @@ def collect_live_twin_payload(rtl_res: dict[str, Any] | None = None) -> dict[str
 
     return {
         "meta": {
-            "version": "v7.1 (TRL 1-2 M0 Conceptual Design & Reduced-Order Multiphysics + RTL + Uncertified Safety Target + Cloud QPU Control Proxy)",
+            "version": "v7.2 (TRL 1-2 M0 Conceptual Design & Reduced-Order Multiphysics + Real-EDA RTL + Uncertified Safety Target + Cloud QPU Control Proxy)",
             "v6_cert_sha256": v6_cert["sha256"],
             "cad_version": cad["cad_version"],
             "cad_parts": cad["master_assembly"]["part_count"],
@@ -281,9 +281,14 @@ def collect_live_twin_payload(rtl_res: dict[str, Any] | None = None) -> dict[str
         },
         "rtl_fpga": {
             "no_external_eda_sim": rtl["no_external_eda_sim"],
+            "real_eda_verified": rtl.get("real_eda_verified", False),
+            "no_vendor_vivado_pnr": rtl.get("no_vendor_vivado_pnr", True),
             "lint": rtl["structural_lint"],
             "rom": rtl["rom_verification"],
             "co_ver": rtl["bit_exact_co_verification"],
+            "verilator": rtl.get("verilator_lint", {}),
+            "iverilog": rtl.get("iverilog_simulation", {}),
+            "yosys": rtl.get("yosys_synthesis", {}),
             "resources": rtl["zu48dr_resource_budget"],
         },
         "v7_algorithms": {
@@ -364,140 +369,286 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Atom Lithography Machine — Interactive Model Explorer (v7.1, TRL 1-2 / M0)</title>
+<title>Atom Lithography Machine — Interactive Model Explorer (v7.2, TRL 1-2 / M0)</title>
 <style>
   :root {
-    --bg: #0b1120;
-    --panel: #111827;
-    --panel2: #1e293b;
-    --border: #334155;
-    --text: #f1f5f9;
-    --muted: #94a3b8;
-    --cyan: #38bdf8;
-    --blue: #3b82f6;
-    --emerald: #10b981;
-    --amber: #f59e0b;
-    --coral: #ef4444;
-    --purple: #a78bfa;
+    --bg: #ffffff;
+    --surface: #f8f9fa;
+    --surface-tint: #eef2f6;
+    --border: #d1d5db;
+    --border-light: #e5e7eb;
+    --ink: #111827;
+    --ink-muted: #4b5563;
+    --navy: #1b365d;
+    --slate: #64748b;
+    --slate-light: #94a3b8;
+    --burgundy: #8b2635;
+    --forest: #2d5a3d;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "DejaVu Sans", sans-serif;
     background: var(--bg);
-    color: var(--text);
-    line-height: 1.5;
+    color: var(--ink);
+    line-height: 1.52;
     min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
   }
   header {
-    background: linear-gradient(135deg, #0f172a 0%, #172554 100%);
+    background: var(--bg);
+    border-top: 3px solid var(--navy);
     border-bottom: 1px solid var(--border);
-    padding: 18px 28px;
+    padding: 20px 32px 16px;
   }
-  .hdr-top { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
-  h1 { font-size: 1.35rem; font-weight: 700; letter-spacing: -0.01em; color: #fff; }
-  .badge-row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .hdr-top { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 14px; }
+  h1 {
+    font-family: Georgia, "Times New Roman", "DejaVu Serif", serif;
+    font-size: 1.42rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+  .badge-row { display: flex; gap: 6px; flex-wrap: wrap; }
   .badge {
-    font-size: 0.74rem; font-weight: 600; padding: 4px 10px; border-radius: 999px;
-    border: 1px solid rgba(255,255,255,0.18); background: rgba(15,23,42,0.7);
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 3px 9px;
+    border-radius: 2px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--ink-muted);
+    letter-spacing: 0.01em;
   }
-  .badge.live { border-color: var(--emerald); color: #6ee7b7; background: rgba(16,185,129,0.14); }
-  .badge.model { border-color: var(--amber); color: #fcd34d; background: rgba(245,158,11,0.14); }
-  .badge.rtl { border-color: var(--cyan); color: #7dd3fc; background: rgba(56,189,248,0.14); }
-  .badge.safe { border-color: var(--purple); color: #ddd6fe; background: rgba(167,139,250,0.14); }
+  .badge.live { border-color: var(--navy); color: var(--navy); background: var(--surface-tint); }
+  .badge.model { border-color: var(--border); color: var(--ink-muted); background: var(--surface); }
+  .badge.rtl { border-color: var(--forest); color: var(--forest); background: var(--bg); }
+  .badge.safe { border-color: var(--burgundy); color: var(--burgundy); background: var(--bg); }
   .epistemic-banner {
-    margin-top: 10px; padding: 8px 14px; border-radius: 8px;
-    background: rgba(15, 23, 42, 0.75); border-left: 4px solid var(--amber);
-    font-size: 0.80rem; color: #cbd5e1;
+    margin-top: 12px;
+    padding: 10px 14px;
+    border-radius: 2px;
+    background: var(--surface);
+    border: 1px solid var(--border-light);
+    border-left: 3px solid var(--burgundy);
+    font-size: 0.79rem;
+    color: var(--ink-muted);
   }
-  .epistemic-banner strong { color: #fff; }
+  .epistemic-banner strong { color: var(--ink); }
+  .epistemic-banner code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "DejaVu Sans Mono", monospace;
+    font-size: 0.76rem;
+    color: var(--navy);
+    background: var(--surface-tint);
+    padding: 1px 4px;
+    border-radius: 2px;
+  }
   nav.tabs {
-    display: flex; gap: 6px; padding: 12px 28px 0; background: #0f172a;
-    border-bottom: 1px solid var(--border); flex-wrap: wrap;
+    display: flex;
+    gap: 2px;
+    padding: 0 32px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
   }
   .tab-btn {
-    padding: 10px 16px; border: 1px solid transparent; border-bottom: none;
-    border-radius: 8px 8px 0 0; background: transparent; color: var(--muted);
-    font-size: 0.88rem; font-weight: 600; cursor: pointer; transition: all 0.15s;
+    padding: 11px 16px;
+    border: none;
+    border-bottom: 2px solid transparent;
+    background: transparent;
+    color: var(--ink-muted);
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: color 0.12s, border-color 0.12s;
   }
-  .tab-btn:hover { color: #fff; background: rgba(255,255,255,0.04); }
+  .tab-btn:hover { color: var(--ink); }
   .tab-btn.active {
-    color: var(--cyan); background: var(--bg); border-color: var(--border);
-    position: relative; top: 1px;
+    color: var(--navy);
+    border-bottom-color: var(--navy);
+    background: var(--bg);
   }
-  main { padding: 22px 28px 40px; max-width: 1480px; margin: 0 auto; }
+  main { padding: 24px 32px 44px; max-width: 1460px; margin: 0 auto; }
   .tab-panel { display: none; }
   .tab-panel.active { display: block; }
-  .grid-2 { display: grid; grid-template-columns: 375px 1fr; gap: 20px; }
-  .grid-even { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+  .grid-2 { display: grid; grid-template-columns: 365px 1fr; gap: 22px; }
+  .grid-even { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; }
   @media (max-width: 980px) { .grid-2, .grid-even { grid-template-columns: 1fr; } }
   .card {
-    background: var(--panel); border: 1px solid var(--border); border-radius: 12px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 3px;
     padding: 18px 20px;
   }
-  .card h2 { font-size: 1.02rem; color: #fff; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
-  .card h3 { font-size: 0.86rem; color: var(--cyan); margin: 12px 0 6px; text-transform: uppercase; letter-spacing: 0.04em; }
-  .ctrl-group { margin-bottom: 13px; }
-  .ctrl-label { display: flex; justify-content: space-between; font-size: 0.83rem; margin-bottom: 5px; color: #cbd5e1; }
-  .ctrl-label span.val { font-family: monospace; color: var(--cyan); font-weight: 700; }
-  input[type="range"] { width: 100%; accent-color: var(--cyan); cursor: pointer; }
+  .card h2 {
+    font-family: Georgia, "Times New Roman", "DejaVu Serif", serif;
+    font-size: 1.00rem;
+    font-weight: 700;
+    color: var(--ink);
+    padding-bottom: 8px;
+    margin-bottom: 14px;
+    border-bottom: 1px solid var(--border-light);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .card h3 {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--navy);
+    margin: 14px 0 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .ctrl-group { margin-bottom: 14px; }
+  .ctrl-label { display: flex; justify-content: space-between; font-size: 0.82rem; margin-bottom: 5px; color: var(--ink); }
+  .ctrl-label span.val {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "DejaVu Sans Mono", monospace;
+    color: var(--navy);
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+  input[type="range"] { width: 100%; accent-color: var(--navy); cursor: pointer; }
   select {
-    width: 100%; padding: 7px 10px; border-radius: 6px; background: var(--panel2);
-    color: var(--text); border: 1px solid var(--border); font-size: 0.84rem;
+    width: 100%;
+    padding: 7px 10px;
+    border-radius: 2px;
+    background: var(--bg);
+    color: var(--ink);
+    border: 1px solid var(--border);
+    font-size: 0.83rem;
   }
   .chk-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
   .chk-row label {
-    display: flex; align-items: center; gap: 6px; font-size: 0.81rem;
-    padding: 6px 9px; background: var(--panel2); border: 1px solid var(--border);
-    border-radius: 6px; cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.80rem;
+    color: var(--ink);
+    padding: 5px 9px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    cursor: pointer;
   }
-  .preset-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+  .chk-row input[type="checkbox"] { accent-color: var(--navy); }
+  .preset-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 9px; }
   .preset-btn {
-    padding: 5px 10px; font-size: 0.76rem; font-weight: 600; border-radius: 6px;
-    border: 1px solid var(--border); background: #0f172a; color: var(--cyan); cursor: pointer;
+    padding: 5px 10px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 2px;
+    border: 1px solid var(--navy);
+    background: var(--bg);
+    color: var(--navy);
+    cursor: pointer;
   }
-  .preset-btn:hover { background: var(--panel2); border-color: var(--cyan); }
+  .preset-btn:hover { background: var(--surface-tint); }
   .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 18px; }
   @media (max-width: 1180px) { .kpi-grid { grid-template-columns: repeat(2, 1fr); } }
   .kpi {
-    background: var(--panel2); border: 1px solid var(--border); border-radius: 10px;
-    padding: 12px 14px;
+    background: var(--surface);
+    border: 1px solid var(--border-light);
+    border-top: 2px solid var(--navy);
+    border-radius: 2px;
+    padding: 11px 13px;
   }
-  .kpi .k-lbl { font-size: 0.73rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
-  .kpi .k-val { font-size: 1.34rem; font-weight: 700; margin: 4px 0 2px; font-family: monospace; }
-  .kpi .k-sub { font-size: 0.75rem; color: #cbd5e1; }
-  .c-emerald { color: var(--emerald); }
-  .c-cyan { color: var(--cyan); }
-  .c-amber { color: var(--amber); }
-  .c-coral { color: var(--coral); }
-  .c-purple { color: var(--purple); }
-  canvas { width: 100%; height: auto; display: block; background: #0f172a; border-radius: 8px; border: 1px solid #1e293b; }
-  svg.arch-svg { width: 100%; height: auto; background: #0f172a; border-radius: 10px; border: 1px solid #1e293b; }
-  .sub-node { cursor: pointer; transition: opacity 0.15s; }
-  .sub-node:hover rect { stroke: #38bdf8; stroke-width: 2.6; }
-  .sub-node.selected rect { stroke: #10b981; stroke-width: 3.2; filter: drop-shadow(0 0 8px rgba(16,185,129,0.5)); }
-  table.spec { width: 100%; border-collapse: collapse; font-size: 0.82rem; margin-top: 8px; }
-  table.spec th, table.spec td { padding: 7px 9px; border-bottom: 1px solid var(--border); text-align: left; }
-  table.spec th { color: var(--muted); font-weight: 600; font-size: 0.75rem; text-transform: uppercase; }
-  table.spec td.num { font-family: monospace; text-align: right; color: var(--cyan); }
-  .bar-track { height: 14px; background: #1e293b; border-radius: 7px; overflow: hidden; margin-top: 4px; }
-  .bar-fill { height: 100%; border-radius: 7px; }
+  .kpi .k-lbl { font-size: 0.70rem; font-weight: 700; color: var(--ink-muted); text-transform: uppercase; letter-spacing: 0.04em; }
+  .kpi .k-val {
+    font-size: 1.28rem;
+    font-weight: 700;
+    margin: 4px 0 2px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "DejaVu Sans Mono", monospace;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink);
+  }
+  .kpi .k-sub { font-size: 0.74rem; color: var(--ink-muted); }
+  .c-emerald { color: var(--forest); }
+  .c-cyan { color: var(--navy); }
+  .c-amber { color: var(--ink); }
+  .c-coral { color: var(--burgundy); }
+  .c-purple { color: var(--navy); }
+  canvas {
+    width: 100%;
+    height: auto;
+    display: block;
+    background: var(--bg);
+    border-radius: 2px;
+    border: 1px solid var(--border-light);
+  }
+  svg.arch-svg {
+    width: 100%;
+    height: auto;
+    background: var(--bg);
+    border-radius: 2px;
+    border: 1px solid var(--border-light);
+  }
+  .sub-node { cursor: pointer; }
+  .sub-node:hover rect { stroke: var(--navy); stroke-width: 2.0; }
+  .sub-node.selected rect { stroke: var(--navy); stroke-width: 2.4; fill: var(--surface-tint); }
+  table.spec {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.81rem;
+    margin-top: 8px;
+    border-top: 1.5px solid var(--ink);
+    border-bottom: 1.5px solid var(--ink);
+  }
+  table.spec th, table.spec td {
+    padding: 7px 9px;
+    border-bottom: 1px solid var(--border-light);
+    text-align: left;
+    color: var(--ink);
+  }
+  table.spec th {
+    color: var(--ink);
+    font-weight: 700;
+    font-size: 0.73rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border-bottom: 1px solid var(--ink);
+    background: var(--surface);
+  }
+  table.spec td.num {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "DejaVu Sans Mono", monospace;
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+    color: var(--navy);
+  }
+  .bar-track { height: 9px; background: var(--border-light); border-radius: 1px; overflow: hidden; margin-top: 4px; }
+  .bar-fill { height: 100%; border-radius: 1px; }
   .note-box {
-    margin-top: 10px; padding: 9px 12px; border-radius: 8px; background: rgba(245,158,11,0.10);
-    border-left: 3px solid var(--amber); font-size: 0.79rem; color: #fde68a;
+    margin-top: 12px;
+    padding: 9px 12px;
+    border-radius: 2px;
+    background: var(--surface);
+    border: 1px solid var(--border-light);
+    border-left: 3px solid var(--burgundy);
+    font-size: 0.79rem;
+    color: var(--ink-muted);
   }
+  .note-box strong { color: var(--ink); }
   footer {
-    text-align: center; padding: 16px 24px; color: var(--muted); font-size: 0.76rem;
-    border-top: 1px solid var(--border); background: #0f172a;
+    text-align: center;
+    padding: 16px 24px;
+    color: var(--ink-muted);
+    font-size: 0.75rem;
+    border-top: 1px solid var(--border);
+    background: var(--surface);
   }
-  code.hash { font-family: monospace; font-size: 0.76rem; color: var(--cyan); word-break: break-all; }
+  code.hash {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "DejaVu Sans Mono", monospace;
+    font-size: 0.76rem;
+    color: var(--navy);
+    word-break: break-all;
+  }
 </style>
 </head>
 <body>
 <header>
   <div class="hdr-top">
     <div>
-      <h1>Atom Lithography Machine — Interactive Model Explorer (v7.1, TRL 1-2 / M0)</h1>
-      <div style="font-size:0.81rem;color:#94a3b8;margin-top:3px;">
+      <h1>Atom Lithography Machine — Interactive Model Explorer (v7.2, TRL 1-2 / M0)</h1>
+      <div style="font-size:0.80rem;color:#4b5563;margin-top:4px;">
         Anchored v6.0 Artifact File-Integrity SHA-256 (provenance only): <code class="hash" id="hdr-sha"></code>
       </div>
     </div>
@@ -509,7 +660,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
     </div>
   </div>
   <div class="epistemic-banner">
-    <strong>Epistemic Boundary (TRL 1-2 / M0):</strong> Silicon <sup>31</sup>P atom lithography fabrication (S1-S8), CAD v6.0 (199p nominal static geometry only; excl. GD&amp;T/thermal/DFM), BOM v7.0 (180p parametric / 10-RFQ draft, <code>no_supplier_quotes=true</code>), D3 GRAPE, Universal qLDPC d=18 (Exp147), <sup>121</sup>Sb Q-Echo-8 (Exp148), Verilog RTL (<code>no_external_eda_sim=true</code>, Exp149), and Exp150 Preliminary Safety FMEA/HAZOP (uncertified M0 — SEMI does not certify S2; no IEC 61508 SIL assessment) are <strong>conceptual systems-design &amp; reduced-order multiphysics models (M0, no_lab_measurement=true, tapeout_done=false)</strong>. Control-stack execution (CellISA v4.0 -&gt; OpenQASM 3.0), Hahn-Echo/XY4 DD, 5Q d=3 QEC, and bit-exact Q16.16 BOED Ramsey estimation were run on <strong>ibm_marrakesh (156Q Heron r2, job_id=dc1tdo2nj2vs73dfrfl0, 0 secret leaks) as a cloud superconducting-QPU control/decoder proxy</strong> (validates zero silicon <sup>31</sup>P fabrication hardware).
+    <strong>Epistemic Boundary (TRL 1-2 / M0):</strong> Silicon <sup>31</sup>P atom lithography fabrication (S1-S8), CAD v6.0 (199p nominal static geometry only; excl. GD&amp;T/thermal/DFM), BOM v7.0 (180p parametric / 10-RFQ draft, <code>no_supplier_quotes=true</code>), D3 GRAPE, Universal qLDPC d=18 (Exp147), <sup>121</sup>Sb Q-Echo-8 (Exp148), Verilog RTL (<strong>real EDA verified via Icarus Verilog + Verilator -Wall + Yosys pre-P&amp;R</strong>; <code>no_external_eda_sim=false</code>, <code>no_vendor_vivado_pnr=true</code>, <code>no_lab_measurement_rtl=true</code>, Exp149), and Exp150 Preliminary Safety FMEA/HAZOP (uncertified M0 — SEMI does not certify S2; no IEC 61508 SIL assessment) are <strong>conceptual systems-design &amp; reduced-order multiphysics models (M0, no_lab_measurement=true, tapeout_done=false)</strong>. Control-stack execution (CellISA v4.0 -&gt; OpenQASM 3.0), Hahn-Echo/XY4 DD, 5Q d=3 QEC, and bit-exact Q16.16 BOED Ramsey estimation were run on <strong>ibm_marrakesh (156Q Heron r2, job_id=dc1tdo2nj2vs73dfrfl0, 0 secret leaks) as a cloud superconducting-QPU control/decoder proxy</strong> (validates zero silicon <sup>31</sup>P fabrication hardware).
   </div>
 </header>
 
@@ -530,7 +681,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
         <div class="ctrl-group">
           <div class="ctrl-label"><span>Charge Noise S_eps (ueV/sqrt(Hz))</span><span class="val" id="v-seps">0.25</span></div>
           <input id="sl-seps" type="range" min="0.15" max="1.00" step="0.01" value="0.25" oninput="updateExplorer()">
-          <div style="font-size:0.72rem;color:#94a3b8;">Route C nominal: 0.39 | Optimistic: 0.25 | Unmitigated v4: 1.00</div>
+          <div style="font-size:0.72rem;color:#4b5563;">Route C nominal: 0.39 | Optimistic: 0.25 | Unmitigated v4: 1.00</div>
         </div>
         <div class="ctrl-group">
           <div class="ctrl-label"><span>M4 Cavity Quality Factor Q_r</span><span class="val" id="v-qr">1.0e6</span></div>
@@ -613,66 +764,69 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
         <svg class="arch-svg" viewBox="0 0 760 490" id="svg-arch">
           <defs>
             <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-              <path d="M 0 1 L 10 5 L 0 9 z" fill="#64748b"/>
+              <path d="M 0 1 L 10 5 L 0 9 z" fill="#4b5563"/>
+            </marker>
+            <marker id="arr-navy" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 1 L 10 5 L 0 9 z" fill="#1b365d"/>
             </marker>
           </defs>
-          <line x1="175" y1="92" x2="175" y2="122" stroke="#64748b" stroke-width="2" marker-end="url(#arr)"/>
-          <line x1="175" y1="186" x2="175" y2="216" stroke="#64748b" stroke-width="2" marker-end="url(#arr)"/>
-          <line x1="175" y1="280" x2="175" y2="310" stroke="#64748b" stroke-width="2" marker-end="url(#arr)"/>
-          <line x1="310" y1="342" x2="365" y2="342" stroke="#38bdf8" stroke-width="2" marker-end="url(#arr)"/>
-          <line x1="310" y1="248" x2="365" y2="248" stroke="#f59e0b" stroke-width="2" marker-end="url(#arr)"/>
-          <line x1="540" y1="290" x2="540" y2="316" stroke="#a78bfa" stroke-width="2" marker-end="url(#arr)"/>
-          <line x1="540" y1="168" x2="540" y2="196" stroke="#10b981" stroke-width="2" marker-end="url(#arr)"/>
+          <line x1="175" y1="92" x2="175" y2="122" stroke="#4b5563" stroke-width="1.3" marker-end="url(#arr)"/>
+          <line x1="175" y1="186" x2="175" y2="216" stroke="#4b5563" stroke-width="1.3" marker-end="url(#arr)"/>
+          <line x1="175" y1="280" x2="175" y2="310" stroke="#4b5563" stroke-width="1.3" marker-end="url(#arr)"/>
+          <line x1="310" y1="342" x2="365" y2="342" stroke="#1b365d" stroke-width="1.4" marker-end="url(#arr-navy)"/>
+          <line x1="310" y1="248" x2="365" y2="248" stroke="#1b365d" stroke-width="1.4" marker-end="url(#arr-navy)"/>
+          <line x1="540" y1="290" x2="540" y2="316" stroke="#64748b" stroke-width="1.3" marker-end="url(#arr)"/>
+          <line x1="540" y1="168" x2="540" y2="196" stroke="#1b365d" stroke-width="1.4" marker-end="url(#arr-navy)"/>
 
           <g class="sub-node selected" data-sub="S1" onclick="selectSub('S1')">
-            <rect x="40" y="28" width="270" height="62" rx="10" fill="#1e293b" stroke="#38bdf8" stroke-width="2"/>
-            <text x="56" y="54" fill="#f8fafc" font-size="14" font-weight="700">S1: Ion Source &amp; Column</text>
-            <text x="56" y="74" fill="#94a3b8" font-size="11.5">31P / S1.7 Multi (121Sb Q-Echo, 167Er)</text>
+            <rect x="40" y="28" width="270" height="62" rx="3" fill="#f8f9fa" stroke="#1b365d" stroke-width="1.5"/>
+            <text x="54" y="53" fill="#111827" font-size="13.5" font-weight="700">S1: Ion Source &amp; Column</text>
+            <text x="54" y="73" fill="#4b5563" font-size="11.2">31P / S1.7 Multi (121Sb Q-Echo, 167Er)</text>
           </g>
           <g class="sub-node" data-sub="S2" onclick="selectSub('S2')">
-            <rect x="40" y="124" width="270" height="62" rx="10" fill="#1e293b" stroke="#475569" stroke-width="1.8"/>
-            <text x="56" y="150" fill="#f8fafc" font-size="14" font-weight="700">S2: 32x32 MEMS Write Head</text>
-            <text x="56" y="170" fill="#94a3b8" font-size="11.5">1,024 active + 128 spare beamlets | Arch B</text>
+            <rect x="40" y="124" width="270" height="62" rx="3" fill="#f8f9fa" stroke="#94a3b8" stroke-width="1.2"/>
+            <text x="54" y="149" fill="#111827" font-size="13.5" font-weight="700">S2: 32x32 MEMS Write Head</text>
+            <text x="54" y="169" fill="#4b5563" font-size="11.2">1,024 active + 128 spare beamlets | Arch B</text>
           </g>
           <g class="sub-node" data-sub="S3" onclick="selectSub('S3')">
-            <rect x="40" y="218" width="270" height="62" rx="10" fill="#1e293b" stroke="#475569" stroke-width="1.8"/>
-            <text x="56" y="244" fill="#f8fafc" font-size="14" font-weight="700">S3: IBIC Ion Detector</text>
-            <text x="56" y="264" fill="#94a3b8" font-size="11.5">Counted single-ion implantation gate</text>
+            <rect x="40" y="218" width="270" height="62" rx="3" fill="#f8f9fa" stroke="#94a3b8" stroke-width="1.2"/>
+            <text x="54" y="243" fill="#111827" font-size="13.5" font-weight="700">S3: IBIC Ion Detector</text>
+            <text x="54" y="263" fill="#4b5563" font-size="11.2">Counted single-ion implantation gate</text>
           </g>
           <g class="sub-node" data-sub="S4" onclick="selectSub('S4')">
-            <rect x="40" y="312" width="270" height="62" rx="10" fill="#1e293b" stroke="#475569" stroke-width="1.8"/>
-            <text x="56" y="338" fill="#f8fafc" font-size="14" font-weight="700">S4: 6-DOF Piezo &amp; Interferometer</text>
-            <text x="56" y="358" fill="#94a3b8" font-size="11.5">CFG4 decoupled | sigma_tot = 3.57 nm</text>
+            <rect x="40" y="312" width="270" height="62" rx="3" fill="#f8f9fa" stroke="#94a3b8" stroke-width="1.2"/>
+            <text x="54" y="337" fill="#111827" font-size="13.5" font-weight="700">S4: 6-DOF Piezo &amp; Interferometer</text>
+            <text x="54" y="357" fill="#4b5563" font-size="11.2">CFG4 decoupled | sigma_tot = 3.57 nm</text>
           </g>
           <g class="sub-node" data-sub="S5" onclick="selectSub('S5')">
-            <rect x="40" y="396" width="270" height="68" rx="10" fill="#1e293b" stroke="#f59e0b" stroke-width="1.8"/>
-            <text x="56" y="422" fill="#fcd34d" font-size="14" font-weight="700">S5: UHV + S5.5 Flash + S5.6 MBE</text>
-            <text x="56" y="442" fill="#94a3b8" font-size="11.5">OD=8 + 3mm steel | 3.2 ms SIL-3 target (uncert.)</text>
+            <rect x="40" y="396" width="270" height="68" rx="3" fill="#f8f9fa" stroke="#8b2635" stroke-width="1.3"/>
+            <text x="54" y="421" fill="#111827" font-size="13.5" font-weight="700">S5: UHV + S5.5 Flash + S5.6 MBE</text>
+            <text x="54" y="441" fill="#4b5563" font-size="11.2">OD=8 + 3mm steel | 3.2 ms SIL-3 target (uncert.)</text>
           </g>
           <g class="sub-node" data-sub="S7" onclick="selectSub('S7')">
-            <rect x="370" y="28" width="350" height="68" rx="10" fill="#1e293b" stroke="#38bdf8" stroke-width="1.8"/>
-            <text x="386" y="54" fill="#7dd3fc" font-size="14" font-weight="700">S7: ZU48DR RFSoC &amp; S7.SAFETY (RFQ-10)</text>
-            <text x="386" y="74" fill="#94a3b8" font-size="11.5">16-ch BOED RTL (584 cyc) + Uncert. SIL-3 target (+$145k)</text>
+            <rect x="370" y="28" width="350" height="68" rx="3" fill="#f8f9fa" stroke="#1b365d" stroke-width="1.3"/>
+            <text x="384" y="53" fill="#1b365d" font-size="13.5" font-weight="700">S7: ZU48DR RFSoC &amp; S7.SAFETY (RFQ-10)</text>
+            <text x="384" y="73" fill="#4b5563" font-size="11.2">16-ch BOED RTL (584 cyc) + Uncert. SIL-3 target (+$145k)</text>
           </g>
           <g class="sub-node" data-sub="S9.HPC" onclick="selectSub('S9.HPC')">
-            <rect x="370" y="108" width="350" height="62" rx="10" fill="#1e293b" stroke="#10b981" stroke-width="1.8"/>
-            <text x="386" y="134" fill="#6ee7b7" font-size="14" font-weight="700">S9.HPC: Option-HPC 100G RoCEv2</text>
-            <text x="386" y="154" fill="#94a3b8" font-size="11.5">+$132k | 64 kg | 2.32 us qLDPC / 6.34 us d=37</text>
+            <rect x="370" y="108" width="350" height="62" rx="3" fill="#f8f9fa" stroke="#94a3b8" stroke-width="1.2"/>
+            <text x="384" y="133" fill="#111827" font-size="13.5" font-weight="700">S9.HPC: Option-HPC 100G RoCEv2</text>
+            <text x="384" y="153" fill="#4b5563" font-size="11.2">+$132k | 64 kg | 2.32 us qLDPC / 6.34 us d=37</text>
           </g>
           <g class="sub-node" data-sub="S6" onclick="selectSub('S6')">
-            <rect x="370" y="198" width="350" height="92" rx="10" fill="#172554" stroke="#3b82f6" stroke-width="2"/>
-            <text x="386" y="226" fill="#fff" font-size="14.5" font-weight="700">S6: 20 mK LD400 DR + 1.5T Magnet</text>
-            <text x="386" y="248" fill="#bfdbfe" font-size="12">S6.5 Cryo-MUX (N_mux*=32, 3 kOhm NbTiN)</text>
-            <text x="386" y="268" fill="#93c5fd" font-size="11.5">2,887 cells/cryo | FeMoco: 16 cryos (37.1x)</text>
+            <rect x="370" y="198" width="350" height="92" rx="3" fill="#eef2f6" stroke="#1b365d" stroke-width="1.6"/>
+            <text x="384" y="225" fill="#1b365d" font-size="14" font-weight="700">S6: 20 mK LD400 DR + 1.5T Magnet</text>
+            <text x="384" y="247" fill="#111827" font-size="11.8">S6.5 Cryo-MUX (N_mux*=32, 3 kOhm NbTiN)</text>
+            <text x="384" y="267" fill="#4b5563" font-size="11.2">2,887 cells/cryo | FeMoco: 16 cryos (37.1x)</text>
           </g>
           <g class="sub-node" data-sub="S9.4" onclick="selectSub('S9.4')">
-            <rect x="370" y="318" width="350" height="72" rx="10" fill="#1e1b4b" stroke="#a78bfa" stroke-width="1.8"/>
-            <text x="386" y="345" fill="#ddd6fe" font-size="14" font-weight="700">S9.4: Option-Q 50 Ohm &lt;-&gt; 3 kOhm qRAM</text>
-            <text x="386" y="366" fill="#c4b5fd" font-size="11.5">+$168k | 9.2 kg | +0.78 uW @ 20 mK | 8,403x life</text>
+            <rect x="370" y="318" width="350" height="72" rx="3" fill="#f8f9fa" stroke="#94a3b8" stroke-width="1.2"/>
+            <text x="384" y="344" fill="#111827" font-size="13.5" font-weight="700">S9.4: Option-Q 50 Ohm &lt;-&gt; 3 kOhm qRAM</text>
+            <text x="384" y="365" fill="#4b5563" font-size="11.2">+$168k | 9.2 kg | +0.78 uW @ 20 mK | 8,403x life</text>
           </g>
-          <rect x="370" y="408" width="350" height="56" rx="8" fill="#064e3b" fill-opacity="0.35" stroke="#10b981" stroke-width="1.2"/>
-          <text x="545" y="432" text-anchor="middle" fill="#6ee7b7" font-size="12" font-weight="700">CAD v6 Nominal: 199p / 1,108 kg | BOM v7 Parametric: 180p</text>
-          <text x="545" y="451" text-anchor="middle" fill="#a7f3d0" font-size="11">0/19,701 static clashes (excl. GD&amp;T/thermal/DFM) | 10-RFQ draft</text>
+          <rect x="370" y="408" width="350" height="56" rx="2" fill="#f8f9fa" stroke="#d1d5db" stroke-width="1.1"/>
+          <text x="545" y="431" text-anchor="middle" fill="#111827" font-size="11.8" font-weight="700">CAD v6 Nominal: 199p / 1,108 kg | BOM v7 Parametric: 180p</text>
+          <text x="545" y="450" text-anchor="middle" fill="#4b5563" font-size="10.8">0/19,701 static clashes (excl. GD&amp;T/thermal/DFM) | 10-RFQ draft</text>
         </svg>
       </div>
       <div class="card">
@@ -716,8 +870,8 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
       <div class="card">
         <h2>boed_q16_core.v — Deterministic 584-Cycle FSM &amp; 4-Lane SIMD Pipeline</h2>
         <canvas id="cv-fsm" width="660" height="300"></canvas>
-        <p style="font-size:0.80rem;color:#94a3b8;margin-top:10px;">
-          Note: <code>no_external_eda_sim = true</code> (host has no iverilog/verilator/vivado). All 4 synthesizable IEEE 1364-2005 modules pass structural linting (0 forbidden constructs, 0 port/width mismatches) and cycle-accurate Python bit-exact co-verification against <code>fpga_boed_dsp.py</code>.
+        <p style="font-size:0.79rem;color:#4b5563;margin-top:10px;">
+          Real EDA Verified (<code>no_external_eda_sim = false</code>, <code>no_vendor_vivado_pnr = true</code>): All 4 synthesizable IEEE 1364-2005 modules pass <code>verilator --lint-only -Wall</code> (0 warnings), <code>iverilog -g2012 + vvp</code> (64/64 diverse vectors + 4-ch AXI4-Stream at 0 LSB / 584 cycles), and real <code>yosys</code> synthesis (<code>xcup</code> / <code>xc7</code> / <code>ecp5</code>, 0 combinational <code>/</code> dividers).
         </p>
       </div>
       <div class="card">
@@ -754,7 +908,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
 </main>
 
 <footer>
-  Atom Lithography Machine v7.1 Interactive Model Explorer (TRL 1-2 / M0) | Zero external CDN dependencies | Embedded JSONs from repository artifacts (Exp128-Exp150) | Zero API tokens/CRNs.
+  Atom Lithography Machine v7.2 Interactive Model Explorer (TRL 1-2 / M0) | Zero external CDN dependencies | Embedded JSONs from repository artifacts (Exp128-Exp150) | Zero API tokens/CRNs.
 </footer>
 
 <script>
@@ -876,10 +1030,10 @@ function updateExplorer() {
   const p100El = document.getElementById('k-p100');
   if (p100m < 5.0) {
     p100El.textContent = 'P(>$100M) = ' + p100m.toFixed(2) + '% (<5% PASS)';
-    p100El.style.color = '#6ee7b7';
+    p100El.style.color = '#2d5a3d';
   } else {
     p100El.textContent = 'P(>$100M) = ' + p100m.toFixed(2) + '% (>5% Phased)';
-    p100El.style.color = '#fcd34d';
+    p100El.style.color = '#8b2635';
   }
   document.getElementById('k-mass').textContent = facMass > 0
     ? (frameMass.toFixed(1) + ' + 355 kg')
@@ -896,32 +1050,43 @@ function drawExplorerChart(liveCryo, liveUsd) {
   const ctx = cv.getContext('2d');
   const W = cv.width, H = cv.height;
   ctx.clearRect(0, 0, W, H);
-  ctx.fillStyle = '#0f172a';
+  ctx.fillStyle = '#ffffff';
   ctx.fillRect(0, 0, W, H);
 
   const items = [
-    { lbl: 'v5 D2 SC', cryo: 679, usd: 14.94e6, col: '#ef4444' },
-    { lbl: 'v6 D3 GRAPE SC', cryo: 100, usd: 2.76e6, col: '#f59e0b' },
-    { lbl: 'v6 qLDPC BB144', cryo: 1, usd: 63827, col: '#10b981' },
-    { lbl: 'Selected Config', cryo: liveCryo, usd: liveUsd, col: '#38bdf8' }
+    { lbl: 'v5 D2 SC', cryo: 679, usd: 14.94e6, col: '#94a3b8' },
+    { lbl: 'v6 D3 GRAPE SC', cryo: 100, usd: 2.76e6, col: '#64748b' },
+    { lbl: 'v6 qLDPC BB144', cryo: 1, usd: 63827, col: '#475569' },
+    { lbl: 'Selected Config', cryo: liveCryo, usd: liveUsd, col: '#1b365d' }
   ];
 
   function drawBars(ox, bwArea, title, getter, minV, maxV, fmt) {
-    ctx.fillStyle = '#e2e8f0';
-    ctx.font = '700 14px sans-serif';
+    ctx.fillStyle = '#111827';
+    ctx.font = '700 13.5px Georgia, serif';
     ctx.textAlign = 'center';
     ctx.fillText(title, ox + bwArea / 2, 26);
 
-    const py = 48, ph = H - 102;
+    const py = 50, ph = H - 102;
     const lmin = Math.log10(minV), lmax = Math.log10(maxV);
-    ctx.strokeStyle = '#1e293b';
-    ctx.lineWidth = 1;
-    for (let i = 0; i <= 3; i++) {
+    ctx.strokeStyle = '#e5e7eb';
+    ctx.lineWidth = 0.8;
+    ctx.setLineDash([3, 3]);
+    for (let i = 0; i < 3; i++) {
       const y = py + (ph * i) / 3;
       ctx.beginPath(); ctx.moveTo(ox, y); ctx.lineTo(ox + bwArea, y); ctx.stroke();
     }
+    ctx.setLineDash([]);
+    // Left and bottom axes only (top/right spines removed)
+    ctx.strokeStyle = '#4b5563';
+    ctx.lineWidth = 1.0;
+    ctx.beginPath();
+    ctx.moveTo(ox, py);
+    ctx.lineTo(ox, py + ph);
+    ctx.lineTo(ox + bwArea, py + ph);
+    ctx.stroke();
+
     const gw = bwArea / items.length;
-    const bw = Math.min(62, gw * 0.58);
+    const bw = Math.min(54, gw * 0.52);
     items.forEach((it, idx) => {
       const val = Math.max(minV, getter(it));
       const frac = Math.max(0.05, Math.min(1.0, (Math.log10(val) - lmin) / (lmax - lmin)));
@@ -929,16 +1094,16 @@ function drawExplorerChart(liveCryo, liveUsd) {
       const cx = ox + (idx + 0.5) * gw;
       ctx.fillStyle = it.col;
       ctx.fillRect(cx - bw / 2, py + ph - bh, bw, bh);
-      ctx.fillStyle = '#fff';
-      ctx.font = '700 12.5px monospace';
+      ctx.fillStyle = '#111827';
+      ctx.font = '700 12px monospace';
       ctx.fillText(fmt(getter(it)), cx, py + ph - bh - 7);
-      ctx.fillStyle = '#94a3b8';
-      ctx.font = '600 11.5px sans-serif';
+      ctx.fillStyle = '#4b5563';
+      ctx.font = '600 11px sans-serif';
       ctx.fillText(it.lbl, cx, py + ph + 20);
     });
   }
-  drawBars(34, 410, '100L Fleet Cryostats (log scale)', x => x.cryo, 0.5, 1500, v => String(v));
-  drawBars(514, 410, '5-yr Deployed $/L_sys (log scale)', x => x.usd, 2e4, 3e7, v => v >= 1e6 ? ('$' + (v/1e6).toFixed(2) + 'M') : ('$' + (v/1e3).toFixed(1) + 'k'));
+  drawBars(42, 405, '100L Fleet Cryostats (log scale)', x => x.cryo, 0.5, 1500, v => String(v));
+  drawBars(516, 405, '5-yr Deployed $/L_sys (log scale)', x => x.usd, 2e4, 3e7, v => v >= 1e6 ? ('$' + (v/1e6).toFixed(2) + 'M') : ('$' + (v/1e3).toFixed(1) + 'k'));
 }
 
 function selectSub(id) {
@@ -948,11 +1113,11 @@ function selectSub(id) {
   document.getElementById('sub-detail').innerHTML = `
     <div class="kpi-grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:10px;">
       <div class="kpi"><div class="k-lbl">CAD v6 Mass</div><div class="k-val c-cyan">${s.cad_mass_kg} kg</div><div class="k-sub">${s.cad_parts} CAD solids</div></div>
-      <div class="kpi"><div class="k-lbl">BOM v7 Nom</div><div class="k-val c-emerald">$${(s.bom_nom_usd/1e3).toFixed(1)}k</div><div class="k-sub">${s.bom_parts} BOM lines</div></div>
-      <div class="kpi"><div class="k-lbl">Thermal Stage</div><div class="k-val" style="font-size:0.92rem;">${s.temp}</div><div class="k-sub">Model design target</div></div>
+      <div class="kpi"><div class="k-lbl">BOM v7 Nom</div><div class="k-val">${'$' + (s.bom_nom_usd/1e3).toFixed(1) + 'k'}</div><div class="k-sub">${s.bom_parts} BOM lines</div></div>
+      <div class="kpi"><div class="k-lbl">Thermal Stage</div><div class="k-val" style="font-size:0.90rem;">${s.temp}</div><div class="k-sub">Model design target</div></div>
     </div>
-    <p style="font-size:0.84rem;color:#cbd5e1;margin-bottom:6px;"><strong>RFQ Scope:</strong> ${s.rfq}</p>
-    <p style="font-size:0.84rem;color:#94a3b8;"><strong>Safety &amp; Control:</strong> ${s.safety}</p>
+    <p style="font-size:0.83rem;color:#111827;margin-bottom:6px;"><strong>RFQ Scope:</strong> ${s.rfq}</p>
+    <p style="font-size:0.83rem;color:#4b5563;"><strong>Safety &amp; Control:</strong> ${s.safety}</p>
   `;
 }
 
@@ -965,22 +1130,29 @@ function drawLiveQPU() {
   const cv = document.getElementById('cv-ramsey');
   const ctx = cv.getContext('2d');
   const W = cv.width, H = cv.height;
-  ctx.fillStyle = '#0f172a'; ctx.fillRect(0, 0, W, H);
-  const px = 64, py = 30, pw = W - 94, ph = H - 82;
+  ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, W, H);
+  const px = 64, py = 28, pw = W - 92, ph = H - 82;
   const mx = t => px + pw * (t / 8.5);
   const my = v => py + ph * (1 - (v + 0.04) / 1.10);
 
-  ctx.strokeStyle = '#1e293b'; ctx.lineWidth = 1;
+  ctx.strokeStyle = '#e5e7eb'; ctx.lineWidth = 0.8; ctx.setLineDash([3, 3]);
   [0, 0.25, 0.5, 0.75, 1.0].forEach(v => {
     ctx.beginPath(); ctx.moveTo(px, my(v)); ctx.lineTo(px + pw, my(v)); ctx.stroke();
-    ctx.fillStyle = '#94a3b8'; ctx.font = '11px monospace'; ctx.textAlign = 'right';
+    ctx.fillStyle = '#4b5563'; ctx.font = '11px monospace'; ctx.textAlign = 'right';
     ctx.fillText(v.toFixed(2), px - 8, my(v) + 4);
   });
+  ctx.setLineDash([]);
+  // Thin L-shaped axes (top/right spines removed)
+  ctx.strokeStyle = '#4b5563'; ctx.lineWidth = 1.0;
+  ctx.beginPath();
+  ctx.moveTo(px, py); ctx.lineTo(px, py + ph); ctx.lineTo(px + pw, py + ph);
+  ctx.stroke();
+
   for (let t = 0; t <= 8; t++) {
-    ctx.fillStyle = '#94a3b8'; ctx.font = '11px monospace'; ctx.textAlign = 'center';
+    ctx.fillStyle = '#4b5563'; ctx.font = '11px monospace'; ctx.textAlign = 'center';
     ctx.fillText(t + ' us', mx(t), py + ph + 18);
   }
-  ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 2.5; ctx.beginPath();
+  ctx.strokeStyle = '#1b365d'; ctx.lineWidth = 2.0; ctx.beginPath();
   for (let s = 0; s <= 160; s++) {
     const t = 0.2 + 8.1 * s / 160;
     const v = 0.5 * (1 + c3.visibility_est * Math.exp(-t / 120) * Math.cos(2 * Math.PI * c3.blind_8pt.est_freq_kHz * 1e-3 * t));
@@ -992,37 +1164,51 @@ function drawLiveQPU() {
   c3.delays_us.forEach((t, i) => {
     const p = c3.p0_measured[i];
     ctx.beginPath();
-    ctx.arc(mx(t), my(p), selSet.has(i) ? 8.5 : 5.5, 0, Math.PI * 2);
-    ctx.fillStyle = selSet.has(i) ? '#f59e0b' : '#3b82f6';
+    ctx.arc(mx(t), my(p), selSet.has(i) ? 7.5 : 4.8, 0, Math.PI * 2);
+    ctx.fillStyle = selSet.has(i) ? '#8b2635' : '#64748b';
     ctx.fill();
-    ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.6; ctx.stroke();
+    ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 1.5; ctx.stroke();
   });
-  ctx.fillStyle = '#fcd34d'; ctx.font = '700 12px monospace'; ctx.textAlign = 'center';
-  ctx.fillText('Gold = 3 Q16.16 BOED points (120.106 kHz, 1.6 Hz vs FP64) | Blue = 8 live ibm_marrakesh PUBs', px + pw/2, H - 14);
+  ctx.fillStyle = '#111827'; ctx.font = '600 11.2px monospace'; ctx.textAlign = 'center';
+  ctx.fillText('Burgundy = 3 Q16.16 BOED points (120.106 kHz, 1.6 Hz vs FP64) | Slate = 8 live ibm_marrakesh PUBs', px + pw/2, H - 12);
 
   const cv2 = document.getElementById('cv-qpu-bars');
   const ctx2 = cv2.getContext('2d');
-  ctx2.fillStyle = '#0f172a'; ctx2.fillRect(0, 0, W, H);
-  const bars = [
-    { l: 'C1 Bare', v: c1.p0_bare_idle, col: '#64748b', t: c1.p0_bare_idle.toFixed(3) },
-    { l: 'C1 Echo', v: c1.p0_hahn_echo, col: '#3b82f6', t: c1.p0_hahn_echo.toFixed(3) },
-    { l: 'C1 XY4', v: c1.p0_xy4_dd, col: '#06b6d4', t: c1.p0_xy4_dd.toFixed(3) },
-    { l: 'C1 Bell F', v: c1.bell_fidelity_Phi_plus, col: '#10b981', t: c1.bell_fidelity_Phi_plus.toFixed(3) },
-    { l: 'C2 1-p_phys', v: 1 - c2.avg_p_phys, col: '#f59e0b', t: 'err ' + (c2.avg_p_phys*100).toFixed(2) + '%' },
-    { l: 'C2 1-p_maj', v: 1 - c2.avg_p_L_majority, col: '#10b981', t: 'err ' + (c2.avg_p_L_majority*100).toFixed(2) + '%' }
-  ];
-  const gw = (W - 60) / bars.length;
-  bars.forEach((b, i) => {
-    const x = 30 + (i + 0.5) * gw;
-    const bh = (H - 100) * b.v;
-    ctx2.fillStyle = b.col;
-    ctx2.fillRect(x - 28, H - 56 - bh, 56, bh);
-    ctx2.fillStyle = '#fff'; ctx2.font = '700 11.5px monospace'; ctx2.textAlign = 'center';
-    ctx2.fillText(b.t, x, H - 64 - bh);
-    ctx2.fillStyle = '#cbd5e1'; ctx2.font = '600 11px sans-serif';
-    ctx2.fillText(b.l, x, H - 34);
+  ctx2.fillStyle = '#ffffff'; ctx2.fillRect(0, 0, W, H);
+  const bx0 = 46, by0 = 28, bw0 = W - 70, bh0 = H - 88;
+  ctx2.strokeStyle = '#e5e7eb'; ctx2.lineWidth = 0.8; ctx2.setLineDash([3, 3]);
+  [0.25, 0.5, 0.75, 1.0].forEach(v => {
+    const yy = by0 + bh0 * (1 - v);
+    ctx2.beginPath(); ctx2.moveTo(bx0, yy); ctx2.lineTo(bx0 + bw0, yy); ctx2.stroke();
+    ctx2.fillStyle = '#4b5563'; ctx2.font = '10.5px monospace'; ctx2.textAlign = 'right';
+    ctx2.fillText(v.toFixed(2), bx0 - 6, yy + 4);
   });
-  ctx2.fillStyle = '#6ee7b7'; ctx2.font = '700 12px monospace'; ctx2.textAlign = 'center';
+  ctx2.setLineDash([]);
+  ctx2.strokeStyle = '#4b5563'; ctx2.lineWidth = 1.0;
+  ctx2.beginPath();
+  ctx2.moveTo(bx0, by0); ctx2.lineTo(bx0, by0 + bh0); ctx2.lineTo(bx0 + bw0, by0 + bh0);
+  ctx2.stroke();
+
+  const bars = [
+    { l: 'C1 Bare', v: c1.p0_bare_idle, col: '#94a3b8', t: c1.p0_bare_idle.toFixed(3) },
+    { l: 'C1 Echo', v: c1.p0_hahn_echo, col: '#64748b', t: c1.p0_hahn_echo.toFixed(3) },
+    { l: 'C1 XY4', v: c1.p0_xy4_dd, col: '#475569', t: c1.p0_xy4_dd.toFixed(3) },
+    { l: 'C1 Bell F', v: c1.bell_fidelity_Phi_plus, col: '#1b365d', t: c1.bell_fidelity_Phi_plus.toFixed(3) },
+    { l: 'C2 1-p_phys', v: 1 - c2.avg_p_phys, col: '#94a3b8', t: 'err ' + (c2.avg_p_phys*100).toFixed(2) + '%' },
+    { l: 'C2 1-p_maj', v: 1 - c2.avg_p_L_majority, col: '#1b365d', t: 'err ' + (c2.avg_p_L_majority*100).toFixed(2) + '%' }
+  ];
+  const gw = bw0 / bars.length;
+  bars.forEach((b, i) => {
+    const x = bx0 + (i + 0.5) * gw;
+    const bh = bh0 * b.v;
+    ctx2.fillStyle = b.col;
+    ctx2.fillRect(x - 24, by0 + bh0 - bh, 48, bh);
+    ctx2.fillStyle = '#111827'; ctx2.font = '700 11px monospace'; ctx2.textAlign = 'center';
+    ctx2.fillText(b.t, x, by0 + bh0 - bh - 6);
+    ctx2.fillStyle = '#4b5563'; ctx2.font = '600 10.5px sans-serif';
+    ctx2.fillText(b.l, x, by0 + bh0 + 18);
+  });
+  ctx2.fillStyle = '#1b365d'; ctx2.font = '600 11.2px monospace'; ctx2.textAlign = 'center';
   ctx2.fillText('Live C2 Post-Sel: 0.000% error (0 / 7,451 shots, 91.0% keep) | Chain [2,3,4,5,6] (0 SWAPs)', W / 2, H - 10);
 }
 
@@ -1030,54 +1216,64 @@ function drawRTL() {
   const cv = document.getElementById('cv-fsm');
   const ctx = cv.getContext('2d');
   const W = cv.width, H = cv.height;
-  ctx.fillStyle = '#0f172a'; ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, W, H);
 
-  ctx.fillStyle = '#e2e8f0'; ctx.font = '700 13px sans-serif'; ctx.textAlign = 'left';
-  ctx.fillText('Stage-0 SPRT Early-Abort Pipeline (4 cycles = 16.0 ns @ 250 MHz)', 24, 34);
-  const sprtW = 580;
+  ctx.fillStyle = '#111827'; ctx.font = '700 12.5px Georgia, serif'; ctx.textAlign = 'left';
+  ctx.fillText('Stage-0 SPRT Early-Abort Pipeline (4 cycles = 16.0 ns @ 250 MHz)', 24, 32);
+  const sprtW = W - 48;
   ['C1: Sub', 'C2: DSP48 Mul', 'C3: Q16 Shift', 'C4: LLR+Cmp'].forEach((s, i) => {
-    ctx.fillStyle = '#0ea5e9';
-    ctx.fillRect(24 + i * (sprtW / 4), 46, sprtW / 4 - 6, 32);
-    ctx.fillStyle = '#0b1120'; ctx.font = '700 11.5px monospace'; ctx.textAlign = 'center';
-    ctx.fillText(s, 24 + (i + 0.5) * (sprtW / 4) - 3, 66);
+    const sx = 24 + i * (sprtW / 4);
+    const sw = sprtW / 4 - 8;
+    ctx.fillStyle = '#eef2f6';
+    ctx.fillRect(sx, 44, sw, 32);
+    ctx.strokeStyle = '#1b365d'; ctx.lineWidth = 1.1;
+    ctx.strokeRect(sx, 44, sw, 32);
+    ctx.fillStyle = '#111827'; ctx.font = '700 11px monospace'; ctx.textAlign = 'center';
+    ctx.fillText(s, sx + sw / 2, 64);
   });
 
-  ctx.fillStyle = '#e2e8f0'; ctx.font = '700 13px sans-serif'; ctx.textAlign = 'left';
-  ctx.fillText('Stage-2 BOED 4-Lane SIMD FSM (Total = 584 cycles = 2.336 us @ 250 MHz)', 24, 120);
+  ctx.fillStyle = '#111827'; ctx.font = '700 12.5px Georgia, serif'; ctx.textAlign = 'left';
+  ctx.fillText('Stage-2 BOED 4-Lane SIMD FSM (Total = 584 cycles = 2.336 us @ 250 MHz)', 24, 114);
   const phases = [
-    { name: 'S_PASS1', cyc: 263, col: '#3b82f6' },
-    { name: 'S_PASS2', cyc: 265, col: '#10b981' },
-    { name: 'S_POST', cyc: 56, col: '#f59e0b' }
+    { name: 'S_PASS1', cyc: 263, col: '#1b365d', txt: '#ffffff' },
+    { name: 'S_PASS2', cyc: 265, col: '#475569', txt: '#ffffff' },
+    { name: 'S_POST', cyc: 56, col: '#cbd5e1', txt: '#111827' }
   ];
   let cx = 24;
   const totW = W - 48;
   phases.forEach(p => {
     const pw = totW * (p.cyc / 584);
     ctx.fillStyle = p.col;
-    ctx.fillRect(cx, 136, pw - 4, 68);
-    ctx.fillStyle = '#fff'; ctx.font = '700 13px monospace'; ctx.textAlign = 'center';
-    ctx.fillText(p.cyc + ' cyc', cx + pw / 2 - 2, 166);
+    ctx.fillRect(cx, 128, pw - 4, 66);
+    ctx.fillStyle = p.txt; ctx.font = '700 12.5px monospace'; ctx.textAlign = 'center';
+    ctx.fillText(p.name + ' (' + p.cyc + ')', cx + pw / 2 - 2, 156);
     ctx.font = '600 10.5px sans-serif';
-    ctx.fillText((p.cyc * 4) + ' ns', cx + pw / 2 - 2, 186);
+    ctx.fillText((p.cyc * 4) + ' ns', cx + pw / 2 - 2, 177);
     cx += pw;
   });
-  ctx.fillStyle = '#94a3b8'; ctx.font = '12px monospace'; ctx.textAlign = 'left';
-  ctx.fillText('Pass 1: 251 beats (4 lanes) + 12 pipe = 263 cyc  |  Pass 2: 251 beats + 14 pipe = 265 cyc', 24, 232);
-  ctx.fillText('Post  : 32 cyc floor-div + 16-stage pipelined isqrt + 8 cyc Fisher argmax = 56 cyc', 24, 254);
-  ctx.fillStyle = '#6ee7b7'; ctx.font = '700 12.5px monospace';
-  ctx.fillText('TOTAL = 263 + 265 + 56 = 584 clock cycles = 2,336 ns (2.336 us) | 0-LSB vs fpga_boed_dsp.py', 24, 282);
+  ctx.fillStyle = '#4b5563'; ctx.font = '11.5px monospace'; ctx.textAlign = 'left';
+  ctx.fillText('Pass 1: 251 beats (4 lanes) + 12 pipe = 263 cyc  |  Pass 2: 251 beats + 14 pipe = 265 cyc', 24, 224);
+  ctx.fillText('Post  : 3x restoring dividers (18/21/35 cyc, 0 `/`) + 16-stage isqrt + Fisher = 56 cyc', 24, 246);
+  ctx.fillStyle = '#1b365d'; ctx.font = '700 12px monospace';
+  ctx.fillText('TOTAL = 263 + 265 + 56 = 584 clock cycles = 2,336 ns (2.336 us) | 0-LSB iverilog vvp verified', 24, 276);
 
+  const yosTop = DATA.rtl_fpga.resources.yosys_measured_pre_pnr && DATA.rtl_fpga.resources.yosys_measured_pre_pnr.targets && DATA.rtl_fpga.resources.yosys_measured_pre_pnr.targets.xcup_top16;
   const res = DATA.rtl_fpga.resources.total_16ch;
-  const rows = [
-    ['DSP48E2 (16 ch)', res.dsp48e2 + ' / 4,272', res.dsp48e2_pct, '#38bdf8'],
-    ['BRAM36  (16 ch)', res.bram36 + ' / 1,080', res.bram36_pct, '#10b981'],
-    ['CLB LUT (16 ch)', res.lut.toLocaleString() + ' / 425,280', res.lut_pct, '#a78bfa'],
-    ['Flip-Flop (16 ch)', res.ff.toLocaleString() + ' / 850,560', res.ff_pct, '#f59e0b']
+  const rows = yosTop ? [
+    ['DSP48E2 (Yosys pre-P&R 16ch)', yosTop.dsp_total.toLocaleString() + ' / 4,272', yosTop.zu48dr_pct.dsp48e2_pct, '#1b365d'],
+    ['BRAM36-eq (Yosys pre-P&R 16ch)', yosTop.bram36_equiv + ' / 1,080 (' + yosTop.bram_blocks + ' RAMB18)', yosTop.zu48dr_pct.bram36_equiv_pct, '#1b365d'],
+    ['CLB LUT (Yosys pre-P&R 16ch)', yosTop.lut_total.toLocaleString() + ' / 425,280', yosTop.zu48dr_pct.lut_pct, '#64748b'],
+    ['Flip-Flop (Yosys pre-P&R 16ch)', yosTop.ff_total.toLocaleString() + ' / 850,560', yosTop.zu48dr_pct.ff_pct, '#64748b']
+  ] : [
+    ['DSP48E2 (16 ch est.)', res.dsp48e2 + ' / 4,272', res.dsp48e2_pct, '#1b365d'],
+    ['BRAM36  (16 ch est.)', res.bram36 + ' / 1,080', res.bram36_pct, '#1b365d'],
+    ['CLB LUT (16 ch est.)', res.lut.toLocaleString() + ' / 425,280', res.lut_pct, '#64748b'],
+    ['Flip-Flop (16 ch est.)', res.ff.toLocaleString() + ' / 850,560', res.ff_pct, '#64748b']
   ];
   document.getElementById('rtl-bars').innerHTML = rows.map(r => `
     <div style="margin-bottom:10px;">
       <div class="ctrl-label"><span>${r[0]}</span><span class="val">${r[1]} (${r[2]}%)</span></div>
-      <div class="bar-track"><div class="bar-fill" style="width:${Math.min(100, r[2]*3)}%;background:${r[3]};"></div></div>
+      <div class="bar-track"><div class="bar-fill" style="width:${Math.min(100, r[2]*2.2)}%;background:${r[3]};"></div></div>
     </div>
   `).join('');
 }
@@ -1100,50 +1296,62 @@ function drawV7Suite() {
   const cv = document.getElementById('cv-v7-alg');
   const ctx = cv.getContext('2d');
   const W = cv.width, H = cv.height;
-  ctx.fillStyle = '#0f172a'; ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, W, H);
+
+  const py = 46, ph = H - 102;
+  // Left panel grid & axes
+  ctx.strokeStyle = '#e5e7eb'; ctx.lineWidth = 0.8; ctx.setLineDash([3, 3]);
+  for (let i = 0; i < 3; i++) {
+    const yy = py + (ph * i) / 3;
+    ctx.beginPath(); ctx.moveTo(28, yy); ctx.lineTo(316, yy); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(354, yy); ctx.lineTo(638, yy); ctx.stroke();
+  }
+  ctx.setLineDash([]);
+  ctx.strokeStyle = '#4b5563'; ctx.lineWidth = 1.0;
+  ctx.beginPath(); ctx.moveTo(28, py); ctx.lineTo(28, py + ph); ctx.lineTo(316, py + ph); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(354, py); ctx.lineTo(354, py + ph); ctx.lineTo(638, py + ph); ctx.stroke();
 
   // Left half: Algorithms log10 cryostats
   const algBars = [
-    { l: 'FeMoco SC', v: alg.femoco.sc_cryos, col: '#ef4444' },
-    { l: 'FeMoco qLDPC', v: alg.femoco.qldpc_cryos, col: '#10b981' },
-    { l: 'RSA SC', v: alg.rsa2048.sc_cryos, col: '#f59e0b' },
-    { l: 'RSA qLDPC', v: alg.rsa2048.qldpc_cryos, col: '#38bdf8' }
+    { l: 'FeMoco SC', v: alg.femoco.sc_cryos, col: '#94a3b8' },
+    { l: 'FeMoco qLDPC', v: alg.femoco.qldpc_cryos, col: '#1b365d' },
+    { l: 'RSA SC', v: alg.rsa2048.sc_cryos, col: '#94a3b8' },
+    { l: 'RSA qLDPC', v: alg.rsa2048.qldpc_cryos, col: '#1b365d' }
   ];
-  ctx.fillStyle = '#e2e8f0'; ctx.font = '700 12.5px sans-serif'; ctx.textAlign = 'center';
-  ctx.fillText('Cryostats (log scale): 37.1x & 52.7x Compression', 175, 24);
-  const py = 46, ph = H - 100;
+  ctx.fillStyle = '#111827'; ctx.font = '700 12px Georgia, serif'; ctx.textAlign = 'center';
+  ctx.fillText('Cryostats (log scale): 37.1x & 52.7x Compression', 172, 24);
   algBars.forEach((b, i) => {
-    const cx = 36 + i * 74 + 30;
+    const cx = 34 + i * 70 + 30;
     const frac = Math.max(0.08, (Math.log10(b.v) - 0.8) / (Math.log10(25000) - 0.8));
     const bh = ph * frac;
     ctx.fillStyle = b.col;
-    ctx.fillRect(cx - 22, py + ph - bh, 44, bh);
-    ctx.fillStyle = '#fff'; ctx.font = '700 11px monospace';
+    ctx.fillRect(cx - 20, py + ph - bh, 40, bh);
+    ctx.fillStyle = '#111827'; ctx.font = '700 10.8px monospace';
     ctx.fillText(b.v.toLocaleString(), cx, py + ph - bh - 6);
-    ctx.fillStyle = '#94a3b8'; ctx.font = '600 10px sans-serif';
+    ctx.fillStyle = '#4b5563'; ctx.font = '600 9.8px sans-serif';
     ctx.fillText(b.l, cx, py + ph + 16);
   });
 
   // Right half: 121Sb Q-Echo-8 Fidelity
-  ctx.fillStyle = '#e2e8f0'; ctx.font = '700 12.5px sans-serif'; ctx.textAlign = 'center';
-  ctx.fillText('121Sb (500 Hz, 1 ms): 455.5x Infidelity Drop', 500, 24);
+  ctx.fillStyle = '#111827'; ctx.font = '700 12px Georgia, serif'; ctx.textAlign = 'center';
+  ctx.fillText('121Sb (500 Hz, 1 ms): 455.5x Infidelity Drop', 496, 24);
   const sbBars = [
-    { l: 'Bare Gross', v: sb.bare_gross_0L, col: '#ef4444' },
-    { l: 'Q-Echo-4', v: sb.qecho4_gross_0L, col: '#f59e0b' },
-    { l: 'Q-Echo-8', v: sb.qecho8_gross_0L, col: '#10b981' },
-    { l: 'Cat +-7/2', v: sb.qecho8_cat77, col: '#a78bfa' }
+    { l: 'Bare Gross', v: sb.bare_gross_0L, col: '#94a3b8' },
+    { l: 'Q-Echo-4', v: sb.qecho4_gross_0L, col: '#64748b' },
+    { l: 'Q-Echo-8', v: sb.qecho8_gross_0L, col: '#1b365d' },
+    { l: 'Cat +-7/2', v: sb.qecho8_cat77, col: '#334155' }
   ];
   sbBars.forEach((b, i) => {
-    const cx = 365 + i * 72 + 28;
+    const cx = 362 + i * 69 + 28;
     const bh = ph * b.v;
     ctx.fillStyle = b.col;
-    ctx.fillRect(cx - 21, py + ph - bh, 42, bh);
-    ctx.fillStyle = '#fff'; ctx.font = '700 10.5px monospace';
+    ctx.fillRect(cx - 19, py + ph - bh, 38, bh);
+    ctx.fillStyle = '#111827'; ctx.font = '700 10.5px monospace';
     ctx.fillText(b.v.toFixed(4), cx, py + ph - bh - 6);
-    ctx.fillStyle = '#94a3b8'; ctx.font = '600 10px sans-serif';
+    ctx.fillStyle = '#4b5563'; ctx.font = '600 9.8px sans-serif';
     ctx.fillText(b.l, cx, py + ph + 16);
   });
-  ctx.fillStyle = '#6ee7b7'; ctx.font = '700 11px monospace'; ctx.textAlign = 'center';
+  ctx.fillStyle = '#1b365d'; ctx.font = '600 10.8px monospace'; ctx.textAlign = 'center';
   ctx.fillText('BB288 L_max=' + alg.bb288_L_max_um + ' um | p_th=' + alg.bb288_p_th_pct + '% | SU(8) GRAPE min F_L=' + sb.min_su8_grape_F_L.toFixed(4), W/2, H - 12);
 
   document.getElementById('v7-honest-notes').innerHTML =
@@ -1153,29 +1361,34 @@ function drawV7Suite() {
   const cv2 = document.getElementById('cv-v7-safety');
   const ctx2 = cv2.getContext('2d');
   const W2 = cv2.width, H2 = cv2.height;
-  ctx2.fillStyle = '#0f172a'; ctx2.fillRect(0, 0, W2, H2);
-  ctx2.fillStyle = '#e2e8f0'; ctx2.font = '700 12.5px sans-serif'; ctx2.textAlign = 'left';
+  ctx2.fillStyle = '#ffffff'; ctx2.fillRect(0, 0, W2, H2);
+  ctx2.fillStyle = '#111827'; ctx2.font = '700 12px Georgia, serif'; ctx2.textAlign = 'left';
   ctx2.fillText('25-Row Preliminary M0 FMEA Target (Residual RPN <= 60; Uncertified)', 20, 24);
+  const bx = 210, bwTot = W2 - 280;
+  // Thin axis
+  ctx2.strokeStyle = '#4b5563'; ctx2.lineWidth = 0.9;
+  ctx2.beginPath(); ctx2.moveTo(bx, 36); ctx2.lineTo(bx, H2 - 12); ctx2.lineTo(bx + bwTot, H2 - 12); ctx2.stroke();
+
   const rpnRows = [
-    { lbl: 'Max RPN Pre-Mitigation', v: sf.max_rpn_pre, col: '#ef4444' },
-    { lbl: 'Mean RPN Pre (25 rows)', v: sf.mean_rpn_pre, col: '#f59e0b' },
-    { lbl: 'Max RPN Post (M0 FMEA Target)', v: sf.max_rpn_post, col: '#10b981' },
-    { lbl: 'Mean RPN Post (-86.3%)', v: sf.mean_rpn_post, col: '#38bdf8' }
+    { lbl: 'Max RPN Pre-Mitigation', v: sf.max_rpn_pre, col: '#8b2635' },
+    { lbl: 'Mean RPN Pre (25 rows)', v: sf.mean_rpn_pre, col: '#94a3b8' },
+    { lbl: 'Max RPN Post (M0 FMEA Target)', v: sf.max_rpn_post, col: '#1b365d' },
+    { lbl: 'Mean RPN Post (-86.3%)', v: sf.mean_rpn_post, col: '#64748b' }
   ];
   rpnRows.forEach((r, i) => {
-    const y = 42 + i * 31;
-    ctx2.fillStyle = '#cbd5e1'; ctx2.font = '600 11px sans-serif'; ctx2.textAlign = 'left';
+    const y = 42 + i * 30;
+    ctx2.fillStyle = '#4b5563'; ctx2.font = '600 11px sans-serif'; ctx2.textAlign = 'left';
     ctx2.fillText(r.lbl, 20, y + 14);
-    const bx = 205, bw = (W2 - 285) * (r.v / 300.0);
-    ctx2.fillStyle = '#1e293b'; ctx2.fillRect(bx, y + 2, W2 - 285, 18);
-    ctx2.fillStyle = r.col; ctx2.fillRect(bx, y + 2, bw, 18);
-    ctx2.fillStyle = '#fff'; ctx2.font = '700 11.5px monospace'; ctx2.textAlign = 'left';
+    const bw = bwTot * (r.v / 300.0);
+    ctx2.fillStyle = '#f8f9fa'; ctx2.fillRect(bx + 1, y + 3, bwTot - 1, 16);
+    ctx2.fillStyle = r.col; ctx2.fillRect(bx + 1, y + 3, bw, 16);
+    ctx2.fillStyle = '#111827'; ctx2.font = '700 11px monospace'; ctx2.textAlign = 'left';
     ctx2.fillText(String(r.v), bx + bw + 8, y + 15);
   });
   // Threshold line at RPN = 60
-  const tx60 = 205 + (W2 - 285) * (60.0 / 300.0);
-  ctx2.strokeStyle = '#6ee7b7'; ctx2.setLineDash([4, 3]); ctx2.lineWidth = 1.5;
-  ctx2.beginPath(); ctx2.moveTo(tx60, 36); ctx2.lineTo(tx60, H2 - 8); ctx2.stroke();
+  const tx60 = bx + bwTot * (60.0 / 300.0);
+  ctx2.strokeStyle = '#8b2635'; ctx2.setLineDash([4, 3]); ctx2.lineWidth = 1.2;
+  ctx2.beginPath(); ctx2.moveTo(tx60, 36); ctx2.lineTo(tx60, H2 - 12); ctx2.stroke();
   ctx2.setLineDash([]);
 
   document.getElementById('tbl-safety').innerHTML = `
@@ -1195,14 +1408,16 @@ document.getElementById('tbl-subs').innerHTML =
   DATA.subsystems.map(s => `<tr style="cursor:pointer" onclick="selectSub('${s.id}')"><td><strong>${s.id}</strong></td><td>${s.name}</td><td class="num">${s.cad_mass_kg}</td><td class="num">$${(s.bom_nom_usd/1e3).toFixed(1)}k</td></tr>`).join('');
 const lint = DATA.rtl_fpga.lint;
 const co = DATA.rtl_fpga.co_ver;
+const iv = DATA.rtl_fpga.iverilog && DATA.rtl_fpga.iverilog.boed_q16_core;
+const ys = DATA.rtl_fpga.yosys && DATA.rtl_fpga.yosys.targets;
 document.getElementById('tbl-rtl').innerHTML = `
   <tr><th>Check</th><th class="num">Measured</th></tr>
-  <tr><td>Synthesizable RTL Files (IEEE-2005)</td><td class="num">${lint.synth_files_checked.length} files (${lint.total_rtl_loc} LOC)</td></tr>
-  <tr><td>Forbidden Constructs / Port / Width Errors</td><td class="num">${lint.forbidden_construct_count} / ${lint.port_error_count} / ${lint.width_mismatch_count}</td></tr>
+  <tr><td>Synthesizable RTL Files (IEEE-2005, 0 '/' divs)</td><td class="num">${lint.synth_files_checked.length} files (${lint.total_rtl_loc} LOC)</td></tr>
+  <tr><td>Verilator --lint-only -Wall (Core + 16ch Top)</td><td class="num">${DATA.rtl_fpga.verilator && DATA.rtl_fpga.verilator.all_passed ? '0 Warnings / 0 Errors' : 'Pending'}</td></tr>
+  <tr><td>Icarus Verilog + vvp (N=64, 8 Regimes + 16ch AXI)</td><td class="num">${iv ? (iv.boed_errors + ' err, ' + iv.max_mu_off_q8_lsb_err + '/' + iv.max_std_q4_lsb_err + '/' + iv.max_next_probe_q8_lsb_err + ' LSB, ' + iv.boed_cycles_max + ' cyc') : (co.max_mu_off_q8_lsb_err + ' LSB')}</td></tr>
   <tr><td>BRAM ROM .hex Words Verified (0-bit diff)</td><td class="num">${DATA.rtl_fpga.rom.total_words_checked} / 1,024</td></tr>
-  <tr><td>Golden Vectors (N=64) Max LSB Error</td><td class="num">${co.max_mu_off_q8_lsb_err} LSB</td></tr>
-  <tr><td>16-Stage isqrt (N=1,000) Max LSB Error</td><td class="num">${co.isqrt_max_lsb_err} LSB</td></tr>
-  <tr><td>ZU48DR XDC Clock Constraint</td><td class="num">${lint.xdc_checks.create_clock_period_ns.toFixed(3)} ns (${lint.xdc_checks.target_freq_MHz} MHz)</td></tr>
+  <tr><td>Yosys Pre-P&amp;R xcup / xc7 / ecp5 (1ch DSP/BRAM)</td><td class="num">${ys && ys.xcup_core ? (ys.xcup_core.dsp_total + 'D/' + ys.xcup_core.bram_blocks + 'B | ' + ys.xc7_core.dsp_total + 'D/' + ys.xc7_core.bram_blocks + 'B | ' + ys.ecp5_core.dsp_total + 'M/' + ys.ecp5_core.bram_blocks + 'B') : 'N/A'}</td></tr>
+  <tr><td>ZU48DR XDC Clock Constraint (0 multicycle waivers)</td><td class="num">${lint.xdc_checks.create_clock_period_ns.toFixed(3)} ns (${lint.xdc_checks.target_freq_MHz} MHz)</td></tr>
 `;
 selectSub('S1');
 updateExplorer();

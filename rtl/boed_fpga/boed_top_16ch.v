@@ -1,5 +1,5 @@
 // boed_top_16ch.v - 16-Channel Parallel Q16.16 BOED-FPGA Accelerator with AXI4-Stream Wrapper
-// Target: Xilinx Zynq UltraScale+ RFSoC ZU48DR @ 250 MHz (448 DSP48E2 = 10.49%, 64 BRAM36 = 5.93%)
+// Target: Xilinx Zynq UltraScale+ RFSoC ZU48DR @ 250 MHz
 // AXI4-Stream Input Packet (128-bit s_axis_tdata, s_axis_tid[3:0] selects channel 0..15):
 //   [31:0]   f_probe_hz     (signed 32-bit Hz)
 //   [63:32]  y_meas_q16     (signed Q16.16 measurement sample)
@@ -62,6 +62,7 @@ module boed_top_16ch #(
     wire        [15:0] ch_std_q4         [0:15];
     wire signed [31:0] ch_next_probe_q8  [0:15];
     wire        [15:0] ch_cycle_count    [0:15];
+    wire        [15:0] ch_sprt_unused;
 
     // Channel ready if targeted channel is idle
     assign s_axis_tready = ~ch_busy_mask[s_axis_tid];
@@ -119,14 +120,16 @@ module boed_top_16ch #(
                 .next_probe_off_q8  (ch_next_probe_q8[ch]),
                 .cycle_count        (ch_cycle_count[ch])
             );
+
+            assign ch_sprt_unused[ch] = &{1'b0, ch_sprt_done[ch], ch_sprt_dec_valid[ch], ch_sprt_llr[ch]};
         end
     endgenerate
 
     // Pending output completion latches + deterministic priority arbiter for AXI4-Stream TX
-    reg [15:0] pending_out;
-    reg [3:0]  grant_idx;
-    reg        grant_valid;
-    integer    k;
+    reg  [15:0] pending_out;
+    reg  [3:0]  grant_idx;
+    reg         grant_valid;
+    integer     k;
 
     always @(*) begin
         grant_valid = 1'b0;
@@ -139,6 +142,12 @@ module boed_top_16ch #(
         end
     end
 
+    wire        tx_accept        = (!m_axis_tvalid || m_axis_tready) && grant_valid;
+    wire [15:0] grant_clear_mask = tx_accept ? (16'd1 << grant_idx) : 16'd0;
+    wire [15:0] pending_next     = (pending_out & (~grant_clear_mask)) | ch_step_done;
+
+    wire _unused_ok = &{1'b0, s_axis_tdata[127:106], s_axis_tlast, ch_sprt_unused};
+
     always @(posedge clk) begin
         if (!rst_n) begin
             pending_out   <= 16'd0;
@@ -147,15 +156,9 @@ module boed_top_16ch #(
             m_axis_tid    <= 4'd0;
             m_axis_tlast  <= 1'b0;
         end else begin
-            // Latch any newly completed channels
-            pending_out <= pending_out | ch_step_done;
+            pending_out <= pending_next;
 
-            if (m_axis_tvalid && m_axis_tready) begin
-                m_axis_tvalid <= 1'b0;
-                m_axis_tlast  <= 1'b0;
-            end
-
-            if ((!m_axis_tvalid || m_axis_tready) && grant_valid) begin
+            if (tx_accept) begin
                 m_axis_tvalid <= 1'b1;
                 m_axis_tid    <= grant_idx;
                 m_axis_tlast  <= 1'b1;
@@ -165,7 +168,9 @@ module boed_top_16ch #(
                     ch_std_q4[grant_idx],
                     ch_mu_off_q8[grant_idx]
                 };
-                pending_out[grant_idx] <= ch_step_done[grant_idx];
+            end else if (m_axis_tvalid && m_axis_tready) begin
+                m_axis_tvalid <= 1'b0;
+                m_axis_tlast  <= 1'b0;
             end
         end
     end

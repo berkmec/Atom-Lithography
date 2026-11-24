@@ -167,6 +167,7 @@
 !results/exp150_industrial_safety_fmea_hazop/**
 !results/exp151_v7_digital_twin/
 !results/exp151_v7_digital_twin/**
+!results/boed_real_bath_benchmark.json
 
 # Minimal legacy JSON anchors required by Atom Lithography pytest & audit gates
 !results/exp42/
@@ -204,7 +205,7 @@
 !results/exp122_budget_cap/
 !results/exp122_budget_cap/exp122.json
 
-# Atom Lithography v7.0 verification test suite (33/33 staged test files, 306/306 pytest)
+# Atom Lithography v7.2 verification test suite (35/35 staged test files, 333/333 pytest)
 !tests/
 !tests/conftest.py
 !tests/test_machine_control.py
@@ -240,6 +241,8 @@
 !tests/test_exp151.py
 !tests/test_rtl_contract.py
 !tests/test_blanker_tile.py
+!tests/test_boed_real_bath.py
+!tests/test_control_physics_upgrades.py
 
 # Hard re-exclusions (caches, bytecode, superseded v1 & local disk forensics)
 **/__pycache__/
