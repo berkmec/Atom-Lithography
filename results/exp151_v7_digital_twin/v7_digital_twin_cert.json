@@ -38,7 +38,7 @@
     "exp148": "b8918584771b124d0bacdd8487aeb280d90a75ea2182e8b72d913a30d3dd0939",
     "exp149": "7af8549c7645c91620a4c50f0b0ee8d56bad81bdc23525a8d72fa7d9c28a8397",
     "exp150": "701d34bb368d711de829c26d19db9a5927aaeb61299e5a736019986f86ca32f3",
-    "interactive_twin_html": "f9f45721c7dd67fe06616a29e3d98b72e10ded75221293ee5efbf15cefca2bc0",
+    "interactive_twin_html": "e78b7e9a61ecc19ce753765ed23be20d6544e2f37ccc23e2516ffd1d1197fc61",
     "live_ibm_qpu_results": "02b7a19d1704662c6424e76f4971e21b04a98d48230a917c9682853b3ca1fc5a",
     "rtl_boed_isqrt_cordic": "dc5d95c7382a108dd66be64f4647b49de934aa3a1270e169fc13f4addc9641ad",
     "rtl_boed_lut_rom": "2ff1579dca90b4d95a6d7f415a295c82822b96d0b77010bfcc0c87752942d8dc",
@@ -112,5 +112,5 @@
   "live_qpu_q16_vs_fp64_kHz": 0.0016,
   "live_cellisa_v40_opcodes": 20,
   "live_auto_recal_passed": "4/4",
-  "sha256": "23a2800e5a31ef0157346eb6dac998f2824c18e79f895e77eeea187c9d68d7c0"
+  "sha256": "7a3dca56839c1d4aefedf01c61fd5f6b1c62f498f45d9a2329568f04cc437d43"
 }

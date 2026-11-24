@@ -1,4 +1,4 @@
-# Exp145 (H163): CellISA v4.0, Canlı 156-Kübitlik IBM Heron r2 (`ibm_marrakesh`) Donanım Doğrulaması ve Otonom Arıza Kurtarma (`auto_recal.py`)
+# Exp145 (H163): Bulut Süperiletken QPU Kontrol/Dekoder Kıyaslaması (`ibm_marrakesh` Proxy — Silikon Fabrikasyonunu Doğrulamaz) ve `auto_recal.py`
 
 **Deney / Hipotez:** `exp145_cloud_qpu_ibm_validation` (`H163`)  
 **Veri Defterleri:** `results/exp145_cloud_qpu_ibm_validation/exp145.json`, `exp145_offline.json`, `ibm_qpu_live_results.json`, `predictions_exp145.json`  
@@ -6,18 +6,18 @@
 
 ---
 
-## 1. Epistemik Sınır ve Kapsam Beyanı
+## 1. Epistemik Sınır ve Kapsam Beyanı (Silikon Fabrikasyonunu Doğrulamaz)
+
+> **Kritik Kapsam Sınırı:** Bu çalışmadaki süperiletken transmon bulut işlemcisi (`ibm_marrakesh`, `156Q Heron r2`, `job_id = dc1tdo2nj2vs73dfrfl0`) koşumu yalnızca yazılım kontrol/dekoder yığınının (`CellISA v4.0 → OpenQASM 3.0`, `Echo/XY4` DD, `d=3` tekrar dekoderi ve bit-kesin `Q16.16` BOED) **silikon-dışı bir bulut QPU proxy kıyaslamasıdır**. Bu koşum silikon `³¹P` implantasyonu, flaş tavlama, epitaksiyel MBE, `100 K` IBIC veya herhangi bir atom-litografi donanımını **hiçbir şekilde doğrulamaz** (`TRL 1–2 / M0`, `no_lab_measurement = true`).
 
 Bu çalışmada iki farklı epistemik kanıt sınıfı birbirinden kesin çizgilerle ayrılmıştır:
 
 | Bileşen | Epistemik Etiket | Gerçek Fiziksel Ölçüm Durumu |
 | :--- | :--- | :--- |
-| Silikon `³¹P` atom litografisi üretimi (`S1–S8`) | `{Model}` / `{Sayısal-Simülasyon}` | `no_lab_measurement = true` (`M0` tasarım aşaması; fiziksel yazıcı/örnek yok) |
+| Silikon `³¹P` atom litografisi üretimi (`S1–S8`) | `{Model}` / `{Sayısal-Simülasyon}` | `no_lab_measurement = true` (`TRL 1–2 / M0` tasarım aşaması; fiziksel yazıcı/örnek yok) |
 | `auto_recal.py` 4-arıza kapalı çevrim kurtarma (`CQ6`) | `{Model}` / `{Sayısal-Simülasyon}` | `no_lab_measurement = true` (fiziksel alt sistem modelleri üzerinde benzetim) |
 | Offline IBM Heron gürültü simülatörü (`exp145_offline.json`) | `{Model}` / `{Sayısal-Simülasyon}` | Çevrimdışı referans model |
-| **`CellISA v4.0` → OpenQASM 3.0 → IBM QPU (`C1`, `C2`, `C3`)** | **`{Canlı-Donanım-IBM-QPU}`** | **Gerçek 156-kübitlik `ibm_marrakesh` (Heron r2) süperiletken işlemci üzerinde `job_id = dc1tdo2nj2vs73dfrfl0` (`32,54 s`, `16 PUB × 4.096 shot`, sıfır gizli anahtar sızıntısı)** |
-
-> **Önemli not:** `ibm_marrakesh` üzerindeki canlı ölçümler, Atom Litografisi Makinesi'nin yazılım kontrol yığınını (`CellISA v4.0`, saf `requests` REST köprüsü, `16-dt` zamanlamalı native `OpenQASM 3.0` derleyicisi, `Hahn-Echo`/`XY4` DD dizileri, `d=3` sendrom dekoderi ve bit-kesin `Q16.16` BOED frekans kestiricisi) gerçek bir kuantum işlemci üzerinde uçtan uca doğrular; ancak silikon `³¹P` fabrikasyon aşamasının (`M0`) yerini almaz.
+| **`CellISA v4.0` → OpenQASM 3.0 → IBM QPU Proxy (`C1`, `C2`, `C3`)** | **`{Bulut-QPU-Proxy-IBM}` (Silikon-Dışı)** | **156-kübitlik süperiletken `ibm_marrakesh` (Heron r2) bulut işlemcisinde kontrol/dekoder kıyaslaması (`job_id = dc1tdo2nj2vs73dfrfl0`, `32,54 s`, `16 PUB × 4.096 shot`, sıfır sızıntı; silikon fabrikasyonunu doğrulamaz)** |
 
 ---
 
@@ -36,11 +36,11 @@ Bu çalışmada iki farklı epistemik kanıt sınıfı birbirinden kesin çizgil
 
 ---
 
-## 3. Canlı `ibm_marrakesh` (156Q Heron r2) vs Offline Heron Model Karşılaştırması
+## 3. Bulut QPU Proxy (`ibm_marrakesh`, 156Q Heron r2) vs Offline Heron Model Karşılaştırması
 
 Seçilen 5-kübitlik doğrusal zincir: **`[q2, q3, q4, q5, q6]`** (`CZ` hata: `%0,14–%0,23`; okuma hatası: `%0,31–%2,78`; `T₁ = 128,6–342,9 µs`; `T₂ = 150,0–304,4 µs`).
 
-| Devre / Metrik | Canlı `ibm_marrakesh` (`{Canlı-Donanım-IBM-QPU}`) | Offline Heron Model (`{Model}`) | Ön-Kayıt Eşiği | Durum |
+| Devre / Metrik | Bulut QPU Proxy (`ibm_marrakesh`, Silikon-Dışı) | Offline Heron Model (`{Model}`) | Ön-Kayıt Eşiği | Durum |
 | :--- | :---: | :---: | :---: | :---: |
 | `C1a` Bare Idle `P(0)` (`48,128 µs`) | `0,3325` | `0,5625` | Referans taban | — |
 | `C1b` Hahn-Echo `P(0)` (`48,128 µs`) | `0,9224` (`+59,0 pp`) | `0,8428` (`+28,0 pp`) | `> Bare Idle` | `PASS` |
@@ -75,7 +75,7 @@ Canlı `ibm_marrakesh` `C3` Ramsey saçağında ölçülen `8` ham olasılık `[
 
 ## 5. Ön-Kayıtlı `CQ1–CQ7` Karar Özeti ve Güvenlik/Taşınabilirlik Denetimi
 
-| Kriter | Offline (`{Model}`) | Canlı `ibm_marrakesh` (`{Canlı-Donanım-IBM-QPU}`) | Kısa Dayanak |
+| Kriter | Offline (`{Model}`) | Bulut QPU Proxy (`ibm_marrakesh`, Silikon-Dışı) | Kısa Dayanak |
 | :--- | :---: | :---: | :--- |
 | `CQ1_CELLISA40_OPCODES_AND_OPENQASM3` | `PASS` | `PASS` | `20` v4.0 / `17` v3.5 uyumlu opcode; Heron `cz` ve Eagle `ecr` `16/16` üniter & `16-dt` geçer |
 | `CQ2_IBM_REST_BRIDGE_AND_SUBGRAPH_SELECTOR` | `PASS` | `PASS` | Saf `requests` IAM+REST v1 (`0` `qiskit`), `[2,3,4,5,6]` optimal 5Q zincir, 4-format çözücü |

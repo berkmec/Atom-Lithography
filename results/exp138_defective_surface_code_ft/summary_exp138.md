@@ -133,4 +133,4 @@ Her `(rejim, N_cand, d)` noktası için `200` rastgele kusurlu kafes üretilmiş
 - `results/exp138_defective_surface_code_ft/predictions_exp138.json` — Deney öncesi mühürlenmiş `FT1–FT7` tahminleri.
 - `results/exp138_defective_surface_code_ft/exp138.json` — Ham Monte Carlo sayımları, eşik kesişimleri, kusurlu kafes istatistikleri ve `Exp141`-uyumlu `target_logical_error_rates`.
 - `results/exp138_defective_surface_code_ft/fig_exp138_surface_code_ft.png` — `2400 × 1400` 4-panelli görsel.
-- `tests/test_exp138.py` — `10` canlı doğrulama testi (cebir, süper-stabilizatör, canlı MWPM, canlı `Exp141` entegrasyonu, PNG CRC, GFM linter, sıfır sabitlenmiş yol).
+- `tests/test_exp138.py` — `10` yazılım regresyon testi (cebir, süper-stabilizatör, MWPM, `Exp141` entegrasyonu, PNG CRC, GFM linter, sıfır sabitlenmiş yol).

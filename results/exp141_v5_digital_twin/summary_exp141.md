@@ -1,11 +1,11 @@
-# Exp141 (H159) — Master `v5.0` Uçtan-Uca Hata-Toleranslı Dijital İkiz, Wafer-Ekonomi `CX4` Kapanışı ve Kriptografik `v5` Sertifikası Raporu
+# Exp141 (H159) — Master `v5.0` Uçtan-Uca Hata-Toleranslı Dijital İkiz, Wafer-Ekonomi `CX4` Model Yinelemesi ve `SHA-256` Dosya Bütünlüğü Özeti
 
 - **Deney / Hipotez:** `exp141_v5_digital_twin` / `H159`
 - **Sürüm:** `v5.0`
 - **Tarih:** 2026-11-23
 - **Epistemik Etiket:** `{Model}` / `{Sayısal-Simülasyon}` / `{Varsayım}` / `{Liste-Çapası}` — **`no_lab_measurement = true`**, **`no_supplier_quotes = true`**
 - **Genel Karar:** **8/8 Ön-Kayıtlı Tahmin `PASS`** (`DT5_1..DT5_8`, `success_rule_met = true`, çalışma süresi `1,73 s`)
-- **Tam 64-Hex Kriptografik `v5.0` Ana Sertifika `SHA-256` Özeti (`results/exp141_v5_digital_twin/v5_digital_twin_cert.json`):**
+- **Tam 64-Hex `v5.0` `SHA-256` Dosya Bütünlüğü Özeti (`results/exp141_v5_digital_twin/v5_digital_twin_cert.json` — yalnızca dosya bütünlüğü ve veri provenansı özetidir; fiziksel/mühendislik doğrulaması veya sertifikasyonu değildir):**
   `2828e8ce8d9388f7cba5490b2d05add930aadc5fe6d3ba4295f0380f816d43d1`
 
 ---
@@ -19,11 +19,11 @@
 | **Yerleştirme Bütçesi (`15 ms` / `10 ms`)** | `3,716 / 3,674 nm` | `3,620 nm` (gizli TED: **`3,963 / 3,995 nm` FAIL!**) | **`3,631 / 3,588 nm`** (`1530 K`, `Exp139: 3,665 nm`) | `{311}` küme temizliği (`%99,99`) → `<= 3,80 nm` **PASS** |
 | **Hücre Verimi & Kusurlu Kafes (`Exp136/138`)** | `KL %51,0` | `VOKL-6 %33,25` (`N_cand*=11`) | **`f*=%1,5 + 2 MV/m: %77,50`**, `d_eff/d = %99,5` (`N=6`) | Atomistik `sp³d⁵s*` + Stark ile `N_cand=6` kurtarıldı |
 | **Flip-Flop Kaplama & Yük Gürültüsü (`Exp139`)** | Yok (`%24,5`) | `8 nm` MBE (`%95,2`, `S_ε = 1,0`) | **Rota C (`1530 K + 8 nm + FG`): `%97,70`, `S_ε = 0,390`** | `2,57×` yük gürültüsü baskılaması (`S5.6`, `%0` akış kaybı) |
-| **M4 Kavite-Bus `CZ` (`Exp137`)** | `50 Ω` CPW `0,791` | Çıplak `P1` (`F_Bell = 0,845`, `Λ = 0,00`) | **`P4 Echo CZ`: `F_Bell = 0,9893` (`Q=5e5: 0,9949`)** | `1/f` yük gürültüsü kırıldı; `F_avg = %99,26` |
+| **M4 Kavite-Bus `CZ` (`Exp137`)** | `50 Ω` CPW `0,791` | Çıplak `P1` (`F_Bell = 0,845`, `Λ = 0,00`) | **`P4 Echo CZ`: `F_Bell = 0,9893` (`Q=5e5: 0,9949`)** | `1/f` yük gürültüsü model uzayında bastırıldı (`F_avg = %99,26`) |
 | **BOED-FPGA & Mux Okuma (`Exp140`)** | `1.000 ms` FP64 | `41,0 ms` FP64 (`8.960` ch) | **`Q16.16` `2,336 µs/adım` (`abs(ΔRMS)=0,018 Hz`)**, **`N_mux*=32` (`F_RO=%99,61`)** | `1.024` hücre `PT420`'de kapanır; tavan `2.887` hücre/kriyostat |
-| **Kontrol Yazılımı (`src/machine_control/`)** | `CellISA v2.0` (`10` op) | `CellISA v3.0` (`14` op) | **`CellISA v3.5` (`17` op: `ECHO_CZ`, `MUX_READOUT`, `SYNDROME_CYCLE`)** | Canlı `ECHO_CZ = 0,9818` (`+20,3 pp`), `T_cyc = 2,62 µs` |
-| **Yüzey Kodu Hata Bastırma (`Exp138`, `d=3..11`)** | Eşik üstü | `v4 P1`: `Λ = 0,00` (**FAIL**) | **`D2`: `Λ = 1,399`** (`Q=5e5, S=0,25`); **`D3` (`p_2q=%0,5`): `Λ = 2,520`** | Gerçek üstel hata bastırma (`p_2q,th = %1,60`) |
-| **Yoğun Fab `10k`-Çip Maliyeti (`CX4`)** | `$3,012` (`W1`) | `$2,603` (`Exp134 v4.0-5x`, `-%13,7`, `CX4 FAIL`) | `W1`: `$2,576` (`-%14,5`, `FAIL`) → **`W2`: `$0,616` (`-%79,5`)**; **`W3`: `$0,442` (`-%85,3`, `PASS`)** | **`Exp134 CX4` SİLİKON DUVARI KIRILDI!** |
+| **Kontrol Yazılımı (`src/machine_control/`)** | `CellISA v2.0` (`10` op) | `CellISA v3.0` (`14` op) | **`CellISA v3.5` (`17` op: `ECHO_CZ`, `MUX_READOUT`, `SYNDROME_CYCLE`)** | Model `ECHO_CZ = 0,9818` (`+20,3 pp`), `T_cyc = 2,62 µs` |
+| **Yüzey Kodu Hata Bastırma (`Exp138`, `d=3..11`)** | Eşik üstü | `v4 P1`: `Λ = 0,00` (**FAIL**) | **`D2`: `Λ = 1,399`** (`Q=5e5, S=0,25`); **`D3` (`p_2q=%0,5`): `Λ = 2,520`** | Model-içi üstel hata bastırma (`p_2q,th = %1,60`) |
+| **Yoğun Fab `10k`-Çip Maliyeti (`CX4`)** | `$3,012` (`W1`) | `$2,603` (`Exp134 v4.0-5x`, `-%13,7`, `CX4 FAIL`) | `W1`: `$2,576` (`-%14,5`, `FAIL`) → **`W2`: `$0,616` (`-%79,5`)**; **`W3`: `$0,442` (`-%85,3`, `PASS`)** | `Exp134 CX4` silikon maliyet tabanı model uzayında aşıldı (teklifsiz) |
 | **`CAD` / `BOM` (`M3` Nominal)** | `143` / `145` (`$4,19M`) | `170` / `159` (`$4,61M`) | **`189` (`1.034,9 kg`, `0` çakışma, `32/32`) / `167` (`$5,248M`)** | `$0,00` BOM uzlaştırma, `19/19` `SHA-256` kilitli |
 
 ---
@@ -60,9 +60,9 @@ Aşağıdaki tablo `wafer_econ141.evaluate_logical_qubit_economics()` çıktıs�
 
 ---
 
-## 4. Kriptografik `v5.0` Ana Sertifika ve Kapsam Dışı Sınırlar
+## 4. `v5.0` `SHA-256` Dosya Bütünlüğü Özeti (Provenans) ve Kapsam Dışı Sınırlar
 
-- **Tam 64-Hex `SHA-256` Özeti (`results/exp141_v5_digital_twin/v5_digital_twin_cert.json`):**
+- **Tam 64-Hex `SHA-256` Özeti (`results/exp141_v5_digital_twin/v5_digital_twin_cert.json` — yalnızca dosya bütünlüğü/provenans özetidir; fiziksel doğrulama değildir):**
   `2828e8ce8d9388f7cba5490b2d05add930aadc5fe6d3ba4295f0380f816d43d1`
 - **Bağlanan `19` Birincil Artefakt:** `exp124.json`..`exp140.json` (`17` deney), `research/atom_lithography_machine/cad/cad_verification.json` (`CAD v5.0`), `research/atom_lithography_machine/BOM_DETAILED.csv` (`BOM v5.0`) — tamamının `64`-hex `SHA-256` özeti `v5_digital_twin_cert.json["primary_ledger_sha256"]` içinde kayıtlıdır ve `tests/test_exp141.py` tarafından diskten birebir doğrulanır.
 - **Epistemik Sınırlar:** `no_lab_measurement = true` ve `no_supplier_quotes = true`. Tüm fiziksel zincirler (`sp³d⁵s*` TB, `1/f` Lindblad `P4`, `d=3..11` MWPM, `1530 K` TED + MBE, `Q16.16` BOED-FPGA, `3 kΩ` `NbTiN` TWPA, `W2/W3` `30 nm` SOI) sayısal model ve mühendislik varsayımlarına dayanır; fiziksel donanım üretimi, kriyostat ENDOR/TWPA ölçümü veya tedarikçi teklifi içermez.

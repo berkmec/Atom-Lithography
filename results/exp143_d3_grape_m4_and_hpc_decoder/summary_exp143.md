@@ -101,4 +101,4 @@ Canlı yerel Python/networkx referansı `d = 7` ve `d = 11` üzerinde deneysel d
 
 - `experiments/exp143_d3_grape_m4_and_hpc_decoder/{__init__.py,grape_m4_bus143.py,hpc_decoder143.py,run_exp143.py,fig_exp143.py}`
 - `results/exp143_d3_grape_m4_and_hpc_decoder/{predictions_exp143.json,exp143.json,s9hpc_hardware_spec.json,summary_exp143.md,fig_exp143_d3_grape_hpc.png}`
-- `tests/test_exp143.py` (`9` canlı doğrulama testi)
+- `tests/test_exp143.py` (`9` yazılım regresyon testi)

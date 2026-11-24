@@ -23,7 +23,7 @@ Kapsam: BOM `S3.1/S3.2/S3.3` + `S2.4` FPGA sayım arayüzü (`DESIGN.md v3.0`, `
 | Histerezisli Karşılaştırıcı | `U0C..U7C`, `RHYS1/2`, `RTERM` | **`TLV3501`** `{Aday-COTS}` | `t_pd = 4,5 ns`, `+3,3 V` CMOS; `RHYS1=1 kΩ, RHYS2=1 MΩ` (`3,3 mV` histerezis); `49,9 Ω` seri sonlandırma → `JFPGA` `COUNT_HIT[0:7]` |
 | Güç & Yıldız Toprak | `JPWR`, `R_STAR`, `CBULK*`, `CD*` | `{Pasif-COTS}` | `VCCA (+2,5 V)`, `VSSA (−2,5 V)`, `VCCD (+3,3 V)`, `AGND ↔ DGND` (`R_STAR = 0 Ω`), her aktif IC'de `100 nF C0G` dekuplaj |
 
-## 3. Exp127 Birinci-İlkeler Sinyal, Gürültü & Verim Bütçesi
+## 3. Exp127 Analitik/SPICE Benzeri Devre Modeli: Sinyal, Gürültü & Verim Bütçesi
 
 - **Lindhard Sinyali (Exp72'den ~%28 daha sert):** `5 keV P91` → **`341,7 e⁻` (`0,0548 fC`) @ 100 K** (`351,2 e⁻` @ 300 K); `10 keV` → `770,8 e⁻` @ 100 K (`792,0 e⁻` @ 300 K).
 - **Laplace / ODE Doğrulaması:** `1111 e⁻` darbesinde FFT tepesi `35,200 mV` vs `scipy.signal.impulse` `35,201 mV` (`%0,004` fark; `t_peak = 224,7 ns` @ `200 ns` profil, `1218 ns` @ `1,2 µs` kilitli profil).

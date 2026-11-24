@@ -8,14 +8,14 @@
 
 ## 1. Yönetici Özeti & Temel Bilimsel Bulgular
 
-`Exp129`, projenin en eski açık teorik riski olan **Risk `R1`**'i (`Exp25` analitik Kohn–Luttinger modelinin `R331` ENDOR kabuğunda `%49,05` hata vermesi ve `Exp56/60/69/75`'in fiziksel `k_0` değerinde bu açığı kapatamaması) ilk-ilkeler düzeyinde sınar. Bu amaçla, **hiçbir `²⁹Si` ENDOR kabuğuna uydurma yapmadan**, yalnızca `³¹P` deneysel spektral değişmezlerine (`E(1s A_1) = -45,59 meV`, `Δ_VO(T_2-A_1) = 11,70 meV`, `Δ_VO(E-A_1) = 13,01 meV`, `A_P(0) = 117,53 MHz`) kalibre edilen tam 6-vadili merkez-hücre Hamiltonyeni (**`VOKL-6`**, `H_6v` `216×216`) kurulmuş, 145-düzlem-dalgalı Cohen–Bergstresser EPM 3B `k`-uzayı Bloch dalga paketiyle konvole edilmiş ve `45.214` silisyum örgü noktasında tam 3B Fermi-kontak + izsiz dipol tensörü üzerinden `N_cell = 400` realizasyonlu Mod B epitaksiyel banyo verimi ile `Exp126` `6,893 kHz` DDRF boşluk riski hesaplanmıştır.
+`Exp129`, projenin en eski açık teorik riski olan **Risk `R1`**'i (`Exp25` analitik Kohn–Luttinger modelinin `R331` ENDOR kabuğunda `%49,05` hata vermesi ve `Exp56/60/69/75`'in fiziksel `k_0` değerinde bu açığı kapatamaması) yarı-ampirik / etkin-kütle düzeyinde sınar. Bu amaçla, **hiçbir `²⁹Si` ENDOR kabuğuna uydurma yapmadan**, yalnızca `³¹P` deneysel spektral değişmezlerine (`E(1s A_1) = -45,59 meV`, `Δ_VO(T_2-A_1) = 11,70 meV`, `Δ_VO(E-A_1) = 13,01 meV`, `A_P(0) = 117,53 MHz`) kalibre edilen tam 6-vadili merkez-hücre Hamiltonyeni (**`VOKL-6`**, `H_6v` `216×216`) kurulmuş, 145-düzlem-dalgalı Cohen–Bergstresser EPM 3B `k`-uzayı Bloch dalga paketiyle konvole edilmiş ve `45.214` silisyum örgü noktasında tam 3B Fermi-kontak + izsiz dipol tensörü üzerinden `N_cell = 400` realizasyonlu Mod B epitaksiyel banyo verimi ile `Exp126` `6,893 kHz` DDRF boşluk riski hesaplanmıştır.
 
 **Dört ana bilimsel ve mühendislik keşfi:**
 
-1. **`VOKL-6` İlk-İlkeler `³¹P` Spektral & Simetri Kapanışı (`CE1 PASS`, `CE2 PASS`, sıfır `²⁹Si` uydurması):**
+1. **`VOKL-6` Yarı-Ampirik / Etkin-Kütle `³¹P` Spektral & Simetri Kapanışı (`CE1 PASS`, `CE2 PASS`, sıfır `²⁹Si` uydurması):**
    - `V_cc = 0` yalın anizotropik EMT çözümü **`E_EMT = -31,262 meV`** vererek Faulkner (1969) `-31,27 meV` değerini `%0,03` içinde yakalar (`Exp69` ızgara EMT'sinin `-28,75 meV` kusp hatasını tamamen giderir).
    - Morton & Preston (1978, Tablo 1) `3s` atomik çekirdek oranı (`η_P/η_Si = 7,252/5,115 = 1,4178`, `η_P = 263,71`) ile tüm 4 `³¹P` değişmezi `10⁻¹¹` duyarlıkla tutturulur: `r_c = 0,1759 nm`, `U_intra = 930,15 meV`, `U_g = 142,47 meV`, `U_f = 316,98 meV` (tamamı fiziksel pozitif çekici potansiyeller; `1× A_1`, `3× T_2` `< 9×10⁻¹² meV` ve `2× E` `< 3×10⁻¹² meV` tam $T_d$ dejenere).
-   - 145-PW CB-EPM vadi-arası Bloch örtüşme hesabı, **`(0,0,2)` $g$-süreci umklapp ağırlığının Lax–Birman seçim kuralıyla tam sıfır (`8,82×10⁻¹⁵`)** olduğunu ve en yakın izinli $g$-umklapp momentum aktarımının (`1,578 × 2π/a`) $f$-sürecinden (`1,022–1,202 × 2π/a`) büyük olduğunu kanıtlayarak deneysel **`U_f > U_g`** (`317,0 > 142,5 meV`) ve `E(T_2) < E(E)` sıralamasını ilk-ilkelerden açıklar.
+   - 145-PW CB-EPM vadi-arası Bloch örtüşme hesabı, **`(0,0,2)` $g$-süreci umklapp ağırlığının Lax–Birman seçim kuralıyla tam sıfır (`8,82×10⁻¹⁵`)** olduğunu ve en yakın izinli $g$-umklapp momentum aktarımının (`1,578 × 2π/a`) $f$-sürecinden (`1,022–1,202 × 2π/a`) büyük olduğunu kanıtlayarak deneysel **`U_f > U_g`** (`317,0 > 142,5 meV`) ve `E(T_2) < E(E)` sıralamasını yarı-ampirik / etkin-kütle CB-EPM modeliyle açıklar.
    - `(0,0,4)` kabuğu için **sıfır ölçeklemeli ab-initio öngörü** yalın EMT'nin `2,66 MHz` (2,2× düşük) değerinden **`7,95 MHz`** (`η_Si=186`) / **`7,61 MHz`** (Assali 2011 `η_Si=178`) düzeyine yükselir (Hale & Mieher `5,962 MHz`'in `%28–33` içinde).
 
 2. **`(3,3,1)` ENDOR Kabuğu & Süreklilik-EMT Sınırının Dürüst Kanıtı (`CE3 FAIL`, `CE4 FAIL`):**
@@ -47,7 +47,7 @@
 
 ---
 
-## 3. Bölüm 1: İlk-İlkeler `VOKL-6` Teorisi (`H_6v` 216×216 & 145-PW CB-EPM)
+## 3. Bölüm 1: Yarı-Ampirik / Etkin-Kütle `VOKL-6` Teorisi (`H_6v` 216×216 & 145-PW CB-EPM)
 
 ### 3.1. `³¹P` Spektral Kalibrasyon & Duyarlılıklar (`{Literatür}` / `{Analitik}` / `{Model}`)
 
@@ -125,12 +125,12 @@ Taşınabilir motor önce `Exp59/62` `N=100` tohumlarında bit-düzeyinde doğru
 ## 5. Makine Çıktısı, Risk `R1` Statüsü & Eylem Önerileri
 
 1. **Risk `R1` Kapatılmamıştır — Fiziksel Yönü Tersine Çevrilerek Nicelleştirilmiştir:**
-   - Eski `Exp60` `EXT_DIAG` (`a=4,0 nm, k0=0,789`) Risk `R1`'in verimi `+43` puan **yukarı** çekebileceğini öne sürüyordu (`%26 → %69`). İlk-ilkeler `VOKL-6` bunun tam tersini kanıtlamaktadır: gerçek `-45,59 meV` bağlanma enerjisi `2–6 nm` kuyruğunu daralttığı için Risk `R1` **aşağı-yönlü bir verim riskidir**.
+   - Eski `Exp60` `EXT_DIAG` (`a=4,0 nm, k0=0,789`) Risk `R1`'in verimi `+43` puan **yukarı** çekebileceğini öne sürüyordu (`%26 → %69`). Yarı-ampirik / etkin-kütle `VOKL-6` bunun tam tersini göstermektedir: gerçek `-45,59 meV` bağlanma enerjisi `2–6 nm` kuyruğunu daralttığı için Risk `R1` **aşağı-yönlü bir verim riskidir**.
    - **Proje Çapında Acil Konvansiyon Kararı:** `Exp25`'in `A(0,0,4) = 2,981 MHz` ve `f_± = abs(ν_n ± A/2)` çift-yarılanması korunursa `VOKL-6` Mod B `f=%1,0` verimi **`%4,75`** düzeyine çöker (`10,6×` verim kaybı). Buna karşılık gerçek Hale & Mieher spin Hamiltonyenine (`H = a S·I`, `a(0,0,4) = 5,962 MHz`, `f_± = abs(ν_n ± a/2)`) geçildiğinde `VOKL-6` verimi **`%33,25` (`f=%1,0`)** ve **`%54,50` (`f=%2,0`)** olur (`KL` tabanına göre `-17,3` / `-12,5` puan; makine throughput çarpanı `1,52×` daha fazla aday yuva gerektirir; `Exp131` `M4` perkolasyonunda `N_cand` tasarım payı bu düşüşe karşı yeniden kontrol edilmelidir).
 2. **`Exp126` DDRF `10–15 kHz` RF Genlik Payı Zorunluluğu:**
    - `VOKL-6` altında sertifikalı `K=8` kayıtçılar daha iç yarıçaplara çekilir (`1,88 → 1,53–1,68 nm`) ve `f=%1,0`'da **`%57,9–73,7`** oranında `min_gap < 6,893 kHz` bölgesine düşer. Yalın `GAUSS500 + XY8` bu hücrelerin çoğunda başarısız olur; `Exp126`'nın `10–15 kHz` GRAPE-`XY8` derleyicisi tüm Mod B hattı için standart olmalıdır.
 3. **Kapsam Dışı / Bir Sonraki Teorik Adım:**
-   - `(3,3,1)` `[110]` bağ-zinciri kabuğunun (`R331 = 0,293`) ilk-ilkelerden tam çözümü ve `2–6 nm` dış kuyruğunun kesinleştirilmesi için tek-bant `VOKL-6` ötesinde **tüm-elektron PAW/LMTO-GF DFT veya `sp³d⁵s*` sıkı-bağ (tight-binding) + çekirdek polarizasyonu** hesabı (Overhof & Gerstmann 2004; Ma vd. 2022) ve/veya gerçek `²⁹Si` ENDOR deneysel doğrulaması (`no_lab_measurement=true`) gereklidir.
+   - `(3,3,1)` `[110]` bağ-zinciri kabuğunun (`R331 = 0,293`) tam çözümü ve `2–6 nm` dış kuyruğunun kesinleştirilmesi için tek-bant yarı-ampirik `VOKL-6` ötesinde **tüm-elektron PAW/LMTO-GF DFT veya `sp³d⁵s*` sıkı-bağ (tight-binding) + çekirdek polarizasyonu** hesabı (Overhof & Gerstmann 2004; Ma vd. 2022) ve/veya gerçek `²⁹Si` ENDOR deneysel doğrulaması (`no_lab_measurement=true`) gereklidir.
 
 ---
 

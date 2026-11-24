@@ -1,8 +1,8 @@
 # Exp128 (`v7.0`) — Parça-Düzeyi Modüler BOM & Emniyet Uzlaştırması, 100.000 Örneklemli Monte Carlo Bütçe Tavanı & `20 mK` vs `1 K` EVPI Analizi
 
-**Tarih:** 2026-11-23 *(`v7.0` SEMI S2/SIL-3 senkronu: `BOM_DETAILED.csv` `180` parça = `167` `M3 Base` [`$5.247.800`] + `7` `v6.0` Opsiyon [`+$300.000`, `73,20 kg`] + `6` `v7.0` `S7.SAFETY` [`+$145.000`, `355,0 kg` tesis] = **`$5.692.800`**; `RFQ-01..RFQ-10`; `$0,00` köprü & `0,0000 kg` şasi/tesis kütle eşleşmesi)*  
+**Tarih:** 2026-11-23 *(`v7.0` `S7.SAFETY` M0 ön emniyet bütçesi senkronu — sertifikasız tasarım taslağı: `BOM_DETAILED.csv` `180` parça = `167` `M3 Base` [`$5.247.800`] + `7` `v6.0` Opsiyon [`+$300.000`, `73,20 kg`] + `6` `v7.0` `S7.SAFETY` [`+$145.000`, `355,0 kg` tesis] = **`$5.692.800`**; `RFQ-01..RFQ-10`; `$0,00` köprü & `0,0000 kg` şasi/tesis kütle eşleşmesi)*  
 **Kayıtlı Tahminler:** `results/exp128_bom_sensitivity/predictions_exp128.json` (ilk simülasyondan önce kilitlendi — değiştirilmedi)  
-**Epistemik Beyan (`no_lab_measurement=true`, `no_supplier_quotes=true`):** Gerçek tedarikçi fiyat teklifi ve laboratuvar ölçümü yoktur. Tüm USD sayıları `Exp114/140/143/150` halka açık liste çapalarına (`{Liste-Çapası}`), `Exp114` `$720/birim` sınıf kalibrasyonuna (`{Model-Kalibrasyon-Exp114}`) veya açıkça etiketlenmiş mühendislik varsayımlarına (`{Varsayım}`) dayanır. Kanonik `BOM.csv` dosyasına kesinlikle dokunulmamıştır (`SHA-256: cee02adfd207e37bbbc6b66982226b27fa87c2be528ede2b762f72840759cfc2`).
+**Epistemik Beyan (`no_lab_measurement=true`, `no_supplier_quotes=true`):** Gerçek tedarikçi fiyat teklifi ve laboratuvar ölçümü yoktur. Tüm USD sayıları `Exp114/140/143/150` halka açık liste çapalarına (`{Liste-Çapası}`), `Exp114` `$720/birim` sınıf kalibrasyonuna (`{Model-Kalibrasyon-Exp114}`) veya açıkça etiketlenmiş mühendislik varsayımlarına (`{Varsayım}`) dayanır. `S7.SAFETY` (`$145k`) yalnızca `M0` ön emniyet bütçesi taslağıdır; resmi `SEMI S2 / IEC 61508 SIL-3` uyumu veya üçüncü-taraf sertifikasyonu içermez. Kanonik `BOM.csv` dosyasına kesinlikle dokunulmamıştır (`SHA-256: cee02adfd207e37bbbc6b66982226b27fa87c2be528ede2b762f72840759cfc2`).
 
 ---
 
@@ -17,7 +17,7 @@
 | **CU5 `evpi_20mk_vindication`** | `N_mach=1`, `C_RD=$2,0M`, `p_succ=0,50` için `1 K` AR-GE `ENV < 0` ve başa-baş `N_be ≥ 4` makine | `E[ΔC_hw] = $664,9k/makine`, `ENV(1) = −$1,67M`, başa-baş **`N_be = 6,02` makine** (`EVPI@1 = $0`) | **PASS** |
 | **CU6 `mc_convergence`** | `50k` vs `100k` yarı-bölümde `ΔP50 ≤ %1,0`, `ΔP95 ≤ %1,0` ve `SE(P>100M) < 0,001` | `ΔP50 = %0,138` ✓, `ΔP95 = %0,530` ✓, `SE(P>100M) = 0,00070` ✓ | **PASS** |
 
-> **Genel Başarı Kuralı (`CU1 ∧ CU2 ∧ CU6 = PASS`) & Dürüst Fazlı Bütçe Stratejisi:** Tek seferde tüm modüller + brüt emniyet paketi birlikte alındığında (**`M3 v7.0 Safety-Certified Full = $5,693M`**), stokastik Program CAPEX kuyruğu `P(Program > $100M) = %5,22 ± %0,07` (`+0,22` puan) ve `P(> $50M) = %30,66` ile ön-kayıtlı `CU3` sınırlarını kıl payı aşar (`FOAK 5y TCO P>100M = %7,25`). Buna karşılık **Faz-1 `M3 Base + Safety` (`$5,393M`, `173` parça — tam `SEMI S2 / ANSI Z136.1 / SIL-3` sertifikalı!)** **`P(Program > $100M) = %4,67 < %5`** ve **`P(> $50M) = %28,11 < %30`** ile **`6/6 CU1–CU6 PASS`** verir! Dolayısıyla bağlayıcı bütçe-tavanı kapanış yolu: **Faz-1 `M3 Base + Safety` (`$5,393M`) → `RFQ-05` (`S6.6 B/C` duvarı) teklif kilidi → Faz-2 `Option-Q` (`+$168k`) & `Option-HPC` (`+$132k`)** modüler kademelemesidir. *(Not: Başlangıç koruma kalemleri `S1.6/S5.5-04/S7.1-03/S7.4-04` [`$76,2k`] ikame kredisi uygulanırsa net `v7 Full` `$5,617M`'a iner; burada muhafazakâr brüt `$5,693M` raporlanmıştır.)*
+> **Genel Başarı Kuralı (`CU1 ∧ CU2 ∧ CU6 = PASS`) & Dürüst Fazlı Bütçe Stratejisi:** Tek seferde tüm modüller + brüt ön emniyet paketi birlikte alındığında (**`M3 v7.0 Full (+S7.SAFETY M0 Taslağı) = $5,693M`**), stokastik Program CAPEX kuyruğu `P(Program > $100M) = %5,22 ± %0,07` (`+0,22` puan) ve `P(> $50M) = %30,66` ile ön-kayıtlı `CU3` sınırlarını kıl payı aşar (`FOAK 5y TCO P>100M = %7,25`). Buna karşılık **Faz-1 `M3 Base + Safety` (`$5,393M`, `173` parça — `S7.SAFETY` M0 ön emniyet bütçesi dahil; `SEMI S2 / ANSI Z136.1 / SIL-3` tasarım hedefidir, resmi sertifikasyon/uyum değildir)** **`P(Program > $100M) = %4,67 < %5`** ve **`P(> $50M) = %28,11 < %30`** ile **`6/6 CU1–CU6 PASS`** verir. Dolayısıyla bağlayıcı bütçe-tavanı kapanış yolu: **Faz-1 `M3 Base + Safety` (`$5,393M`) → `RFQ-05` (`S6.6 B/C` duvarı) teklif kilidi → Faz-2 `Option-Q` (`+$168k`) & `Option-HPC` (`+$132k`)** modüler kademelemesidir. *(Not: Başlangıç koruma kalemleri `S1.6/S5.5-04/S7.1-03/S7.4-04` [`$76,2k`] ikame kredisi uygulanırsa net `v7 Full` `$5,617M`'a iner; burada muhafazakâr brüt `$5,693M` raporlanmıştır.)*
 
 ---
 
@@ -37,7 +37,7 @@
 | **`M3 v6.0 +Option-HPC` (`170p`)** | `$5,380M` | `$6,29M` | `$35,38M` | `$97,70M` | `%27,94` | `%4,63` *(PASS)* | `$17,47M` | `$44,37M` (`%6,46`) |
 | **`M3 v6.0 +Option-Q` (`171p`)** | `$5,416M` | `$6,33M` | `$35,60M` | `$98,18M` | `%28,29` | `%4,69` *(PASS)* | `$17,54M` | `$44,61M` (`%6,55`) |
 | **`M3 v6.0 Full` (`174p`, OptQ+OptHPC)** | `$5,548M` | `$6,46M` | `$36,37M` | `$99,64M` | `%29,38` | **`%4,95`** *(PASS)* | `$17,78M` | `$45,43M` (`%6,87`) |
-| **`M3 v7.0 Safety-Certified Full` (`180p`)** | **`$5,693M`** | **`$6,62M`** | **`$37,24M`** | **`$101,49M`** | **`%30,66`** | **`%5,22`** *(±%0,07; FAIL)* | **`$18,05M`** | **`$46,36M`** (`%7,25`) |
+| **`M3 v7.0 Full (+S7.SAFETY M0 Taslağı)` (`180p`)** | **`$5,693M`** | **`$6,62M`** | **`$37,24M`** | **`$101,49M`** | **`%30,66`** | **`%5,22`** *(±%0,07; FAIL)* | **`$18,05M`** | **`$46,36M`** (`%7,25`) |
 
 ### 3.1 Tam `M3 v7.0 Full` Dağılım Tablosu (`Model A` vs `Model B`)
 
@@ -65,7 +65,7 @@
 | **5** | **`v4.0` Paketi (`M4` + `S5.5` + `PT420` net)** | `$351k` | **`%2,67`** | `0,731` | `$4,67M → $11,26M` | `$6,59M` |
 | 6–14 | `S1`, `S6` Diğer, `S6.3`, `S5`, `S3`, `S4`, `S7` Kontrol, `S9` Yedek, `S2` Diğer | `$119k–$434k` | `%11,94` top. | `0,44–0,72` | `$4,71M → $11,24M` | `$3,8–6,5M` |
 | **15** | **`v6.0` `Option-Q` (`qRAM` + `S1-Multi`, `9,20 kg`)** | `$171k` | **`%0,51`** | `0,517` | `$5,37M → $9,88M` | `$4,50M` |
-| **16** | **`v7.0` Emniyet Paketi (`S7.SAFETY` SEMI S2/SIL-3, `355 kg`)** | `$148k` | **`%0,50`** | `0,436` | `$5,67M → $9,47M` | `$3,81M` |
+| **16** | **`v7.0` Ön Emniyet Paketi (`S7.SAFETY`, SEMI S2/SIL-3 hedefi — M0 sertifikasız, `355 kg`)** | `$148k` | **`%0,50`** | `0,436` | `$5,67M → $9,47M` | `$3,81M` |
 | **17** | **`v6.0` `Option-HPC` (`100G` RDMA Dekoder, `64,00 kg`)** | `$132k` | **`%0,31`** | `0,378` | `$5,86M → $9,11M` | `$3,25M` |
 
 - **`10-RFQ` Kapsamı (`RFQ-01..RFQ-10`, `91` parça):** Nominal **`%78,2` (`$4,454M`)**, MC varyansı **`%92,6`** (`RFQ-10` tek başına `%2,5` nom / `%0,50` var.).

@@ -100,7 +100,7 @@ def _panel_card(
 
 
 def _draw_panel1_laser(ctx: cairo.Context, x: float, y: float, w: float, h: float, las: dict[str, Any]) -> None:
-    _panel_card(ctx, x, y, w, h, "1. S5.5 Sınıf-4 808 nm Lazer (ANSI Z136.1 & SIL-3)", "OD8 · 3,2 ms · PASS", "#059669")
+    _panel_card(ctx, x, y, w, h, "1. S5.5 Sınıf-4 808 nm Lazer (ANSI Z136.1 & SIL-3 Hedefi)", "OD8 · 3,2 ms · M0", "#059669")
 
     px, py, pw, ph = x + 78, y + 66, w - 104, 326
     y_min, y_max = -7.5, 2.5
@@ -187,8 +187,8 @@ def _draw_panel1_laser(ctx: cairo.Context, x: float, y: float, w: float, h: floa
     ctx.stroke()
     _text(ctx, f"NOHD (20 mrad): {las['nohd_collimated_20mrad_m']:.1f} m   |   Fiber (150 mrad): {las['nohd_fiber_150mrad_m']:.1f} m   |   NHZ_diff: {las['nhz_diffuse_m']:.2f} m", x + 28, sy + 24, size=12.0, color="#0F172A", bold=True)
     _text(ctx, f"Gerekli OD (1 / 4 darbe): {las['od_required_1pulse_wafer']:.2f} / {las['od_required_4pulse_wafer']:.2f}  ->  OD8 Artık Oran: {las['od_sweep']['OD8']['ratio_to_4pulse_MPE_at_wafer']:.4f}x MPE (<< 1)", x + 28, sy + 48, size=12.0, color="#334155")
-    _text(ctx, f"1oo2D SIL-3 Kilitleme: <0,1 ms Diyot Kesici + {las['interlock_sil3']['shutter_close_ms']} ms Perde  |  PFD_avg = {las['interlock_sil3']['pfd_avg_1oo2d']:.2e} (< 1e-3)", x + 28, sy + 72, size=12.0, color="#047857", bold=True)
-    _text(ctx, "Sonuç: OD>=8 Kilitli Muhafaza ile Gömülü Sınıf-1 (Class 1) Temizoda İşletimi", x + 28, sy + 96, size=11.5, color="#475569")
+    _text(ctx, f"1oo2D SIL-3 Hedefi (Sertifikasız): <0,1 ms Kesici + {las['interlock_sil3']['shutter_close_ms']} ms Perde  |  PFD_avg = {las['interlock_sil3']['pfd_avg_1oo2d']:.2e}", x + 28, sy + 72, size=11.5, color="#047857", bold=True)
+    _text(ctx, "Tasarım Hedefi: OD>=8 Kilitli Muhafaza ile Gömülü Sınıf-1 (Class 1) Hedefi", x + 28, sy + 96, size=11.5, color="#475569")
 
 
 def _draw_panel2_ph3(ctx: cairo.Context, x: float, y: float, w: float, h: float, gas: dict[str, Any]) -> None:
@@ -293,7 +293,7 @@ def _draw_panel2_ph3(ctx: cairo.Context, x: float, y: float, w: float, h: float,
 
     # Peak annotation on HP curve
     _text(ctx, "40 bar / 100 g: Tepe 1.207 ppm (24,1x IDLH!)", _sx(32), _sy(1207.0) - 8, size=11.5, color="#B91C1C", bold=True)
-    _text(ctx, "SDS + 250 CFM Scrubber + SIL-3 (12 s): Tepe 6,9e-5 ppm", _sx(28), _sy(6.9e-5) - 9, size=11.0, color="#0369A1", bold=True)
+    _text(ctx, "SDS + 250 CFM Scrubber + SIL-3 hedefi (12 s): Tepe 6,9e-5 ppm", _sx(28), _sy(6.9e-5) - 9, size=10.5, color="#0369A1", bold=True)
 
     # Bottom summary box
     sy = y + 444
@@ -306,7 +306,7 @@ def _draw_panel2_ph3(ctx: cairo.Context, x: float, y: float, w: float, h: float,
     sds = gas["mitigated_sds_system"]
     _text(ctx, f"SDS (<650 Torr, 10 g): Kopmada Dış Akış = 0  |  Saf Fick Difüzyonu = {sds['sds_fickian_diff_sccm']:.3f} sccm", x + 28, sy + 24, size=12.0, color="#0F172A", bold=True)
     _text(ctx, f"Operatör Maruziyeti <= {sds['operator_conservative_ppm']:.4f} ppm  ({sds['margin_below_tlv_twa']:.1f}x < TLV-TWA, {int(sds['margin_below_idlh'])}x < IDLH)", x + 28, sy + 48, size=12.0, color="#047857", bold=True)
-    _text(ctx, "Gaz Dolabı: 250 CFM Egzoz + %99,9 Kuru Scrubber + 0,02/0,05 ppm SIL-3 Kesme", x + 28, sy + 72, size=11.8, color="#334155")
+    _text(ctx, "Gaz Dolabı Hedefi: 250 CFM Egzoz + %99,9 Kuru Scrubber + 0,02/0,05 ppm SIL-3 hedefi", x + 28, sy + 72, size=11.4, color="#334155")
     _text(ctx, "S5.6 %5,0 H₂ / %95,0 N₂ Pasivasyon: ISO 10156 (%5,7) Altı -> Havada Doğal Alevlenmez", x + 28, sy + 96, size=11.8, color="#0369A1", bold=True)
 
 
@@ -529,9 +529,9 @@ def _draw_panel5_epo_ups(ctx: cairo.Context, x: float, y: float, w: float, h: fl
 
     steps = [
         ("0,0 ms", "S7.SAFETY", "15 kVA LFP Online UPS kesintisiz barayı devralır (0 ms)", "#059669", 0.04),
-        ("3,2 ms", "S5.5", "SIL-3 PLC 808 nm lazer sürücüsünü keser, perde kapanır", "#DC2626", 0.14),
+        ("3,2 ms", "S5.5", "SIL-3 hedef PLC 808 nm lazer sürücüsünü keser, perde kapanır", "#DC2626", 0.14),
         ("18,3 ms", "S1/S2", "22 kV HV kesilir; 2 MΩ crowbar gerilimi < 50 V'a indirir", "#EA580C", 0.28),
-        ("45,0 ms", "S5.6/S1", "MBE deklanşörü + 400 W PBN + SDS PH₃ SIL-3 vana kapanır", "#D97706", 0.42),
+        ("45,0 ms", "S5.6/S1", "MBE deklanşörü + 400 W PBN + SDS PH₃ SIL-3 hedef vana kapanır", "#D97706", 0.42),
         ("80,0 ms", "S5 UHV", "Yay-dönüşlü all-metal UHV sürgülü vanalar mühürlenir", "#2563EB", 0.56),
         ("60 s", "S6/HPC", "Exp125 mıknatıs kontrollü inişi + Option-HPC güvenli duruş", "#7C3AED", 0.78),
         ("300 s", "S6.8", "LD400 ³He/⁴He karışımı oda sıcaklığı tankına geri alınır", "#0D9488", 0.96),
@@ -696,11 +696,11 @@ def _draw_panel6_fmea(
     ctx.stroke()
     tot = spec["totals"]
     sc = fstat["sil_counts"]
-    _text(ctx, f"S7.SAFETY-01..06 Laboratuvar Güvenlik Kiti (BOM v7.0 Paketi):", x + 28, sy + 24, size=12.0, color="#0F172A", bold=True)
+    _text(ctx, f"S7.SAFETY-01..06 Ön Emniyet Kiti Tasarım Hedefi (BOM v7.0, Sertifikasız M0):", x + 28, sy + 24, size=11.5, color="#0F172A", bold=True)
     _text(ctx, f"Kütle: {tot['total_mass_kg']:.1f} kg  |  Güç: {tot['steady_electrical_power_W']:.0f} W  |  Kriyo Yükü: {tot['cryo_load_W']:.1f} W", x + 28, sy + 48, size=11.8, color="#334155")
-    _text(ctx, f"Bütçe: ${tot['cost_usd_low']:,} – ${tot['cost_usd_nom']:,} – ${tot['cost_usd_high']:,} (M3 v6.0 BOM'un %{tot['pct_of_m3_v6_full_bom']:.2f}'i)", x + 28, sy + 72, size=11.8, color="#047857", bold=True)
-    _text(ctx, f"SIL Dağılımı (25 FMEA + 10 HAZOP): {sc['SIL-3']}x SIL-3  |  {sc['SIL-2']}x SIL-2  |  {sc['SIL-1']}x SIL-1", x + 28, sy + 96, size=11.5, color="#1D4ED8", bold=True)
-    _text(ctx, "01: SDS PH₃ ($42k) · 02: OD8 Perde ($22k) · 03: SIL-3 PLC ($28k) · 04: 15kVA UPS ($24k) · 05: O₂/DN50 ($14k) · 06: UHV ($15k)", x + 28, sy + 122, size=10.3, color="#475569")
+    _text(ctx, f"Parametrik Bütçe: ${tot['cost_usd_low']:,} – ${tot['cost_usd_nom']:,} – ${tot['cost_usd_high']:,} (M3 v6.0 BOM'un %{tot['pct_of_m3_v6_full_bom']:.2f}'i)", x + 28, sy + 72, size=11.4, color="#047857", bold=True)
+    _text(ctx, f"SIL Hedef Dağılımı (Sertifikasız M0): {sc['SIL-3']}x SIL-3 hedefi | {sc['SIL-2']}x SIL-2 hedefi | {sc['SIL-1']}x SIL-1 hedefi", x + 28, sy + 96, size=10.8, color="#1D4ED8", bold=True)
+    _text(ctx, "01: SDS PH₃ ($42k) · 02: OD8 Perde ($22k) · 03: SIL-3 hedef PLC ($28k) · 04: UPS ($24k) · 05: O₂/DN50 ($14k) · 06: UHV ($15k)", x + 28, sy + 122, size=10.0, color="#475569")
 
 
 def main() -> None:
@@ -721,13 +721,13 @@ def main() -> None:
     ctx.fill()
     _text(
         ctx,
-        "ATOM LİTOGRAFİ MAKİNESİ — EXP150 (H168): ENDÜSTRİYEL EMNİYET, HAZOP, 25-SATIRLI FMEA & SIL-3 KİTİ",
-        28, 36, size=22.0, color="#FFFFFF", bold=True,
+        "EXP150 (H168): ÖN EMNİYET TASARIM HEDEFİ, HAZOP & 25-SATIRLI FMEA (SERTİFİKASIZ M0)",
+        28, 36, size=21.0, color="#FFFFFF", bold=True,
     )
     _text(
         ctx,
-        "SEMI S2 · IEC 61508 (SIL-2/3) · ANSI Z136.1 · OSHA/NIOSH · ISO 10156 · ICRP 103 / NIST XCOM · ASME BPVC Sec VIII  |  {Model}/{Analitik} (no_lab_measurement=true)",
-        28, 64, size=13.0, color="#CBD5E1",
+        "ÖN EMNİYET TASARIM HEDEFİ (SERTİFİKASIZ M0 — SEMI S2 SERTİFİKASI VERMEZ; BAĞIMSIZ SIL DEĞERLENDİRMESİ YOK) · Referans: ANSI/OSHA/ICRP/ASME",
+        28, 64, size=12.4, color="#CBD5E1",
     )
 
     # Header right pills
@@ -798,8 +798,8 @@ def main() -> None:
     )
     _text(
         ctx,
-        "Epistemik: {Model}/{Analitik}/{Varsayım} · no_lab_measurement=true · no_supplier_quotes=true · Kapanış onayı Carbon denetimine tabidir",
-        W - 28, H - 14, size=11.5, color="#64748B", align="right",
+        "Epistemik (TRL 1–2 / M0): Ön tasarım taraması · SEMI S2 sertifikası vermez; bağımsız IEC 61508 SIL değerlendirmesi yok · no_lab_measurement=true",
+        W - 28, H - 14, size=11.0, color="#64748B", align="right",
     )
 
     surf.write_to_png(str(OUT_PNG))

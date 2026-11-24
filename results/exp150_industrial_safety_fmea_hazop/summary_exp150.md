@@ -1,13 +1,16 @@
-# Exp150 (`H168`): Endüstriyel Emniyet, HAZOP, 25-Satırlı FMEA & Gerçek Laboratuvar Güvenlik Kiti (`S7.SAFETY`)
+# Exp150 (`H168`): Ön Emniyet Tasarım Hedefi, HAZOP, 25-Satırlı FMEA & `S7.SAFETY` Kiti Taslağı (Sertifikasız `M0`)
 
-- **Tarih:** 2026-11-23  
-- **Hipotez:** `H168` (`Exp150_industrial_safety_fmea_hazop`, `v7.0` Wave A)  
-- **Ön-Kayıtlı Kriter Kararı:** **7/7 PASS** (`PASS`)  
-- **Epistemik Durum:** `{Model}`, `{Analitik}`, `{Literatür}`, `{Varsayım}` — `no_lab_measurement=true`, `no_supplier_quotes=true`. Tüm güvenlik limitleri uluslararası standartlara (`ANSI Z136.1-2022`, `IEC 60825-1`, `OSHA 29 CFR 1910.1000/146`, `ACGIH`, `NIOSH`, `ISO 10156`, `ICRP 103`, `NIST XCOM`, `IEC 61010-1`, `ASME BPVC Sec VIII`, `IEC 61508`, `SEMI S2`) göre analitik olarak hesaplanmıştır; gerçek laboratuvar saha ölçümü veya tedarikçi teklifi değildir. Kapanış onayı (`KABUL`) yalnızca sıfır-bağlamlı **Carbon** denetimiyle verilebilir.
+- **Tarih:** 2026-11-24  
+- **Hipotez:** `H168` (`Exp150_industrial_safety_fmea_hazop`, `v7.0` / `v7.1`)  
+- **Ön-Kayıtlı Model Kriter Kararı:** **7/7 PASS** (`PASS`, yazılım/analitik model kontrolü)  
+- **Epistemik Durum:** `{Model}`, `{Analitik}`, `{Literatür}`, `{Varsayım}` — `TRL 1–2 (M0)`, `no_lab_measurement = true`, `no_supplier_quotes = true`.
 
-## 1. Yönetici Özeti & Ön-Kayıtlı Kriterler (`SF1–SF7`)
+> [!NOTE]
+> **Epistemik ve Sertifikasyon Sınırı (Zorunlu Beyan):** Bu belge Python tabanlı bir **`M0` ön FMEA/HAZOP tasarım taramasıdır**; herhangi bir sertifikasyon veya uygunluk beyanı değildir. **SEMI, kendi `SEMI S2` kılavuzu için sertifikasyon vermez** (üçüncü-taraf saha değerlendirmesi gerekir). Benzer biçimde **`IEC 61508 SIL-3`**, FMEA/RPN puanı düşürülerek kazanılan bir etiket olmayıp tam emniyet yaşam döngüsü, donanım mimari kısıtları (`HFT`, `SFF`), sistematik yetkinlik ve bağımsız fonksiyonel emniyet değerlendirmesi gerektirir. Aşağıdaki tablolarda yer alan `SIL-3`, `SIL-2` ve `SIL-1` sınıfları yalnızca **hedeflenen emniyet düzeyini (`tasarım hedefi`)** belirtir; sertifikasyon iddiası değildir.
 
-Atom Litografi Makinesi (`CAD v6.0`, `M3 v6.0 Full BOM = $5,547,800`), temizodada beş kritik/ölümcül mühendislik tehlikesini tek şaside barındırır: (1) `S5.5` Sınıf-4 `808 nm` `43,49 J/cm²` qCW flaş lazer, (2) `S1.1` zehirli/piroforik `PH₃` fosfin ve `S5.6` `%5 H₂/N₂` pasivasyon gazı, (3) `10–22 keV` yüksek gerilim ve Bremsstrahlung X-ışını, (4) `20 mK / 4 K` kriyojenik Helyum ODH + `ASME 0,5 barg` OVC tahliye + `Exp125` `18,94 kJ` mıknatıs quench, (5) plansız elektrik kesintisi (`EPO` / `15 kVA` çevrimiçi UPS). `S7.SAFETY-01..06` kiti (`355,0 kg`, `1.090 W`, `0,0 W` kriyo yükü, `$145.000` nominal = `M3 v6.0` BOM'un **`%2,61`**'i) eklendiğinde 25 satırlı FMEA'daki maksimum risk puanı `RPN_pre = 280` değerinden **`RPN_post = 42 ≤ 60`** düzeyine (ortalama **`%86.3`** azalma, `0` kabul edilemez artık risk) indirilmiştir.
+## 1. Yönetici Özeti ve Ön-Kayıtlı Model Kriterleri (`SF1–SF7`)
+
+Atom Litografi Makinesi kavramsal tasarımı (`CAD v6.0`, `M3 v6.0 Full BOM = $5,547,800`), temizoda senaryosunda beş kritik mühendislik tehlikesi için ön koruma hedefleri tanımlar: (1) `S5.5` Sınıf-4 `808 nm` `43,49 J/cm²` qCW flaş lazer, (2) `S1.1` zehirli/piroforik `PH₃` fosfin ve `S5.6` `%5 H₂/N₂` pasivasyon gazı, (3) `10–22 keV` yüksek gerilim ve Bremsstrahlung X-ışını, (4) `20 mK / 4 K` kriyojenik Helyum ODH + `ASME 0,5 barg` OVC tahliye + `Exp125` `18,94 kJ` mıknatıs quench, (5) plansız elektrik kesintisi (`EPO` / `15 kVA` çevrimiçi UPS). Parametrik `S7.SAFETY-01..06` ön tasarım kiti (`355,0 kg`, `1.090 W`, `0,0 W` kriyo yükü, `$145.000` nominal = `M3 v6.0` BOM'un `%2,61`'i, `no_supplier_quotes = true`) modellendiğinde `25` satırlı ön FMEA taramasındaki maksimum risk puanı `RPN_pre = 280` değerinden **`RPN_post = 42 ≤ 60`** tasarım hedefine (ortalama `%86,3` azalma, `0` artık risk `> 60`) inmektedir.
 
 | Kriter | Kapsam | Gözlenen Değerler | Karar |
 |---|---|---|---|
@@ -19,13 +22,13 @@ Atom Litografi Makinesi (`CAD v6.0`, `M3 v6.0 Full BOM = $5,547,800`), temizodad
 | `SF6_25row_fmea_and_hazop_closure` | Ön-kayıtlı emniyet eşiği | `n_fmea_rows=25`, `n_hazop_nodes=10`, `max_rpn_pre=280`, `max_rpn_post=42`, `mean_rpn_reduction_pct=86.3` | **PASS** |
 | `SF7_safety_kit_spec_ready_for_bom_v7` | Ön-kayıtlı emniyet eşiği | `n_items=6`, `total_mass_kg=355.0`, `cryo_load_W=0.0`, `pct_of_m3_v6_full=2.61`, `no_supplier_quotes=True` | **PASS** |
 
-## 2. Beş Kritik Tehlike Alanının İlk-İlkelerden Fizik Analizi
+## 2. Beş Kritik Tehlike Alanının İndirgenmiş-Mertebe Analitik Taraması
 
-### 2.1. Tehlike-1: `S5.5` Sınıf-4 `808 nm` Flaş Lazer (`ANSI Z136.1-2022` / `IEC 60825-1`)
+### 2.1. Tehlike-1: `S5.5` Sınıf-4 `808 nm` Flaş Lazer (`ANSI Z136.1-2022` / `IEC 60825-1` Referansı)
 
 - **Çapalı Kaynak (`Exp130`/`Exp139`/`CAD v6.0`):** `λ = 808.0 nm`, `t = 1.0 ms`, yonga fluansı `43.49 J/cm²` (`16×16 mm` = `111.33 J`, kaynak `119.53 J`, tepe güç `132.82 kW`), AR safir pencere fluansı `11.16 J/cm²` (`8,96×` LIDT marjı).
 - **MPE ve Tehlike Mesafeleri (`C_A = 1.64437`):** Tek-darbe göz MPE = **`16.645 µJ/cm²`**, 4-darbe MPE (`C_P = 4^-0.25`) = **`11.769 µJ/cm²`**, deri MPE = `0.3217 J/cm²`. Kolime (`20 mrad`) `NOHD =` **`1472.2 m`**, fiber demeti (`150 mrad`) `NOHD =` **`196.3 m`**, Lambertian yaygın yansıma (`ρ=1`) `NHZ_diff =` **`14.59 m`**.
-- **Gerekli Optik Yoğunluk & SIL-3 Kilitleme:** Gerekli `OD` tek-darbe `6.417`, 4-darbe **`6.568`** → `OD ≥ 7+` zorunludur, tasarım standardı **`OD = 8`** olarak belirlenmiştir (`OD8` artık fluans oranı `0.03695× MPE << 1`). `IEC 61508` `1oo2D` çift-kanallı perde (`3.2 ms` yay-dönüşlü mekanik bıçak + `<0,1 ms` diyot sürücü kesici) için `PFD_avg =` **`2.343e-05`** `< 1e-3` (donanım hata toleransı `HFT=1` altında **SIL-3** uyumlu, gömülü **Class-1** operasyon).
+- **Gerekli Optik Yoğunluk ve `SIL-3` Kilitleme Hedefi (Sertifikasız `M0`):** Gerekli `OD` tek-darbe `6.417`, 4-darbe **`6.568`** → `OD ≥ 7+` gerekir, tasarım hedefi **`OD = 8`** olarak belirlenmiştir (`OD8` artık fluans oranı `0.03695× MPE << 1`). `IEC 61508` `1oo2D` çift-kanallı perde (`3.2 ms` yay-dönüşlü mekanik bıçak + `<0,1 ms` diyot sürücü kesici) için analitik `PFD_avg =` **`2.343e-05`** `< 1e-3` hesaplanmıştır (`HFT=1` altında **SIL-3 mimari tasarım hedefi** ve gömülü **Class-1** operasyon hedefi; sertifikasyon değildir).
 
 | Optik Yoğunluk | Yonga Artık Fluans (J/cm²) | Pencere Artık Fluans (J/cm²) | 4-Darbe MPE Oranı | Pencere Güvenlik Marjı | Gömülü Class-1 |
 |---|---:|---:|---:|---:|---|
@@ -55,7 +58,7 @@ Atom Litografi Makinesi (`CAD v6.0`, `M3 v6.0 Full BOM = $5,547,800`), temizodad
 ### 2.4. Tehlike-4: `20 mK / 4 K` Kriyojenik Helyum ODH, `ASME 0,5 barg` Tahliye & `Exp125` Quench
 
 - **Kuru Kapalı-Çevrim Helyum ODH (`OSHA ≥ %19,5`):** `LD400` karışımı (`0.065 m³` STP) + `PT420` kompresör/hatları (`0.85 m³` STP) + `%20` marj = **`1.098 m³` STP**. Tüm envanterin anlık salınımında `60 m³` temizodada oksijen oranı **`20.567% >> %19,5`** kalır (aynı odada `100 L` ıslak sıvı Helyum kriyostatı `O₂ = 5.93%` ile ölümcül boğulma yaratırdı). Yine de `15 m³` küçük servis odaları için duvara monteli `O₂` monitörü (`%19,5` alarm) zorunludur.
-- **`ASME BPVC Sec VIII` / `CGA S-1.3` OVC Tahliye (Tam Saint-Venant İzentropik Subsonik Akış):** `0,50 barg` ayarlı (`+10%` UG-125 birikimle `0,55 barg`) tek **`DN50` patlama diski** (`250 K`) He kapasitesi `0.1817 kg/s` (paralel yaylı tahliye vanası ek `2×` yedeklik sağlar); ilk-ilkeler en kötü He girişi (`PT420` `20 bar` `Ø2 mm` `50 K` kırığı + `LD400` `5 s` tam boşalım = `0.0111 kg/s`) karşısında **`16.37×`**, `N₂` cryo-yoğuşma geri-buharlaşması (`0.018 kg/s` vs `0.4629 kg/s`) karşısında **`25.72×`** (`≥ 10×`) güvenlik marjı sağlar.
+- **`ASME BPVC Sec VIII` / `CGA S-1.3` OVC Tahliye (Tam Saint-Venant İzentropik Subsonik Akış):** `0,50 barg` ayarlı (`+10%` UG-125 birikimle `0,55 barg`) tek **`DN50` patlama diski** (`250 K`) He kapasitesi `0.1817 kg/s` (paralel yaylı tahliye vanası ek `2×` yedeklik sağlar); analitik/fiziksel taşıma modeli en kötü He girişi (`PT420` `20 bar` `Ø2 mm` `50 K` kırığı + `LD400` `5 s` tam boşalım = `0.0111 kg/s`) karşısında **`16.37×`**, `N₂` cryo-yoğuşma geri-buharlaşması (`0.018 kg/s` vs `0.4629 kg/s`) karşısında **`25.72×`** (`≥ 10×`) güvenlik marjı sağlar.
 - **`Exp125` 8-Bobin Mıknatıs Quench:** `1,50 T` tam alanda `18.941 kJ` (`M4` `0,1785 T` modunda `0.2682 kJ`), `R_dump = 1.563 Ω`, `τ = 0.37 s`, `V_max = 400.0 V`, bobin sıcak noktası `T_hotspot = 64.62 K < 150 K`. Harici `2.5 kg` hava-soğutmalı boşaltma direnci yalnızca `ΔT = 15.15 K` ısınarak **`38.15 °C < 55 °C`** güvenli dokunma eşiğinin altında kalır (`5 Gauss` sınırı `r < 0.62 m`).
 
 | Oda Hacmi | Kuru `LD400+PT420` `O₂` (%) | OSHA (`≥%19,5`) | Karşılaştırma: `100 L` Islak LHe `O₂` (%) |
@@ -112,9 +115,9 @@ Atom Litografi Makinesi (`CAD v6.0`, `M3 v6.0 Full BOM = $5,547,800`), temizodad
 | `FM-24` | `S7.3` | Yazılım/FPGA bozuk komut gönderimi (yanlış lazer/HV tetiği) | Otonom yazılımla emniyet sınırlarının aşılması | `9/4/6` | **216** | Yazılımdan tamamen bağımsız donanımsal SIL-3 emniyet PLC kilitleme katmanı | `9/1/2` | **18** | `-91.7%` | `SIL-3` |
 | `FM-25` | `Facility` | Temizoda HVAC/sıcaklık kayması veya su soğutma kaçağı | Optik hizalama kayması, elektrik panosunda su kısa devresi | `6/5/5` | **150** | Zemin su kaçağı sensörü + solenoid su kesici + ±10 mK HVAC alarmı (Exp133) | `6/2/2` | **24** | `-84.0%` | `SIL-1` |
 
-## 4. 10-Düğümlü HAZOP Çalışması (`IEC 61882` / `SEMI S2`)
+## 4. 10-Düğümlü Ön HAZOP Taraması (`IEC 61882` / `SEMI S2` Referansı — Sertifikasız `M0`)
 
-| Düğüm | Sistem | Kılavuz Sözcük | Sapma | Birincil Koruma Bariyeri | SIL |
+| Düğüm | Sistem | Kılavuz Sözcük | Sapma | Birincil Koruma Bariyeri (Tasarım Hedefi) | Hedef SIL (Sertifikasız) |
 |---|---|---|---|---|---|
 | `HZ-01` | S5.5 808 nm Flaş Lazer | `OTHER THAN (Kapak açık)` | Sınıf-4 43,49 J/cm^2 demetin dış ortama kaçışı | OD>=8 muhafaza + 1oo2D SIL-3 3,2 ms perde + diyot kesici | `SIL-3` |
 | `HZ-02` | S1.1 PH3 Gaz Besleme | `MORE (Sızıntı/Basınç)` | Zehirli/piroforik PH3 salınımı (>0,05 ppm TLV / 50 ppm IDLH) | <650 Torr SDS + vakum ceket + 250 CFM scrubber + 0,02 ppm SIL-3 vana | `SIL-3` |
@@ -127,11 +130,11 @@ Atom Litografi Makinesi (`CAD v6.0`, `M3 v6.0 Full BOM = $5,547,800`), temizodad
 | `HZ-09` | S9.HPC 100G RDMA Rafı | `MORE (Termal Yük)` | 2.195 W soğutma kaybı & aşırı ısınma | Yedekli 2,6 kW Titanium PSU + 85 °C BMC kesici + raf duman sensörü | `SIL-2` |
 | `HZ-10` | S1.6 Option-Q (Sb/Er) & S9.1 | `OTHER THAN (Bakım/Fiber)` | 450 °C Sb fırını termal kaçağı veya 1550 nm fiber açılması | 500 °C donanım kesici + ALS otomatik optik güç kesme + HEPA bakım | `SIL-2` |
 
-## 5. Gerçek Laboratuvar Güvenlik Kiti (`s_safety_spec.json` — `BOM v7.0` Entegrasyon Paketi)
+## 5. Ön Emniyet Kiti Tasarım Taslağı (`s_safety_spec.json` — `BOM v7.0` Parametrik Paketi, Sertifikasız `M0`)
 
-- **Toplam Kit Özeti (`S7.SAFETY-01..06`):** `6` kalem, toplam kütle **`355.0 kg`**, elektrik gücü **`1090.0 W`**, kriyojenik ısıl yük **`0.0 W`**, bütçe aralığı **`$92,000 – $145,000 – $220,000`** (`M3 v6.0` Full BOM `$5,547,800`'ün **`%2.61`**'i). `no_supplier_quotes=true` (`{Varsayım}` / `{Liste-Capasi}`).
+- **Toplam Kit Özeti (`S7.SAFETY-01..06`):** `6` kalem, toplam kütle **`355.0 kg`**, elektrik gücü **`1090.0 W`**, kriyojenik ısıl yük **`0.0 W`**, parametrik bütçe aralığı **`$92,000 – $145,000 – $220,000`** (`M3 v6.0` Full BOM `$5,547,800`'ün **`%2.61`**'i). `no_supplier_quotes=true` (`{Varsayım}` / `{Liste-Capasi}`).
 
-| Parça ID | Donanım Tanımı | Konum | Kütle (kg) | Güç (W) | Kriyo (W) | Maliyet Low / Nom / High (USD) | SIL | Epistemik |
+| Parça ID | Donanım Tanımı | Konum | Kütle (kg) | Güç (W) | Kriyo (W) | Maliyet Low / Nom / High (USD) | Hedef SIL | Epistemik |
 |---|---|---|---:|---:|---:|---|---|---|
 | `S7.SAFETY-01` | Sub-Atmospheric SDS PH3 Micro-Cylinder Gas Cabinet (<650 Torr, 10 g), Vacuum-Jacket Line, 250 CFM Dry Scrubber & Dual 0.02 ppm Sensors | Facility gas bay adjacent to S1/S7 | `118.0` | `480` | `0.0` | `$28,000 / $42,000 / $62,000` | `SIL-3` | `{Varsayim}` |
 | `S7.SAFETY-02` | ANSI Z136.1 OD>=8 (808 nm) Interlocked Class-1 Laser/X-Ray Steel Shroud & Dual-Channel SIL-3 Mechanical Shutter (<5 ms) | S5.5 +Y viewport perimeter | `38.0` | `45` | `0.0` | `$14,000 / $22,000 / $34,000` | `SIL-3` | `{Varsayim}` |
@@ -140,8 +143,8 @@ Atom Litografi Makinesi (`CAD v6.0`, `M3 v6.0 Full BOM = $5,547,800`), temizodad
 | `S7.SAFETY-05` | Cleanroom O2 Deficiency Monitor (19.5% Alarm), ASME DN50 0.5 barg OVC Burst Disk/Relief & 1.563 Ohm Quench Dump Bank | S6 DR OVC + Cleanroom wall + S7 dump bay | `24.0` | `35` | `0.0` | `$8,000 / $14,000 / $22,000` | `SIL-3` | `{Liste-Capasi}` |
 | `S7.SAFETY-06` | Fast Spring-Return UHV Isolation Gate Valve Actuators (<80 ms), ISO 10156 5% H2/N2 Orifice & X-Ray Survey Meter | S5.2/S5.3/S5.6 vacuum manifolds & cleanroom | `12.0` | `60` | `0.0` | `$9,000 / $15,000 / $24,000` | `SIL-2` | `{Varsayim}` |
 
-## 6. Epistemik Sınırlar & Kapsam Dışı Maddeler
+## 6. Epistemik Sınırlar ve Kapsam Dışı Maddeler
 
-- Bu rapor ilk-ilkeler fizik modelleri (`{Model}` / `{Analitik}`), uluslararası emniyet standartları (`{Literatür}`) ve bütçe/donanım tahminlerine (`{Varsayım}`) dayanır.
-- Gerçek saha `X-ışını` dozimetri ölçümü, `PH₃` sızıntı kalibrasyonu, `SIL-3` üçüncü-taraf `TÜV / SEMI S2` sertifikasyonu ve gerçek tedarikçi fiyat teklifleri (`no_lab_measurement=true`, `no_supplier_quotes=true`) laboratuvar kurulum fazında yapılmalıdır.
+- Bu rapor indirgenmiş-mertebe analitik fizik modelleri (`{Model}` / `{Analitik}`), uluslararası emniyet standart/kılavuz referansları (`{Literatür}`) ve parametrik bütçe tahminlerine (`{Varsayım}`) dayanır (`TRL 1–2 / M0`).
+- **Sertifikasyon Yoktur:** SEMI kendi `SEMI S2` kılavuzu için sertifika vermez; `IEC 61508 SIL-3` ise tam emniyet yaşam döngüsü, donanım mimari kısıtları, sistematik yetkinlik ve bağımsız fonksiyonel emniyet değerlendirmesi gerektirir. Gerçek saha `X-ışını` dozimetri ölçümü, `PH₃` sızıntı kalibrasyonu, üçüncü-taraf `SEMI S2` / `IEC 61508` saha değerlendirmesi ve gerçek tedarikçi fiyat teklifleri (`no_lab_measurement=true`, `no_supplier_quotes=true`) laboratuvar kurulum fazında yapılmalıdır.
 - **Global Carbon & Hydrogen Kuralı:** Bu belge `Hydrogen` (yazar) çıktısıdır; kapanış onayı (`KABUL`) sıfır-bağlamlı **Carbon** denetimine tabidir.

@@ -5,7 +5,7 @@ Tarih: 2026-11-22. **Epistemik durum: `{Model}` & `{Aday-COTS}`; `no_lab_measure
 ## 1. Kapsam ve Tasarım Yenilemesi
 Bu deney iki kritik eksiği kapatır:
 1. **`src/board/` IBIC 8-Kanallı Ön-Uç Onarımı (`COLD_100K` Kilitli Varsayılan):** Eski `detector_frontend.net` üzerindeki tüm topolojik kusurlar giderildi (boşta op-amp girişleri, çift-nete bağlı pinler, eksik CR-RC pasifleri, paylaşımlı DAC ve jenerik yer tutucular). `detector_frontend.py` varsayılan olarak kilitli **`COLD_100K`** profilini (`RF = 1 GΩ`, `CS = CP = 600 pF → τ_s = 1,2 µs`, `Q_ION = 0,055 fC`, `V_THR = 4,23 mV`; isteğe bağlı `--profile rt300k`) üretir: geçerli KiCad S-ifadesi (`detector_frontend.net`: **204 bileşen, 107 benzersiz net, 0 ERC hatası**) ve standart SPICE destesi (`detector_frontend.cir`).
-2. **Birinci-İlkeler Fiziksel Devre + Monte Carlo Simülasyonu:** `Exp72`'nin sezgisel varsayımları (`Y_e = 0,35/0,40/0,45` ve `ENC = 50 + 25·C`) yerine tam **Lindhard elektronik/nükleer durdurma bölüşümü**, sonlu GBP'li **Laplace `H(s)` + sıfır-sarmallı zaman-alanı darbe tepkisi**, **Parseval gürültü integrali `ENC(C_det, τ_s, T)`**, **Rice yanlış-tetik oranı** ve nokta başına **`50.000` iyonlu Monte Carlo** yürütüldü.
+2. **Analitik/SPICE Benzeri Devre + Monte Carlo Simülasyonu:** `Exp72`'nin sezgisel varsayımları (`Y_e = 0,35/0,40/0,45` ve `ENC = 50 + 25·C`) yerine tam **Lindhard elektronik/nükleer durdurma bölüşümü**, sonlu GBP'li **Laplace `H(s)` + sıfır-sarmallı zaman-alanı darbe tepkisi**, **Parseval gürültü integrali `ENC(C_det, τ_s, T)`**, **Rice yanlış-tetik oranı** ve nokta başına **`50.000` iyonlu Monte Carlo** yürütüldü.
 
 ## 2. Kayıtlı Öngörüler & Hükümler (`predictions_exp127.json`)
 
@@ -39,7 +39,7 @@ Bu deney iki kritik eksiği kapatır:
 
 **Tasarım hükmü:** P91 `5 keV ³¹P⁺` noktasında `η ≥ 0,99` penceresini açmak için CSA ilk kademesi soğuk ada (`T ≈ 100 K`, `R_f = 1 GΩ`) üzerinde `τ_s = 1,2 µs` (`CS = CP = 600 pF`, `1 ms` atış çevriminin `< %0,2`'si) ile çalıştırılmalıdır; bu rejimde **`C_det ≤ 1,5 pF`** bandının tamamında `η(5 keV) ≥ 0,99` sağlanır (`C_det = 0,5 pF` tasarım noktasında `3×` kapasitans marjı ve `η = 0,99936`).
 
-## 4. `machine_control` v2.1 & `CellISA` Canlı Doğrulama Özeti (`Arch-B` `1.024` Demetcik Kilidi)
+## 4. `machine_control` v2.1 & `CellISA` Sayısal Benzetim ve Yazılım Demo Özeti (`Arch-B` `1.024` Demetcik Kilidi)
 - **Fabrika demo sertifikaları (`certs_v224_demo.jsonl`, 4000 yuva, `v224_baseline` / `v300_baseline`):** Kilitli `Arch-B` `1.024` demetcik (`32×32 @ 0,50 mm = 16,0×16,0 mm`, `16×` 64-kanallı karo) ve `Exp124 HDA-HiRes` `15 ms/atış` (`2,95×10⁹` ham atış/gün `@%50` görev `≫` okuma sınırı); `3517/4000` sertifikalı (`%87,92`), `1,98` atış/yazmaç, `1,98` spektroskopi/yazmaç, analitik hız **`1,973×10⁸`/gün** (`56×160 = 8960` okuma kanalı), **`3517/3517` kayıtta 8 elemanlı `lines_Hz` %100 dolu**.
 - **`CellISA` GRAPE Derleyici (`prog_certs_v224_demo.jsonl`, 9 köşe `±400 Hz × ±2%`, SHA-256 imzalı; `DD_HOLD` hızlı efektif koherens faz operatörü — tam 32B `448`-seyirci `XY8-GRAPE` doğrulaması `Exp126`'dadır):**
   - `bell` (2 darbe): `F_nom = 0,9940`, **`F_corner_min = 0,9982`**, `XY8 DD gain = 14,37×`, SHA-256 PASS.

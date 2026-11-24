@@ -4,7 +4,7 @@
 - **Tarih:** 2026-11-23
 - **Epistemik Etiket:** `{Model}` / `{Sayısal-Simülasyon}` — **`no_lab_measurement = true`**
 - **Genel Karar:** **7/7 Ön-Kayıtlı Tahmin `PASS`** (`success_rule_met = true`, çalışma süresi `9.15 s`)
-- **Birincil Veri Bağlantısı:** `Exp124`–`Exp134` arasındaki tüm `11` birincil JSON defteri çalışma zamanında `Path(__file__).resolve()` ile okunmuş ve her birinin `SHA-256` özeti `v4_digital_twin_cert.json` içine kilitlenmiştir.
+- **Birincil Veri Bağlantısı:** `Exp124`–`Exp134` arasındaki tüm `11` birincil JSON defteri çalışma zamanında `Path(__file__).resolve()` ile okunmuş ve her birinin `SHA-256` özeti `v4_digital_twin_cert.json` içine kayıtlanmıştır *(not: `SHA-256` özeti yalnızca dosya bütünlüğü ve veri provenansı özetidir; fiziksel veya mühendislik doğrulaması/sertifikasyonu değildir)*.
 
 ---
 
@@ -61,7 +61,7 @@ Sabit `1,0 s` taramalı `v3.0` makinesi `VOKL-6 HM5962` (`%33,25`) veriminde `1,
 
 ---
 
-## 4. Canlı `src/machine_control/` Entegrasyon ve `SHA-256` Ana Sertifika (`L8`)
+## 4. `src/machine_control/` Entegrasyonu ve `SHA-256` Dosya Bütünlüğü Özeti (`L8`)
 
 - **Canlı `120`-Yuvalı `Factory` Koşumu:**
   - `v300_KL`: `105` sertifikalı, `1.000,0 ms/deneme`, `1,973 × 10⁸/gün`.
@@ -69,7 +69,7 @@ Sabit `1,0 s` taramalı `v3.0` makinesi `VOKL-6 HM5962` (`%33,25`) veriminde `1,
   - `v400_VOKL6_HM5962`: `87` sertifikalı, canlı ortalama **`31,66 ms/deneme`**, `168` erken iptal, `9,796 × 10⁸/gün`.
 - **Canlı Tek-Hücre `AtomCellProgrammer` (`ALM-000000`):** `Bell` nominal `0,995878` (köşe min `0,977378`), `GHZ4` nominal `0,996797`.
 - **Canlı `4×4` Heterojen Wafer (`BayesianSpectrometer` → `MultiCellProgrammer`):** `8` çalışan / `8` ölü yuva, ortalama BOED taraması `40,82 ms`, yönlendirilen 4 hücre `DT4-{R0C0, R0C1, R0C2, R1C0}` (`3` adet `1`-hop `NbTiN` `BUS_CZ`), **`F_joint = 0,983448`**, **`min_bus_cz = 0,988923`**, `Exp126` 32D köprüsü bağlı (`all_clear_5kHz_gate = True`).
-- **Kriptografik `v4.0` Dijital İkiz Ana Sertifikası (`results/exp135_v4_digital_twin/v4_digital_twin_cert.json`):**
+- **`v4.0` Dijital İkiz `SHA-256` Dosya Bütünlüğü Özeti (`results/exp135_v4_digital_twin/v4_digital_twin_cert.json` — yalnızca dosya bütünlüğü/provenans; fiziksel doğrulama değildir):**
   - `SHA-256 = feffc1d4ba2b0698c3f61015c6684da47f57ea863a8b3e0da845cc9c71914b57` (diskten geri okuma ve tahrifat testi `test_exp135.py` içinde doğrulandı).
 
 ---

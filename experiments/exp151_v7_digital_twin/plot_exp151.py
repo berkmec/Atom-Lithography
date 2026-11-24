@@ -111,31 +111,31 @@ def main() -> None:
     ctx.fill()
     draw_text(
         ctx,
-        "Atom Lithography Machine v7.0 — Master End-to-End Digital Twin Dashboard (Exp151 / H169)",
+        "Atom Lithography Machine v7.1 — Integrated Artifact Dashboard & File-Integrity Manifest (Exp151 / H169)",
         44,
         46,
-        size=28.0,
+        size=25.5,
         color=(1.0, 1.0, 1.0),
         bold=True,
     )
     draw_text(
         ctx,
-        "Universal qLDPC d=18 + 121Sb Q-Echo-8 + 584-Cycle Verilog RTL + SEMI S2/IEC 61508 Safety + Live 156Q IBM ibm_marrakesh",
+        "TRL 1-2 (M0) Conceptual Design & Reduced-Order Multiphysics · Uncertified Safety Target · IBM Superconducting-QPU Control Proxy",
         44,
         82,
-        size=16.5,
+        size=15.5,
         color=(0.74, 0.85, 0.98),
     )
 
-    # Top-right PASS badge
+    # Top-right CHECKS badge
     rounded_rect(ctx, W - 360, 22, 316, 62, 10)
     ctx.set_source_rgb(0.05, 0.36, 0.25)
     ctx.fill_preserve()
     ctx.set_source_rgb(0.20, 0.83, 0.60)
     ctx.set_line_width(2.0)
     ctx.stroke()
-    draw_text(ctx, "8/8 DT7 PASS  |  38/38 LOCKED", W - 202, 50, size=16.5, color=(0.82, 0.99, 0.92), bold=True, mono=True, align="center")
-    draw_text(ctx, "CAD v6.0 (0 Clash) + BOM v7.0 (10-RFQ)", W - 202, 73, size=12.5, color=(0.75, 0.92, 0.86), align="center")
+    draw_text(ctx, "8/8 CHECKS | 38/38 SHA-256", W - 202, 50, size=16.0, color=(0.82, 0.99, 0.92), bold=True, mono=True, align="center")
+    draw_text(ctx, "CAD v6 Nominal + BOM v7 Parametric", W - 202, 73, size=12.0, color=(0.75, 0.92, 0.86), align="center")
 
     # Card geometries (2x2)
     c_w = 1136
@@ -247,14 +247,14 @@ def main() -> None:
     # =========================================================================
     # PANEL B (Top-Right): Exp148 121Sb Q-Echo-8 + Exp149 Verilog RTL
     # =========================================================================
-    draw_card(ctx, xR, yT, c_w, c_h1, "B. 121Sb Q-Echo-8 (450x Closure) & 584-Cycle Verilog RTL", "Exp148 + Exp149")
+    draw_card(ctx, xR, yT, c_w, c_h1, "B. 121Sb Q-Echo-8 (Model Iteration) & 584-Cycle Verilog RTL", "Exp148 + Exp149")
 
     # Upper sub-section: Exp148 121Sb Q-Echo-8
-    draw_text(ctx, "Exp148: 121Sb (I=7/2) Static 500 Hz Quadrupole Closure & SU(8) GRAPE", xR + 24, yT + 78, size=16.0, color=NAVY, bold=True)
+    draw_text(ctx, "Exp148: 121Sb (I=7/2) Static 500 Hz Quadrupole Model & SU(8) GRAPE", xR + 24, yT + 78, size=16.0, color=NAVY, bold=True)
     sb_rows = [
-        ("Bare Gross 0_L (Exp142 OQ6 Wall)", l3["bare_gross_0L_1ms"], CORAL, f"{l3['bare_gross_0L_1ms']:.4f}  (infid 42.0%)"),
-        ("Q-Echo-8 Gross 0_L (Levitt-Freeman)", l3["qecho8_gross_0L_1ms"], EMERALD, f"{l3['qecho8_gross_0L_1ms']:.5f}  ({l3['gross_infidelity_reduction_x']:.0f}x drop!)"),
-        ("Q-Echo-8 |+-7/2> Cat (0.9424 ->)", l3["qecho8_cat77_1ms"], CYAN, f"{l3['qecho8_cat77_1ms']:.5f}  (closes OQ6)"),
+        ("Bare Gross 0_L (Exp142 OQ6 Limit)", l3["bare_gross_0L_1ms"], CORAL, f"{l3['bare_gross_0L_1ms']:.4f}  (infid 42.0%)"),
+        ("Q-Echo-8 Gross 0_L (Levitt-Freeman)", l3["qecho8_gross_0L_1ms"], EMERALD, f"{l3['qecho8_gross_0L_1ms']:.5f}  ({l3['gross_infidelity_reduction_x']:.0f}x drop)"),
+        ("Q-Echo-8 |+-7/2> Cat (0.9424 ->)", l3["qecho8_cat77_1ms"], CYAN, f"{l3['qecho8_cat77_1ms']:.5f}  (model iter)"),
         ("SU(8) GRAPE Logical X_L/Z_L/H_L", l3["su8_grape_min_F"], PURPLE, f">= {l3['su8_grape_min_F']:.4f}  (22.9 kHz)"),
     ]
     bx_s = xR + 340
@@ -336,21 +336,21 @@ def main() -> None:
     # =========================================================================
     # PANEL C (Bottom-Left): Exp150 Safety FMEA + Live IBM ibm_marrakesh QPU
     # =========================================================================
-    draw_card(ctx, xL, yB, c_w, c_h2, "C. Industrial Safety FMEA (7/7) & Live IBM QPU Hardware", "Exp150 + Exp145")
+    draw_card(ctx, xL, yB, c_w, c_h2, "C. Preliminary M0 Safety FMEA Target & IBM QPU Control Proxy", "Exp150 + Exp145")
 
     draw_text(
         ctx,
-        f"Exp150: 25-Row FMEA + 10-Node HAZOP (Max RPN {l5['max_rpn_pre']} -> {l5['max_rpn_post']} <= 60, -{l5['mean_rpn_reduction_pct']:.1f}% mean)",
+        f"Exp150 (Uncertified M0): 25-Row FMEA + 10-Node HAZOP (Max RPN {l5['max_rpn_pre']} -> {l5['max_rpn_post']} <= 60, -{l5['mean_rpn_reduction_pct']:.1f}%)",
         xL + 24,
         yB + 78,
-        size=16.0,
+        size=15.0,
         color=NAVY,
         bold=True,
     )
     rpn_bars = [
         ("Max RPN Pre-Mitigation", float(l5["max_rpn_pre"]), CORAL),
         ("Mean RPN Pre (25 rows)", 186.1, AMBER),
-        ("Max RPN Post (SIL-3)", float(l5["max_rpn_post"]), EMERALD),
+        ("Max RPN Post (M0 Target)", float(l5["max_rpn_post"]), EMERALD),
         ("Mean RPN Post (0 > 60)", 25.5, CYAN),
     ]
     rx_b = xL + 265
@@ -380,23 +380,23 @@ def main() -> None:
 
     # 5-Hazard compact summary strip
     haz_line = (
-        f"OD={l5['laser_od_spec']}+3mm steel ({l5['xray_22kev_shrouded_uSv_h']:.2e} uSv/h, {l5['sil3_shutter_ms']} ms SIL-3) | "
+        f"OD={l5['laser_od_spec']}+3mm steel ({l5['xray_22kev_shrouded_uSv_h']:.2e} uSv/h, {l5['sil3_shutter_ms']} ms SIL-3 target) | "
         f"SDS PH3 {l5['ph3_operator_ppm']:.5f} ppm | He O2 {l5['he_60m3_O2_pct']:.2f}% | "
-        f"15kVA UPS {l5['ups_full_load_min']:.0f}/{l5['ups_tier1_min']:.0f} min ({l5['uhv_gate_valve_ms']:.0f} ms UHV)"
+        f"15kVA UPS {l5['ups_full_load_min']:.0f}/{l5['ups_tier1_min']:.0f} min"
     )
-    draw_text(ctx, haz_line, xL + 24, yB + 284, size=12.8, color=TEXT, bold=True)
+    draw_text(ctx, haz_line, xL + 24, yB + 284, size=12.6, color=TEXT, bold=True)
     draw_text(
         ctx,
-        f"S7.SAFETY Kit (RFQ-10, 6 items): ${l5['s_safety_nom_usd']:,.0f} nom [$92k-$220k] | {l5['s_safety_mass_kg']:.0f} kg facility | {l5['s_safety_power_W']:.0f} W | 0.0 W cryo",
+        f"S7.SAFETY Target Kit (RFQ-10 Draft, Uncertified M0): ${l5['s_safety_nom_usd']:,.0f} nom [$92k-$220k] | {l5['s_safety_mass_kg']:.0f} kg | {l5['s_safety_power_W']:.0f} W | 0 W cryo",
         xL + 24,
         yB + 308,
-        size=13.2,
+        size=12.6,
         color=PURPLE,
         bold=True,
         mono=True,
     )
 
-    # Live IBM QPU Emerald Hardware Box
+    # Cloud Superconducting-QPU Proxy Box
     rounded_rect(ctx, xL + 24, yB + 330, c_w - 48, 240, 12)
     ctx.set_source_rgb(*LIGHT_EMERALD)
     ctx.fill_preserve()
@@ -407,10 +407,10 @@ def main() -> None:
     lq = l6["live_ibm_qpu"]
     draw_text(
         ctx,
-        f"LIVE HARDWARE {{Canli-Donanim-IBM-QPU}}: {lq['backend_name']} ({lq['n_qubits']}Q Heron r2, job_id={lq['job_id']})",
+        f"CLOUD SUPERCONDUCTING-QPU PROXY (Non-Silicon Control Stack): {lq['backend_name']} ({lq['n_qubits']}Q, job={lq['job_id']})",
         xL + 42,
         yB + 362,
-        size=15.5,
+        size=14.0,
         color=(0.02, 0.34, 0.22),
         bold=True,
     )
@@ -436,19 +436,19 @@ def main() -> None:
 
     draw_text(
         ctx,
-        f"Live CellISA v4.0 ({l6['live_cellisa_v40']['v40_total_opcodes']} opcodes) + auto_recal ({l6['live_auto_recal']['n_passed']}/{l6['live_auto_recal']['n_fault_modes']} PASS) | Secret Leaks: 0 | Independent raw-count verification PASS",
+        f"CellISA v4.0 ({l6['live_cellisa_v40']['v40_total_opcodes']} opcodes) + auto_recal sim ({l6['live_auto_recal']['n_passed']}/{l6['live_auto_recal']['n_fault_modes']} PASS) | Secret Leaks: 0 | Validates 0 Si:31P hardware",
         xL + 42,
         yB + 540,
-        size=13.5,
+        size=12.8,
         color=(0.02, 0.34, 0.22),
         bold=True,
         mono=True,
     )
 
     # =========================================================================
-    # PANEL D (Bottom-Right): BOM v7.0 Phased Procurement & 38/38 SHA-256 Lock
+    # PANEL D (Bottom-Right): BOM v7.0 Parametric Tiers & 38/38 SHA-256 Manifest
     # =========================================================================
-    draw_card(ctx, xR, yB, c_w, c_h2, "D. BOM v7.0 Phased Procurement & 38/38 SHA-256 Lock", "Exp128 v7.0 + Cert")
+    draw_card(ctx, xR, yB, c_w, c_h2, "D. Parametric BOM v7.0 & Artifact File-Integrity Manifest", "Exp128 v7.0 + SHA-256")
 
     draw_text(
         ctx,
@@ -502,17 +502,17 @@ def main() -> None:
     ctx.set_line_width(2.0)
     ctx.stroke()
 
-    draw_text(ctx, "Cryptographic Master v7.0 Lock Summary (38/38 Primary Artifacts Verified)", xR + 42, yB + 366, size=16.0, color=NAVY, bold=True)
+    draw_text(ctx, "Artifact File-Integrity Manifest (38/38 SHA-256 — Provenance Only)", xR + 42, yB + 366, size=15.5, color=NAVY, bold=True)
     lock_lines = [
-        f"• Experiment Ledgers : 27 primary JSONs (Exp124..Exp150) + Live ibm_marrakesh raw counts JSON",
-        f"• CAD v6.0 Locked    : {l1['cad_v6']['part_count']} parts | {l1['cad_v6']['total_mass_kg']:.3f} kg | {l1['cad_v6']['solid_clashes']}/{l1['cad_v6']['pairs_checked']:,} clashes | {l1['cad_v6']['clearances_passed']}/{l1['cad_v6']['clearances_total']} clearances",
-        f"• BOM v7.0 Locked    : {l1['bom_v7']['exp128_total_parts']} parts | $0.00 bridge | 0.0000 kg on-frame + 355 kg fac. = {l1['bom_v7']['total_facility_load_mass_kg']:.3f} kg",
-        f"• 10-RFQ Coverage    : {l1['bom_v7']['rfq10_nom_share_pct']:.2f}% nominal / {l1['bom_v7']['rfq10_var_share_pct']:.2f}% MC variance (Phase-1 -> RFQ-05 Lock -> Phase-2)",
-        f"• Verilog RTL + Twin : 7 rtl/boed_fpga/ files (0 err, 0 LSB) + docs/digital_twin_interactive.html (0 CDN)",
-        f"• Historical Certs   : v4 (feffc1d4..), v5 (2828e8ce..), v6 (ca3f0e02..) strictly untouched on disk",
+        f"• Experiment Ledgers : 27 primary JSONs (Exp124..Exp150) + IBM proxy raw counts JSON",
+        f"• CAD v6.0 Nominal   : {l1['cad_v6']['part_count']} parts | {l1['cad_v6']['total_mass_kg']:.3f} kg | 0 static clashes (excl. GD&T/thermal/DFM)",
+        f"• BOM v7.0 Parametric: {l1['bom_v7']['exp128_total_parts']} parts (no vendor quotes) | $0.00 bridge | +355 kg fac. = {l1['bom_v7']['total_facility_load_mass_kg']:.1f} kg",
+        f"• 10-RFQ Draft Scope : {l1['bom_v7']['rfq10_nom_share_pct']:.2f}% nominal / {l1['bom_v7']['rfq10_var_share_pct']:.2f}% MC variance (Phase-1 -> RFQ-05 -> Phase-2)",
+        f"• Verilog RTL + HTML : 7 rtl/boed_fpga/ files (no_external_eda_sim=true) + digital_twin_interactive.html",
+        f"• Historical Manifests: v4 (feffc1d4..), v5 (2828e8ce..), v6 (ca3f0e02..) strictly untouched on disk",
     ]
     for i, ln in enumerate(lock_lines):
-        draw_text(ctx, ln, xR + 42, yB + 398 + i * 28, size=13.5, color=TEXT, mono=False)
+        draw_text(ctx, ln, xR + 42, yB + 398 + i * 28, size=13.2, color=TEXT, mono=False)
 
     # --- BOTTOM FOOTER WITH FULL 64-HEX SHA-256 ---
     ctx.set_source_rgb(*NAVY)
@@ -520,10 +520,10 @@ def main() -> None:
     ctx.fill()
     draw_text(
         ctx,
-        f"v7_digital_twin_cert.json FULL 64-HEX SHA-256: {cert['sha256']}   |   Epistemic: Si:31P/RTL/Safety = M0 Model, Control/DD/BOED = Live IBM ibm_marrakesh (156Q)",
+        f"FILE-INTEGRITY SHA-256 (Provenance Only): {cert['sha256']}  |  TRL 1-2 (M0) Model (no_lab_measurement) · IBM 156Q Control Proxy (Non-Silicon)",
         W / 2,
         H - 16,
-        size=13.5,
+        size=12.6,
         color=(0.78, 0.90, 1.0),
         bold=True,
         mono=True,

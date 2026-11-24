@@ -320,7 +320,7 @@ def _draw_p2_sb121(ctx: cairo.Context, x: float, y: float, w: float, h: float, e
     ctx.set_source_rgba(*_hex("#E2E8F0"))
     ctx.set_line_width(1.0)
     ctx.stroke()
-    _text(ctx, f"Exp142 OQ6 Kapatıldı: Statik 500 Hz Gross {tr_f(cert['exp148_sb121_bare_gross_0L'], 4)} -> {tr_f(cert['exp148_sb121_qecho8_gross_0L'], 5)} ({tr_f(cert['exp148_sb121_infidelity_reduction_x'], 1)}x infidelite ↓)", x + 26, sy + 24, size=11.2, color="#047857", bold=True, max_w=w - 52)
+    _text(ctx, f"Exp142 OQ6 Model İterasyonu: Statik 500 Hz Gross {tr_f(cert['exp148_sb121_bare_gross_0L'], 4)} -> {tr_f(cert['exp148_sb121_qecho8_gross_0L'], 5)} ({tr_f(cert['exp148_sb121_infidelity_reduction_x'], 1)}x infidelite ↓)", x + 26, sy + 24, size=11.2, color="#047857", bold=True, max_w=w - 52)
     _text(ctx, f"Cat |±7/2⟩: 0,9424 -> {tr_f(cert['exp148_sb121_qecho8_cat77'], 5)} (1/f T2_eff = {tr_f(t2['qecho8_cat77_ms'], 2)} ms)  |  SU(8) GRAPE min F_L = {tr_f(cert['exp148_sb121_su8_grape_min_F'], 4)}", x + 26, sy + 49, size=11.2, color="#0F172A", max_w=w - 52)
     _text(ctx, f"Sonlu Darbe (25 kHz Kompozit 90-240-90 + Faz Döngüsü): 8x8/16x16 CPTP Lindblad doğrulandı", x + 26, sy + 73, size=11.0, color="#334155", max_w=w - 52)
     _rrect(ctx, x + 24, sy + 88, w - 48, 42, 6)
@@ -410,7 +410,8 @@ def _draw_p3_verilog_twin(ctx: cairo.Context, x: float, y: float, w: float, h: f
     ctx.stroke()
     _text(ctx, f"rtl/boed_fpga/: {cert['exp149_rtl_loc']} satır IEEE 1364-2005 (4 modül, 0 sentez hatası, 250 MHz XDC)", x + 26, sy + 24, size=11.2, color="#0F172A", bold=True, max_w=w - 52)
     _text(ctx, f"Bit-Doğru Eş-Doğrulama: 1.024/1.024 ROM (0 bit fark) | 64/64 Golden + 1.000 ISQRT (0 LSB)", x + 26, sy + 49, size=11.2, color="#047857", bold=True, max_w=w - 52)
-    _text(ctx, "İnteraktif Dijital İkiz: docs/digital_twin_interactive.html (66,6 KB · 5 Sekme · 0 CDN/HTTP)", x + 26, sy + 73, size=11.2, color="#1D4ED8", bold=True, max_w=w - 52)
+    html_kb = (ROOT / "docs/digital_twin_interactive.html").stat().st_size / 1000.0
+    _text(ctx, f"Etkileşimli Model Gezgini: docs/digital_twin_interactive.html ({tr_f(html_kb, 1)} KB · 5 Sekme · 0 CDN/HTTP)", x + 26, sy + 73, size=11.2, color="#1D4ED8", bold=True, max_w=w - 52)
     _rrect(ctx, x + 24, sy + 88, w - 48, 42, 6)
     ctx.set_source_rgba(*_hex("#EFF6FF"))
     ctx.fill_preserve()
@@ -423,7 +424,7 @@ def _draw_p3_verilog_twin(ctx: cairo.Context, x: float, y: float, w: float, h: f
 
 def _draw_p4_safety_fmea(ctx: cairo.Context, x: float, y: float, w: float, h: float, e150: dict[str, Any]) -> None:
     fstat = e150["fmea_summary"]
-    _panel(ctx, x, y, w, h, "4. Exp150 — Endüstriyel Emniyet & 25-Satırlı FMEA", f"RPN {fstat['max_rpn_pre']}->{fstat['max_rpn_post']} · 7/7", "#DC2626")
+    _panel(ctx, x, y, w, h, "4. Exp150 — Ön Emniyet Hedefi & 25-Satırlı FMEA (Sertifikasız M0)", f"RPN {fstat['max_rpn_pre']}->{fstat['max_rpn_post']} · M0", "#DC2626")
 
     px, py, pw, ph = x + 52, y + 76, w - 72, 260
     y_max = 310.0
@@ -508,7 +509,7 @@ def _draw_p4_safety_fmea(ctx: cairo.Context, x: float, y: float, w: float, h: fl
     epo = e150["hazard_5_epo_ups_shutdown"]
     spec = e150["s_safety_spec"]["totals"]
     cards = [
-        ("S5.5 Lazer + X-Işını Bariyeri", f"OD8 + 3 mm Çelik ({las['interlock_sil3']['shutter_close_ms']} ms SIL-3)", f"22 keV: 10,1 -> {hvx['energy_sweep']['22keV']['s55_sapphire_plus_3mm_steel_shroud_uSv_h']:.1e} µSv/h", "#FEF2F2", "#FCA5A5", "#991B1B"),
+        ("S5.5 Lazer + X-Işını Bariyer Hedefi", f"OD8 + 3 mm Çelik ({las['interlock_sil3']['shutter_close_ms']} ms SIL-3 hedefi)", f"22 keV: 10,1 -> {hvx['energy_sweep']['22keV']['s55_sapphire_plus_3mm_steel_shroud_uSv_h']:.1e} µSv/h (Sertifikasız M0)", "#FEF2F2", "#FCA5A5", "#991B1B"),
         ("S1.1 PH₃ (SDS) & %5 H₂/N₂", f"1.207 ppm -> {tr_f(gas['mitigated_sds_system']['operator_conservative_ppm'], 4)} ppm", f"7,0x < TLV · 6.990x < IDLH · ISO 10156", "#F0FDF4", "#86EFAC", "#065F46"),
         ("Kriyo He ODH & Quench", f"60 m³ O₂ = %{tr_f(cryo['helium_odh']['room_sweep']['60m3']['dry_ld400_pt420_O2_pct'], 2)} (DN50 {tr_f(cryo['asme_ovc_relief']['relief_safety_margin'], 1)}x)", f"18,9 kJ Dump Direnci: {tr_f(cryo['magnet_quench_exp125']['dump_resistor_peak_1p5T_C'], 2)} °C", "#EFF6FF", "#93C5FD", "#1E3A8A"),
         ("15 kVA UPS & S7.SAFETY Kit", f"0 ms · 80 ms UHV ({epo['ups_spec']['runtime_at_rated_13p5kW_min']:.0f}/{epo['ups_spec']['runtime_tier1_min']:.0f} dk)", f"${spec['cost_usd_nom']//1000}k · {tr_f(spec['total_mass_kg'], 0)} kg · 0 W Kriyo", "#FFFBEB", "#FCD34D", "#92400E"),
@@ -623,15 +624,15 @@ def _draw_p5_bom_v7(ctx: cairo.Context, x: float, y: float, w: float, h: float, 
 
 
 def _draw_p6_evolution_seal(ctx: cairo.Context, x: float, y: float, w: float, h: float, cert: dict[str, Any]) -> None:
-    _panel(ctx, x, y, w, h, "6. v3 → v7 Evrim, Tam 64-Hex SHA-256 & Epistemik Mühür", "38/38 SHA-256", "#0F172A")
+    _panel(ctx, x, y, w, h, "6. v3 → v7 Evrim, Dosya Bütünlüğü SHA-256 & Epistemik Sınır", "38/38 SHA-256", "#0F172A")
 
     # 5-Row v3 -> v7 Evolution Timeline Table
     evo = [
-        ("v3.0", "CAD 144p (857 kg) · BOM $4,19M · 100K IBIC · 1,5 T Kriyo-Mıknatıs", "#64748B"),
-        ("v4.0", "CAD 156p (960 kg) · S5.5 808 nm Lazer · BOM $4,61M · Exp135 Mühür", "#0284C7"),
-        ("v5.0", "CAD 189p (1035 kg) · S5.6 MBE + S6.5 RFSoC · BOM $5,25M · Exp141", "#7C3AED"),
-        ("v6.0", "CAD 199p (1108 kg) · Opt-Q/HPC · Canlı IBM 156Q (ibm_marrakesh)", "#0D9488"),
-        ("v7.0", "Evrensel qLDPC d=18 · ¹²¹Sb Q-Echo-8 · Verilog RTL · FMEA · 180p BOM", "#059669"),
+        ("v3.0", "CAD 144p nominal (857 kg) · BOM $4,19M · 100K IBIC · 1,5 T Model", "#64748B"),
+        ("v4.0", "CAD 156p nominal (960 kg) · S5.5 808 nm · BOM $4,61M · Exp135", "#0284C7"),
+        ("v5.0", "CAD 189p nominal (1035 kg) · S5.6 MBE + S6.5 RFSoC · BOM $5,25M", "#7C3AED"),
+        ("v6.0", "CAD 199p nominal (1108 kg) · Opt-Q/HPC · IBM 156Q Kontrol Proxy", "#0D9488"),
+        ("v7.1", "qLDPC d=18 · ¹²¹Sb Q-Echo-8 · Verilog RTL · M0 FMEA · 180p BOM", "#059669"),
     ]
     ey0 = y + 54
     for i, (ver, desc, col) in enumerate(evo):
@@ -648,7 +649,7 @@ def _draw_p6_evolution_seal(ctx: cairo.Context, x: float, y: float, w: float, h:
         ctx.stroke()
         _text(ctx, desc, x + 94, ry + 21, size=11.0, color="#0F172A", bold=(i == 4), max_w=w - 118)
 
-    # Full 64-Hex v7_digital_twin_cert.json SHA-256 Cryptographic Seal Box
+    # Full 64-Hex v7_digital_twin_cert.json SHA-256 File-Integrity Box
     sha_full = cert["sha256"]
     assert len(sha_full) == 64
     by_sha = y + 286
@@ -658,30 +659,30 @@ def _draw_p6_evolution_seal(ctx: cairo.Context, x: float, y: float, w: float, h:
     ctx.set_source_rgba(*_hex("#38BDF8"))
     ctx.set_line_width(1.5)
     ctx.stroke()
-    _text(ctx, f"v7_digital_twin_cert.json — TAM 64-HEX SHA-256 ({cert['n_locked_artifacts']}/{cert['n_locked_artifacts']} Birincil Eser Kilitli):", x + 28, by_sha + 22, size=11.0, color="#38BDF8", bold=True)
+    _text(ctx, f"DOSYA BÜTÜNLÜĞÜ SHA-256 ({cert['n_locked_artifacts']}/{cert['n_locked_artifacts']} Artefakt — Fizik Kanıtı Değil):", x + 28, by_sha + 22, size=11.0, color="#38BDF8", bold=True, max_w=w - 56)
     _text(ctx, sha_full, x + w / 2.0, by_sha + 47, size=13.5, color="#F8FAFC", bold=True, mono=True, align="center", max_w=w - 56)
-    _text(ctx, f"CAD v6: {cert['cad_v6_parts']}p / {tr_f(cert['cad_v6_mass_kg'], 1)} kg / 0 çakışma / {cert['cad_v6_clearances_pass']} | Tarihsel v4/v5/v6 mühürleri korundu", x + w / 2.0, by_sha + 66, size=10.0, color="#94A3B8", align="center")
+    _text(ctx, f"CAD v6 Nominal: {cert['cad_v6_parts']}p / {tr_f(cert['cad_v6_mass_kg'], 1)} kg (GD&T/termal/DFM hariç) | Tarihsel v4/v5/v6 korundu", x + w / 2.0, by_sha + 66, size=10.0, color="#94A3B8", align="center", max_w=w - 56)
 
-    # Crystal Dual-Column Epistemic Stamp (M0 Silicon/RTL/Safety vs Live IBM QPU)
+    # Dual-Column Epistemic Boundary (TRL 1-2 M0 Conceptual Model vs IBM Cloud QPU Proxy)
     ey_ep = y + 378
     ew = (w - 42) / 2.0
     eh = h - (ey_ep - y) - 14
 
-    # Left: M0 Model / Analytic
+    # Left: TRL 1-2 M0 Conceptual Design & Reduced-Order Model
     _rrect(ctx, x + 16, ey_ep, ew, eh, 8)
     ctx.set_source_rgba(*_hex("#FFFBEB"))
     ctx.fill_preserve()
     ctx.set_source_rgba(*_hex("#F59E0B"))
     ctx.set_line_width(1.2)
     ctx.stroke()
-    _text(ctx, "M0 MODEL / ANALİTİK / VARSAYIM", x + 28, ey_ep + 24, size=11.0, color="#92400E", bold=True)
-    _text(ctx, "• Silikon ³¹P / ¹²¹Sb / ¹⁶⁷Er donanım", x + 28, ey_ep + 50, size=10.6, color="#78350F")
-    _text(ctx, "• Verilog RTL (no_external_eda_sim=true)", x + 28, ey_ep + 74, size=10.6, color="#78350F")
-    _text(ctx, "• Emniyet FMEA/HAZOP (no_lab_meas=true)", x + 28, ey_ep + 98, size=10.6, color="#78350F")
-    _text(ctx, "• BOM v7.0 / 10-RFQ (no_quotes=true)", x + 28, ey_ep + 122, size=10.6, color="#78350F")
-    _text(ctx, "• Kapanış onayı: Carbon denetimine tabi", x + 28, ey_ep + 148, size=10.6, color="#B45309", bold=True)
+    _text(ctx, "M0 KAVRAMSAL TASARIM (TRL 1–2)", x + 28, ey_ep + 24, size=10.8, color="#92400E", bold=True, max_w=ew - 22)
+    _text(ctx, "• Silikon ³¹P/¹²¹Sb/¹⁶⁷Er: İndirgenmiş model", x + 28, ey_ep + 50, size=10.4, color="#78350F", max_w=ew - 22)
+    _text(ctx, "• Verilog RTL (no_external_eda_sim=true)", x + 28, ey_ep + 74, size=10.4, color="#78350F", max_w=ew - 22)
+    _text(ctx, "• Emniyet FMEA: Sertifikasız M0 hedefi", x + 28, ey_ep + 98, size=10.4, color="#78350F", max_w=ew - 22)
+    _text(ctx, "• BOM v7.0 / 10-RFQ (no_quotes=true)", x + 28, ey_ep + 122, size=10.4, color="#78350F", max_w=ew - 22)
+    _text(ctx, "• Laboratuvar ölçümü & tapeout YOK", x + 28, ey_ep + 148, size=10.4, color="#B45309", bold=True, max_w=ew - 22)
 
-    # Right: Live IBM QPU Hardware
+    # Right: Cloud Superconducting-QPU Control Proxy (Non-Silicon)
     rx = x + 26 + ew
     _rrect(ctx, rx, ey_ep, ew, eh, 8)
     ctx.set_source_rgba(*_hex("#ECFDF5"))
@@ -689,12 +690,12 @@ def _draw_p6_evolution_seal(ctx: cairo.Context, x: float, y: float, w: float, h:
     ctx.set_source_rgba(*_hex("#10B981"))
     ctx.set_line_width(1.2)
     ctx.stroke()
-    _text(ctx, "CANLI DONANIM — IBM QPU", rx + 12, ey_ep + 24, size=11.0, color="#065F46", bold=True)
-    _text(ctx, f"• Backend: {cert['live_qpu_backend']} (156Q)", rx + 12, ey_ep + 50, size=10.6, color="#064E3B", bold=True)
-    _text(ctx, f"• Job ID: {cert['live_qpu_job_id']}", rx + 12, ey_ep + 74, size=10.0, color="#064E3B", mono=True, max_w=ew - 22)
-    _text(ctx, f"• Bell: %{tr_f(cert['live_qpu_bell_fidelity']*100, 2)} | XY4: +{tr_f(cert['live_qpu_xy4_gain_pp'], 2)} pp", rx + 12, ey_ep + 98, size=10.6, color="#064E3B")
-    _text(ctx, f"• Q16 vs FP64: {tr_f(cert['live_qpu_q16_vs_fp64_kHz']*1000, 1)} Hz | ISA v4: {cert['live_cellisa_v40_opcodes']} op", rx + 12, ey_ep + 122, size=10.6, color="#064E3B")
-    _text(ctx, f"• auto_recal: {cert['live_auto_recal_passed']} PASS | 0 Sızıntı", rx + 12, ey_ep + 148, size=10.6, color="#047857", bold=True)
+    _text(ctx, "BULUT QPU PROXY — IBM (SİLİKON DEĞİL)", rx + 12, ey_ep + 24, size=10.6, color="#065F46", bold=True, max_w=ew - 22)
+    _text(ctx, f"• Backend: {cert['live_qpu_backend']} (156Q transmon)", rx + 12, ey_ep + 50, size=10.4, color="#064E3B", bold=True, max_w=ew - 22)
+    _text(ctx, f"• Job ID: {cert['live_qpu_job_id']}", rx + 12, ey_ep + 74, size=9.8, color="#064E3B", mono=True, max_w=ew - 22)
+    _text(ctx, f"• Bell: %{tr_f(cert['live_qpu_bell_fidelity']*100, 2)} | XY4: +{tr_f(cert['live_qpu_xy4_gain_pp'], 2)} pp", rx + 12, ey_ep + 98, size=10.4, color="#064E3B", max_w=ew - 22)
+    _text(ctx, f"• Q16 vs FP64: {tr_f(cert['live_qpu_q16_vs_fp64_kHz']*1000, 1)} Hz | ISA v4: {cert['live_cellisa_v40_opcodes']} op", rx + 12, ey_ep + 122, size=10.4, color="#064E3B", max_w=ew - 22)
+    _text(ctx, "• Silikon fabrikasyonu DOĞRULAMAZ", rx + 12, ey_ep + 148, size=10.4, color="#047857", bold=True, max_w=ew - 22)
 
 
 def main() -> None:
@@ -726,11 +727,11 @@ def main() -> None:
     ctx.rectangle(0, 0, W, 86)
     ctx.fill()
 
-    _text(ctx, "ATOM LİTOGRAFİ MAKİNESİ — v7.0 MASTER GENEL BAKIŞ PANOSU (Exp147–Exp151)", 28, 36, size=23.0, color="#FFFFFF", bold=True)
+    _text(ctx, "ATOM LİTOGRAFİ MAKİNESİ — M0 Kavramsal Tasarım & İndirgenmiş-Mertebe Fizibilite (TRL 1–2)", 28, 36, size=22.0, color="#FFFFFF", bold=True, max_w=W - 490)
     _text(
         ctx,
-        "Evrensel qLDPC d=18 (FeMoco/RSA-2048) · ¹²¹Sb Q-Echo-8 · Q16.16 BOED Verilog RTL & HTML5 İkiz · SEMI S2/SIL-3 Emniyet · BOM v7.0 / 10-RFQ",
-        28, 65, size=13.0, color="#CBD5E1",
+        "qLDPC d=18 (FeMoco/RSA-2048) · ¹²¹Sb Q-Echo-8 · Q16.16 BOED RTL · Ön Emniyet Hedefi (Sertifikasız M0) · Parametrik BOM v7.0 · IBM QPU Proxy",
+        28, 65, size=12.8, color="#CBD5E1", max_w=W - 490,
     )
 
     # Header right pills
@@ -753,7 +754,7 @@ def main() -> None:
         ("FeMoco / RSA-2048", f"{cert['exp147_femoco_cryostats']} / {cert['exp147_rsa2048_cryostats']} Kriyo", f"{tr_f(cert['exp147_femoco_compression_x'], 1)}x / {tr_f(cert['exp147_rsa2048_compression_x'], 1)}x ↓ · {tr_f(cert['exp147_rsa2048_power_MW'], 2)} MW", "#7C3AED"),
         ("¹²¹Sb Q-ECHO-8 & SU(8)", "0,580 -> 0,9991", f"{tr_f(cert['exp148_sb121_infidelity_reduction_x'], 1)}x ↓ · SU(8) >= {tr_f(cert['exp148_sb121_su8_grape_min_F'], 4)}", "#059669"),
         ("VERILOG RTL + HTML5 İKİZ", f"{cert['exp149_rtl_loc']} satır · 0 LSB", f"{cert['exp149_rtl_cycles']} cyc ({tr_f(cert['exp149_rtl_latency_us'], 2)} µs) · 5-Sekme", "#2563EB"),
-        ("EMNİYET FMEA / HAZOP", f"RPN {cert['exp150_fmea_max_rpn_pre']} -> {cert['exp150_fmea_max_rpn_post']}", f"-%{tr_f(cert['exp150_fmea_mean_reduction_pct'], 1)} · OD8+3mm · PH₃ {tr_f(cert['exp150_ph3_operator_ppm'], 4)}", "#DC2626"),
+        ("ÖN EMNİYET FMEA (M0)", f"RPN {cert['exp150_fmea_max_rpn_pre']} -> {cert['exp150_fmea_max_rpn_post']}", f"Sertifikasız M0 · OD8+3mm · PH₃ {tr_f(cert['exp150_ph3_operator_ppm'], 4)}", "#DC2626"),
         ("BOM v7.0 / 10-RFQ", f"${tr_f(cert['bom_v7_m3_phase1_base_safety_nom_usd']/1e6, 2)}M / ${tr_f(cert['bom_v7_m3_v7_full_nom_usd']/1e6, 2)}M", f"Faz-1 %{tr_f(cert['bom_v7_phase1_P_gt_100M_pct'], 2)} · {cert['bom_v7_parts']}p · %{tr_f(cert['bom_v7_rfq10_nom_share_pct'], 1)}/%{tr_f(cert['bom_v7_rfq10_var_share_pct'], 1)}", "#D97706"),
     ]
     kw = (W - 56 - 5 * 14) / 6.0
@@ -789,13 +790,13 @@ def main() -> None:
     # Footer
     _text(
         ctx,
-        "Canlı Veri Kaynakları: exp128.json, exp147..exp151.json, v7_digital_twin_cert.json, cad_verification.json  |  İnteraktif İkiz: docs/digital_twin_interactive.html",
-        28, H - 14, size=11.3, color="#475569",
+        "Veri Kaynakları: exp128.json, exp147..exp151.json, v7_digital_twin_cert.json (dosya bütünlüğü özeti), cad_verification.json (nominal statik)  |  docs/digital_twin_interactive.html",
+        28, H - 14, size=11.0, color="#475569",
     )
     _text(
         ctx,
-        "Silikon ³¹P/RTL/Emniyet: M0 (Model/Analitik) · Kontrol/DD/Dekoder/BOED: Canlı IBM ibm_marrakesh 156Q · Kapanış: Carbon Denetimi",
-        W - 28, H - 14, size=11.3, color="#64748B", align="right",
+        "TRL 1–2 (M0) Kavramsal Model (no_lab_measurement=true) · Bulut QPU Proxy: ibm_marrakesh 156Q (silikon fabrikasyonunu doğrulamaz)",
+        W - 28, H - 14, size=11.0, color="#64748B", align="right",
     )
 
     OUT_PNG.parent.mkdir(parents=True, exist_ok=True)

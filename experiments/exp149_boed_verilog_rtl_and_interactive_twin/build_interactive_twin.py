@@ -120,7 +120,7 @@ def collect_live_twin_payload(rtl_res: dict[str, Any] | None = None) -> dict[str
             "bom_parts": bom_by_sub.get("S5", {}).get("parts", 0),
             "bom_nom_usd": round(bom_by_sub.get("S5", {}).get("usd_nom", 0.0)),
             "rfq": "RFQ-07 (S5.5 808nm 43.49 J/cm2) + RFQ-08 (S5.6 28Si MBE)",
-            "safety": "Exp150 OD=8 + 3 mm steel dual Laser/X-ray (1.19e-23 uSv/h) + 3.2 ms SIL-3 shutter + 80 ms UHV gate valve",
+            "safety": "Exp150 OD=8 + 3 mm steel dual Laser/X-ray model (1.19e-23 uSv/h) + 3.2 ms SIL-3 target shutter (uncertified M0) + 80 ms UHV gate valve",
         },
         {
             "id": "S6",
@@ -142,7 +142,7 @@ def collect_live_twin_payload(rtl_res: dict[str, Any] | None = None) -> dict[str
             "bom_parts": bom_by_sub.get("S7", {}).get("parts", 0),
             "bom_nom_usd": round(bom_by_sub.get("S7", {}).get("usd_nom", 0.0)),
             "rfq": "RFQ-08 (RFSoC ZU48DR) + RFQ-09B (RDMA) + RFQ-10 (S7.SAFETY $145k, 6 items)",
-            "safety": "16-ch Q16.16 BOED RTL (584 cyc) + SEMI S2/IEC 61508 SIL-3 PLC + 15 kVA UPS (40/213 min), 0 W cryo",
+            "safety": "16-ch Q16.16 BOED RTL (584 cyc) + uncertified M0 SIL-3 target PLC (SEMI S2 / IEC 61508 reference) + 15 kVA UPS (40/213 min), 0 W cryo",
         },
         {
             "id": "S9.4",
@@ -216,7 +216,7 @@ def collect_live_twin_payload(rtl_res: dict[str, Any] | None = None) -> dict[str
 
     return {
         "meta": {
-            "version": "v7.0 (Universal qLDPC + 121Sb Q-Echo-8 + RTL + SEMI S2 Safety + Live IBM QPU)",
+            "version": "v7.1 (TRL 1-2 M0 Conceptual Design & Reduced-Order Multiphysics + RTL + Uncertified Safety Target + Cloud QPU Control Proxy)",
             "v6_cert_sha256": v6_cert["sha256"],
             "cad_version": cad["cad_version"],
             "cad_parts": cad["master_assembly"]["part_count"],
@@ -364,7 +364,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Atom Lithography Machine — Interactive Digital Twin (v7.0)</title>
+<title>Atom Lithography Machine — Interactive Model Explorer (v7.1, TRL 1-2 / M0)</title>
 <style>
   :root {
     --bg: #0b1120;
@@ -496,29 +496,29 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
 <header>
   <div class="hdr-top">
     <div>
-      <h1>Atom Lithography Machine — Live Interactive Digital Twin (v7.0)</h1>
+      <h1>Atom Lithography Machine — Interactive Model Explorer (v7.1, TRL 1-2 / M0)</h1>
       <div style="font-size:0.81rem;color:#94a3b8;margin-top:3px;">
-        Anchored v6.0 Master Cert SHA-256: <code class="hash" id="hdr-sha"></code>
+        Anchored v6.0 Artifact File-Integrity SHA-256 (provenance only): <code class="hash" id="hdr-sha"></code>
       </div>
     </div>
     <div class="badge-row">
-      <span class="badge live">LIVE IBM QPU: ibm_marrakesh (156Q)</span>
+      <span class="badge live">CLOUD QPU PROXY: ibm_marrakesh (156Q, Non-Silicon)</span>
       <span class="badge rtl">Verilog RTL: 584 cyc / 2.336 us</span>
-      <span class="badge safe">SEMI S2 Safety: RPN 280-&gt;42</span>
-      <span class="badge model">Si:31P Fab &amp; BOM v7.0: M0 Model</span>
+      <span class="badge safe">Uncertified M0 Safety Target: RPN 280-&gt;42</span>
+      <span class="badge model">Si:31P Fab &amp; BOM v7.0: TRL 1-2 (M0) Model</span>
     </div>
   </div>
   <div class="epistemic-banner">
-    <strong>Epistemic Boundary:</strong> Silicon <sup>31</sup>P atom lithography fabrication (S1-S8), CAD v6.0 (199p), BOM v7.0 (180p / 10-RFQ), D3 GRAPE, Universal qLDPC d=18 (Exp147), <sup>121</sup>Sb Q-Echo-8 (Exp148), Verilog RTL (<code>no_external_eda_sim=true</code>, Exp149), and SEMI S2/IEC 61508 Safety FMEA/HAZOP (Exp150) are <strong>{Model}/{Sayisal-Simulasyon} (M0, no_lab_measurement=true, no_supplier_quotes=true)</strong>. Control-stack execution (CellISA v4.0 -&gt; OpenQASM 3.0), Hahn-Echo/XY4 DD, 5Q d=3 QEC, and bit-exact Q16.16 BOED Ramsey estimation are validated on <strong>{Canli-Donanim-IBM-QPU} (ibm_marrakesh, 156Q Heron r2, job_id=dc1tdo2nj2vs73dfrfl0, 0 secret leaks)</strong>.
+    <strong>Epistemic Boundary (TRL 1-2 / M0):</strong> Silicon <sup>31</sup>P atom lithography fabrication (S1-S8), CAD v6.0 (199p nominal static geometry only; excl. GD&amp;T/thermal/DFM), BOM v7.0 (180p parametric / 10-RFQ draft, <code>no_supplier_quotes=true</code>), D3 GRAPE, Universal qLDPC d=18 (Exp147), <sup>121</sup>Sb Q-Echo-8 (Exp148), Verilog RTL (<code>no_external_eda_sim=true</code>, Exp149), and Exp150 Preliminary Safety FMEA/HAZOP (uncertified M0 — SEMI does not certify S2; no IEC 61508 SIL assessment) are <strong>conceptual systems-design &amp; reduced-order multiphysics models (M0, no_lab_measurement=true, tapeout_done=false)</strong>. Control-stack execution (CellISA v4.0 -&gt; OpenQASM 3.0), Hahn-Echo/XY4 DD, 5Q d=3 QEC, and bit-exact Q16.16 BOED Ramsey estimation were run on <strong>ibm_marrakesh (156Q Heron r2, job_id=dc1tdo2nj2vs73dfrfl0, 0 secret leaks) as a cloud superconducting-QPU control/decoder proxy</strong> (validates zero silicon <sup>31</sup>P fabrication hardware).
   </div>
 </header>
 
 <nav class="tabs">
   <button class="tab-btn active" onclick="openTab('explorer', this)">1. Interactive Parameter &amp; BOM v7.0 Explorer</button>
   <button class="tab-btn" onclick="openTab('schematic', this)">2. Machine Subsystems (S1-S9)</button>
-  <button class="tab-btn" onclick="openTab('liveqpu', this)">3. Live IBM QPU (ibm_marrakesh 156Q)</button>
+  <button class="tab-btn" onclick="openTab('liveqpu', this)">3. Cloud QPU Control Proxy (ibm_marrakesh 156Q)</button>
   <button class="tab-btn" onclick="openTab('rtl', this)">4. Verilog RTL &amp; 584-Cycle FPGA Pipeline</button>
-  <button class="tab-btn" onclick="openTab('v7suite', this)">5. v7.0 Algorithms, 121Sb Q-Echo &amp; Safety</button>
+  <button class="tab-btn" onclick="openTab('v7suite', this)">5. v7.0 Algorithms, 121Sb Q-Echo &amp; M0 Safety Target</button>
 </nav>
 
 <main>
@@ -595,7 +595,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
           <div class="kpi"><div class="k-lbl">M3 Machine BOM (v7.0)</div><div class="k-val c-cyan" id="k-bom">$5.39M</div><div class="k-sub" id="k-p100">P(&gt;$100M) = 4.67% (PASS)</div></div>
           <div class="kpi"><div class="k-lbl">Mass (Frame / Total)</div><div class="k-val" id="k-mass">1,034.9 / 1,389.9 kg</div><div class="k-sub" id="k-parts">173 BOM / 189 CAD + 355 kg fac.</div></div>
           <div class="kpi"><div class="k-lbl">MXC 20 mK Heat Load</div><div class="k-val c-purple" id="k-mxc">6.26 uW</div><div class="k-sub">Limit 14.0 uW (0 W from Safety)</div></div>
-          <div class="kpi"><div class="k-lbl">Daily Certified Cells</div><div class="k-val c-emerald" id="k-daily">1.55B / day</div><div class="k-sub" id="k-blkyld">288-cell block yield: 99.64%</div></div>
+          <div class="kpi"><div class="k-lbl">Model Capacity (Assumed Inputs)</div><div class="k-val c-emerald" id="k-daily">1.55B / day</div><div class="k-sub" id="k-blkyld">288-cell block yield: 99.64%</div></div>
         </div>
         <div class="card">
           <h2>Live Architecture Comparison (100L Fleet Cryostats &amp; $/L_sys — Log Scale)</h2>
@@ -647,12 +647,12 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
           <g class="sub-node" data-sub="S5" onclick="selectSub('S5')">
             <rect x="40" y="396" width="270" height="68" rx="10" fill="#1e293b" stroke="#f59e0b" stroke-width="1.8"/>
             <text x="56" y="422" fill="#fcd34d" font-size="14" font-weight="700">S5: UHV + S5.5 Flash + S5.6 MBE</text>
-            <text x="56" y="442" fill="#94a3b8" font-size="11.5">OD=8 + 3mm steel | 3.2 ms SIL-3 shutter</text>
+            <text x="56" y="442" fill="#94a3b8" font-size="11.5">OD=8 + 3mm steel | 3.2 ms SIL-3 target (uncert.)</text>
           </g>
           <g class="sub-node" data-sub="S7" onclick="selectSub('S7')">
             <rect x="370" y="28" width="350" height="68" rx="10" fill="#1e293b" stroke="#38bdf8" stroke-width="1.8"/>
             <text x="386" y="54" fill="#7dd3fc" font-size="14" font-weight="700">S7: ZU48DR RFSoC &amp; S7.SAFETY (RFQ-10)</text>
-            <text x="386" y="74" fill="#94a3b8" font-size="11.5">16-ch BOED RTL (584 cyc) + SIL-3 Kit (+$145k)</text>
+            <text x="386" y="74" fill="#94a3b8" font-size="11.5">16-ch BOED RTL (584 cyc) + Uncert. SIL-3 target (+$145k)</text>
           </g>
           <g class="sub-node" data-sub="S9.HPC" onclick="selectSub('S9.HPC')">
             <rect x="370" y="108" width="350" height="62" rx="10" fill="#1e293b" stroke="#10b981" stroke-width="1.8"/>
@@ -671,34 +671,34 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
             <text x="386" y="366" fill="#c4b5fd" font-size="11.5">+$168k | 9.2 kg | +0.78 uW @ 20 mK | 8,403x life</text>
           </g>
           <rect x="370" y="408" width="350" height="56" rx="8" fill="#064e3b" fill-opacity="0.35" stroke="#10b981" stroke-width="1.2"/>
-          <text x="545" y="432" text-anchor="middle" fill="#6ee7b7" font-size="12.5" font-weight="700">CAD v6: 199p / 1,108.137 kg | BOM v7: 180p (+355 kg fac.)</text>
-          <text x="545" y="451" text-anchor="middle" fill="#a7f3d0" font-size="11.5">0/19,701 clashes | 40/40 clearances | 10-RFQ: 78.2% nom / 92.6% var</text>
+          <text x="545" y="432" text-anchor="middle" fill="#6ee7b7" font-size="12" font-weight="700">CAD v6 Nominal: 199p / 1,108 kg | BOM v7 Parametric: 180p</text>
+          <text x="545" y="451" text-anchor="middle" fill="#a7f3d0" font-size="11">0/19,701 static clashes (excl. GD&amp;T/thermal/DFM) | 10-RFQ draft</text>
         </svg>
       </div>
       <div class="card">
         <h2 id="sub-title">Subsystem Inspector</h2>
         <div id="sub-detail"></div>
-        <h3>All Subsystems Summary (Live CAD v6.0 &amp; BOM v7.0)</h3>
+        <h3>All Subsystems Summary (Nominal CAD v6.0 &amp; Parametric BOM v7.0)</h3>
         <table class="spec" id="tbl-subs"></table>
       </div>
     </div>
   </section>
 
-  <!-- TAB 3: LIVE IBM QPU -->
+  <!-- TAB 3: CLOUD QPU CONTROL PROXY (NON-SILICON) -->
   <section id="tab-liveqpu" class="tab-panel">
     <div class="kpi-grid">
-      <div class="kpi"><div class="k-lbl">Live QPU Hardware</div><div class="k-val c-emerald" id="q-name">ibm_marrakesh</div><div class="k-sub" id="q-job">156Q Heron r2 | 32.54 s</div></div>
-      <div class="kpi"><div class="k-lbl">Live C1 XY4 DD Gain</div><div class="k-val c-cyan" id="q-xy4">+59.55 pp</div><div class="k-sub" id="q-xy4-sub">Bare 0.3325 -&gt; XY4 0.9280</div></div>
-      <div class="kpi"><div class="k-lbl">Live C1 Bell Fidelity</div><div class="k-val c-emerald" id="q-bell">0.9733</div><div class="k-sub">ZZ=+0.961, XX=+0.972, YY=-0.960</div></div>
-      <div class="kpi"><div class="k-lbl">Live C3 Q16 vs FP64</div><div class="k-val c-amber" id="q-boed">1.6 Hz</div><div class="k-sub">3 vs 8 pts (2.67x) | drift -4.52 kHz</div></div>
+      <div class="kpi"><div class="k-lbl">Cloud QPU Proxy (Non-Silicon)</div><div class="k-val c-emerald" id="q-name">ibm_marrakesh</div><div class="k-sub" id="q-job">156Q Heron r2 | 32.54 s (0 Si fab)</div></div>
+      <div class="kpi"><div class="k-lbl">Proxy C1 XY4 DD Gain</div><div class="k-val c-cyan" id="q-xy4">+59.55 pp</div><div class="k-sub" id="q-xy4-sub">Bare 0.3325 -&gt; XY4 0.9280</div></div>
+      <div class="kpi"><div class="k-lbl">Proxy C1 Bell Fidelity</div><div class="k-val c-emerald" id="q-bell">0.9733</div><div class="k-sub">ZZ=+0.961, XX=+0.972, YY=-0.960</div></div>
+      <div class="kpi"><div class="k-lbl">Proxy C3 Q16 vs FP64</div><div class="k-val c-amber" id="q-boed">1.6 Hz</div><div class="k-sub">3 vs 8 pts (2.67x) | drift -4.52 kHz</div></div>
     </div>
     <div class="grid-even">
       <div class="card">
-        <h2>C3: Live ibm_marrakesh 8-Point Ramsey Fringe &amp; Q16.16 BOED (3 Selected Points)</h2>
+        <h2>C3: Cloud QPU Proxy (ibm_marrakesh) 8-Point Ramsey Fringe &amp; Q16.16 BOED (3 Selected Points)</h2>
         <canvas id="cv-ramsey" width="660" height="340"></canvas>
       </div>
       <div class="card">
-        <h2>C1 DD / Bell &amp; C2 5-Qubit Linear d=3 Repetition Code (Zero SWAPs)</h2>
+        <h2>C1 DD / Bell &amp; C2 5-Qubit Linear d=3 Repetition Code (Superconducting Control Proxy)</h2>
         <canvas id="cv-qpu-bars" width="660" height="340"></canvas>
       </div>
     </div>
@@ -729,24 +729,24 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
     </div>
   </section>
 
-  <!-- TAB 5: v7.0 UNIVERSAL ALGORITHMS, 121Sb Q-ECHO-8 & INDUSTRIAL SAFETY -->
+  <!-- TAB 5: v7.0 UNIVERSAL ALGORITHMS, 121Sb Q-ECHO-8 & PRELIMINARY M0 SAFETY TARGET -->
   <section id="tab-v7suite" class="tab-panel">
     <div class="kpi-grid">
       <div class="kpi"><div class="k-lbl">FeMoco (192L, 10^8 T)</div><div class="k-val c-emerald" id="v7-femoco">16 cryos</div><div class="k-sub" id="v7-femoco-sub">3.38 h | $6,537/calc | 37.1x vs SC</div></div>
       <div class="kpi"><div class="k-lbl">RSA-2048 (4096L, 10^10 T)</div><div class="k-val c-cyan" id="v7-rsa">291 cryos</div><div class="k-sub" id="v7-rsa-sub">7.37 MW | 21.1 h | 52.7x vs SC</div></div>
-      <div class="kpi"><div class="k-lbl">121Sb Q-Echo-8 (500 Hz)</div><div class="k-val c-emerald" id="v7-sb">0.99908</div><div class="k-sub" id="v7-sb-sub">0.5800 -&gt; 0.99908 (450x infid drop)</div></div>
-      <div class="kpi"><div class="k-lbl">Industrial Safety FMEA</div><div class="k-val c-purple" id="v7-rpn">RPN 280-&gt;42</div><div class="k-sub" id="v7-rpn-sub">-86.3% | 0 residual &gt;60 | 7/7 PASS</div></div>
+      <div class="kpi"><div class="k-lbl">121Sb Q-Echo-8 (500 Hz)</div><div class="k-val c-emerald" id="v7-sb">0.99908</div><div class="k-sub" id="v7-sb-sub">0.5800 -&gt; 0.99908 (455.5x infid drop)</div></div>
+      <div class="kpi"><div class="k-lbl">Preliminary M0 Safety FMEA</div><div class="k-val c-purple" id="v7-rpn">RPN 280-&gt;42</div><div class="k-sub" id="v7-rpn-sub">-86.3% | 0 residual &gt;60 | Uncertified M0</div></div>
     </div>
     <div class="grid-even">
       <div class="card">
-        <h2>Exp147 Universal qLDPC Compression &amp; Exp148 121Sb Q-Echo-8 Closure</h2>
+        <h2>Exp147 Universal qLDPC Scaling &amp; Exp148 121Sb Q-Echo-8 Model Iteration</h2>
         <canvas id="cv-v7-alg" width="660" height="330"></canvas>
         <div class="note-box" id="v7-honest-notes"></div>
       </div>
       <div class="card">
-        <h2>Exp150 SEMI S2 / IEC 61508 Safety Kit (S7.SAFETY / RFQ-10: $145k, 355 kg)</h2>
+        <h2>Exp150 Preliminary Safety-Interlock Design Target (Uncertified M0 — SEMI does not certify S2; no IEC 61508 SIL assessment)</h2>
         <canvas id="cv-v7-safety" width="660" height="175"></canvas>
-        <h3>5-Hazard Quantitative Closure &amp; S7.SAFETY-01..06 BOM</h3>
+        <h3>5-Hazard Reduced-Order Model Target &amp; S7.SAFETY-01..06 Parametric BOM ($145k, 355 kg)</h3>
         <table class="spec" id="tbl-safety"></table>
       </div>
     </div>
@@ -754,7 +754,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
 </main>
 
 <footer>
-  Atom Lithography Machine v7.0 Digital Twin | Zero external CDN dependencies | Live embedded JSONs from primary repository artifacts (Exp128-Exp150) | Zero API tokens/CRNs.
+  Atom Lithography Machine v7.1 Interactive Model Explorer (TRL 1-2 / M0) | Zero external CDN dependencies | Embedded JSONs from repository artifacts (Exp128-Exp150) | Zero API tokens/CRNs.
 </footer>
 
 <script>
@@ -949,7 +949,7 @@ function selectSub(id) {
     <div class="kpi-grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:10px;">
       <div class="kpi"><div class="k-lbl">CAD v6 Mass</div><div class="k-val c-cyan">${s.cad_mass_kg} kg</div><div class="k-sub">${s.cad_parts} CAD solids</div></div>
       <div class="kpi"><div class="k-lbl">BOM v7 Nom</div><div class="k-val c-emerald">$${(s.bom_nom_usd/1e3).toFixed(1)}k</div><div class="k-sub">${s.bom_parts} BOM lines</div></div>
-      <div class="kpi"><div class="k-lbl">Thermal Stage</div><div class="k-val" style="font-size:0.92rem;">${s.temp}</div><div class="k-sub">Locked spec</div></div>
+      <div class="kpi"><div class="k-lbl">Thermal Stage</div><div class="k-val" style="font-size:0.92rem;">${s.temp}</div><div class="k-sub">Model design target</div></div>
     </div>
     <p style="font-size:0.84rem;color:#cbd5e1;margin-bottom:6px;"><strong>RFQ Scope:</strong> ${s.rfq}</p>
     <p style="font-size:0.84rem;color:#94a3b8;"><strong>Safety &amp; Control:</strong> ${s.safety}</p>
@@ -1092,9 +1092,9 @@ function drawV7Suite() {
   document.getElementById('v7-rsa').textContent = alg.rsa2048.qldpc_cryos + ' cryos';
   document.getElementById('v7-rsa-sub').textContent = alg.rsa2048.power_mw.toFixed(2) + ' MW | ' + alg.rsa2048.runtime_hours.toFixed(1) + ' h | ' + alg.rsa2048.cryo_compression_x.toFixed(1) + 'x vs SC';
   document.getElementById('v7-sb').textContent = sb.qecho8_gross_0L.toFixed(5);
-  document.getElementById('v7-sb-sub').textContent = sb.bare_gross_0L.toFixed(4) + ' -> ' + sb.qecho8_gross_0L.toFixed(5) + ' (' + Math.round(sb.infidelity_reduction_x) + 'x drop)';
+  document.getElementById('v7-sb-sub').textContent = sb.bare_gross_0L.toFixed(4) + ' -> ' + sb.qecho8_gross_0L.toFixed(5) + ' (' + sb.infidelity_reduction_x.toFixed(1) + 'x drop)';
   document.getElementById('v7-rpn').textContent = 'RPN ' + sf.max_rpn_pre + '->' + sf.max_rpn_post;
-  document.getElementById('v7-rpn-sub').textContent = '-' + sf.mean_rpn_reduction_pct.toFixed(1) + '% | 0 >60 | ' + sf.criteria_passed + ' PASS';
+  document.getElementById('v7-rpn-sub').textContent = '-' + sf.mean_rpn_reduction_pct.toFixed(1) + '% | 0 >60 | Uncertified M0 | ' + sf.criteria_passed + ' PASS';
 
   // Canvas 1: Left = FeMoco & RSA-2048 Cryostat Compression (log10), Right = 121Sb Q-Echo-8 Fidelity Restoration
   const cv = document.getElementById('cv-v7-alg');
@@ -1126,7 +1126,7 @@ function drawV7Suite() {
 
   // Right half: 121Sb Q-Echo-8 Fidelity
   ctx.fillStyle = '#e2e8f0'; ctx.font = '700 12.5px sans-serif'; ctx.textAlign = 'center';
-  ctx.fillText('121Sb (500 Hz, 1 ms): 450x Infidelity Drop', 500, 24);
+  ctx.fillText('121Sb (500 Hz, 1 ms): 455.5x Infidelity Drop', 500, 24);
   const sbBars = [
     { l: 'Bare Gross', v: sb.bare_gross_0L, col: '#ef4444' },
     { l: 'Q-Echo-4', v: sb.qecho4_gross_0L, col: '#f59e0b' },
@@ -1155,11 +1155,11 @@ function drawV7Suite() {
   const W2 = cv2.width, H2 = cv2.height;
   ctx2.fillStyle = '#0f172a'; ctx2.fillRect(0, 0, W2, H2);
   ctx2.fillStyle = '#e2e8f0'; ctx2.font = '700 12.5px sans-serif'; ctx2.textAlign = 'left';
-  ctx2.fillText('25-Row FMEA Risk Reduction (Target Residual RPN <= 60)', 20, 24);
+  ctx2.fillText('25-Row Preliminary M0 FMEA Target (Residual RPN <= 60; Uncertified)', 20, 24);
   const rpnRows = [
     { lbl: 'Max RPN Pre-Mitigation', v: sf.max_rpn_pre, col: '#ef4444' },
     { lbl: 'Mean RPN Pre (25 rows)', v: sf.mean_rpn_pre, col: '#f59e0b' },
-    { lbl: 'Max RPN Post (SIL-3)', v: sf.max_rpn_post, col: '#10b981' },
+    { lbl: 'Max RPN Post (M0 FMEA Target)', v: sf.max_rpn_post, col: '#10b981' },
     { lbl: 'Mean RPN Post (-86.3%)', v: sf.mean_rpn_post, col: '#38bdf8' }
   ];
   rpnRows.forEach((r, i) => {
@@ -1179,12 +1179,12 @@ function drawV7Suite() {
   ctx2.setLineDash([]);
 
   document.getElementById('tbl-safety').innerHTML = `
-    <tr><th>Safety Domain / Kit Item</th><th class="num">Verified Spec</th><th class="num">SIL / Cost</th></tr>
-    <tr><td>S5.5 Laser + 22 keV X-Ray Shroud</td><td class="num">OD=${sf.laser_od_spec} + 3mm (${sf.xray_22kev_shrouded_uSv_h.toExponential(2)} uSv/h)</td><td class="num">SIL-3 (${sf.shutter_ms} ms)</td></tr>
-    <tr><td>S1.1 Sub-Atm SDS PH3 Cabinet</td><td class="num">${sf.ph3_operator_ppm.toFixed(5)} ppm (&lt;&lt;0.05 TLV)</td><td class="num">SIL-3 ($42k)</td></tr>
-    <tr><td>S6 Dry-Cryo He ODH (60 m3 room)</td><td class="num">O2 = ${sf.he_o2_60m3_pct.toFixed(2)}% (&gt;=19.5% OSHA)</td><td class="num">SIL-2 ($12k)</td></tr>
-    <tr><td>15 kVA Online UPS + UHV Gate Valve</td><td class="num">${sf.ups_full_min}/${sf.ups_tier1_min.toFixed(0)} min | ${sf.uhv_valve_ms} ms valve</td><td class="num">SIL-2 ($36k)</td></tr>
-    <tr><td><strong>S7.SAFETY Total (6 Items, RFQ-10)</strong></td><td class="num"><strong>${sf.kit_totals.total_mass_kg} kg | ${sf.kit_totals.steady_electrical_power_W} W | 0 W cryo</strong></td><td class="num"><strong>$${(sf.kit_totals.cost_usd_nom/1e3).toFixed(0)}k</strong></td></tr>
+    <tr><th>Safety Domain / Kit Item</th><th class="num">Model Target</th><th class="num">SIL Target (Uncertified) / Cost</th></tr>
+    <tr><td>S5.5 Laser + 22 keV X-Ray Shroud</td><td class="num">OD=${sf.laser_od_spec} + 3mm (${sf.xray_22kev_shrouded_uSv_h.toExponential(2)} uSv/h)</td><td class="num">SIL-3 target (uncertified M0, ${sf.shutter_ms} ms)</td></tr>
+    <tr><td>S1.1 Sub-Atm SDS PH3 Cabinet</td><td class="num">${sf.ph3_operator_ppm.toFixed(5)} ppm (&lt;&lt;0.05 TLV)</td><td class="num">SIL-3 target (uncertified M0, $42k)</td></tr>
+    <tr><td>S6 Dry-Cryo He ODH (60 m3 room)</td><td class="num">O2 = ${sf.he_o2_60m3_pct.toFixed(2)}% (&gt;=19.5% OSHA)</td><td class="num">SIL-2 target (uncertified, $12k)</td></tr>
+    <tr><td>15 kVA Online UPS + UHV Gate Valve</td><td class="num">${sf.ups_full_min}/${sf.ups_tier1_min.toFixed(0)} min | ${sf.uhv_valve_ms} ms valve</td><td class="num">SIL-2 target (uncertified, $36k)</td></tr>
+    <tr><td><strong>S7.SAFETY Total (6 Items, RFQ-10 Draft)</strong></td><td class="num"><strong>${sf.kit_totals.total_mass_kg} kg | ${sf.kit_totals.steady_electrical_power_W} W | 0 W cryo</strong></td><td class="num"><strong>$${(sf.kit_totals.cost_usd_nom/1e3).toFixed(0)}k</strong></td></tr>
   `;
 }
 

@@ -1,7 +1,10 @@
 # CAD Paketi v6.0 — Atom Litografi Makinesi (`Exp124`..`Exp140` + `Option-Q` [`Exp142`] + `Option-HPC` [`Exp143`] Kilitli)
 
-Sürüm: `6.0-exp142-exp143-option-qhpc-locked` (2026-11-23) · Birim: `mm` · Genel Tolerans: `ISO 2768-mK`  
-Durum: **Kâğıt üzerinde parametrik konsept / ön-mühendislik CAD modeli (`no_lab_measurement=true`).** Fiziksel donanım veya laboratuvar ölçümü değildir.
+Sürüm: `6.0-exp142-exp143-option-qhpc-locked` (2026-11-24 `v7.1` epistemik kapsam notu) · Birim: `mm` · Genel Tolerans: `ISO 2768-mK`  
+Durum: **TRL 1–2 (`M0`) nominal statik parametrik konsept CAD modeli (`no_lab_measurement = true`).** Fiziksel donanım veya laboratuvar ölçümü değildir.
+
+> [!NOTE]
+> **Geometrik Doğrulama Kapsamı ve Sınırları (`0/19.701` çakışma / `40/40` boşluk):** `cad_verification.json` içindeki `0/19.701` katı çakışma ve `40/40` boşluk sonucu **yalnızca nominal statik geometrik çakışma ve zarf kontrolüdür**. Bu kontrol **GD&T tolerans yığılmasını, `300 K → 20 mK` termal büzülmeyi, mekanik titreşim kuplajını, kablo/boru/tesisat yönlendirmesini, UHV gaz salınımı ve uyumluluğunu, manyetik malzeme uyumunu, üretilebilirliği (`DFM`) ve fiziksel montaj sırasını KAPSAMAZ.**
 
 ## v6.0 Kilitli Mühendislik Mimarisi (`exp124..143_synced=True`)
 
@@ -38,7 +41,7 @@ Durum: **Kâğıt üzerinde parametrik konsept / ön-mühendislik CAD modeli (`n
 - `parts/s1..s7.scad` + `atom_litho_machine.scad` (8 parametrik OpenSCAD dosyası)
 - `stl/s1..s7.stl` + `stl/atom_litho_machine.stl` (8 su geçirmez ikili STL) + `cad_verification.json`
 - `drawings/01..10.{svg,png}` (10 adet `2400×1600` px ISO/ANSI teknik resim, `ALM-600-*`) + `drawings/00_v{3,4,5,6,7}_overview_dashboard.png` (`v7.0` kapak panosu dahil) + `preview_machine.png` (`2000×1020`)
-- **`v7.0` Tesis Emniyeti Ayrımı (`Exp150` / `BOM v7.0`):** `CAD v6.0` makine şasi-üstü (`on-frame`) kütlesi **`1.108,137 kg`** (`199` parça, `0/19.701` çakışma, `40/40` boşluk) değişmeden korunur; `S7.SAFETY-01..06` (`355,0 kg`, `1.090 W`, `0,0 W` kriyo) harici temizoda zemin emniyet uyumluluk paketi olarak ayrı tutulur (toplam tesis yükü `1.463,137 kg`).
+- **`v7.0` Ön Tesis Emniyeti Ayrımı (`Exp150` / `BOM v7.0`, Sertifikasız `M0`):** `CAD v6.0` makine şasi-üstü (`on-frame`) nominal statik kütlesi **`1.108,137 kg`** (`199` parça, `0/19.701` nominal statik çakışma, `40/40` nominal zarf) değişmeden korunur; `S7.SAFETY-01..06` (`355,0 kg`, `1.090 W`, `0,0 W` kriyo) harici temizoda ön emniyet tasarım paketi (sertifikasız `M0`) olarak ayrı tutulur (toplam tesis yükü `1.463,137 kg`).
 
 ```bash
 cd research/atom_lithography_machine/cad

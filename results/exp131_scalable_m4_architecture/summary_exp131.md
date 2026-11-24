@@ -6,7 +6,7 @@
 
 ## 1. Yönetici Özeti
 
-`Exp126`, `1 µm` adımlı yalıtılmış `³¹P` atom hücreleri arasında doğrudan dipolar bağlaşımın yalnızca `J_inter = 9,5 nHz` (sıfır doğrudan dolaştırma) olduğunu göstermişti. `Exp131 (H149)`, `Atom Lithography Machine` için **`M4` ölçeklenebilir çok-hücreli mimari teorisini** ilk-ilkeler açık kuantum sistemi fiziği ve 2B perkolasyon istatistiğiyle kurar:
+`Exp126`, `1 µm` adımlı yalıtılmış `³¹P` atom hücreleri arasında doğrudan dipolar bağlaşımın yalnızca `J_inter = 9,5 nHz` (sıfır doğrudan dolaştırma) olduğunu göstermişti. `Exp131 (H149)`, `Atom Lithography Machine` için **`M4` ölçeklenebilir çok-hücreli mimari teorisini** açık kuantum sistemi (Lindblad) modeli ve 2B perkolasyon istatistiğiyle kurar:
 
 1. **Stokastik İyon Dağılımına Dayanıklı `4 × 4` Tosi Flip-Flop Kübit (`flipflop_cell131.py`):** `Exp124`'ün `5 keV ³¹P⁺` 3B ekim dağılımı (`R_p = 6,46 nm`, `σ_z = 2,88 nm`, `σ_xy = 3,67 nm`) kaplamasız (`Δz_cap = 0 nm`) bırakıldığında güçlü bağlaşım verimi **`%24,15`**'te çöker (`< %25`). **`Δz_cap* = 8,0 ± 1,0 nm`** ince epitaksiyel `²⁸Si` kaplama + yerel DC saat-geçişi (`ε*`) ayarı verimi **`%95,20`**'ye (`ε = 0` sabit öngerilimde `%37,90`) ve ortanca işbirlikçiliği **`C = 2.800,1`**'e (sabit `ε = 0`'da `0,0`) çıkarır (**`CM1 PASS`**).
 2. **Kesin `12 × 12` Lindblad Kavite-QED Veri Yolu (`lindblad_bus131.py`, CUDA `144 × 144` Süperoperatör):**
