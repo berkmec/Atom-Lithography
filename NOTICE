@@ -1,35 +1,105 @@
 Atom Lithography Machine
 Copyright (C) 2026 berkmec (https://counfield.com/)
+Canonical Source Location: https://github.com/berkmec/Atom-Lithography
 
-This repository uses a strongly reciprocal (copyleft) tri-license structure so
-that all software, HDL/RTL, physical hardware blueprints, and documentation
-remain open to humanity and cannot be closed or monopolized in derivative works:
+This repository uses a strongly reciprocal (copyleft) tri-license architecture
+with mutually exclusive, collectively exhaustive (100% file coverage) scoping
+so that software (including network/cloud SaaS services), silicon/FPGA RTL,
+physical hardware blueprints, and documentation remain open to humanity and
+cannot be closed or monopolized in derivative works.
 
-1. Software, Simulation Code, Tests & Verilog RTL
-   Scope: `src/`, `rtl/`, `experiments/`, `tests/`, `docs/digital_twin_interactive.html`,
-          and all `.py`, `.v`, `.sv`, `.ys`, `.sh`, `.html`, `.js` source files
-   License: GNU General Public License v3.0 or later (`SPDX-License-Identifier: GPL-3.0-or-later`)
-   Full text: `LICENSE`
+===============================================================================
+1. LICENSE SCOPE (PRECEDENCE-ORDERED, ZERO-OVERLAP PARTITION)
+===============================================================================
 
-2. Hardware Designs (3D CAD, 2D GD&T Drawings, KiCad 8 PCBs, SPICE, BOM & ICDs)
-   Scope: `hardware/`, `research/atom_lithography_machine/cad/`, `src/board/`,
-          `research/atom_lithography_machine/BOM*.csv`, and all `.stl`, `.step`,
-          `.scad`, `.dxf`, `.svg`, `.kicad_sch`, `.kicad_pcb`, `.kicad_pro`,
-          `.cir`, `.json` hardware design files
-   License: CERN Open Hardware Licence Version 2 - Strongly Reciprocal
-            (`SPDX-License-Identifier: CERN-OHL-S-2.0`)
-   Full text: `LICENSE-HARDWARE`
+Rule 0 — Verbatim Upstream License Texts (Not Copyrighted by berkmec):
+  Files: `LICENSE` (Copyright (C) 2007 Free Software Foundation, Inc.),
+         `LICENSE-HARDWARE` (Copyright CERN 2020),
+         `LICENSE-DOCS` (Creative Commons Corporation).
+  These files are unmodified verbatim texts of their respective licenses.
 
-3. Documentation, Scientific Reports & Figures
-   Scope: `README.md`, `research/atom_lithography_machine/*.md`,
-          `research/hypotheses/hypotheses.md`, `results/**/summary_*.md`,
-          and rendered figures/plates (`.png`)
-   License: Creative Commons Attribution-ShareAlike 4.0 International
-            (`SPDX-License-Identifier: CC-BY-SA-4.0`)
-   Full text: `LICENSE-DOCS`
+Rule 1 — Software, Simulation, Control Stack, Generators, Tests & Build Files:
+  SPDX: `AGPL-3.0-or-later` (GNU Affero General Public License v3.0 or later)
+  Full text: `LICENSE`
+  Files: All `*.py`, `*.sh`, `*.html`, `*.js`, `Makefile`, `requirements.txt`,
+         `.gitignore`, `NOTICE`, and `REUSE.toml` files anywhere in this
+         repository (including generator scripts under `hardware/` and
+         `research/`).
+  Effect: Closes the cloud/SaaS network loophole (AGPLv3 Section 13) — anyone
+          operating modified software over a network must provide the
+          Corresponding Source under AGPLv3.
 
-Warranty & Safety Disclaimer:
-All materials are provided "AS IS" without warranty of any kind, as set forth
-in `LICENSE`, `LICENSE-HARDWARE`, and `LICENSE-DOCS`. Hardware artifacts are
-`TRL 1-2` (`M0/M1 DESIGN_ONLY`) and are not safety-certified (`iec61508_certified = false`,
-`semi_s2_certified = false`).
+Rule 2 — Hardware Designs, Silicon/FPGA RTL, PCBs, CAD, SPICE, BOM & ICDs:
+  SPDX: `CERN-OHL-S-2.0` (CERN Open Hardware Licence Version 2 — Strongly
+        Reciprocal, or any later version of variant `S` published by CERN
+        pursuant to Section 8.3)
+  Full text: `LICENSE-HARDWARE`
+  Files: All `*.v`, `*.sv`, `*.xdc`, `*.hex`, `*.mem`, `*.ys`, `*.stl`,
+         `*.step`, `*.scad`, `*.dxf`, `*.svg`, `*.kicad_pcb`, `*.kicad_sch`,
+         `*.kicad_pro`, `*.cir`, `*.net`, and `*.csv` files anywhere in this
+         repository, AND all `*.json` files under `hardware/`, `research/`,
+         `src/`, and `rtl/`.
+  Effect: Closes the silicon/FPGA bitstream, ASIC fabrication, PCB, and
+          mechanical manufacturing loophole — anyone manufacturing, loading,
+          compiling, or conveying a Product or modified Covered Source must
+          release Complete Source under CERN-OHL-S v2.
+
+Rule 3 — Documentation, Scientific Reports, Figures & Archived Study Results:
+  SPDX: `CC-BY-SA-4.0` (Creative Commons Attribution-ShareAlike 4.0
+        International)
+  Full text: `LICENSE-DOCS`
+  Files: All `*.md` and `*.png` files anywhere in this repository, AND all
+         `*.json` and `*.jsonl` files under `results/`.
+
+Rule 4 — Catch-All Default (Zero Unlicensed Gaps):
+  Any original file in this repository not matched by Rules 0–3 is licensed
+  under `AGPL-3.0-or-later` (`LICENSE`), or under `CERN-OHL-S-2.0`
+  (`LICENSE-HARDWARE`) if it constitutes physical hardware or HDL design source.
+
+Machine-readable SPDX mapping is additionally provided in `REUSE.toml`.
+
+===============================================================================
+2. CERN-OHL-S v2 SECTION 4 — MANDATORY SOURCE LOCATION DISPLAY NOTICE
+===============================================================================
+
+Pursuant to Section 4 of `CERN-OHL-S-2.0`, any physical or configured Product
+(including manufactured PCBs, mechanical assemblies, loaded FPGA bitstreams,
+or fabricated ASICs) Made from or incorporating Covered Source MUST visibly
+and securely display the Source Location on the Product itself, its packaging,
+or its accompanying technical documentation:
+  - For unmodified Covered Source:
+    `Source: https://github.com/berkmec/Atom-Lithography (https://counfield.com/)`
+  - For modified Covered Source:
+    The modifier's persistent Source Location URL (per Section 1.9 & 3.3(c))
+    together with attribution to the upstream origin above.
+
+===============================================================================
+3. TRADEMARKS, DOMAIN NAME & NON-ENDORSEMENT
+===============================================================================
+
+Nothing in these licenses grants permission to use the names, trademarks,
+service marks, logos, or domain names `berkmec` or `https://counfield.com/`
+for commercial endorsement, certification claims, or implied affiliation,
+except as strictly necessary for factual attribution and compliance notices
+(see AGPLv3 Section 7(e) and CERN-OHL-S v2 Section 8.2).
+
+===============================================================================
+4. THIRD-PARTY DEPENDENCIES (NOT VENDORED)
+===============================================================================
+
+External runtime libraries and EDA/SPICE/PDK tools referenced by this project
+(including Python packages in `requirements.txt`, `Verilator`, `Icarus Verilog`,
+`Yosys`, `ngspice`, `KiCad`, `OpenSCAD`, `OpenROAD`, and `SkyWater SKY130 PDK`)
+are independent third-party works governed exclusively by their own respective
+licenses and are not vendored in this repository.
+
+===============================================================================
+5. WARRANTY, LIABILITY & SAFETY DISCLAIMER
+===============================================================================
+
+ALL SOFTWARE, HDL/RTL, HARDWARE DESIGNS, AND DOCUMENTATION ARE PROVIDED "AS IS"
+WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, TO THE MAXIMUM EXTENT
+PERMITTED BY APPLICABLE LAW (see AGPLv3 Sections 15–17, CERN-OHL-S v2 Section 6,
+and CC-BY-SA-4.0 Section 5). All hardware artifacts in this repository are
+`TRL 1-2` (`M0/M1 DESIGN_ONLY`) and are NOT safety-certified
+(`iec61508_certified = false`, `semi_s2_certified = false`).

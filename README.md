@@ -332,12 +332,12 @@ Aşağıdaki `SHA-256` özetleri yalnızca depodaki çıktı dosyalarının sonr
 
 **Copyright (C) 2026 berkmec (https://counfield.com/)**
 
-Bu depo, tasarımın tüm insanlık için açık kalması ve türev çalışmalarla kapatılıp tekelleştirilememesi amacıyla **güçlü karşılıklı (*strongly reciprocal / copyleft*) üçlü lisans** yapısını kullanır (ayrıntılı kapsam: [`NOTICE`](NOTICE)):
+Bu depo, tasarımın tüm insanlık için açık kalması ve bulut/SaaS, silikon/FPGA üretimi veya fiziksel donanım yoluyla kapatılıp tekelleştirilememesi amacıyla **sıfır-örtüşmeli (%100 dosya kapsamlı) güçlü karşılıklı (*strongly reciprocal / copyleft*) üçlü lisans** yapısını kullanır (kesin kapsam kuralları, `CERN-OHL-S v2` Bölüm 4 kaynak-konum etiketi zorunluluğu ve marka koruması: [`NOTICE`](NOTICE) · makine-okunur SPDX eşlemesi: [`REUSE.toml`](REUSE.toml)):
 
 | Kapsam | Lisans (SPDX) | Tam Metin |
 |---|---|---|
-| **Yazılım, Simülasyon Kodu, Testler ve Verilog RTL** (`src/`, `rtl/`, `experiments/`, `tests/`, `docs/digital_twin_interactive.html`) | **GNU GPLv3 veya üstü** (`GPL-3.0-or-later`) | [`LICENSE`](LICENSE) |
-| **Donanım Tasarımları** (`hardware/`, 3B CAD, 2B GD&T, KiCad 8 PCB, SPICE, BOM ve ICD'ler) | **CERN Open Hardware Licence v2 — Strongly Reciprocal** (`CERN-OHL-S-2.0`) | [`LICENSE-HARDWARE`](LICENSE-HARDWARE) |
-| **Dokümantasyon, Bilimsel Raporlar ve Şekiller** (`*.md`, teknik paftalar ve görseller) | **Creative Commons Attribution-ShareAlike 4.0** (`CC-BY-SA-4.0`) | [`LICENSE-DOCS`](LICENSE-DOCS) |
+| **Yazılım, Simülasyon, Üreteç Betikleri, Testler ve Derleme Dosyaları** (`*.py`, `*.sh`, `*.html`, `*.js`, `Makefile`, `requirements.txt`, `.gitignore`, `NOTICE`, `REUSE.toml`) | **GNU AGPLv3 veya üstü** (`AGPL-3.0-or-later` — bulut/SaaS ağ etkileşimi dâhil) | [`LICENSE`](LICENSE) |
+| **Fiziksel Donanım ve Silikon/FPGA Verilog RTL** (`*.v`, `*.sv`, `*.xdc`, `*.hex`, `*.mem`, `*.ys`, `*.stl`, `*.step`, `*.scad`, `*.dxf`, `*.svg`, `*.kicad_pcb`, `*.kicad_sch`, `*.cir`, `*.net`, `*.csv` ve `hardware/`·`research/`·`src/`·`rtl/` altındaki `*.json` dosyaları) | **CERN Open Hardware Licence v2 — Strongly Reciprocal** (`CERN-OHL-S-2.0` — PCB/CAD + FPGA/ASIC üretimi dâhil) | [`LICENSE-HARDWARE`](LICENSE-HARDWARE) |
+| **Dokümantasyon, Bilimsel Raporlar, Şekiller ve Deney Çıktı Arşivleri** (`*.md`, `*.png` ve `results/` altındaki `*.json`/`*.jsonl`) | **Creative Commons Attribution-ShareAlike 4.0** (`CC-BY-SA-4.0`) | [`LICENSE-DOCS`](LICENSE-DOCS) |
 
-Tüm materyaller ilgili lisans metinlerinde belirtildiği biçimde **"OLDUĞU GİBİ" (*AS IS*)** sunulur; donanım tasarımları `M0/M1 DESIGN_ONLY` aşamasındadır ve fonksiyonel emniyet sertifikası taşımaz.
+Tüm materyaller ilgili lisans metinlerinde belirtildiği biçimde **"OLDUĞU GİBİ" (*AS IS*)** sunulur; donanım tasarımları `M0/M1 DESIGN_ONLY` aşamasındadır ve fonksiyonel emniyet sertifikası taşımaz. `berkmec` ve `https://counfield.com/` ad/alan adları için ticari onay veya marka hakkı devri verilmez.

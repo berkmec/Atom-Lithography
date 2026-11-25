@@ -1,0 +1,82 @@
+version = 1
+SPDX-PackageName = "Atom Lithography Machine"
+SPDX-PackageSupplier = "berkmec (https://counfield.com/)"
+SPDX-PackageDownloadLocation = "https://github.com/berkmec/Atom-Lithography"
+
+# Rule 0 — Verbatim upstream license texts (not copyrighted by berkmec)
+[[annotations]]
+path = ["LICENSE"]
+precedence = "override"
+SPDX-FileCopyrightText = "2007 Free Software Foundation, Inc. <https://fsf.org/>"
+SPDX-License-Identifier = "AGPL-3.0-or-later"
+
+[[annotations]]
+path = ["LICENSE-HARDWARE"]
+precedence = "override"
+SPDX-FileCopyrightText = "2020 CERN"
+SPDX-License-Identifier = "CERN-OHL-S-2.0"
+
+[[annotations]]
+path = ["LICENSE-DOCS"]
+precedence = "override"
+SPDX-FileCopyrightText = "Creative Commons Corporation"
+SPDX-License-Identifier = "CC-BY-SA-4.0"
+
+# Rule 1 — Software, simulation, control stack, CAD/PCB generator scripts, tests & build metadata
+[[annotations]]
+path = [
+    "**.py",
+    "**.sh",
+    "**.html",
+    "**.js",
+    "**/Makefile",
+    "Makefile",
+    "requirements.txt",
+    ".gitignore",
+    "NOTICE",
+    "REUSE.toml",
+]
+precedence = "override"
+SPDX-FileCopyrightText = "2026 berkmec (https://counfield.com/)"
+SPDX-License-Identifier = "AGPL-3.0-or-later"
+
+# Rule 2 — Physical hardware designs, silicon/FPGA Verilog RTL, PCBs, CAD, SPICE, BOM & ICDs
+[[annotations]]
+path = [
+    "**.v",
+    "**.sv",
+    "**.xdc",
+    "**.hex",
+    "**.mem",
+    "**.ys",
+    "**.stl",
+    "**.step",
+    "**.scad",
+    "**.dxf",
+    "**.svg",
+    "**.kicad_pcb",
+    "**.kicad_sch",
+    "**.kicad_pro",
+    "**.cir",
+    "**.net",
+    "**.csv",
+    "hardware/**.json",
+    "research/**.json",
+    "src/**.json",
+    "rtl/**.json",
+]
+precedence = "override"
+SPDX-FileCopyrightText = "2026 berkmec (https://counfield.com/)"
+SPDX-License-Identifier = "CERN-OHL-S-2.0"
+
+# Rule 3 — Documentation, scientific reports, rendered figures & archived experimental data
+[[annotations]]
+path = [
+    "**.md",
+    "**.png",
+    "results/**.json",
+    "results/**.jsonl",
+]
+precedence = "override"
+SPDX-FileCopyrightText = "2026 berkmec (https://counfield.com/)"
+SPDX-License-Identifier = "CC-BY-SA-4.0"
