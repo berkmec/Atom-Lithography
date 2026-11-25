@@ -32,7 +32,8 @@ Rule 1 — Software, Simulations, Control Stack, Tests, Web App & Repo Metadata:
   Files: `src/machine_control/**/*.py`, `experiments/**/*.py` (except
          `experiments/exp128_bom_sensitivity/build_bom_detailed.py`, covered by
          Rule 2), `tests/**/*.py`, `docs/digital_twin_interactive.html`,
-         `requirements.txt`, `.gitignore`, `NOTICE`, `REUSE.toml`.
+         `requirements.txt`, `.gitignore`, `NOTICE` (plus `REUSE.toml`, which is
+         evaluated as metadata by REUSE 3.3).
   Effect: Closes the cloud/SaaS network loophole (AGPLv3 Section 13) — anyone
           operating modified software over a network must provide the
           Corresponding Source under AGPLv3.
@@ -76,10 +77,11 @@ Rule 4 — Documentation, Scientific Reports & Rendered Figures:
   Full text: `LICENSES/CC-BY-SA-4.0.txt`
   Files: All `**/*.md` and `**/*.png` files across the repository.
 
-Rule 5 — Deterministic Catch-All Fallback (Future Additions):
-  Any future original file added to this repository without an explicit
-  `REUSE.toml` or per-file SPDX header defaults to
-  `AGPL-3.0-or-later OR CERN-OHL-S-2.0`.
+Policy for Future Additions (outside the 4-rule `REUSE.toml` table):
+  `REUSE.toml` intentionally omits a wildcard `**` rule so `reuse lint` flags
+  any newly added file lacking an explicit category; as a legal backstop, any
+  future original file added without an explicit `REUSE.toml` or per-file SPDX
+  header defaults to `AGPL-3.0-or-later OR CERN-OHL-S-2.0`.
 
 ===============================================================================
 3. CERN-OHL-S v2 SECTION 4 — MANDATORY SOURCE LOCATION DISPLAY NOTICE

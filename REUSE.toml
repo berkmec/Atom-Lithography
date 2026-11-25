@@ -3,17 +3,24 @@ SPDX-PackageName = "Atom Lithography Machine"
 SPDX-PackageSupplier = "berkmec (https://counfield.com/)"
 SPDX-PackageDownloadLocation = "https://github.com/berkmec/Atom-Lithography"
 
-# Rule 1 — Pure software, control stack, physics simulations, tests, HTML5 twin & repo metadata
+# Rule 1a — Pure software, control stack, tests, HTML5 twin & repo metadata
 [[annotations]]
 path = [
     "src/machine_control/**/*.py",
-    "experiments/**/*.py",
     "tests/**/*.py",
     "docs/digital_twin_interactive.html",
     "requirements.txt",
     ".gitignore",
     "NOTICE",
-    "REUSE.toml",
+]
+precedence = "override"
+SPDX-FileCopyrightText = "2026 berkmec (https://counfield.com/)"
+SPDX-License-Identifier = "AGPL-3.0-or-later"
+
+# Rule 1b — Physics experiment scripts (closest so Rule 2 overrides build_bom_detailed.py cleanly)
+[[annotations]]
+path = [
+    "experiments/**/*.py",
 ]
 precedence = "closest"
 SPDX-FileCopyrightText = "2026 berkmec (https://counfield.com/)"
