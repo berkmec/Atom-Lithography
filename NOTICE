@@ -2,64 +2,87 @@ Atom Lithography Machine
 Copyright (C) 2026 berkmec (https://counfield.com/)
 Canonical Source Location: https://github.com/berkmec/Atom-Lithography
 
-This repository uses a strongly reciprocal (copyleft) tri-license architecture
-with mutually exclusive, collectively exhaustive (100% file coverage) scoping
-so that software (including network/cloud SaaS services), silicon/FPGA RTL,
-physical hardware blueprints, and documentation remain open to humanity and
-cannot be closed or monopolized in derivative works.
+This repository uses a REUSE 3.3 compliant, strongly reciprocal (copyleft)
+tri-license architecture (`AGPL-3.0-or-later`, `CERN-OHL-S-2.0`, `CC-BY-SA-4.0`)
+with a dual-copyleft bridge (`AGPL-3.0-or-later OR CERN-OHL-S-2.0`) on cross-
+domain generator, build, and data/specification files. Every tracked file is
+unambiguously covered with zero copyleft deadlocks so that software (including
+cloud/SaaS network services), silicon/FPGA RTL, physical hardware blueprints,
+and documentation remain open to humanity and cannot be closed or monopolized.
 
 ===============================================================================
-1. LICENSE SCOPE (PRECEDENCE-ORDERED, ZERO-OVERLAP PARTITION)
+1. VERBATIM LICENSE FILES (`LICENSES/` & ROOT `LICENSE`)
 ===============================================================================
 
-Rule 0 — Verbatim Upstream License Texts (Not Copyrighted by berkmec):
-  Files: `LICENSE` (Copyright (C) 2007 Free Software Foundation, Inc.),
-         `LICENSE-HARDWARE` (Copyright CERN 2020),
-         `LICENSE-DOCS` (Creative Commons Corporation).
-  These files are unmodified verbatim texts of their respective licenses.
+The canonical unmodified license texts live in `LICENSES/` per REUSE 3.3:
+  - `LICENSES/AGPL-3.0-or-later.txt`  (Copyright (C) 2007 Free Software Foundation, Inc.)
+  - `LICENSES/CERN-OHL-S-2.0.txt`     (Copyright CERN 2020)
+  - `LICENSES/CC-BY-SA-4.0.txt`       (Creative Commons Corporation)
+Root `LICENSE` is an identical verbatim copy of `LICENSES/AGPL-3.0-or-later.txt`
+provided for repository forge auto-detection (e.g., GitHub Licensee). These
+verbatim upstream license texts are NOT copyrighted by `berkmec`.
 
-Rule 1 — Software, Simulation, Control Stack, Generators, Tests & Build Files:
+===============================================================================
+2. LICENSE SCOPE (1:1 WITH `REUSE.toml`, VERIFIED BY `reuse lint`)
+===============================================================================
+
+Rule 1 — Software, Simulations, Control Stack, Tests, Web App & Repo Metadata:
   SPDX: `AGPL-3.0-or-later` (GNU Affero General Public License v3.0 or later)
-  Full text: `LICENSE`
-  Files: All `*.py`, `*.sh`, `*.html`, `*.js`, `Makefile`, `requirements.txt`,
-         `.gitignore`, `NOTICE`, and `REUSE.toml` files anywhere in this
-         repository (including generator scripts under `hardware/` and
-         `research/`).
+  Full text: `LICENSES/AGPL-3.0-or-later.txt` (and root `LICENSE`)
+  Files: `src/machine_control/**/*.py`, `experiments/**/*.py` (except
+         `experiments/exp128_bom_sensitivity/build_bom_detailed.py`, covered by
+         Rule 2), `tests/**/*.py`, `docs/digital_twin_interactive.html`,
+         `requirements.txt`, `.gitignore`, `NOTICE`, `REUSE.toml`.
   Effect: Closes the cloud/SaaS network loophole (AGPLv3 Section 13) — anyone
           operating modified software over a network must provide the
           Corresponding Source under AGPLv3.
 
-Rule 2 — Hardware Designs, Silicon/FPGA RTL, PCBs, CAD, SPICE, BOM & ICDs:
+Rule 2 — Dual-Copyleft Bridge (Hardware/CAD/PCB/BOM Generators, RTL Makefiles,
+         Software ICDs, Master Registry, BOM CSVs & Study/Spec JSON/JSONL Data):
+  SPDX: `AGPL-3.0-or-later OR CERN-OHL-S-2.0`
+  Full texts: `LICENSES/AGPL-3.0-or-later.txt`, `LICENSES/CERN-OHL-S-2.0.txt`
+  Files: `hardware/**/*.py`, `research/**/*.py`, `src/board/detector_frontend.py`,
+         `experiments/exp128_bom_sensitivity/build_bom_detailed.py`,
+         `rtl/**/Makefile`, `hardware/parts_registry.json`,
+         `hardware/icd/parts/S8.*.json`, `research/atom_lithography_machine/BOM.csv`,
+         `research/atom_lithography_machine/BOM_DETAILED.csv`,
+         `research/atom_lithography_machine/cad/cad_verification.json`,
+         `results/**/*.json`, `results/**/*.jsonl`.
+  Effect: Recipients may elect EITHER `AGPL-3.0-or-later` (for software,
+          runtime simulation, HTML5 digital twin embedding, or network services)
+          OR `CERN-OHL-S-2.0` (as Complete Source when building/modifying
+          hardware, PCBs, CAD, BOMs, or FPGA/ASIC bitstreams). Both options
+          are strongly reciprocal copyleft with patent retaliation; neither
+          permits closed-source appropriation.
+
+Rule 3 — Physical Hardware Designs, Silicon/FPGA RTL, PCBs, CAD, SPICE & ICDs:
   SPDX: `CERN-OHL-S-2.0` (CERN Open Hardware Licence Version 2 — Strongly
         Reciprocal, or any later version of variant `S` published by CERN
         pursuant to Section 8.3)
-  Full text: `LICENSE-HARDWARE`
-  Files: All `*.v`, `*.sv`, `*.xdc`, `*.hex`, `*.mem`, `*.ys`, `*.stl`,
-         `*.step`, `*.scad`, `*.dxf`, `*.svg`, `*.kicad_pcb`, `*.kicad_sch`,
-         `*.kicad_pro`, `*.cir`, `*.net`, and `*.csv` files anywhere in this
-         repository, AND all `*.json` files under `hardware/`, `research/`,
-         `src/`, and `rtl/`.
+  Full text: `LICENSES/CERN-OHL-S-2.0.txt`
+  Files: All `**/*.v`, `**/*.sv`, `**/*.xdc`, `**/*.hex`, `**/*.mem`, `**/*.ys`,
+         `**/*.stl`, `**/*.step`, `**/*.scad`, `**/*.dxf`, `**/*.svg`,
+         `**/*.kicad_pcb`, `**/*.kicad_sch`, `**/*.kicad_pro`, `**/*.cir`,
+         `**/*.net`, plus `hardware/cad_parts/**/*.json`, `hardware/pcb/**/*.json`,
+         `hardware/eda_flow/**/*.json`, `hardware/icd/electrical/**/*.json`, and
+         `hardware/icd/parts/S1.*.json`..`S7.*.json` and `S9.*.json`.
   Effect: Closes the silicon/FPGA bitstream, ASIC fabrication, PCB, and
           mechanical manufacturing loophole — anyone manufacturing, loading,
           compiling, or conveying a Product or modified Covered Source must
           release Complete Source under CERN-OHL-S v2.
 
-Rule 3 — Documentation, Scientific Reports, Figures & Archived Study Results:
-  SPDX: `CC-BY-SA-4.0` (Creative Commons Attribution-ShareAlike 4.0
-        International)
-  Full text: `LICENSE-DOCS`
-  Files: All `*.md` and `*.png` files anywhere in this repository, AND all
-         `*.json` and `*.jsonl` files under `results/`.
+Rule 4 — Documentation, Scientific Reports & Rendered Figures:
+  SPDX: `CC-BY-SA-4.0` (Creative Commons Attribution-ShareAlike 4.0 International)
+  Full text: `LICENSES/CC-BY-SA-4.0.txt`
+  Files: All `**/*.md` and `**/*.png` files across the repository.
 
-Rule 4 — Catch-All Default (Zero Unlicensed Gaps):
-  Any original file in this repository not matched by Rules 0–3 is licensed
-  under `AGPL-3.0-or-later` (`LICENSE`), or under `CERN-OHL-S-2.0`
-  (`LICENSE-HARDWARE`) if it constitutes physical hardware or HDL design source.
-
-Machine-readable SPDX mapping is additionally provided in `REUSE.toml`.
+Rule 5 — Deterministic Catch-All Fallback (Future Additions):
+  Any future original file added to this repository without an explicit
+  `REUSE.toml` or per-file SPDX header defaults to
+  `AGPL-3.0-or-later OR CERN-OHL-S-2.0`.
 
 ===============================================================================
-2. CERN-OHL-S v2 SECTION 4 — MANDATORY SOURCE LOCATION DISPLAY NOTICE
+3. CERN-OHL-S v2 SECTION 4 — MANDATORY SOURCE LOCATION DISPLAY NOTICE
 ===============================================================================
 
 Pursuant to Section 4 of `CERN-OHL-S-2.0`, any physical or configured Product
@@ -74,7 +97,7 @@ or its accompanying technical documentation:
     together with attribution to the upstream origin above.
 
 ===============================================================================
-3. TRADEMARKS, DOMAIN NAME & NON-ENDORSEMENT
+4. TRADEMARKS, DOMAIN NAME & NON-ENDORSEMENT
 ===============================================================================
 
 Nothing in these licenses grants permission to use the names, trademarks,
@@ -84,7 +107,7 @@ except as strictly necessary for factual attribution and compliance notices
 (see AGPLv3 Section 7(e) and CERN-OHL-S v2 Section 8.2).
 
 ===============================================================================
-4. THIRD-PARTY DEPENDENCIES (NOT VENDORED)
+5. THIRD-PARTY DEPENDENCIES (NOT VENDORED)
 ===============================================================================
 
 External runtime libraries and EDA/SPICE/PDK tools referenced by this project
@@ -94,7 +117,7 @@ are independent third-party works governed exclusively by their own respective
 licenses and are not vendored in this repository.
 
 ===============================================================================
-5. WARRANTY, LIABILITY & SAFETY DISCLAIMER
+6. WARRANTY, LIABILITY & SAFETY DISCLAIMER
 ===============================================================================
 
 ALL SOFTWARE, HDL/RTL, HARDWARE DESIGNS, AND DOCUMENTATION ARE PROVIDED "AS IS"

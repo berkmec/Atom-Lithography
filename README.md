@@ -328,16 +328,17 @@ Aşağıdaki `SHA-256` özetleri yalnızca depodaki çıktı dosyalarının sonr
 
 ---
 
-## 10. Lisans (Güçlü Karşılıklı Açık Kaynak / Copyleft)
+## 10. Lisans (REUSE 3.3 Uyumlu Güçlü Karşılıklı Açık Kaynak / Copyleft)
 
 **Copyright (C) 2026 berkmec (https://counfield.com/)**
 
-Bu depo, tasarımın tüm insanlık için açık kalması ve bulut/SaaS, silikon/FPGA üretimi veya fiziksel donanım yoluyla kapatılıp tekelleştirilememesi amacıyla **sıfır-örtüşmeli (%100 dosya kapsamlı) güçlü karşılıklı (*strongly reciprocal / copyleft*) üçlü lisans** yapısını kullanır (kesin kapsam kuralları, `CERN-OHL-S v2` Bölüm 4 kaynak-konum etiketi zorunluluğu ve marka koruması: [`NOTICE`](NOTICE) · makine-okunur SPDX eşlemesi: [`REUSE.toml`](REUSE.toml)):
+Bu depo, tasarımın tüm insanlık için açık kalması ve bulut/SaaS, silikon/FPGA üretimi veya fiziksel donanım yoluyla kapatılıp tekelleştirilememesi amacıyla **`REUSE 3.3` uyumlu güçlü karşılıklı (*strongly reciprocal / copyleft*) üçlü lisans** ve çapraz-alan köprü dosyaları için **çift-copyleft (`OR`)** yapısını kullanır (ayrıntılı kapsam, `CERN-OHL-S v2` Bölüm 4 kaynak-konum etiketi zorunluluğu, Bölüm 8.3 sürüm hükmü ve marka koruması: [`NOTICE`](NOTICE) · makine-okunur SPDX eşlemesi: [`REUSE.toml`](REUSE.toml)):
 
 | Kapsam | Lisans (SPDX) | Tam Metin |
 |---|---|---|
-| **Yazılım, Simülasyon, Üreteç Betikleri, Testler ve Derleme Dosyaları** (`*.py`, `*.sh`, `*.html`, `*.js`, `Makefile`, `requirements.txt`, `.gitignore`, `NOTICE`, `REUSE.toml`) | **GNU AGPLv3 veya üstü** (`AGPL-3.0-or-later` — bulut/SaaS ağ etkileşimi dâhil) | [`LICENSE`](LICENSE) |
-| **Fiziksel Donanım ve Silikon/FPGA Verilog RTL** (`*.v`, `*.sv`, `*.xdc`, `*.hex`, `*.mem`, `*.ys`, `*.stl`, `*.step`, `*.scad`, `*.dxf`, `*.svg`, `*.kicad_pcb`, `*.kicad_sch`, `*.cir`, `*.net`, `*.csv` ve `hardware/`·`research/`·`src/`·`rtl/` altındaki `*.json` dosyaları) | **CERN Open Hardware Licence v2 — Strongly Reciprocal** (`CERN-OHL-S-2.0` — PCB/CAD + FPGA/ASIC üretimi dâhil) | [`LICENSE-HARDWARE`](LICENSE-HARDWARE) |
-| **Dokümantasyon, Bilimsel Raporlar, Şekiller ve Deney Çıktı Arşivleri** (`*.md`, `*.png` ve `results/` altındaki `*.json`/`*.jsonl`) | **Creative Commons Attribution-ShareAlike 4.0** (`CC-BY-SA-4.0`) | [`LICENSE-DOCS`](LICENSE-DOCS) |
+| **Yazılım, Simülasyon, Kontrol Yığını, Testler, HTML5 Gezgin ve Depo Metaverisi** (`src/machine_control/**/*.py`, `experiments/**/*.py` [`build_bom_detailed.py` hariç], `tests/**/*.py`, `docs/digital_twin_interactive.html`, `requirements.txt`, `.gitignore`, `NOTICE`, `REUSE.toml`) | **GNU AGPLv3 veya üstü** (`AGPL-3.0-or-later` — bulut/SaaS ağ etkileşimi dâhil) | [`LICENSES/AGPL-3.0-or-later.txt`](LICENSES/AGPL-3.0-or-later.txt) · [`LICENSE`](LICENSE) |
+| **Çapraz-Alan Donanım/RTL Üreteçleri, Derleme ve Veri/Spec Köprüsü** (`hardware/**/*.py`, `research/**/*.py`, `src/board/detector_frontend.py`, `experiments/exp128_bom_sensitivity/build_bom_detailed.py`, `rtl/**/Makefile`, `hardware/parts_registry.json`, `hardware/icd/parts/S8.*.json`, `BOM*.csv`, `cad_verification.json`, `results/**/*.json`, `results/**/*.jsonl`) | **Çift-Copyleft Köprü** (`AGPL-3.0-or-later OR CERN-OHL-S-2.0` — her iki seçim de kapatılamaz copyleft; çapraz lisans kilitlenmesini önler) | [`LICENSES/AGPL-3.0-or-later.txt`](LICENSES/AGPL-3.0-or-later.txt) · [`LICENSES/CERN-OHL-S-2.0.txt`](LICENSES/CERN-OHL-S-2.0.txt) |
+| **Fiziksel Donanım ve Silikon/FPGA Verilog RTL** (`**/*.v`, `**/*.sv`, `**/*.xdc`, `**/*.hex`, `**/*.mem`, `**/*.ys`, `**/*.stl`, `**/*.step`, `**/*.scad`, `**/*.dxf`, `**/*.svg`, `**/*.kicad_pcb`, `**/*.kicad_sch`, `**/*.kicad_pro`, `**/*.cir`, `**/*.net` ve donanım `*.json` dosyaları) | **CERN Open Hardware Licence v2 — Strongly Reciprocal** (`CERN-OHL-S-2.0`, Bölüm 8.3 uyarınca v2 veya üstü `S` varyantı — PCB/CAD + FPGA/ASIC üretimi dâhil) | [`LICENSES/CERN-OHL-S-2.0.txt`](LICENSES/CERN-OHL-S-2.0.txt) |
+| **Dokümantasyon, Bilimsel Raporlar ve Şekiller** (`**/*.md`, `**/*.png`) | **Creative Commons Attribution-ShareAlike 4.0** (`CC-BY-SA-4.0`) | [`LICENSES/CC-BY-SA-4.0.txt`](LICENSES/CC-BY-SA-4.0.txt) |
 
 Tüm materyaller ilgili lisans metinlerinde belirtildiği biçimde **"OLDUĞU GİBİ" (*AS IS*)** sunulur; donanım tasarımları `M0/M1 DESIGN_ONLY` aşamasındadır ve fonksiyonel emniyet sertifikası taşımaz. `berkmec` ve `https://counfield.com/` ad/alan adları için ticari onay veya marka hakkı devri verilmez.

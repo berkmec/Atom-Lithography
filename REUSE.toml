@@ -3,79 +3,86 @@ SPDX-PackageName = "Atom Lithography Machine"
 SPDX-PackageSupplier = "berkmec (https://counfield.com/)"
 SPDX-PackageDownloadLocation = "https://github.com/berkmec/Atom-Lithography"
 
-# Rule 0 — Verbatim upstream license texts (not copyrighted by berkmec)
-[[annotations]]
-path = ["LICENSE"]
-precedence = "override"
-SPDX-FileCopyrightText = "2007 Free Software Foundation, Inc. <https://fsf.org/>"
-SPDX-License-Identifier = "AGPL-3.0-or-later"
-
-[[annotations]]
-path = ["LICENSE-HARDWARE"]
-precedence = "override"
-SPDX-FileCopyrightText = "2020 CERN"
-SPDX-License-Identifier = "CERN-OHL-S-2.0"
-
-[[annotations]]
-path = ["LICENSE-DOCS"]
-precedence = "override"
-SPDX-FileCopyrightText = "Creative Commons Corporation"
-SPDX-License-Identifier = "CC-BY-SA-4.0"
-
-# Rule 1 — Software, simulation, control stack, CAD/PCB generator scripts, tests & build metadata
+# Rule 1 — Pure software, control stack, physics simulations, tests, HTML5 twin & repo metadata
 [[annotations]]
 path = [
-    "**.py",
-    "**.sh",
-    "**.html",
-    "**.js",
-    "**/Makefile",
-    "Makefile",
+    "src/machine_control/**/*.py",
+    "experiments/**/*.py",
+    "tests/**/*.py",
+    "docs/digital_twin_interactive.html",
     "requirements.txt",
     ".gitignore",
     "NOTICE",
     "REUSE.toml",
 ]
-precedence = "override"
+precedence = "closest"
 SPDX-FileCopyrightText = "2026 berkmec (https://counfield.com/)"
 SPDX-License-Identifier = "AGPL-3.0-or-later"
 
-# Rule 2 — Physical hardware designs, silicon/FPGA Verilog RTL, PCBs, CAD, SPICE, BOM & ICDs
+# Rule 2 — Dual-copyleft bridge (hardware/CAD/PCB/BOM generators, RTL Makefiles, SW ICDs,
+# master registry, BOM CSVs, CAD summary JSON & experimental/spec JSON/JSONL archives).
+# Both options are strongly reciprocal copyleft, eliminating cross-license deadlocks while
+# closing both cloud/SaaS and physical-hardware/silicon appropriation loopholes.
 [[annotations]]
 path = [
-    "**.v",
-    "**.sv",
-    "**.xdc",
-    "**.hex",
-    "**.mem",
-    "**.ys",
-    "**.stl",
-    "**.step",
-    "**.scad",
-    "**.dxf",
-    "**.svg",
-    "**.kicad_pcb",
-    "**.kicad_sch",
-    "**.kicad_pro",
-    "**.cir",
-    "**.net",
-    "**.csv",
-    "hardware/**.json",
-    "research/**.json",
-    "src/**.json",
-    "rtl/**.json",
+    "hardware/**/*.py",
+    "research/**/*.py",
+    "src/board/detector_frontend.py",
+    "experiments/exp128_bom_sensitivity/build_bom_detailed.py",
+    "rtl/**/Makefile",
+    "hardware/parts_registry.json",
+    "hardware/icd/parts/S8.*.json",
+    "research/atom_lithography_machine/BOM.csv",
+    "research/atom_lithography_machine/BOM_DETAILED.csv",
+    "research/atom_lithography_machine/cad/cad_verification.json",
+    "results/**/*.json",
+    "results/**/*.jsonl",
+]
+precedence = "override"
+SPDX-FileCopyrightText = "2026 berkmec (https://counfield.com/)"
+SPDX-License-Identifier = "AGPL-3.0-or-later OR CERN-OHL-S-2.0"
+
+# Rule 3 — Physical hardware designs, silicon/FPGA Verilog RTL, PCBs, CAD, SPICE & hardware ICDs
+[[annotations]]
+path = [
+    "**/*.v",
+    "**/*.sv",
+    "**/*.xdc",
+    "**/*.hex",
+    "**/*.mem",
+    "**/*.ys",
+    "**/*.stl",
+    "**/*.step",
+    "**/*.scad",
+    "**/*.dxf",
+    "**/*.svg",
+    "**/*.kicad_pcb",
+    "**/*.kicad_sch",
+    "**/*.kicad_pro",
+    "**/*.cir",
+    "**/*.net",
+    "hardware/cad_parts/**/*.json",
+    "hardware/pcb/**/*.json",
+    "hardware/eda_flow/**/*.json",
+    "hardware/icd/electrical/**/*.json",
+    "hardware/icd/parts/S1.*.json",
+    "hardware/icd/parts/S2.*.json",
+    "hardware/icd/parts/S3.*.json",
+    "hardware/icd/parts/S4.*.json",
+    "hardware/icd/parts/S5.*.json",
+    "hardware/icd/parts/S6.*.json",
+    "hardware/icd/parts/S7.*.json",
+    "hardware/icd/parts/S9.*.json",
 ]
 precedence = "override"
 SPDX-FileCopyrightText = "2026 berkmec (https://counfield.com/)"
 SPDX-License-Identifier = "CERN-OHL-S-2.0"
 
-# Rule 3 — Documentation, scientific reports, rendered figures & archived experimental data
+# Rule 4 — Documentation, scientific reports & rendered figures (prose and static visual plates)
 [[annotations]]
 path = [
-    "**.md",
-    "**.png",
-    "results/**.json",
-    "results/**.jsonl",
+    "**/*.md",
+    "**/*.png",
 ]
 precedence = "override"
 SPDX-FileCopyrightText = "2026 berkmec (https://counfield.com/)"
