@@ -1,0 +1,86 @@
+{
+  "schema_version": "part_icd_v1.0",
+  "part_id": "S8.2-02",
+  "parent_bom_id": "S8.2",
+  "subsystem": "S8",
+  "part_name": "OpenROAD / KLayout fiziksel sentez, DRC/LVS ve anten-ECO akis betikleri",
+  "part_category": "IN_HOUSE_SOFTWARE_RTL_EDA",
+  "bom_metadata": {
+    "qty": "1",
+    "unit": "paket",
+    "material": "Tcl / Python / KLayout DRC-LVS",
+    "key_spec": "SKY130 signoff + Exp123 guncel OpenROAD anten kapanis betigi",
+    "tolerance": "DRC=0, LVS=MATCH",
+    "temp_stage": "300 K (EDA)",
+    "vacuum_grade": "Uygulanmaz (SW)",
+    "procurement_class": "IN-HOUSE",
+    "parent_cost_class": "--",
+    "usd_low": 0.0,
+    "usd_nom": 0.0,
+    "usd_high": 0.0,
+    "legacy_cad_module": "software_control_stack",
+    "bom_epistemic_tag": "{Program-NRE-Kapsam}",
+    "notes": "Proje ici EDA akisi ($0 HW; Program NRE kapsaminda)"
+  },
+  "artifact_links": {
+    "cad": null,
+    "pcb_bundles": [],
+    "legacy_board_files": [],
+    "electrical_icd": null,
+    "rtl_modules": [
+      "src/rtl/blanker_gate.v",
+      "src/rtl/blanker_tile.v"
+    ],
+    "rtl_audit_json": null,
+    "software_and_eda_files": [
+      "hardware/eda_flow/openroad_signoff_manifest.json",
+      "src/rtl/BLANKER_TILE.md"
+    ],
+    "verification_tests": [
+      "tests/test_full_180_traceability.py",
+      "tests/test_blanker_tile.py"
+    ]
+  },
+  "specialized_specification": {
+    "kind": "IN_HOUSE_SOFTWARE_RTL_EDA",
+    "role": "OpenROAD / KLayout SKY130 physical synthesis, DRC/LVS & antenna-ECO signoff manifest",
+    "implementation_files": [
+      "hardware/eda_flow/openroad_signoff_manifest.json",
+      "src/rtl/BLANKER_TILE.md"
+    ],
+    "rtl_files": [
+      "src/rtl/blanker_tile.v",
+      "src/rtl/blanker_gate.v"
+    ],
+    "verification_tests": [
+      "tests/test_full_180_traceability.py",
+      "tests/test_blanker_tile.py"
+    ],
+    "openroad_signoff_summary": {
+      "design_top": "blanker_tile",
+      "pdk": "sky130A",
+      "yosys_abc_cells": 11835,
+      "exp76_wns_ns": 7.21,
+      "exp100_klayout_drc_violations": 0,
+      "exp101_klayout_lvs": "MATCH",
+      "tapeout_done": false
+    }
+  },
+  "verification_status": {
+    "cad_verified": false,
+    "pcb_verified": false,
+    "electrical_icd_verified": false,
+    "rtl_verified": true,
+    "software_or_eda_verified": true,
+    "specialized_icd_present": true,
+    "traceable": true
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "tapeout_done": false
+  }
+}

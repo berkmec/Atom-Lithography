@@ -1,0 +1,76 @@
+{
+  "schema_version": "1.0",
+  "part_id": "S7.3-03",
+  "parent_bom_id": "S7.3",
+  "subsystem": "S7",
+  "part_name": "Kriyojenik cip tarama (screening) test soketi ve karakterizasyon duzenegi",
+  "qty": 1,
+  "unit": "set",
+  "temp_stage": "4 K / 300 K",
+  "vacuum_grade": "Kriyo-test",
+  "bom_key_spec": "4 K islevsel/kink karakterizasyon testi (Exp33 protokol)",
+  "usd_nom": 12000.0,
+  "bom_epistemic_tag": "{Model-Kalibrasyon-Exp114}",
+  "electrical_class": "E4",
+  "grounding_domain": "CRYO_OVC",
+  "grounding_notes": "Non-magnetic PEEK/BeCu 4 K cryo-CMOS chip screening socket & test rig (offline screening).",
+  "supply_rails": [
+    {
+      "rail_name": "SCREEN_VDD_1V8",
+      "voltage_v": 1.8,
+      "current_type": "DC",
+      "max_current_a": 0.2,
+      "steady_power_w": 0.0,
+      "peak_power_w": 0.5,
+      "source_part_id": "S3.2-06"
+    }
+  ],
+  "connectors_and_pinout": [
+    {
+      "connector_ref": "J_TEST_SKT",
+      "connector_type": "Micro-D 37-Pin Cryo Probe",
+      "location_side": "test_dewar",
+      "mating_part_id": "S7.3-01",
+      "pins": [
+        {
+          "pin": "1-32",
+          "signal": "SKY130_DUT_IO",
+          "direction": "BIDIR",
+          "nominal_level": "4 K functional & kink screening"
+        },
+        {
+          "pin": "33-37",
+          "signal": "VDD_1V8_GND",
+          "direction": "PWR",
+          "nominal_level": "1.8 V / 0 V CRYO_OVC"
+        }
+      ]
+    }
+  ],
+  "mating_part_ids": [
+    "S7.3-01",
+    "S7.3-02",
+    "S3.2-06"
+  ],
+  "interlock_hooks": [],
+  "ups_tier": "NONE",
+  "ups_budget_group": "PASSIVE_ZERO_MAINS",
+  "exp150_ups_allocation_w": 0.0,
+  "supply_rails_steady_sum_w": 0.0,
+  "incremental_mains_w": 0.0,
+  "secondary_or_parent_derived_w": 0.0,
+  "non_exp150_aux_shed_w": 0.0,
+  "reconciliation_note": "Passive or downstream sub-assembly (0.00 W sub-rail power drawn from upstream source S3.2-06); incremental_mains_w = 0.0 W (zero double-counting).",
+  "timing_sync": {
+    "rb_10mhz_port": null,
+    "white_rabbit_port": null,
+    "sync_role": "Offline 4 K ASIC screening fixture"
+  },
+  "epistemic_flags": {
+    "design_maturity": "M0_M1_ELECTRICAL_ICD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

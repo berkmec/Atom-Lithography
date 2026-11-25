@@ -1,0 +1,308 @@
+{
+  "part_id": "S3.1-04",
+  "subsystem": "S3",
+  "part_design": {
+    "part_id": "S3.1-04",
+    "parent_bom_id": "S3.1",
+    "subsystem": "S3",
+    "part_name": "Altin kapli yayli IBIC yonga temas halkasi (cantilever contact ring)",
+    "design_tier": "CUSTOM_FULL",
+    "material": "BeCu",
+    "temp_stage": "4 K - 300 K",
+    "temp_k": 4.0,
+    "vacuum_grade": "UHV 1e-9 mbar",
+    "tolerance_spec": "±10 um konum",
+    "surface_finish_ra_um": 0.4,
+    "qty": 2,
+    "procurement_class": "CUS",
+    "world_origin_mm": [
+      0.0,
+      0.0,
+      1.0
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "cantilever_contacts",
+        "kind": "electrical",
+        "position_mm": [
+          0.0,
+          0.0,
+          -0.93
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "standard": "16x Au-Plated BeCu Cantilever Springs (<50 mOhm)",
+        "mating_part_id": "S3.1-02",
+        "bore_mm": 57.6,
+        "od_mm": 64.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      },
+      {
+        "name": "coax_terminal_ring",
+        "kind": "rf",
+        "position_mm": [
+          0.0,
+          0.0,
+          0.35
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "standard": "16x Radial Micro-Coax Launches",
+        "mating_part_id": "S3.2-04",
+        "bore_mm": 0.0,
+        "od_mm": 82.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      },
+      {
+        "name": "mount_bolts",
+        "kind": "bolt",
+        "position_mm": [
+          0.0,
+          0.0,
+          0.1
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "standard": "6x M2.5 @ PCD 71.2 mm",
+        "mating_part_id": "S3.1-03",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 71.2,
+        "bolt_count": 6,
+        "bolt_hole_mm": 2.7,
+        "bolt_spec": "M2.5",
+        "frame": "local",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "RING_ID",
+        "nominal_mm": 64.0,
+        "tol_plus_mm": 0.02,
+        "tol_minus_mm": -0.02,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø64.00 ±0.02"
+      },
+      {
+        "label": "SHIELD_OD",
+        "nominal_mm": 82.0,
+        "tol_plus_mm": 0.05,
+        "tol_minus_mm": -0.05,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø82.00 ±0.05"
+      },
+      {
+        "label": "BOLT_PCD",
+        "nominal_mm": 71.2,
+        "tol_plus_mm": 0.02,
+        "tol_minus_mm": -0.02,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø71.20 ±0.02"
+      },
+      {
+        "label": "RING_H",
+        "nominal_mm": 2.4,
+        "tol_plus_mm": 0.02,
+        "tol_minus_mm": -0.02,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "2.40 ±0.02"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "flatness",
+        "tolerance_mm": 0.01,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "SPRING CONTACT PLANE",
+        "glyph": "⏥",
+        "tolerance_text": "0.010"
+      },
+      {
+        "symbol": "position",
+        "tolerance_mm": 0.01,
+        "diameter_zone": true,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "B",
+        "datum_tertiary": "",
+        "feature_note": "16x CANTILEVER TIPS",
+        "glyph": "⌖",
+        "tolerance_text": "Ø0.010"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "Yonga degistirilebilir temas, temas direnci <50 mOhm",
+      "Load-lock wafer-exchange compatible non-magnetic BeCu + 2 um Au spring contact ring (<50 mOhm).",
+      "Clears S2.3-01 Arch-B mini-lens (OD 60 mm, WD 0.25 mm) by 2.0 mm radially and S2.4-02 by 0.6 mm vertically.",
+      "300K->100K BeCu ring vs Si wafer WC rad clearance: 6.883 mm (PASS)."
+    ],
+    "scad_params": {
+      "ring_id_mm": 64.0,
+      "shield_od_mm": 82.0,
+      "n_spring_fingers": 16,
+      "bolt_pcd_mm": 71.2
+    },
+    "target_mass_kg": null,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S3.1-04",
+    "subsystem": "S3",
+    "design_tier": "CUSTOM_FULL",
+    "stl_path": "hardware/cad_parts/out/S3/S3.1-04.stl",
+    "step_path": "hardware/cad_parts/out/S3/S3.1-04.step",
+    "scad_path": "hardware/cad_parts/out/S3/S3.1-04.scad",
+    "dxf_path": "hardware/cad_parts/out/S3/S3.1-04.dxf",
+    "svg_path": "hardware/cad_parts/out/S3/S3.1-04.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 3740.1536804769817,
+    "surface_area_mm2": 6153.612340149004,
+    "mass_kg": 0.030856267863935104,
+    "cg_mm": [
+      2.813557627734983e-15,
+      -3.596737325259458e-15,
+      0.12189146858374783
+    ],
+    "bbox_min_mm": [
+      -41.0,
+      -41.0,
+      -1.03
+    ],
+    "bbox_max_mm": [
+      41.0,
+      41.0,
+      1.4
+    ],
+    "inertia_kg_mm2": [
+      20.444282399675412,
+      20.444282399675426,
+      40.86808730418793,
+      -1.5833201416626285e-16,
+      -1.8885312435490844e-17,
+      -3.0156527285239246e-17
+    ],
+    "triangle_count": 1008,
+    "vertex_count": 524,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "world_bbox_min_mm": [
+    -41.0,
+    -41.0,
+    -0.030000000000000027
+  ],
+  "world_bbox_max_mm": [
+    41.0,
+    41.0,
+    2.4
+  ],
+  "reconciliation": null,
+  "thermal_contraction_checks": [
+    {
+      "outer_material": "BeCu",
+      "inner_material": "Si",
+      "t_cold_k": 100.0,
+      "t_ref_k": 293.15,
+      "warm_outer_id_mm": 64.0,
+      "warm_inner_od_mm": 50.0,
+      "cold_outer_id_mm": 63.82464,
+      "cold_inner_od_mm": 49.9884,
+      "outer_strain": -0.0027399999999999647,
+      "inner_strain": -0.00023200000000000998,
+      "warm_radial_clearance_mm": 7.0,
+      "cold_nominal_radial_clearance_mm": 6.918120000000002,
+      "cold_worst_case_radial_clearance_mm": 6.883120000000002,
+      "delta_radial_clearance_mm": -0.08187999999999818,
+      "min_required_radial_clearance_mm": 5.0,
+      "interference_risk": false,
+      "passed": true
+    }
+  ],
+  "tolerance_stack_checks": []
+}

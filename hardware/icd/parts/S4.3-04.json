@@ -1,0 +1,98 @@
+{
+  "schema_version": "part_icd_v1.0",
+  "part_id": "S4.3-04",
+  "parent_bom_id": "S4.3",
+  "subsystem": "S4",
+  "part_name": "6-kanalli dusuk gurultulu piezo servo denetleyici ve HV surucu",
+  "part_category": "PHYSICAL_SOLID",
+  "bom_metadata": {
+    "qty": "1",
+    "unit": "adet",
+    "material": "19 inc dijital kontrolor (E-712 sinifi)",
+    "key_spec": "24-bit DAC, <0.1 nm elektriksel gurultu, EtherCAT/SPI",
+    "tolerance": "±0.1 nm",
+    "temp_stage": "300 K (kabin)",
+    "vacuum_grade": "Atmosfer",
+    "procurement_class": "COTS",
+    "parent_cost_class": "C",
+    "usd_low": 8000.0,
+    "usd_nom": 13500.0,
+    "usd_high": 24000.0,
+    "legacy_cad_module": "s4_piezo_stage_interferometry",
+    "bom_epistemic_tag": "{Model-Kalibrasyon-Exp114}",
+    "notes": "Kaba+ince senkron hareket kontrolu"
+  },
+  "artifact_links": {
+    "cad": {
+      "work_package": "WP-M2",
+      "design_tier": "COTS_ENV_ICD",
+      "stl": "hardware/cad_parts/out/S4/S4.3-04.stl",
+      "step": "hardware/cad_parts/out/S4/S4.3-04.step",
+      "scad": "hardware/cad_parts/out/S4/S4.3-04.scad",
+      "dxf": "hardware/cad_parts/out/S4/S4.3-04.dxf",
+      "svg": "hardware/cad_parts/out/S4/S4.3-04.svg",
+      "cad_json": "hardware/cad_parts/out/S4/S4.3-04.json",
+      "watertight": true,
+      "all_6_files_valid": true,
+      "mass_kg": 10.410369,
+      "triangle_count": 1332,
+      "temp_k": 300.0,
+      "canonical_bbox_min_mm": [
+        1238.7,
+        -434.2,
+        713.3
+      ],
+      "canonical_bbox_max_mm": [
+        1721.3,
+        28.8,
+        800.2
+      ],
+      "datum_shift_mm": [
+        0.0,
+        0.0,
+        500.0
+      ],
+      "port_count": 0,
+      "gdt_frame_count": 0
+    },
+    "pcb_bundles": [],
+    "legacy_board_files": [],
+    "electrical_icd": {
+      "path": "hardware/icd/electrical/S4.3-04.json",
+      "electrical_class": "E3",
+      "grounding_domain": "AGND",
+      "ups_tier": "TIER2_SHED",
+      "exp150_ups_allocation_w": 0.0,
+      "mating_part_ids": [
+        "S4.3-01",
+        "S4.3-02",
+        "S4.3-03",
+        "S4.5-03",
+        "S7.1-01"
+      ],
+      "interlock_hooks_count": 1
+    },
+    "rtl_modules": [],
+    "rtl_audit_json": null,
+    "software_and_eda_files": [],
+    "verification_tests": []
+  },
+  "specialized_specification": null,
+  "verification_status": {
+    "cad_verified": true,
+    "pcb_verified": false,
+    "electrical_icd_verified": true,
+    "rtl_verified": false,
+    "software_or_eda_verified": false,
+    "specialized_icd_present": false,
+    "traceable": true
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "tapeout_done": false
+  }
+}

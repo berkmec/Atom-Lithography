@@ -1,0 +1,277 @@
+{
+  "part_id": "S3.1-01",
+  "subsystem": "S3",
+  "part_design": {
+    "part_id": "S3.1-01",
+    "parent_bom_id": "S3.1",
+    "subsystem": "S3",
+    "part_name": "Pikselli p-i-n diyot IBIC algilama katmanli substrat tasiyici",
+    "design_tier": "CUSTOM_FULL",
+    "material": "Si",
+    "temp_stage": "4 K - 300 K",
+    "temp_k": 4.0,
+    "vacuum_grade": "UHV 1e-9 mbar",
+    "tolerance_spec": "±0.05 pF",
+    "surface_finish_ra_um": 0.05,
+    "qty": 10,
+    "procurement_class": "CUS",
+    "world_origin_mm": [
+      0.0,
+      0.0,
+      -0.2625
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "active_implant_plane",
+        "kind": "optical",
+        "position_mm": [
+          0.0,
+          0.0,
+          0.2625
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "Arch-B 16x16 mm Write Field",
+        "mating_part_id": "S2.3-01",
+        "bore_mm": 0.0,
+        "od_mm": 50.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": "Global Z=0.000 mm wafer active top plane; WD=0.250 mm to S2.3-01"
+      },
+      {
+        "name": "wafer_pocket_seat",
+        "kind": "mechanical",
+        "position_mm": [
+          0.0,
+          0.0,
+          -0.2625
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "standard": "Ø50.0 mm Wafer in Ø50.4 mm AlN Pocket",
+        "mating_part_id": "S3.1-03",
+        "bore_mm": 0.0,
+        "od_mm": 50.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "OD",
+        "nominal_mm": 50.0,
+        "tol_plus_mm": 0.02,
+        "tol_minus_mm": -0.02,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø50.00 ±0.02"
+      },
+      {
+        "label": "THK",
+        "nominal_mm": 0.525,
+        "tol_plus_mm": 0.01,
+        "tol_minus_mm": -0.01,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 3,
+        "formatted": "0.525 ±0.010"
+      },
+      {
+        "label": "GUARD_MOAT_ID",
+        "nominal_mm": 40.0,
+        "tol_plus_mm": 0.02,
+        "tol_minus_mm": -0.02,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø40.00 ±0.02"
+      },
+      {
+        "label": "GUARD_MOAT_OD",
+        "nominal_mm": 45.2,
+        "tol_plus_mm": 0.02,
+        "tol_minus_mm": -0.02,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø45.20 ±0.02"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "flatness",
+        "tolerance_mm": 0.002,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "ACTIVE TOP FACE Z=0",
+        "glyph": "⏥",
+        "tolerance_text": "0.002"
+      },
+      {
+        "symbol": "parallelism",
+        "tolerance_mm": 0.005,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "REAR OHMIC SURFACE",
+        "glyph": "∥",
+        "tolerance_text": "0.005"
+      },
+      {
+        "symbol": "concentricity",
+        "tolerance_mm": 0.01,
+        "diameter_zone": true,
+        "material_condition": "",
+        "datum_primary": "B",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "GUARD-RING MOAT",
+        "glyph": "◎",
+        "tolerance_text": "Ø0.010"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "C_det <= 0.5 pF/piksel, eta = 0.9914 @ 5 keV (Exp72/91)",
+      "Global Z=0.000 mm active wafer top plane; 16x16 mm central 32x32 Arch-B write zone.",
+      "Concentric guard-ring keepout moat R=20.0..22.6 mm suppresses edge leakage <10 pA @ 20 V.",
+      "Exp72/91/127: high-resistivity >10 kOhm*cm Si p-i-n, C_det<=0.5 pF/pixel, eta=0.99936 @ 100 K."
+    ],
+    "scad_params": {
+      "wafer_od_mm": 50.0,
+      "wafer_thickness_mm": 0.525,
+      "active_field_mm": 16.0,
+      "guard_moat_r_in_mm": 20.0,
+      "guard_moat_r_out_mm": 22.6
+    },
+    "target_mass_kg": null,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S3.1-01",
+    "subsystem": "S3",
+    "design_tier": "CUSTOM_FULL",
+    "stl_path": "hardware/cad_parts/out/S3/S3.1-01.stl",
+    "step_path": "hardware/cad_parts/out/S3/S3.1-01.step",
+    "scad_path": "hardware/cad_parts/out/S3/S3.1-01.scad",
+    "dxf_path": "hardware/cad_parts/out/S3/S3.1-01.dxf",
+    "svg_path": "hardware/cad_parts/out/S3/S3.1-01.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 1001.387644595357,
+    "surface_area_mm2": 4024.5238032182897,
+    "mass_kg": 0.0023322318242625863,
+    "cg_mm": [
+      1.8093732092334789e-16,
+      -1.6343119165018819e-15,
+      -0.0061752241560437
+    ],
+    "bbox_min_mm": [
+      -25.0,
+      -25.0,
+      -0.2625
+    ],
+    "bbox_max_mm": [
+      25.0,
+      25.0,
+      0.2625
+    ],
+    "inertia_kg_mm2": [
+      0.35926126666549973,
+      0.3592612666654997,
+      0.7184190788032788,
+      1.472458088791484e-17,
+      -1.202556479286113e-19,
+      1.433608397553016e-19
+    ],
+    "triangle_count": 768,
+    "vertex_count": 386,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "world_bbox_min_mm": [
+    -25.0,
+    -25.0,
+    -0.525
+  ],
+  "world_bbox_max_mm": [
+    25.0,
+    25.0,
+    0.0
+  ],
+  "reconciliation": null,
+  "thermal_contraction_checks": [],
+  "tolerance_stack_checks": []
+}

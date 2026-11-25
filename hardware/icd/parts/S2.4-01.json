@@ -1,0 +1,107 @@
+{
+  "schema_version": "part_icd_v1.0",
+  "part_id": "S2.4-01",
+  "parent_bom_id": "S2.4",
+  "subsystem": "S2",
+  "part_name": "SKY130 blanker_tile 64-kanalli surucu ASIC yongalari (16 aktif karo + yedek, 1024 ch)",
+  "part_category": "PHYSICAL_SOLID",
+  "bom_metadata": {
+    "qty": "24",
+    "unit": "karo",
+    "material": "SKY130 130 nm CMOS Si (0.14 mm2/karo)",
+    "key_spec": "16x 64-ch aktif karo (1024 demetcik Arch-B baz) + 8 yedek, WNS +7.21 ns @10 ns, DRC=0, LVS=MATCH",
+    "tolerance": "Anten ECO kapali",
+    "temp_stage": "300 K / 4 K uyumlu",
+    "vacuum_grade": "UHV 1e-9 mbar",
+    "procurement_class": "CUS",
+    "parent_cost_class": "C",
+    "usd_low": 25000.0,
+    "usd_nom": 48000.0,
+    "usd_high": 95000.0,
+    "legacy_cad_module": "s2_mems_write_head",
+    "bom_epistemic_tag": "{Model-Kalibrasyon-Exp114}",
+    "notes": "MPW shuttle + dilimleme + paketleme (16 aktif + 8 yedek karo; MPW sabit bedeli degismez; R5 acik)"
+  },
+  "artifact_links": {
+    "cad": {
+      "work_package": "WP-M1",
+      "design_tier": "CUSTOM_FULL",
+      "stl": "hardware/cad_parts/out/S2/S2.4-01.stl",
+      "step": "hardware/cad_parts/out/S2/S2.4-01.step",
+      "scad": "hardware/cad_parts/out/S2/S2.4-01.scad",
+      "dxf": "hardware/cad_parts/out/S2/S2.4-01.dxf",
+      "svg": "hardware/cad_parts/out/S2/S2.4-01.svg",
+      "cad_json": "hardware/cad_parts/out/S2/S2.4-01.json",
+      "watertight": true,
+      "all_6_files_valid": true,
+      "mass_kg": 0.001139,
+      "triangle_count": 448,
+      "temp_k": 4.0,
+      "canonical_bbox_min_mm": [
+        -50.576,
+        -50.576,
+        505.4
+      ],
+      "canonical_bbox_max_mm": [
+        50.576,
+        50.576,
+        506.25
+      ],
+      "datum_shift_mm": [
+        0.0,
+        0.0,
+        500.0
+      ],
+      "port_count": 1,
+      "gdt_frame_count": 2
+    },
+    "pcb_bundles": [
+      {
+        "bundle_slug": "blanker_asic_mezzanine",
+        "verification_json": "hardware/pcb/blanker_asic_mezzanine/blanker_asic_mezzanine_verification.json",
+        "boards": [
+          "blanker_asic_mezzanine"
+        ],
+        "kicad_sch_files": [
+          "hardware/pcb/blanker_asic_mezzanine/blanker_asic_mezzanine.kicad_sch"
+        ],
+        "kicad_pcb_files": [
+          "hardware/pcb/blanker_asic_mezzanine/blanker_asic_mezzanine.kicad_pcb"
+        ],
+        "spice_decks": [
+          "hardware/pcb/blanker_asic_mezzanine/blanker_hv_driver.cir"
+        ],
+        "all_passed": true
+      }
+    ],
+    "legacy_board_files": [],
+    "electrical_icd": null,
+    "rtl_modules": [
+      "rtl/machine_ctrl/blanker_array_ctrl.v",
+      "src/rtl/blanker_gate.v",
+      "src/rtl/blanker_tile.v",
+      "src/rtl/blanker_tile_formal.v"
+    ],
+    "rtl_audit_json": "results/stage2_rtl_verification/rtl_machine_ctrl_audit.json",
+    "software_and_eda_files": [],
+    "verification_tests": []
+  },
+  "specialized_specification": null,
+  "verification_status": {
+    "cad_verified": true,
+    "pcb_verified": true,
+    "electrical_icd_verified": false,
+    "rtl_verified": true,
+    "software_or_eda_verified": false,
+    "specialized_icd_present": false,
+    "traceable": true
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "tapeout_done": false
+  }
+}

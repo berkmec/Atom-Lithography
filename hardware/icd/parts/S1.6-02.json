@@ -1,0 +1,97 @@
+{
+  "schema_version": "part_icd_v1.0",
+  "part_id": "S1.6-02",
+  "parent_bom_id": "S1.6",
+  "subsystem": "S1",
+  "part_name": "Kuru-yatakli PH3 gaz yikayici (scrubber) ve 50 ppb gaz dedektoru",
+  "part_category": "PHYSICAL_SOLID",
+  "bom_metadata": {
+    "qty": "1",
+    "unit": "set",
+    "material": "Katalitik kartus + elektrokimyasal sensor",
+    "key_spec": "Cikis PH3 <50 ppb, PLC acil kapama kilidi (<5 s)",
+    "tolerance": "±10 ppb alarm",
+    "temp_stage": "300 K (tesis)",
+    "vacuum_grade": "Egzoz hatti",
+    "procurement_class": "COTS",
+    "parent_cost_class": "B(ADDER)",
+    "usd_low": 14000.0,
+    "usd_nom": 24000.0,
+    "usd_high": 43000.0,
+    "legacy_cad_module": "s1_ion_source_column",
+    "bom_epistemic_tag": "{Varsayım}",
+    "notes": "DELTA-ADDER(Exp81/83): guvenlik kilidi (S7.4 PLC ile bagli)"
+  },
+  "artifact_links": {
+    "cad": {
+      "work_package": "WP-M1",
+      "design_tier": "COTS_ENV_ICD",
+      "stl": "hardware/cad_parts/out/S1/S1.6-02.stl",
+      "step": "hardware/cad_parts/out/S1/S1.6-02.step",
+      "scad": "hardware/cad_parts/out/S1/S1.6-02.scad",
+      "dxf": "hardware/cad_parts/out/S1/S1.6-02.dxf",
+      "svg": "hardware/cad_parts/out/S1/S1.6-02.svg",
+      "cad_json": "hardware/cad_parts/out/S1/S1.6-02.json",
+      "watertight": true,
+      "all_6_files_valid": true,
+      "mass_kg": 118.386464,
+      "triangle_count": 1800,
+      "temp_k": 300.0,
+      "canonical_bbox_min_mm": [
+        -1570.0,
+        1430.0,
+        0.0
+      ],
+      "canonical_bbox_max_mm": [
+        -1130.0,
+        1870.0,
+        1519.0
+      ],
+      "datum_shift_mm": [
+        0.0,
+        0.0,
+        500.0
+      ],
+      "port_count": 2,
+      "gdt_frame_count": 1
+    },
+    "pcb_bundles": [],
+    "legacy_board_files": [],
+    "electrical_icd": {
+      "path": "hardware/icd/electrical/S1.6-02.json",
+      "electrical_class": "E4",
+      "grounding_domain": "FACILITY_PE",
+      "ups_tier": "NONE",
+      "exp150_ups_allocation_w": 0.0,
+      "mating_part_ids": [
+        "S1.6-01",
+        "S7.4-04",
+        "S7.SAFETY-01",
+        "S7.SAFETY-03"
+      ],
+      "interlock_hooks_count": 1
+    },
+    "rtl_modules": [],
+    "rtl_audit_json": null,
+    "software_and_eda_files": [],
+    "verification_tests": []
+  },
+  "specialized_specification": null,
+  "verification_status": {
+    "cad_verified": true,
+    "pcb_verified": false,
+    "electrical_icd_verified": true,
+    "rtl_verified": false,
+    "software_or_eda_verified": false,
+    "specialized_icd_present": false,
+    "traceable": true
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "tapeout_done": false
+  }
+}

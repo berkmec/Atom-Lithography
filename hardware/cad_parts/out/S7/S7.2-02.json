@@ -1,0 +1,415 @@
+{
+  "part_design": {
+    "part_id": "S7.2-02",
+    "parent_bom_id": "S7.2",
+    "subsystem": "S7",
+    "part_name": "Yuksek hizli dijital isaretci (marker) ve darbe siralamaci karti",
+    "design_tier": "COTS_ENV_ICD",
+    "material": "Rogers",
+    "temp_stage": "300 K (kabin)",
+    "temp_k": 300.0,
+    "vacuum_grade": "Atmosfer",
+    "tolerance_spec": "±1 ns",
+    "surface_finish_ra_um": 0.8,
+    "qty": 2,
+    "procurement_class": "COTS",
+    "world_origin_mm": [
+      1459.6799999999998,
+      -242.39999999999998,
+      578.95
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "pxie_backplane_j1",
+        "kind": "connector",
+        "position_mm": [
+          1459.6799999999998,
+          -52.39999999999998,
+          578.95
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "standard": "PXIe x8 Gen3 Backplane",
+        "mating_part_id": "S7.2-03",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "world",
+        "notes": ""
+      },
+      {
+        "name": "front_sma_outputs",
+        "kind": "rf",
+        "position_mm": [
+          1459.6799999999998,
+          -445.6,
+          578.95
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "standard": "12x SMA 50 Ohm",
+        "mating_part_id": "S7.4-02",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "world",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "CARD_PITCH",
+        "nominal_mm": 20.32,
+        "tol_plus_mm": 0.05,
+        "tol_minus_mm": -0.05,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "20.32 ±0.05"
+      },
+      {
+        "label": "CARD_HEIGHT",
+        "nominal_mm": 133.8,
+        "tol_plus_mm": 0.2,
+        "tol_minus_mm": -0.2,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "133.80 ±0.20"
+      },
+      {
+        "label": "CARD_DEPTH",
+        "nominal_mm": 380.0,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "right",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "380.00 ±0.50"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "parallelism",
+        "tolerance_mm": 0.1,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "CARD GUIDE RAILS",
+        "glyph": "∥",
+        "tolerance_text": "0.10"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "ESR/ENDOR + XY8/CPMG + okuma kapisi mikrosaniye zamanlama",
+      "Installed in S7.2-03 PXIe chassis Slots 7-8 (1-slot EMI guard gap from S7.2-01 AWG cards); 1 ns marker steps."
+    ],
+    "scad_params": {
+      "n_cards": 2,
+      "slot_pitch_mm": 20.32,
+      "card_depth_mm": 380.0
+    },
+    "target_mass_kg": 1.4,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S7.2-02",
+    "subsystem": "S7",
+    "design_tier": "COTS_ENV_ICD",
+    "stl_path": "hardware/cad_parts/out/S7/S7.2-02.stl",
+    "step_path": "hardware/cad_parts/out/S7/S7.2-02.step",
+    "scad_path": "hardware/cad_parts/out/S7/S7.2-02.scad",
+    "dxf_path": "hardware/cad_parts/out/S7/S7.2-02.dxf",
+    "svg_path": "hardware/cad_parts/out/S7/S7.2-02.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 1355115.1999997797,
+    "surface_area_mm2": 232942.65311342318,
+    "mass_kg": 1.4000000000000004,
+    "cg_mm": [
+      1459.6800000000578,
+      -244.92556600352458,
+      578.9500000000204
+    ],
+    "bbox_min_mm": [
+      1440.77,
+      -445.6,
+      512.0500000000001
+    ],
+    "bbox_max_mm": [
+      1478.59,
+      -52.39999999999998,
+      645.85
+    ],
+    "inertia_kg_mm2": [
+      19118.472304549017,
+      2014.0994499819424,
+      17439.23786446398,
+      3.6572939979573734e-09,
+      9.584632546371048e-09,
+      2.9006124811386065e-09
+    ],
+    "triangle_count": 656,
+    "vertex_count": 360,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "shell_bboxes_mm": [
+    [
+      [
+        1440.77,
+        -435.5,
+        512.05
+      ],
+      [
+        1458.27,
+        -432.5,
+        645.85
+      ]
+    ],
+    [
+      [
+        1442.52,
+        -432.4,
+        516.05
+      ],
+      [
+        1456.52,
+        -52.4,
+        641.85
+      ]
+    ],
+    [
+      [
+        1446.32,
+        -445.6,
+        535.75
+      ],
+      [
+        1452.72,
+        -435.6,
+        542.15
+      ]
+    ],
+    [
+      [
+        1446.32,
+        -445.6,
+        551.75
+      ],
+      [
+        1452.72,
+        -435.6,
+        558.15
+      ]
+    ],
+    [
+      [
+        1446.32,
+        -445.6,
+        567.75
+      ],
+      [
+        1452.72,
+        -435.6,
+        574.15
+      ]
+    ],
+    [
+      [
+        1446.32,
+        -445.6,
+        583.75
+      ],
+      [
+        1452.72,
+        -435.6,
+        590.15
+      ]
+    ],
+    [
+      [
+        1446.32,
+        -445.6,
+        599.75
+      ],
+      [
+        1452.72,
+        -435.6,
+        606.15
+      ]
+    ],
+    [
+      [
+        1446.32,
+        -445.6,
+        615.75
+      ],
+      [
+        1452.72,
+        -435.6,
+        622.15
+      ]
+    ],
+    [
+      [
+        1461.09,
+        -435.5,
+        512.05
+      ],
+      [
+        1478.59,
+        -432.5,
+        645.85
+      ]
+    ],
+    [
+      [
+        1462.84,
+        -432.4,
+        516.05
+      ],
+      [
+        1476.84,
+        -52.4,
+        641.85
+      ]
+    ],
+    [
+      [
+        1466.64,
+        -445.6,
+        535.75
+      ],
+      [
+        1473.04,
+        -435.6,
+        542.15
+      ]
+    ],
+    [
+      [
+        1466.64,
+        -445.6,
+        551.75
+      ],
+      [
+        1473.04,
+        -435.6,
+        558.15
+      ]
+    ],
+    [
+      [
+        1466.64,
+        -445.6,
+        567.75
+      ],
+      [
+        1473.04,
+        -435.6,
+        574.15
+      ]
+    ],
+    [
+      [
+        1466.64,
+        -445.6,
+        583.75
+      ],
+      [
+        1473.04,
+        -435.6,
+        590.15
+      ]
+    ],
+    [
+      [
+        1466.64,
+        -445.6,
+        599.75
+      ],
+      [
+        1473.04,
+        -435.6,
+        606.15
+      ]
+    ],
+    [
+      [
+        1466.64,
+        -445.6,
+        615.75
+      ],
+      [
+        1473.04,
+        -435.6,
+        622.15
+      ]
+    ]
+  ],
+  "reconciliation_notes": []
+}

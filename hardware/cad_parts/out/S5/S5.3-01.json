@@ -1,0 +1,253 @@
+{
+  "part_id": "S5.3-01",
+  "subsystem": "S5",
+  "design": {
+    "part_id": "S5.3-01",
+    "parent_bom_id": "S5.3",
+    "subsystem": "S5",
+    "part_name": "Yerinde hizli termal / flas optik tavlama modulu (Exp66/91)",
+    "design_tier": "COTS_ENV_ICD",
+    "material": "Al 6061",
+    "temp_stage": "300 K -> 1000 C (ms)",
+    "temp_k": 300.0,
+    "vacuum_grade": "UHV (optik giris)",
+    "tolerance_spec": "±5 C / ms darbe",
+    "surface_finish_ra_um": 1.6,
+    "qty": 1,
+    "procurement_class": "COTS",
+    "world_origin_mm": [
+      -271.5628,
+      227.8682,
+      500.0
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      140.0
+    ],
+    "ports": [
+      {
+        "name": "optical_exit_aperture",
+        "kind": "optical",
+        "position_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "standard": "Dia 96 mm RTA Exit",
+        "mating_part_id": "S5.3-02",
+        "bore_mm": 96.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      },
+      {
+        "name": "coolant_in",
+        "kind": "cooling",
+        "position_mm": [
+          52.0,
+          -28.0,
+          -85.5
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "standard": "1/4 in Swagelok DI Water",
+        "mating_part_id": "",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      },
+      {
+        "name": "hv_pulse_bus",
+        "kind": "electrical",
+        "position_mm": [
+          74.0,
+          0.0,
+          99.5
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "3 kV Flash Pulse Bus",
+        "mating_part_id": "S7.4-01",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "HEAD_L",
+        "nominal_mm": 148.2,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "148.20 ±0.50"
+      },
+      {
+        "label": "HEAD_W",
+        "nominal_mm": 147.0,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "147.00 ±0.50"
+      },
+      {
+        "label": "HEAD_H",
+        "nominal_mm": 185.0,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "185.00 ±0.50"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "concentricity",
+        "tolerance_mm": 0.25,
+        "diameter_zone": true,
+        "material_condition": "",
+        "datum_primary": "B",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "Elliptical reflector axis to S5.3-02 viewport",
+        "glyph": "◎",
+        "tolerance_text": "Ø0.25"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "Tavlama difuzyonu sigma_anneal <= 0.5 nm (P91 hedefi, Exp91)",
+      "Backup Xe flash-lamp / RTA optical anneal head (Exp66/91, sigma_anneal <= 0.5 nm backup to S5.5 808 nm).",
+      "Positioned on 140 deg (-X/+Y) CF100 port: >=85 mm clear of S7.SAFETY-02 & >=260 mm clear of S6 DR."
+    ],
+    "scad_params": {
+      "head_l": 148.2,
+      "aperture_d": 96.0,
+      "pulse_ms": 1.0
+    },
+    "target_mass_kg": 7.8,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifacts": {
+    "part_id": "S5.3-01",
+    "subsystem": "S5",
+    "design_tier": "COTS_ENV_ICD",
+    "stl_path": "hardware/cad_parts/out/S5/S5.3-01.stl",
+    "step_path": "hardware/cad_parts/out/S5/S5.3-01.step",
+    "scad_path": "hardware/cad_parts/out/S5/S5.3-01.scad",
+    "dxf_path": "hardware/cad_parts/out/S5/S5.3-01.dxf",
+    "svg_path": "hardware/cad_parts/out/S5/S5.3-01.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 1128044.58330827,
+    "surface_area_mm2": 302123.03298699955,
+    "mass_kg": 3.60974266658646,
+    "cg_mm": [
+      79.62635371000037,
+      -3.121830056518622e-15,
+      9.558108925428469
+    ],
+    "bbox_min_mm": [
+      0.0,
+      -73.5,
+      -85.5
+    ],
+    "bbox_max_mm": [
+      148.2,
+      73.5,
+      99.5
+    ],
+    "inertia_kg_mm2": [
+      13550.351763572904,
+      13786.09793310063,
+      11967.74911163412,
+      -1.5160888331946493e-14,
+      169.1989305269585,
+      -3.938126545377863e-13
+    ],
+    "triangle_count": 1008,
+    "vertex_count": 546,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

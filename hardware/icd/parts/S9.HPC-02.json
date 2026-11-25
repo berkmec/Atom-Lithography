@@ -1,0 +1,98 @@
+{
+  "schema_version": "part_icd_v1.0",
+  "part_id": "S9.HPC-02",
+  "parent_bom_id": "S9.HPC",
+  "subsystem": "S9",
+  "part_name": "1U Ultra-Dusuk-Gecikmeli Cut-Through 100 GbE RoCEv2 Optik Kopru + 4x QSFP28-100G-SR4 + 20m OM4 MPO-12 (Exp143, 4.20 kg)",
+  "part_category": "PHYSICAL_SOLID",
+  "bom_metadata": {
+    "qty": "1",
+    "unit": "set",
+    "material": "1U cut-through 100GbE anahtar + 4x QSFP28-SR4 + 20m OM4 MPO-12",
+    "key_spec": "482.6x380x44.5 mm, 4x 100G QSFP28 port, tek-yon giris gecikmesi 0.777 us (RFSoC 0.32 + RDMA 0.45 + koaks 0.007 us), 95 W / 0 W kriyo, kutle=4.20 kg",
+    "tolerance": "tau_ingest <= 0.80 us",
+    "temp_stage": "300 K (HPC rafi)",
+    "vacuum_grade": "Atmosfer",
+    "procurement_class": "COTS",
+    "parent_cost_class": "B(v6.0-OptHPC)",
+    "usd_low": 9500.0,
+    "usd_nom": 13500.0,
+    "usd_high": 19500.0,
+    "legacy_cad_module": "s7_electronics_rack_interconnect",
+    "bom_epistemic_tag": "{Liste-Çapası}",
+    "notes": "DELTA-V6.0-OPTHPC-EXP143 (Exp143 S9.HPC-02 Option-HPC 2/3, 4.20 kg; s9hpc_hardware_spec.json birebir; M3 Base ustune opsiyonel; RFQ-09)"
+  },
+  "artifact_links": {
+    "cad": {
+      "work_package": "WP-M5",
+      "design_tier": "COTS_ENV_ICD",
+      "stl": "hardware/cad_parts/out/S9_spares_hpc/S9.HPC-02.stl",
+      "step": "hardware/cad_parts/out/S9_spares_hpc/S9.HPC-02.step",
+      "scad": "hardware/cad_parts/out/S9_spares_hpc/S9.HPC-02.scad",
+      "dxf": "hardware/cad_parts/out/S9_spares_hpc/S9.HPC-02.dxf",
+      "svg": "hardware/cad_parts/out/S9_spares_hpc/S9.HPC-02.svg",
+      "cad_json": "hardware/cad_parts/out/S9_spares_hpc/S9.HPC-02.json",
+      "watertight": true,
+      "all_6_files_valid": true,
+      "mass_kg": 4.2,
+      "triangle_count": 952,
+      "temp_k": 300.0,
+      "canonical_bbox_min_mm": [
+        2508.7,
+        -1118.2,
+        268.75
+      ],
+      "canonical_bbox_max_mm": [
+        2991.3,
+        -697.8,
+        311.25
+      ],
+      "datum_shift_mm": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "port_count": 0,
+      "gdt_frame_count": 0
+    },
+    "pcb_bundles": [],
+    "legacy_board_files": [],
+    "electrical_icd": {
+      "path": "hardware/icd/electrical/S9.HPC-02.json",
+      "electrical_class": "E3",
+      "grounding_domain": "DGND",
+      "ups_tier": "TIER2_SHED",
+      "exp150_ups_allocation_w": 95.0,
+      "mating_part_ids": [
+        "S9.HPC-01",
+        "S9.HPC-03",
+        "S6.11-01",
+        "S7.4-02",
+        "S7.SAFETY-04"
+      ],
+      "interlock_hooks_count": 1
+    },
+    "rtl_modules": [],
+    "rtl_audit_json": null,
+    "software_and_eda_files": [],
+    "verification_tests": []
+  },
+  "specialized_specification": null,
+  "verification_status": {
+    "cad_verified": true,
+    "pcb_verified": false,
+    "electrical_icd_verified": true,
+    "rtl_verified": false,
+    "software_or_eda_verified": false,
+    "specialized_icd_present": false,
+    "traceable": true
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "tapeout_done": false
+  }
+}

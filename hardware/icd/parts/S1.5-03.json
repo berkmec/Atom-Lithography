@@ -1,0 +1,114 @@
+{
+  "schema_version": "part_icd_v1.0",
+  "part_id": "S1.5-03",
+  "parent_bom_id": "S1.5",
+  "subsystem": "S1",
+  "part_name": "Enerji suzgeci ultra-dusuk gurultulu cift-kutuplu besleme",
+  "part_category": "PHYSICAL_SOLID",
+  "bom_metadata": {
+    "qty": "1",
+    "unit": "adet",
+    "material": "Elektronik modul (19 inc)",
+    "key_spec": "Dalgalilik <50 mVpp, 10 ppm kararlik",
+    "tolerance": "±50 mV",
+    "temp_stage": "300 K (kabin)",
+    "vacuum_grade": "Atmosfer",
+    "procurement_class": "COTS",
+    "parent_cost_class": "B(ADDER)",
+    "usd_low": 6000.0,
+    "usd_nom": 10000.0,
+    "usd_high": 19000.0,
+    "legacy_cad_module": "s1_ion_source_column",
+    "bom_epistemic_tag": "{Varsayım}",
+    "notes": "DELTA-EXP124/ADDER: HDA-HiRes dE_FWHM<=0.50 eV (0.453 eV hedef) gecis penceresini sabit tutar"
+  },
+  "artifact_links": {
+    "cad": {
+      "work_package": "WP-M1",
+      "design_tier": "COTS_ENV_ICD",
+      "stl": "hardware/cad_parts/out/S1/S1.5-03.stl",
+      "step": "hardware/cad_parts/out/S1/S1.5-03.step",
+      "scad": "hardware/cad_parts/out/S1/S1.5-03.scad",
+      "dxf": "hardware/cad_parts/out/S1/S1.5-03.dxf",
+      "svg": "hardware/cad_parts/out/S1/S1.5-03.svg",
+      "cad_json": "hardware/cad_parts/out/S1/S1.5-03.json",
+      "watertight": true,
+      "all_6_files_valid": true,
+      "mass_kg": 5.350011,
+      "triangle_count": 788,
+      "temp_k": 300.0,
+      "canonical_bbox_min_mm": [
+        1238.7,
+        -438.0,
+        1424.5
+      ],
+      "canonical_bbox_max_mm": [
+        1721.3,
+        4.5,
+        1466.95
+      ],
+      "datum_shift_mm": [
+        0.0,
+        0.0,
+        500.0
+      ],
+      "port_count": 1,
+      "gdt_frame_count": 1
+    },
+    "pcb_bundles": [
+      {
+        "bundle_slug": "ion_column_hv_dac",
+        "verification_json": "hardware/pcb/ion_column_hv_dac/ion_column_hv_dac_verification.json",
+        "boards": [
+          "ion_column_hv_dac"
+        ],
+        "kicad_sch_files": [
+          "hardware/pcb/ion_column_hv_dac/ion_column_hv_dac.kicad_sch"
+        ],
+        "kicad_pcb_files": [
+          "hardware/pcb/ion_column_hv_dac/ion_column_hv_dac.kicad_pcb"
+        ],
+        "spice_decks": [
+          "hardware/pcb/ion_column_hv_dac/ion_hv_filter_trim.cir"
+        ],
+        "all_passed": true
+      }
+    ],
+    "legacy_board_files": [],
+    "electrical_icd": {
+      "path": "hardware/icd/electrical/S1.5-03.json",
+      "electrical_class": "E3",
+      "grounding_domain": "HV_MINUS_5KV_DECK",
+      "ups_tier": "TIER2_SHED",
+      "exp150_ups_allocation_w": 0.0,
+      "mating_part_ids": [
+        "S1.5-01",
+        "S1.3-03",
+        "S7.SAFETY-03"
+      ],
+      "interlock_hooks_count": 1
+    },
+    "rtl_modules": [],
+    "rtl_audit_json": null,
+    "software_and_eda_files": [],
+    "verification_tests": []
+  },
+  "specialized_specification": null,
+  "verification_status": {
+    "cad_verified": true,
+    "pcb_verified": true,
+    "electrical_icd_verified": true,
+    "rtl_verified": false,
+    "software_or_eda_verified": false,
+    "specialized_icd_present": false,
+    "traceable": true
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "tapeout_done": false
+  }
+}

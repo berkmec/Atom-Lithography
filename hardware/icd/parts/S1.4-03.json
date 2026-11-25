@@ -1,0 +1,104 @@
+{
+  "schema_version": "part_icd_v1.0",
+  "part_id": "S1.4-03",
+  "parent_bom_id": "S1.4",
+  "subsystem": "S1",
+  "part_name": "Kapali-cevrim demet dozu PID denetleyici ve hizli surgu",
+  "part_category": "PHYSICAL_SOLID",
+  "bom_metadata": {
+    "qty": "1",
+    "unit": "set",
+    "material": "FPGA/PLC + UHV piezo vana",
+    "key_spec": "Atis basi doz tekrarlanabilirligi <1% RMS",
+    "tolerance": "<1 ms tepki",
+    "temp_stage": "300 K (kabin)",
+    "vacuum_grade": "Atmosfer/UHV",
+    "procurement_class": "CUS",
+    "parent_cost_class": "B",
+    "usd_low": 2000.0,
+    "usd_nom": 3500.0,
+    "usd_high": 6500.0,
+    "legacy_cad_module": "s1_ion_source_column",
+    "bom_epistemic_tag": "{Model-Kalibrasyon-Exp114}",
+    "notes": "Kaynak ark akimi ile geri besleme dongusu"
+  },
+  "artifact_links": {
+    "cad": {
+      "work_package": "WP-M1",
+      "design_tier": "CUSTOM_FULL",
+      "stl": "hardware/cad_parts/out/S1/S1.4-03.stl",
+      "step": "hardware/cad_parts/out/S1/S1.4-03.step",
+      "scad": "hardware/cad_parts/out/S1/S1.4-03.scad",
+      "dxf": "hardware/cad_parts/out/S1/S1.4-03.dxf",
+      "svg": "hardware/cad_parts/out/S1/S1.4-03.svg",
+      "cad_json": "hardware/cad_parts/out/S1/S1.4-03.json",
+      "watertight": true,
+      "all_6_files_valid": true,
+      "mass_kg": 5.433259,
+      "triangle_count": 760,
+      "temp_k": 300.0,
+      "canonical_bbox_min_mm": [
+        1238.7,
+        -438.0,
+        1468.95
+      ],
+      "canonical_bbox_max_mm": [
+        1721.3,
+        4.5,
+        1511.4
+      ],
+      "datum_shift_mm": [
+        0.0,
+        0.0,
+        500.0
+      ],
+      "port_count": 1,
+      "gdt_frame_count": 1
+    },
+    "pcb_bundles": [
+      {
+        "bundle_slug": "fpga_brain_carrier",
+        "verification_json": "hardware/pcb/fpga_brain_carrier/fpga_brain_carrier_verification.json",
+        "boards": [
+          "fpga_brain_carrier"
+        ],
+        "kicad_sch_files": [
+          "hardware/pcb/fpga_brain_carrier/fpga_brain_carrier.kicad_sch"
+        ],
+        "kicad_pcb_files": [
+          "hardware/pcb/fpga_brain_carrier/fpga_brain_carrier.kicad_pcb"
+        ],
+        "spice_decks": [
+          "hardware/pcb/fpga_brain_carrier/fpga_pdn_1v0.cir"
+        ],
+        "all_passed": true
+      }
+    ],
+    "legacy_board_files": [],
+    "electrical_icd": null,
+    "rtl_modules": [
+      "rtl/machine_ctrl/aom_pid_ctrl.v"
+    ],
+    "rtl_audit_json": "results/stage2_rtl_verification/rtl_machine_ctrl_audit.json",
+    "software_and_eda_files": [],
+    "verification_tests": []
+  },
+  "specialized_specification": null,
+  "verification_status": {
+    "cad_verified": true,
+    "pcb_verified": true,
+    "electrical_icd_verified": false,
+    "rtl_verified": true,
+    "software_or_eda_verified": false,
+    "specialized_icd_present": false,
+    "traceable": true
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "tapeout_done": false
+  }
+}

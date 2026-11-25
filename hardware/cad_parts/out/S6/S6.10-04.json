@@ -1,0 +1,229 @@
+{
+  "part_design": {
+    "part_id": "S6.10-04",
+    "parent_bom_id": "S6.10",
+    "subsystem": "S6",
+    "part_name": "M4 dusuk-gurultulu 20-bit DC dipol kapi DAC & filtre elektronigi [v5.0 NET: 5 GHz RF S6.11-01'e tasindi]",
+    "design_tier": "COTS_ENV_ICD",
+    "material": "Al 6061",
+    "temp_stage": "300 K (kabin)",
+    "temp_k": 300.0,
+    "vacuum_grade": "Atmosfer",
+    "tolerance_spec": "<0.5 uV/sqrt(Hz)",
+    "surface_finish_ra_um": 0.8,
+    "qty": 1,
+    "procurement_class": "COTS/CUS",
+    "world_origin_mm": [
+      2100.0,
+      0.0,
+      401.15000000000003
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "dc_dac_20bit_out",
+        "kind": "connector",
+        "position_mm": [
+          0.0,
+          220.0,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "standard": "4x DB25 Filtered <0.5 uV/sqrt(Hz)",
+        "mating_part_id": "S6.10-03",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      },
+      {
+        "name": "rack_bay2_u7_u8",
+        "kind": "mechanical",
+        "position_mm": [
+          0.0,
+          -220.0,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "standard": "19\" EIA-310 2U (U7-U8)",
+        "mating_part_id": "S7.4-03",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "WIDTH_19IN",
+        "nominal_mm": 482.6,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "482.60 ±0.50"
+      },
+      {
+        "label": "DEPTH",
+        "nominal_mm": 440.0,
+        "tol_plus_mm": 1.0,
+        "tol_minus_mm": -1.0,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "440.00 ±1.00"
+      },
+      {
+        "label": "HEIGHT_2U",
+        "nominal_mm": 86.9,
+        "tol_plus_mm": 0.3,
+        "tol_minus_mm": -0.3,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "86.90 ±0.30"
+      }
+    ],
+    "gdt_frames": [],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "B_M4=0.1785 T kipinde flip-flop dipol sweet-spot DC bias (<0.5 uV/sqrt(Hz)); 5 GHz RF yarisi (-$20k) S6.11-01 ZU48DR'ye tasindi"
+    ],
+    "scad_params": {
+      "rack_u": 2,
+      "u_start": 7,
+      "dac_bits": 20,
+      "noise_uv_rthz": 0.5
+    },
+    "target_mass_kg": 9.4,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact_result": {
+    "part_id": "S6.10-04",
+    "subsystem": "S6",
+    "design_tier": "COTS_ENV_ICD",
+    "stl_path": "hardware/cad_parts/out/S6/S6.10-04.stl",
+    "step_path": "hardware/cad_parts/out/S6/S6.10-04.step",
+    "scad_path": "hardware/cad_parts/out/S6/S6.10-04.scad",
+    "dxf_path": "hardware/cad_parts/out/S6/S6.10-04.dxf",
+    "svg_path": "hardware/cad_parts/out/S6/S6.10-04.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 2127468.6024994417,
+    "surface_area_mm2": 1450051.5837042066,
+    "mass_kg": 5.744165226748495,
+    "cg_mm": [
+      1.600563298296072e-14,
+      -8.898253019274758,
+      -5.976846940566474
+    ],
+    "bbox_min_mm": [
+      -241.3,
+      -232.05,
+      -43.45
+    ],
+    "bbox_max_mm": [
+      241.3,
+      220.0,
+      43.45
+    ],
+    "inertia_kg_mm2": [
+      116604.40177712093,
+      114514.72454717051,
+      219756.75760143404,
+      -5.6460727148191345e-12,
+      1.894657631484748e-12,
+      375.87538282361317
+    ],
+    "triangle_count": 1076,
+    "vertex_count": 560,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "json_path": "hardware/cad_parts/out/S6/S6.10-04.json",
+  "world_bbox_min_mm": [
+    1858.7,
+    -232.05,
+    357.7
+  ],
+  "world_bbox_max_mm": [
+    2341.3,
+    220.0,
+    444.6
+  ],
+  "world_cg_mm": [
+    2100.0,
+    -8.8983,
+    395.1732
+  ],
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

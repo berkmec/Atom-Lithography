@@ -1,0 +1,107 @@
+{
+  "schema_version": "1.0",
+  "part_id": "S4.3-04",
+  "parent_bom_id": "S4.3",
+  "subsystem": "S4",
+  "part_name": "6-kanalli dusuk gurultulu piezo servo denetleyici ve HV surucu",
+  "qty": 1,
+  "unit": "adet",
+  "temp_stage": "300 K (kabin)",
+  "vacuum_grade": "Atmosfer",
+  "bom_key_spec": "24-bit DAC, <0.1 nm elektriksel gurultu, EtherCAT/SPI",
+  "usd_nom": 13500.0,
+  "bom_epistemic_tag": "{Model-Kalibrasyon-Exp114}",
+  "electrical_class": "E3",
+  "grounding_domain": "AGND",
+  "grounding_notes": "6-ch 24-bit piezo servo controller (E-712 class, <0.1 nm noise); EtherCAT/SPI to host.",
+  "supply_rails": [
+    {
+      "rail_name": "AC_MAINS_230V",
+      "voltage_v": 230.0,
+      "current_type": "AC_1PH",
+      "max_current_a": 1.8,
+      "steady_power_w": 220.0,
+      "peak_power_w": 350.0,
+      "source_part_id": "S7.4-03"
+    }
+  ],
+  "connectors_and_pinout": [
+    {
+      "connector_ref": "J_PIEZO_HV",
+      "connector_type": "LEMO 2B 12-Pin HV",
+      "location_side": "rack_rear",
+      "mating_part_id": "S4.3-01",
+      "pins": [
+        {
+          "pin": "1-12",
+          "signal": "PIEZO_FINE_6DOF",
+          "direction": "OUT",
+          "nominal_level": "-20 to +120 V low-noise servo"
+        }
+      ]
+    },
+    {
+      "connector_ref": "J_CAP_FB",
+      "connector_type": "LEMO 00 Coax (6x)",
+      "location_side": "rack_rear",
+      "mating_part_id": "S4.3-03",
+      "pins": [
+        {
+          "pin": "1-6",
+          "signal": "CAP_SENS_FB[0:5]",
+          "direction": "IN",
+          "nominal_level": "Sub-nm capacitive feedback"
+        }
+      ]
+    },
+    {
+      "connector_ref": "J_ECAT",
+      "connector_type": "RJ45 EtherCAT",
+      "location_side": "rack_rear",
+      "mating_part_id": "S7.1-01",
+      "pins": [
+        {
+          "pin": "1-8",
+          "signal": "ETHERCAT_SYNC",
+          "direction": "BIDIR",
+          "nominal_level": "100BASE-TX deterministic motion"
+        }
+      ]
+    }
+  ],
+  "mating_part_ids": [
+    "S4.3-01",
+    "S4.3-02",
+    "S4.3-03",
+    "S4.5-03",
+    "S7.1-01"
+  ],
+  "interlock_hooks": [
+    {
+      "signal_name": "STAGE_LIMIT_INTERLOCK",
+      "target_part_id": "S7.4-04",
+      "action_on_trip": "Clamp piezo drive on collision/E-Stop",
+      "response_time_ms": 5.0
+    }
+  ],
+  "ups_tier": "TIER2_SHED",
+  "ups_budget_group": "AUX_PROCESS_SHED_ON_OUTAGE",
+  "exp150_ups_allocation_w": 0.0,
+  "supply_rails_steady_sum_w": 220.0,
+  "incremental_mains_w": 220.0,
+  "secondary_or_parent_derived_w": 0.0,
+  "non_exp150_aux_shed_w": 220.0,
+  "reconciliation_note": "Non-Exp150 auxiliary sheddable rack/facility load (TIER2_SHED): incremental_mains_w = 220.0 W AC mains (mutually exclusive process/experiment mode, shed immediately on outage; exp150_ups_allocation_w = 0.0 W).",
+  "timing_sync": {
+    "rb_10mhz_port": null,
+    "white_rabbit_port": "WR_COAX_5",
+    "sync_role": "Wafer stage step-and-settle sync"
+  },
+  "epistemic_flags": {
+    "design_maturity": "M0_M1_ELECTRICAL_ICD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

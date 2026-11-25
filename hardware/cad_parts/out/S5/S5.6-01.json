@@ -1,0 +1,329 @@
+{
+  "part_id": "S5.6-01",
+  "subsystem": "S5",
+  "design": {
+    "part_id": "S5.6-01",
+    "parent_bom_id": "S5.6",
+    "subsystem": "S5",
+    "part_name": "CF100 potasiz DC 28Si cubuk sublimasyon kaynagi, kriyo/su kalkani, pnomatik deklansor & PSU (Exp139, 11.8 kg)",
+    "design_tier": "CUSTOM_FULL",
+    "material": "316LN",
+    "temp_stage": "300 K (UHV kaynak)",
+    "temp_k": 300.0,
+    "vacuum_grade": "UHV 1.5e-10 Torr",
+    "tolerance_spec": "±0.3 nm kalinlik",
+    "surface_finish_ra_um": 0.4,
+    "qty": 1,
+    "procurement_class": "CUS",
+    "world_origin_mm": [
+      420.0,
+      0.0,
+      585.5
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "loadlock_cf100_base",
+        "kind": "flange",
+        "position_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "standard": "CF100",
+        "mating_part_id": "S5.1-03",
+        "bore_mm": 101.6,
+        "od_mm": 152.0,
+        "pcd_mm": 130.2,
+        "bolt_count": 16,
+        "bolt_hole_mm": 8.4,
+        "bolt_spec": "M8",
+        "frame": "local",
+        "notes": "ISO 3669 CF100 Cu-gasket knife-edge"
+      },
+      {
+        "name": "qcm_neg_y_cf40",
+        "kind": "flange",
+        "position_mm": [
+          0.0,
+          -88.0,
+          119.5
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "standard": "CF40",
+        "mating_part_id": "S5.6-02",
+        "bore_mm": 38.0,
+        "od_mm": 69.5,
+        "pcd_mm": 58.7,
+        "bolt_count": 6,
+        "bolt_hole_mm": 6.6,
+        "bolt_spec": "M6",
+        "frame": "local",
+        "notes": "ISO 3669 CF40 Cu-gasket knife-edge"
+      },
+      {
+        "name": "pbn_pos_y_cf40",
+        "kind": "flange",
+        "position_mm": [
+          0.0,
+          88.0,
+          89.5
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "standard": "CF40",
+        "mating_part_id": "S5.6-03",
+        "bore_mm": 38.0,
+        "od_mm": 69.5,
+        "pcd_mm": 58.7,
+        "bolt_count": 6,
+        "bolt_hole_mm": 6.6,
+        "bolt_spec": "M6",
+        "frame": "local",
+        "notes": "ISO 3669 CF40 Cu-gasket knife-edge"
+      },
+      {
+        "name": "mbe_tmp_pos_x_cf63",
+        "kind": "flange",
+        "position_mm": [
+          94.0,
+          0.0,
+          124.5
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "standard": "CF63",
+        "mating_part_id": "S5.6-04",
+        "bore_mm": 63.5,
+        "od_mm": 113.5,
+        "pcd_mm": 92.1,
+        "bolt_count": 8,
+        "bolt_hole_mm": 8.4,
+        "bolt_spec": "M8",
+        "frame": "local",
+        "notes": "ISO 3669 CF63 Cu-gasket knife-edge"
+      },
+      {
+        "name": "dc_400w_feed",
+        "kind": "electrical",
+        "position_mm": [
+          -34.0,
+          0.0,
+          279.5
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "400 W DC Sublimation PSU",
+        "mating_part_id": "S7.4-01",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "CF100_OD",
+        "nominal_mm": 152.0,
+        "tol_plus_mm": 0.15,
+        "tol_minus_mm": -0.15,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø152.00 ±0.15"
+      },
+      {
+        "label": "BARREL_OD",
+        "nominal_mm": 136.0,
+        "tol_plus_mm": 0.2,
+        "tol_minus_mm": -0.2,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø136.00 ±0.20"
+      },
+      {
+        "label": "TOTAL_H",
+        "nominal_mm": 279.5,
+        "tol_plus_mm": 0.3,
+        "tol_minus_mm": -0.3,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "279.50 ±0.30"
+      },
+      {
+        "label": "SHROUD_ID",
+        "nominal_mm": 92.0,
+        "tol_plus_mm": 0.2,
+        "tol_minus_mm": -0.2,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø92.00 ±0.20"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "perpendicularity",
+        "tolerance_mm": 0.08,
+        "diameter_zone": true,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "28Si rod sublimation axis to CF100 base",
+        "glyph": "⊥",
+        "tolerance_text": "Ø0.080"
+      },
+      {
+        "symbol": "concentricity",
+        "tolerance_mm": 0.1,
+        "diameter_zone": true,
+        "material_condition": "",
+        "datum_primary": "B",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "OFHC cryoshroud to CF100 bore",
+        "glyph": "◎",
+        "tolerance_text": "Ø0.10"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "s5_loadlock_chamber +Z CF100 (Ø152x280 mm, Z=585..865 mm, min bosluk 70 mm), P_base=1.5e-10 / P_growth=3.5e-10 Torr, 0.10 nm/s (8.0±0.3 nm / 80 s), 400 W / 0 uW kriyo, kutle=11.8 kg",
+      "Exp139 S5.6 crucible-free DC 28Si rod sublimation MBE source + OFHC water/LN2 cryoshroud + pneumatic shutter.",
+      "Mounts directly on S5.1-03 Load-Lock +Z CF100 (Z=585.5..865.0 mm); 0.10 nm/s -> 8.0 +/-0.3 nm cap in 80 s.",
+      "Target mass 11.8 kg (Exp139 s56_hardware_spec.json); 0.00 uW thermal leak to 20 mK DR."
+    ],
+    "scad_params": {
+      "cf100_od": 152.0,
+      "barrel_od": 136.0,
+      "height_mm": 279.5,
+      "growth_rate_nm_s": 0.1
+    },
+    "target_mass_kg": 11.8,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifacts": {
+    "part_id": "S5.6-01",
+    "subsystem": "S5",
+    "design_tier": "CUSTOM_FULL",
+    "stl_path": "hardware/cad_parts/out/S5/S5.6-01.stl",
+    "step_path": "hardware/cad_parts/out/S5/S5.6-01.step",
+    "scad_path": "hardware/cad_parts/out/S5/S5.6-01.scad",
+    "dxf_path": "hardware/cad_parts/out/S5/S5.6-01.dxf",
+    "svg_path": "hardware/cad_parts/out/S5/S5.6-01.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 1553197.8592429403,
+    "surface_area_mm2": 454756.785629558,
+    "mass_kg": 12.11494330209493,
+    "cg_mm": [
+      6.171993263870949,
+      1.9614153936003066e-15,
+      144.73835326870815
+    ],
+    "bbox_min_mm": [
+      -76.0,
+      -88.0,
+      0.0
+    ],
+    "bbox_max_mm": [
+      94.0,
+      88.0,
+      279.5
+    ],
+    "inertia_kg_mm2": [
+      104680.84393056402,
+      106718.76657532135,
+      42953.56415587325,
+      -1.6930264510805037e-12,
+      1513.2894410701037,
+      585.9207561017269
+    ],
+    "triangle_count": 6192,
+    "vertex_count": 3002,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

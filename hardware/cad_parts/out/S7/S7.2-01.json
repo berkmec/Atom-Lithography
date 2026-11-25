@@ -1,0 +1,511 @@
+{
+  "part_design": {
+    "part_id": "S7.2-01",
+    "parent_bom_id": "S7.2",
+    "subsystem": "S7",
+    "part_name": "Cok-kanalli keyfi dalga formu uretici (AWG) kartlari (GRAPE XY/ENDOR)",
+    "design_tier": "COTS_ENV_ICD",
+    "material": "Rogers",
+    "temp_stage": "300 K (kabin)",
+    "temp_k": 300.0,
+    "vacuum_grade": "Atmosfer",
+    "tolerance_spec": "16-bit, <10 ps",
+    "surface_finish_ra_um": 0.8,
+    "qty": 4,
+    "procurement_class": "COTS",
+    "world_origin_mm": [
+      1378.3999999999999,
+      -242.39999999999998,
+      578.95
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "pxie_backplane_j1",
+        "kind": "connector",
+        "position_mm": [
+          1378.3999999999999,
+          -52.39999999999998,
+          578.95
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "standard": "PXIe x8 Gen3 Backplane",
+        "mating_part_id": "S7.2-03",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "world",
+        "notes": ""
+      },
+      {
+        "name": "front_sma_outputs",
+        "kind": "rf",
+        "position_mm": [
+          1378.3999999999999,
+          -445.6,
+          578.95
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "standard": "16x SMA 50 Ohm",
+        "mating_part_id": "S6.4-01",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "world",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "CARD_PITCH",
+        "nominal_mm": 20.32,
+        "tol_plus_mm": 0.05,
+        "tol_minus_mm": -0.05,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "20.32 ±0.05"
+      },
+      {
+        "label": "CARD_HEIGHT",
+        "nominal_mm": 133.8,
+        "tol_plus_mm": 0.2,
+        "tol_minus_mm": -0.2,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "133.80 ±0.20"
+      },
+      {
+        "label": "CARD_DEPTH",
+        "nominal_mm": 380.0,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "right",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "380.00 ±0.50"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "parallelism",
+        "tolerance_mm": 0.1,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "CARD GUIDE RAILS",
+        "glyph": "∥",
+        "tolerance_text": "0.10"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "16 kanal toplam, GRAPE darbe hatasi eps<=1e-3 (Exp61/68)",
+      "Installed in S7.2-03 PXIe chassis Slots 2-5 (Bay 1 U10-U13); 16 total 1.25 GS/s 16-bit AWG outputs."
+    ],
+    "scad_params": {
+      "n_cards": 4,
+      "slot_pitch_mm": 20.32,
+      "card_depth_mm": 380.0
+    },
+    "target_mass_kg": 3.2,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S7.2-01",
+    "subsystem": "S7",
+    "design_tier": "COTS_ENV_ICD",
+    "stl_path": "hardware/cad_parts/out/S7/S7.2-01.stl",
+    "step_path": "hardware/cad_parts/out/S7/S7.2-01.step",
+    "scad_path": "hardware/cad_parts/out/S7/S7.2-01.scad",
+    "dxf_path": "hardware/cad_parts/out/S7/S7.2-01.dxf",
+    "svg_path": "hardware/cad_parts/out/S7/S7.2-01.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 2707772.800000102,
+    "surface_area_mm2": 463803.6020137363,
+    "mass_kg": 3.200000000000003,
+    "cg_mm": [
+      1378.3999999999937,
+      -244.74797005125473,
+      578.9499999999925
+    ],
+    "bbox_min_mm": [
+      1339.17,
+      -445.6,
+      512.0500000000001
+    ],
+    "bbox_max_mm": [
+      1417.6299999999999,
+      -52.39999999999998,
+      645.85
+    ],
+    "inertia_kg_mm2": [
+      43623.04486659413,
+      5924.160917546282,
+      41106.94592281958,
+      2.1639093944661014e-09,
+      -1.3849020124583049e-08,
+      5.049121920420902e-10
+    ],
+    "triangle_count": 928,
+    "vertex_count": 512,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "shell_bboxes_mm": [
+    [
+      [
+        1339.17,
+        -435.5,
+        512.05
+      ],
+      [
+        1356.67,
+        -432.5,
+        645.85
+      ]
+    ],
+    [
+      [
+        1340.92,
+        -432.4,
+        516.05
+      ],
+      [
+        1354.92,
+        -52.4,
+        641.85
+      ]
+    ],
+    [
+      [
+        1344.72,
+        -445.6,
+        551.75
+      ],
+      [
+        1351.12,
+        -435.6,
+        558.15
+      ]
+    ],
+    [
+      [
+        1344.72,
+        -445.6,
+        567.75
+      ],
+      [
+        1351.12,
+        -435.6,
+        574.15
+      ]
+    ],
+    [
+      [
+        1344.72,
+        -445.6,
+        583.75
+      ],
+      [
+        1351.12,
+        -435.6,
+        590.15
+      ]
+    ],
+    [
+      [
+        1344.72,
+        -445.6,
+        599.75
+      ],
+      [
+        1351.12,
+        -435.6,
+        606.15
+      ]
+    ],
+    [
+      [
+        1359.49,
+        -435.5,
+        512.05
+      ],
+      [
+        1376.99,
+        -432.5,
+        645.85
+      ]
+    ],
+    [
+      [
+        1361.24,
+        -432.4,
+        516.05
+      ],
+      [
+        1375.24,
+        -52.4,
+        641.85
+      ]
+    ],
+    [
+      [
+        1365.04,
+        -445.6,
+        551.75
+      ],
+      [
+        1371.44,
+        -435.6,
+        558.15
+      ]
+    ],
+    [
+      [
+        1365.04,
+        -445.6,
+        567.75
+      ],
+      [
+        1371.44,
+        -435.6,
+        574.15
+      ]
+    ],
+    [
+      [
+        1365.04,
+        -445.6,
+        583.75
+      ],
+      [
+        1371.44,
+        -435.6,
+        590.15
+      ]
+    ],
+    [
+      [
+        1365.04,
+        -445.6,
+        599.75
+      ],
+      [
+        1371.44,
+        -435.6,
+        606.15
+      ]
+    ],
+    [
+      [
+        1379.81,
+        -435.5,
+        512.05
+      ],
+      [
+        1397.31,
+        -432.5,
+        645.85
+      ]
+    ],
+    [
+      [
+        1381.56,
+        -432.4,
+        516.05
+      ],
+      [
+        1395.56,
+        -52.4,
+        641.85
+      ]
+    ],
+    [
+      [
+        1385.36,
+        -445.6,
+        551.75
+      ],
+      [
+        1391.76,
+        -435.6,
+        558.15
+      ]
+    ],
+    [
+      [
+        1385.36,
+        -445.6,
+        567.75
+      ],
+      [
+        1391.76,
+        -435.6,
+        574.15
+      ]
+    ],
+    [
+      [
+        1385.36,
+        -445.6,
+        583.75
+      ],
+      [
+        1391.76,
+        -435.6,
+        590.15
+      ]
+    ],
+    [
+      [
+        1385.36,
+        -445.6,
+        599.75
+      ],
+      [
+        1391.76,
+        -435.6,
+        606.15
+      ]
+    ],
+    [
+      [
+        1400.13,
+        -435.5,
+        512.05
+      ],
+      [
+        1417.63,
+        -432.5,
+        645.85
+      ]
+    ],
+    [
+      [
+        1401.88,
+        -432.4,
+        516.05
+      ],
+      [
+        1415.88,
+        -52.4,
+        641.85
+      ]
+    ],
+    [
+      [
+        1405.68,
+        -445.6,
+        551.75
+      ],
+      [
+        1412.08,
+        -435.6,
+        558.15
+      ]
+    ],
+    [
+      [
+        1405.68,
+        -445.6,
+        567.75
+      ],
+      [
+        1412.08,
+        -435.6,
+        574.15
+      ]
+    ],
+    [
+      [
+        1405.68,
+        -445.6,
+        583.75
+      ],
+      [
+        1412.08,
+        -435.6,
+        590.15
+      ]
+    ],
+    [
+      [
+        1405.68,
+        -445.6,
+        599.75
+      ],
+      [
+        1412.08,
+        -435.6,
+        606.15
+      ]
+    ]
+  ],
+  "reconciliation_notes": []
+}

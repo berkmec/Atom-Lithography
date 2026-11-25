@@ -1,0 +1,97 @@
+{
+  "schema_version": "1.0",
+  "part_id": "S6.6-07",
+  "parent_bom_id": "S6.6",
+  "subsystem": "S6",
+  "part_name": "NbTiN superiletken spiral cogullamali rezonator yongalari ve paketleme (9000 kanal)",
+  "qty": 1,
+  "unit": "set",
+  "temp_stage": "20 mK (MXC)",
+  "vacuum_grade": "UHV / Kriyo-vakum",
+  "bom_key_spec": "NL=110-160/hat, Ql=800-1200, Qi~2e5 @ <=0.4 T, alan 8.4 mm2 (Exp109/112)",
+  "usd_nom": 85000.0,
+  "bom_epistemic_tag": "{Varsay\u0131m}",
+  "electrical_class": "E2",
+  "grounding_domain": "CRYO_OVC",
+  "grounding_notes": "NbTiN resonator chip enclosed inside S6.3-03 Nb Meissner cup (B_res=22.3 uT) at 20 mK.",
+  "supply_rails": [
+    {
+      "rail_name": "PASSIVE_RESONATOR_ARRAY",
+      "voltage_v": 0.0,
+      "current_type": "RF",
+      "max_current_a": 0.0,
+      "steady_power_w": 0.0,
+      "peak_power_w": 0.0,
+      "source_part_id": "S6.6-03"
+    }
+  ],
+  "connectors_and_pinout": [
+    {
+      "connector_ref": "J_FEED_IN",
+      "connector_type": "SMP-M Non-Magnetic PCB Launch (56x)",
+      "location_side": "20mK_MXC",
+      "mating_part_id": "S6.6-03",
+      "pins": [
+        {
+          "pin": "1",
+          "signal": "RES_FEED_IN[0:55]",
+          "direction": "IN",
+          "nominal_level": "NL=110-160 tones/line, -100 dBm/tone"
+        },
+        {
+          "pin": "2",
+          "signal": "NBTIN_GND",
+          "direction": "PWR",
+          "nominal_level": "0 V MXC superconducting ground"
+        }
+      ]
+    },
+    {
+      "connector_ref": "J_FEED_OUT",
+      "connector_type": "SMP-M Non-Magnetic PCB Launch (56x)",
+      "location_side": "20mK_MXC",
+      "mating_part_id": "S6.6-02",
+      "pins": [
+        {
+          "pin": "1",
+          "signal": "RES_FEED_OUT[0:55]",
+          "direction": "OUT",
+          "nominal_level": "Dispersive Ql=800-1200, Qi~2e5"
+        },
+        {
+          "pin": "2",
+          "signal": "NBTIN_GND",
+          "direction": "PWR",
+          "nominal_level": "0 V MXC superconducting ground"
+        }
+      ]
+    }
+  ],
+  "mating_part_ids": [
+    "S6.6-02",
+    "S6.6-03",
+    "S6.3-03",
+    "S6.10-01"
+  ],
+  "interlock_hooks": [],
+  "ups_tier": "NONE",
+  "ups_budget_group": "PASSIVE_ZERO_MAINS",
+  "exp150_ups_allocation_w": 0.0,
+  "supply_rails_steady_sum_w": 0.0,
+  "incremental_mains_w": 0.0,
+  "secondary_or_parent_derived_w": 0.0,
+  "non_exp150_aux_shed_w": 0.0,
+  "reconciliation_note": "Passive or downstream sub-assembly (0.00 W sub-rail power drawn from upstream source S6.6-03); incremental_mains_w = 0.0 W (zero double-counting).",
+  "timing_sync": {
+    "rb_10mhz_port": null,
+    "white_rabbit_port": null,
+    "sync_role": "Superconducting dispersive readout bank"
+  },
+  "epistemic_flags": {
+    "design_maturity": "M0_M1_ELECTRICAL_ICD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

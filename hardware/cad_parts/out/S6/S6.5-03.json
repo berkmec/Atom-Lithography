@@ -1,0 +1,228 @@
+{
+  "part_design": {
+    "part_id": "S6.5-03",
+    "parent_bom_id": "S6.5",
+    "subsystem": "S6",
+    "part_name": "Kriyojenik RF koaksiyel hatlar, bias-tee ve Eccosorb dusuk-geciren filtreler",
+    "design_tier": "COTS_ENV_ICD",
+    "material": "CuNi",
+    "temp_stage": "300 K -> 20 mK",
+    "temp_k": 0.02,
+    "vacuum_grade": "Kriyo-vakum",
+    "tolerance_spec": "ISO 2768-mK",
+    "surface_finish_ra_um": 0.8,
+    "qty": 8,
+    "procurement_class": "COTS",
+    "world_origin_mm": [
+      -588.0,
+      -40.0,
+      669.0
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "rf_top_50k",
+        "kind": "rf",
+        "position_mm": [
+          0.0,
+          0.0,
+          167.0
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "8x SMA CuNi Coax",
+        "mating_part_id": "S6.5-02",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      },
+      {
+        "name": "rf_bot_mxc",
+        "kind": "rf",
+        "position_mm": [
+          0.0,
+          0.0,
+          -167.0
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "standard": "8x Eccosorb CR-124 LPF",
+        "mating_part_id": "S6.8-01",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "LOOM_W",
+        "nominal_mm": 20.0,
+        "tol_plus_mm": 0.2,
+        "tol_minus_mm": -0.2,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "20.00 ±0.20"
+      },
+      {
+        "label": "LOOM_D",
+        "nominal_mm": 18.0,
+        "tol_plus_mm": 0.2,
+        "tol_minus_mm": -0.2,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "18.00 ±0.20"
+      },
+      {
+        "label": "SPAN_Z",
+        "nominal_mm": 334.0,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "334.00 ±0.50"
+      }
+    ],
+    "gdt_frames": [],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "IR/GHz termal foton bastirma >40 dB @ >1 GHz"
+    ],
+    "scad_params": {
+      "n_lines": 8,
+      "eccosorb_grade": "CR-124",
+      "ir_atten_db": 40.0
+    },
+    "target_mass_kg": 0.62,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact_result": {
+    "part_id": "S6.5-03",
+    "subsystem": "S6",
+    "design_tier": "COTS_ENV_ICD",
+    "stl_path": "hardware/cad_parts/out/S6/S6.5-03.stl",
+    "step_path": "hardware/cad_parts/out/S6/S6.5-03.step",
+    "scad_path": "hardware/cad_parts/out/S6/S6.5-03.scad",
+    "dxf_path": "hardware/cad_parts/out/S6/S6.5-03.dxf",
+    "svg_path": "hardware/cad_parts/out/S6/S6.5-03.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 27072.096962282132,
+    "surface_area_mm2": 27243.90444634259,
+    "mass_kg": 0.24094166296431097,
+    "cg_mm": [
+      -1.6193975242286702e-16,
+      4.007812025116984e-16,
+      -14.627108475445045
+    ],
+    "bbox_min_mm": [
+      -10.0,
+      -9.0,
+      -167.0
+    ],
+    "bbox_max_mm": [
+      10.0,
+      9.0,
+      167.0
+    ],
+    "inertia_kg_mm2": [
+      2663.228388454143,
+      2664.688582495076,
+      13.157876440645316,
+      -3.7955629750285886e-16,
+      -1.4646944345236002e-14,
+      -1.2849766926154926e-15
+    ],
+    "triangle_count": 2016,
+    "vertex_count": 1064,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "json_path": "hardware/cad_parts/out/S6/S6.5-03.json",
+  "world_bbox_min_mm": [
+    -598.0,
+    -49.0,
+    502.0
+  ],
+  "world_bbox_max_mm": [
+    -578.0,
+    -31.0,
+    836.0
+  ],
+  "world_cg_mm": [
+    -588.0,
+    -40.0,
+    654.3729
+  ],
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

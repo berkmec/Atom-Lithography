@@ -1,0 +1,368 @@
+{
+  "part_design": {
+    "part_id": "S9.3-02",
+    "parent_bom_id": "S9.3",
+    "subsystem": "S9",
+    "part_name": "Yedek 4 K kriyo-LNA ve izolator saha servis kiti (4 zincir)",
+    "design_tier": "KIT_OR_ALIAS",
+    "material": "OFHC Cu",
+    "temp_stage": "4 K / 20 mK",
+    "temp_k": 4.0,
+    "vacuum_grade": "Kriyo-vakum",
+    "tolerance_spec": "P_DC <= 2.8 mW",
+    "surface_finish_ra_um": 0.8,
+    "qty": 4,
+    "procurement_class": "CUS",
+    "world_origin_mm": [
+      280.0,
+      -1520.0,
+      90.0
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "cryo_chain_spare_kit",
+        "kind": "rf",
+        "position_mm": [
+          280.0,
+          -1520.0,
+          180.0
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "4x Spare 4K InP HEMT + Dual Isolator + Coax/Attenuator Chains",
+        "mating_part_id": "S6.6-01",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "world",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "CASE_W",
+        "nominal_mm": 420.0,
+        "tol_plus_mm": 1.0,
+        "tol_minus_mm": -1.0,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "420.00 ±1.00"
+      },
+      {
+        "label": "CASE_D",
+        "nominal_mm": 320.0,
+        "tol_plus_mm": 1.0,
+        "tol_minus_mm": -1.0,
+        "view": "right",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "320.00 ±1.00"
+      },
+      {
+        "label": "CASE_H",
+        "nominal_mm": 180.0,
+        "tol_plus_mm": 1.0,
+        "tol_minus_mm": -1.0,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "180.00 ±1.00"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "flatness",
+        "tolerance_mm": 0.5,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "ESD CASE RIM",
+        "glyph": "⏥",
+        "tolerance_text": "0.50"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "Okuma hatti ariza degisim yedegi (4 x ~$5.5k)",
+      "4x spare 4K InP HEMT LNA + cryo isolator + attenuator/coax service kit (7% redundancy over 56 chains)."
+    ],
+    "scad_params": {
+      "qty_chains": 4,
+      "case_dx_mm": 420.0,
+      "case_dy_mm": 320.0,
+      "case_dz_mm": 180.0
+    },
+    "target_mass_kg": 9.2,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S9.3-02",
+    "subsystem": "S9",
+    "design_tier": "KIT_OR_ALIAS",
+    "stl_path": "hardware/cad_parts/out/S9_spares_hpc/S9.3-02.stl",
+    "step_path": "hardware/cad_parts/out/S9_spares_hpc/S9.3-02.step",
+    "scad_path": "hardware/cad_parts/out/S9_spares_hpc/S9.3-02.scad",
+    "dxf_path": "hardware/cad_parts/out/S9_spares_hpc/S9.3-02.dxf",
+    "svg_path": "hardware/cad_parts/out/S9_spares_hpc/S9.3-02.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 7382659.440000025,
+    "surface_area_mm2": 1223374.0967927382,
+    "mass_kg": 9.199999999999976,
+    "cg_mm": [
+      280.0000000000007,
+      -1520.446715120319,
+      87.63085947467216
+    ],
+    "bbox_min_mm": [
+      55.599999999999994,
+      -1694.4,
+      0.0
+    ],
+    "bbox_max_mm": [
+      504.4,
+      -1358.0,
+      180.0
+    ],
+    "inertia_kg_mm2": [
+      131098.53708829964,
+      196485.2833832682,
+      239894.35923059867,
+      -6.084782233975004e-09,
+      9.127173350962507e-10,
+      272.7625070713002
+    ],
+    "triangle_count": 264,
+    "vertex_count": 160,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "shell_bboxes_mm": [
+    [
+      [
+        70.0,
+        -1680.0,
+        0.0
+      ],
+      [
+        490.0,
+        -1360.0,
+        12.0
+      ]
+    ],
+    [
+      [
+        70.0,
+        -1680.0,
+        12.2
+      ],
+      [
+        78.0,
+        -1360.0,
+        161.6
+      ]
+    ],
+    [
+      [
+        482.0,
+        -1680.0,
+        12.2
+      ],
+      [
+        490.0,
+        -1360.0,
+        161.6
+      ]
+    ],
+    [
+      [
+        78.2,
+        -1680.0,
+        12.2
+      ],
+      [
+        481.8,
+        -1672.0,
+        161.6
+      ]
+    ],
+    [
+      [
+        78.2,
+        -1368.0,
+        12.2
+      ],
+      [
+        481.8,
+        -1360.0,
+        161.6
+      ]
+    ],
+    [
+      [
+        68.0,
+        -1682.0,
+        162.0
+      ],
+      [
+        492.0,
+        -1358.0,
+        180.0
+      ]
+    ],
+    [
+      [
+        150.4,
+        -1694.4,
+        137.0
+      ],
+      [
+        174.4,
+        -1682.4,
+        171.0
+      ]
+    ],
+    [
+      [
+        55.6,
+        -1565.0,
+        75.9
+      ],
+      [
+        67.6,
+        -1475.0,
+        97.9
+      ]
+    ],
+    [
+      [
+        385.6,
+        -1694.4,
+        137.0
+      ],
+      [
+        409.6,
+        -1682.4,
+        171.0
+      ]
+    ],
+    [
+      [
+        492.4,
+        -1565.0,
+        75.9
+      ],
+      [
+        504.4,
+        -1475.0,
+        97.9
+      ]
+    ],
+    [
+      [
+        125.0,
+        -1610.0,
+        20.0
+      ],
+      [
+        183.0,
+        -1430.0,
+        56.0
+      ]
+    ],
+    [
+      [
+        209.0,
+        -1610.0,
+        20.0
+      ],
+      [
+        267.0,
+        -1430.0,
+        56.0
+      ]
+    ],
+    [
+      [
+        293.0,
+        -1610.0,
+        20.0
+      ],
+      [
+        351.0,
+        -1430.0,
+        56.0
+      ]
+    ],
+    [
+      [
+        377.0,
+        -1610.0,
+        20.0
+      ],
+      [
+        435.0,
+        -1430.0,
+        56.0
+      ]
+    ]
+  ],
+  "reconciliation_notes": []
+}

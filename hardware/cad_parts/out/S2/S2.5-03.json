@@ -1,0 +1,267 @@
+{
+  "part_id": "S2.5-03",
+  "subsystem": "S2",
+  "design": {
+    "part_id": "S2.5-03",
+    "parent_bom_id": "S2.5",
+    "subsystem": "S2",
+    "part_name": "Kafa cercevesi referans optik aynasi ve lazer hedef prizmasi",
+    "design_tier": "COTS_ENV_ICD",
+    "material": "Zerodur",
+    "temp_stage": "300 K",
+    "temp_k": 300.0,
+    "vacuum_grade": "UHV 1e-9 mbar",
+    "tolerance_spec": "±2 arcsec",
+    "surface_finish_ra_um": 0.02,
+    "qty": 1,
+    "procurement_class": "COTS",
+    "world_origin_mm": [
+      0.0,
+      0.0,
+      20.0
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "interf_mirror_x",
+        "kind": "optical",
+        "position_mm": [
+          28.750000000000007,
+          49.79646071760522,
+          20.0
+        ],
+        "normal": [
+          0.5,
+          0.866025,
+          0.0
+        ],
+        "standard": "λ/20 @ 633 nm",
+        "mating_part_id": "",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "global",
+        "notes": ""
+      },
+      {
+        "name": "interf_mirror_y",
+        "kind": "optical",
+        "position_mm": [
+          -57.5,
+          0.0,
+          20.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "standard": "λ/20 @ 633 nm",
+        "mating_part_id": "",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "global",
+        "notes": ""
+      },
+      {
+        "name": "interf_mirror_z",
+        "kind": "optical",
+        "position_mm": [
+          28.750000000000007,
+          -49.79646071760522,
+          20.0
+        ],
+        "normal": [
+          0.5,
+          -0.866025,
+          0.0
+        ],
+        "standard": "λ/20 @ 633 nm",
+        "mating_part_id": "",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "global",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "MIRROR_PCD",
+        "nominal_mm": 115.0,
+        "tol_plus_mm": 0.02,
+        "tol_minus_mm": -0.02,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø115.00 ±0.02"
+      },
+      {
+        "label": "MIRROR_W",
+        "nominal_mm": 14.0,
+        "tol_plus_mm": 0.05,
+        "tol_minus_mm": -0.05,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "14.00 ±0.05"
+      },
+      {
+        "label": "MIRROR_H",
+        "nominal_mm": 13.6,
+        "tol_plus_mm": 0.05,
+        "tol_minus_mm": -0.05,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "13.60 ±0.05"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "flatness",
+        "tolerance_mm": 3e-05,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "LAMBDA/20 @ 633 NM",
+        "glyph": "⏥",
+        "tolerance_text": "0.0000"
+      },
+      {
+        "symbol": "perpendicularity",
+        "tolerance_mm": 0.001,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "±2 ARCSEC MIRROR FACE",
+        "glyph": "⊥",
+        "tolerance_text": "0.001"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "Yuzey duzlemligi lambda/20 @ 633 nm",
+      "3x Zerodur Al-SiO2 coated reference mirrors/prisms (λ/20 @ 633 nm, ±2 arcsec) at R=57.5 mm (60/180/300 deg) for S4.4 interferometry"
+    ],
+    "scad_params": {
+      "mirror_pcd": 115.0,
+      "mirror_t": 8.0,
+      "mirror_w": 14.0,
+      "mirror_h": 13.6,
+      "flatness_nm": 31.6
+    },
+    "target_mass_kg": 0.012,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S2.5-03",
+    "subsystem": "S2",
+    "design_tier": "COTS_ENV_ICD",
+    "stl_path": "hardware/cad_parts/out/S2/S2.5-03.stl",
+    "step_path": "hardware/cad_parts/out/S2/S2.5-03.step",
+    "scad_path": "hardware/cad_parts/out/S2/S2.5-03.scad",
+    "dxf_path": "hardware/cad_parts/out/S2/S2.5-03.dxf",
+    "svg_path": "hardware/cad_parts/out/S2/S2.5-03.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 4556.5440000000035,
+    "surface_area_mm2": 2427.039861351716,
+    "mass_kg": 0.011528056320000013,
+    "cg_mm": [
+      2.5149835582272188e-14,
+      -4.0169876277240304e-14,
+      19.999999999999993
+    ],
+    "bbox_min_mm": [
+      -61.5,
+      -56.560562332742975,
+      13.2
+    ],
+    "bbox_max_mm": [
+      36.61217782649108,
+      56.560562332742975,
+      26.8
+    ],
+    "inertia_kg_mm2": [
+      19.359223034764806,
+      19.35922303476482,
+      38.36307452003843,
+      1.6589215192652762e-14,
+      4.878165782429258e-16,
+      -1.4634497347287803e-15
+    ],
+    "triangle_count": 84,
+    "vertex_count": 48,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "engineering_checks": {},
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

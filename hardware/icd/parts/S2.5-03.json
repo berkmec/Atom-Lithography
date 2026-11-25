@@ -1,0 +1,84 @@
+{
+  "schema_version": "part_icd_v1.0",
+  "part_id": "S2.5-03",
+  "parent_bom_id": "S2.5",
+  "subsystem": "S2",
+  "part_name": "Kafa cercevesi referans optik aynasi ve lazer hedef prizmasi",
+  "part_category": "PHYSICAL_SOLID",
+  "bom_metadata": {
+    "qty": "1",
+    "unit": "set",
+    "material": "Zerodur / Al-SiO2 kaplama",
+    "key_spec": "Yuzey duzlemligi lambda/20 @ 633 nm",
+    "tolerance": "±2 arcsec",
+    "temp_stage": "300 K",
+    "vacuum_grade": "UHV 1e-9 mbar",
+    "procurement_class": "COTS",
+    "parent_cost_class": "B",
+    "usd_low": 2500.0,
+    "usd_nom": 4500.0,
+    "usd_high": 8500.0,
+    "legacy_cad_module": "s2_mems_write_head",
+    "bom_epistemic_tag": "{Model-Kalibrasyon-Exp114}",
+    "notes": "S4.4 interferometresi icin kafa referans yuzeyi"
+  },
+  "artifact_links": {
+    "cad": {
+      "work_package": "WP-M1",
+      "design_tier": "COTS_ENV_ICD",
+      "stl": "hardware/cad_parts/out/S2/S2.5-03.stl",
+      "step": "hardware/cad_parts/out/S2/S2.5-03.step",
+      "scad": "hardware/cad_parts/out/S2/S2.5-03.scad",
+      "dxf": "hardware/cad_parts/out/S2/S2.5-03.dxf",
+      "svg": "hardware/cad_parts/out/S2/S2.5-03.svg",
+      "cad_json": "hardware/cad_parts/out/S2/S2.5-03.json",
+      "watertight": true,
+      "all_6_files_valid": true,
+      "mass_kg": 0.011528,
+      "triangle_count": 84,
+      "temp_k": 300.0,
+      "canonical_bbox_min_mm": [
+        -61.5,
+        -56.561,
+        513.2
+      ],
+      "canonical_bbox_max_mm": [
+        36.612,
+        56.561,
+        526.8
+      ],
+      "datum_shift_mm": [
+        0.0,
+        0.0,
+        500.0
+      ],
+      "port_count": 3,
+      "gdt_frame_count": 2
+    },
+    "pcb_bundles": [],
+    "legacy_board_files": [],
+    "electrical_icd": null,
+    "rtl_modules": [],
+    "rtl_audit_json": null,
+    "software_and_eda_files": [],
+    "verification_tests": []
+  },
+  "specialized_specification": null,
+  "verification_status": {
+    "cad_verified": true,
+    "pcb_verified": false,
+    "electrical_icd_verified": false,
+    "rtl_verified": false,
+    "software_or_eda_verified": false,
+    "specialized_icd_present": false,
+    "traceable": true
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "tapeout_done": false
+  }
+}

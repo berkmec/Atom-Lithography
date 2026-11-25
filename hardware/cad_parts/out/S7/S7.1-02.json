@@ -1,0 +1,500 @@
+{
+  "part_design": {
+    "part_id": "S7.1-02",
+    "parent_bom_id": "S7.1",
+    "subsystem": "S7",
+    "part_name": "Yuksek hizli NVMe RAID sertifika ve spektroskopi veri sunucusu",
+    "design_tier": "COTS_ENV_ICD",
+    "material": "Steel",
+    "temp_stage": "300 K (kabin)",
+    "temp_k": 300.0,
+    "vacuum_grade": "Atmosfer",
+    "tolerance_spec": "99.99% yedekli",
+    "surface_finish_ra_um": 0.8,
+    "qty": 1,
+    "procurement_class": "COTS",
+    "world_origin_mm": [
+      1480.0,
+      -108.0,
+      445.6
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "nvme_25gbe_uplink",
+        "kind": "connector",
+        "position_mm": [
+          1570.0,
+          227.0,
+          445.6
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "standard": "2x 25GbE SFP28 RAID-10",
+        "mating_part_id": "S7.1-01",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "world",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "WIDTH_19IN",
+        "nominal_mm": 482.6,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "482.60 ±0.50"
+      },
+      {
+        "label": "HEIGHT_2U",
+        "nominal_mm": 86.9,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "86.90 ±0.50"
+      },
+      {
+        "label": "DEPTH",
+        "nominal_mm": 660.0,
+        "tol_plus_mm": 1.0,
+        "tol_minus_mm": -1.0,
+        "view": "right",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "660.00 ±1.00"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "flatness",
+        "tolerance_mm": 0.5,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "FRONT BEZEL",
+        "glyph": "⏥",
+        "tolerance_text": "0.50"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "Her atis ve yazmac sertifikasi icin degismez veri deposu",
+      "Bay 1 U8-U9 (12x hot-swap enterprise NVMe RAID-10 bays, 30 TB immutable log store)."
+    ],
+    "scad_params": {
+      "u_start": 8,
+      "u_count": 2,
+      "nvme_bays": 12,
+      "depth_mm": 660.0
+    },
+    "target_mass_kg": 21.0,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S7.1-02",
+    "subsystem": "S7",
+    "design_tier": "COTS_ENV_ICD",
+    "stl_path": "hardware/cad_parts/out/S7/S7.1-02.stl",
+    "step_path": "hardware/cad_parts/out/S7/S7.1-02.step",
+    "scad_path": "hardware/cad_parts/out/S7/S7.1-02.scad",
+    "dxf_path": "hardware/cad_parts/out/S7/S7.1-02.dxf",
+    "svg_path": "hardware/cad_parts/out/S7/S7.1-02.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 24782593.954351317,
+    "surface_area_mm2": 907183.8140726913,
+    "mass_kg": 20.999999999999993,
+    "cg_mm": [
+      1479.9629664753975,
+      -109.10258265777587,
+      445.60000000000144
+    ],
+    "bbox_min_mm": [
+      1238.7,
+      -464.2,
+      402.15000000000003
+    ],
+    "bbox_max_mm": [
+      1721.3,
+      234.2,
+      489.05
+    ],
+    "inertia_kg_mm2": [
+      783015.835781787,
+      351375.97340913204,
+      1109204.3721252012,
+      -602.0793284938694,
+      -1.8205191749945264e-08,
+      6.206315369299522e-10
+    ],
+    "triangle_count": 1332,
+    "vertex_count": 704,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "shell_bboxes_mm": [
+    [
+      [
+        1238.7,
+        -438.0,
+        402.15
+      ],
+      [
+        1721.3,
+        -434.0,
+        489.05
+      ]
+    ],
+    [
+      [
+        1260.0,
+        -433.9,
+        403.15
+      ],
+      [
+        1700.0,
+        222.0,
+        488.05
+      ]
+    ],
+    [
+      [
+        1272.5,
+        -456.1,
+        418.2025
+      ],
+      [
+        1279.5,
+        -438.1,
+        425.2025
+      ]
+    ],
+    [
+      [
+        1272.5,
+        -456.1,
+        465.9975
+      ],
+      [
+        1279.5,
+        -438.1,
+        472.9975
+      ]
+    ],
+    [
+      [
+        1272.0,
+        -464.2,
+        417.7025
+      ],
+      [
+        1280.0,
+        -456.2,
+        473.4975
+      ]
+    ],
+    [
+      [
+        1680.5,
+        -456.1,
+        418.2025
+      ],
+      [
+        1687.5,
+        -438.1,
+        425.2025
+      ]
+    ],
+    [
+      [
+        1680.5,
+        -456.1,
+        465.9975
+      ],
+      [
+        1687.5,
+        -438.1,
+        472.9975
+      ]
+    ],
+    [
+      [
+        1680.0,
+        -464.2,
+        417.7025
+      ],
+      [
+        1688.0,
+        -456.2,
+        473.4975
+      ]
+    ],
+    [
+      [
+        1561.0,
+        -449.1,
+        441.6
+      ],
+      [
+        1569.0,
+        -438.1,
+        449.6
+      ]
+    ],
+    [
+      [
+        1621.0,
+        -449.1,
+        441.6
+      ],
+      [
+        1629.0,
+        -438.1,
+        449.6
+      ]
+    ],
+    [
+      [
+        1339.436,
+        222.2,
+        415.036
+      ],
+      [
+        1400.564,
+        232.2,
+        476.164
+      ]
+    ],
+    [
+      [
+        1449.436,
+        222.2,
+        415.036
+      ],
+      [
+        1510.564,
+        232.2,
+        476.164
+      ]
+    ],
+    [
+      [
+        1614.0,
+        222.2,
+        433.6
+      ],
+      [
+        1646.0,
+        234.2,
+        457.6
+      ]
+    ],
+    [
+      [
+        1308.0,
+        -444.1,
+        414.6
+      ],
+      [
+        1352.0,
+        -438.1,
+        440.6
+      ]
+    ],
+    [
+      [
+        1360.0,
+        -444.1,
+        414.6
+      ],
+      [
+        1404.0,
+        -438.1,
+        440.6
+      ]
+    ],
+    [
+      [
+        1412.0,
+        -444.1,
+        414.6
+      ],
+      [
+        1456.0,
+        -438.1,
+        440.6
+      ]
+    ],
+    [
+      [
+        1464.0,
+        -444.1,
+        414.6
+      ],
+      [
+        1508.0,
+        -438.1,
+        440.6
+      ]
+    ],
+    [
+      [
+        1516.0,
+        -444.1,
+        414.6
+      ],
+      [
+        1560.0,
+        -438.1,
+        440.6
+      ]
+    ],
+    [
+      [
+        1568.0,
+        -444.1,
+        414.6
+      ],
+      [
+        1612.0,
+        -438.1,
+        440.6
+      ]
+    ],
+    [
+      [
+        1308.0,
+        -444.1,
+        450.6
+      ],
+      [
+        1352.0,
+        -438.1,
+        476.6
+      ]
+    ],
+    [
+      [
+        1360.0,
+        -444.1,
+        450.6
+      ],
+      [
+        1404.0,
+        -438.1,
+        476.6
+      ]
+    ],
+    [
+      [
+        1412.0,
+        -444.1,
+        450.6
+      ],
+      [
+        1456.0,
+        -438.1,
+        476.6
+      ]
+    ],
+    [
+      [
+        1464.0,
+        -444.1,
+        450.6
+      ],
+      [
+        1508.0,
+        -438.1,
+        476.6
+      ]
+    ],
+    [
+      [
+        1516.0,
+        -444.1,
+        450.6
+      ],
+      [
+        1560.0,
+        -438.1,
+        476.6
+      ]
+    ],
+    [
+      [
+        1568.0,
+        -444.1,
+        450.6
+      ],
+      [
+        1612.0,
+        -438.1,
+        476.6
+      ]
+    ]
+  ],
+  "reconciliation_notes": []
+}

@@ -1,0 +1,70 @@
+{
+  "schema_version": "1.0",
+  "part_id": "S2.1-03",
+  "parent_bom_id": "S2.1",
+  "subsystem": "S2",
+  "part_name": "Anti-sarj altin/Pt iletken ust membran kaplama ve koruma cercevesi",
+  "qty": 2,
+  "unit": "set",
+  "temp_stage": "300 K",
+  "vacuum_grade": "UHV 1e-9 mbar",
+  "bom_key_spec": "Yuzey direnci <1 Ohm/sq, demet isisi dagitimi",
+  "usd_nom": 11000.0,
+  "bom_epistemic_tag": "{Varsay\u0131m}",
+  "electrical_class": "E4",
+  "grounding_domain": "HV_MINUS_5KV_DECK",
+  "grounding_notes": "Au/Pt anti-charging aperture membrane (<1 Ohm/sq) bonded directly to -5 kV column liner.",
+  "supply_rails": [
+    {
+      "rail_name": "LINER_REF_N5KV",
+      "voltage_v": -5000.0,
+      "current_type": "HV_DC",
+      "max_current_a": 0.001,
+      "steady_power_w": 0.0,
+      "peak_power_w": 0.1,
+      "source_part_id": "S1.3-03"
+    }
+  ],
+  "connectors_and_pinout": [
+    {
+      "connector_ref": "P_CLAMP",
+      "connector_type": "BeCu Spring Grounding Clip",
+      "location_side": "write_head_uhv",
+      "mating_part_id": "S2.1-01",
+      "pins": [
+        {
+          "pin": "1",
+          "signal": "MEMBRANE_LINER_TIE",
+          "direction": "PWR",
+          "nominal_level": "-5 kV anti-charging drain"
+        }
+      ]
+    }
+  ],
+  "mating_part_ids": [
+    "S2.1-01",
+    "S2.1-04",
+    "S1.3-02"
+  ],
+  "interlock_hooks": [],
+  "ups_tier": "NONE",
+  "ups_budget_group": "PASSIVE_ZERO_MAINS",
+  "exp150_ups_allocation_w": 0.0,
+  "supply_rails_steady_sum_w": 0.0,
+  "incremental_mains_w": 0.0,
+  "secondary_or_parent_derived_w": 0.0,
+  "non_exp150_aux_shed_w": 0.0,
+  "reconciliation_note": "Passive or downstream sub-assembly (0.00 W sub-rail power drawn from upstream source S1.3-03); incremental_mains_w = 0.0 W (zero double-counting).",
+  "timing_sync": {
+    "rb_10mhz_port": null,
+    "white_rabbit_port": null,
+    "sync_role": "Anti-charging drain tie"
+  },
+  "epistemic_flags": {
+    "design_maturity": "M0_M1_ELECTRICAL_ICD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

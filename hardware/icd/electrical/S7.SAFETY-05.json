@@ -1,0 +1,111 @@
+{
+  "schema_version": "1.0",
+  "part_id": "S7.SAFETY-05",
+  "parent_bom_id": "S7.SAFETY",
+  "subsystem": "S7",
+  "part_name": "Temizoda O2 Eksikligi Izleyici (%19.5 Alarm), ASME DN50 0.5 barg OVC Patlama Diski & 1.563 Ohm Quench Bosaltma Bankasi (Exp150, 24.0 kg)",
+  "qty": 1,
+  "unit": "set",
+  "temp_stage": "300 K (OVC / duvar / raf)",
+  "vacuum_grade": "Kriyo OVC / Atmosfer",
+  "bom_key_spec": "380x260x240 mm, kuru LD400+PT420 (1.098 m3 STP) O2=%20.57 >> %19.5, ASME DN50 16.37x He marji, 18.94 kJ quench 38.15 C < 55 C, 35 W / 0 W kriyo, kutle=24.0 kg",
+  "usd_nom": 14000.0,
+  "bom_epistemic_tag": "{Liste-\u00c7apas\u0131}",
+  "electrical_class": "E3",
+  "grounding_domain": "FACILITY_PE",
+  "grounding_notes": "Cleanroom O2 monitor (19.5% alarm), ASME DN50 0.5 barg OVC burst disk & 1.563 Ohm quench dump bank.",
+  "supply_rails": [
+    {
+      "rail_name": "AC_UPS_TIER1",
+      "voltage_v": 230.0,
+      "current_type": "AC_1PH",
+      "max_current_a": 0.3,
+      "steady_power_w": 35.0,
+      "peak_power_w": 50.0,
+      "source_part_id": "S7.SAFETY-04"
+    }
+  ],
+  "connectors_and_pinout": [
+    {
+      "connector_ref": "J_O2_ALM",
+      "connector_type": "Phoenix 6-Pin 4-20 mA + Dual NC",
+      "location_side": "wall_mount",
+      "mating_part_id": "S7.SAFETY-03",
+      "pins": [
+        {
+          "pin": "1-2",
+          "signal": "O2_4_20MA",
+          "direction": "OUT",
+          "nominal_level": "0-25% O2 sensor loop"
+        },
+        {
+          "pin": "3-6",
+          "signal": "O2_LT_19P5_1OO2D",
+          "direction": "OUT",
+          "nominal_level": "Dual-channel SIL-3 target alarm"
+        }
+      ]
+    },
+    {
+      "connector_ref": "J_DUMP_BUS",
+      "connector_type": "M10 Insulated 500V Studs",
+      "location_side": "dump_bay",
+      "mating_part_id": "S6.3-04",
+      "pins": [
+        {
+          "pin": "1",
+          "signal": "DUMP_1P563_POS",
+          "direction": "IN",
+          "nominal_level": "1.563 Ohm, 18.94 kJ, Vpeak<=400 V"
+        },
+        {
+          "pin": "2",
+          "signal": "DUMP_1P563_NEG",
+          "direction": "IN",
+          "nominal_level": "2.5 kg bank, Tpeak=38.1 C < 55 C"
+        }
+      ]
+    }
+  ],
+  "mating_part_ids": [
+    "S6.3-04",
+    "S6.3-05",
+    "S6.8-04",
+    "S7.SAFETY-03",
+    "S7.SAFETY-04"
+  ],
+  "interlock_hooks": [
+    {
+      "signal_name": "O2_DEFICIENCY_19P5PCT",
+      "target_part_id": "S7.SAFETY-03",
+      "action_on_trip": "Activate cleanroom ODH beacon/exhaust & safe halt",
+      "response_time_ms": 500.0
+    },
+    {
+      "signal_name": "QUENCH_DUMP_THERMAL_55C",
+      "target_part_id": "S7.SAFETY-03",
+      "action_on_trip": "Inhibit magnet recharge until dump bank cools",
+      "response_time_ms": 100.0
+    }
+  ],
+  "ups_tier": "TIER1_CRITICAL",
+  "ups_budget_group": "EXP150_TIER1_CRITICAL",
+  "exp150_ups_allocation_w": 35.0,
+  "supply_rails_steady_sum_w": 35.0,
+  "incremental_mains_w": 35.0,
+  "secondary_or_parent_derived_w": 0.0,
+  "non_exp150_aux_shed_w": 0.0,
+  "reconciliation_note": "Exp150 Tier-1 critical UPS load: incremental_mains_w = exp150_ups_allocation_w = 35.0 W.",
+  "timing_sync": {
+    "rb_10mhz_port": null,
+    "white_rabbit_port": null,
+    "sync_role": "ODH monitor & passive 1.563 Ohm quench dump"
+  },
+  "epistemic_flags": {
+    "design_maturity": "M0_M1_ELECTRICAL_ICD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

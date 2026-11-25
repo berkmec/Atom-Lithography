@@ -1,0 +1,288 @@
+{
+  "part_id": "S1.3-01",
+  "subsystem": "S1",
+  "design": {
+    "part_id": "S1.3-01",
+    "parent_bom_id": "S1.3",
+    "subsystem": "S1",
+    "part_name": "5-20 keV ana hizlandirma/yavaslatma seramik kolon tupu",
+    "design_tier": "CUSTOM_FULL",
+    "material": "Al2O3",
+    "temp_stage": "300 K",
+    "temp_k": 300.0,
+    "vacuum_grade": "UHV 1e-9 mbar",
+    "tolerance_spec": "±0.02 mm eksen",
+    "surface_finish_ra_um": 0.4,
+    "qty": 1,
+    "procurement_class": "CUS",
+    "world_origin_mm": [
+      0.0,
+      0.0,
+      395.4
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "lower_cf100",
+        "kind": "flange",
+        "position_mm": [
+          0.0,
+          0.0,
+          369.5
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "standard": "CF100",
+        "mating_part_id": "S1.2-01",
+        "bore_mm": 88.0,
+        "od_mm": 152.0,
+        "pcd_mm": 130.2,
+        "bolt_count": 16,
+        "bolt_hole_mm": 8.4,
+        "bolt_spec": "M8",
+        "frame": "global",
+        "notes": "ISO 3669 CF100 Cu-gasket knife-edge"
+      },
+      {
+        "name": "upper_ti_collar",
+        "kind": "flange",
+        "position_mm": [
+          0.0,
+          0.0,
+          421.3
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "12xM6 PCD 112",
+        "mating_part_id": "S1.1-01",
+        "bore_mm": 88.0,
+        "od_mm": 126.0,
+        "pcd_mm": 112.0,
+        "bolt_count": 12,
+        "bolt_hole_mm": 6.6,
+        "bolt_spec": "",
+        "frame": "global",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "FLANGE_CF100",
+        "nominal_mm": 152.0,
+        "tol_plus_mm": 0.1,
+        "tol_minus_mm": -0.1,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø152.00 ±0.10"
+      },
+      {
+        "label": "BORE_ID",
+        "nominal_mm": 88.0,
+        "tol_plus_mm": 0.05,
+        "tol_minus_mm": -0.05,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø88.00 ±0.05"
+      },
+      {
+        "label": "SHED_OD",
+        "nominal_mm": 121.0,
+        "tol_plus_mm": 0.1,
+        "tol_minus_mm": -0.1,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø121.00 ±0.10"
+      },
+      {
+        "label": "HEIGHT",
+        "nominal_mm": 51.8,
+        "tol_plus_mm": 0.05,
+        "tol_minus_mm": -0.05,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "51.80 ±0.05"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "concentricity",
+        "tolerance_mm": 0.02,
+        "diameter_zone": true,
+        "material_condition": "",
+        "datum_primary": "B",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "CERAMIC BORE",
+        "glyph": "◎",
+        "tolerance_text": "Ø0.020"
+      },
+      {
+        "symbol": "perpendicularity",
+        "tolerance_mm": 0.02,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "CF100 TO COLLAR",
+        "glyph": "⊥",
+        "tolerance_text": "0.020"
+      },
+      {
+        "symbol": "flatness",
+        "tolerance_mm": 0.015,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "BRAZE FLANGE",
+        "glyph": "⏥",
+        "tolerance_text": "0.015"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "25 kV izolasyon, bakout 150 C, CF100 flans",
+      "Brazed 99.7% Al2O3 25 kV ribbed insulator + ISO 3669 CF100 Ti-6Al-4V flange; encloses S1.1-03 w/ 2.0 mm radial vacuum gap"
+    ],
+    "scad_params": {
+      "cf_size": "CF100",
+      "bore_id": 88.0,
+      "hv_rating_kV": 25.0,
+      "bakeout_C": 150.0
+    },
+    "target_mass_kg": 3.15,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S1.3-01",
+    "subsystem": "S1",
+    "design_tier": "CUSTOM_FULL",
+    "stl_path": "hardware/cad_parts/out/S1/S1.3-01.stl",
+    "step_path": "hardware/cad_parts/out/S1/S1.3-01.step",
+    "scad_path": "hardware/cad_parts/out/S1/S1.3-01.scad",
+    "dxf_path": "hardware/cad_parts/out/S1/S1.3-01.dxf",
+    "svg_path": "hardware/cad_parts/out/S1/S1.3-01.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 365104.12794078747,
+    "surface_area_mm2": 98902.30717622665,
+    "mass_kg": 1.442161305366111,
+    "cg_mm": [
+      1.1239643105500518e-14,
+      2.6504832145949802e-14,
+      390.59725964039376
+    ],
+    "bbox_min_mm": [
+      -76.0,
+      -76.0,
+      369.5
+    ],
+    "bbox_max_mm": [
+      76.0,
+      76.0,
+      421.3
+    ],
+    "inertia_kg_mm2": [
+      2773.868836607546,
+      2773.8688366075503,
+      4890.758251279206,
+      -2.796750050038099e-12,
+      1.2455026082670462e-12,
+      9.54003410530865e-12
+    ],
+    "triangle_count": 3792,
+    "vertex_count": 1840,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "engineering_checks": {
+    "bakeout_clearance": {
+      "outer_material": "Ti-6Al-4V",
+      "inner_material": "Mo",
+      "t_cold_k": 423.15,
+      "t_ref_k": 293.15,
+      "warm_outer_id_mm": 88.0,
+      "warm_inner_od_mm": 84.0,
+      "cold_outer_id_mm": 88.10383999999999,
+      "cold_inner_od_mm": 84.05460000000001,
+      "outer_strain": 0.0011799999999999589,
+      "inner_strain": 0.0006500000000000394,
+      "warm_radial_clearance_mm": 2.0,
+      "cold_nominal_radial_clearance_mm": 2.0246199999999916,
+      "cold_worst_case_radial_clearance_mm": 1.9896199999999917,
+      "delta_radial_clearance_mm": 0.02461999999999165,
+      "min_required_radial_clearance_mm": 1.5,
+      "interference_risk": false,
+      "passed": true
+    }
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

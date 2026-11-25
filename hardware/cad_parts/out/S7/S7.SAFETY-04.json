@@ -1,0 +1,323 @@
+{
+  "part_design": {
+    "part_id": "S7.SAFETY-04",
+    "parent_bom_id": "S7.SAFETY",
+    "subsystem": "S7",
+    "part_name": "15 kVA / 10 kWh Online Cift-Donusumlu LFP UPS (0 ms Gecis) & Kademeli Yuk-Atma PDU (Exp150, 145.0 kg)",
+    "design_tier": "COTS_ENV_ICD",
+    "material": "LFP",
+    "temp_stage": "300 K (tesis guc bolmesi)",
+    "temp_k": 300.0,
+    "vacuum_grade": "Atmosfer",
+    "tolerance_spec": "0 ms gecis, >=30 dk tam",
+    "surface_finish_ra_um": 3.2,
+    "qty": 1,
+    "procurement_class": "COTS",
+    "world_origin_mm": [
+      2650.0,
+      150.0,
+      390.0
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "utility_3ph_in",
+        "kind": "electrical",
+        "position_mm": [
+          2650.0,
+          526.0,
+          580.0
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "standard": "400V 3-Ph / 230V 63A Utility Feed",
+        "mating_part_id": "",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "world",
+        "notes": ""
+      },
+      {
+        "name": "tier1_critical_out",
+        "kind": "electrical",
+        "position_mm": [
+          2570.0,
+          526.0,
+          470.0
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "standard": "Tier-1 Critical Bus (2.533 kW, 213.2 min backup)",
+        "mating_part_id": "S7.1-03",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "world",
+        "notes": ""
+      },
+      {
+        "name": "tier2_shed_out",
+        "kind": "electrical",
+        "position_mm": [
+          2730.0,
+          526.0,
+          470.0
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "standard": "Tier-2 Load-Shed Bus (12.275 kW shed on outage)",
+        "mating_part_id": "S9.HPC-03",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "world",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "UPS_W",
+        "nominal_mm": 440.0,
+        "tol_plus_mm": 2.0,
+        "tol_minus_mm": -2.0,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "440.00 ±2.00"
+      },
+      {
+        "label": "UPS_D",
+        "nominal_mm": 720.0,
+        "tol_plus_mm": 2.0,
+        "tol_minus_mm": -2.0,
+        "view": "right",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "720.00 ±2.00"
+      },
+      {
+        "label": "UPS_H",
+        "nominal_mm": 780.0,
+        "tol_plus_mm": 2.0,
+        "tol_minus_mm": -2.0,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "780.00 ±2.00"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "flatness",
+        "tolerance_mm": 1.0,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "FLOOR PLINTH BASE",
+        "glyph": "⏥",
+        "tolerance_text": "1.00"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "440x720x780 mm (tesis guc bolmesi), 0.0 ms gecis, 40.0 dk tam yuk (>=30 dk) / 213.2 dk Tier-1 (>=180 dk), 350 W kayip / 0 W kriyo, kutle=145.0 kg",
+      "Exp150 S7.SAFETY-04 (145.0 kg, 350 W loss, 0 W cryo): 15 kVA / 13.5 kW / 10 kWh Online LFP UPS (0 ms transfer).",
+      "Placed at X=+2650 mm, Y=+150 mm (30 mm clear of Bay 2 X_max=2400; 100 mm clear of S9.HPC Y_max=-310).",
+      "PRELIMINARY DESIGN ONLY: iec61508_certified=False, semi_s2_certified=False."
+    ],
+    "scad_params": {
+      "ups_w_mm": 440.0,
+      "ups_d_mm": 720.0,
+      "ups_h_mm": 780.0,
+      "kva_rating": 15.0,
+      "lfp_kwh": 10.0
+    },
+    "target_mass_kg": 145.0,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S7.SAFETY-04",
+    "subsystem": "S7",
+    "design_tier": "COTS_ENV_ICD",
+    "stl_path": "hardware/cad_parts/out/S7/S7.SAFETY-04.stl",
+    "step_path": "hardware/cad_parts/out/S7/S7.SAFETY-04.step",
+    "scad_path": "hardware/cad_parts/out/S7/S7.SAFETY-04.scad",
+    "dxf_path": "hardware/cad_parts/out/S7/S7.SAFETY-04.dxf",
+    "svg_path": "hardware/cad_parts/out/S7/S7.SAFETY-04.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 245999528.42073122,
+    "surface_area_mm2": 3834495.7876858925,
+    "mass_kg": 145.00000000000003,
+    "cg_mm": [
+      2649.9999999999914,
+      154.94339329437395,
+      391.36164689684887
+    ],
+    "bbox_min_mm": [
+      2430.0,
+      -210.0,
+      0.0
+    ],
+    "bbox_max_mm": [
+      2870.0,
+      526.2,
+      780.0
+    ],
+    "inertia_kg_mm2": [
+      13553793.215247175,
+      9637285.851054152,
+      8583292.749833724,
+      -3.1313576287940685e-07,
+      -4.973332704555285e-07,
+      -42397.68505309721
+    ],
+    "triangle_count": 688,
+    "vertex_count": 344,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "shell_bboxes_mm": [
+    [
+      [
+        2430.0,
+        -210.0,
+        0.0
+      ],
+      [
+        2870.0,
+        510.0,
+        38.0
+      ]
+    ],
+    [
+      [
+        2430.0,
+        -196.0,
+        40.0
+      ],
+      [
+        2870.0,
+        510.0,
+        780.0
+      ]
+    ],
+    [
+      [
+        2434.0,
+        -210.0,
+        42.0
+      ],
+      [
+        2866.0,
+        -200.0,
+        770.0
+      ]
+    ],
+    [
+      [
+        2480.0,
+        510.2,
+        380.0
+      ],
+      [
+        2820.0,
+        526.2,
+        640.0
+      ]
+    ],
+    [
+      [
+        2499.0,
+        510.2,
+        214.0
+      ],
+      [
+        2611.0,
+        524.2,
+        326.0
+      ]
+    ],
+    [
+      [
+        2689.0,
+        510.2,
+        214.0
+      ],
+      [
+        2801.0,
+        524.2,
+        326.0
+      ]
+    ]
+  ],
+  "reconciliation_notes": []
+}

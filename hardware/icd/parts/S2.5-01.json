@@ -1,0 +1,96 @@
+{
+  "schema_version": "part_icd_v1.0",
+  "part_id": "S2.5-01",
+  "parent_bom_id": "S2.5",
+  "subsystem": "S2",
+  "part_name": "Kafa-kademe goreli kapasitif konum sensorleri (3 eksen)",
+  "part_category": "PHYSICAL_SOLID",
+  "bom_metadata": {
+    "qty": "1",
+    "unit": "set",
+    "material": "Invar / Altin elektrot (PI/Lion sinifi)",
+    "key_spec": "Cozunurluk <=0.1 nm RMS, 10 kHz bant genisligi",
+    "tolerance": "±0.2 nm",
+    "temp_stage": "300 K",
+    "vacuum_grade": "UHV 1e-9 mbar",
+    "procurement_class": "COTS",
+    "parent_cost_class": "B",
+    "usd_low": 8000.0,
+    "usd_nom": 14000.0,
+    "usd_high": 25000.0,
+    "legacy_cad_module": "s2_mems_write_head",
+    "bom_epistemic_tag": "{Model-Kalibrasyon-Exp114}",
+    "notes": "DESIGN §5.4 goreli metroloji"
+  },
+  "artifact_links": {
+    "cad": {
+      "work_package": "WP-M1",
+      "design_tier": "COTS_ENV_ICD",
+      "stl": "hardware/cad_parts/out/S2/S2.5-01.stl",
+      "step": "hardware/cad_parts/out/S2/S2.5-01.step",
+      "scad": "hardware/cad_parts/out/S2/S2.5-01.scad",
+      "dxf": "hardware/cad_parts/out/S2/S2.5-01.dxf",
+      "svg": "hardware/cad_parts/out/S2/S2.5-01.svg",
+      "cad_json": "hardware/cad_parts/out/S2/S2.5-01.json",
+      "watertight": true,
+      "all_6_files_valid": true,
+      "mass_kg": 0.023109,
+      "triangle_count": 1056,
+      "temp_k": 300.0,
+      "canonical_bbox_min_mm": [
+        -33.75,
+        -54.796,
+        512.0
+      ],
+      "canonical_bbox_max_mm": [
+        62.5,
+        54.796,
+        528.0
+      ],
+      "datum_shift_mm": [
+        0.0,
+        0.0,
+        500.0
+      ],
+      "port_count": 3,
+      "gdt_frame_count": 2
+    },
+    "pcb_bundles": [],
+    "legacy_board_files": [],
+    "electrical_icd": {
+      "path": "hardware/icd/electrical/S2.5-01.json",
+      "electrical_class": "E4",
+      "grounding_domain": "AGND",
+      "ups_tier": "NONE",
+      "exp150_ups_allocation_w": 0.0,
+      "mating_part_ids": [
+        "S2.5-02",
+        "S4.5-01",
+        "S4.5-03"
+      ],
+      "interlock_hooks_count": 1
+    },
+    "rtl_modules": [],
+    "rtl_audit_json": null,
+    "software_and_eda_files": [],
+    "verification_tests": []
+  },
+  "specialized_specification": null,
+  "verification_status": {
+    "cad_verified": true,
+    "pcb_verified": false,
+    "electrical_icd_verified": true,
+    "rtl_verified": false,
+    "software_or_eda_verified": false,
+    "specialized_icd_present": false,
+    "traceable": true
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "tapeout_done": false
+  }
+}

@@ -1,0 +1,245 @@
+{
+  "part_design": {
+    "part_id": "S9.4-02",
+    "parent_bom_id": "S9.4",
+    "subsystem": "S9",
+    "part_name": "20 mK NbTiN 5-Kademe Chebyshev/Klopfenstein 50 Ohm <-> 3 kOhm qRAM Kopru Modulu (4-ch, Exp142 S9.1-02, 0.38 kg)",
+    "design_tier": "CUSTOM_FULL",
+    "material": "Nb",
+    "temp_stage": "20 mK (MXC)",
+    "temp_k": 0.02,
+    "vacuum_grade": "Kriyo-vakum",
+    "tolerance_spec": "S11<=-20 dB (4-8 GHz)",
+    "surface_finish_ra_um": 0.8,
+    "qty": 1,
+    "procurement_class": "R&D",
+    "world_origin_mm": [
+      -650.0,
+      0.0,
+      408.0
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "qram_50ohm_in",
+        "kind": "rf",
+        "position_mm": [
+          -34.05,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "standard": "2x 50 Ohm Cryo SMP (4-8 GHz)",
+        "mating_part_id": "S9.4-03",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      },
+      {
+        "name": "qram_3kohm_out",
+        "kind": "rf",
+        "position_mm": [
+          34.05,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "standard": "2x 3 kOhm Bus Coupling SMP",
+        "mating_part_id": "S6.10-01",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "BOX_X",
+        "nominal_mm": 60.0,
+        "tol_plus_mm": 0.05,
+        "tol_minus_mm": -0.05,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "60.00 ±0.05"
+      },
+      {
+        "label": "BOX_Y",
+        "nominal_mm": 30.0,
+        "tol_plus_mm": 0.05,
+        "tol_minus_mm": -0.05,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "30.00 ±0.05"
+      },
+      {
+        "label": "BOX_Z",
+        "nominal_mm": 16.0,
+        "tol_plus_mm": 0.05,
+        "tol_minus_mm": -0.05,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "16.00 ±0.05"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "flatness",
+        "tolerance_mm": 0.005,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "Chebyshev die thermal seat",
+        "glyph": "⏥",
+        "tolerance_text": "0.005"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "s6_dr_flange_mxc ([-650,0,410] mm, 60x30x16 mm, S6.5 TWPA alti 8.5 mm Z bosluk), max S11=-39.56 dB @ 4-8 GHz (BW_20dB=4.8 GHz), F_SWAP_31P=0.9858, 0.78 uW @ 20 mK, kutle=0.38 kg",
+      "Exact BOM part_id S9.4-02 (resolves legacy cad/params.py S9.1 aliasing bug). 20 mK 5-stage Chebyshev 50 Ohm<->3 kOhm qRAM bridge (S11=-39.56 dB, 0.78 uW @ 20 mK, 8.5 mm clear below S6.11-02 TWPA, Exp142)."
+    ],
+    "scad_params": {
+      "box_dx": 60.0,
+      "box_dy": 30.0,
+      "box_dz": 16.0,
+      "z_in_ohm": 50.0,
+      "z_out_ohm": 3000.0,
+      "stages": 5
+    },
+    "target_mass_kg": 0.38,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact_result": {
+    "part_id": "S9.4-02",
+    "subsystem": "S9",
+    "design_tier": "CUSTOM_FULL",
+    "stl_path": "hardware/cad_parts/out/S9_optq/S9.4-02.stl",
+    "step_path": "hardware/cad_parts/out/S9_optq/S9.4-02.step",
+    "scad_path": "hardware/cad_parts/out/S9_optq/S9.4-02.scad",
+    "dxf_path": "hardware/cad_parts/out/S9_optq/S9.4-02.dxf",
+    "svg_path": "hardware/cad_parts/out/S9_optq/S9.4-02.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 24291.510186025353,
+    "surface_area_mm2": 14746.332252864133,
+    "mass_kg": 0.2081782422942373,
+    "cg_mm": [
+      3.2292730022624535e-16,
+      -1.6947101863096096e-17,
+      -0.04100624300496342
+    ],
+    "bbox_min_mm": [
+      -34.05,
+      -15.0,
+      -8.0
+    ],
+    "bbox_max_mm": [
+      34.05,
+      15.0,
+      8.0
+    ],
+    "inertia_kg_mm2": [
+      22.571372635675033,
+      73.88532676662808,
+      86.2814931419939,
+      -3.741297405213118e-16,
+      2.4608463500315737e-16,
+      2.569402244687008e-16
+    ],
+    "triangle_count": 436,
+    "vertex_count": 224,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "json_path": "hardware/cad_parts/out/S9_optq/S9.4-02.json",
+  "world_bbox_min_mm": [
+    -684.05,
+    -15.0,
+    400.0
+  ],
+  "world_bbox_max_mm": [
+    -615.95,
+    15.0,
+    416.0
+  ],
+  "world_cg_mm": [
+    -650.0,
+    -0.0,
+    407.959
+  ],
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

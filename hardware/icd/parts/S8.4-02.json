@@ -1,0 +1,79 @@
+{
+  "schema_version": "part_icd_v1.0",
+  "part_id": "S8.4-02",
+  "parent_bom_id": "S8.4",
+  "subsystem": "S8",
+  "part_name": "Kriyo/UHV/Guvenlik telemetri SCADA kayitcisi ve alarm arayuzu",
+  "part_category": "IN_HOUSE_SOFTWARE_RTL_EDA",
+  "bom_metadata": {
+    "qty": "1",
+    "unit": "paket",
+    "material": "Python / OPC-UA / MQTT",
+    "key_spec": "5-kademe sicaklik, vakum, PH3, B-alani 1 Hz log ve alarm",
+    "tolerance": "1 Hz",
+    "temp_stage": "300 K (SW)",
+    "vacuum_grade": "Uygulanmaz (SW)",
+    "procurement_class": "IN-HOUSE",
+    "parent_cost_class": "--",
+    "usd_low": 0.0,
+    "usd_nom": 0.0,
+    "usd_high": 0.0,
+    "legacy_cad_module": "software_control_stack",
+    "bom_epistemic_tag": "{Program-NRE-Kapsam}",
+    "notes": "S7.4 PLC ile entegre izleme ($0 HW; Program NRE kapsaminda)"
+  },
+  "artifact_links": {
+    "cad": null,
+    "pcb_bundles": [],
+    "legacy_board_files": [],
+    "electrical_icd": null,
+    "rtl_modules": [
+      "rtl/machine_ctrl/fpga_top_machine_ctrl.v",
+      "rtl/machine_ctrl/uart_axi_regmap.v",
+      "rtl/machine_ctrl/uhv_interlock_fsm.v"
+    ],
+    "rtl_audit_json": "results/stage2_rtl_verification/rtl_machine_ctrl_audit.json",
+    "software_and_eda_files": [
+      "src/machine_control/scada_telemetry.py",
+      "rtl/machine_ctrl/REGMAP.md"
+    ],
+    "verification_tests": [
+      "tests/test_scada_telemetry.py",
+      "tests/test_rtl_machine_ctrl.py"
+    ]
+  },
+  "specialized_specification": {
+    "kind": "IN_HOUSE_SOFTWARE_RTL_EDA",
+    "role": "Cryo/UHV/Safety 1 Hz SCADA telemetry historian, OPC-UA schema & ISA-18.2 alarm/interlock logger",
+    "implementation_files": [
+      "src/machine_control/scada_telemetry.py",
+      "rtl/machine_ctrl/REGMAP.md"
+    ],
+    "rtl_files": [
+      "rtl/machine_ctrl/uart_axi_regmap.v",
+      "rtl/machine_ctrl/uhv_interlock_fsm.v",
+      "rtl/machine_ctrl/fpga_top_machine_ctrl.v"
+    ],
+    "verification_tests": [
+      "tests/test_scada_telemetry.py",
+      "tests/test_rtl_machine_ctrl.py"
+    ]
+  },
+  "verification_status": {
+    "cad_verified": false,
+    "pcb_verified": false,
+    "electrical_icd_verified": false,
+    "rtl_verified": true,
+    "software_or_eda_verified": true,
+    "specialized_icd_present": true,
+    "traceable": true
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "tapeout_done": false
+  }
+}

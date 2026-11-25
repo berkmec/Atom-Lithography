@@ -1,0 +1,92 @@
+{
+  "schema_version": "1.0",
+  "part_id": "S9.HPC-01",
+  "parent_bom_id": "S9.HPC",
+  "subsystem": "S9",
+  "part_name": "2U Cift-Hizlandiricili QEC Dekoder Dugumu (2x H100/Alveo-U280 Sinifi + Cift-100G ConnectX-7 RoCEv2 NIC, Exp143, 56.00 kg)",
+  "qty": 2,
+  "unit": "dugum",
+  "temp_stage": "300 K (HPC rafi)",
+  "vacuum_grade": "Atmosfer",
+  "bom_key_spec": "482.6x780x177.8 mm (4U dogrudan / 5U anahtarli), Surface d=37 e2e=6.34 us (<6.70 us D3 dongu, 16L/modul) & qLDPC [[144,12,12]] e2e=2.32 us (<2.62 us, 108L/modul), 2100 W / 0 W kriyo, kutle=56.00 kg",
+  "usd_nom": 112000.0,
+  "bom_epistemic_tag": "{Varsay\u0131m}",
+  "electrical_class": "E3",
+  "grounding_domain": "DGND",
+  "grounding_notes": "2x 2U QEC decoder nodes (2x H100/Alveo-U280 + Dual-100G ConnectX-7 RoCEv2); Tier-2 graceful halt.",
+  "supply_rails": [
+    {
+      "rail_name": "AC_UPS_TIER2_SHED",
+      "voltage_v": 230.0,
+      "current_type": "AC_1PH",
+      "max_current_a": 12.0,
+      "steady_power_w": 2100.0,
+      "peak_power_w": 2500.0,
+      "source_part_id": "S7.SAFETY-04"
+    }
+  ],
+  "connectors_and_pinout": [
+    {
+      "connector_ref": "J_AC",
+      "connector_type": "4x IEC C19 Redundant PSU",
+      "location_side": "rack_rear",
+      "mating_part_id": "S9.HPC-03",
+      "pins": [
+        {
+          "pin": "L-N-PE",
+          "signal": "UPS_T2_SHED_230V",
+          "direction": "IN",
+          "nominal_level": "2100 W total (2 nodes), shed @ t=60 s"
+        }
+      ]
+    },
+    {
+      "connector_ref": "J_100G",
+      "connector_type": "4x QSFP28-100G-SR4",
+      "location_side": "rack_rear",
+      "mating_part_id": "S9.HPC-02",
+      "pins": [
+        {
+          "pin": "1-4",
+          "signal": "ROCEV2_100G_OM4",
+          "direction": "BIDIR",
+          "nominal_level": "Surface d=37 6.34 us / qLDPC 2.32 us"
+        }
+      ]
+    }
+  ],
+  "mating_part_ids": [
+    "S9.HPC-02",
+    "S9.HPC-03",
+    "S6.11-01",
+    "S7.SAFETY-04"
+  ],
+  "interlock_hooks": [
+    {
+      "signal_name": "UPS_TIER2_GRACEFUL_HALT",
+      "target_part_id": "S7.SAFETY-04",
+      "action_on_trip": "Checkpoint syndromes & power down within 60 s",
+      "response_time_ms": 60000.0
+    }
+  ],
+  "ups_tier": "TIER2_SHED",
+  "ups_budget_group": "EXP150_TIER2_SHED",
+  "exp150_ups_allocation_w": 2100.0,
+  "supply_rails_steady_sum_w": 2100.0,
+  "incremental_mains_w": 2100.0,
+  "secondary_or_parent_derived_w": 0.0,
+  "non_exp150_aux_shed_w": 0.0,
+  "reconciliation_note": "Exp150 Tier-2 sheddable baseline load: incremental_mains_w = exp150_ups_allocation_w = 2100.0 W (raw supply_rails sum = 2100.0 W, shed cleanly on utility outage).",
+  "timing_sync": {
+    "rb_10mhz_port": null,
+    "white_rabbit_port": "WR_SFP_4 (via S9.HPC-02)",
+    "sync_role": "Real-time QEC decoder cluster"
+  },
+  "epistemic_flags": {
+    "design_maturity": "M0_M1_ELECTRICAL_ICD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

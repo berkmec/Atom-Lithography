@@ -1,0 +1,283 @@
+{
+  "part_id": "S2.1-01",
+  "subsystem": "S2",
+  "design": {
+    "part_id": "S2.1-01",
+    "parent_bom_id": "S2.1",
+    "subsystem": "S2",
+    "part_name": "SOI MEMS apertur plakasi (Arch-B es-adimli 0.50 mm, 32x32=1024 demetcik)",
+    "design_tier": "CUSTOM_FULL",
+    "material": "Si",
+    "temp_stage": "300 K",
+    "temp_k": 300.0,
+    "vacuum_grade": "UHV 1e-9 mbar",
+    "tolerance_spec": "±50 nm CD, <=2 um egilme",
+    "surface_finish_ra_um": 0.05,
+    "qty": 2,
+    "procurement_class": "R&D",
+    "world_origin_mm": [
+      0.0,
+      0.0,
+      7.675
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "beamlet_array_in",
+        "kind": "vacuum",
+        "position_mm": [
+          0.0,
+          0.0,
+          7.69
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "32x32 @ 0.50 mm SOI",
+        "mating_part_id": "S2.1-03",
+        "bore_mm": 22.627,
+        "od_mm": 36.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "global",
+        "notes": ""
+      },
+      {
+        "name": "beamlet_array_out",
+        "kind": "vacuum",
+        "position_mm": [
+          0.0,
+          0.0,
+          7.66
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "standard": "32x32 @ 0.50 mm SOI",
+        "mating_part_id": "S2.2-03",
+        "bore_mm": 22.627,
+        "od_mm": 36.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "global",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "WAFER_OD",
+        "nominal_mm": 36.0,
+        "tol_plus_mm": 0.02,
+        "tol_minus_mm": -0.02,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø36.00 ±0.02"
+      },
+      {
+        "label": "SOI_THICK",
+        "nominal_mm": 0.03,
+        "tol_plus_mm": 0.002,
+        "tol_minus_mm": -0.002,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 3,
+        "formatted": "0.030 ±0.002"
+      },
+      {
+        "label": "PITCH_32X32",
+        "nominal_mm": 0.5,
+        "tol_plus_mm": 5e-05,
+        "tol_minus_mm": -5e-05,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 4,
+        "formatted": "0.5000 ±0.0001"
+      },
+      {
+        "label": "ACTIVE_SPAN",
+        "nominal_mm": 16.0,
+        "tol_plus_mm": 0.005,
+        "tol_minus_mm": -0.005,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "16.00 ±0.005"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "position",
+        "tolerance_mm": 0.0001,
+        "diameter_zone": true,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "B",
+        "datum_tertiary": "",
+        "feature_note": "1024 APERTURE ARRAY",
+        "glyph": "⌖",
+        "tolerance_text": "Ø0.0001"
+      },
+      {
+        "symbol": "flatness",
+        "tolerance_mm": 0.002,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "30 UM SOI MEMBRANE",
+        "glyph": "⏥",
+        "tolerance_text": "0.002"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "0.50 mm es-adim, 32x32=1024 demetcik (16.0x16.0 mm, kosegen 22.63 mm < Ø28.0 mm aciklik)",
+      "True 32x32 = 1,024 beamlet 30 um SOI wafer (16.0x16.0 mm, diag 22.627 mm < Ø28.0 mm); Euler genus = 1,024"
+    ],
+    "scad_params": {
+      "nx": 32,
+      "ny": 32,
+      "pitch_mm": 0.5,
+      "hole_d_mm": 0.22,
+      "soi_t_mm": 0.03,
+      "wafer_od": 36.0
+    },
+    "target_mass_kg": 7e-05,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S2.1-01",
+    "subsystem": "S2",
+    "design_tier": "CUSTOM_FULL",
+    "stl_path": "hardware/cad_parts/out/S2/S2.1-01.stl",
+    "step_path": "hardware/cad_parts/out/S2/S2.1-01.step",
+    "scad_path": "hardware/cad_parts/out/S2/S2.1-01.scad",
+    "dxf_path": "hardware/cad_parts/out/S2/S2.1-01.dxf",
+    "svg_path": "hardware/cad_parts/out/S2/S2.1-01.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 29.48147492059161,
+    "surface_area_mm2": 1989.5151074056876,
+    "mass_kg": 6.866235509005892e-05,
+    "cg_mm": [
+      -2.5259981892903856e-13,
+      1.6987177068994228e-13,
+      7.6749999998671115
+    ],
+    "bbox_min_mm": [
+      -18.0,
+      -18.0,
+      7.66
+    ],
+    "bbox_max_mm": [
+      18.0,
+      18.0,
+      7.6899999999999995
+    ],
+    "inertia_kg_mm2": [
+      0.0057071512570044435,
+      0.005707151257005007,
+      0.011414292214444819,
+      2.0646404932930624e-17,
+      -1.820103674583645e-16,
+      1.134890422607145e-16
+    ],
+    "triangle_count": 50688,
+    "vertex_count": 23298,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "engineering_checks": {
+    "lateral_registration": {
+      "nominal_mm": 0.0,
+      "mean_mm": 0.0,
+      "wc_half_band_mm": 0.0008,
+      "wc_min_mm": -0.0008,
+      "wc_max_mm": 0.0008,
+      "rss_half_band_mm": 0.0005431390245600108,
+      "rss_min_mm": -0.0005431390245600108,
+      "rss_max_mm": 0.0005431390245600108,
+      "modified_rss_half_band_mm": 0.0008147085368400162,
+      "modified_rss_min_mm": -0.0008147085368400162,
+      "modified_rss_max_mm": 0.0008147085368400162,
+      "target_min_mm": -0.005,
+      "target_max_mm": 0.005,
+      "wc_pass": true,
+      "rss_pass": true,
+      "modified_rss_pass": true,
+      "variance_shares_pct": {
+        "S2.1-01_soi_cd_error": 0.847457627118644,
+        "S2.2-01_blanker_elec_pitch": 13.559322033898304,
+        "S2.3-01_minilens_roundness": 0.847457627118644,
+        "S2.3-03_dowel_pin_reg": 84.7457627118644
+      }
+    }
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

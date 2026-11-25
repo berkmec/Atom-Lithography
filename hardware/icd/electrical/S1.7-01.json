@@ -1,0 +1,90 @@
+{
+  "schema_version": "1.0",
+  "part_id": "S1.7-01",
+  "parent_bom_id": "S1.7",
+  "subsystem": "S1",
+  "part_name": "S1-Multi Hizli-Degisim 3-Turlu Kaynak Kartus Yuvasi (31P Gaz / 121Sb 450C Firin / 167Er Mikro-Paul, Exp142 S1.6-01, 4.80 kg)",
+  "qty": 1,
+  "unit": "set",
+  "temp_stage": "300 K (UHV kolon)",
+  "vacuum_grade": "UHV 1e-9 mbar",
+  "bom_key_spec": "s1_duoplasmatron +Y flans (76x76x95 mm, [0,110,992.66] mm, min bosluk 27 mm), 31P+ / 121Sb+ / 167Er+ (1536 nm F_P_eff=1520, beta_ZPL=0.9993), 180 W tepe / 0 W kriyo, kutle=4.80 kg",
+  "usd_nom": 68000.0,
+  "bom_epistemic_tag": "{Varsay\u0131m}",
+  "electrical_class": "E4",
+  "grounding_domain": "HV_MINUS_5KV_DECK",
+  "grounding_notes": "S1-Multi 3-species quick-swap cartridge bay (31P/121Sb 450C oven/167Er); 180 W peak Tier-2 shed.",
+  "supply_rails": [
+    {
+      "rail_name": "OVEN_HEATER_450C",
+      "voltage_v": 48.0,
+      "current_type": "DC",
+      "max_current_a": 4.0,
+      "steady_power_w": 180.0,
+      "peak_power_w": 180.0,
+      "source_part_id": "S7.SAFETY-04"
+    }
+  ],
+  "connectors_and_pinout": [
+    {
+      "connector_ref": "J_OVEN_FT",
+      "connector_type": "CF40 Power + Thermocouple Feedthrough",
+      "location_side": "s1_plusY_flange",
+      "mating_part_id": "S1.1-05",
+      "pins": [
+        {
+          "pin": "1-2",
+          "signal": "PBN_OVEN_HTR_PN",
+          "direction": "IN",
+          "nominal_level": "180 W peak @ 450 C (0 W cryo)"
+        },
+        {
+          "pin": "3-4",
+          "signal": "TYPE_K_TC",
+          "direction": "OUT",
+          "nominal_level": "Oven temperature feedback"
+        },
+        {
+          "pin": "5-6",
+          "signal": "MICRO_PAUL_RF",
+          "direction": "IN",
+          "nominal_level": "167Er trap RF feed"
+        }
+      ]
+    }
+  ],
+  "mating_part_ids": [
+    "S1.1-01",
+    "S1.1-05",
+    "S7.SAFETY-03",
+    "S7.SAFETY-04"
+  ],
+  "interlock_hooks": [
+    {
+      "signal_name": "OPTION_Q_OVEN_CUT",
+      "target_part_id": "S7.SAFETY-03",
+      "action_on_trip": "Cut 180 W oven power at t=45 ms on EPO/outage",
+      "response_time_ms": 45.0
+    }
+  ],
+  "ups_tier": "TIER2_SHED",
+  "ups_budget_group": "EXP150_TIER2_SHED",
+  "exp150_ups_allocation_w": 180.0,
+  "supply_rails_steady_sum_w": 180.0,
+  "incremental_mains_w": 180.0,
+  "secondary_or_parent_derived_w": 0.0,
+  "non_exp150_aux_shed_w": 0.0,
+  "reconciliation_note": "Exp150 Tier-2 sheddable baseline load: incremental_mains_w = exp150_ups_allocation_w = 180.0 W (raw supply_rails sum = 180.0 W, shed cleanly on utility outage).",
+  "timing_sync": {
+    "rb_10mhz_port": null,
+    "white_rabbit_port": null,
+    "sync_role": "Multi-species source oven"
+  },
+  "epistemic_flags": {
+    "design_maturity": "M0_M1_ELECTRICAL_ICD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

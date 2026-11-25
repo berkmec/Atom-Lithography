@@ -1,0 +1,84 @@
+{
+  "schema_version": "part_icd_v1.0",
+  "part_id": "S6.8-01",
+  "parent_bom_id": "S6.8",
+  "subsystem": "S6",
+  "part_name": "Seyreltme kriyostati ic-eklenti kulesi (MXC ~20 mK, Still, CP, isi esanjorleri)",
+  "part_category": "PHYSICAL_SOLID",
+  "bom_metadata": {
+    "qty": "1",
+    "unit": "adet",
+    "material": "OFHC Cu / 316LN / Ag-sinter esanjor",
+    "key_spec": "T_base <= 20 mK, >=400 uW @ 100 mK (MXC yuku 5.2 uW rahat, Exp110/121)",
+    "tolerance": "±1 mK",
+    "temp_stage": "50K/4K/0.8K/100mK/20mK",
+    "vacuum_grade": "Kriyo-vakum",
+    "procurement_class": "COTS",
+    "parent_cost_class": "D",
+    "usd_low": 250000.0,
+    "usd_nom": 420000.0,
+    "usd_high": 730000.0,
+    "legacy_cad_module": "s6_cryo_dr_magnet_readout",
+    "bom_epistemic_tag": "{Model-Kalibrasyon-Exp114}",
+    "notes": "EXP121 BAZ KADEME (S6.8=D): Bluefors/Oxford arastirma sinifi; 1K (Exp117) indirme alternatifi"
+  },
+  "artifact_links": {
+    "cad": {
+      "work_package": "WP-M4",
+      "design_tier": "COTS_ENV_ICD",
+      "stl": "hardware/cad_parts/out/S6/S6.8-01.stl",
+      "step": "hardware/cad_parts/out/S6/S6.8-01.step",
+      "scad": "hardware/cad_parts/out/S6/S6.8-01.scad",
+      "dxf": "hardware/cad_parts/out/S6/S6.8-01.dxf",
+      "svg": "hardware/cad_parts/out/S6/S6.8-01.svg",
+      "cad_json": "hardware/cad_parts/out/S6/S6.8-01.json",
+      "watertight": true,
+      "all_6_files_valid": true,
+      "mass_kg": 27.172107,
+      "triangle_count": 6000,
+      "temp_k": 0.02,
+      "canonical_bbox_min_mm": [
+        -798.0,
+        -148.0,
+        484.0
+      ],
+      "canonical_bbox_max_mm": [
+        -502.0,
+        148.0,
+        959.5
+      ],
+      "datum_shift_mm": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "port_count": 0,
+      "gdt_frame_count": 0
+    },
+    "pcb_bundles": [],
+    "legacy_board_files": [],
+    "electrical_icd": null,
+    "rtl_modules": [],
+    "rtl_audit_json": null,
+    "software_and_eda_files": [],
+    "verification_tests": []
+  },
+  "specialized_specification": null,
+  "verification_status": {
+    "cad_verified": true,
+    "pcb_verified": false,
+    "electrical_icd_verified": false,
+    "rtl_verified": false,
+    "software_or_eda_verified": false,
+    "specialized_icd_present": false,
+    "traceable": true
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "tapeout_done": false
+  }
+}

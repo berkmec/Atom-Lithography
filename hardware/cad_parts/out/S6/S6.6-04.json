@@ -1,0 +1,228 @@
+{
+  "part_design": {
+    "part_id": "S6.6-04",
+    "parent_bom_id": "S6.6",
+    "subsystem": "S6",
+    "part_name": "Cikis superiletken NbTi / SS koaksiyel hatlari (56 zincir, Exp114)",
+    "design_tier": "CUSTOM_FULL",
+    "material": "NbTi",
+    "temp_stage": "20 mK -> 300 K",
+    "temp_k": 0.02,
+    "vacuum_grade": "Kriyo-vakum",
+    "tolerance_spec": "<0.1 dB/m",
+    "surface_finish_ra_um": 0.8,
+    "qty": 56,
+    "procurement_class": "CUS",
+    "world_origin_mm": [
+      -650.0,
+      -76.0,
+      669.0
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "out56_top_50k",
+        "kind": "rf",
+        "position_mm": [
+          0.0,
+          0.0,
+          167.0
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "56x SS304 Output to RT LNA",
+        "mating_part_id": "S6.6-05",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      },
+      {
+        "name": "out56_bot_mxc",
+        "kind": "rf",
+        "position_mm": [
+          0.0,
+          0.0,
+          -167.0
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "standard": "56x NbTi Lossless MXC->4K Loom",
+        "mating_part_id": "S6.6-02",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "CLAMP_W",
+        "nominal_mm": 44.0,
+        "tol_plus_mm": 0.2,
+        "tol_minus_mm": -0.2,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "44.00 ±0.20"
+      },
+      {
+        "label": "CLAMP_D",
+        "nominal_mm": 22.0,
+        "tol_plus_mm": 0.2,
+        "tol_minus_mm": -0.2,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "22.00 ±0.20"
+      },
+      {
+        "label": "SPAN_Z",
+        "nominal_mm": 334.0,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "334.00 ±0.50"
+      }
+    ],
+    "gdt_frames": [],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "MXC->4K kayipsiz iletim (<0.1 dB/m), dusuk isi iletkenligi"
+    ],
+    "scad_params": {
+      "n_chains": 56,
+      "loss_db_per_m": 0.1,
+      "superconducting_span": "MXC_to_4K"
+    },
+    "target_mass_kg": 2.2,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact_result": {
+    "part_id": "S6.6-04",
+    "subsystem": "S6",
+    "design_tier": "CUSTOM_FULL",
+    "stl_path": "hardware/cad_parts/out/S6/S6.6-04.stl",
+    "step_path": "hardware/cad_parts/out/S6/S6.6-04.step",
+    "scad_path": "hardware/cad_parts/out/S6/S6.6-04.scad",
+    "dxf_path": "hardware/cad_parts/out/S6/S6.6-04.dxf",
+    "svg_path": "hardware/cad_parts/out/S6/S6.6-04.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 61193.81670332197,
+    "surface_area_mm2": 57415.20590363365,
+    "mass_kg": 0.39959562307269275,
+    "cg_mm": [
+      -5.053258895453217e-16,
+      3.5762953579953833e-16,
+      -15.42661238358506
+    ],
+    "bbox_min_mm": [
+      -22.0,
+      -11.0,
+      -167.0
+    ],
+    "bbox_max_mm": [
+      22.0,
+      11.0,
+      167.0
+    ],
+    "inertia_kg_mm2": [
+      4488.801639217748,
+      4529.214513570571,
+      70.80806160553249,
+      -1.2572863852255979e-14,
+      6.350279043672667e-14,
+      2.425961185605547e-14
+    ],
+    "triangle_count": 3104,
+    "vertex_count": 1680,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "json_path": "hardware/cad_parts/out/S6/S6.6-04.json",
+  "world_bbox_min_mm": [
+    -672.0,
+    -87.0,
+    502.0
+  ],
+  "world_bbox_max_mm": [
+    -628.0,
+    -65.0,
+    836.0
+  ],
+  "world_cg_mm": [
+    -650.0,
+    -76.0,
+    653.5734
+  ],
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

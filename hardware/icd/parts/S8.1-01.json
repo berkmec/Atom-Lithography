@@ -1,0 +1,81 @@
+{
+  "schema_version": "part_icd_v1.0",
+  "part_id": "S8.1-01",
+  "parent_bom_id": "S8.1",
+  "subsystem": "S8",
+  "part_name": "machine_control fabrika dongusu (factory/writer/calibrator Python cekirdegi)",
+  "part_category": "IN_HOUSE_SOFTWARE_RTL_EDA",
+  "bom_metadata": {
+    "qty": "1",
+    "unit": "paket",
+    "material": "Python 3.12 (src/machine_control/)",
+    "key_spec": "Yaz-algila-olc-sec-kalibre tam kapali cevrim + pytest",
+    "tolerance": "100% birim testi",
+    "temp_stage": "300 K (SW)",
+    "vacuum_grade": "Uygulanmaz (SW)",
+    "procurement_class": "IN-HOUSE",
+    "parent_cost_class": "--",
+    "usd_low": 0.0,
+    "usd_nom": 0.0,
+    "usd_high": 0.0,
+    "legacy_cad_module": "software_control_stack",
+    "bom_epistemic_tag": "{Program-NRE-Kapsam}",
+    "notes": "Proje ici yazilir ($0 HW alimi; muhendislik isciligi Program x3-x10 NRE icinde)"
+  },
+  "artifact_links": {
+    "cad": null,
+    "pcb_bundles": [],
+    "legacy_board_files": [],
+    "electrical_icd": null,
+    "rtl_modules": [],
+    "rtl_audit_json": null,
+    "software_and_eda_files": [
+      "src/machine_control/config.py",
+      "src/machine_control/factory.py",
+      "src/machine_control/writer.py",
+      "src/machine_control/calibrator.py",
+      "src/machine_control/selector.py",
+      "src/machine_control/spectroscopy.py",
+      "src/machine_control/sim.py"
+    ],
+    "verification_tests": [
+      "tests/test_machine_control.py",
+      "tests/test_control_physics_upgrades.py"
+    ]
+  },
+  "specialized_specification": {
+    "kind": "IN_HOUSE_SOFTWARE_RTL_EDA",
+    "role": "Closed-loop factory write->detect->measure->select->calibrate Python core",
+    "implementation_files": [
+      "src/machine_control/config.py",
+      "src/machine_control/factory.py",
+      "src/machine_control/writer.py",
+      "src/machine_control/calibrator.py",
+      "src/machine_control/selector.py",
+      "src/machine_control/spectroscopy.py",
+      "src/machine_control/sim.py"
+    ],
+    "rtl_files": [],
+    "verification_tests": [
+      "tests/test_machine_control.py",
+      "tests/test_control_physics_upgrades.py"
+    ]
+  },
+  "verification_status": {
+    "cad_verified": false,
+    "pcb_verified": false,
+    "electrical_icd_verified": false,
+    "rtl_verified": false,
+    "software_or_eda_verified": true,
+    "specialized_icd_present": true,
+    "traceable": true
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "tapeout_done": false
+  }
+}

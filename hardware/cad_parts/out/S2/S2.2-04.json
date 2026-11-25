@@ -1,0 +1,243 @@
+{
+  "part_id": "S2.2-04",
+  "subsystem": "S2",
+  "design": {
+    "part_id": "S2.2-04",
+    "parent_bom_id": "S2.2",
+    "subsystem": "S2",
+    "part_name": "Saptirilmis iyon durdurma diyaframi (beam-stop Faraday plakasi)",
+    "design_tier": "CUSTOM_FULL",
+    "material": "Mo",
+    "temp_stage": "300 K",
+    "temp_k": 300.0,
+    "vacuum_grade": "UHV 1e-9 mbar",
+    "tolerance_spec": "±20 um aciklik",
+    "surface_finish_ra_um": 0.4,
+    "qty": 1,
+    "procurement_class": "CUS",
+    "world_origin_mm": [
+      0.0,
+      0.0,
+      3.61
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "beamstop_inlet",
+        "kind": "vacuum",
+        "position_mm": [
+          0.0,
+          0.0,
+          4.21
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "32x32 Ø0.18 mm Stop",
+        "mating_part_id": "S2.2-01",
+        "bore_mm": 22.627,
+        "od_mm": 60.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "global",
+        "notes": ""
+      },
+      {
+        "name": "beamstop_outlet",
+        "kind": "vacuum",
+        "position_mm": [
+          0.0,
+          0.0,
+          3.01
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "standard": "32x32 Ø0.18 mm Stop",
+        "mating_part_id": "S2.3-03",
+        "bore_mm": 22.627,
+        "od_mm": 60.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "global",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "OD",
+        "nominal_mm": 60.0,
+        "tol_plus_mm": 0.02,
+        "tol_minus_mm": -0.02,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø60.00 ±0.02"
+      },
+      {
+        "label": "STOP_HOLE",
+        "nominal_mm": 0.18,
+        "tol_plus_mm": 0.02,
+        "tol_minus_mm": -0.02,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 3,
+        "formatted": "Ø0.180 ±0.020"
+      },
+      {
+        "label": "RIM_H",
+        "nominal_mm": 1.2,
+        "tol_plus_mm": 0.01,
+        "tol_minus_mm": -0.01,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "1.20 ±0.01"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "position",
+        "tolerance_mm": 0.02,
+        "diameter_zone": true,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "B",
+        "datum_tertiary": "",
+        "feature_note": "1024 BEAM-STOP HOLES",
+        "glyph": "⌖",
+        "tolerance_text": "Ø0.020"
+      },
+      {
+        "symbol": "flatness",
+        "tolerance_mm": 0.005,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "FARADAY DIAPHRAGM",
+        "glyph": "⏥",
+        "tolerance_text": "0.005"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "Saptirilan 10 mrad demetcikleri yakalar, geri-sacilma <1e-4",
+      "Separate solid graphite-coated Mo Faraday beam-stop + OFHC thermal rim; intercepts 10 mrad deflected ions (<1e-4 backscatter)"
+    ],
+    "scad_params": {
+      "nx": 32,
+      "ny": 32,
+      "pitch_mm": 0.5,
+      "stop_hole_mm": 0.18,
+      "backscatter_max": 0.0001
+    },
+    "target_mass_kg": 0.019,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S2.2-04",
+    "subsystem": "S2",
+    "design_tier": "CUSTOM_FULL",
+    "stl_path": "hardware/cad_parts/out/S2/S2.2-04.stl",
+    "step_path": "hardware/cad_parts/out/S2/S2.2-04.step",
+    "scad_path": "hardware/cad_parts/out/S2/S2.2-04.scad",
+    "dxf_path": "hardware/cad_parts/out/S2/S2.2-04.dxf",
+    "svg_path": "hardware/cad_parts/out/S2/S2.2-04.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 1751.5096799977316,
+    "surface_area_mm2": 5999.777025900867,
+    "mass_kg": 0.018005519510376676,
+    "cg_mm": [
+      -7.703757910205659e-15,
+      4.624688792856478e-16,
+      3.609999999999738
+    ],
+    "bbox_min_mm": [
+      -29.544232590366242,
+      -30.0,
+      3.01
+    ],
+    "bbox_max_mm": [
+      29.544232590366242,
+      30.0,
+      4.21
+    ],
+    "inertia_kg_mm2": [
+      4.6975421494111735,
+      4.697542149411187,
+      9.392740484951203,
+      9.213744078806485e-16,
+      -7.8842739981119e-17,
+      5.1343577922577974e-17
+    ],
+    "triangle_count": 51336,
+    "vertex_count": 23610,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "engineering_checks": {},
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

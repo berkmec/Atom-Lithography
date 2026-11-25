@@ -1,0 +1,276 @@
+{
+  "part_id": "S4.3-02",
+  "subsystem": "S4",
+  "part_design": {
+    "part_id": "S4.3-02",
+    "parent_bom_id": "S4.3",
+    "subsystem": "S4",
+    "part_name": "UHV kaba piezo stick-slip XY adimlama alt-kademesi (±25 mm)",
+    "design_tier": "CUSTOM_FULL",
+    "material": "Invar-36",
+    "temp_stage": "300 K (UHV)",
+    "temp_k": 300.0,
+    "vacuum_grade": "UHV 1e-9 mbar",
+    "tolerance_spec": "±50 nm kaba",
+    "surface_finish_ra_um": 0.4,
+    "qty": 1,
+    "procurement_class": "COTS/CUS",
+    "world_origin_mm": [
+      0.0,
+      0.0,
+      -145.0
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "fine_stage_top_mount",
+        "kind": "mechanical",
+        "position_mm": [
+          0.0,
+          0.0,
+          90.5
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "±25 mm Crossed-Roller XY Carriage Top",
+        "mating_part_id": "S4.3-01",
+        "bore_mm": 42.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      },
+      {
+        "name": "chamber_bottom_bolt_ring",
+        "kind": "bolt",
+        "position_mm": [
+          0.0,
+          0.0,
+          -69.0
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "standard": "8x M4 @ PCD 100.0 mm on UHV Bottom Flange",
+        "mating_part_id": "S5.1-01",
+        "bore_mm": 90.0,
+        "od_mm": 110.0,
+        "pcd_mm": 100.0,
+        "bolt_count": 8,
+        "bolt_hole_mm": 4.5,
+        "bolt_spec": "M4",
+        "frame": "local",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "STAGE_XY",
+        "nominal_mm": 96.0,
+        "tol_plus_mm": 0.05,
+        "tol_minus_mm": -0.05,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "96.00 ±0.05"
+      },
+      {
+        "label": "PEDESTAL_OD",
+        "nominal_mm": 104.0,
+        "tol_plus_mm": 0.02,
+        "tol_minus_mm": -0.02,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø104.00 ±0.02"
+      },
+      {
+        "label": "PEDESTAL_ID",
+        "nominal_mm": 90.0,
+        "tol_plus_mm": 0.02,
+        "tol_minus_mm": -0.02,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø90.00 ±0.02"
+      },
+      {
+        "label": "TOTAL_H",
+        "nominal_mm": 159.5,
+        "tol_plus_mm": 0.05,
+        "tol_minus_mm": -0.05,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "159.50 ±0.05"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "flatness",
+        "tolerance_mm": 0.005,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "XY CARRIAGE TOP DATUM A",
+        "glyph": "⏥",
+        "tolerance_text": "0.005"
+      },
+      {
+        "symbol": "coaxiality",
+        "tolerance_mm": 0.02,
+        "diameter_zone": true,
+        "material_condition": "",
+        "datum_primary": "B",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "INVAR PEDESTAL R=45..52",
+        "glyph": "◎",
+        "tolerance_text": "Ø0.020"
+      },
+      {
+        "symbol": "perpendicularity",
+        "tolerance_mm": 0.01,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "BASE MOUNTING FLANGE",
+        "glyph": "⊥",
+        "tolerance_text": "0.010"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "±25 mm yonga tarama alani (alan-alan adimlama, Exp79)",
+      "Non-magnetic Ti-6Al-4V / ceramic crossed-roller stick-slip XY stepper (±25 mm stroke, ±50 nm coarse step).",
+      "Integrated coaxial Invar-36 pedestal (R=45..52 mm) clears Cryoperm (R=41 mm) by 4 mm and B-coils (R=56 mm) by 4 mm."
+    ],
+    "scad_params": {
+      "coarse_xy_mm": 96.0,
+      "stroke_xy_mm": 25.0,
+      "pedestal_id_mm": 90.0,
+      "pedestal_od_mm": 104.0,
+      "pedestal_h_mm": 137.0
+    },
+    "target_mass_kg": null,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S4.3-02",
+    "subsystem": "S4",
+    "design_tier": "CUSTOM_FULL",
+    "stl_path": "hardware/cad_parts/out/S4/S4.3-02.stl",
+    "step_path": "hardware/cad_parts/out/S4/S4.3-02.step",
+    "scad_path": "hardware/cad_parts/out/S4/S4.3-02.scad",
+    "dxf_path": "hardware/cad_parts/out/S4/S4.3-02.dxf",
+    "svg_path": "hardware/cad_parts/out/S4/S4.3-02.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 471962.9047173274,
+    "surface_area_mm2": 143791.46992866715,
+    "mass_kg": 3.1149551711343615,
+    "cg_mm": [
+      -0.18509929303093062,
+      -0.18509929303092068,
+      28.4228009013318
+    ],
+    "bbox_min_mm": [
+      -55.5,
+      -55.5,
+      -69.0
+    ],
+    "bbox_max_mm": [
+      55.0,
+      55.0,
+      90.5
+    ],
+    "inertia_kg_mm2": [
+      11399.267099408346,
+      11399.267099408342,
+      6741.968936959023,
+      0.10672380997844273,
+      26.422863147512583,
+      32.765199147514345
+    ],
+    "triangle_count": 1320,
+    "vertex_count": 656,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "world_bbox_min_mm": [
+    -55.5,
+    -55.5,
+    -214.0
+  ],
+  "world_bbox_max_mm": [
+    55.0,
+    55.0,
+    -54.5
+  ],
+  "reconciliation": null,
+  "thermal_contraction_checks": [],
+  "tolerance_stack_checks": []
+}

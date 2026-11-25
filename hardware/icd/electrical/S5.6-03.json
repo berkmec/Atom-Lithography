@@ -1,0 +1,90 @@
+{
+  "schema_version": "1.0",
+  "part_id": "S5.6-03",
+  "parent_bom_id": "S5.6",
+  "subsystem": "S5",
+  "part_name": "Yuk-kilidi 345 C pirolitik-BN radyatif isitici + 350 C %5 H2/N2 FG/atomik-H pasivasyon manifoldu (Exp139, 4.2 kg)",
+  "qty": 1,
+  "unit": "set",
+  "temp_stage": "300-723 K (yuk-kilidi)",
+  "vacuum_grade": "UHV / FG-H",
+  "bom_key_spec": "RT-450 C (T_epi*=345 C \u00b12 C, 150 W), Rota C 350 C/15 dk FG/H pasivasyon (S_eps=0.390 ueV/rtHz, F_ff=%97.70), kutle=4.2 kg",
+  "usd_nom": 17000.0,
+  "bom_epistemic_tag": "{Varsay\u0131m}",
+  "electrical_class": "E4",
+  "grounding_domain": "FACILITY_PE",
+  "grounding_notes": "Load-lock 345 C PBN radiative heater (150 W, sequential w/ S5.6-01) + 5% H2/N2 FG leak-valve manifold.",
+  "supply_rails": [
+    {
+      "rail_name": "PBN_HEATER_150W",
+      "voltage_v": 48.0,
+      "current_type": "DC",
+      "max_current_a": 3.5,
+      "steady_power_w": 0.0,
+      "peak_power_w": 150.0,
+      "source_part_id": "S5.6-01"
+    }
+  ],
+  "connectors_and_pinout": [
+    {
+      "connector_ref": "J_PBN",
+      "connector_type": "CF40 Power + TC + Solenoid",
+      "location_side": "loadlock",
+      "mating_part_id": "S5.6-01",
+      "pins": [
+        {
+          "pin": "1-2",
+          "signal": "PBN_HTR_PN",
+          "direction": "IN",
+          "nominal_level": "150 W PID (RT-450 C \u00b12 C, sequential)"
+        },
+        {
+          "pin": "3-4",
+          "signal": "TYPE_C_TC",
+          "direction": "OUT",
+          "nominal_level": "Wafer temperature feedback"
+        },
+        {
+          "pin": "5-6",
+          "signal": "FG_VALVE_24V",
+          "direction": "IN",
+          "nominal_level": "ISO 10156 5% H2/N2 orifice valve"
+        }
+      ]
+    }
+  ],
+  "mating_part_ids": [
+    "S5.1-03",
+    "S5.6-01",
+    "S5.6-04",
+    "S7.SAFETY-06"
+  ],
+  "interlock_hooks": [
+    {
+      "signal_name": "FG_H2_VALVE_CLOSE",
+      "target_part_id": "S7.SAFETY-03",
+      "action_on_trip": "Close 5% H2/N2 valve & cut PBN heater (45 ms)",
+      "response_time_ms": 45.0
+    }
+  ],
+  "ups_tier": "TIER2_SHED",
+  "ups_budget_group": "AUX_PROCESS_SHED_ON_OUTAGE",
+  "exp150_ups_allocation_w": 0.0,
+  "supply_rails_steady_sum_w": 0.0,
+  "incremental_mains_w": 0.0,
+  "secondary_or_parent_derived_w": 0.0,
+  "non_exp150_aux_shed_w": 0.0,
+  "reconciliation_note": "Sequential non-simultaneous process load (0.0 W steady concurrent draw; peak 150.0 W interlocked against simultaneous peak): incremental_mains_w = 0.0 W, exp150_ups_allocation_w = 0.0 W.",
+  "timing_sync": {
+    "rb_10mhz_port": null,
+    "white_rabbit_port": null,
+    "sync_role": "Sequential epi/FG heater"
+  },
+  "epistemic_flags": {
+    "design_maturity": "M0_M1_ELECTRICAL_ICD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

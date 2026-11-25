@@ -1,0 +1,288 @@
+{
+  "part_id": "S4.4-04",
+  "subsystem": "S4",
+  "part_design": {
+    "part_id": "S4.4-04",
+    "parent_bom_id": "S4.4",
+    "subsystem": "S4",
+    "part_name": "632.8 nm AR-kapli CF40 optik vakum pencereleri ve fiber lansmanlar",
+    "design_tier": "COTS_ENV_ICD",
+    "material": "316LN",
+    "temp_stage": "300 K",
+    "temp_k": 300.0,
+    "vacuum_grade": "UHV 1e-9 mbar",
+    "tolerance_spec": "lambda/10",
+    "surface_finish_ra_um": 0.4,
+    "qty": 3,
+    "procurement_class": "COTS",
+    "world_origin_mm": [
+      0.0,
+      0.0,
+      -133.0
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "cf40_ar_viewport_X",
+        "kind": "flange",
+        "position_mm": [
+          240.5,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          -0.0,
+          0.0
+        ],
+        "standard": "CF40",
+        "mating_part_id": "S5.1-01",
+        "bore_mm": 28.0,
+        "od_mm": 69.5,
+        "pcd_mm": 58.7,
+        "bolt_count": 6,
+        "bolt_hole_mm": 6.6,
+        "bolt_spec": "M6",
+        "frame": "local",
+        "notes": "632.8 nm AR <0.2% CF40 optical viewport (X-axis, 0 deg)"
+      },
+      {
+        "name": "cf40_ar_viewport_Y",
+        "kind": "flange",
+        "position_mm": [
+          1.4726377759746924e-14,
+          240.5,
+          0.0
+        ],
+        "normal": [
+          -6.123233995736766e-17,
+          -1.0,
+          0.0
+        ],
+        "standard": "CF40",
+        "mating_part_id": "S5.1-01",
+        "bore_mm": 28.0,
+        "od_mm": 69.5,
+        "pcd_mm": 58.7,
+        "bolt_count": 6,
+        "bolt_hole_mm": 6.6,
+        "bolt_spec": "M6",
+        "frame": "local",
+        "notes": "632.8 nm AR <0.2% CF40 optical viewport (Y-axis, 90 deg)"
+      },
+      {
+        "name": "cf40_ar_viewport_Z",
+        "kind": "flange",
+        "position_mm": [
+          -4.417913327924076e-14,
+          -240.5,
+          0.0
+        ],
+        "normal": [
+          1.8369701987210297e-16,
+          1.0,
+          0.0
+        ],
+        "standard": "CF40",
+        "mating_part_id": "S5.1-01",
+        "bore_mm": 28.0,
+        "od_mm": 69.5,
+        "pcd_mm": 58.7,
+        "bolt_count": 6,
+        "bolt_hole_mm": 6.6,
+        "bolt_spec": "M6",
+        "frame": "local",
+        "notes": "632.8 nm AR <0.2% CF40 optical viewport (Z-axis, 270 deg)"
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "CF40_OD",
+        "nominal_mm": 69.5,
+        "tol_plus_mm": 0.15,
+        "tol_minus_mm": -0.15,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø69.50 ±0.15"
+      },
+      {
+        "label": "CF40_PCD",
+        "nominal_mm": 58.7,
+        "tol_plus_mm": 0.1,
+        "tol_minus_mm": -0.1,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø58.70 ±0.10"
+      },
+      {
+        "label": "CLEAR_APERTURE",
+        "nominal_mm": 28.0,
+        "tol_plus_mm": 0.1,
+        "tol_minus_mm": -0.1,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø28.00 ±0.10"
+      },
+      {
+        "label": "PORT_RADIUS",
+        "nominal_mm": 240.5,
+        "tol_plus_mm": 0.25,
+        "tol_minus_mm": -0.25,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "R",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "R240.50 ±0.25"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "flatness",
+        "tolerance_mm": 0.015,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "CF40 KNIFE-EDGE SEALING FACE",
+        "glyph": "⏥",
+        "tolerance_text": "0.015"
+      },
+      {
+        "symbol": "position",
+        "tolerance_mm": 0.12,
+        "diameter_zone": true,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "B",
+        "datum_tertiary": "",
+        "feature_note": "6x Ø6.6 BOLTS @ PCD 58.7",
+        "glyph": "⌖",
+        "tolerance_text": "Ø0.12"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "Yansima <0.2% @ 632.8 nm, dusuk cift-kirilim",
+      "3x ISO 3669 CF40 fused-silica AR viewports (R < 0.2% @ 632.8 nm, lambda/10, low birefringence) + fiber launchers & beam benders.",
+      "Aligned at 0/90/270 deg, R_face=240.5 mm (0.5 mm Cu gasket gap to S5.1-01 CF40 necks), Z=-133 mm (Z_canon=367 mm)."
+    ],
+    "scad_params": {
+      "n_viewports": 3,
+      "cf40_od_mm": 69.5,
+      "cf40_pcd_mm": 58.7,
+      "cf40_bolts": 6,
+      "clear_aperture_mm": 28.0
+    },
+    "target_mass_kg": null,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S4.4-04",
+    "subsystem": "S4",
+    "design_tier": "COTS_ENV_ICD",
+    "stl_path": "hardware/cad_parts/out/S4/S4.4-04.stl",
+    "step_path": "hardware/cad_parts/out/S4/S4.4-04.step",
+    "scad_path": "hardware/cad_parts/out/S4/S4.4-04.scad",
+    "dxf_path": "hardware/cad_parts/out/S4/S4.4-04.dxf",
+    "svg_path": "hardware/cad_parts/out/S4/S4.4-04.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 182034.16000504326,
+    "surface_area_mm2": 57515.22047783589,
+    "mass_kg": 1.4562732800403462,
+    "cg_mm": [
+      84.79689387773796,
+      0.49840755403364306,
+      1.8985886311895397e-16
+    ],
+    "bbox_min_mm": [
+      -37.19999999999998,
+      -280.7,
+      -34.75
+    ],
+    "bbox_max_mm": [
+      280.7,
+      280.7,
+      34.75
+    ],
+    "inertia_kg_mm2": [
+      63402.77353771287,
+      21589.753442414356,
+      84330.95934858029,
+      255.84845075869973,
+      7.509245331119313e-13,
+      2.1806728536505603e-13
+    ],
+    "triangle_count": 4164,
+    "vertex_count": 2064,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "world_bbox_min_mm": [
+    -37.19999999999998,
+    -280.7,
+    -167.75
+  ],
+  "world_bbox_max_mm": [
+    280.7,
+    280.7,
+    -98.25
+  ],
+  "reconciliation": null,
+  "thermal_contraction_checks": [],
+  "tolerance_stack_checks": []
+}

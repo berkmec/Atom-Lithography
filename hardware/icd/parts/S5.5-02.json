@@ -1,0 +1,84 @@
+{
+  "schema_version": "part_icd_v1.0",
+  "part_id": "S5.5-02",
+  "parent_bom_id": "S5.5",
+  "subsystem": "S5",
+  "part_name": "CF63 +Y ekvatoral (Z=500 mm) AR-kapli safir vakum penceresi ve optik flans (Exp130)",
+  "part_category": "PHYSICAL_SOLID",
+  "bom_metadata": {
+    "qty": "1",
+    "unit": "adet",
+    "material": "Tek-kristal Safir (Ø50x8 mm) + 316LN CF63",
+    "key_spec": "Temiz aciklik Ø44 mm, demet Ø36 mm (4 mm radyal pay), n(808nm)=1.760, T_AR=98.0%, F_win=10.56-11.16 J/cm2 (8.96-9.47x LIDT @ 100 J/cm2)",
+    "tolerance": "lambda/10, He<=1e-10",
+    "temp_stage": "300 K",
+    "vacuum_grade": "UHV 1e-9 mbar",
+    "procurement_class": "COTS/CUS",
+    "parent_cost_class": "C(v4.0)",
+    "usd_low": 6000.0,
+    "usd_nom": 10000.0,
+    "usd_high": 18000.0,
+    "legacy_cad_module": "s5_uhv_chamber_loadlock",
+    "bom_epistemic_tag": "{Varsayım}",
+    "notes": "DELTA-V4.0-EXP130 (S5.5 2/4): CAD v3/v4/v5 +Y Z=500 mm mevcut CF63 portuna dogrudan montaj (RFQ-07)"
+  },
+  "artifact_links": {
+    "cad": {
+      "work_package": "WP-M3",
+      "design_tier": "COTS_ENV_ICD",
+      "stl": "hardware/cad_parts/out/S5/S5.5-02.stl",
+      "step": "hardware/cad_parts/out/S5/S5.5-02.step",
+      "scad": "hardware/cad_parts/out/S5/S5.5-02.scad",
+      "dxf": "hardware/cad_parts/out/S5/S5.5-02.dxf",
+      "svg": "hardware/cad_parts/out/S5/S5.5-02.svg",
+      "cad_json": "hardware/cad_parts/out/S5/S5.5-02.json",
+      "watertight": true,
+      "all_6_files_valid": true,
+      "mass_kg": 1.10806,
+      "triangle_count": 896,
+      "temp_k": 300.0,
+      "canonical_bbox_min_mm": [
+        -56.75,
+        295.5,
+        443.25
+      ],
+      "canonical_bbox_max_mm": [
+        56.75,
+        313.0,
+        556.75
+      ],
+      "datum_shift_mm": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "port_count": 2,
+      "gdt_frame_count": 3
+    },
+    "pcb_bundles": [],
+    "legacy_board_files": [],
+    "electrical_icd": null,
+    "rtl_modules": [],
+    "rtl_audit_json": null,
+    "software_and_eda_files": [],
+    "verification_tests": []
+  },
+  "specialized_specification": null,
+  "verification_status": {
+    "cad_verified": true,
+    "pcb_verified": false,
+    "electrical_icd_verified": false,
+    "rtl_verified": false,
+    "software_or_eda_verified": false,
+    "specialized_icd_present": false,
+    "traceable": true
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "tapeout_done": false
+  }
+}

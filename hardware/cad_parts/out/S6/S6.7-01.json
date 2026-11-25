@@ -1,0 +1,214 @@
+{
+  "part_design": {
+    "part_id": "S6.7-01",
+    "parent_bom_id": "S6.7",
+    "subsystem": "S6",
+    "part_name": "SET / rf-SET kriyojenik tank-devresi on-uclari ve bias-tee modulleri",
+    "design_tier": "CUSTOM_FULL",
+    "material": "OFHC Cu",
+    "temp_stage": "20 mK (MXC)",
+    "temp_k": 0.02,
+    "vacuum_grade": "UHV / Kriyo-vakum",
+    "tolerance_spec": "±5% f_0",
+    "surface_finish_ra_um": 0.8,
+    "qty": 56,
+    "procurement_class": "CUS/R&D",
+    "world_origin_mm": [
+      -650.0,
+      0.0,
+      310.0
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "rfset_20mk_mount",
+        "kind": "thermal",
+        "position_mm": [
+          0.0,
+          0.0,
+          17.75
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "12x M3 Au-OFHC 20 mK Mount",
+        "mating_part_id": "S6.8-01",
+        "bore_mm": 0.0,
+        "od_mm": 188.0,
+        "pcd_mm": 172.0,
+        "bolt_count": 12,
+        "bolt_hole_mm": 3.2,
+        "bolt_spec": "M3",
+        "frame": "local",
+        "notes": ""
+      },
+      {
+        "name": "rfset_56ch_smp",
+        "kind": "rf",
+        "position_mm": [
+          0.0,
+          0.0,
+          -15.5
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "standard": "56x SMP rf-SET LC Tank + Bias-Tee",
+        "mating_part_id": "S6.7-02",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "PLATE_OD",
+        "nominal_mm": 188.0,
+        "tol_plus_mm": 0.1,
+        "tol_minus_mm": -0.1,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø188.00 ±0.10"
+      },
+      {
+        "label": "ASSY_H",
+        "nominal_mm": 33.5,
+        "tol_plus_mm": 0.1,
+        "tol_minus_mm": -0.1,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "33.50 ±0.10"
+      }
+    ],
+    "gdt_frames": [],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "Tek-elektron yuk hassasiyeti <1e-4 e/sqrt(Hz), Elzerman spin-yuk"
+    ],
+    "scad_params": {
+      "n_rfset_modules": 56,
+      "plate_od": 188.0,
+      "f_tank_mhz": 320.0
+    },
+    "target_mass_kg": 1.95,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact_result": {
+    "part_id": "S6.7-01",
+    "subsystem": "S6",
+    "design_tier": "CUSTOM_FULL",
+    "stl_path": "hardware/cad_parts/out/S6/S6.7-01.stl",
+    "step_path": "hardware/cad_parts/out/S6/S6.7-01.step",
+    "scad_path": "hardware/cad_parts/out/S6/S6.7-01.scad",
+    "dxf_path": "hardware/cad_parts/out/S6/S6.7-01.dxf",
+    "svg_path": "hardware/cad_parts/out/S6/S6.7-01.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 268171.20044620143,
+    "surface_area_mm2": 121229.51211396145,
+    "mass_kg": 1.2335875220525268,
+    "cg_mm": [
+      2.2248046150009022e-15,
+      -1.7771305156409645e-15,
+      7.161350672621107
+    ],
+    "bbox_min_mm": [
+      -94.0,
+      -94.0,
+      -15.5
+    ],
+    "bbox_max_mm": [
+      94.0,
+      94.0,
+      17.75
+    ],
+    "inertia_kg_mm2": [
+      2802.63262073913,
+      2802.6326207391307,
+      5352.7335430978765,
+      -1.9412254914641385e-14,
+      -4.042074770312454e-15,
+      -3.111210358955388e-14
+    ],
+    "triangle_count": 1536,
+    "vertex_count": 856,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "json_path": "hardware/cad_parts/out/S6/S6.7-01.json",
+  "world_bbox_min_mm": [
+    -744.0,
+    -94.0,
+    294.5
+  ],
+  "world_bbox_max_mm": [
+    -556.0,
+    94.0,
+    327.75
+  ],
+  "world_cg_mm": [
+    -650.0,
+    -0.0,
+    317.1614
+  ],
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

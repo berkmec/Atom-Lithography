@@ -1,0 +1,116 @@
+{
+  "schema_version": "part_icd_v1.0",
+  "part_id": "S6.5-03",
+  "parent_bom_id": "S6.5",
+  "subsystem": "S6",
+  "part_name": "Kriyojenik RF koaksiyel hatlar, bias-tee ve Eccosorb dusuk-geciren filtreler",
+  "part_category": "PHYSICAL_SOLID",
+  "bom_metadata": {
+    "qty": "8",
+    "unit": "hat",
+    "material": "CuNi koaksiyel + Eccosorb CR-124 filtre",
+    "key_spec": "IR/GHz termal foton bastirma >40 dB @ >1 GHz",
+    "tolerance": "—",
+    "temp_stage": "300 K -> 20 mK",
+    "vacuum_grade": "Kriyo-vakum",
+    "procurement_class": "COTS",
+    "parent_cost_class": "B",
+    "usd_low": 2500.0,
+    "usd_nom": 4500.0,
+    "usd_high": 8500.0,
+    "legacy_cad_module": "s6_cryo_dr_magnet_readout",
+    "bom_epistemic_tag": "{Model-Kalibrasyon-Exp114}",
+    "notes": "MXC isinmasini onleyen filtrelenmis ENDOR hatlari"
+  },
+  "artifact_links": {
+    "cad": {
+      "work_package": "WP-M4",
+      "design_tier": "COTS_ENV_ICD",
+      "stl": "hardware/cad_parts/out/S6/S6.5-03.stl",
+      "step": "hardware/cad_parts/out/S6/S6.5-03.step",
+      "scad": "hardware/cad_parts/out/S6/S6.5-03.scad",
+      "dxf": "hardware/cad_parts/out/S6/S6.5-03.dxf",
+      "svg": "hardware/cad_parts/out/S6/S6.5-03.svg",
+      "cad_json": "hardware/cad_parts/out/S6/S6.5-03.json",
+      "watertight": true,
+      "all_6_files_valid": true,
+      "mass_kg": 0.240942,
+      "triangle_count": 2016,
+      "temp_k": 0.02,
+      "canonical_bbox_min_mm": [
+        -598.0,
+        -49.0,
+        502.0
+      ],
+      "canonical_bbox_max_mm": [
+        -578.0,
+        -31.0,
+        836.0
+      ],
+      "datum_shift_mm": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "port_count": 0,
+      "gdt_frame_count": 0
+    },
+    "pcb_bundles": [
+      {
+        "bundle_slug": "cryo_rf_harness_icd",
+        "verification_json": "hardware/pcb/cryo_rf_harness_icd/cryo_rf_thermal_attenuation.json",
+        "boards": [
+          "cryo_rf_bias_panel"
+        ],
+        "kicad_sch_files": [
+          "hardware/pcb/cryo_rf_harness_icd/cryo_rf_bias_panel.kicad_sch"
+        ],
+        "kicad_pcb_files": [
+          "hardware/pcb/cryo_rf_harness_icd/cryo_rf_bias_panel.kicad_pcb"
+        ],
+        "spice_decks": [
+          "hardware/pcb/cryo_rf_harness_icd/magnet_quench_dump_1p563ohm.cir",
+          "hardware/pcb/cryo_rf_harness_icd/qram_chebyshev_50_to_3k.cir",
+          "hardware/pcb/cryo_rf_harness_icd/rf_set_tank_biastee.cir"
+        ],
+        "all_passed": true
+      }
+    ],
+    "legacy_board_files": [],
+    "electrical_icd": {
+      "path": "hardware/icd/electrical/S6.5-03.json",
+      "electrical_class": "E2",
+      "grounding_domain": "CRYO_OVC",
+      "ups_tier": "NONE",
+      "exp150_ups_allocation_w": 0.0,
+      "mating_part_ids": [
+        "S6.5-02",
+        "S6.7-01",
+        "S6.8-04"
+      ],
+      "interlock_hooks_count": 0
+    },
+    "rtl_modules": [],
+    "rtl_audit_json": null,
+    "software_and_eda_files": [],
+    "verification_tests": []
+  },
+  "specialized_specification": null,
+  "verification_status": {
+    "cad_verified": true,
+    "pcb_verified": true,
+    "electrical_icd_verified": true,
+    "rtl_verified": false,
+    "software_or_eda_verified": false,
+    "specialized_icd_present": false,
+    "traceable": true
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "tapeout_done": false
+  }
+}

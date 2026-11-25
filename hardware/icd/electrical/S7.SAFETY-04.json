@@ -1,0 +1,158 @@
+{
+  "schema_version": "1.0",
+  "part_id": "S7.SAFETY-04",
+  "parent_bom_id": "S7.SAFETY",
+  "subsystem": "S7",
+  "part_name": "15 kVA / 10 kWh Online Cift-Donusumlu LFP UPS (0 ms Gecis) & Kademeli Yuk-Atma PDU (Exp150, 145.0 kg)",
+  "qty": 1,
+  "unit": "set",
+  "temp_stage": "300 K (tesis guc bolmesi)",
+  "vacuum_grade": "Atmosfer",
+  "bom_key_spec": "440x720x780 mm (tesis guc bolmesi), 0.0 ms gecis, 40.0 dk tam yuk (>=30 dk) / 213.2 dk Tier-1 (>=180 dk), 350 W kayip / 0 W kriyo, kutle=145.0 kg",
+  "usd_nom": 24000.0,
+  "bom_epistemic_tag": "{Liste-\u00c7apas\u0131}",
+  "electrical_class": "E3",
+  "grounding_domain": "FACILITY_PE",
+  "grounding_notes": "15 kVA / 13.5 kW / 10 kWh Online Double-Conversion LFP UPS (0 ms transfer) + tiered load-shed PDU.",
+  "supply_rails": [
+    {
+      "rail_name": "AC_FACILITY_IN_3PH",
+      "voltage_v": 400.0,
+      "current_type": "AC_3PH",
+      "max_current_a": 32.0,
+      "steady_power_w": 350.0,
+      "peak_power_w": 13850.0,
+      "source_part_id": "S7.SAFETY-04"
+    },
+    {
+      "rail_name": "UPS_TIER1_BUS_230V",
+      "voltage_v": 230.0,
+      "current_type": "AC_1PH",
+      "max_current_a": 16.0,
+      "steady_power_w": 2533.0,
+      "peak_power_w": 3500.0,
+      "source_part_id": "S7.SAFETY-04"
+    },
+    {
+      "rail_name": "UPS_TIER2_SHED_BUS",
+      "voltage_v": 230.0,
+      "current_type": "AC_1PH",
+      "max_current_a": 32.0,
+      "steady_power_w": 2775.0,
+      "peak_power_w": 10967.0,
+      "source_part_id": "S7.SAFETY-04"
+    }
+  ],
+  "connectors_and_pinout": [
+    {
+      "connector_ref": "J_MAINS_IN",
+      "connector_type": "IEC 60309 3P+N+PE 32A",
+      "location_side": "facility_bay",
+      "mating_part_id": "S7.4-03",
+      "pins": [
+        {
+          "pin": "L1-L3",
+          "signal": "UTILITY_400V_3PH",
+          "direction": "IN",
+          "nominal_level": "400 VAC 3-phase input"
+        },
+        {
+          "pin": "N",
+          "signal": "UTILITY_N",
+          "direction": "IN",
+          "nominal_level": "Neutral"
+        },
+        {
+          "pin": "PE",
+          "signal": "FACILITY_PE",
+          "direction": "PWR",
+          "nominal_level": "Main earth bond"
+        }
+      ]
+    },
+    {
+      "connector_ref": "J_PDU_T1",
+      "connector_type": "Tier-1 Critical Outlet Bank (IEC C13/C19)",
+      "location_side": "pdu_tier1",
+      "mating_part_id": "S7.SAFETY-03",
+      "pins": [
+        {
+          "pin": "1-16",
+          "signal": "UPS_TIER1_230V",
+          "direction": "OUT",
+          "nominal_level": "2.533 kW critical (213.2 min runtime)"
+        }
+      ]
+    },
+    {
+      "connector_ref": "J_PDU_T2",
+      "connector_type": "Tier-2 Sheddable Outlet Bank (IEC C19)",
+      "location_side": "pdu_tier2",
+      "mating_part_id": "S9.HPC-01",
+      "pins": [
+        {
+          "pin": "1-8",
+          "signal": "UPS_TIER2_SHED_230V",
+          "direction": "OUT",
+          "nominal_level": "Shed cleanly on outage"
+        }
+      ]
+    },
+    {
+      "connector_ref": "J_EPO_DRY",
+      "connector_type": "Phoenix 6-Pin EPO & Status",
+      "location_side": "front_ctrl",
+      "mating_part_id": "S7.SAFETY-03",
+      "pins": [
+        {
+          "pin": "1-2",
+          "signal": "EPO_NC_LOOP",
+          "direction": "IN",
+          "nominal_level": "Hardwired EPO trip"
+        },
+        {
+          "pin": "3-4",
+          "signal": "ON_BATTERY_OUT",
+          "direction": "OUT",
+          "nominal_level": "Triggers Tier-2 shed at t=0.5 s"
+        }
+      ]
+    }
+  ],
+  "mating_part_ids": [
+    "S7.SAFETY-03",
+    "S7.SAFETY-01",
+    "S7.1-03",
+    "S7.4-03",
+    "S9.HPC-01",
+    "S6.8-02"
+  ],
+  "interlock_hooks": [
+    {
+      "signal_name": "UTILITY_LOSS_0MS_HOLD",
+      "target_part_id": "S7.SAFETY-03",
+      "action_on_trip": "Zero-ms hold Tier-1; trigger Tier-2 load-shed",
+      "response_time_ms": 0.0
+    }
+  ],
+  "ups_tier": "NONE",
+  "ups_budget_group": "UPS_INTERNAL_LOSS",
+  "exp150_ups_allocation_w": 0.0,
+  "supply_rails_steady_sum_w": 5658.0,
+  "incremental_mains_w": 350.0,
+  "secondary_or_parent_derived_w": 5308.0,
+  "non_exp150_aux_shed_w": 0.0,
+  "reconciliation_note": "S7.SAFETY-04 online double-conversion UPS: 350.0 W continuous internal conversion loss (accounted explicitly in conservative battery-draw runtime); output buses supply downstream loads.",
+  "timing_sync": {
+    "rb_10mhz_port": null,
+    "white_rabbit_port": null,
+    "sync_role": "Master facility UPS & load-shed PDU"
+  },
+  "epistemic_flags": {
+    "design_maturity": "M0_M1_ELECTRICAL_ICD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

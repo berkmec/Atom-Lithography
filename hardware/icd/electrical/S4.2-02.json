@@ -1,0 +1,76 @@
+{
+  "schema_version": "1.0",
+  "part_id": "S4.2-02",
+  "parent_bom_id": "S4.2",
+  "subsystem": "S4",
+  "part_name": "Cok-eksenli dusuk gurultulu jeofon / ivmeolcer sensor paketi",
+  "qty": 1,
+  "unit": "set",
+  "temp_stage": "300 K",
+  "vacuum_grade": "Atmosfer",
+  "bom_key_spec": "Gurultu tabani <1 ng/sqrt(Hz) @ 10 Hz",
+  "usd_nom": 7000.0,
+  "bom_epistemic_tag": "{Model-Kalibrasyon-Exp114}",
+  "electrical_class": "E4",
+  "grounding_domain": "AGND",
+  "grounding_notes": "3-axis 4.5 Hz seismic geophone/accelerometer pack (<1 ng/rtHz @ 10 Hz) with shielded twisted pairs.",
+  "supply_rails": [
+    {
+      "rail_name": "IEPE_24V_4MA",
+      "voltage_v": 24.0,
+      "current_type": "DC",
+      "max_current_a": 0.02,
+      "steady_power_w": 0.5,
+      "peak_power_w": 0.5,
+      "source_part_id": "S4.2-03"
+    }
+  ],
+  "connectors_and_pinout": [
+    {
+      "connector_ref": "J_GEO",
+      "connector_type": "LEMO 1B 8-Pin Shielded",
+      "location_side": "granite_block",
+      "mating_part_id": "S4.2-03",
+      "pins": [
+        {
+          "pin": "1-6",
+          "signal": "GEO_XYZ_DIFF",
+          "direction": "OUT",
+          "nominal_level": "3-axis velocity/accel feedback"
+        },
+        {
+          "pin": "7-8",
+          "signal": "AGND_SHIELD",
+          "direction": "PWR",
+          "nominal_level": "0 V AGND"
+        }
+      ]
+    }
+  ],
+  "mating_part_ids": [
+    "S4.2-01",
+    "S4.2-03",
+    "S4.1-01"
+  ],
+  "interlock_hooks": [],
+  "ups_tier": "NONE",
+  "ups_budget_group": "PASSIVE_ZERO_MAINS",
+  "exp150_ups_allocation_w": 0.0,
+  "supply_rails_steady_sum_w": 0.5,
+  "incremental_mains_w": 0.0,
+  "secondary_or_parent_derived_w": 0.5,
+  "non_exp150_aux_shed_w": 0.0,
+  "reconciliation_note": "Passive or downstream sub-assembly (0.50 W sub-rail power drawn from upstream source S4.2-03); incremental_mains_w = 0.0 W (zero double-counting).",
+  "timing_sync": {
+    "rb_10mhz_port": null,
+    "white_rabbit_port": null,
+    "sync_role": "Seismic feedback sensor"
+  },
+  "epistemic_flags": {
+    "design_maturity": "M0_M1_ELECTRICAL_ICD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

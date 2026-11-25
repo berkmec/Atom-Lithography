@@ -1,0 +1,652 @@
+{
+  "part_id": "S5.1-01",
+  "subsystem": "S5",
+  "design": {
+    "part_id": "S5.1-01",
+    "parent_bom_id": "S5.1",
+    "subsystem": "S5",
+    "part_name": "UHV ana surec odasi (s=0.5 altin zarf, r=175 mm, ~34 L, Exp80)",
+    "design_tier": "CUSTOM_FULL",
+    "material": "316LN",
+    "temp_stage": "300 K (150 C bakeout)",
+    "temp_k": 300.0,
+    "vacuum_grade": "UHV 1e-9 mbar",
+    "tolerance_spec": "±0.1 mm flans ekseni",
+    "surface_finish_ra_um": 0.2,
+    "qty": 1,
+    "procurement_class": "CUS",
+    "world_origin_mm": [
+      0.0,
+      0.0,
+      500.0
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "bottom_cf400_base",
+        "kind": "flange",
+        "position_mm": [
+          0.0,
+          0.0,
+          -240.0
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "standard": "CF400",
+        "mating_part_id": "S4.2-01",
+        "bore_mm": 364.0,
+        "od_mm": 456.0,
+        "pcd_mm": 431.8,
+        "bolt_count": 40,
+        "bolt_hole_mm": 8.4,
+        "bolt_spec": "M8",
+        "frame": "local",
+        "notes": "Bottom CF400 base seated on S4.2 active isolation table at Z=260 mm"
+      },
+      {
+        "name": "top_cf400_service",
+        "kind": "flange",
+        "position_mm": [
+          0.0,
+          0.0,
+          128.5
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "CF400",
+        "mating_part_id": "S5.1-02",
+        "bore_mm": 364.0,
+        "od_mm": 456.0,
+        "pcd_mm": 431.8,
+        "bolt_count": 40,
+        "bolt_hole_mm": 8.4,
+        "bolt_spec": "M8",
+        "frame": "local",
+        "notes": "Top CF400 split service flange for internal magnet/stage installation"
+      },
+      {
+        "name": "top_cf250_column",
+        "kind": "flange",
+        "position_mm": [
+          0.0,
+          0.0,
+          168.5
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "CF250",
+        "mating_part_id": "S5.1-02",
+        "bore_mm": 254.0,
+        "od_mm": 305.0,
+        "pcd_mm": 284.2,
+        "bolt_count": 32,
+        "bolt_hole_mm": 8.4,
+        "bolt_spec": "M8",
+        "frame": "local",
+        "notes": "Top CF250 port mating S5.1-02 ion-column mounting adapter flange at Z=668.5 mm"
+      },
+      {
+        "name": "port_loadlock_pos_x",
+        "kind": "flange",
+        "position_mm": [
+          250.0,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "standard": "CF100",
+        "mating_part_id": "S5.1-03",
+        "bore_mm": 101.6,
+        "od_mm": 152.0,
+        "pcd_mm": 130.2,
+        "bolt_count": 16,
+        "bolt_hole_mm": 8.4,
+        "bolt_spec": "M8",
+        "frame": "local",
+        "notes": "+X Load-Lock transfer gate port"
+      },
+      {
+        "name": "port_pump_neg_y",
+        "kind": "flange",
+        "position_mm": [
+          -0.0,
+          -270.0,
+          0.0
+        ],
+        "normal": [
+          -1.8369701987210297e-16,
+          -1.0,
+          0.0
+        ],
+        "standard": "CF100",
+        "mating_part_id": "S5.2-01",
+        "bore_mm": 101.6,
+        "od_mm": 152.0,
+        "pcd_mm": 130.2,
+        "bolt_count": 16,
+        "bolt_hole_mm": 8.4,
+        "bolt_spec": "M8",
+        "frame": "local",
+        "notes": "-Y 300 L/s TMP & VacIon pumping port"
+      },
+      {
+        "name": "port_rta_flash_140",
+        "kind": "flange",
+        "position_mm": [
+          -210.662,
+          176.767,
+          0.0
+        ],
+        "normal": [
+          -0.7660444431189779,
+          0.6427876096865395,
+          0.0
+        ],
+        "standard": "CF100",
+        "mating_part_id": "S5.3-02",
+        "bore_mm": 101.6,
+        "od_mm": 152.0,
+        "pcd_mm": 130.2,
+        "bolt_count": 16,
+        "bolt_hole_mm": 8.4,
+        "bolt_spec": "M8",
+        "frame": "local",
+        "notes": "140 deg backup Xe flash/RTA quartz viewport"
+      },
+      {
+        "name": "port_808nm_flash_pos_y",
+        "kind": "flange",
+        "position_mm": [
+          0.0,
+          295.0,
+          0.0
+        ],
+        "normal": [
+          6.123233995736766e-17,
+          1.0,
+          0.0
+        ],
+        "standard": "CF63",
+        "mating_part_id": "S5.5-02",
+        "bore_mm": 44.0,
+        "od_mm": 113.5,
+        "pcd_mm": 92.1,
+        "bolt_count": 8,
+        "bolt_hole_mm": 8.4,
+        "bolt_spec": "M8",
+        "frame": "local",
+        "notes": "+Y Exp130 808 nm sapphire viewport (Dia 44 CA)"
+      },
+      {
+        "name": "port_cryo_bridge_neg_x",
+        "kind": "flange",
+        "position_mm": [
+          -273.5,
+          0.0,
+          -7.0
+        ],
+        "normal": [
+          -1.0,
+          1.2246467991473532e-16,
+          0.0
+        ],
+        "standard": "CF63",
+        "mating_part_id": "S6.9-02",
+        "bore_mm": 44.0,
+        "od_mm": 113.5,
+        "pcd_mm": 92.1,
+        "bolt_count": 8,
+        "bolt_hole_mm": 8.4,
+        "bolt_spec": "M8",
+        "frame": "local",
+        "notes": "-X Exp133 OVC CF63 bellows cryo bridge"
+      },
+      {
+        "name": "port_ibic_ft_45",
+        "kind": "flange",
+        "position_mm": [
+          173.241,
+          173.241,
+          -105.0
+        ],
+        "normal": [
+          0.7071067811865476,
+          0.7071067811865475,
+          0.0
+        ],
+        "standard": "CF63",
+        "mating_part_id": "S3.2-05",
+        "bore_mm": 63.5,
+        "od_mm": 113.5,
+        "pcd_mm": 92.1,
+        "bolt_count": 8,
+        "bolt_hole_mm": 8.4,
+        "bolt_spec": "M8",
+        "frame": "local",
+        "notes": "45 deg Z=395 IBIC 32-coax feedthrough port"
+      },
+      {
+        "name": "port_ibic_ft_315",
+        "kind": "flange",
+        "position_mm": [
+          173.241,
+          -173.241,
+          -105.0
+        ],
+        "normal": [
+          0.7071067811865474,
+          -0.7071067811865477,
+          0.0
+        ],
+        "standard": "CF63",
+        "mating_part_id": "S3.2-05",
+        "bore_mm": 63.5,
+        "od_mm": 113.5,
+        "pcd_mm": 92.1,
+        "bolt_count": 8,
+        "bolt_hole_mm": 8.4,
+        "bolt_spec": "M8",
+        "frame": "local",
+        "notes": "315 deg Z=395 IBIC 32-coax feedthrough port"
+      },
+      {
+        "name": "port_interf_x_0",
+        "kind": "flange",
+        "position_mm": [
+          240.0,
+          0.0,
+          -133.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "standard": "CF40",
+        "mating_part_id": "S4.4-03",
+        "bore_mm": 38.0,
+        "od_mm": 69.5,
+        "pcd_mm": 58.7,
+        "bolt_count": 6,
+        "bolt_hole_mm": 6.6,
+        "bolt_spec": "M6",
+        "frame": "local",
+        "notes": "0 deg Z=367 X-axis 632.8 nm interferometer viewport"
+      },
+      {
+        "name": "port_interf_y_90",
+        "kind": "flange",
+        "position_mm": [
+          0.0,
+          240.0,
+          -133.0
+        ],
+        "normal": [
+          6.123233995736766e-17,
+          1.0,
+          0.0
+        ],
+        "standard": "CF40",
+        "mating_part_id": "S4.4-03",
+        "bore_mm": 38.0,
+        "od_mm": 69.5,
+        "pcd_mm": 58.7,
+        "bolt_count": 6,
+        "bolt_hole_mm": 6.6,
+        "bolt_spec": "M6",
+        "frame": "local",
+        "notes": "90 deg Z=367 Y-axis 632.8 nm interferometer viewport"
+      },
+      {
+        "name": "port_interf_z_270",
+        "kind": "flange",
+        "position_mm": [
+          -0.0,
+          -240.0,
+          -133.0
+        ],
+        "normal": [
+          -1.8369701987210297e-16,
+          -1.0,
+          0.0
+        ],
+        "standard": "CF40",
+        "mating_part_id": "S4.4-03",
+        "bore_mm": 38.0,
+        "od_mm": 69.5,
+        "pcd_mm": 58.7,
+        "bolt_count": 6,
+        "bolt_hole_mm": 6.6,
+        "bolt_spec": "M6",
+        "frame": "local",
+        "notes": "270 deg Z=367 Z-axis 632.8 nm interferometer viewport"
+      },
+      {
+        "name": "port_gauge_rga_225",
+        "kind": "flange",
+        "position_mm": [
+          -173.241,
+          -173.241,
+          -105.0
+        ],
+        "normal": [
+          -0.7071067811865477,
+          -0.7071067811865475,
+          0.0
+        ],
+        "standard": "CF40",
+        "mating_part_id": "S5.2-04",
+        "bore_mm": 38.0,
+        "od_mm": 69.5,
+        "pcd_mm": 58.7,
+        "bolt_count": 6,
+        "bolt_hole_mm": 6.6,
+        "bolt_spec": "M6",
+        "frame": "local",
+        "notes": "225 deg Z=395 Pirani/CC/RGA manifold port"
+      },
+      {
+        "name": "port_shutter_212",
+        "kind": "flange",
+        "position_mm": [
+          -212.012,
+          -132.48,
+          10.0
+        ],
+        "normal": [
+          -0.8480480961564261,
+          -0.5299192642332048,
+          0.0
+        ],
+        "standard": "CF40",
+        "mating_part_id": "S5.3-04",
+        "bore_mm": 38.0,
+        "od_mm": 69.5,
+        "pcd_mm": 58.7,
+        "bolt_count": 6,
+        "bolt_hole_mm": 6.6,
+        "bolt_spec": "M6",
+        "frame": "local",
+        "notes": "212 deg Z=510 S2-head thermal shutter actuator"
+      },
+      {
+        "name": "port_pyro_325",
+        "kind": "flange",
+        "position_mm": [
+          204.788,
+          -143.394,
+          0.0
+        ],
+        "normal": [
+          0.8191520442889916,
+          -0.5735764363510465,
+          0.0
+        ],
+        "standard": "CF40",
+        "mating_part_id": "S5.3-03",
+        "bore_mm": 38.0,
+        "od_mm": 69.5,
+        "pcd_mm": 58.7,
+        "bolt_count": 6,
+        "bolt_hole_mm": 6.6,
+        "bolt_spec": "M6",
+        "frame": "local",
+        "notes": "325 deg Z=500 backup optical pyrometer port"
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "ID_CHAMBER",
+        "nominal_mm": 364.0,
+        "tol_plus_mm": 0.2,
+        "tol_minus_mm": -0.2,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø364.00 ±0.20"
+      },
+      {
+        "label": "OD_SHELL",
+        "nominal_mm": 384.0,
+        "tol_plus_mm": 0.2,
+        "tol_minus_mm": -0.2,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø384.00 ±0.20"
+      },
+      {
+        "label": "CF400_OD",
+        "nominal_mm": 456.0,
+        "tol_plus_mm": 0.15,
+        "tol_minus_mm": -0.15,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø456.00 ±0.15"
+      },
+      {
+        "label": "H_TOTAL",
+        "nominal_mm": 408.5,
+        "tol_plus_mm": 0.25,
+        "tol_minus_mm": -0.25,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "408.50 ±0.25"
+      },
+      {
+        "label": "CF250_TOP_Z",
+        "nominal_mm": 168.5,
+        "tol_plus_mm": 0.1,
+        "tol_minus_mm": -0.1,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "A",
+        "decimals": 2,
+        "formatted": "168.50 ±0.10"
+      },
+      {
+        "label": "FLASH_Y_FACE",
+        "nominal_mm": 295.0,
+        "tol_plus_mm": 0.1,
+        "tol_minus_mm": -0.1,
+        "view": "right",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "B",
+        "decimals": 2,
+        "formatted": "295.00 ±0.10"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "flatness",
+        "tolerance_mm": 0.05,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "CF400/CF250 knife-edge sealing faces",
+        "glyph": "⏥",
+        "tolerance_text": "0.050"
+      },
+      {
+        "symbol": "perpendicularity",
+        "tolerance_mm": 0.1,
+        "diameter_zone": true,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "Vessel axis B to bottom CF400 datum A",
+        "glyph": "⊥",
+        "tolerance_text": "Ø0.10"
+      },
+      {
+        "symbol": "concentricity",
+        "tolerance_mm": 0.1,
+        "diameter_zone": true,
+        "material_condition": "",
+        "datum_primary": "B",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "Top CF250 column port to chamber axis",
+        "glyph": "◎",
+        "tolerance_text": "Ø0.10"
+      },
+      {
+        "symbol": "position",
+        "tolerance_mm": 0.15,
+        "diameter_zone": true,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "B",
+        "datum_tertiary": "C",
+        "feature_note": "13x radial CF port axes",
+        "glyph": "⌖",
+        "tolerance_text": "Ø0.15"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "BOTTOM CF400 MOUNTING FACE (Z=260.0 MM)"
+      ],
+      [
+        "B",
+        "MAIN CYLINDER INNER BORE AXIS (Ø364.0 MM)"
+      ],
+      [
+        "C",
+        "+X LOAD-LOCK CF100 PORT AXIS (AZ=0 DEG)"
+      ]
+    ],
+    "notes": [
+      "Taban basinci <=1e-9 mbar, r=175 mm (Exp80), coklu CF port",
+      "RECONCILIATION: BOM lists r=175 mm (~34 L); adopted CAD R_in=182.0 / R_out=192.0 mm (V_in=34.91 L, 6.0 mm radial clearance to Exp125 Ø352 mm magnet former, Exp80 BC4 PASS).",
+      "Electropolished non-magnetic 316LN (mu_r < 1.005), Ra <= 0.2 um interior, 150 C bakeable.",
+      "16 welded ISO 3669 ConFlat flanges: 2x CF400, 1x CF250, 3x CF100, 4x CF63, 6x CF40."
+    ],
+    "scad_params": {
+      "chamber_r_in_mm": 182.0,
+      "chamber_r_out_mm": 192.0,
+      "inner_vol_L": 34.91,
+      "z_wafer_mm": 500.0,
+      "n_cf_ports": 16
+    },
+    "target_mass_kg": 85.0,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifacts": {
+    "part_id": "S5.1-01",
+    "subsystem": "S5",
+    "design_tier": "CUSTOM_FULL",
+    "stl_path": "hardware/cad_parts/out/S5/S5.1-01.stl",
+    "step_path": "hardware/cad_parts/out/S5/S5.1-01.step",
+    "scad_path": "hardware/cad_parts/out/S5/S5.1-01.scad",
+    "dxf_path": "hardware/cad_parts/out/S5/S5.1-01.dxf",
+    "svg_path": "hardware/cad_parts/out/S5/S5.1-01.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 10581008.567704987,
+    "surface_area_mm2": 2088644.6950374702,
+    "mass_kg": 84.64806854163986,
+    "cg_mm": [
+      1.932897954766158,
+      1.4402211349071543,
+      -84.1575323818145
+    ],
+    "bbox_min_mm": [
+      -273.5,
+      -270.00000000000006,
+      -240.0
+    ],
+    "bbox_max_mm": [
+      250.0,
+      295.0,
+      168.5
+    ],
+    "inertia_kg_mm2": [
+      3271975.2069834783,
+      3231522.8501469702,
+      3035390.129003089,
+      28984.149731701287,
+      22642.641165289846,
+      -15045.569376700681
+    ],
+    "triangle_count": 24420,
+    "vertex_count": 11770,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  },
+  "reconciliation": {
+    "field": "UHV main chamber inner radius & volume",
+    "bom_v7_spec": "r = 175 mm (~34 L, Exp80 s=0.5 envelope)",
+    "cad_v8_adopted": "R_in = 182.0 mm, R_out = 192.0 mm, H_in = 335.5 mm, V_in = 34.91 L",
+    "engineering_rationale": "Exp125 8-coil cryo-magnet outer former has OD = 352.0 mm (R = 176.0 mm). A BOM r = 175 mm wall would interfere by 1.0 mm; R_in = 182.0 mm provides 6.0 mm radial vacuum clearance (182 - 176 = 6.0 mm) while keeping V_in / V_ref = 34.91 / 269.39 = 0.1296 within Exp80 BC4 (1/8 +/- 5%)."
+  }
+}

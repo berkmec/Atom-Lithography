@@ -1,0 +1,228 @@
+{
+  "part_design": {
+    "part_id": "S6.4-03",
+    "parent_bom_id": "S6.4",
+    "subsystem": "S6",
+    "part_name": "Kriyojenik mikrodalga surus koaksiyel hatlari ve termalize zayiflaticilar",
+    "design_tier": "COTS_ENV_ICD",
+    "material": "CuNi",
+    "temp_stage": "300 K -> 20 mK",
+    "temp_k": 0.02,
+    "vacuum_grade": "Kriyo-vakum",
+    "tolerance_spec": "±1 dB",
+    "surface_finish_ra_um": 0.8,
+    "qty": 8,
+    "procurement_class": "COTS",
+    "world_origin_mm": [
+      -588.0,
+      40.0,
+      669.0
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "mw_top_50k",
+        "kind": "rf",
+        "position_mm": [
+          0.0,
+          0.0,
+          167.0
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "8x 2.92mm / 0.086-in CuNi",
+        "mating_part_id": "S6.4-02",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      },
+      {
+        "name": "mw_bot_mxc",
+        "kind": "rf",
+        "position_mm": [
+          0.0,
+          0.0,
+          -167.0
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "standard": "8x XMA -60 dB MXC Out",
+        "mating_part_id": "S6.8-01",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "LOOM_W",
+        "nominal_mm": 20.0,
+        "tol_plus_mm": 0.2,
+        "tol_minus_mm": -0.2,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "20.00 ±0.20"
+      },
+      {
+        "label": "LOOM_D",
+        "nominal_mm": 18.0,
+        "tol_plus_mm": 0.2,
+        "tol_minus_mm": -0.2,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "18.00 ±0.20"
+      },
+      {
+        "label": "SPAN_Z",
+        "nominal_mm": 334.0,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "334.00 ±0.50"
+      }
+    ],
+    "gdt_frames": [],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "-60 dB kademeli (50K/4K/Still/MXC), 40 GHz bant"
+    ],
+    "scad_params": {
+      "n_lines": 8,
+      "atten_db": 60.0,
+      "f_max_ghz": 40.0
+    },
+    "target_mass_kg": 0.58,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact_result": {
+    "part_id": "S6.4-03",
+    "subsystem": "S6",
+    "design_tier": "COTS_ENV_ICD",
+    "stl_path": "hardware/cad_parts/out/S6/S6.4-03.stl",
+    "step_path": "hardware/cad_parts/out/S6/S6.4-03.step",
+    "scad_path": "hardware/cad_parts/out/S6/S6.4-03.scad",
+    "dxf_path": "hardware/cad_parts/out/S6/S6.4-03.dxf",
+    "svg_path": "hardware/cad_parts/out/S6/S6.4-03.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 26391.35946228213,
+    "surface_area_mm2": 26965.970761312747,
+    "mass_kg": 0.23488309921431091,
+    "cg_mm": [
+      -1.5494364548152668e-16,
+      4.2397481446052853e-16,
+      -14.440231829274317
+    ],
+    "bbox_min_mm": [
+      -10.0,
+      -9.0,
+      -167.0
+    ],
+    "bbox_max_mm": [
+      10.0,
+      9.0,
+      167.0
+    ],
+    "inertia_kg_mm2": [
+      2599.90560711905,
+      2601.3658011599828,
+      13.076120951860775,
+      -3.7443399492076427e-16,
+      -1.019968361917768e-14,
+      1.1926898924412471e-15
+    ],
+    "triangle_count": 2016,
+    "vertex_count": 1064,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "json_path": "hardware/cad_parts/out/S6/S6.4-03.json",
+  "world_bbox_min_mm": [
+    -598.0,
+    31.0,
+    502.0
+  ],
+  "world_bbox_max_mm": [
+    -578.0,
+    49.0,
+    836.0
+  ],
+  "world_cg_mm": [
+    -588.0,
+    40.0,
+    654.5598
+  ],
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

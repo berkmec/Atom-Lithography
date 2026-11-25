@@ -1,0 +1,445 @@
+{
+  "part_design": {
+    "part_id": "S7.SAFETY-01",
+    "parent_bom_id": "S7.SAFETY",
+    "subsystem": "S7",
+    "part_name": "Sub-Atmosferik SDS PH3 Mikro-Tup Gaz Kabini (<650 Torr, 10 g), Vakum-Ceketli Hat, 250 CFM Kuru Yikayici & Cift 0.02 ppm Sensor (Exp150, 118.0 kg)",
+    "design_tier": "COTS_ENV_ICD",
+    "material": "316L",
+    "temp_stage": "300 K (tesis gaz bolmesi)",
+    "temp_k": 300.0,
+    "vacuum_grade": "Atmosfer (250 CFM egzoz)",
+    "tolerance_spec": "PH3<=0.02 ppm alarm (SIL-3)",
+    "surface_finish_ra_um": 1.6,
+    "qty": 1,
+    "procurement_class": "COTS/CUS",
+    "world_origin_mm": [
+      -1600.0,
+      400.0,
+      900.0
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "ph3_vcr_outlet",
+        "kind": "gas",
+        "position_mm": [
+          -1350.0,
+          400.0,
+          820.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "standard": "1/4-in Coaxial Vacuum-Jacketed VCR (316L VAR)",
+        "mating_part_id": "S1.1-04",
+        "bore_mm": 4.5,
+        "od_mm": 19.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "world",
+        "notes": ""
+      },
+      {
+        "name": "exhaust_250cfm_dn100",
+        "kind": "gas",
+        "position_mm": [
+          -2060.0,
+          400.0,
+          720.0
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "DN100 Facility Exhaust (250 CFM Dry-Bed Scrubber)",
+        "mating_part_id": "",
+        "bore_mm": 100.0,
+        "od_mm": 114.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "world",
+        "notes": ""
+      },
+      {
+        "name": "ph3_sensor_4_20ma",
+        "kind": "electrical",
+        "position_mm": [
+          -1600.0,
+          44.0,
+          1620.0
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "standard": "Dual 0.02/0.05 ppm 4-20 mA SIL-3 Target Loop",
+        "mating_part_id": "S7.SAFETY-03",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "world",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "CAB_W",
+        "nominal_mm": 500.0,
+        "tol_plus_mm": 2.0,
+        "tol_minus_mm": -2.0,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "500.00 ±2.00"
+      },
+      {
+        "label": "CAB_D",
+        "nominal_mm": 600.0,
+        "tol_plus_mm": 2.0,
+        "tol_minus_mm": -2.0,
+        "view": "right",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "600.00 ±2.00"
+      },
+      {
+        "label": "CAB_H",
+        "nominal_mm": 1800.0,
+        "tol_plus_mm": 3.0,
+        "tol_minus_mm": -3.0,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "1800.00 ±3.00"
+      },
+      {
+        "label": "SCRUBBER_OD",
+        "nominal_mm": 320.0,
+        "tol_plus_mm": 2.0,
+        "tol_minus_mm": -2.0,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø320.00 ±2.00"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "flatness",
+        "tolerance_mm": 1.0,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "CABINET BASE PLINTH",
+        "glyph": "⏥",
+        "tolerance_text": "1.00"
+      },
+      {
+        "symbol": "perpendicularity",
+        "tolerance_mm": 1.5,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "GAS CABINET ENCLOSURE",
+        "glyph": "⊥",
+        "tolerance_text": "1.50"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "SDS <650 Torr (10 g envanter), operator maruziyeti 0.00715 ppm << 0.05 ppm TLV-TWA (%99.9 yikama, 12 s SIL-3 kesme), 600x500x1800 mm, 480 W / 0 W kriyo, kutle=118.0 kg",
+      "Exp150 S7.SAFETY-01 (118.0 kg, 480 W, 0 W cryo): <650 Torr (10 g) SDS PH3 + vacuum-jacket duct + 250 CFM dry scrubber.",
+      "Cabinet at X=-1600 mm, Y=+400 mm (Y in [+100,+700]), scrubber at X=-2060 mm, Y=+400 mm (fully clear of S1.6-01/02 at Y>=+750 mm).",
+      "PRELIMINARY PARAMETRIC DESIGN ONLY: iec61508_certified=False, semi_s2_certified=False."
+    ],
+    "scad_params": {
+      "cab_dx_mm": 500.0,
+      "cab_dy_mm": 600.0,
+      "cab_dz_mm": 1800.0,
+      "scrubber_od_mm": 320.0,
+      "exhaust_cfm": 250
+    },
+    "target_mass_kg": 118.0,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S7.SAFETY-01",
+    "subsystem": "S7",
+    "design_tier": "COTS_ENV_ICD",
+    "stl_path": "hardware/cad_parts/out/S7/S7.SAFETY-01.stl",
+    "step_path": "hardware/cad_parts/out/S7/S7.SAFETY-01.step",
+    "scad_path": "hardware/cad_parts/out/S7/S7.SAFETY-01.scad",
+    "dxf_path": "hardware/cad_parts/out/S7/S7.SAFETY-01.dxf",
+    "svg_path": "hardware/cad_parts/out/S7/S7.SAFETY-01.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 137581374.41830182,
+    "surface_area_mm2": 11201201.644869538,
+    "mass_kg": 117.99999999999991,
+    "cg_mm": [
+      -1809.1008751234347,
+      401.0963693351514,
+      673.8071514888791
+    ],
+    "bbox_min_mm": [
+      -2225.0,
+      44.5,
+      0.0
+    ],
+    "bbox_max_mm": [
+      -1350.0,
+      700.0,
+      2060.0
+    ],
+    "inertia_kg_mm2": [
+      43160680.95903801,
+      48655671.23688299,
+      11367165.669044496,
+      -27051.710917903314,
+      -5240963.291605907,
+      130455.83164211999
+    ],
+    "triangle_count": 1304,
+    "vertex_count": 668,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "shell_bboxes_mm": [
+    [
+      [
+        -1850.0,
+        100.0,
+        0.0
+      ],
+      [
+        -1350.0,
+        700.0,
+        40.0
+      ]
+    ],
+    [
+      [
+        -1850.0,
+        100.0,
+        1770.0
+      ],
+      [
+        -1350.0,
+        700.0,
+        1800.0
+      ]
+    ],
+    [
+      [
+        -1850.0,
+        100.0,
+        40.2
+      ],
+      [
+        -1838.0,
+        700.0,
+        1769.8
+      ]
+    ],
+    [
+      [
+        -1362.0,
+        100.0,
+        40.2
+      ],
+      [
+        -1350.0,
+        700.0,
+        1769.8
+      ]
+    ],
+    [
+      [
+        -1837.8,
+        688.0,
+        40.2
+      ],
+      [
+        -1362.2,
+        700.0,
+        1769.8
+      ]
+    ],
+    [
+      [
+        -1837.8,
+        100.0,
+        40.2
+      ],
+      [
+        -1362.2,
+        112.0,
+        1769.8
+      ]
+    ],
+    [
+      [
+        -1658.0,
+        342.0,
+        45.0
+      ],
+      [
+        -1542.0,
+        458.0,
+        655.0
+      ]
+    ],
+    [
+      [
+        -1690.0,
+        340.0,
+        750.0
+      ],
+      [
+        -1510.0,
+        460.0,
+        890.0
+      ]
+    ],
+    [
+      [
+        -1765.0,
+        44.5,
+        1565.0
+      ],
+      [
+        -1675.0,
+        99.5,
+        1675.0
+      ]
+    ],
+    [
+      [
+        -1525.0,
+        44.5,
+        1565.0
+      ],
+      [
+        -1435.0,
+        99.5,
+        1675.0
+      ]
+    ],
+    [
+      [
+        -1654.0,
+        346.0,
+        1800.5
+      ],
+      [
+        -1546.0,
+        454.0,
+        1950.5
+      ]
+    ],
+    [
+      [
+        -2114.0,
+        346.0,
+        1952.0
+      ],
+      [
+        -1546.0,
+        454.0,
+        2060.0
+      ]
+    ],
+    [
+      [
+        -2114.0,
+        346.0,
+        722.0
+      ],
+      [
+        -2006.0,
+        454.0,
+        1952.0
+      ]
+    ],
+    [
+      [
+        -2225.0,
+        235.0,
+        0.0
+      ],
+      [
+        -1895.0,
+        565.0,
+        720.0
+      ]
+    ]
+  ],
+  "reconciliation_notes": []
+}

@@ -1,0 +1,96 @@
+{
+  "schema_version": "part_icd_v1.0",
+  "part_id": "S7.1-03",
+  "parent_bom_id": "S7.1",
+  "subsystem": "S7",
+  "part_name": "Cift-donusumlu kesintisiz guc kaynagi (UPS 6 kVA) ve akilli PDU",
+  "part_category": "PHYSICAL_SOLID",
+  "bom_metadata": {
+    "qty": "1",
+    "unit": "set",
+    "material": "19 inc online UPS + izlenebilir PDU",
+    "key_spec": "Kriyo kontrol/PLC/vakum icin 30 dk kesintisiz koruma",
+    "tolerance": "±1% gerilim",
+    "temp_stage": "300 K (kabin)",
+    "vacuum_grade": "Atmosfer",
+    "procurement_class": "COTS",
+    "parent_cost_class": "B",
+    "usd_low": 1400.0,
+    "usd_nom": 2200.0,
+    "usd_high": 4000.0,
+    "legacy_cad_module": "s7_electronics_rack_interconnect",
+    "bom_epistemic_tag": "{Liste-Çapası}",
+    "notes": "Ani elektrik kesintisinde guvenli kapatma"
+  },
+  "artifact_links": {
+    "cad": {
+      "work_package": "WP-M5",
+      "design_tier": "COTS_ENV_ICD",
+      "stl": "hardware/cad_parts/out/S7/S7.1-03.stl",
+      "step": "hardware/cad_parts/out/S7/S7.1-03.step",
+      "scad": "hardware/cad_parts/out/S7/S7.1-03.scad",
+      "dxf": "hardware/cad_parts/out/S7/S7.1-03.dxf",
+      "svg": "hardware/cad_parts/out/S7/S7.1-03.svg",
+      "cad_json": "hardware/cad_parts/out/S7/S7.1-03.json",
+      "watertight": true,
+      "all_6_files_valid": true,
+      "mass_kg": 46.0,
+      "triangle_count": 2908,
+      "temp_k": 300.0,
+      "canonical_bbox_min_mm": [
+        1238.7,
+        -464.2,
+        91.0
+      ],
+      "canonical_bbox_max_mm": [
+        1721.3,
+        234.2,
+        222.35
+      ],
+      "datum_shift_mm": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "port_count": 0,
+      "gdt_frame_count": 0
+    },
+    "pcb_bundles": [],
+    "legacy_board_files": [],
+    "electrical_icd": {
+      "path": "hardware/icd/electrical/S7.1-03.json",
+      "electrical_class": "E3",
+      "grounding_domain": "FACILITY_PE",
+      "ups_tier": "TIER1_CRITICAL",
+      "exp150_ups_allocation_w": 20.0,
+      "mating_part_ids": [
+        "S7.SAFETY-04",
+        "S7.4-03",
+        "S7.1-01"
+      ],
+      "interlock_hooks_count": 1
+    },
+    "rtl_modules": [],
+    "rtl_audit_json": null,
+    "software_and_eda_files": [],
+    "verification_tests": []
+  },
+  "specialized_specification": null,
+  "verification_status": {
+    "cad_verified": true,
+    "pcb_verified": false,
+    "electrical_icd_verified": true,
+    "rtl_verified": false,
+    "software_or_eda_verified": false,
+    "specialized_icd_present": false,
+    "traceable": true
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "tapeout_done": false
+  }
+}

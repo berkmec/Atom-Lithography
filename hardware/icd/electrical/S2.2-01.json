@@ -1,0 +1,84 @@
+{
+  "schema_version": "1.0",
+  "part_id": "S2.2-01",
+  "parent_bom_id": "S2.2",
+  "subsystem": "S2",
+  "part_name": "MEMS elektrostatik blanker plakasi (Arch-B es-adimli 0.50 mm, 1024 kanal)",
+  "qty": 1,
+  "unit": "adet",
+  "temp_stage": "300 K",
+  "vacuum_grade": "UHV 1e-9 mbar",
+  "bom_key_spec": "0.50 mm es-adim, 32x32=1024 kanal (16.0x16.0 mm < \u00d828.0 mm), V_blank ~27 V @ 5 keV, kapi <=1 ms",
+  "usd_nom": 80000.0,
+  "bom_epistemic_tag": "{Varsay\u0131m}",
+  "electrical_class": "E4",
+  "grounding_domain": "HV_MINUS_5KV_DECK",
+  "grounding_notes": "32x32=1024-ch MEMS electrostatic blanker plate (V_blank~27-53.3 V) floating on -5 kV deck.",
+  "supply_rails": [
+    {
+      "rail_name": "BLANKER_HV_DRV",
+      "voltage_v": 53.3,
+      "current_type": "DC",
+      "max_current_a": 0.05,
+      "steady_power_w": 1.5,
+      "peak_power_w": 3.0,
+      "source_part_id": "S2.4-02"
+    }
+  ],
+  "connectors_and_pinout": [
+    {
+      "connector_ref": "P_BUMP",
+      "connector_type": "1024-Ch Micro-Bump Array (0.50 mm pitch)",
+      "location_side": "write_head_uhv",
+      "mating_part_id": "S2.2-03",
+      "pins": [
+        {
+          "pin": "1-1024",
+          "signal": "V_DEFLECT[0:1023]",
+          "direction": "IN",
+          "nominal_level": "0 V open / 27-53.3 V blanked (<100 ns)"
+        },
+        {
+          "pin": "GND",
+          "signal": "DECK_N5KV_REF",
+          "direction": "PWR",
+          "nominal_level": "-5 kV floating reference"
+        }
+      ]
+    }
+  ],
+  "mating_part_ids": [
+    "S2.2-03",
+    "S2.4-01",
+    "S2.4-02",
+    "S2.2-04"
+  ],
+  "interlock_hooks": [
+    {
+      "signal_name": "GLOBAL_BLANK_OVERRIDE",
+      "target_part_id": "S7.SAFETY-03",
+      "action_on_trip": "Force all 1024 plates HIGH (<1 us) on fault",
+      "response_time_ms": 0.001
+    }
+  ],
+  "ups_tier": "NONE",
+  "ups_budget_group": "PASSIVE_ZERO_MAINS",
+  "exp150_ups_allocation_w": 0.0,
+  "supply_rails_steady_sum_w": 1.5,
+  "incremental_mains_w": 0.0,
+  "secondary_or_parent_derived_w": 1.5,
+  "non_exp150_aux_shed_w": 0.0,
+  "reconciliation_note": "Passive or downstream sub-assembly (1.50 W sub-rail power drawn from upstream source S2.4-02); incremental_mains_w = 0.0 W (zero double-counting).",
+  "timing_sync": {
+    "rb_10mhz_port": null,
+    "white_rabbit_port": "WR_SFP_3 (via S3.3-02)",
+    "sync_role": "1024-beamlet deterministic blanker"
+  },
+  "epistemic_flags": {
+    "design_maturity": "M0_M1_ELECTRICAL_ICD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

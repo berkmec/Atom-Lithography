@@ -1,0 +1,236 @@
+{
+  "part_id": "S3.3-01",
+  "subsystem": "S3",
+  "part_design": {
+    "part_id": "S3.3-01",
+    "parent_bom_id": "S3.3",
+    "subsystem": "S3",
+    "part_name": "Sayim kapisi FPGA islem karti (blanker_gate 100 MHz RTL)",
+    "design_tier": "COTS_ENV_ICD",
+    "material": "Al 6061",
+    "temp_stage": "300 K (kabin)",
+    "temp_k": 300.0,
+    "vacuum_grade": "Atmosfer",
+    "tolerance_spec": "±10 ns",
+    "surface_finish_ra_um": 1.6,
+    "qty": 2,
+    "procurement_class": "COTS/CUS",
+    "world_origin_mm": [
+      1480.0,
+      -220.0,
+      634.575
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "rack_front_1u",
+        "kind": "mechanical",
+        "position_mm": [
+          0.0,
+          -190.0,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "standard": "EIA-310 19-inch 1U (Bay 1 U24, X=1480 mm)",
+        "mating_part_id": "S7.4-03",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      },
+      {
+        "name": "blanker_gate_link",
+        "kind": "optical",
+        "position_mm": [
+          0.0,
+          -190.0,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "standard": "100 MHz blanker_gate RTL (<100 ns latency)",
+        "mating_part_id": "S3.3-02",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "WIDTH_19IN",
+        "nominal_mm": 482.6,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "482.60 ±0.50"
+      },
+      {
+        "label": "HEIGHT_1U",
+        "nominal_mm": 42.45,
+        "tol_plus_mm": 0.3,
+        "tol_minus_mm": -0.3,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "42.45 ±0.30"
+      },
+      {
+        "label": "DEPTH",
+        "nominal_mm": 380.0,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "380.00 ±0.50"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "perpendicularity",
+        "tolerance_mm": 0.25,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "19-INCH FRONT FLANGE",
+        "glyph": "⊥",
+        "tolerance_text": "0.25"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "Gecikme <100 ns (<<1 ms atis cevrimi), watchdog 100k cevrim (Exp73/88)",
+      "2x redundant Xilinx/AMD Kintex/Artix FPGA counting-gate cards running blanker_gate 100 MHz RTL.",
+      "Latency <100 ns, 100k-cycle hardware watchdog (Exp73/88). Rack Bay 1 (X=+1480 mm, front -Y) U24 (1U)."
+    ],
+    "scad_params": {
+      "n_fpga_cards": 2,
+      "rack_u_height": 1,
+      "depth_mm": 380.0
+    },
+    "target_mass_kg": null,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S3.3-01",
+    "subsystem": "S3",
+    "design_tier": "COTS_ENV_ICD",
+    "stl_path": "hardware/cad_parts/out/S3/S3.3-01.stl",
+    "step_path": "hardware/cad_parts/out/S3/S3.3-01.step",
+    "scad_path": "hardware/cad_parts/out/S3/S3.3-01.scad",
+    "dxf_path": "hardware/cad_parts/out/S3/S3.3-01.dxf",
+    "svg_path": "hardware/cad_parts/out/S3/S3.3-01.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 1433445.8471715304,
+    "surface_area_mm2": 1029567.704145681,
+    "mass_kg": 3.5836146179288275,
+    "cg_mm": [
+      -1.2994178698179077e-15,
+      -13.370230566550525,
+      -1.8110429529810799
+    ],
+    "bbox_min_mm": [
+      -241.3,
+      -214.2,
+      -21.225
+    ],
+    "bbox_max_mm": [
+      241.3,
+      198.79999999999998,
+      21.225
+    ],
+    "inertia_kg_mm2": [
+      42715.4085966091,
+      60477.5692005409,
+      101439.64065150349,
+      -2.478542630296876e-11,
+      -7.366247337638352e-13,
+      23.84586599535879
+    ],
+    "triangle_count": 792,
+    "vertex_count": 428,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "world_bbox_min_mm": [
+    1238.7,
+    -434.2,
+    613.35
+  ],
+  "world_bbox_max_mm": [
+    1721.3,
+    -21.200000000000017,
+    655.8000000000001
+  ],
+  "reconciliation": null,
+  "thermal_contraction_checks": [],
+  "tolerance_stack_checks": []
+}

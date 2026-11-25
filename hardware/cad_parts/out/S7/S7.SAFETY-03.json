@@ -1,0 +1,721 @@
+{
+  "part_design": {
+    "part_id": "S7.SAFETY-03",
+    "parent_bom_id": "S7.SAFETY",
+    "subsystem": "S7",
+    "part_name": "IEC 61508 SIL-3 1oo2D Donanimsal Emniyet PLC, 4x E-Stop Mantar, Kapak Anahtarlari & 2 MOhm HV Crowbar Modulu (Exp150, 18.0 kg)",
+    "design_tier": "COTS_ENV_ICD",
+    "material": "Steel",
+    "temp_stage": "300 K (S7 raf ustu)",
+    "temp_k": 300.0,
+    "vacuum_grade": "Atmosfer",
+    "tolerance_spec": "SIL-3 1oo2D, <50 ms HV",
+    "surface_finish_ra_um": 0.8,
+    "qty": 1,
+    "procurement_class": "COTS/CUS",
+    "world_origin_mm": [
+      1480.0,
+      -263.0,
+      1845.775
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "plc_1oo2d_bay1",
+        "kind": "electrical",
+        "position_mm": [
+          1480.0,
+          -438.0,
+          1845.775
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "standard": "3U 1oo2D Hardwired Safety PLC (Bay 1 U39-U41)",
+        "mating_part_id": "S7.4-04",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "world",
+        "notes": ""
+      },
+      {
+        "name": "hv_crowbar_22kv",
+        "kind": "electrical",
+        "position_mm": [
+          940.0,
+          240.0,
+          876.0
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "22 kV Active 2 MOhm HV Crowbar (<50 V in 18.26 ms)",
+        "mating_part_id": "S1.1-05",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "world",
+        "notes": ""
+      },
+      {
+        "name": "estop_loop_nw",
+        "kind": "mechanical",
+        "position_mm": [
+          -1900.0,
+          1900.0,
+          1050.0
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "Dual-NC Mushroom E-Stop Pedestal (4x Room Corners ±1900 mm)",
+        "mating_part_id": "",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "world",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "PLC_W_19IN",
+        "nominal_mm": 482.6,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "482.60 ±0.50"
+      },
+      {
+        "label": "PLC_H_3U",
+        "nominal_mm": 133.4,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "133.40 ±0.50"
+      },
+      {
+        "label": "ESTOP_GRID",
+        "nominal_mm": 3800.0,
+        "tol_plus_mm": 10.0,
+        "tol_minus_mm": -10.0,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "3800.00 ±10.00"
+      },
+      {
+        "label": "CROWBAR_W",
+        "nominal_mm": 220.0,
+        "tol_plus_mm": 1.0,
+        "tol_minus_mm": -1.0,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "220.00 ±1.00"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "flatness",
+        "tolerance_mm": 0.5,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "3U PLC FACEPLATE & PEDESTAL BASES",
+        "glyph": "⏥",
+        "tolerance_text": "0.50"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "482.6x350x133.4 mm, 22 kV HV crowbar 18.26 ms < 50 ms (<50 V, E=0.363 J < 0.5 J), 3.2 ms lazer kesme, max FMEA RPN 280->42, 120 W / 0 W kriyo, kutle=18.0 kg",
+      "Exp150 S7.SAFETY-03 (18.0 kg canonical BOM_DETAILED.csv & s_safety_spec.json; 120 W, 0 W cryo).",
+      "Includes 3U 1oo2D safety PLC (Bay 1 U39-U41), 4x perimeter E-Stop pedestals (±1900 mm), and 2 MOhm HV crowbar box.",
+      "PRELIMINARY DESIGN ONLY: iec61508_certified=False, semi_s2_certified=False."
+    ],
+    "scad_params": {
+      "plc_u": 3,
+      "estop_corner_mm": 1900.0,
+      "crowbar_mohm": 2.0
+    },
+    "target_mass_kg": 18.0,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S7.SAFETY-03",
+    "subsystem": "S7",
+    "design_tier": "COTS_ENV_ICD",
+    "stl_path": "hardware/cad_parts/out/S7/S7.SAFETY-03.stl",
+    "step_path": "hardware/cad_parts/out/S7/S7.SAFETY-03.step",
+    "scad_path": "hardware/cad_parts/out/S7/S7.SAFETY-03.scad",
+    "dxf_path": "hardware/cad_parts/out/S7/S7.SAFETY-03.dxf",
+    "svg_path": "hardware/cad_parts/out/S7/S7.SAFETY-03.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 35633417.345281444,
+    "surface_area_mm2": 2769232.811543408,
+    "mass_kg": 17.99999999999998,
+    "cg_mm": [
+      998.5970413171018,
+      -104.30756268812164,
+      1318.4937309840977
+    ],
+    "bbox_min_mm": [
+      -2000.0,
+      -2000.0,
+      0.0
+    ],
+    "bbox_max_mm": [
+      2000.0,
+      2000.0,
+      1911.45
+    ],
+    "inertia_kg_mm2": [
+      24913520.477543823,
+      31300858.227369986,
+      41753457.80539172,
+      1323369.3206079789,
+      -6118766.735027385,
+      1847601.6847139155
+    ],
+    "triangle_count": 4896,
+    "vertex_count": 2464,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "shell_bboxes_mm": [
+    [
+      [
+        1238.7,
+        -438.0,
+        1780.1
+      ],
+      [
+        1721.3,
+        -434.0,
+        1911.45
+      ]
+    ],
+    [
+      [
+        1260.0,
+        -433.9,
+        1781.1
+      ],
+      [
+        1700.0,
+        -88.0,
+        1910.45
+      ]
+    ],
+    [
+      [
+        1272.5,
+        -456.1,
+        1806.275
+      ],
+      [
+        1279.5,
+        -438.1,
+        1813.275
+      ]
+    ],
+    [
+      [
+        1272.5,
+        -456.1,
+        1878.275
+      ],
+      [
+        1279.5,
+        -438.1,
+        1885.275
+      ]
+    ],
+    [
+      [
+        1272.0,
+        -464.2,
+        1805.775
+      ],
+      [
+        1280.0,
+        -456.2,
+        1885.775
+      ]
+    ],
+    [
+      [
+        1680.5,
+        -456.1,
+        1806.275
+      ],
+      [
+        1687.5,
+        -438.1,
+        1813.275
+      ]
+    ],
+    [
+      [
+        1680.5,
+        -456.1,
+        1878.275
+      ],
+      [
+        1687.5,
+        -438.1,
+        1885.275
+      ]
+    ],
+    [
+      [
+        1680.0,
+        -464.2,
+        1805.775
+      ],
+      [
+        1688.0,
+        -456.2,
+        1885.775
+      ]
+    ],
+    [
+      [
+        1538.0,
+        -449.1,
+        1841.275
+      ],
+      [
+        1547.0,
+        -438.1,
+        1850.275
+      ]
+    ],
+    [
+      [
+        1553.0,
+        -449.1,
+        1841.275
+      ],
+      [
+        1562.0,
+        -438.1,
+        1850.275
+      ]
+    ],
+    [
+      [
+        1568.0,
+        -449.1,
+        1841.275
+      ],
+      [
+        1577.0,
+        -438.1,
+        1850.275
+      ]
+    ],
+    [
+      [
+        1583.0,
+        -449.1,
+        1841.275
+      ],
+      [
+        1592.0,
+        -438.1,
+        1850.275
+      ]
+    ],
+    [
+      [
+        1598.0,
+        -449.1,
+        1841.275
+      ],
+      [
+        1607.0,
+        -438.1,
+        1850.275
+      ]
+    ],
+    [
+      [
+        1613.0,
+        -449.1,
+        1841.275
+      ],
+      [
+        1622.0,
+        -438.1,
+        1850.275
+      ]
+    ],
+    [
+      [
+        1628.0,
+        -449.1,
+        1841.275
+      ],
+      [
+        1637.0,
+        -438.1,
+        1850.275
+      ]
+    ],
+    [
+      [
+        1643.0,
+        -449.1,
+        1841.275
+      ],
+      [
+        1652.0,
+        -438.1,
+        1850.275
+      ]
+    ],
+    [
+      [
+        1334.0,
+        -87.8,
+        1809.775
+      ],
+      [
+        1406.0,
+        -77.8,
+        1881.775
+      ]
+    ],
+    [
+      [
+        1444.0,
+        -87.8,
+        1809.775
+      ],
+      [
+        1516.0,
+        -77.8,
+        1881.775
+      ]
+    ],
+    [
+      [
+        1614.0,
+        -87.8,
+        1833.775
+      ],
+      [
+        1646.0,
+        -75.8,
+        1857.775
+      ]
+    ],
+    [
+      [
+        -2000.0,
+        -2000.0,
+        0.0
+      ],
+      [
+        -1800.0,
+        -1800.0,
+        12.0
+      ]
+    ],
+    [
+      [
+        -1930.0,
+        -1930.0,
+        12.2
+      ],
+      [
+        -1870.0,
+        -1870.0,
+        947.2
+      ]
+    ],
+    [
+      [
+        -1955.0,
+        -1955.0,
+        948.0
+      ],
+      [
+        -1845.0,
+        -1845.0,
+        1018.0
+      ]
+    ],
+    [
+      [
+        -1930.0,
+        -1930.0,
+        1018.2
+      ],
+      [
+        -1870.0,
+        -1870.0,
+        1054.2
+      ]
+    ],
+    [
+      [
+        1800.0,
+        -2000.0,
+        0.0
+      ],
+      [
+        2000.0,
+        -1800.0,
+        12.0
+      ]
+    ],
+    [
+      [
+        1870.0,
+        -1930.0,
+        12.2
+      ],
+      [
+        1930.0,
+        -1870.0,
+        947.2
+      ]
+    ],
+    [
+      [
+        1845.0,
+        -1955.0,
+        948.0
+      ],
+      [
+        1955.0,
+        -1845.0,
+        1018.0
+      ]
+    ],
+    [
+      [
+        1870.0,
+        -1930.0,
+        1018.2
+      ],
+      [
+        1930.0,
+        -1870.0,
+        1054.2
+      ]
+    ],
+    [
+      [
+        1800.0,
+        1800.0,
+        0.0
+      ],
+      [
+        2000.0,
+        2000.0,
+        12.0
+      ]
+    ],
+    [
+      [
+        1870.0,
+        1870.0,
+        12.2
+      ],
+      [
+        1930.0,
+        1930.0,
+        947.2
+      ]
+    ],
+    [
+      [
+        1845.0,
+        1845.0,
+        948.0
+      ],
+      [
+        1955.0,
+        1955.0,
+        1018.0
+      ]
+    ],
+    [
+      [
+        1870.0,
+        1870.0,
+        1018.2
+      ],
+      [
+        1930.0,
+        1930.0,
+        1054.2
+      ]
+    ],
+    [
+      [
+        -2000.0,
+        1800.0,
+        0.0
+      ],
+      [
+        -1800.0,
+        2000.0,
+        12.0
+      ]
+    ],
+    [
+      [
+        -1930.0,
+        1870.0,
+        12.2
+      ],
+      [
+        -1870.0,
+        1930.0,
+        947.2
+      ]
+    ],
+    [
+      [
+        -1955.0,
+        1845.0,
+        948.0
+      ],
+      [
+        -1845.0,
+        1955.0,
+        1018.0
+      ]
+    ],
+    [
+      [
+        -1930.0,
+        1870.0,
+        1018.2
+      ],
+      [
+        -1870.0,
+        1930.0,
+        1054.2
+      ]
+    ],
+    [
+      [
+        830.0,
+        150.0,
+        660.0
+      ],
+      [
+        1050.0,
+        330.0,
+        820.0
+      ]
+    ],
+    [
+      [
+        872.0,
+        222.0,
+        820.2
+      ],
+      [
+        908.0,
+        258.0,
+        876.2
+      ]
+    ],
+    [
+      [
+        972.0,
+        222.0,
+        820.2
+      ],
+      [
+        1008.0,
+        258.0,
+        876.2
+      ]
+    ]
+  ],
+  "reconciliation_notes": [
+    "Canonical BOM_DETAILED.csv & s_safety_spec.json specify S7.SAFETY-03 = 18.0 kg and S7.SAFETY-05 = 24.0 kg (total S7.SAFETY-01..06 = 355.0 kg)."
+  ]
+}

@@ -1,0 +1,83 @@
+{
+  "schema_version": "1.0",
+  "part_id": "S1.2-02",
+  "parent_bom_id": "S1.2",
+  "subsystem": "S1",
+  "part_name": "Wien filtresi elektrostatik saptirma plakalari",
+  "qty": 2,
+  "unit": "set",
+  "temp_stage": "300 K",
+  "vacuum_grade": "UHV 1e-8 mbar",
+  "bom_key_spec": "E-alani +/-20 kV/m, ExB dengeli dogrusal eksen",
+  "usd_nom": 16000.0,
+  "bom_epistemic_tag": "{Model-Kalibrasyon-Exp114}",
+  "electrical_class": "E4",
+  "grounding_domain": "AGND",
+  "grounding_notes": "2x OFHC/Mo/Macor Wien electrostatic deflector plate pairs (\u00b120 kV/m, \u00b110 um parallelism).",
+  "supply_rails": [
+    {
+      "rail_name": "WIEN_HV_BIPOLAR",
+      "voltage_v": 5000.0,
+      "current_type": "HV_DC",
+      "max_current_a": 0.001,
+      "steady_power_w": 0.5,
+      "peak_power_w": 2.0,
+      "source_part_id": "S1.2-03"
+    }
+  ],
+  "connectors_and_pinout": [
+    {
+      "connector_ref": "J_CF40_SHV",
+      "connector_type": "CF40 Dual SHV-10kV Feedthrough (2x)",
+      "location_side": "column_uhv",
+      "mating_part_id": "S1.2-03",
+      "pins": [
+        {
+          "pin": "1",
+          "signal": "WIEN_PLATE_POS",
+          "direction": "IN",
+          "nominal_level": "+E_Wien balanced"
+        },
+        {
+          "pin": "2",
+          "signal": "WIEN_PLATE_NEG",
+          "direction": "IN",
+          "nominal_level": "-E_Wien balanced"
+        }
+      ]
+    }
+  ],
+  "mating_part_ids": [
+    "S1.2-01",
+    "S1.2-03",
+    "S1.2-04"
+  ],
+  "interlock_hooks": [
+    {
+      "signal_name": "WIEN_HV_SAFE",
+      "target_part_id": "S7.SAFETY-03",
+      "action_on_trip": "Zero plate HV via S1.2-03 on interlock",
+      "response_time_ms": 18.3
+    }
+  ],
+  "ups_tier": "NONE",
+  "ups_budget_group": "PASSIVE_ZERO_MAINS",
+  "exp150_ups_allocation_w": 0.0,
+  "supply_rails_steady_sum_w": 0.5,
+  "incremental_mains_w": 0.0,
+  "secondary_or_parent_derived_w": 0.5,
+  "non_exp150_aux_shed_w": 0.0,
+  "reconciliation_note": "Passive or downstream sub-assembly (0.50 W sub-rail power drawn from upstream source S1.2-03); incremental_mains_w = 0.0 W (zero double-counting).",
+  "timing_sync": {
+    "rb_10mhz_port": null,
+    "white_rabbit_port": null,
+    "sync_role": "Electrostatic ExB balance plates"
+  },
+  "epistemic_flags": {
+    "design_maturity": "M0_M1_ELECTRICAL_ICD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

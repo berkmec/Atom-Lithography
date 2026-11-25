@@ -1,0 +1,260 @@
+{
+  "part_id": "S3.3-04",
+  "subsystem": "S3",
+  "part_design": {
+    "part_id": "S3.3-04",
+    "parent_bom_id": "S3.3",
+    "subsystem": "S3",
+    "part_name": "1U EMI kalkanli sayim sase ve senkronizasyon arayuzu",
+    "design_tier": "COTS_ENV_ICD",
+    "material": "Al 6061",
+    "temp_stage": "300 K (kabin)",
+    "temp_k": 300.0,
+    "vacuum_grade": "Atmosfer",
+    "tolerance_spec": "ISO 2768-mK",
+    "surface_finish_ra_um": 1.6,
+    "qty": 1,
+    "procurement_class": "COTS",
+    "world_origin_mm": [
+      1480.0,
+      -220.0,
+      590.1250000000001
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "rack_front_1u",
+        "kind": "mechanical",
+        "position_mm": [
+          0.0,
+          -190.0,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "standard": "EIA-310 19-inch 1U (Bay 1 U23, X=1480 mm)",
+        "mating_part_id": "S7.4-03",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      },
+      {
+        "name": "clock_10mhz_sync",
+        "kind": "rf",
+        "position_mm": [
+          -150.0,
+          -190.0,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "standard": "10 MHz Rb Reference + Trigger BNC/SMA",
+        "mating_part_id": "S7.4-01",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      },
+      {
+        "name": "host_pcie_gbe",
+        "kind": "electrical",
+        "position_mm": [
+          -110.0,
+          190.0,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "standard": "PCIe Gen3 / 10GbE Host Interface",
+        "mating_part_id": "S7.1-01",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "WIDTH_19IN",
+        "nominal_mm": 482.6,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "482.60 ±0.50"
+      },
+      {
+        "label": "HEIGHT_1U",
+        "nominal_mm": 42.45,
+        "tol_plus_mm": 0.3,
+        "tol_minus_mm": -0.3,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "42.45 ±0.30"
+      },
+      {
+        "label": "DEPTH",
+        "nominal_mm": 380.0,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "380.00 ±0.50"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "perpendicularity",
+        "tolerance_mm": 0.25,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "19-INCH FRONT FLANGE",
+        "glyph": "⊥",
+        "tolerance_text": "0.25"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "S7.4 10 MHz/trigger dagitimina kilitli",
+      "1U EMI-shielded IBIC counting chassis locked to S7.4 10 MHz Rb clock & trigger distribution.",
+      "Integrates PCIe/GbE host telemetry interface card envelope (168x111 mm). Rack Bay 1 (X=+1480 mm) U23 (1U)."
+    ],
+    "scad_params": {
+      "rack_u_height": 1,
+      "depth_mm": 380.0,
+      "sync_freq_mhz": 10
+    },
+    "target_mass_kg": null,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S3.3-04",
+    "subsystem": "S3",
+    "design_tier": "COTS_ENV_ICD",
+    "stl_path": "hardware/cad_parts/out/S3/S3.3-04.stl",
+    "step_path": "hardware/cad_parts/out/S3/S3.3-04.step",
+    "scad_path": "hardware/cad_parts/out/S3/S3.3-04.scad",
+    "dxf_path": "hardware/cad_parts/out/S3/S3.3-04.dxf",
+    "svg_path": "hardware/cad_parts/out/S3/S3.3-04.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 1672725.8471715301,
+    "surface_area_mm2": 1088492.7962522358,
+    "mass_kg": 4.014542033211675,
+    "cg_mm": [
+      0.7344748107273162,
+      11.510419684857007,
+      -0.7490910731837959
+    ],
+    "bbox_min_mm": [
+      -241.3,
+      -214.2,
+      -21.225
+    ],
+    "bbox_max_mm": [
+      241.3,
+      200.79999999999998,
+      21.225
+    ],
+    "inertia_kg_mm2": [
+      46865.018266786225,
+      64879.45358092416,
+      109993.44639910807,
+      -3108.39280472568,
+      -176.59851495656744,
+      -242.721293076475
+    ],
+    "triangle_count": 804,
+    "vertex_count": 430,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "world_bbox_min_mm": [
+    1238.7,
+    -434.2,
+    568.9000000000001
+  ],
+  "world_bbox_max_mm": [
+    1721.3,
+    -19.200000000000017,
+    611.3500000000001
+  ],
+  "reconciliation": null,
+  "thermal_contraction_checks": [],
+  "tolerance_stack_checks": []
+}

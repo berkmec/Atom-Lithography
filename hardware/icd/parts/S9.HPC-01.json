@@ -1,0 +1,97 @@
+{
+  "schema_version": "part_icd_v1.0",
+  "part_id": "S9.HPC-01",
+  "parent_bom_id": "S9.HPC",
+  "subsystem": "S9",
+  "part_name": "2U Cift-Hizlandiricili QEC Dekoder Dugumu (2x H100/Alveo-U280 Sinifi + Cift-100G ConnectX-7 RoCEv2 NIC, Exp143, 56.00 kg)",
+  "part_category": "PHYSICAL_SOLID",
+  "bom_metadata": {
+    "qty": "2",
+    "unit": "dugum",
+    "material": "2x 2U sunucu (4U toplam) + H100/Alveo-U280 + ConnectX-7 100G",
+    "key_spec": "482.6x780x177.8 mm (4U dogrudan / 5U anahtarli), Surface d=37 e2e=6.34 us (<6.70 us D3 dongu, 16L/modul) & qLDPC [[144,12,12]] e2e=2.32 us (<2.62 us, 108L/modul), 2100 W / 0 W kriyo, kutle=56.00 kg",
+    "tolerance": "<6.7 us d=37 / <2.6 us qLDPC",
+    "temp_stage": "300 K (HPC rafi)",
+    "vacuum_grade": "Atmosfer",
+    "procurement_class": "COTS/CUS",
+    "parent_cost_class": "C(v6.0-OptHPC)",
+    "usd_low": 84000.0,
+    "usd_nom": 112000.0,
+    "usd_high": 152000.0,
+    "legacy_cad_module": "s7_electronics_rack_interconnect",
+    "bom_epistemic_tag": "{Varsayım}",
+    "notes": "DELTA-V6.0-OPTHPC-EXP143 (Exp143 S9.HPC-01 Option-HPC 1/3, 56.00 kg; 2 dugum x $56k nom; M3 Base ustune opsiyonel; RFQ-09)"
+  },
+  "artifact_links": {
+    "cad": {
+      "work_package": "WP-M5",
+      "design_tier": "COTS_ENV_ICD",
+      "stl": "hardware/cad_parts/out/S9_spares_hpc/S9.HPC-01.stl",
+      "step": "hardware/cad_parts/out/S9_spares_hpc/S9.HPC-01.step",
+      "scad": "hardware/cad_parts/out/S9_spares_hpc/S9.HPC-01.scad",
+      "dxf": "hardware/cad_parts/out/S9_spares_hpc/S9.HPC-01.dxf",
+      "svg": "hardware/cad_parts/out/S9_spares_hpc/S9.HPC-01.svg",
+      "cad_json": "hardware/cad_parts/out/S9_spares_hpc/S9.HPC-01.json",
+      "watertight": true,
+      "all_6_files_valid": true,
+      "mass_kg": 56.0,
+      "triangle_count": 3544,
+      "temp_k": 300.0,
+      "canonical_bbox_min_mm": [
+        2508.7,
+        -1116.2,
+        85.3
+      ],
+      "canonical_bbox_max_mm": [
+        2991.3,
+        -297.8,
+        263.2
+      ],
+      "datum_shift_mm": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "port_count": 0,
+      "gdt_frame_count": 0
+    },
+    "pcb_bundles": [],
+    "legacy_board_files": [],
+    "electrical_icd": {
+      "path": "hardware/icd/electrical/S9.HPC-01.json",
+      "electrical_class": "E3",
+      "grounding_domain": "DGND",
+      "ups_tier": "TIER2_SHED",
+      "exp150_ups_allocation_w": 2100.0,
+      "mating_part_ids": [
+        "S9.HPC-02",
+        "S9.HPC-03",
+        "S6.11-01",
+        "S7.SAFETY-04"
+      ],
+      "interlock_hooks_count": 1
+    },
+    "rtl_modules": [],
+    "rtl_audit_json": null,
+    "software_and_eda_files": [],
+    "verification_tests": []
+  },
+  "specialized_specification": null,
+  "verification_status": {
+    "cad_verified": true,
+    "pcb_verified": false,
+    "electrical_icd_verified": true,
+    "rtl_verified": false,
+    "software_or_eda_verified": false,
+    "specialized_icd_present": false,
+    "traceable": true
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "tapeout_done": false
+  }
+}

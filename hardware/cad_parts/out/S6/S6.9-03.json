@@ -1,0 +1,256 @@
+{
+  "part_design": {
+    "part_id": "S6.9-03",
+    "parent_bom_id": "S6.9",
+    "subsystem": "S6",
+    "part_name": "DR tarafi Ø12x397 mm Cu bara + 4x paralel S-ilmek OFHC Cu orgu demeti (k=52.7 N/m, Exp133)",
+    "design_tier": "CUSTOM_FULL",
+    "material": "OFHC Cu",
+    "temp_stage": "20 mK (MXC)",
+    "temp_k": 0.02,
+    "vacuum_grade": "UHV / Kriyo-vakum",
+    "tolerance_spec": "k<=60 N/m, RRR>=200",
+    "surface_finish_ra_um": 0.8,
+    "qty": 1,
+    "procurement_class": "CUS",
+    "world_origin_mm": [
+      -308.0,
+      0.0,
+      493.5
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "mxc_dr_clamp",
+        "kind": "thermal",
+        "position_mm": [
+          -246.5,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "standard": "Au-OFHC 4xM2 MXC Clamp",
+        "mating_part_id": "S6.8-01",
+        "bore_mm": 0.0,
+        "od_mm": 14.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 4,
+        "bolt_hole_mm": 2.2,
+        "bolt_spec": "M2",
+        "frame": "local",
+        "notes": ""
+      },
+      {
+        "name": "cold_island_braid_end",
+        "kind": "thermal",
+        "position_mm": [
+          246.8,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "standard": "4x Au-OFHC Braid Clamp Lugs",
+        "mating_part_id": "S6.2-01",
+        "bore_mm": 0.0,
+        "od_mm": 12.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "BUSBAR_OD",
+        "nominal_mm": 12.0,
+        "tol_plus_mm": 0.03,
+        "tol_minus_mm": -0.03,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø12.00 ±0.03"
+      },
+      {
+        "label": "BUSBAR_L",
+        "nominal_mm": 397.0,
+        "tol_plus_mm": 0.2,
+        "tol_minus_mm": -0.2,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "397.00 ±0.20"
+      },
+      {
+        "label": "BRAID_L",
+        "nominal_mm": 95.6,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "95.60 ±0.50"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "flatness",
+        "tolerance_mm": 0.015,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "Au-plated thermal clamp faces",
+        "glyph": "⏥",
+        "tolerance_text": "0.015"
+      },
+      {
+        "symbol": "straightness",
+        "tolerance_mm": 0.1,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "B",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "Ø12 OFHC Cu busbar",
+        "glyph": "⎯",
+        "tolerance_text": "0.10"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "L=100 mm, A=20.03 mm2, k_braid=52.7 N/m <= 60 N/m (70x emniyet), G_orgu(20mK)=1.15 mW/K, G_hat=0.675 mW/K (dT=3.7 mK @ 2.5 uW)",
+      "4x parallel 2550xØ50 um OFHC Cu S-loop braids: k=52.7 N/m <= 60 N/m (70x margin), dT=3.7 mK @ 2.5 uW (Exp133)"
+    ],
+    "scad_params": {
+      "busbar_d": 12.0,
+      "busbar_l": 397.0,
+      "n_braids": 4,
+      "k_braid_n_per_m": 52.7,
+      "dt_mk": 3.7
+    },
+    "target_mass_kg": 0.44,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact_result": {
+    "part_id": "S6.9-03",
+    "subsystem": "S6",
+    "design_tier": "CUSTOM_FULL",
+    "stl_path": "hardware/cad_parts/out/S6/S6.9-03.stl",
+    "step_path": "hardware/cad_parts/out/S6/S6.9-03.step",
+    "scad_path": "hardware/cad_parts/out/S6/S6.9-03.scad",
+    "dxf_path": "hardware/cad_parts/out/S6/S6.9-03.dxf",
+    "svg_path": "hardware/cad_parts/out/S6/S6.9-03.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 46134.76548143666,
+    "surface_area_mm2": 18670.670183698985,
+    "mass_kg": 0.41336749871367245,
+    "cg_mm": [
+      -43.10694752647551,
+      1.478540140415719e-17,
+      1.3060437907005518e-16
+    ],
+    "bbox_min_mm": [
+      -246.1,
+      -7.0,
+      -7.0
+    ],
+    "bbox_max_mm": [
+      246.8,
+      7.0,
+      7.0
+    ],
+    "inertia_kg_mm2": [
+      7.491723115843964,
+      6016.820896103272,
+      6016.78513526714,
+      1.0688892246091278e-14,
+      -0.05415927065475053,
+      4.6857167035341264e-17
+    ],
+    "triangle_count": 2652,
+    "vertex_count": 1346,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "json_path": "hardware/cad_parts/out/S6/S6.9-03.json",
+  "world_bbox_min_mm": [
+    -554.1,
+    -7.0,
+    486.5
+  ],
+  "world_bbox_max_mm": [
+    -61.2,
+    7.0,
+    500.5
+  ],
+  "world_cg_mm": [
+    -351.1069,
+    -0.0,
+    493.5
+  ],
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

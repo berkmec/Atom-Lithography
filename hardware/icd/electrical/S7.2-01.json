@@ -1,0 +1,91 @@
+{
+  "schema_version": "1.0",
+  "part_id": "S7.2-01",
+  "parent_bom_id": "S7.2",
+  "subsystem": "S7",
+  "part_name": "Cok-kanalli keyfi dalga formu uretici (AWG) kartlari (GRAPE XY/ENDOR)",
+  "qty": 4,
+  "unit": "kart",
+  "temp_stage": "300 K (kabin)",
+  "vacuum_grade": "Atmosfer",
+  "bom_key_spec": "16 kanal toplam, GRAPE darbe hatasi eps<=1e-3 (Exp61/68)",
+  "usd_nom": 46000.0,
+  "bom_epistemic_tag": "{Model-Kalibrasyon-Exp114}",
+  "electrical_class": "E3",
+  "grounding_domain": "DGND",
+  "grounding_notes": "4x PXIe 4-ch 1.25 GS/s 16-bit AWG modules (16 ch GRAPE/ENDOR) hosted in S7.2-03 backplane.",
+  "supply_rails": [
+    {
+      "rail_name": "PXIE_BACKPLANE_12V",
+      "voltage_v": 12.0,
+      "current_type": "DC",
+      "max_current_a": 15.0,
+      "steady_power_w": 140.0,
+      "peak_power_w": 180.0,
+      "source_part_id": "S7.2-03"
+    }
+  ],
+  "connectors_and_pinout": [
+    {
+      "connector_ref": "J_BP",
+      "connector_type": "PXIe Hybrid Backplane (4 slots)",
+      "location_side": "chassis_back",
+      "mating_part_id": "S7.2-03",
+      "pins": [
+        {
+          "pin": "CLK10",
+          "signal": "PXIE_10MHZ_RB",
+          "direction": "IN",
+          "nominal_level": "Locked via S7.4-01 CH11"
+        },
+        {
+          "pin": "TRIG",
+          "signal": "PXIE_STAR_TRIG",
+          "direction": "IN",
+          "nominal_level": "From S7.2-02 / WR"
+        }
+      ]
+    },
+    {
+      "connector_ref": "J_AWG_OUT",
+      "connector_type": "SMA-F 50R (16x)",
+      "location_side": "front_panel",
+      "mating_part_id": "S6.4-02",
+      "pins": [
+        {
+          "pin": "1-16",
+          "signal": "AWG_CH[0:15]",
+          "direction": "OUT",
+          "nominal_level": "1.25 GS/s 16-bit <10 ps jitter"
+        }
+      ]
+    }
+  ],
+  "mating_part_ids": [
+    "S7.2-03",
+    "S7.2-02",
+    "S6.4-02",
+    "S6.5-01"
+  ],
+  "interlock_hooks": [],
+  "ups_tier": "TIER2_SHED",
+  "ups_budget_group": "AUX_PROCESS_SHED_ON_OUTAGE",
+  "exp150_ups_allocation_w": 0.0,
+  "supply_rails_steady_sum_w": 140.0,
+  "incremental_mains_w": 0.0,
+  "secondary_or_parent_derived_w": 140.0,
+  "non_exp150_aux_shed_w": 0.0,
+  "reconciliation_note": "PXIe plug-in card (140.0 W DC backplane load) powered wholly by parent chassis S7.2-03 (320.0 W AC mains): incremental_mains_w = 0.0 W, exp150_ups_allocation_w = 0.0 W (0.0 W double-count).",
+  "timing_sync": {
+    "rb_10mhz_port": "CH11 (via S7.2-03)",
+    "white_rabbit_port": "WR_COAX_4 (via S7.2-02)",
+    "sync_role": "16-ch GRAPE/ENDOR AWG"
+  },
+  "epistemic_flags": {
+    "design_maturity": "M0_M1_ELECTRICAL_ICD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

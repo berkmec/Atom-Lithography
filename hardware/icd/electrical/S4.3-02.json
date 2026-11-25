@@ -1,0 +1,76 @@
+{
+  "schema_version": "1.0",
+  "part_id": "S4.3-02",
+  "parent_bom_id": "S4.3",
+  "subsystem": "S4",
+  "part_name": "UHV kaba piezo stick-slip XY adimlama alt-kademesi (\u00b125 mm)",
+  "qty": 1,
+  "unit": "adet",
+  "temp_stage": "300 K (UHV)",
+  "vacuum_grade": "UHV 1e-9 mbar",
+  "bom_key_spec": "\u00b125 mm yonga tarama alani (alan-alan adimlama, Exp79)",
+  "usd_nom": 21000.0,
+  "bom_epistemic_tag": "{Model-Kalibrasyon-Exp114}",
+  "electrical_class": "E4",
+  "grounding_domain": "AGND",
+  "grounding_notes": "UHV non-magnetic coarse stick-slip XY piezo stepper stage (\u00b125 mm, \u00b150 nm, zero holding power).",
+  "supply_rails": [
+    {
+      "rail_name": "STICK_SLIP_60V",
+      "voltage_v": 60.0,
+      "current_type": "DC",
+      "max_current_a": 0.3,
+      "steady_power_w": 1.0,
+      "peak_power_w": 18.0,
+      "source_part_id": "S4.3-04"
+    }
+  ],
+  "connectors_and_pinout": [
+    {
+      "connector_ref": "J_COARSE",
+      "connector_type": "CF40 9-Pin Sub-D UHV",
+      "location_side": "uhv_stage",
+      "mating_part_id": "S4.3-04",
+      "pins": [
+        {
+          "pin": "1-4",
+          "signal": "XY_STICKSLIP_DRV",
+          "direction": "IN",
+          "nominal_level": "Sawtooth 0-60 V stepping"
+        },
+        {
+          "pin": "5-8",
+          "signal": "OPT_ENC_ABZ",
+          "direction": "OUT",
+          "nominal_level": "\u00b150 nm coarse encoder"
+        }
+      ]
+    }
+  ],
+  "mating_part_ids": [
+    "S4.3-01",
+    "S4.3-04",
+    "S5.1-01"
+  ],
+  "interlock_hooks": [],
+  "ups_tier": "NONE",
+  "ups_budget_group": "PASSIVE_ZERO_MAINS",
+  "exp150_ups_allocation_w": 0.0,
+  "supply_rails_steady_sum_w": 1.0,
+  "incremental_mains_w": 0.0,
+  "secondary_or_parent_derived_w": 1.0,
+  "non_exp150_aux_shed_w": 0.0,
+  "reconciliation_note": "Passive or downstream sub-assembly (1.00 W sub-rail power drawn from upstream source S4.3-04); incremental_mains_w = 0.0 W (zero double-counting).",
+  "timing_sync": {
+    "rb_10mhz_port": null,
+    "white_rabbit_port": null,
+    "sync_role": "Field-to-field stepping"
+  },
+  "epistemic_flags": {
+    "design_maturity": "M0_M1_ELECTRICAL_ICD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

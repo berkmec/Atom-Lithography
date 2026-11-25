@@ -1,0 +1,97 @@
+{
+  "schema_version": "part_icd_v1.0",
+  "part_id": "S5.6-03",
+  "parent_bom_id": "S5.6",
+  "subsystem": "S5",
+  "part_name": "Yuk-kilidi 345 C pirolitik-BN radyatif isitici + 350 C %5 H2/N2 FG/atomik-H pasivasyon manifoldu (Exp139, 4.2 kg)",
+  "part_category": "PHYSICAL_SOLID",
+  "bom_metadata": {
+    "qty": "1",
+    "unit": "set",
+    "material": "Pirolitik BN (PBN) isitici + 316L VAR szinti-vana H2/N2 manifoldu",
+    "key_spec": "RT-450 C (T_epi*=345 C ±2 C, 150 W), Rota C 350 C/15 dk FG/H pasivasyon (S_eps=0.390 ueV/rtHz, F_ff=%97.70), kutle=4.2 kg",
+    "tolerance": "±2 C PID",
+    "temp_stage": "300-723 K (yuk-kilidi)",
+    "vacuum_grade": "UHV / FG-H",
+    "procurement_class": "CUS",
+    "parent_cost_class": "C(v5.0)",
+    "usd_low": 12000.0,
+    "usd_nom": 17000.0,
+    "usd_high": 26000.0,
+    "legacy_cad_module": "s5_uhv_chamber_loadlock",
+    "bom_epistemic_tag": "{Varsayım}",
+    "notes": "DELTA-V5.0-EXP139 (S5.6 3/4, 4.2 kg; S5.6-03+04=$29k s56_hardware_spec.json birebir; RFQ-08)"
+  },
+  "artifact_links": {
+    "cad": {
+      "work_package": "WP-M3",
+      "design_tier": "CUSTOM_FULL",
+      "stl": "hardware/cad_parts/out/S5/S5.6-03.stl",
+      "step": "hardware/cad_parts/out/S5/S5.6-03.step",
+      "scad": "hardware/cad_parts/out/S5/S5.6-03.scad",
+      "dxf": "hardware/cad_parts/out/S5/S5.6-03.dxf",
+      "svg": "hardware/cad_parts/out/S5/S5.6-03.svg",
+      "cad_json": "hardware/cad_parts/out/S5/S5.6-03.json",
+      "watertight": true,
+      "all_6_files_valid": true,
+      "mass_kg": 2.737556,
+      "triangle_count": 1516,
+      "temp_k": 618.15,
+      "canonical_bbox_min_mm": [
+        385.25,
+        88.5,
+        640.25
+      ],
+      "canonical_bbox_max_mm": [
+        479.2,
+        208.5,
+        744.0
+      ],
+      "datum_shift_mm": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "port_count": 3,
+      "gdt_frame_count": 1
+    },
+    "pcb_bundles": [],
+    "legacy_board_files": [],
+    "electrical_icd": {
+      "path": "hardware/icd/electrical/S5.6-03.json",
+      "electrical_class": "E4",
+      "grounding_domain": "FACILITY_PE",
+      "ups_tier": "TIER2_SHED",
+      "exp150_ups_allocation_w": 0.0,
+      "mating_part_ids": [
+        "S5.1-03",
+        "S5.6-01",
+        "S5.6-04",
+        "S7.SAFETY-06"
+      ],
+      "interlock_hooks_count": 1
+    },
+    "rtl_modules": [],
+    "rtl_audit_json": null,
+    "software_and_eda_files": [],
+    "verification_tests": []
+  },
+  "specialized_specification": null,
+  "verification_status": {
+    "cad_verified": true,
+    "pcb_verified": false,
+    "electrical_icd_verified": true,
+    "rtl_verified": false,
+    "software_or_eda_verified": false,
+    "specialized_icd_present": false,
+    "traceable": true
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "tapeout_done": false
+  }
+}

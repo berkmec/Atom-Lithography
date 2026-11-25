@@ -1,0 +1,295 @@
+{
+  "part_id": "S5.1-02",
+  "subsystem": "S5",
+  "design": {
+    "part_id": "S5.1-02",
+    "parent_bom_id": "S5.1",
+    "subsystem": "S5",
+    "part_name": "Ust kolon montaj flansi ve cikarilabilir 150 C bakeout isitma ceketi",
+    "design_tier": "CUSTOM_FULL",
+    "material": "316LN",
+    "temp_stage": "300-423 K",
+    "temp_k": 423.15,
+    "vacuum_grade": "UHV / Dis yuzey",
+    "tolerance_spec": "±3 C",
+    "surface_finish_ra_um": 0.8,
+    "qty": 1,
+    "procurement_class": "CUS",
+    "world_origin_mm": [
+      0.0,
+      0.0,
+      500.0
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "chamber_top_cf250_mate",
+        "kind": "flange",
+        "position_mm": [
+          0.0,
+          0.0,
+          169.0
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "standard": "CF250",
+        "mating_part_id": "S5.1-01",
+        "bore_mm": 128.0,
+        "od_mm": 305.0,
+        "pcd_mm": 284.2,
+        "bolt_count": 32,
+        "bolt_hole_mm": 8.4,
+        "bolt_spec": "M8",
+        "frame": "local",
+        "notes": "ISO 3669 CF250 Cu-gasket knife-edge"
+      },
+      {
+        "name": "column_mount_bore",
+        "kind": "mechanical",
+        "position_mm": [
+          0.0,
+          0.0,
+          205.0
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "Dia 128 mm H7",
+        "mating_part_id": "S1.3-01",
+        "bore_mm": 128.0,
+        "od_mm": 172.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      },
+      {
+        "name": "pid_power_4zone",
+        "kind": "electrical",
+        "position_mm": [
+          161.93,
+          -161.93,
+          -190.0
+        ],
+        "normal": [
+          0.7071067811865474,
+          -0.7071067811865477,
+          0.0
+        ],
+        "standard": "4x Type-K + 230VAC PID",
+        "mating_part_id": "S7.4-01",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "CF250_OD",
+        "nominal_mm": 305.0,
+        "tol_plus_mm": 0.15,
+        "tol_minus_mm": -0.15,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø305.00 ±0.15"
+      },
+      {
+        "label": "COL_BORE",
+        "nominal_mm": 128.0,
+        "tol_plus_mm": 0.04,
+        "tol_minus_mm": -0.0,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø128.00 +0.040/-0.000"
+      },
+      {
+        "label": "JACKET_ID",
+        "nominal_mm": 390.0,
+        "tol_plus_mm": 1.0,
+        "tol_minus_mm": -1.0,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø390.00 ±1.00"
+      },
+      {
+        "label": "JACKET_OD",
+        "nominal_mm": 426.0,
+        "tol_plus_mm": 1.5,
+        "tol_minus_mm": -1.5,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø426.00 ±1.50"
+      },
+      {
+        "label": "H_SPAN",
+        "nominal_mm": 412.0,
+        "tol_plus_mm": 1.0,
+        "tol_minus_mm": -1.0,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "412.00 ±1.00"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "flatness",
+        "tolerance_mm": 0.03,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "CF250 mating flange face",
+        "glyph": "⏥",
+        "tolerance_text": "0.030"
+      },
+      {
+        "symbol": "concentricity",
+        "tolerance_mm": 0.05,
+        "diameter_zone": true,
+        "material_condition": "",
+        "datum_primary": "B",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "Dia 128 column bore to CF250 PCD",
+        "glyph": "◎",
+        "tolerance_text": "Ø0.050"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "Tekduze 150 C firinlama, 4-bolge PID sicaklik kontrolu",
+      "4-zone removable silicone-coated E-glass 150 C (+/-3 C PID) UHV bakeout jacket shells.",
+      "3.0 mm cold / >2.5 mm hot radial clearance to S5.1-01 R_out=192.0 mm at 423.15 K.",
+      "Composite effective assembly density (~3400 kg/m^3: 316LN CF250 flange + fiberglass/silicone blankets)."
+    ],
+    "scad_params": {
+      "jacket_r_in": 195.0,
+      "jacket_r_out": 213.0,
+      "col_bore_mm": 128.0,
+      "bake_temp_C": 150
+    },
+    "target_mass_kg": 18.5,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifacts": {
+    "part_id": "S5.1-02",
+    "subsystem": "S5",
+    "design_tier": "CUSTOM_FULL",
+    "stl_path": "hardware/cad_parts/out/S5/S5.1-02.stl",
+    "step_path": "hardware/cad_parts/out/S5/S5.1-02.step",
+    "scad_path": "hardware/cad_parts/out/S5/S5.1-02.scad",
+    "dxf_path": "hardware/cad_parts/out/S5/S5.1-02.dxf",
+    "svg_path": "hardware/cad_parts/out/S5/S5.1-02.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 3741106.144840338,
+    "surface_area_mm2": 620316.1165231052,
+    "mass_kg": 12.71976089245715,
+    "cg_mm": [
+      15.406812663065159,
+      -2.0160004507713514,
+      52.30911270959539
+    ],
+    "bbox_min_mm": [
+      -212.8702461550674,
+      -213.0,
+      -207.0
+    ],
+    "bbox_max_mm": [
+      212.8702461550674,
+      213.0,
+      205.0
+    ],
+    "inertia_kg_mm2": [
+      476522.39967513137,
+      444421.81548905873,
+      382098.00350893004,
+      -22817.940982451935,
+      13166.328299660472,
+      -6130.2326625109745
+    ],
+    "triangle_count": 4832,
+    "vertex_count": 2372,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

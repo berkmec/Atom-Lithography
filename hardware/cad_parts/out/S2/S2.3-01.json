@@ -1,0 +1,334 @@
+{
+  "part_id": "S2.3-01",
+  "subsystem": "S2",
+  "design": {
+    "part_id": "S2.3-01",
+    "parent_bom_id": "S2.3",
+    "subsystem": "S2",
+    "part_name": "Cok-aciklikli elektrostatik mini-lens dizisi (Arch-B 0.50 mm, 32x32=1024, Exp124)",
+    "design_tier": "CUSTOM_FULL",
+    "material": "Si",
+    "temp_stage": "300 K",
+    "temp_k": 300.0,
+    "vacuum_grade": "UHV 1e-9 mbar",
+    "tolerance_spec": "±50 nm delik yuvarlakligi",
+    "surface_finish_ra_um": 0.05,
+    "qty": 1,
+    "procurement_class": "R&D",
+    "world_origin_mm": [
+      0.0,
+      0.0,
+      1.13
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "wafer_facing_wd",
+        "kind": "vacuum",
+        "position_mm": [
+          0.0,
+          0.0,
+          0.25
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "standard": "Arch-B WD=0.250 mm",
+        "mating_part_id": "",
+        "bore_mm": 22.627,
+        "od_mm": 60.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "global",
+        "notes": ""
+      },
+      {
+        "name": "minilens_top",
+        "kind": "vacuum",
+        "position_mm": [
+          0.0,
+          0.0,
+          2.01
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "32x32 D=0.30 mm",
+        "mating_part_id": "S2.3-03",
+        "bore_mm": 22.627,
+        "od_mm": 60.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "global",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "WAFER_OD",
+        "nominal_mm": 60.0,
+        "tol_plus_mm": 0.01,
+        "tol_minus_mm": -0.01,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø60.00 ±0.01"
+      },
+      {
+        "label": "TOTAL_H",
+        "nominal_mm": 1.76,
+        "tol_plus_mm": 0.002,
+        "tol_minus_mm": -0.002,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 3,
+        "formatted": "1.760 ±0.002"
+      },
+      {
+        "label": "ARCHB_WD",
+        "nominal_mm": 0.25,
+        "tol_plus_mm": 0.005,
+        "tol_minus_mm": -0.005,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 3,
+        "formatted": "0.250 ±0.005"
+      },
+      {
+        "label": "LENS_BORE_D",
+        "nominal_mm": 0.3,
+        "tol_plus_mm": 5e-05,
+        "tol_minus_mm": -5e-05,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 4,
+        "formatted": "Ø0.3000 ±0.0001"
+      },
+      {
+        "label": "PITCH",
+        "nominal_mm": 0.5,
+        "tol_plus_mm": 0.0001,
+        "tol_minus_mm": -0.0001,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 4,
+        "formatted": "0.5000 ±0.0001"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "circularity",
+        "tolerance_mm": 5e-05,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "3072 LENS APERTURES",
+        "glyph": "○",
+        "tolerance_text": "0.0001"
+      },
+      {
+        "symbol": "concentricity",
+        "tolerance_mm": 0.0005,
+        "diameter_zone": true,
+        "material_condition": "",
+        "datum_primary": "B",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "3-WAFER BOND STACK",
+        "glyph": "◎",
+        "tolerance_text": "Ø0.0005"
+      },
+      {
+        "symbol": "parallelism",
+        "tolerance_mm": 0.001,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "WAFER FACES",
+        "glyph": "∥",
+        "tolerance_text": "0.001"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "Arch-B 0.50 mm es-adim 32x32=1024 (16.0x16.0 mm < Ø28.0 mm), h=1.76 mm, WD=0.250 mm, Cc=2.660 mm, E_gap=10.60 MV/m, sigma_spot=1.428 nm",
+      "Exp124 locked 3-wafer anodically bonded Arch-B retarding mini-lens (3,072 bores, h=1.760 mm, WD=0.250 mm, Cc=2.660 mm, sigma_spot=1.428 nm)"
+    ],
+    "scad_params": {
+      "nx": 32,
+      "ny": 32,
+      "pitch_mm": 0.5,
+      "hole_d_mm": 0.3,
+      "stack_h_mm": 1.76,
+      "wd_mm": 0.25,
+      "e_gap_MV_m": 10.6
+    },
+    "target_mass_kg": 0.011,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S2.3-01",
+    "subsystem": "S2",
+    "design_tier": "CUSTOM_FULL",
+    "stl_path": "hardware/cad_parts/out/S2/S2.3-01.stl",
+    "step_path": "hardware/cad_parts/out/S2/S2.3-01.step",
+    "scad_path": "hardware/cad_parts/out/S2/S2.3-01.scad",
+    "dxf_path": "hardware/cad_parts/out/S2/S2.3-01.dxf",
+    "svg_path": "hardware/cad_parts/out/S2/S2.3-01.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 4246.396217887829,
+    "surface_area_mm2": 26011.58745930084,
+    "mass_kg": 0.00988985679146075,
+    "cg_mm": [
+      8.221184766218141e-16,
+      -1.2744803803732054e-15,
+      1.1305333788557037
+    ],
+    "bbox_min_mm": [
+      -30.0,
+      -30.0,
+      0.24999999999999997
+    ],
+    "bbox_max_mm": [
+      30.0,
+      30.0,
+      2.0100000000000002
+    ],
+    "inertia_kg_mm2": [
+      2.367145399047415,
+      2.3671453990474176,
+      4.7288552965256665,
+      2.8006523380974537e-16,
+      5.516743427890172e-17,
+      -5.617495298795464e-17
+    ],
+    "triangle_count": 152832,
+    "vertex_count": 70278,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "engineering_checks": {
+    "wd_stack": {
+      "nominal_mm": 0.24999999999999978,
+      "mean_mm": 0.24999999999999978,
+      "wc_half_band_mm": 0.0125,
+      "wc_min_mm": 0.23749999999999977,
+      "wc_max_mm": 0.2624999999999998,
+      "rss_half_band_mm": 0.007365459931328118,
+      "rss_min_mm": 0.24263454006867166,
+      "rss_max_mm": 0.2573654599313279,
+      "modified_rss_half_band_mm": 0.011048189896992178,
+      "modified_rss_min_mm": 0.2389518101030076,
+      "modified_rss_max_mm": 0.26104818989699197,
+      "target_min_mm": 0.22,
+      "target_max_mm": 0.28,
+      "wc_pass": true,
+      "rss_pass": true,
+      "modified_rss_pass": true,
+      "variance_shares_pct": {
+        "S2.5-02_piezo_mount_datum": 46.08294930875576,
+        "S2.1-04_aln_cassette_seat": 46.08294930875576,
+        "S2.3-03_sapphire_spacer_ring": 0.46082949308755755,
+        "S2.3-01_archB_minilens_h": 7.373271889400921
+      }
+    },
+    "lateral_registration": {
+      "nominal_mm": 0.0,
+      "mean_mm": 0.0,
+      "wc_half_band_mm": 0.0008,
+      "wc_min_mm": -0.0008,
+      "wc_max_mm": 0.0008,
+      "rss_half_band_mm": 0.0005431390245600108,
+      "rss_min_mm": -0.0005431390245600108,
+      "rss_max_mm": 0.0005431390245600108,
+      "modified_rss_half_band_mm": 0.0008147085368400162,
+      "modified_rss_min_mm": -0.0008147085368400162,
+      "modified_rss_max_mm": 0.0008147085368400162,
+      "target_min_mm": -0.005,
+      "target_max_mm": 0.005,
+      "wc_pass": true,
+      "rss_pass": true,
+      "modified_rss_pass": true,
+      "variance_shares_pct": {
+        "S2.1-01_soi_cd_error": 0.847457627118644,
+        "S2.2-01_blanker_elec_pitch": 13.559322033898304,
+        "S2.3-01_minilens_roundness": 0.847457627118644,
+        "S2.3-03_dowel_pin_reg": 84.7457627118644
+      }
+    }
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

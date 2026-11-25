@@ -1,0 +1,90 @@
+{
+  "schema_version": "1.0",
+  "part_id": "S6.3-01",
+  "parent_bom_id": "S6.3",
+  "subsystem": "S6",
+  "part_name": "Ana NbTi superiletken ESR miknatis bobinleri (8-bobinli cift-yarik, Exp125 delta)",
+  "qty": 1,
+  "unit": "adet",
+  "temp_stage": "4.2 K",
+  "vacuum_grade": "Kriyo-vakum",
+  "bom_key_spec": "8-bobin (M/S/A/B), bore \u00d8150 mm, yarik 36 mm, OD \u00d8352 mm, Bz=1.500000 T, 17.8 ppm @ r<=2.3 mm (Exp125)",
+  "usd_nom": 82000.0,
+  "bom_epistemic_tag": "{Varsay\u0131m}",
+  "electrical_class": "E4",
+  "grounding_domain": "CRYO_OVC",
+  "grounding_notes": "Main 4.2 K NbTi 8-coil split-pair magnet (Bz=1.500 T, 17.8 ppm, E_mag=18.94 kJ, 5.48 km NbTi).",
+  "supply_rails": [
+    {
+      "rail_name": "SC_MAGNET_BUS",
+      "voltage_v": 400.0,
+      "current_type": "DC",
+      "max_current_a": 256.0,
+      "steady_power_w": 0.0,
+      "peak_power_w": 1000.0,
+      "source_part_id": "S6.3-05"
+    }
+  ],
+  "connectors_and_pinout": [
+    {
+      "connector_ref": "J_SC_LEADS",
+      "connector_type": "4.2 K Bi-2223 HTS / NbTi Splice Lugs",
+      "location_side": "4K_magnet",
+      "mating_part_id": "S6.3-04",
+      "pins": [
+        {
+          "pin": "1",
+          "signal": "MAG_MAIN_POS",
+          "direction": "IN",
+          "nominal_level": "Up to 255.9 A, V_quench <= 400 V"
+        },
+        {
+          "pin": "2",
+          "signal": "MAG_MAIN_NEG",
+          "direction": "IN",
+          "nominal_level": "Return bus"
+        },
+        {
+          "pin": "3-10",
+          "signal": "COIL_VTAP[0:7]",
+          "direction": "OUT",
+          "nominal_level": "Quench bridge voltage taps"
+        }
+      ]
+    }
+  ],
+  "mating_part_ids": [
+    "S6.3-02",
+    "S6.3-03",
+    "S6.3-04",
+    "S6.3-05"
+  ],
+  "interlock_hooks": [
+    {
+      "signal_name": "QUENCH_VTAP_TRIP",
+      "target_part_id": "S6.3-04",
+      "action_on_trip": "Extract 18.94 kJ into 1.563 Ohm dump (tau=0.370 s)",
+      "response_time_ms": 30.0
+    }
+  ],
+  "ups_tier": "NONE",
+  "ups_budget_group": "PASSIVE_ZERO_MAINS",
+  "exp150_ups_allocation_w": 0.0,
+  "supply_rails_steady_sum_w": 0.0,
+  "incremental_mains_w": 0.0,
+  "secondary_or_parent_derived_w": 0.0,
+  "non_exp150_aux_shed_w": 0.0,
+  "reconciliation_note": "Passive or downstream sub-assembly (0.00 W sub-rail power drawn from upstream source S6.3-05); incremental_mains_w = 0.0 W (zero double-counting).",
+  "timing_sync": {
+    "rb_10mhz_port": null,
+    "white_rabbit_port": null,
+    "sync_role": "Persistent-mode 1.50 T ESR magnet"
+  },
+  "epistemic_flags": {
+    "design_maturity": "M0_M1_ELECTRICAL_ICD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

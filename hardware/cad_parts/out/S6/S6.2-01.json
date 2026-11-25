@@ -1,0 +1,278 @@
+{
+  "part_design": {
+    "part_id": "S6.2-01",
+    "parent_bom_id": "S6.2",
+    "subsystem": "S6",
+    "part_name": "OFHC bakir soguk parmak ve yonga adasi termal tutucusu",
+    "design_tier": "CUSTOM_FULL",
+    "material": "OFHC Cu",
+    "temp_stage": "20 mK - 4 K",
+    "temp_k": 0.02,
+    "vacuum_grade": "UHV 1e-9 mbar",
+    "tolerance_spec": "±0.05 mm",
+    "surface_finish_ra_um": 0.8,
+    "qty": 1,
+    "procurement_class": "CUS",
+    "world_origin_mm": [
+      0.0,
+      0.0,
+      483.0
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "wafer_carrier_seat",
+        "kind": "thermal",
+        "position_mm": [
+          0.0,
+          0.0,
+          10.6
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "8x M3 Au-OFHC Thermal Seat",
+        "mating_part_id": "S3.1-02",
+        "bore_mm": 16.0,
+        "od_mm": 116.0,
+        "pcd_mm": 96.0,
+        "bolt_count": 8,
+        "bolt_hole_mm": 3.4,
+        "bolt_spec": "M3",
+        "frame": "local",
+        "notes": ""
+      },
+      {
+        "name": "braid_clamp_west",
+        "kind": "thermal",
+        "position_mm": [
+          -60.4,
+          0.0,
+          8.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "standard": "Au-OFHC Braid Lug",
+        "mating_part_id": "S6.9-03",
+        "bore_mm": 0.0,
+        "od_mm": 18.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      },
+      {
+        "name": "stage_kinematic_base",
+        "kind": "mechanical",
+        "position_mm": [
+          0.0,
+          0.0,
+          -11.5
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "standard": "4x Vespel SP-22 Struts",
+        "mating_part_id": "S4.3-01",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 90.51,
+        "bolt_count": 4,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "CHUCK_OD",
+        "nominal_mm": 116.0,
+        "tol_plus_mm": 0.05,
+        "tol_minus_mm": -0.05,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø116.00 ±0.05"
+      },
+      {
+        "label": "CHUCK_H",
+        "nominal_mm": 7.6,
+        "tol_plus_mm": 0.02,
+        "tol_minus_mm": -0.02,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "7.60 ±0.02"
+      },
+      {
+        "label": "TRUSS_H",
+        "nominal_mm": 14.3,
+        "tol_plus_mm": 0.05,
+        "tol_minus_mm": -0.05,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "14.30 ±0.05"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "flatness",
+        "tolerance_mm": 0.005,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "Top thermal seating plane",
+        "glyph": "⏥",
+        "tolerance_text": "0.005"
+      },
+      {
+        "symbol": "parallelism",
+        "tolerance_mm": 0.01,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "Vespel mounting plane",
+        "glyph": "∥",
+        "tolerance_text": "0.010"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "Sadece yonga adasini sogutur; dusuk termal kutle"
+    ],
+    "scad_params": {
+      "chuck_od": 116.0,
+      "chuck_h": 7.6,
+      "vespel_d": 9.0,
+      "vespel_h": 14.3
+    },
+    "target_mass_kg": 0.72,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact_result": {
+    "part_id": "S6.2-01",
+    "subsystem": "S6",
+    "design_tier": "CUSTOM_FULL",
+    "stl_path": "hardware/cad_parts/out/S6/S6.2-01.stl",
+    "step_path": "hardware/cad_parts/out/S6/S6.2-01.step",
+    "scad_path": "hardware/cad_parts/out/S6/S6.2-01.scad",
+    "dxf_path": "hardware/cad_parts/out/S6/S6.2-01.dxf",
+    "svg_path": "hardware/cad_parts/out/S6/S6.2-01.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 80899.56724745223,
+    "surface_area_mm2": 27580.390030773277,
+    "mass_kg": 0.7248601225371721,
+    "cg_mm": [
+      -0.15160464285902803,
+      -2.1538002740630036e-15,
+      6.256113994036533
+    ],
+    "bbox_min_mm": [
+      -60.4,
+      -58.0,
+      -11.5
+    ],
+    "bbox_max_mm": [
+      58.0,
+      58.0,
+      10.6
+    ],
+    "inertia_kg_mm2": [
+      618.1900357304694,
+      624.6352262311993,
+      1227.1433400910653,
+      -8.67196945363976e-15,
+      0.19163939998910243,
+      4.6975339793633866e-15
+    ],
+    "triangle_count": 1420,
+    "vertex_count": 704,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "json_path": "hardware/cad_parts/out/S6/S6.2-01.json",
+  "world_bbox_min_mm": [
+    -60.4,
+    -58.0,
+    471.5
+  ],
+  "world_bbox_max_mm": [
+    58.0,
+    58.0,
+    493.6
+  ],
+  "world_cg_mm": [
+    -0.1516,
+    -0.0,
+    489.2561
+  ],
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

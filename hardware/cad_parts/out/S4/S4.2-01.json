@@ -1,0 +1,264 @@
+{
+  "part_id": "S4.2-01",
+  "subsystem": "S4",
+  "part_design": {
+    "part_id": "S4.2-01",
+    "parent_bom_id": "S4.2",
+    "subsystem": "S4",
+    "part_name": "Aktif piezo titresim sonumleme tablasi (6-DOF, Herzan/Accurion sinifi)",
+    "design_tier": "COTS_ENV_ICD",
+    "material": "Al 6061",
+    "temp_stage": "300 K",
+    "temp_k": 300.0,
+    "vacuum_grade": "Atmosfer",
+    "tolerance_spec": "±0.5 nm artik",
+    "surface_finish_ra_um": 0.8,
+    "qty": 1,
+    "procurement_class": "COTS",
+    "world_origin_mm": [
+      0.0,
+      0.0,
+      -270.0
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "uhv_chamber_cf400_seat",
+        "kind": "mechanical",
+        "position_mm": [
+          0.0,
+          0.0,
+          30.0
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "CF400 Chamber Bottom Support Deck (Ø420 clear bore)",
+        "mating_part_id": "S5.1-01",
+        "bore_mm": 420.0,
+        "od_mm": 456.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      },
+      {
+        "name": "granite_base_seat",
+        "kind": "mechanical",
+        "position_mm": [
+          0.0,
+          0.0,
+          -30.0
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "standard": "6x Active Piezo Isolator Feet on S4.1-01 Granite",
+        "mating_part_id": "S4.1-01",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "TABLE_X",
+        "nominal_mm": 820.0,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "820.00 ±0.50"
+      },
+      {
+        "label": "TABLE_Y",
+        "nominal_mm": 620.0,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "620.00 ±0.50"
+      },
+      {
+        "label": "TOTAL_H",
+        "nominal_mm": 60.0,
+        "tol_plus_mm": 0.2,
+        "tol_minus_mm": -0.2,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "60.00 ±0.20"
+      },
+      {
+        "label": "DR_BORE",
+        "nominal_mm": 420.0,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø420.00 ±0.50"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "flatness",
+        "tolerance_mm": 0.05,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "ACTIVE ISOLATED TOP DECK",
+        "glyph": "⏥",
+        "tolerance_text": "0.050"
+      },
+      {
+        "symbol": "parallelism",
+        "tolerance_mm": 0.05,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "6-POD ACTUATOR BASE PLANE",
+        "glyph": "∥",
+        "tolerance_text": "0.050"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "0.5-100 Hz aktif bastirma (>30 dB @ 10 Hz), Exp114 capasi",
+      "Herzan/Accurion-class 6-DOF active piezo isolation table (0.5-100 Hz, >30 dB @ 10 Hz, VC-E+ floor).",
+      "Central Ø420 mm (R=210 mm) bore aligns with S4.1-01 granite & clears lower DR OVC while supporting CF400 UHV flange."
+    ],
+    "scad_params": {
+      "table_x_mm": 820.0,
+      "table_y_mm": 620.0,
+      "table_h_mm": 60.0,
+      "n_piezo_pods": 6,
+      "dr_bore_d_mm": 420.0
+    },
+    "target_mass_kg": null,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S4.2-01",
+    "subsystem": "S4",
+    "design_tier": "COTS_ENV_ICD",
+    "stl_path": "hardware/cad_parts/out/S4/S4.2-01.stl",
+    "step_path": "hardware/cad_parts/out/S4/S4.2-01.step",
+    "scad_path": "hardware/cad_parts/out/S4/S4.2-01.scad",
+    "dxf_path": "hardware/cad_parts/out/S4/S4.2-01.dxf",
+    "svg_path": "hardware/cad_parts/out/S4/S4.2-01.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 15959474.678154903,
+    "surface_area_mm2": 1001448.5065017625,
+    "mass_kg": 35.110844291940786,
+    "cg_mm": [
+      -5.427058295207807e-15,
+      -2.6250841451450397e-14,
+      8.193310281273407
+    ],
+    "bbox_min_mm": [
+      -410.0,
+      -310.0,
+      -30.0
+    ],
+    "bbox_max_mm": [
+      410.0,
+      310.0,
+      30.0
+    ],
+    "inertia_kg_mm2": [
+      1400730.1817694309,
+      2595165.75473897,
+      3984140.9253698336,
+      6.136894226074219e-11,
+      -4.380523491230365e-12,
+      -1.8597869880545407e-11
+    ],
+    "triangle_count": 1232,
+    "vertex_count": 596,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "world_bbox_min_mm": [
+    -410.0,
+    -310.0,
+    -300.0
+  ],
+  "world_bbox_max_mm": [
+    410.0,
+    310.0,
+    -240.0
+  ],
+  "reconciliation": null,
+  "thermal_contraction_checks": [],
+  "tolerance_stack_checks": []
+}

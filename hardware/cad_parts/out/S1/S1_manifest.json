@@ -1,0 +1,653 @@
+{
+  "subsystem": "S1",
+  "part_count": 23,
+  "custom_full_count": 15,
+  "cots_env_icd_count": 8,
+  "all_watertight": true,
+  "all_valid": true,
+  "total_computed_mass_kg": 327.3461,
+  "engineering_checks": {
+    "bakeout_decel_clearance": {
+      "outer_material": "Ti-6Al-4V",
+      "inner_material": "Mo",
+      "t_cold_k": 423.15,
+      "t_ref_k": 293.15,
+      "warm_outer_id_mm": 88.0,
+      "warm_inner_od_mm": 84.0,
+      "cold_outer_id_mm": 88.10383999999999,
+      "cold_inner_od_mm": 84.05460000000001,
+      "outer_strain": 0.0011799999999999589,
+      "inner_strain": 0.0006500000000000394,
+      "warm_radial_clearance_mm": 2.0,
+      "cold_nominal_radial_clearance_mm": 2.0246199999999916,
+      "cold_worst_case_radial_clearance_mm": 1.9896199999999917,
+      "delta_radial_clearance_mm": 0.02461999999999165,
+      "min_required_radial_clearance_mm": 1.5,
+      "interference_risk": false,
+      "passed": true
+    },
+    "bakeout_mumetal_clearance": {
+      "outer_material": "Mu-metal",
+      "inner_material": "Ti-6Al-4V",
+      "t_cold_k": 423.15,
+      "t_ref_k": 293.15,
+      "warm_outer_id_mm": 114.0,
+      "warm_inner_od_mm": 110.0,
+      "cold_outer_id_mm": 114.19380000000001,
+      "cold_inner_od_mm": 110.12979999999999,
+      "outer_strain": 0.0017000000000000348,
+      "inner_strain": 0.0011799999999999589,
+      "warm_radial_clearance_mm": 2.0,
+      "cold_nominal_radial_clearance_mm": 2.0320000000000107,
+      "cold_worst_case_radial_clearance_mm": 1.9070000000000107,
+      "delta_radial_clearance_mm": 0.03200000000001069,
+      "min_required_radial_clearance_mm": 1.5,
+      "interference_risk": false,
+      "passed": true
+    },
+    "s17_450c_oven_clearance": {
+      "outer_material": "316LN",
+      "inner_material": "Al2O3",
+      "t_cold_k": 723.15,
+      "t_ref_k": 293.15,
+      "warm_outer_id_mm": 38.0,
+      "warm_inner_od_mm": 22.0,
+      "cold_outer_id_mm": 38.27063544457978,
+      "cold_inner_od_mm": 22.06146172959805,
+      "outer_strain": 0.007121985383678364,
+      "inner_strain": 0.0027937149817296447,
+      "warm_radial_clearance_mm": 8.0,
+      "cold_nominal_radial_clearance_mm": 8.104586857490865,
+      "cold_worst_case_radial_clearance_mm": 8.004586857490866,
+      "delta_radial_clearance_mm": 0.10458685749086527,
+      "min_required_radial_clearance_mm": 5.0,
+      "interference_risk": false,
+      "passed": true
+    },
+    "hda_r0_gap_tolerance_stack": {
+      "nominal_mm": 8.0,
+      "mean_mm": 8.0,
+      "wc_half_band_mm": 0.013000000000000001,
+      "wc_min_mm": 7.987,
+      "wc_max_mm": 8.013,
+      "rss_half_band_mm": 0.0076811457478686085,
+      "rss_min_mm": 7.992318854252131,
+      "rss_max_mm": 8.007681145747869,
+      "modified_rss_half_band_mm": 0.011521718621802913,
+      "modified_rss_min_mm": 7.988478281378197,
+      "modified_rss_max_mm": 8.011521718621802,
+      "target_min_mm": 7.985,
+      "target_max_mm": 8.015,
+      "wc_pass": true,
+      "rss_pass": true,
+      "modified_rss_pass": true,
+      "variance_shares_pct": {
+        "outer_hemisphere_R2": 42.3728813559322,
+        "inner_hemisphere_R1": 42.3728813559322,
+        "sapphire_standoff_concentricity": 15.254237288135592
+      }
+    },
+    "column_coaxiality_stack": {
+      "nominal_mm": 0.0,
+      "mean_mm": 0.0,
+      "wc_half_band_mm": 0.041999999999999996,
+      "wc_min_mm": -0.041999999999999996,
+      "wc_max_mm": 0.041999999999999996,
+      "rss_half_band_mm": 0.02353720459187964,
+      "rss_min_mm": -0.02353720459187964,
+      "rss_max_mm": 0.02353720459187964,
+      "modified_rss_half_band_mm": 0.035305806887819466,
+      "modified_rss_min_mm": -0.035305806887819466,
+      "modified_rss_max_mm": 0.035305806887819466,
+      "target_min_mm": -0.05,
+      "target_max_mm": 0.05,
+      "wc_pass": true,
+      "rss_pass": true,
+      "modified_rss_pass": true,
+      "variance_shares_pct": {
+        "S1.1-03_extraction_coax": 4.512635379061372,
+        "S1.2-01_wien_axis": 18.050541516245488,
+        "S1.5-01_hda_axis": 4.512635379061372,
+        "S1.3-02_archB_decel_coax": 0.7220216606498194,
+        "S1.3-01_cf100_column_runout": 72.20216606498195
+      }
+    }
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  },
+  "parts": {
+    "S1.1-01": {
+      "design_tier": "CUSTOM_FULL",
+      "material": "316LN",
+      "mass_kg": 5.69205,
+      "watertight": true,
+      "all_valid": true,
+      "bbox_min_mm": [
+        -56.75,
+        -56.75,
+        422.66
+      ],
+      "bbox_max_mm": [
+        56.75,
+        56.75,
+        562.66
+      ],
+      "json_path": "hardware/cad_parts/out/S1/S1.1-01.json",
+      "stl_path": "hardware/cad_parts/out/S1/S1.1-01.stl",
+      "step_path": "hardware/cad_parts/out/S1/S1.1-01.step",
+      "scad_path": "hardware/cad_parts/out/S1/S1.1-01.scad",
+      "dxf_path": "hardware/cad_parts/out/S1/S1.1-01.dxf",
+      "svg_path": "hardware/cad_parts/out/S1/S1.1-01.svg"
+    },
+    "S1.1-02": {
+      "design_tier": "CUSTOM_FULL",
+      "material": "316LN",
+      "mass_kg": 6.01736,
+      "watertight": true,
+      "all_valid": true,
+      "bbox_min_mm": [
+        82.65,
+        -56.75,
+        422.66
+      ],
+      "bbox_max_mm": [
+        221.75,
+        56.75,
+        562.66
+      ],
+      "json_path": "hardware/cad_parts/out/S1/S1.1-02.json",
+      "stl_path": "hardware/cad_parts/out/S1/S1.1-02.stl",
+      "step_path": "hardware/cad_parts/out/S1/S1.1-02.step",
+      "scad_path": "hardware/cad_parts/out/S1/S1.1-02.scad",
+      "dxf_path": "hardware/cad_parts/out/S1/S1.1-02.dxf",
+      "svg_path": "hardware/cad_parts/out/S1/S1.1-02.svg"
+    },
+    "S1.1-03": {
+      "design_tier": "CUSTOM_FULL",
+      "material": "Mo",
+      "mass_kg": 1.73499,
+      "watertight": true,
+      "all_valid": true,
+      "bbox_min_mm": [
+        -42.0,
+        -42.0,
+        373.66
+      ],
+      "bbox_max_mm": [
+        42.0,
+        42.0,
+        418.66
+      ],
+      "json_path": "hardware/cad_parts/out/S1/S1.1-03.json",
+      "stl_path": "hardware/cad_parts/out/S1/S1.1-03.stl",
+      "step_path": "hardware/cad_parts/out/S1/S1.1-03.step",
+      "scad_path": "hardware/cad_parts/out/S1/S1.1-03.scad",
+      "dxf_path": "hardware/cad_parts/out/S1/S1.1-03.dxf",
+      "svg_path": "hardware/cad_parts/out/S1/S1.1-03.svg"
+    },
+    "S1.1-04": {
+      "design_tier": "COTS_ENV_ICD",
+      "material": "316L",
+      "mass_kg": 1.67892,
+      "watertight": true,
+      "all_valid": true,
+      "bbox_min_mm": [
+        -46.0,
+        -152.75,
+        468.0
+      ],
+      "bbox_max_mm": [
+        46.0,
+        -47.5,
+        535.0
+      ],
+      "json_path": "hardware/cad_parts/out/S1/S1.1-04.json",
+      "stl_path": "hardware/cad_parts/out/S1/S1.1-04.stl",
+      "step_path": "hardware/cad_parts/out/S1/S1.1-04.step",
+      "scad_path": "hardware/cad_parts/out/S1/S1.1-04.scad",
+      "dxf_path": "hardware/cad_parts/out/S1/S1.1-04.dxf",
+      "svg_path": "hardware/cad_parts/out/S1/S1.1-04.svg"
+    },
+    "S1.1-05": {
+      "design_tier": "CUSTOM_FULL",
+      "material": "Al 6061",
+      "mass_kg": 11.20687,
+      "watertight": true,
+      "all_valid": true,
+      "bbox_min_mm": [
+        1238.7,
+        -438.0,
+        746.7
+      ],
+      "bbox_max_mm": [
+        1721.3,
+        4.5,
+        878.05
+      ],
+      "json_path": "hardware/cad_parts/out/S1/S1.1-05.json",
+      "stl_path": "hardware/cad_parts/out/S1/S1.1-05.stl",
+      "step_path": "hardware/cad_parts/out/S1/S1.1-05.step",
+      "scad_path": "hardware/cad_parts/out/S1/S1.1-05.scad",
+      "dxf_path": "hardware/cad_parts/out/S1/S1.1-05.dxf",
+      "svg_path": "hardware/cad_parts/out/S1/S1.1-05.svg"
+    },
+    "S1.2-01": {
+      "design_tier": "CUSTOM_FULL",
+      "material": "Soft Iron",
+      "mass_kg": 4.28935,
+      "watertight": true,
+      "all_valid": true,
+      "bbox_min_mm": [
+        -55.0,
+        -55.0,
+        252.66
+      ],
+      "bbox_max_mm": [
+        55.0,
+        55.0,
+        367.66
+      ],
+      "json_path": "hardware/cad_parts/out/S1/S1.2-01.json",
+      "stl_path": "hardware/cad_parts/out/S1/S1.2-01.stl",
+      "step_path": "hardware/cad_parts/out/S1/S1.2-01.step",
+      "scad_path": "hardware/cad_parts/out/S1/S1.2-01.scad",
+      "dxf_path": "hardware/cad_parts/out/S1/S1.2-01.dxf",
+      "svg_path": "hardware/cad_parts/out/S1/S1.2-01.svg"
+    },
+    "S1.2-02": {
+      "design_tier": "CUSTOM_FULL",
+      "material": "OFHC Cu",
+      "mass_kg": 0.16822,
+      "watertight": true,
+      "all_valid": true,
+      "bbox_min_mm": [
+        -14.0,
+        -23.0,
+        270.0
+      ],
+      "bbox_max_mm": [
+        14.0,
+        23.0,
+        350.0
+      ],
+      "json_path": "hardware/cad_parts/out/S1/S1.2-02.json",
+      "stl_path": "hardware/cad_parts/out/S1/S1.2-02.stl",
+      "step_path": "hardware/cad_parts/out/S1/S1.2-02.step",
+      "scad_path": "hardware/cad_parts/out/S1/S1.2-02.scad",
+      "dxf_path": "hardware/cad_parts/out/S1/S1.2-02.dxf",
+      "svg_path": "hardware/cad_parts/out/S1/S1.2-02.svg"
+    },
+    "S1.2-03": {
+      "design_tier": "COTS_ENV_ICD",
+      "material": "Al 6061",
+      "mass_kg": 5.35001,
+      "watertight": true,
+      "all_valid": true,
+      "bbox_min_mm": [
+        1238.7,
+        -438.0,
+        1102.3
+      ],
+      "bbox_max_mm": [
+        1721.3,
+        4.5,
+        1144.75
+      ],
+      "json_path": "hardware/cad_parts/out/S1/S1.2-03.json",
+      "stl_path": "hardware/cad_parts/out/S1/S1.2-03.stl",
+      "step_path": "hardware/cad_parts/out/S1/S1.2-03.step",
+      "scad_path": "hardware/cad_parts/out/S1/S1.2-03.scad",
+      "dxf_path": "hardware/cad_parts/out/S1/S1.2-03.dxf",
+      "svg_path": "hardware/cad_parts/out/S1/S1.2-03.svg"
+    },
+    "S1.2-04": {
+      "design_tier": "COTS_ENV_ICD",
+      "material": "316LN",
+      "mass_kg": 1.46578,
+      "watertight": true,
+      "all_valid": true,
+      "bbox_min_mm": [
+        -42.0,
+        -162.5,
+        217.43
+      ],
+      "bbox_max_mm": [
+        42.0,
+        162.5,
+        251.23
+      ],
+      "json_path": "hardware/cad_parts/out/S1/S1.2-04.json",
+      "stl_path": "hardware/cad_parts/out/S1/S1.2-04.stl",
+      "step_path": "hardware/cad_parts/out/S1/S1.2-04.step",
+      "scad_path": "hardware/cad_parts/out/S1/S1.2-04.scad",
+      "dxf_path": "hardware/cad_parts/out/S1/S1.2-04.dxf",
+      "svg_path": "hardware/cad_parts/out/S1/S1.2-04.svg"
+    },
+    "S1.3-01": {
+      "design_tier": "CUSTOM_FULL",
+      "material": "Al2O3",
+      "mass_kg": 1.44216,
+      "watertight": true,
+      "all_valid": true,
+      "bbox_min_mm": [
+        -76.0,
+        -76.0,
+        369.5
+      ],
+      "bbox_max_mm": [
+        76.0,
+        76.0,
+        421.3
+      ],
+      "json_path": "hardware/cad_parts/out/S1/S1.3-01.json",
+      "stl_path": "hardware/cad_parts/out/S1/S1.3-01.stl",
+      "step_path": "hardware/cad_parts/out/S1/S1.3-01.step",
+      "scad_path": "hardware/cad_parts/out/S1/S1.3-01.scad",
+      "dxf_path": "hardware/cad_parts/out/S1/S1.3-01.dxf",
+      "svg_path": "hardware/cad_parts/out/S1/S1.3-01.svg"
+    },
+    "S1.3-02": {
+      "design_tier": "CUSTOM_FULL",
+      "material": "Ti-6Al-4V",
+      "mass_kg": 1.00327,
+      "watertight": true,
+      "all_valid": true,
+      "bbox_min_mm": [
+        -42.0,
+        -42.0,
+        39.66
+      ],
+      "bbox_max_mm": [
+        42.0,
+        42.0,
+        104.66
+      ],
+      "json_path": "hardware/cad_parts/out/S1/S1.3-02.json",
+      "stl_path": "hardware/cad_parts/out/S1/S1.3-02.stl",
+      "step_path": "hardware/cad_parts/out/S1/S1.3-02.step",
+      "scad_path": "hardware/cad_parts/out/S1/S1.3-02.scad",
+      "dxf_path": "hardware/cad_parts/out/S1/S1.3-02.dxf",
+      "svg_path": "hardware/cad_parts/out/S1/S1.3-02.svg"
+    },
+    "S1.3-03": {
+      "design_tier": "COTS_ENV_ICD",
+      "material": "Al 6061",
+      "mass_kg": 5.35001,
+      "watertight": true,
+      "all_valid": true,
+      "bbox_min_mm": [
+        1238.7,
+        -438.0,
+        1057.85
+      ],
+      "bbox_max_mm": [
+        1721.3,
+        4.5,
+        1100.3
+      ],
+      "json_path": "hardware/cad_parts/out/S1/S1.3-03.json",
+      "stl_path": "hardware/cad_parts/out/S1/S1.3-03.stl",
+      "step_path": "hardware/cad_parts/out/S1/S1.3-03.step",
+      "scad_path": "hardware/cad_parts/out/S1/S1.3-03.scad",
+      "dxf_path": "hardware/cad_parts/out/S1/S1.3-03.dxf",
+      "svg_path": "hardware/cad_parts/out/S1/S1.3-03.svg"
+    },
+    "S1.3-04": {
+      "design_tier": "CUSTOM_FULL",
+      "material": "Mu-metal",
+      "mass_kg": 1.30722,
+      "watertight": true,
+      "all_valid": true,
+      "bbox_min_mm": [
+        -62.0,
+        -62.0,
+        42.0
+      ],
+      "bbox_max_mm": [
+        62.0,
+        62.0,
+        215.0
+      ],
+      "json_path": "hardware/cad_parts/out/S1/S1.3-04.json",
+      "stl_path": "hardware/cad_parts/out/S1/S1.3-04.stl",
+      "step_path": "hardware/cad_parts/out/S1/S1.3-04.step",
+      "scad_path": "hardware/cad_parts/out/S1/S1.3-04.scad",
+      "dxf_path": "hardware/cad_parts/out/S1/S1.3-04.dxf",
+      "svg_path": "hardware/cad_parts/out/S1/S1.3-04.svg"
+    },
+    "S1.3-05": {
+      "design_tier": "CUSTOM_FULL",
+      "material": "316LN",
+      "mass_kg": 2.21643,
+      "watertight": true,
+      "all_valid": true,
+      "bbox_min_mm": [
+        -184.75,
+        -56.75,
+        425.25
+      ],
+      "bbox_max_mm": [
+        -58.3,
+        56.75,
+        538.75
+      ],
+      "json_path": "hardware/cad_parts/out/S1/S1.3-05.json",
+      "stl_path": "hardware/cad_parts/out/S1/S1.3-05.stl",
+      "step_path": "hardware/cad_parts/out/S1/S1.3-05.step",
+      "scad_path": "hardware/cad_parts/out/S1/S1.3-05.scad",
+      "dxf_path": "hardware/cad_parts/out/S1/S1.3-05.dxf",
+      "svg_path": "hardware/cad_parts/out/S1/S1.3-05.svg"
+    },
+    "S1.4-01": {
+      "design_tier": "CUSTOM_FULL",
+      "material": "OFHC Cu",
+      "mass_kg": 2.10332,
+      "watertight": true,
+      "all_valid": true,
+      "bbox_min_mm": [
+        -226.5,
+        -34.75,
+        220.25
+      ],
+      "bbox_max_mm": [
+        226.5,
+        34.75,
+        289.75
+      ],
+      "json_path": "hardware/cad_parts/out/S1/S1.4-01.json",
+      "stl_path": "hardware/cad_parts/out/S1/S1.4-01.stl",
+      "step_path": "hardware/cad_parts/out/S1/S1.4-01.step",
+      "scad_path": "hardware/cad_parts/out/S1/S1.4-01.scad",
+      "dxf_path": "hardware/cad_parts/out/S1/S1.4-01.dxf",
+      "svg_path": "hardware/cad_parts/out/S1/S1.4-01.svg"
+    },
+    "S1.4-02": {
+      "design_tier": "COTS_ENV_ICD",
+      "material": "Al 6061",
+      "mass_kg": 5.35001,
+      "watertight": true,
+      "all_valid": true,
+      "bbox_min_mm": [
+        1238.7,
+        -438.0,
+        1013.4
+      ],
+      "bbox_max_mm": [
+        1721.3,
+        4.5,
+        1055.85
+      ],
+      "json_path": "hardware/cad_parts/out/S1/S1.4-02.json",
+      "stl_path": "hardware/cad_parts/out/S1/S1.4-02.stl",
+      "step_path": "hardware/cad_parts/out/S1/S1.4-02.step",
+      "scad_path": "hardware/cad_parts/out/S1/S1.4-02.scad",
+      "dxf_path": "hardware/cad_parts/out/S1/S1.4-02.dxf",
+      "svg_path": "hardware/cad_parts/out/S1/S1.4-02.svg"
+    },
+    "S1.4-03": {
+      "design_tier": "CUSTOM_FULL",
+      "material": "Al 6061",
+      "mass_kg": 5.43326,
+      "watertight": true,
+      "all_valid": true,
+      "bbox_min_mm": [
+        1238.7,
+        -438.0,
+        968.95
+      ],
+      "bbox_max_mm": [
+        1721.3,
+        4.5,
+        1011.4
+      ],
+      "json_path": "hardware/cad_parts/out/S1/S1.4-03.json",
+      "stl_path": "hardware/cad_parts/out/S1/S1.4-03.stl",
+      "step_path": "hardware/cad_parts/out/S1/S1.4-03.step",
+      "scad_path": "hardware/cad_parts/out/S1/S1.4-03.scad",
+      "dxf_path": "hardware/cad_parts/out/S1/S1.4-03.dxf",
+      "svg_path": "hardware/cad_parts/out/S1/S1.4-03.svg"
+    },
+    "S1.5-01": {
+      "design_tier": "CUSTOM_FULL",
+      "material": "Ti-6Al-4V",
+      "mass_kg": 0.89953,
+      "watertight": true,
+      "all_valid": true,
+      "bbox_min_mm": [
+        -55.0,
+        -55.0,
+        114.66
+      ],
+      "bbox_max_mm": [
+        55.0,
+        55.0,
+        209.66
+      ],
+      "json_path": "hardware/cad_parts/out/S1/S1.5-01.json",
+      "stl_path": "hardware/cad_parts/out/S1/S1.5-01.stl",
+      "step_path": "hardware/cad_parts/out/S1/S1.5-01.step",
+      "scad_path": "hardware/cad_parts/out/S1/S1.5-01.scad",
+      "dxf_path": "hardware/cad_parts/out/S1/S1.5-01.dxf",
+      "svg_path": "hardware/cad_parts/out/S1/S1.5-01.svg"
+    },
+    "S1.5-02": {
+      "design_tier": "CUSTOM_FULL",
+      "material": "Mo",
+      "mass_kg": 0.63724,
+      "watertight": true,
+      "all_valid": true,
+      "bbox_min_mm": [
+        -43.0,
+        -43.0,
+        106.16
+      ],
+      "bbox_max_mm": [
+        43.0,
+        43.0,
+        216.66
+      ],
+      "json_path": "hardware/cad_parts/out/S1/S1.5-02.json",
+      "stl_path": "hardware/cad_parts/out/S1/S1.5-02.stl",
+      "step_path": "hardware/cad_parts/out/S1/S1.5-02.step",
+      "scad_path": "hardware/cad_parts/out/S1/S1.5-02.scad",
+      "dxf_path": "hardware/cad_parts/out/S1/S1.5-02.dxf",
+      "svg_path": "hardware/cad_parts/out/S1/S1.5-02.svg"
+    },
+    "S1.5-03": {
+      "design_tier": "COTS_ENV_ICD",
+      "material": "Al 6061",
+      "mass_kg": 5.35001,
+      "watertight": true,
+      "all_valid": true,
+      "bbox_min_mm": [
+        1238.7,
+        -438.0,
+        924.5
+      ],
+      "bbox_max_mm": [
+        1721.3,
+        4.5,
+        966.95
+      ],
+      "json_path": "hardware/cad_parts/out/S1/S1.5-03.json",
+      "stl_path": "hardware/cad_parts/out/S1/S1.5-03.stl",
+      "step_path": "hardware/cad_parts/out/S1/S1.5-03.step",
+      "scad_path": "hardware/cad_parts/out/S1/S1.5-03.scad",
+      "dxf_path": "hardware/cad_parts/out/S1/S1.5-03.dxf",
+      "svg_path": "hardware/cad_parts/out/S1/S1.5-03.svg"
+    },
+    "S1.6-01": {
+      "design_tier": "COTS_ENV_ICD",
+      "material": "Steel",
+      "mass_kg": 139.16831,
+      "watertight": true,
+      "all_valid": true,
+      "bbox_min_mm": [
+        -1600.0,
+        750.0,
+        -500.0
+      ],
+      "bbox_max_mm": [
+        -1100.0,
+        1350.0,
+        1299.75
+      ],
+      "json_path": "hardware/cad_parts/out/S1/S1.6-01.json",
+      "stl_path": "hardware/cad_parts/out/S1/S1.6-01.stl",
+      "step_path": "hardware/cad_parts/out/S1/S1.6-01.step",
+      "scad_path": "hardware/cad_parts/out/S1/S1.6-01.scad",
+      "dxf_path": "hardware/cad_parts/out/S1/S1.6-01.dxf",
+      "svg_path": "hardware/cad_parts/out/S1/S1.6-01.svg"
+    },
+    "S1.6-02": {
+      "design_tier": "COTS_ENV_ICD",
+      "material": "Steel",
+      "mass_kg": 118.38646,
+      "watertight": true,
+      "all_valid": true,
+      "bbox_min_mm": [
+        -1570.0,
+        1430.0,
+        -500.0
+      ],
+      "bbox_max_mm": [
+        -1130.0,
+        1870.0,
+        1019.0
+      ],
+      "json_path": "hardware/cad_parts/out/S1/S1.6-02.json",
+      "stl_path": "hardware/cad_parts/out/S1/S1.6-02.stl",
+      "step_path": "hardware/cad_parts/out/S1/S1.6-02.step",
+      "scad_path": "hardware/cad_parts/out/S1/S1.6-02.scad",
+      "dxf_path": "hardware/cad_parts/out/S1/S1.6-02.dxf",
+      "svg_path": "hardware/cad_parts/out/S1/S1.6-02.svg"
+    },
+    "S1.7-01": {
+      "design_tier": "CUSTOM_FULL",
+      "material": "Ti-6Al-4V",
+      "mass_kg": 1.09537,
+      "watertight": true,
+      "all_valid": true,
+      "bbox_min_mm": [
+        -38.0,
+        47.0,
+        445.16
+      ],
+      "bbox_max_mm": [
+        38.0,
+        148.0,
+        540.16
+      ],
+      "json_path": "hardware/cad_parts/out/S1/S1.7-01.json",
+      "stl_path": "hardware/cad_parts/out/S1/S1.7-01.stl",
+      "step_path": "hardware/cad_parts/out/S1/S1.7-01.step",
+      "scad_path": "hardware/cad_parts/out/S1/S1.7-01.scad",
+      "dxf_path": "hardware/cad_parts/out/S1/S1.7-01.dxf",
+      "svg_path": "hardware/cad_parts/out/S1/S1.7-01.svg"
+    }
+  }
+}

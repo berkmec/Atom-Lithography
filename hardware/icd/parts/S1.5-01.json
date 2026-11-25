@@ -1,0 +1,96 @@
+{
+  "schema_version": "part_icd_v1.0",
+  "part_id": "S1.5-01",
+  "parent_bom_id": "S1.5",
+  "subsystem": "S1",
+  "part_name": "Yari-kuresel HDA-HiRes enerji suzgeci (R0=40 mm, dE=0.453 eV, Exp124)",
+  "part_category": "PHYSICAL_SOLID",
+  "bom_metadata": {
+    "qty": "1",
+    "unit": "adet",
+    "material": "Ti-6Al-4V / Altin kapli OFHC / Al2O3",
+    "key_spec": "HDA-HiRes R0=40 mm, dE_FWHM=0.453 eV (h=95 mm, OD=110 mm; Exp124 Arch-B Cc=2.660 mm uyumlu)",
+    "tolerance": "±5 um kure profili",
+    "temp_stage": "300 K",
+    "vacuum_grade": "UHV 1e-9 mbar",
+    "procurement_class": "CUS",
+    "parent_cost_class": "B(ADDER)",
+    "usd_low": 22000.0,
+    "usd_nom": 40000.0,
+    "usd_high": 74000.0,
+    "legacy_cad_module": "s1_ion_source_column",
+    "bom_epistemic_tag": "{Varsayım}",
+    "notes": "DELTA-EXP124/ADDER: Exp83 +10u ($7.2k) uzerine gercek HDA-HiRes UHV enerji analizoru deltasi"
+  },
+  "artifact_links": {
+    "cad": {
+      "work_package": "WP-M1",
+      "design_tier": "CUSTOM_FULL",
+      "stl": "hardware/cad_parts/out/S1/S1.5-01.stl",
+      "step": "hardware/cad_parts/out/S1/S1.5-01.step",
+      "scad": "hardware/cad_parts/out/S1/S1.5-01.scad",
+      "dxf": "hardware/cad_parts/out/S1/S1.5-01.dxf",
+      "svg": "hardware/cad_parts/out/S1/S1.5-01.svg",
+      "cad_json": "hardware/cad_parts/out/S1/S1.5-01.json",
+      "watertight": true,
+      "all_6_files_valid": true,
+      "mass_kg": 0.899534,
+      "triangle_count": 10068,
+      "temp_k": 300.0,
+      "canonical_bbox_min_mm": [
+        -55.0,
+        -55.0,
+        614.66
+      ],
+      "canonical_bbox_max_mm": [
+        55.0,
+        55.0,
+        709.66
+      ],
+      "datum_shift_mm": [
+        0.0,
+        0.0,
+        500.0
+      ],
+      "port_count": 2,
+      "gdt_frame_count": 3
+    },
+    "pcb_bundles": [],
+    "legacy_board_files": [],
+    "electrical_icd": {
+      "path": "hardware/icd/electrical/S1.5-01.json",
+      "electrical_class": "E4",
+      "grounding_domain": "HV_MINUS_5KV_DECK",
+      "ups_tier": "NONE",
+      "exp150_ups_allocation_w": 0.0,
+      "mating_part_ids": [
+        "S1.5-02",
+        "S1.5-03",
+        "S1.3-01"
+      ],
+      "interlock_hooks_count": 1
+    },
+    "rtl_modules": [],
+    "rtl_audit_json": null,
+    "software_and_eda_files": [],
+    "verification_tests": []
+  },
+  "specialized_specification": null,
+  "verification_status": {
+    "cad_verified": true,
+    "pcb_verified": false,
+    "electrical_icd_verified": true,
+    "rtl_verified": false,
+    "software_or_eda_verified": false,
+    "specialized_icd_present": false,
+    "traceable": true
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "tapeout_done": false
+  }
+}

@@ -1,0 +1,253 @@
+{
+  "part_id": "S5.2-02",
+  "subsystem": "S5",
+  "design": {
+    "part_id": "S5.2-02",
+    "parent_bom_id": "S5.2",
+    "subsystem": "S5",
+    "part_name": "Iyon pompasi (VacIon 75 sinifi) + Titanyum Sublimasyon Pompasi (TSP)",
+    "design_tier": "COTS_ENV_ICD",
+    "material": "316LN",
+    "temp_stage": "300 K",
+    "temp_k": 300.0,
+    "vacuum_grade": "UHV 1e-10 mbar",
+    "tolerance_spec": "≤1e-10 mbar",
+    "surface_finish_ra_um": 0.8,
+    "qty": 1,
+    "procurement_class": "COTS",
+    "world_origin_mm": [
+      0.0,
+      -450.0,
+      600.3
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "tee_cf100_inlet",
+        "kind": "flange",
+        "position_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "standard": "CF100",
+        "mating_part_id": "S5.2-01",
+        "bore_mm": 101.6,
+        "od_mm": 152.0,
+        "pcd_mm": 130.2,
+        "bolt_count": 16,
+        "bolt_hole_mm": 8.4,
+        "bolt_spec": "M8",
+        "frame": "local",
+        "notes": "ISO 3669 CF100 Cu-gasket knife-edge"
+      },
+      {
+        "name": "tsp_cartridge_top",
+        "kind": "flange",
+        "position_mm": [
+          0.0,
+          0.0,
+          232.75
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "CF40",
+        "mating_part_id": "",
+        "bore_mm": 38.0,
+        "od_mm": 69.5,
+        "pcd_mm": 58.7,
+        "bolt_count": 6,
+        "bolt_hole_mm": 6.6,
+        "bolt_spec": "M6",
+        "frame": "local",
+        "notes": "3-filament Ti sublimation cartridge feedthrough"
+      },
+      {
+        "name": "hv_7kv_shv",
+        "kind": "electrical",
+        "position_mm": [
+          0.0,
+          -92.5,
+          83.0
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "standard": "7 kV SHV-10",
+        "mating_part_id": "S7.4-01",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "OVERALL_W",
+        "nominal_mm": 178.0,
+        "tol_plus_mm": 1.0,
+        "tol_minus_mm": -1.0,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "178.00 ±1.00"
+      },
+      {
+        "label": "OVERALL_H",
+        "nominal_mm": 256.8,
+        "tol_plus_mm": 1.0,
+        "tol_minus_mm": -1.0,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "256.80 ±1.00"
+      },
+      {
+        "label": "TSP_OD",
+        "nominal_mm": 104.0,
+        "tol_plus_mm": 0.3,
+        "tol_minus_mm": -0.3,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø104.00 ±0.30"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "flatness",
+        "tolerance_mm": 0.05,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "CF100 inlet knife-edge flange",
+        "glyph": "⏥",
+        "tolerance_text": "0.050"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "75 L/s (hareketsiz/sifir titresim yazma modu, Exp114 capasi)",
+      "75 L/s VacIon StarCell ion pump + integrated 3-filament TSP cartridge (zero-vibration write mode).",
+      "Dual mu-metal outer shields keep stray B-field negligible at wafer (distance > 450 mm)."
+    ],
+    "scad_params": {
+      "ion_speed_L_s": 75,
+      "tsp_od_mm": 104.0,
+      "total_h_mm": 256.8
+    },
+    "target_mass_kg": 18.5,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifacts": {
+    "part_id": "S5.2-02",
+    "subsystem": "S5",
+    "design_tier": "COTS_ENV_ICD",
+    "stl_path": "hardware/cad_parts/out/S5/S5.2-02.stl",
+    "step_path": "hardware/cad_parts/out/S5/S5.2-02.step",
+    "scad_path": "hardware/cad_parts/out/S5/S5.2-02.scad",
+    "dxf_path": "hardware/cad_parts/out/S5/S5.2-02.dxf",
+    "svg_path": "hardware/cad_parts/out/S5/S5.2-02.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 1620732.196251706,
+    "surface_area_mm2": 365245.36865515664,
+    "mass_kg": 12.641711130763305,
+    "cg_mm": [
+      -2.832750077506773e-15,
+      -0.9503866518503347,
+      91.12543136866606
+    ],
+    "bbox_min_mm": [
+      -89.0,
+      -92.5,
+      0.0
+    ],
+    "bbox_max_mm": [
+      89.0,
+      76.0,
+      256.8
+    ],
+    "inertia_kg_mm2": [
+      62546.659596343314,
+      85380.13454754947,
+      59573.7333766872,
+      1.7774699737716363e-12,
+      -2.1336741928120357e-12,
+      -97.62310499587169
+    ],
+    "triangle_count": 2616,
+    "vertex_count": 1288,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

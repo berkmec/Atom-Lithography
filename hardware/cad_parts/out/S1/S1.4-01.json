@@ -1,0 +1,266 @@
+{
+  "part_id": "S1.4-01",
+  "subsystem": "S1",
+  "design": {
+    "part_id": "S1.4-01",
+    "parent_bom_id": "S1.4",
+    "subsystem": "S1",
+    "part_name": "Geri cekilebilir UHV Faraday kupasi (ikincil elektron bastirmali)",
+    "design_tier": "CUSTOM_FULL",
+    "material": "OFHC Cu",
+    "temp_stage": "300 K",
+    "temp_k": 300.0,
+    "vacuum_grade": "UHV 1e-9 mbar",
+    "tolerance_spec": "±0.5% kalibrasyon",
+    "surface_finish_ra_um": 0.4,
+    "qty": 2,
+    "procurement_class": "CUS",
+    "world_origin_mm": [
+      0.0,
+      0.0,
+      255.0
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "fc1_cf40_pos_x",
+        "kind": "flange",
+        "position_mm": [
+          88.0,
+          0.0,
+          255.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "standard": "CF40",
+        "mating_part_id": "",
+        "bore_mm": 26.0,
+        "od_mm": 69.5,
+        "pcd_mm": 58.7,
+        "bolt_count": 6,
+        "bolt_hole_mm": 6.6,
+        "bolt_spec": "M6",
+        "frame": "global",
+        "notes": "ISO 3669 CF40 Cu-gasket knife-edge"
+      },
+      {
+        "name": "fc2_cf40_neg_x",
+        "kind": "flange",
+        "position_mm": [
+          -88.0,
+          0.0,
+          255.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "standard": "CF40",
+        "mating_part_id": "",
+        "bore_mm": 26.0,
+        "od_mm": 69.5,
+        "pcd_mm": 58.7,
+        "bolt_count": 6,
+        "bolt_hole_mm": 6.6,
+        "bolt_spec": "M6",
+        "frame": "global",
+        "notes": "ISO 3669 CF40 Cu-gasket knife-edge"
+      },
+      {
+        "name": "triax_out_pos_x",
+        "kind": "electrical",
+        "position_mm": [
+          226.5,
+          0.0,
+          255.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "standard": "3-Lug Triax BNC",
+        "mating_part_id": "S1.4-02",
+        "bore_mm": 0.0,
+        "od_mm": 12.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "global",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "CUP_OD",
+        "nominal_mm": 23.0,
+        "tol_plus_mm": 0.05,
+        "tol_minus_mm": -0.05,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø23.00 ±0.05"
+      },
+      {
+        "label": "FLANGE_CF40",
+        "nominal_mm": 69.5,
+        "tol_plus_mm": 0.1,
+        "tol_minus_mm": -0.1,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø69.50 ±0.10"
+      },
+      {
+        "label": "STROKE",
+        "nominal_mm": 50.0,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "50.00 ±0.50"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "concentricity",
+        "tolerance_mm": 0.05,
+        "diameter_zone": true,
+        "material_condition": "",
+        "datum_primary": "B",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "CUP & SUPPRESSOR",
+        "glyph": "◎",
+        "tolerance_text": "Ø0.050"
+      },
+      {
+        "symbol": "perpendicularity",
+        "tolerance_mm": 0.025,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "CF40 SEAL FACE",
+        "glyph": "⊥",
+        "tolerance_text": "0.025"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "1 fA - 10 uA akim olcumu, -100 V bastirma halkasi",
+      "2x retractable UHV Faraday cups (1 fA-10 uA) w/ graphite traps, -100 V suppressors, CF40 14-conv bellows & pneumatic actuators"
+    ],
+    "scad_params": {
+      "qty_cups": 2,
+      "suppressor_V": -100.0,
+      "bellows_conv": 14,
+      "cf_size": "CF40"
+    },
+    "target_mass_kg": 2.9,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S1.4-01",
+    "subsystem": "S1",
+    "design_tier": "CUSTOM_FULL",
+    "stl_path": "hardware/cad_parts/out/S1/S1.4-01.stl",
+    "step_path": "hardware/cad_parts/out/S1/S1.4-01.step",
+    "scad_path": "hardware/cad_parts/out/S1/S1.4-01.scad",
+    "dxf_path": "hardware/cad_parts/out/S1/S1.4-01.dxf",
+    "svg_path": "hardware/cad_parts/out/S1/S1.4-01.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 234745.28070479384,
+    "surface_area_mm2": 115647.17534333622,
+    "mass_kg": 2.1033177151149522,
+    "cg_mm": [
+      -1.2571619755048528e-13,
+      -4.9169879903636857e-14,
+      254.99999999999747
+    ],
+    "bbox_min_mm": [
+      -226.5,
+      -34.75,
+      220.25
+    ],
+    "bbox_max_mm": [
+      226.5,
+      34.75,
+      289.75
+    ],
+    "inertia_kg_mm2": [
+      673.7472023395826,
+      52801.31420080197,
+      52801.31420079949,
+      -8.315443992614733e-12,
+      -8.01780074834817e-11,
+      -5.505749722942448e-12
+    ],
+    "triangle_count": 18000,
+    "vertex_count": 8992,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "engineering_checks": {},
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

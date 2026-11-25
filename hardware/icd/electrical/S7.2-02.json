@@ -1,0 +1,85 @@
+{
+  "schema_version": "1.0",
+  "part_id": "S7.2-02",
+  "parent_bom_id": "S7.2",
+  "subsystem": "S7",
+  "part_name": "Yuksek hizli dijital isaretci (marker) ve darbe siralamaci karti",
+  "qty": 2,
+  "unit": "kart",
+  "temp_stage": "300 K (kabin)",
+  "vacuum_grade": "Atmosfer",
+  "bom_key_spec": "ESR/ENDOR + XY8/CPMG + okuma kapisi mikrosaniye zamanlama",
+  "usd_nom": 11000.0,
+  "bom_epistemic_tag": "{Model-Kalibrasyon-Exp114}",
+  "electrical_class": "E3",
+  "grounding_domain": "DGND",
+  "grounding_notes": "2x FPGA 1 ns digital marker & pulse sequencer PXIe modules synced to WR + 10 MHz Rb.",
+  "supply_rails": [
+    {
+      "rail_name": "PXIE_BACKPLANE_12V",
+      "voltage_v": 12.0,
+      "current_type": "DC",
+      "max_current_a": 4.0,
+      "steady_power_w": 35.0,
+      "peak_power_w": 50.0,
+      "source_part_id": "S7.2-03"
+    }
+  ],
+  "connectors_and_pinout": [
+    {
+      "connector_ref": "J_MARK",
+      "connector_type": "SMA-F 50R LVTTL Markers (16x)",
+      "location_side": "front_panel",
+      "mating_part_id": "S6.4-02",
+      "pins": [
+        {
+          "pin": "1-16",
+          "signal": "SEQ_MARKER[0:15]",
+          "direction": "OUT",
+          "nominal_level": "1 ns resolution ESR/ENDOR/RO gates"
+        }
+      ]
+    },
+    {
+      "connector_ref": "J_WR_IN",
+      "connector_type": "SMA-F 50R Trigger",
+      "location_side": "front_panel",
+      "mating_part_id": "S7.4-02",
+      "pins": [
+        {
+          "pin": "1",
+          "signal": "WR_COAX_TRIG_4",
+          "direction": "IN",
+          "nominal_level": "<200 ps trigger epoch"
+        }
+      ]
+    }
+  ],
+  "mating_part_ids": [
+    "S7.2-03",
+    "S7.2-01",
+    "S7.4-02",
+    "S6.4-02"
+  ],
+  "interlock_hooks": [],
+  "ups_tier": "TIER2_SHED",
+  "ups_budget_group": "AUX_PROCESS_SHED_ON_OUTAGE",
+  "exp150_ups_allocation_w": 0.0,
+  "supply_rails_steady_sum_w": 35.0,
+  "incremental_mains_w": 0.0,
+  "secondary_or_parent_derived_w": 35.0,
+  "non_exp150_aux_shed_w": 0.0,
+  "reconciliation_note": "PXIe plug-in card (35.0 W DC backplane load) powered wholly by parent chassis S7.2-03 (320.0 W AC mains): incremental_mains_w = 0.0 W, exp150_ups_allocation_w = 0.0 W (0.0 W double-count).",
+  "timing_sync": {
+    "rb_10mhz_port": "CH11 (via S7.2-03)",
+    "white_rabbit_port": "WR_COAX_4",
+    "sync_role": "1 ns pulse sequencer"
+  },
+  "epistemic_flags": {
+    "design_maturity": "M0_M1_ELECTRICAL_ICD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

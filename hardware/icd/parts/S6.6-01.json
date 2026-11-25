@@ -1,0 +1,117 @@
+{
+  "schema_version": "part_icd_v1.0",
+  "part_id": "S6.6-01",
+  "parent_bom_id": "S6.6",
+  "subsystem": "S6",
+  "part_name": "4 K kriyojenik dusuk-guclu InP HEMT LNA (56 okuma zinciri, Exp111/114)",
+  "part_category": "PHYSICAL_SOLID",
+  "bom_metadata": {
+    "qty": "56",
+    "unit": "adet",
+    "material": "InP HEMT MMIC/hibrit + altin kapli Cu kasa",
+    "key_spec": "P_DC <= 2.8 mW/hat (Rebelo 2026: 2.1 mW, Tn=1.4 K, 41.6 dB)",
+    "tolerance": "P_DC <= 2.8 mW",
+    "temp_stage": "4 K",
+    "vacuum_grade": "Kriyo-vakum",
+    "procurement_class": "R&D",
+    "parent_cost_class": "D",
+    "usd_low": 112000.0,
+    "usd_nom": 224000.0,
+    "usd_high": 448000.0,
+    "legacy_cad_module": "s6_cryo_dr_magnet_readout",
+    "bom_epistemic_tag": "{Model-Kalibrasyon-Exp114}",
+    "notes": "EXP114 ZINCIR-1/6: 56 x $4,000 ($2k-$8k/adet); B/C duvarinin #1 belirleyicisi (RFQ-05)"
+  },
+  "artifact_links": {
+    "cad": {
+      "work_package": "WP-M4",
+      "design_tier": "CUSTOM_FULL",
+      "stl": "hardware/cad_parts/out/S6/S6.6-01.stl",
+      "step": "hardware/cad_parts/out/S6/S6.6-01.step",
+      "scad": "hardware/cad_parts/out/S6/S6.6-01.scad",
+      "dxf": "hardware/cad_parts/out/S6/S6.6-01.dxf",
+      "svg": "hardware/cad_parts/out/S6/S6.6-01.svg",
+      "cad_json": "hardware/cad_parts/out/S6/S6.6-01.json",
+      "watertight": true,
+      "all_6_files_valid": true,
+      "mass_kg": 1.128907,
+      "triangle_count": 1824,
+      "temp_k": 4.0,
+      "canonical_bbox_min_mm": [
+        -776.0,
+        -126.0,
+        683.0
+      ],
+      "canonical_bbox_max_mm": [
+        -524.0,
+        126.0,
+        718.0
+      ],
+      "datum_shift_mm": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "port_count": 0,
+      "gdt_frame_count": 0
+    },
+    "pcb_bundles": [
+      {
+        "bundle_slug": "cryo_rf_harness_icd",
+        "verification_json": "hardware/pcb/cryo_rf_harness_icd/cryo_rf_thermal_attenuation.json",
+        "boards": [
+          "cryo_rf_bias_panel"
+        ],
+        "kicad_sch_files": [
+          "hardware/pcb/cryo_rf_harness_icd/cryo_rf_bias_panel.kicad_sch"
+        ],
+        "kicad_pcb_files": [
+          "hardware/pcb/cryo_rf_harness_icd/cryo_rf_bias_panel.kicad_pcb"
+        ],
+        "spice_decks": [
+          "hardware/pcb/cryo_rf_harness_icd/magnet_quench_dump_1p563ohm.cir",
+          "hardware/pcb/cryo_rf_harness_icd/qram_chebyshev_50_to_3k.cir",
+          "hardware/pcb/cryo_rf_harness_icd/rf_set_tank_biastee.cir"
+        ],
+        "all_passed": true
+      }
+    ],
+    "legacy_board_files": [],
+    "electrical_icd": {
+      "path": "hardware/icd/electrical/S6.6-01.json",
+      "electrical_class": "E2",
+      "grounding_domain": "CRYO_OVC",
+      "ups_tier": "NONE",
+      "exp150_ups_allocation_w": 0.0,
+      "mating_part_ids": [
+        "S6.6-02",
+        "S6.6-04",
+        "S6.6-05",
+        "S9.3-02"
+      ],
+      "interlock_hooks_count": 1
+    },
+    "rtl_modules": [],
+    "rtl_audit_json": null,
+    "software_and_eda_files": [],
+    "verification_tests": []
+  },
+  "specialized_specification": null,
+  "verification_status": {
+    "cad_verified": true,
+    "pcb_verified": true,
+    "electrical_icd_verified": true,
+    "rtl_verified": false,
+    "software_or_eda_verified": false,
+    "specialized_icd_present": false,
+    "traceable": true
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "tapeout_done": false
+  }
+}

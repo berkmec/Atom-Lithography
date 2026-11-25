@@ -1,0 +1,90 @@
+{
+  "schema_version": "1.0",
+  "part_id": "S4.2-03",
+  "parent_bom_id": "S4.2",
+  "subsystem": "S4",
+  "part_name": "Aktif sonumleme DSP denetleyici ve yuksek-hizli piezo amplifikatoru",
+  "qty": 1,
+  "unit": "adet",
+  "temp_stage": "300 K (kabin)",
+  "vacuum_grade": "Atmosfer",
+  "bom_key_spec": "6-DOF MIMO geri besleme, 10 kHz dongu",
+  "usd_nom": 7000.0,
+  "bom_epistemic_tag": "{Model-Kalibrasyon-Exp114}",
+  "electrical_class": "E3",
+  "grounding_domain": "AGND",
+  "grounding_notes": "6-DOF MIMO active vibration isolation DSP & piezo amplifier (10 kHz loop).",
+  "supply_rails": [
+    {
+      "rail_name": "AC_MAINS_230V",
+      "voltage_v": 230.0,
+      "current_type": "AC_1PH",
+      "max_current_a": 1.5,
+      "steady_power_w": 160.0,
+      "peak_power_w": 260.0,
+      "source_part_id": "S7.4-03"
+    }
+  ],
+  "connectors_and_pinout": [
+    {
+      "connector_ref": "J_SENS",
+      "connector_type": "DB25 Shielded Analog In",
+      "location_side": "rack_rear",
+      "mating_part_id": "S4.2-02",
+      "pins": [
+        {
+          "pin": "1-6",
+          "signal": "GEOPHONE_XYZ_DIFF",
+          "direction": "IN",
+          "nominal_level": "3-axis seismic feedback <1 ng/rtHz"
+        },
+        {
+          "pin": "7",
+          "signal": "AGND",
+          "direction": "PWR",
+          "nominal_level": "0 V AGND"
+        }
+      ]
+    },
+    {
+      "connector_ref": "J_ACT",
+      "connector_type": "MIL-DTL-38999 12-Pin HV Piezo",
+      "location_side": "rack_rear",
+      "mating_part_id": "S4.2-01",
+      "pins": [
+        {
+          "pin": "1-12",
+          "signal": "PIEZO_6DOF_DRV",
+          "direction": "OUT",
+          "nominal_level": "0-150 V active isolation"
+        }
+      ]
+    }
+  ],
+  "mating_part_ids": [
+    "S4.2-01",
+    "S4.2-02",
+    "S6.9-04"
+  ],
+  "interlock_hooks": [],
+  "ups_tier": "TIER2_SHED",
+  "ups_budget_group": "AUX_PROCESS_SHED_ON_OUTAGE",
+  "exp150_ups_allocation_w": 0.0,
+  "supply_rails_steady_sum_w": 160.0,
+  "incremental_mains_w": 160.0,
+  "secondary_or_parent_derived_w": 0.0,
+  "non_exp150_aux_shed_w": 160.0,
+  "reconciliation_note": "Non-Exp150 auxiliary sheddable rack/facility load (TIER2_SHED): incremental_mains_w = 160.0 W AC mains (mutually exclusive process/experiment mode, shed immediately on outage; exp150_ups_allocation_w = 0.0 W).",
+  "timing_sync": {
+    "rb_10mhz_port": null,
+    "white_rabbit_port": null,
+    "sync_role": "10 kHz MIMO vibration servo"
+  },
+  "epistemic_flags": {
+    "design_maturity": "M0_M1_ELECTRICAL_ICD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

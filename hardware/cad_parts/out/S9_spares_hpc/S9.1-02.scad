@@ -1,0 +1,52 @@
+// ============================================================================
+// Atom Lithography Machine — Parametric OpenSCAD Module (S9.1-02)
+// ============================================================================
+// part_id           : S9.1-02
+// parent_bom_id     : S9.1
+// subsystem         : S9
+// part_name         : Demet nokta boyutu (knife-edge) ve litografik fiducial kalibrasyon hedefleri
+// material          : Si
+// temp_stage        : 300 K
+// vacuum_grade      : UHV 1e-9 mbar
+// tolerance         : ±1 nm kenar
+// computed_mass_kg  : 1.15000
+// envelope_mm       : 168.800 x 116.400 x 52.000
+// design_maturity   : M0_M1_DETAILED_CAD_DESIGN_ONLY
+// no_lab_measurement: true
+// iec61508_certified: false
+// semi_s2_certified : false
+// Units: millimeters (mm)
+// ============================================================================
+
+$fn = 64;
+
+// Nominal bounding envelope parameters (mm)
+bbox_x = 168.8000;
+bbox_y = 116.4000;
+bbox_z = 52.0000;
+
+// Part-specific parametric dimensions
+qty_targets = 4;
+coupon_sq_mm = 25.0;
+edge_nm = 10.0;
+
+// Interface / port parameters (mm)
+
+module part_S9_1_02() {
+  difference() {
+    union() {
+      // Cleanroom ESD storage case outer envelope
+      cube([140.000, 100.000, 52.000], center=true);
+    }
+    // Internal padded kit tray cavity
+    hull() {
+      translate([-20.000, 0, 0]) cylinder(d=84.000, h=21.400, center=true);
+      translate([20.000, 0, 0]) cylinder(d=84.000, h=21.400, center=true);
+    }
+  }
+}
+
+// World assembly mounting transform (global machine frame, mm / deg):
+// translate([-710.000, -1180.000, 26.000]) rotate([0.000, 0.000, 0.000]) part_S9_1_02();
+
+part_S9_1_02();

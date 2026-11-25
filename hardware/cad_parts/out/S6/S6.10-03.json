@@ -1,0 +1,244 @@
+{
+  "part_design": {
+    "part_id": "S6.10-03",
+    "parent_bom_id": "S6.10",
+    "subsystem": "S6",
+    "part_name": "4 K SKY130 968-kapi capraz-anahtar coklama karti ve M4 DC kapi dagitim modulu (Exp131)",
+    "design_tier": "CUSTOM_FULL",
+    "material": "OFHC Cu",
+    "temp_stage": "4 K -> 20 mK",
+    "temp_k": 0.02,
+    "vacuum_grade": "Kriyo-vakum",
+    "tolerance_spec": "±0.2 mV kapi bias",
+    "surface_finish_ra_um": 0.8,
+    "qty": 2,
+    "procurement_class": "CUS/R&D",
+    "world_origin_mm": [
+      -650.0,
+      0.0,
+      703.0
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "thermal_4k_top",
+        "kind": "thermal",
+        "position_mm": [
+          0.0,
+          0.0,
+          13.0
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "4x M3 Au-OFHC 4K Clamp (<=15.4 mW)",
+        "mating_part_id": "S6.8-01",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 4,
+        "bolt_hole_mm": 3.2,
+        "bolt_spec": "M3",
+        "frame": "local",
+        "notes": ""
+      },
+      {
+        "name": "gates_968_microd",
+        "kind": "connector",
+        "position_mm": [
+          34.0,
+          0.0,
+          -2.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "standard": "4x 51-pin Micro-D 968-Gate Mux",
+        "mating_part_id": "S6.7-02",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "CARRIER_X",
+        "nominal_mm": 76.0,
+        "tol_plus_mm": 0.05,
+        "tol_minus_mm": -0.05,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "76.00 ±0.05"
+      },
+      {
+        "label": "CARRIER_Y",
+        "nominal_mm": 58.0,
+        "tol_plus_mm": 0.05,
+        "tol_minus_mm": -0.05,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "58.00 ±0.05"
+      },
+      {
+        "label": "STACK_Z",
+        "nominal_mm": 26.0,
+        "tol_plus_mm": 0.1,
+        "tol_minus_mm": -0.1,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "26.00 ±0.10"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "flatness",
+        "tolerance_mm": 0.015,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "4 K OFHC thermal interface",
+        "glyph": "⏥",
+        "tolerance_text": "0.015"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "L=11 FT yuzey kodu (N_cand=6 %99.40 / N_cand=3 %100.0 perkolasyon): dugum basi 5-8 DC kapi, toplam 968 kapi 4 K coklama, 4K yuk=15.4 mW",
+      "Exact BOM part_id S6.10-03 (resolves legacy cad/params.py S6.6 aliasing bug). Dual-set SKY130 968-gate 4 K crossbar (15.4 mW)."
+    ],
+    "scad_params": {
+      "n_gates": 968,
+      "p_4k_mw": 15.4,
+      "qty_sets": 2,
+      "carrier_dx": 76.0,
+      "carrier_dy": 58.0
+    },
+    "target_mass_kg": 0.42,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact_result": {
+    "part_id": "S6.10-03",
+    "subsystem": "S6",
+    "design_tier": "CUSTOM_FULL",
+    "stl_path": "hardware/cad_parts/out/S6/S6.10-03.stl",
+    "step_path": "hardware/cad_parts/out/S6/S6.10-03.step",
+    "scad_path": "hardware/cad_parts/out/S6/S6.10-03.scad",
+    "dxf_path": "hardware/cad_parts/out/S6/S6.10-03.dxf",
+    "svg_path": "hardware/cad_parts/out/S6/S6.10-03.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 52043.43237049575,
+    "surface_area_mm2": 33444.33584184521,
+    "mass_kg": 0.2498084753783796,
+    "cg_mm": [
+      0.0,
+      -8.737843185459605e-17,
+      3.2427116356113226
+    ],
+    "bbox_min_mm": [
+      -38.0,
+      -29.0,
+      -13.35
+    ],
+    "bbox_max_mm": [
+      38.0,
+      29.0,
+      13.0
+    ],
+    "inertia_kg_mm2": [
+      74.79880908247434,
+      132.7923544747724,
+      177.30545116110173,
+      3.352761268615723e-15,
+      -2.2351741790771487e-15,
+      2.435398716855418e-16
+    ],
+    "triangle_count": 284,
+    "vertex_count": 152,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "json_path": "hardware/cad_parts/out/S6/S6.10-03.json",
+  "world_bbox_min_mm": [
+    -688.0,
+    -29.0,
+    689.65
+  ],
+  "world_bbox_max_mm": [
+    -612.0,
+    29.0,
+    716.0
+  ],
+  "world_cg_mm": [
+    -650.0,
+    0.0,
+    706.2427
+  ],
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

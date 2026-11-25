@@ -1,0 +1,280 @@
+{
+  "part_id": "S5.5-04",
+  "subsystem": "S5",
+  "design": {
+    "part_id": "S5.5-04",
+    "parent_bom_id": "S5.5",
+    "subsystem": "S5",
+    "part_name": "Donanimsal lazer deklansor kilidi (MXC <1 K + UHV vana emniyet arayuzu, Exp130)",
+    "design_tier": "CUSTOM_FULL",
+    "material": "316LN",
+    "temp_stage": "300 K",
+    "temp_k": 300.0,
+    "vacuum_grade": "Atmosfer / UHV arayuz",
+    "tolerance_spec": "<5 ms kesme",
+    "surface_finish_ra_um": 0.8,
+    "qty": 1,
+    "procurement_class": "CUS",
+    "world_origin_mm": [
+      0.0,
+      327.0,
+      500.0
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "viewport_side_ap",
+        "kind": "optical",
+        "position_mm": [
+          0.0,
+          -10.0,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "standard": "Dia 46 mm Beam Aperture",
+        "mating_part_id": "S5.5-02",
+        "bore_mm": 46.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      },
+      {
+        "name": "laser_side_ap",
+        "kind": "optical",
+        "position_mm": [
+          0.0,
+          10.0,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "standard": "Dia 46 mm Beam Aperture",
+        "mating_part_id": "S5.5-01",
+        "bore_mm": 46.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      },
+      {
+        "name": "sil3_interlock_bus",
+        "kind": "electrical",
+        "position_mm": [
+          0.0,
+          0.0,
+          -53.2
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "standard": "1oo2D Dual-Coil Interlock",
+        "mating_part_id": "S7.SAFETY-03",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "BODY_W",
+        "nominal_mm": 74.0,
+        "tol_plus_mm": 0.1,
+        "tol_minus_mm": -0.1,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "74.00 ±0.10"
+      },
+      {
+        "label": "BODY_T",
+        "nominal_mm": 20.0,
+        "tol_plus_mm": 0.1,
+        "tol_minus_mm": -0.1,
+        "view": "right",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "20.00 ±0.10"
+      },
+      {
+        "label": "APERTURE",
+        "nominal_mm": 46.0,
+        "tol_plus_mm": 0.1,
+        "tol_minus_mm": -0.1,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø46.00 ±0.10"
+      },
+      {
+        "label": "COIL_SPAN",
+        "nominal_mm": 124.6,
+        "tol_plus_mm": 0.3,
+        "tol_minus_mm": -0.3,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "124.60 ±0.30"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "parallelism",
+        "tolerance_mm": 0.05,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "Front & rear optical mounting faces",
+        "glyph": "∥",
+        "tolerance_text": "0.050"
+      },
+      {
+        "symbol": "concentricity",
+        "tolerance_mm": 0.1,
+        "diameter_zone": true,
+        "material_condition": "",
+        "datum_primary": "B",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "Dia 46 aperture to S5.5-02 sapphire axis",
+        "glyph": "◎",
+        "tolerance_text": "Ø0.10"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "MXC <1 K termal kilidi + UHV kapi vanasi + S7.4 SIL-2 PLC donanim kilidi (<5 ms kesme)",
+      "Dual-coil 1oo2D fail-safe laser beam shutter (<3.2 ms mechanical closure, OFHC Cu absorber blade).",
+      "Interlocked to MXC <1 K thermal latch, UHV gate valve & S7.SAFETY-03 PLC; fits cleanly inside S7.SAFETY-02 shroud."
+    ],
+    "scad_params": {
+      "body_xy": 74.0,
+      "body_t": 20.0,
+      "aperture_d": 46.0,
+      "close_time_ms": 3.2
+    },
+    "target_mass_kg": 0.78,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifacts": {
+    "part_id": "S5.5-04",
+    "subsystem": "S5",
+    "design_tier": "CUSTOM_FULL",
+    "stl_path": "hardware/cad_parts/out/S5/S5.5-04.stl",
+    "step_path": "hardware/cad_parts/out/S5/S5.5-04.step",
+    "scad_path": "hardware/cad_parts/out/S5/S5.5-04.scad",
+    "dxf_path": "hardware/cad_parts/out/S5/S5.5-04.dxf",
+    "svg_path": "hardware/cad_parts/out/S5/S5.5-04.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 141656.74841863284,
+    "surface_area_mm2": 33099.199869422606,
+    "mass_kg": 0.7791121163024807,
+    "cg_mm": [
+      -4.113879053885939e-15,
+      3.7719921094935456e-17,
+      -2.7769887731536884
+    ],
+    "bbox_min_mm": [
+      -62.3,
+      -12.5,
+      -53.2
+    ],
+    "bbox_max_mm": [
+      62.3,
+      12.5,
+      37.0
+    ],
+    "inertia_kg_mm2": [
+      449.78509496795203,
+      1388.3043419934936,
+      990.3272924553271,
+      -2.9413058655336502e-15,
+      1.202211529761393e-14,
+      8.087850349215583e-16
+    ],
+    "triangle_count": 352,
+    "vertex_count": 188,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

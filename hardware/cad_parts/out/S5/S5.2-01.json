@@ -1,0 +1,254 @@
+{
+  "part_id": "S5.2-01",
+  "subsystem": "S5",
+  "design": {
+    "part_id": "S5.2-01",
+    "parent_bom_id": "S5.2",
+    "subsystem": "S5",
+    "part_name": "UHV turbomolekuler pompa (HiPace 300 sinifi) + titresim korugu",
+    "design_tier": "COTS_ENV_ICD",
+    "material": "Al 6061",
+    "temp_stage": "300 K",
+    "temp_k": 300.0,
+    "vacuum_grade": "UHV 1e-9 mbar",
+    "tolerance_spec": "<0.01 um titresim",
+    "surface_finish_ra_um": 1.6,
+    "qty": 1,
+    "procurement_class": "COTS",
+    "world_origin_mm": [
+      0.0,
+      -450.0,
+      500.0
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "chamber_cf100_inlet",
+        "kind": "flange",
+        "position_mm": [
+          0.0,
+          179.5,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "standard": "CF100",
+        "mating_part_id": "S5.1-01",
+        "bore_mm": 101.6,
+        "od_mm": 152.0,
+        "pcd_mm": 130.2,
+        "bolt_count": 16,
+        "bolt_hole_mm": 8.4,
+        "bolt_spec": "M8",
+        "frame": "local",
+        "notes": "ISO 3669 CF100 Cu-gasket knife-edge"
+      },
+      {
+        "name": "vacion_top_tee_port",
+        "kind": "flange",
+        "position_mm": [
+          0.0,
+          0.0,
+          99.8
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "CF100",
+        "mating_part_id": "S5.2-02",
+        "bore_mm": 101.6,
+        "od_mm": 152.0,
+        "pcd_mm": 130.2,
+        "bolt_count": 16,
+        "bolt_hole_mm": 8.4,
+        "bolt_spec": "M8",
+        "frame": "local",
+        "notes": "ISO 3669 CF100 Cu-gasket knife-edge"
+      },
+      {
+        "name": "kf25_foreline_out",
+        "kind": "vacuum",
+        "position_mm": [
+          0.0,
+          -92.0,
+          -250.0
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "standard": "ISO-KF25",
+        "mating_part_id": "S5.2-03",
+        "bore_mm": 25.0,
+        "od_mm": 40.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "BELLOWS_L",
+        "nominal_mm": 57.6,
+        "tol_plus_mm": 1.0,
+        "tol_minus_mm": -1.0,
+        "view": "right",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "57.60 ±1.00"
+      },
+      {
+        "label": "TMP_OD",
+        "nominal_mm": 136.0,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø136.00 ±0.50"
+      },
+      {
+        "label": "STATION_H",
+        "nominal_mm": 599.8,
+        "tol_plus_mm": 1.0,
+        "tol_minus_mm": -1.0,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "599.80 ±1.00"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "perpendicularity",
+        "tolerance_mm": 0.15,
+        "diameter_zone": true,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "CF100 tee top/bottom flange alignment",
+        "glyph": "⊥",
+        "tolerance_text": "Ø0.15"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "260 L/s N2, CF100, ultra-dusuk titresim (Exp114 capasi)",
+      "300 L/s (260 L/s N2) magnetically levitated TMP (HiPace 300 class, <0.01 um vibration).",
+      "14-convolution CF100 edge-welded 316L vibration isolation bellows decouples chamber with full flange wrench clearance.",
+      "Pump frame clears S4 granite base (Y_min=-350 mm) by 30.0 mm."
+    ],
+    "scad_params": {
+      "speed_N2_L_s": 260,
+      "bellows_conv": 14,
+      "tmp_od_mm": 136.0
+    },
+    "target_mass_kg": 16.5,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifacts": {
+    "part_id": "S5.2-01",
+    "subsystem": "S5",
+    "design_tier": "COTS_ENV_ICD",
+    "stl_path": "hardware/cad_parts/out/S5/S5.2-01.stl",
+    "step_path": "hardware/cad_parts/out/S5/S5.2-01.step",
+    "scad_path": "hardware/cad_parts/out/S5/S5.2-01.scad",
+    "dxf_path": "hardware/cad_parts/out/S5/S5.2-01.dxf",
+    "svg_path": "hardware/cad_parts/out/S5/S5.2-01.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 4030281.055690609,
+    "surface_area_mm2": 954518.4107377409,
+    "mass_kg": 14.50901180048619,
+    "cg_mm": [
+      4.254194623918612,
+      13.016190598733983,
+      -184.54632639398903
+    ],
+    "bbox_min_mm": [
+      -76.0,
+      -92.0,
+      -500.0
+    ],
+    "bbox_max_mm": [
+      92.0,
+      179.5,
+      99.80000000000001
+    ],
+    "inertia_kg_mm2": [
+      353567.3122108937,
+      335936.06766834715,
+      72529.46030004132,
+      803.4134311067506,
+      2188.348222245186,
+      -37557.460046695895
+    ],
+    "triangle_count": 16952,
+    "vertex_count": 8332,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

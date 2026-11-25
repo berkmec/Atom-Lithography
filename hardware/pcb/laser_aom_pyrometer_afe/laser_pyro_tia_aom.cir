@@ -1,0 +1,175 @@
+* Atom Lithography Machine - Laser AOM RF VCA, 10 us 2-Color Pyrometer TIA & 1 ms Integrator
+* BOM: S5.5-03, S5.5-01, S5.5-04, S5.3-03
+* Epistemic status: M0/M1 DESIGN_ONLY; no_lab_measurement=true; no_physical_fab=true.
+
+.temp 26.85
+.options reltol=1e-4 vntol=1e-6 abstol=1e-12
+
+* --- Wideband FET-Input TIA Op-Amp (OPA657: A0=1e5, GBP=1.6 GHz, Cin=4.5 pF, en=4.8 nV/rtHz) ---
+.subckt OPAMP_OPA657 inp inn out
+Cin inp inn 4.5p
+Rin inp inn 1T noisy=0
+Rnw nw 0 1390.6 temp=26.85
+Evn inp_i inp nw 0 1.0
+Egain n1 0 inp_i inn 1e5
+Rp n1 n2 1k noisy=0
+Cp n2 0 9.9472n
+Ebuf n_out 0 n2 0 1.0
+Rout n_out out 5 noisy=0
+.ends OPAMP_OPA657
+
+* --- Precision JFET Integrator Op-Amp (OPA140: A0=1e6, GBP=11 MHz, low Ib=10 pA) ---
+.subckt OPAMP_OPA140 inp inn out
+Cin inp inn 5.0p
+Rin inp inn 1T noisy=0
+Ibias inn 0 DC 10p
+Egain n1 0 inp inn 1e6
+Rp n1 n2 1k noisy=0
+Cp n2 0 14.4686u
+Ebuf n_out 0 n2 0 1.0
+Rout n_out out 10 noisy=0
+.ends OPAMP_OPA140
+
+* --- Analog Switch Model (ADG1211: Ron=120 Ohm, Roff=10 GOhm) ---
+.model SW_ADG1211 SW(VT=1.65 VH=0.1 RON=120 ROFF=10G)
+* --- Fast NMOS Crowbar Model (2N7002 / SI2302: Ron=1.5 Ohm, Roff=100 MOhm) ---
+.model SW_MOS_CB  SW(VT=1.65 VH=0.1 RON=1.5 ROFF=100Meg)
+
+* =========================================================================
+* 1) DUAL-CHANNEL 2-COLOR PYROMETER TIAs (InGaAs 1550 nm & Si 850 nm, < 10 us)
+* =========================================================================
+* Channel 1: InGaAs 1550 nm (Cj=12 pF, Rf=100 kOhm, Cf=12 pF -> fc=132.6 kHz, tr~2.64 us << 10 us)
+Ipd_ig 0 ig_sum DC 0 AC 1 PULSE(0 10u 5u 20n 20n 80u 200u)
+Cpd_ig ig_sum 0 12.5p
+X_ig   0 ig_sum ig_out OPAMP_OPA657
+Rf_ig  ig_out ig_sum 100k
+Cf_ig  ig_out ig_sum 12p
+Rld_ig ig_out 0 10k
+
+* Channel 2: Si 850 nm (Cj=3 pF, Rf=200 kOhm, Cf=6.0 pF -> fc=132.6 kHz, tr~2.64 us << 10 us)
+Ipd_si 0 si_sum DC 0 AC 1 PULSE(0 5u 5u 20n 20n 80u 200u)
+Cpd_si si_sum 0 3.5p
+X_si   0 si_sum si_out OPAMP_OPA657
+Rf_si  si_out si_sum 200k
+Cf_si  si_out si_sum 6.0p
+Rld_si si_out 0 10k
+
+* =========================================================================
+* 2) 1.0 ms INLINE PHOTODIODE PULSE-ENERGY INTEGRATOR (1x vs 2x LINEARITY)
+* =========================================================================
+* Reset control: HIGH (closed) for t < 0.05 ms and t > 1.30 ms; LOW (integrate/hold) during 0.05..1.30 ms
+Vint_rst int_rst 0 DC 3.3 PWL(0 3.3 49u 3.3 50u 0 1.299m 0 1.300m 3.3)
+
+* 1x Nominal Energy Shot (100 uA for 1.000 ms -> Q = 100 nC across 100 nF -> V_int_1x = 1.000 V)
+Ieng_1x int1_sum 0 DC 0 PULSE(0 100u 0.100m 1u 1u 0.999m 5m)
+Cint_1x int1_out int1_sum 100n
+Rlk_1x  int1_out int1_sum 10G
+Srst_1x int1_out int1_sum int_rst 0 SW_ADG1211
+Xint_1x 0 int1_sum int1_out OPAMP_OPA140
+Rld_1x  int1_out 0 100k
+
+* 2x Energy Shot (200 uA for 1.000 ms -> Q = 200 nC across 100 nF -> V_int_2x = 2.000 V)
+Ieng_2x int2_sum 0 DC 0 PULSE(0 200u 0.100m 1u 1u 0.999m 5m)
+Cint_2x int2_out int2_sum 100n
+Rlk_2x  int2_out int2_sum 10G
+Srst_2x int2_out int2_sum int_rst 0 SW_ADG1211
+Xint_2x 0 int2_sum int2_out OPAMP_OPA140
+Rld_2x  int2_out 0 100k
+
+* =========================================================================
+* 3) 80-200 MHz AOM RF VCA [0.65, 1.40] & < 50 us HARDWARE CROWBAR (S5.5-04)
+* =========================================================================
+* 50 Ohm AC RF passband model (AC coupling caps 100 nF + 1 uH RF bias choke + 1.5 pF stray C + 100k DC ref)
+Vrf_lo  rf_src 0 DC 0 AC 1
+Rrf_src rf_src rf_in 50
+Crf_ac1 rf_in  rf_mid 100n
+Rrf_dc  rf_mid 0 100k
+Crf_par rf_mid 0 1.5p
+Crf_ac2 rf_mid rf_out 100n
+Lrf_chk rf_out 0 1.0u
+Rrf_ld  rf_out 0 50
+
+* AOM PID DAC VCA Control Voltage: 0.65 V (min gain) -> steps to 1.40 V (max gain) at t=50 us
+* Hardware 1oo2D crowbar trips at t=150 us -> opto + gate delay (~0.5 us) -> clamps VCA & cuts 24 V diode enable!
+Vdac_aom vca_buf 0 DC 0.65 PWL(0 0.65 49u 0.65 50u 1.40 300u 1.40)
+Rvca_s   vca_buf vca_ctrl 499
+Cvca_f   vca_ctrl 0 2.2n
+* Interlock 1oo2D Ch-A enable (drops 3.3 V -> 0 V at t=150 us, realistic 0.5 us opto fall)
+Vilk_a   ilk_ok 0 DC 3.3 PWL(0 3.3 150u 3.3 150.5u 0 300u 0)
+* Inverted crowbar clamp drive (0 V when healthy, 3.3 V on trip)
+Bcb_drv  cb_trip 0 V = 3.3 - V(ilk_ok)
+Scb_vca  vca_ctrl 0 cb_trip 0 SW_MOS_CB
+
+* Series Dual-MOSFET 24 V Diode-Laser Enable Cutoff (1 kOhm pulldown + 2 nF cable capacitance)
+V24_dio  v24_d 0 DC 24.0
+Sdio_a   v24_d dio_mid ilk_ok 0 SW_MOS_CB
+Sdio_b   dio_mid diode_en ilk_ok 0 SW_MOS_CB
+Rdio_pd  diode_en 0 1.0k
+Cdio_cab diode_en 0 2.0n
+
+.control
+set noaskquit
+
+* 1) AC Analysis: 2-Color TIA -3 dB bandwidth & 80-200 MHz AOM RF 50 Ohm flatness
+ac dec 100 100 500Meg
+meas ac z_dc_ingaas FIND vm(ig_out) AT=1k
+meas ac z_dc_si     FIND vm(si_out) AT=1k
+let ig_3db = 0.707107 * z_dc_ingaas
+let si_3db = 0.707107 * z_dc_si
+meas ac f3db_ingaas_hz WHEN vm(ig_out)=$&ig_3db FALL=1
+meas ac f3db_si_hz     WHEN vm(si_out)=$&si_3db FALL=1
+meas ac rf_gain_80m_db  FIND vdb(rf_out) AT=80Meg
+meas ac rf_gain_200m_db FIND vdb(rf_out) AT=200Meg
+let rf_flatness_db = abs(rf_gain_200m_db - rf_gain_80m_db)
+print rf_flatness_db
+
+* 2) Transient A: Fast 2-Color Pyrometer TIA Step (< 10 us) + AOM VCA Gain & < 50 us Crowbar Cutoff
+tran 20n 220u 0 50n
+* InGaAs TIA (negative inverting output: 0 V -> -1.000 V)
+meas tran ig_v_final FIND v(ig_out) AT=40u
+let ig_v10 = 0.10 * ig_v_final
+let ig_v90 = 0.90 * ig_v_final
+meas tran ig_t10 WHEN v(ig_out)=$&ig_v10 FALL=1
+meas tran ig_t90 WHEN v(ig_out)=$&ig_v90 FALL=1
+let tau_rise_ingaas_s = ig_t90 - ig_t10
+
+* Si TIA (0 V -> -1.000 V)
+meas tran si_v_final FIND v(si_out) AT=40u
+let si_v10 = 0.10 * si_v_final
+let si_v90 = 0.90 * si_v_final
+meas tran si_t10 WHEN v(si_out)=$&si_v10 FALL=1
+meas tran si_t90 WHEN v(si_out)=$&si_v90 FALL=1
+let tau_rise_si_s = si_t90 - si_t10
+print tau_rise_ingaas_s tau_rise_si_s
+
+* AOM VCA modulation ratio [0.65, 1.40] & Hardware Crowbar Cutoff (< 50 us << 0.1 ms)
+meas tran vca_gain_lo FIND v(vca_ctrl) AT=30u
+meas tran vca_gain_hi FIND v(vca_ctrl) AT=120u
+let vca_mod_ratio = vca_gain_hi / vca_gain_lo
+print vca_mod_ratio
+
+let vca_90 = 0.90 * vca_gain_hi
+let vca_10 = 0.10 * vca_gain_hi
+meas tran vca_cb_t90 WHEN v(vca_ctrl)=$&vca_90 FALL=1 TD=149u
+meas tran vca_cb_t10 WHEN v(vca_ctrl)=$&vca_10 FALL=1 TD=149u
+let crowbar_vca_cutoff_s = vca_cb_t10 - 150u
+
+meas tran diode_v_on  FIND v(diode_en) AT=120u
+meas tran diode_v_off FIND v(diode_en) AT=200u
+let dio_10 = 0.10 * diode_v_on
+meas tran dio_cb_t10 WHEN v(diode_en)=$&dio_10 FALL=1 TD=149u
+let crowbar_diode_cutoff_s = dio_cb_t10 - 150u
+print crowbar_vca_cutoff_s crowbar_diode_cutoff_s
+
+* 3) Transient B: 1.0 ms Pulse-Energy Integrator 2x Linearity Sweep & Clean Reset
+tran 1u 1.6m 0 2u
+meas tran v_int_1x FIND v(int1_out) AT=1.20m
+meas tran v_int_2x FIND v(int2_out) AT=1.20m
+meas tran v_int_1x_after_rst FIND v(int1_out) AT=1.55m
+let int_ratio_2x = v_int_2x / v_int_1x
+let int_lin_err_pct = abs(int_ratio_2x - 2.0) / 2.0 * 100.0
+print int_ratio_2x int_lin_err_pct
+
+quit 0
+.endc
+.end

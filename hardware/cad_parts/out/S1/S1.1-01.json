@@ -1,0 +1,343 @@
+{
+  "part_id": "S1.1-01",
+  "subsystem": "S1",
+  "design": {
+    "part_id": "S1.1-01",
+    "parent_bom_id": "S1.1",
+    "subsystem": "S1",
+    "part_name": "Duoplasmatron plazma odasi (31P+ donor hatti)",
+    "design_tier": "CUSTOM_FULL",
+    "material": "316LN",
+    "temp_stage": "300 K (su sogutmali)",
+    "temp_k": 300.0,
+    "vacuum_grade": "HV 1e-6 mbar (kaynak)",
+    "tolerance_spec": "±0.05 mm eksen",
+    "surface_finish_ra_um": 0.4,
+    "qty": 1,
+    "procurement_class": "R&D",
+    "world_origin_mm": [
+      0.0,
+      0.0,
+      492.66
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "beam_exit_anode",
+        "kind": "vacuum",
+        "position_mm": [
+          0.0,
+          0.0,
+          422.66
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "standard": "Mo Anode Ø0.10 mm",
+        "mating_part_id": "S1.1-03",
+        "bore_mm": 4.0,
+        "od_mm": 28.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "global",
+        "notes": ""
+      },
+      {
+        "name": "top_cathode_cf63",
+        "kind": "flange",
+        "position_mm": [
+          0.0,
+          0.0,
+          562.66
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "CF63",
+        "mating_part_id": "",
+        "bore_mm": 40.0,
+        "od_mm": 113.5,
+        "pcd_mm": 92.1,
+        "bolt_count": 8,
+        "bolt_hole_mm": 8.4,
+        "bolt_spec": "M8",
+        "frame": "global",
+        "notes": "ISO 3669 CF63 Cu-gasket knife-edge"
+      },
+      {
+        "name": "multi_species_port_pos_y",
+        "kind": "flange",
+        "position_mm": [
+          0.0,
+          45.0,
+          492.66
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "standard": "CF40",
+        "mating_part_id": "S1.7-01",
+        "bore_mm": 38.0,
+        "od_mm": 69.5,
+        "pcd_mm": 58.7,
+        "bolt_count": 6,
+        "bolt_hole_mm": 6.6,
+        "bolt_spec": "M6",
+        "frame": "global",
+        "notes": "ISO 3669 CF40 Cu-gasket knife-edge"
+      },
+      {
+        "name": "ph3_vcr_inlet_neg_y",
+        "kind": "gas",
+        "position_mm": [
+          0.0,
+          -45.0,
+          492.66
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "standard": "1/4 VCR Male",
+        "mating_part_id": "S1.1-04",
+        "bore_mm": 4.6,
+        "od_mm": 14.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "global",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "OD_BODY",
+        "nominal_mm": 90.0,
+        "tol_plus_mm": 0.05,
+        "tol_minus_mm": -0.05,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø90.00 ±0.05"
+      },
+      {
+        "label": "HEIGHT",
+        "nominal_mm": 140.0,
+        "tol_plus_mm": 0.05,
+        "tol_minus_mm": -0.05,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "140.00 ±0.05"
+      },
+      {
+        "label": "TOP_FLANGE",
+        "nominal_mm": 113.5,
+        "tol_plus_mm": 0.1,
+        "tol_minus_mm": -0.1,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "CF63 Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "CF63 Ø113.50 ±0.10"
+      },
+      {
+        "label": "Z_TOP_COL",
+        "nominal_mm": 562.66,
+        "tol_plus_mm": 0.05,
+        "tol_minus_mm": -0.05,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "562.66 ±0.05"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "concentricity",
+        "tolerance_mm": 0.05,
+        "diameter_zone": true,
+        "material_condition": "",
+        "datum_primary": "B",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "MO ANODE AXIS",
+        "glyph": "◎",
+        "tolerance_text": "Ø0.050"
+      },
+      {
+        "symbol": "perpendicularity",
+        "tolerance_mm": 0.025,
+        "diameter_zone": true,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "CF63 FACE",
+        "glyph": "⊥",
+        "tolerance_text": "Ø0.025"
+      },
+      {
+        "symbol": "flatness",
+        "tolerance_mm": 0.015,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "ANODE SEAT",
+        "glyph": "⏥",
+        "tolerance_text": "0.015"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "J>=10 mA/cm2, B>=3.18e5 A/m2/sr @Ti=1 eV (Exp81)",
+      "Exp124 locked total column top Z=562.66 mm above Z=0 wafer plane",
+      "Water-cooled 316LN jacket + Mo anode + Al2O3 HV intermediate break"
+    ],
+    "scad_params": {
+      "body_od": 90.0,
+      "height": 140.0,
+      "top_flange": "CF63",
+      "hv_potential_kV": 5.0
+    },
+    "target_mass_kg": 7.5,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S1.1-01",
+    "subsystem": "S1",
+    "design_tier": "CUSTOM_FULL",
+    "stl_path": "hardware/cad_parts/out/S1/S1.1-01.stl",
+    "step_path": "hardware/cad_parts/out/S1/S1.1-01.step",
+    "scad_path": "hardware/cad_parts/out/S1/S1.1-01.scad",
+    "dxf_path": "hardware/cad_parts/out/S1/S1.1-01.dxf",
+    "svg_path": "hardware/cad_parts/out/S1/S1.1-01.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 711505.7008302953,
+    "surface_area_mm2": 117532.62085680466,
+    "mass_kg": 5.692045606642363,
+    "cg_mm": [
+      1.4533902886639927e-15,
+      -4.764782514900223e-15,
+      502.53251829614106
+    ],
+    "bbox_min_mm": [
+      -56.75,
+      -56.75,
+      422.66
+    ],
+    "bbox_max_mm": [
+      56.75,
+      56.75,
+      562.6600000000001
+    ],
+    "inertia_kg_mm2": [
+      12059.146241734252,
+      12059.14624173425,
+      6798.848223886466,
+      1.5563728084089234e-13,
+      4.301338582464904e-12,
+      -1.39169836336082e-11
+    ],
+    "triangle_count": 3952,
+    "vertex_count": 1960,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "engineering_checks": {
+    "coax_stack": {
+      "nominal_mm": 0.0,
+      "mean_mm": 0.0,
+      "wc_half_band_mm": 0.041999999999999996,
+      "wc_min_mm": -0.041999999999999996,
+      "wc_max_mm": 0.041999999999999996,
+      "rss_half_band_mm": 0.02353720459187964,
+      "rss_min_mm": -0.02353720459187964,
+      "rss_max_mm": 0.02353720459187964,
+      "modified_rss_half_band_mm": 0.035305806887819466,
+      "modified_rss_min_mm": -0.035305806887819466,
+      "modified_rss_max_mm": 0.035305806887819466,
+      "target_min_mm": -0.05,
+      "target_max_mm": 0.05,
+      "wc_pass": true,
+      "rss_pass": true,
+      "modified_rss_pass": true,
+      "variance_shares_pct": {
+        "S1.1-03_extraction_coax": 4.512635379061372,
+        "S1.2-01_wien_axis": 18.050541516245488,
+        "S1.5-01_hda_axis": 4.512635379061372,
+        "S1.3-02_archB_decel_coax": 0.7220216606498194,
+        "S1.3-01_cf100_column_runout": 72.20216606498195
+      }
+    }
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

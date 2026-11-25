@@ -1,0 +1,280 @@
+{
+  "part_id": "S5.3-04",
+  "subsystem": "S5",
+  "design": {
+    "part_id": "S5.3-04",
+    "parent_bom_id": "S5.3",
+    "subsystem": "S5",
+    "part_name": "Su sogutmali koruma surgu ve tavlama isi kalkani",
+    "design_tier": "CUSTOM_FULL",
+    "material": "OFHC Cu",
+    "temp_stage": "300 K",
+    "temp_k": 300.0,
+    "vacuum_grade": "UHV 1e-9 mbar",
+    "tolerance_spec": "±0.2 mm",
+    "surface_finish_ra_um": 0.4,
+    "qty": 1,
+    "procurement_class": "CUS",
+    "world_origin_mm": [
+      -212.436,
+      -132.7448,
+      510.0
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      212.0
+    ],
+    "ports": [
+      {
+        "name": "chamber_cf40_mate",
+        "kind": "flange",
+        "position_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "standard": "CF40",
+        "mating_part_id": "S5.1-01",
+        "bore_mm": 38.0,
+        "od_mm": 69.5,
+        "pcd_mm": 58.7,
+        "bolt_count": 6,
+        "bolt_hole_mm": 6.6,
+        "bolt_spec": "M6",
+        "frame": "local",
+        "notes": "ISO 3669 CF40 Cu-gasket knife-edge"
+      },
+      {
+        "name": "di_water_loop",
+        "kind": "cooling",
+        "position_mm": [
+          208.0,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "standard": "Dual 1/8 in VCR Cooling",
+        "mating_part_id": "",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      },
+      {
+        "name": "pneumatic_6bar",
+        "kind": "gas",
+        "position_mm": [
+          165.0,
+          0.0,
+          31.5
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "6 bar Dry N2 Actuator",
+        "mating_part_id": "",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "ASSY_LEN",
+        "nominal_mm": 208.0,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "208.00 ±0.50"
+      },
+      {
+        "label": "BLADE_W",
+        "nominal_mm": 26.0,
+        "tol_plus_mm": 0.1,
+        "tol_minus_mm": -0.1,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "26.00 ±0.10"
+      },
+      {
+        "label": "BLADE_T",
+        "nominal_mm": 4.2,
+        "tol_plus_mm": 0.1,
+        "tol_minus_mm": -0.1,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "4.20 ±0.10"
+      },
+      {
+        "label": "CF40_OD",
+        "nominal_mm": 69.5,
+        "tol_plus_mm": 0.1,
+        "tol_minus_mm": -0.1,
+        "view": "right",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø69.50 ±0.10"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "flatness",
+        "tolerance_mm": 0.05,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "Mo reflective heat-shield face",
+        "glyph": "⏥",
+        "tolerance_text": "0.050"
+      },
+      {
+        "symbol": "parallelism",
+        "tolerance_mm": 0.15,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "Blade travel plane inside 36 mm magnet split gap",
+        "glyph": "∥",
+        "tolerance_text": "0.15"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "Tavlama sirasinda S2 MEMS kafasini radyasyon isisindan korur",
+      "Water-cooled OFHC Cu core + Mo reflective thermal shutter protecting S2 MEMS write head during flash anneal.",
+      "Shown retracted inside CF40 bonnet at 212 deg Z=510.0 mm (zero magnetic/solid interference during write mode)."
+    ],
+    "scad_params": {
+      "blade_l": 42.0,
+      "blade_w": 26.0,
+      "stroke_mm": 160.0,
+      "bellows_conv": 16
+    },
+    "target_mass_kg": 2.6,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifacts": {
+    "part_id": "S5.3-04",
+    "subsystem": "S5",
+    "design_tier": "CUSTOM_FULL",
+    "stl_path": "hardware/cad_parts/out/S5/S5.3-04.stl",
+    "step_path": "hardware/cad_parts/out/S5/S5.3-04.step",
+    "scad_path": "hardware/cad_parts/out/S5/S5.3-04.scad",
+    "dxf_path": "hardware/cad_parts/out/S5/S5.3-04.dxf",
+    "svg_path": "hardware/cad_parts/out/S5/S5.3-04.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 167703.2900788059,
+    "surface_area_mm2": 103946.24751982836,
+    "mass_kg": 1.2074636885674024,
+    "cg_mm": [
+      92.17836864525563,
+      -3.5115460115376425e-16,
+      0.23338898110828618
+    ],
+    "bbox_min_mm": [
+      0.0,
+      -34.75,
+      -34.75
+    ],
+    "bbox_max_mm": [
+      208.0,
+      34.75,
+      34.75
+    ],
+    "inertia_kg_mm2": [
+      519.0350451058625,
+      5776.981394177586,
+      5772.243063430537,
+      -1.7675698060194753e-13,
+      -22.839226080392162,
+      1.6245752755828397e-14
+    ],
+    "triangle_count": 8020,
+    "vertex_count": 4002,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

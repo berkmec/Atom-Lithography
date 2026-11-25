@@ -1,0 +1,116 @@
+{
+  "schema_version": "part_icd_v1.0",
+  "part_id": "S9.4-01",
+  "parent_bom_id": "S9.4",
+  "subsystem": "S9",
+  "part_name": "Option-Q OVC -X CF63 Kriyo-Koaksiyel (4-Port 4-8 GHz) & 1550 nm SMF-28 Vakum Gecisi (Exp142 S9.1-01, 3.20 kg)",
+  "part_category": "PHYSICAL_SOLID",
+  "bom_metadata": {
+    "qty": "1",
+    "unit": "adet",
+    "material": "316LN CF63 / hermetik 4x SMA + 1550 nm SMF-28 fiber gecis",
+    "key_spec": "s6_dr_ovc_upper -X dis port ([-875,0,690] mm, 100x120x120 mm, sifir ic cakisma), 0 W / 0 uW kriyo, kutle=3.20 kg",
+    "tolerance": "He<=1e-10 mbar*L/s",
+    "temp_stage": "300 K (OVC portu)",
+    "vacuum_grade": "Kriyo-vakum",
+    "procurement_class": "CUS",
+    "parent_cost_class": "C(v6.0-OptQ)",
+    "usd_low": 22000.0,
+    "usd_nom": 32000.0,
+    "usd_high": 46000.0,
+    "legacy_cad_module": "s6_cryo_dr_magnet_readout",
+    "bom_epistemic_tag": "{Varsayım}",
+    "notes": "DELTA-V6.0-OPTQ-EXP142 (Exp142 S9.1-01 Option-Q 1/4, 3.20 kg; kanonik S9.1=kalibrasyon korundu; M3 Base ustune opsiyonel; RFQ-09)"
+  },
+  "artifact_links": {
+    "cad": {
+      "work_package": "WP-M4",
+      "design_tier": "CUSTOM_FULL",
+      "stl": "hardware/cad_parts/out/S9_optq/S9.4-01.stl",
+      "step": "hardware/cad_parts/out/S9_optq/S9.4-01.step",
+      "scad": "hardware/cad_parts/out/S9_optq/S9.4-01.scad",
+      "dxf": "hardware/cad_parts/out/S9_optq/S9.4-01.dxf",
+      "svg": "hardware/cad_parts/out/S9_optq/S9.4-01.svg",
+      "cad_json": "hardware/cad_parts/out/S9_optq/S9.4-01.json",
+      "watertight": true,
+      "all_6_files_valid": true,
+      "mass_kg": 3.224249,
+      "triangle_count": 1616,
+      "temp_k": 300.0,
+      "canonical_bbox_min_mm": [
+        -926.0,
+        -60.0,
+        630.0
+      ],
+      "canonical_bbox_max_mm": [
+        -826.0,
+        60.0,
+        750.0
+      ],
+      "datum_shift_mm": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "port_count": 0,
+      "gdt_frame_count": 0
+    },
+    "pcb_bundles": [
+      {
+        "bundle_slug": "cryo_rf_harness_icd",
+        "verification_json": "hardware/pcb/cryo_rf_harness_icd/cryo_rf_thermal_attenuation.json",
+        "boards": [
+          "cryo_rf_bias_panel"
+        ],
+        "kicad_sch_files": [
+          "hardware/pcb/cryo_rf_harness_icd/cryo_rf_bias_panel.kicad_sch"
+        ],
+        "kicad_pcb_files": [
+          "hardware/pcb/cryo_rf_harness_icd/cryo_rf_bias_panel.kicad_pcb"
+        ],
+        "spice_decks": [
+          "hardware/pcb/cryo_rf_harness_icd/magnet_quench_dump_1p563ohm.cir",
+          "hardware/pcb/cryo_rf_harness_icd/qram_chebyshev_50_to_3k.cir",
+          "hardware/pcb/cryo_rf_harness_icd/rf_set_tank_biastee.cir"
+        ],
+        "all_passed": true
+      }
+    ],
+    "legacy_board_files": [],
+    "electrical_icd": {
+      "path": "hardware/icd/electrical/S9.4-01.json",
+      "electrical_class": "E2",
+      "grounding_domain": "CRYO_OVC",
+      "ups_tier": "NONE",
+      "exp150_ups_allocation_w": 0.0,
+      "mating_part_ids": [
+        "S6.8-04",
+        "S9.4-03",
+        "S6.11-01"
+      ],
+      "interlock_hooks_count": 0
+    },
+    "rtl_modules": [],
+    "rtl_audit_json": null,
+    "software_and_eda_files": [],
+    "verification_tests": []
+  },
+  "specialized_specification": null,
+  "verification_status": {
+    "cad_verified": true,
+    "pcb_verified": true,
+    "electrical_icd_verified": true,
+    "rtl_verified": false,
+    "software_or_eda_verified": false,
+    "specialized_icd_present": false,
+    "traceable": true
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "tapeout_done": false
+  }
+}

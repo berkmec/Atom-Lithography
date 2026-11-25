@@ -1,0 +1,320 @@
+{
+  "part_id": "S4.1-01",
+  "subsystem": "S4",
+  "part_design": {
+    "part_id": "S4.1-01",
+    "parent_bom_id": "S4.1",
+    "subsystem": "S4",
+    "part_name": "Hassas taslanmis siyah granit izolasyon blogu (s=0.5 zarf)",
+    "design_tier": "COTS_ENV_ICD",
+    "material": "Granite",
+    "temp_stage": "300 K",
+    "temp_k": 300.0,
+    "vacuum_grade": "Atmosfer",
+    "tolerance_spec": "±2 um duzlemlik",
+    "surface_finish_ra_um": 0.4,
+    "qty": 1,
+    "procurement_class": "COTS",
+    "world_origin_mm": [
+      0.0,
+      0.0,
+      -361.0
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "top_active_table_deck",
+        "kind": "mechanical",
+        "position_mm": [
+          0.0,
+          0.0,
+          60.0
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "DIN 876/00 Flatness ±2 um + 44x M6 Insert Grid (100 mm pitch)",
+        "mating_part_id": "S4.2-01",
+        "bore_mm": 420.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      },
+      {
+        "name": "dr_central_clear_bore",
+        "kind": "mechanical",
+        "position_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "standard": "Ø420.0 mm (R=210.0 mm) Clear Bore for Lower DR OVC",
+        "mating_part_id": "S6.8-04",
+        "bore_mm": 420.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      },
+      {
+        "name": "air_isolator_pads",
+        "kind": "mechanical",
+        "position_mm": [
+          0.0,
+          0.0,
+          -60.0
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "standard": "4x Air-Spring Seats @ (±350, ±250) mm",
+        "mating_part_id": "S4.1-02",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "LEN_X",
+        "nominal_mm": 900.0,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "900.00 ±0.50"
+      },
+      {
+        "label": "WID_Y",
+        "nominal_mm": 700.0,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "700.00 ±0.50"
+      },
+      {
+        "label": "THK_Z",
+        "nominal_mm": 120.0,
+        "tol_plus_mm": 0.2,
+        "tol_minus_mm": -0.2,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "120.00 ±0.20"
+      },
+      {
+        "label": "DR_CLEAR_BORE",
+        "nominal_mm": 420.0,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø420.00 ±0.50"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "flatness",
+        "tolerance_mm": 0.002,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "DIN 876/00 TOP OPTICAL SURFACE",
+        "glyph": "⏥",
+        "tolerance_text": "0.002"
+      },
+      {
+        "symbol": "parallelism",
+        "tolerance_mm": 0.02,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "BOTTOM ISOLATOR MOUNT FACE",
+        "glyph": "∥",
+        "tolerance_text": "0.020"
+      },
+      {
+        "symbol": "position",
+        "tolerance_mm": 0.15,
+        "diameter_zone": true,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "B",
+        "datum_tertiary": "",
+        "feature_note": "44x M6 THREADED INSERTS",
+        "glyph": "⌖",
+        "tolerance_text": "Ø0.15"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "600x450x150 mm (Exp80 s=0.5 zarf), kutle ~120 kg",
+      "RECONCILIATION: BOM listed 600x450x150 mm (~120 kg) vs CAD params.py 900x700x120 mm; selected structurally valid 900x700x120 mm.",
+      "Includes central Ø420 mm (R=210 mm) clear bore for lower DR OVC + 42x real M6 insert grid holes (100 mm pitch).",
+      "Clears -X DR tower OVC (x_min=-450 mm > -475 mm) and supports 820x620 mm S4.2-01 active 6-DOF isolation table."
+    ],
+    "scad_params": {
+      "granite_x_mm": 900.0,
+      "granite_y_mm": 700.0,
+      "granite_z_mm": 120.0,
+      "dr_clear_bore_d_mm": 420.0,
+      "m6_insert_count": 42,
+      "m6_grid_pitch_mm": 100.0,
+      "bom_reconciled_from": "600x450x150"
+    },
+    "target_mass_kg": null,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S4.1-01",
+    "subsystem": "S4",
+    "design_tier": "COTS_ENV_ICD",
+    "stl_path": "hardware/cad_parts/out/S4/S4.1-01.stl",
+    "step_path": "hardware/cad_parts/out/S4/S4.1-01.step",
+    "scad_path": "hardware/cad_parts/out/S4/S4.1-01.scad",
+    "dxf_path": "hardware/cad_parts/out/S4/S4.1-01.dxf",
+    "svg_path": "hardware/cad_parts/out/S4/S4.1-01.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 58796324.82481936,
+    "surface_area_mm2": 1642138.364784626,
+    "mass_kg": 176.38897447445814,
+    "cg_mm": [
+      -3.030155525107489e-14,
+      3.476046157787969e-14,
+      1.5582412429819615e-15
+    ],
+    "bbox_min_mm": [
+      -450.0,
+      -350.0,
+      -60.0
+    ],
+    "bbox_max_mm": [
+      450.0,
+      350.0,
+      60.0
+    ],
+    "inertia_kg_mm2": [
+      8880411.259499213,
+      14892829.679898499,
+      23349907.400659014,
+      -1.7452239990234393e-10,
+      -3.710389137268075e-12,
+      2.056360244750986e-12
+    ],
+    "triangle_count": 1688,
+    "vertex_count": 760,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "world_bbox_min_mm": [
+    -450.0,
+    -350.0,
+    -421.0
+  ],
+  "world_bbox_max_mm": [
+    450.0,
+    350.0,
+    -301.0
+  ],
+  "reconciliation": {
+    "part_id": "S4.1-01",
+    "conflict": "BOM_DETAILED.csv v7.0 specifies 600x450x150 mm (~120 kg) whereas canonical CAD params.py v6.0 specifies 900x700x120 mm (223 kg solid).",
+    "bom_dims_mm": [
+      600.0,
+      450.0,
+      150.0
+    ],
+    "selected_cad_dims_mm": [
+      900.0,
+      700.0,
+      120.0
+    ],
+    "central_dr_bore_mm": 420.0,
+    "m6_insert_hole_count": 42,
+    "decision": "SELECTED 900x700x120 mm DIN 876/00 granite base plate with Ø420 mm (R=210 mm) central DR clear bore and 44x M6 threaded stainless inserts (~174 kg).",
+    "justification": "A 600x450 mm block cannot structurally support the Ø456 mm CF400 UHV bottom flange, the 820x620 mm S4.2-01 active 6-DOF isolation table, the metrology bridge footprint, and the S4.4-01 He-Ne laser shelf while preserving a clear R=210 mm bore. 900x700x120 mm spans all supports cleanly and clears the -X DR OVC (x_min=-450 mm > -475 mm)."
+  },
+  "thermal_contraction_checks": [],
+  "tolerance_stack_checks": []
+}

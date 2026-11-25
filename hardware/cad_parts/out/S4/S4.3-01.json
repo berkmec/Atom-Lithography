@@ -1,0 +1,326 @@
+{
+  "part_id": "S4.3-01",
+  "subsystem": "S4",
+  "part_design": {
+    "part_id": "S4.3-01",
+    "parent_bom_id": "S4.3",
+    "subsystem": "S4",
+    "part_name": "6-DOF UHV ince piezo flekstur kademesi (PI PIMars P-562/563 UHV sinifi)",
+    "design_tier": "CUSTOM_FULL",
+    "material": "Ti-6Al-4V",
+    "temp_stage": "300 K (UHV)",
+    "temp_k": 300.0,
+    "vacuum_grade": "UHV 1e-9 mbar",
+    "tolerance_spec": "±0.2 nm RMS",
+    "surface_finish_ra_um": 0.4,
+    "qty": 1,
+    "procurement_class": "CUS",
+    "world_origin_mm": [
+      0.0,
+      0.0,
+      -41.0
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "vespel_standoff_deck",
+        "kind": "mechanical",
+        "position_mm": [
+          0.0,
+          0.0,
+          12.0
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "4x Vespel SP-22 Thermal Standoff Seats @ (±32, ±32)",
+        "mating_part_id": "S6.2-02",
+        "bore_mm": 36.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      },
+      {
+        "name": "coarse_stage_mount",
+        "kind": "bolt",
+        "position_mm": [
+          0.0,
+          0.0,
+          -12.0
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "standard": "4x M4 Corner Mounts @ (±39.5, ±39.5)",
+        "mating_part_id": "S4.3-02",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 4,
+        "bolt_hole_mm": 4.4,
+        "bolt_spec": "M4",
+        "frame": "local",
+        "notes": ""
+      },
+      {
+        "name": "mirror_x_face",
+        "kind": "optical",
+        "position_mm": [
+          45.0,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "standard": "Zerodur Bar Mirror Kinematic Seat (+X/+Y/-Y)",
+        "mating_part_id": "S4.4-03",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "STAGE_X",
+        "nominal_mm": 90.0,
+        "tol_plus_mm": 0.01,
+        "tol_minus_mm": -0.01,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "90.00 ±0.01"
+      },
+      {
+        "label": "STAGE_Y",
+        "nominal_mm": 90.0,
+        "tol_plus_mm": 0.01,
+        "tol_minus_mm": -0.01,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "90.00 ±0.01"
+      },
+      {
+        "label": "STAGE_H",
+        "nominal_mm": 24.0,
+        "tol_plus_mm": 0.005,
+        "tol_minus_mm": -0.005,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "24.00 ±0.005"
+      },
+      {
+        "label": "CENTER_BORE",
+        "nominal_mm": 36.0,
+        "tol_plus_mm": 0.02,
+        "tol_minus_mm": -0.02,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø36.00 ±0.02"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "flatness",
+        "tolerance_mm": 0.002,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "TOP MOVING PLATFORM DATUM A",
+        "glyph": "⏥",
+        "tolerance_text": "0.002"
+      },
+      {
+        "symbol": "parallelism",
+        "tolerance_mm": 0.005,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "BASE MOUNTING PLANE",
+        "glyph": "∥",
+        "tolerance_text": "0.005"
+      },
+      {
+        "symbol": "perpendicularity",
+        "tolerance_mm": 0.005,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "MIRROR REFERENCE FACES",
+        "glyph": "⊥",
+        "tolerance_text": "0.005"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "200 um strok, 0.2 nm tipik cozunurluk (Exp79), sigma_kademe<=0.5 nm",
+      "PI PIMars P-562/563 UHV-class non-magnetic Ti-6Al-4V / Invar-36 6-DOF monolithic EDM flexure stage.",
+      "200 um XYZ stroke, 0.2 nm RMS resolution (Exp79/133 closed-loop sigma_stage = 0.102 nm).",
+      "Z stage stackup RSS=0.0187 mm, WC=0.0300 mm (PASS)."
+    ],
+    "scad_params": {
+      "stage_xy_mm": 90.0,
+      "stage_h_mm": 24.0,
+      "stroke_um": 200.0,
+      "n_flexure_slots": 8,
+      "bore_d_mm": 36.0
+    },
+    "target_mass_kg": null,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S4.3-01",
+    "subsystem": "S4",
+    "design_tier": "CUSTOM_FULL",
+    "stl_path": "hardware/cad_parts/out/S4/S4.3-01.stl",
+    "step_path": "hardware/cad_parts/out/S4/S4.3-01.step",
+    "scad_path": "hardware/cad_parts/out/S4/S4.3-01.scad",
+    "dxf_path": "hardware/cad_parts/out/S4/S4.3-01.dxf",
+    "svg_path": "hardware/cad_parts/out/S4/S4.3-01.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 141847.58271468652,
+    "surface_area_mm2": 45129.85389650162,
+    "mass_kg": 0.6283847914260613,
+    "cg_mm": [
+      2.9173573591242912e-16,
+      6.299568363383772e-16,
+      -0.5881889939810254
+    ],
+    "bbox_min_mm": [
+      -45.0,
+      -45.0,
+      -12.0
+    ],
+    "bbox_max_mm": [
+      45.0,
+      45.0,
+      12.0
+    ],
+    "inertia_kg_mm2": [
+      490.4078855804709,
+      490.4078855804712,
+      924.1211447244815,
+      1.55360612552613e-14,
+      4.562404550854031e-16,
+      5.492458704650056e-15
+    ],
+    "triangle_count": 992,
+    "vertex_count": 464,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "world_bbox_min_mm": [
+    -45.0,
+    -45.0,
+    -53.0
+  ],
+  "world_bbox_max_mm": [
+    45.0,
+    45.0,
+    -29.0
+  ],
+  "reconciliation": null,
+  "thermal_contraction_checks": [],
+  "tolerance_stack_checks": [
+    {
+      "nominal_mm": 0.0,
+      "mean_mm": 0.0,
+      "wc_half_band_mm": 0.030000000000000002,
+      "wc_min_mm": -0.030000000000000002,
+      "wc_max_mm": 0.030000000000000002,
+      "rss_half_band_mm": 0.01870828693386971,
+      "rss_min_mm": -0.01870828693386971,
+      "rss_max_mm": 0.01870828693386971,
+      "modified_rss_half_band_mm": 0.028062430400804562,
+      "modified_rss_min_mm": -0.028062430400804562,
+      "modified_rss_max_mm": 0.028062430400804562,
+      "target_min_mm": -0.035,
+      "target_max_mm": 0.035,
+      "wc_pass": true,
+      "rss_pass": true,
+      "modified_rss_pass": true,
+      "variance_shares_pct": {
+        "invar_pedestal": 64.28571428571428,
+        "coarse_xy_stage": 28.571428571428573,
+        "fine_6dof_flexure": 7.142857142857143,
+        "datum_height": 0.0
+      }
+    }
+  ]
+}

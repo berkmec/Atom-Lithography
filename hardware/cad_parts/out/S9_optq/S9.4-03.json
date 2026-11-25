@@ -1,0 +1,230 @@
+{
+  "part_design": {
+    "part_id": "S9.4-03",
+    "parent_bom_id": "S9.4",
+    "subsystem": "S9",
+    "part_name": "Option-Q 4x NbTi Superiletken qRAM Kopru Koaksiyel + 1x 1550 nm SMF-28 Kriyo-Fiber Demeti (Exp142 S9.1-03, 0.82 kg)",
+    "design_tier": "CUSTOM_FULL",
+    "material": "OFHC Cu",
+    "temp_stage": "300 K -> 20 mK",
+    "temp_k": 0.02,
+    "vacuum_grade": "Kriyo-vakum",
+    "tolerance_spec": "<=0.1 dB/m (NbTi)",
+    "surface_finish_ra_um": 0.8,
+    "qty": 1,
+    "procurement_class": "CUS",
+    "world_origin_mm": [
+      -793.0,
+      0.0,
+      560.0
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "optq_loom_top",
+        "kind": "optical",
+        "position_mm": [
+          0.0,
+          0.0,
+          154.0
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "4x NbTi SMA + SMF-28 to S9.4-01",
+        "mating_part_id": "S9.4-01",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      },
+      {
+        "name": "optq_loom_mxc",
+        "kind": "optical",
+        "position_mm": [
+          0.0,
+          0.0,
+          -154.0
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "standard": "4x NbTi SMP + Fiber to S9.4-02",
+        "mating_part_id": "S9.4-02",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "LOOM_X",
+        "nominal_mm": 10.0,
+        "tol_plus_mm": 0.1,
+        "tol_minus_mm": -0.1,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "10.00 ±0.10"
+      },
+      {
+        "label": "LOOM_Y",
+        "nominal_mm": 30.0,
+        "tol_plus_mm": 0.1,
+        "tol_minus_mm": -0.1,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "30.00 ±0.10"
+      },
+      {
+        "label": "LOOM_Z",
+        "nominal_mm": 308.0,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "308.00 ±0.50"
+      }
+    ],
+    "gdt_frames": [],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "s6_dr_ovc_upper -X termal ankraj yolu ([-770,0,560] mm, 30x30x320 mm), 100 mK=6.15 uW, 4 K=0.062 W, 50 K=0.48 W, kutle=0.82 kg",
+      "Exact BOM part_id S9.4-03 (resolves legacy cad/params.py S9.1 aliasing bug). Routed cleanly in 14 mm radial annulus between 50 K shield (R_in=150) & 4 K shield (R_out=136), 0.82 kg (Exp142)."
+    ],
+    "scad_params": {
+      "n_nbti_coax": 4,
+      "n_smf28_fiber": 1,
+      "n_clamps": 4,
+      "mass_kg": 0.82
+    },
+    "target_mass_kg": 0.82,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact_result": {
+    "part_id": "S9.4-03",
+    "subsystem": "S9",
+    "design_tier": "CUSTOM_FULL",
+    "stl_path": "hardware/cad_parts/out/S9_optq/S9.4-03.stl",
+    "step_path": "hardware/cad_parts/out/S9_optq/S9.4-03.step",
+    "scad_path": "hardware/cad_parts/out/S9_optq/S9.4-03.scad",
+    "dxf_path": "hardware/cad_parts/out/S9_optq/S9.4-03.dxf",
+    "svg_path": "hardware/cad_parts/out/S9_optq/S9.4-03.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 13077.599999999999,
+    "surface_area_mm2": 17987.542288387,
+    "mass_kg": 0.11717529600000003,
+    "cg_mm": [
+      2.042913597646339e-16,
+      3.4772997406746197e-16,
+      -2.2254718340317564e-15
+    ],
+    "bbox_min_mm": [
+      -5.0,
+      -15.0,
+      -154.0
+    ],
+    "bbox_max_mm": [
+      5.0,
+      15.0,
+      154.0
+    ],
+    "inertia_kg_mm2": [
+      1174.03682034594,
+      1167.82549352354,
+      7.854223245480061,
+      1.2427335605025293e-16,
+      1.434236764907837e-15,
+      -2.216547727584839e-15
+    ],
+    "triangle_count": 336,
+    "vertex_count": 194,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "json_path": "hardware/cad_parts/out/S9_optq/S9.4-03.json",
+  "world_bbox_min_mm": [
+    -798.0,
+    -15.0,
+    406.0
+  ],
+  "world_bbox_max_mm": [
+    -788.0,
+    15.0,
+    714.0
+  ],
+  "world_cg_mm": [
+    -793.0,
+    -0.0,
+    560.0
+  ],
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

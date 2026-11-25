@@ -1,0 +1,584 @@
+{
+  "part_design": {
+    "part_id": "S7.1-01",
+    "parent_bom_id": "S7.1",
+    "subsystem": "S7",
+    "part_name": "Ana kontrol ve GPU GRAPE sentez is istasyonlari (2x Lambda Vector 2xRTX4500Ada)",
+    "design_tier": "COTS_ENV_ICD",
+    "material": "Steel",
+    "temp_stage": "300 K (kabin)",
+    "temp_k": 300.0,
+    "vacuum_grade": "Atmosfer",
+    "tolerance_spec": "24/7 calisma",
+    "surface_finish_ra_um": 0.8,
+    "qty": 2,
+    "procurement_class": "COTS",
+    "world_origin_mm": [
+      1480.0,
+      -98.0,
+      312.25
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "sfp28_ctrl_link",
+        "kind": "connector",
+        "position_mm": [
+          1580.0,
+          247.0,
+          267.8
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "standard": "2x 25GbE SFP28 / PCIe Gen4",
+        "mating_part_id": "S7.1-02",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "world",
+        "notes": ""
+      },
+      {
+        "name": "wr_sync_in",
+        "kind": "rf",
+        "position_mm": [
+          1600.0,
+          -438.0,
+          356.70000000000005
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "standard": "SMA 10 MHz / PPS",
+        "mating_part_id": "S7.4-02",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "world",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "WIDTH_19IN",
+        "nominal_mm": 482.6,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "482.60 ±0.50"
+      },
+      {
+        "label": "HEIGHT_2X2U",
+        "nominal_mm": 175.8,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "175.80 ±0.50"
+      },
+      {
+        "label": "DEPTH",
+        "nominal_mm": 680.0,
+        "tol_plus_mm": 1.0,
+        "tol_minus_mm": -1.0,
+        "view": "right",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "680.00 ±1.00"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "flatness",
+        "tolerance_mm": 0.5,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "RACK FACEPLATE",
+        "glyph": "⏥",
+        "tolerance_text": "0.50"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "Per-register GRAPE + XY8 sentez/secim (Exp61/126; Exp114 capasi)",
+      "Bay 1 U4-U7 (Node 1: U4-U5; Node 2: U6-U7; 2x 2U Lambda Vector 2xRTX4500Ada)."
+    ],
+    "scad_params": {
+      "qty_nodes": 2,
+      "u_per_node": 2,
+      "u_start": 4,
+      "depth_mm": 680.0
+    },
+    "target_mass_kg": 38.0,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S7.1-01",
+    "subsystem": "S7",
+    "design_tier": "COTS_ENV_ICD",
+    "stl_path": "hardware/cad_parts/out/S7/S7.1-01.stl",
+    "step_path": "hardware/cad_parts/out/S7/S7.1-01.step",
+    "scad_path": "hardware/cad_parts/out/S7/S7.1-01.scad",
+    "dxf_path": "hardware/cad_parts/out/S7/S7.1-01.dxf",
+    "svg_path": "hardware/cad_parts/out/S7/S7.1-01.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 50881383.599159956,
+    "surface_area_mm2": 1778398.4370449516,
+    "mass_kg": 38.00000000000002,
+    "cg_mm": [
+      1480.055721574414,
+      -97.9075500717763,
+      312.24999999999994
+    ],
+    "bbox_min_mm": [
+      1238.7,
+      -464.2,
+      224.35000000000002
+    ],
+    "bbox_max_mm": [
+      1721.3,
+      254.2,
+      400.15000000000003
+    ],
+    "inertia_kg_mm2": [
+      1566916.2771868075,
+      712002.0615379419,
+      2083112.3556967168,
+      99.33400540181971,
+      -1.2252762324849454e-07,
+      6.563979816883636e-09
+    ],
+    "triangle_count": 3544,
+    "vertex_count": 1784,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "shell_bboxes_mm": [
+    [
+      [
+        1238.7,
+        -438.0,
+        224.35
+      ],
+      [
+        1721.3,
+        -434.0,
+        311.25
+      ]
+    ],
+    [
+      [
+        1260.0,
+        -433.9,
+        225.35
+      ],
+      [
+        1700.0,
+        242.0,
+        310.25
+      ]
+    ],
+    [
+      [
+        1272.5,
+        -456.1,
+        240.4025
+      ],
+      [
+        1279.5,
+        -438.1,
+        247.4025
+      ]
+    ],
+    [
+      [
+        1272.5,
+        -456.1,
+        288.1975
+      ],
+      [
+        1279.5,
+        -438.1,
+        295.1975
+      ]
+    ],
+    [
+      [
+        1272.0,
+        -464.2,
+        239.9025
+      ],
+      [
+        1280.0,
+        -456.2,
+        295.6975
+      ]
+    ],
+    [
+      [
+        1680.5,
+        -456.1,
+        240.4025
+      ],
+      [
+        1687.5,
+        -438.1,
+        247.4025
+      ]
+    ],
+    [
+      [
+        1680.5,
+        -456.1,
+        288.1975
+      ],
+      [
+        1687.5,
+        -438.1,
+        295.1975
+      ]
+    ],
+    [
+      [
+        1680.0,
+        -464.2,
+        239.9025
+      ],
+      [
+        1688.0,
+        -456.2,
+        295.6975
+      ]
+    ],
+    [
+      [
+        1545.5,
+        -449.1,
+        263.3
+      ],
+      [
+        1554.5,
+        -438.1,
+        272.3
+      ]
+    ],
+    [
+      [
+        1575.5,
+        -449.1,
+        263.3
+      ],
+      [
+        1584.5,
+        -438.1,
+        272.3
+      ]
+    ],
+    [
+      [
+        1605.5,
+        -449.1,
+        263.3
+      ],
+      [
+        1614.5,
+        -438.1,
+        272.3
+      ]
+    ],
+    [
+      [
+        1635.5,
+        -449.1,
+        263.3
+      ],
+      [
+        1644.5,
+        -438.1,
+        272.3
+      ]
+    ],
+    [
+      [
+        1339.436,
+        242.2,
+        237.236
+      ],
+      [
+        1400.564,
+        252.2,
+        298.364
+      ]
+    ],
+    [
+      [
+        1449.436,
+        242.2,
+        237.236
+      ],
+      [
+        1510.564,
+        252.2,
+        298.364
+      ]
+    ],
+    [
+      [
+        1614.0,
+        242.2,
+        255.8
+      ],
+      [
+        1646.0,
+        254.2,
+        279.8
+      ]
+    ],
+    [
+      [
+        1238.7,
+        -438.0,
+        313.25
+      ],
+      [
+        1721.3,
+        -434.0,
+        400.15
+      ]
+    ],
+    [
+      [
+        1260.0,
+        -433.9,
+        314.25
+      ],
+      [
+        1700.0,
+        242.0,
+        399.15
+      ]
+    ],
+    [
+      [
+        1272.5,
+        -456.1,
+        329.3025
+      ],
+      [
+        1279.5,
+        -438.1,
+        336.3025
+      ]
+    ],
+    [
+      [
+        1272.5,
+        -456.1,
+        377.0975
+      ],
+      [
+        1279.5,
+        -438.1,
+        384.0975
+      ]
+    ],
+    [
+      [
+        1272.0,
+        -464.2,
+        328.8025
+      ],
+      [
+        1280.0,
+        -456.2,
+        384.5975
+      ]
+    ],
+    [
+      [
+        1680.5,
+        -456.1,
+        329.3025
+      ],
+      [
+        1687.5,
+        -438.1,
+        336.3025
+      ]
+    ],
+    [
+      [
+        1680.5,
+        -456.1,
+        377.0975
+      ],
+      [
+        1687.5,
+        -438.1,
+        384.0975
+      ]
+    ],
+    [
+      [
+        1680.0,
+        -464.2,
+        328.8025
+      ],
+      [
+        1688.0,
+        -456.2,
+        384.5975
+      ]
+    ],
+    [
+      [
+        1545.5,
+        -449.1,
+        352.2
+      ],
+      [
+        1554.5,
+        -438.1,
+        361.2
+      ]
+    ],
+    [
+      [
+        1575.5,
+        -449.1,
+        352.2
+      ],
+      [
+        1584.5,
+        -438.1,
+        361.2
+      ]
+    ],
+    [
+      [
+        1605.5,
+        -449.1,
+        352.2
+      ],
+      [
+        1614.5,
+        -438.1,
+        361.2
+      ]
+    ],
+    [
+      [
+        1635.5,
+        -449.1,
+        352.2
+      ],
+      [
+        1644.5,
+        -438.1,
+        361.2
+      ]
+    ],
+    [
+      [
+        1339.436,
+        242.2,
+        326.136
+      ],
+      [
+        1400.564,
+        252.2,
+        387.264
+      ]
+    ],
+    [
+      [
+        1449.436,
+        242.2,
+        326.136
+      ],
+      [
+        1510.564,
+        252.2,
+        387.264
+      ]
+    ],
+    [
+      [
+        1614.0,
+        242.2,
+        344.7
+      ],
+      [
+        1646.0,
+        254.2,
+        368.7
+      ]
+    ]
+  ],
+  "reconciliation_notes": []
+}

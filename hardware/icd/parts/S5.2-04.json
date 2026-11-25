@@ -1,0 +1,97 @@
+{
+  "schema_version": "part_icd_v1.0",
+  "part_id": "S5.2-04",
+  "parent_bom_id": "S5.2",
+  "subsystem": "S5",
+  "part_name": "Tam-aralikli Pirani/soguk-katot vakum olcerler ve RGA (kutle spektrometre)",
+  "part_category": "PHYSICAL_SOLID",
+  "bom_metadata": {
+    "qty": "1",
+    "unit": "set",
+    "material": "316LN / Quadrupole RGA (1-100 amu)",
+    "key_spec": "1000 - 1e-11 mbar olcum, H2O/PH3/He kacak takibi",
+    "tolerance": "±10% basinc",
+    "temp_stage": "300 K",
+    "vacuum_grade": "UHV 1e-10 mbar",
+    "procurement_class": "COTS",
+    "parent_cost_class": "B",
+    "usd_low": 2800.0,
+    "usd_nom": 4500.0,
+    "usd_high": 8000.0,
+    "legacy_cad_module": "s5_uhv_chamber_loadlock",
+    "bom_epistemic_tag": "{Model-Kalibrasyon-Exp114}",
+    "notes": "Vakum kalitesi ve PH3 kalinti izleme"
+  },
+  "artifact_links": {
+    "cad": {
+      "work_package": "WP-M3",
+      "design_tier": "COTS_ENV_ICD",
+      "stl": "hardware/cad_parts/out/S5/S5.2-04.stl",
+      "step": "hardware/cad_parts/out/S5/S5.2-04.step",
+      "scad": "hardware/cad_parts/out/S5/S5.2-04.scad",
+      "dxf": "hardware/cad_parts/out/S5/S5.2-04.dxf",
+      "svg": "hardware/cad_parts/out/S5/S5.2-04.svg",
+      "cad_json": "hardware/cad_parts/out/S5/S5.2-04.json",
+      "watertight": true,
+      "all_6_files_valid": true,
+      "mass_kg": 3.336807,
+      "triangle_count": 3176,
+      "temp_k": 300.0,
+      "canonical_bbox_min_mm": [
+        -350.937,
+        -350.937,
+        360.25
+      ],
+      "canonical_bbox_max_mm": [
+        -93.409,
+        -120.774,
+        429.75
+      ],
+      "datum_shift_mm": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "port_count": 3,
+      "gdt_frame_count": 1
+    },
+    "pcb_bundles": [],
+    "legacy_board_files": [],
+    "electrical_icd": {
+      "path": "hardware/icd/electrical/S5.2-04.json",
+      "electrical_class": "E3",
+      "grounding_domain": "DGND",
+      "ups_tier": "TIER1_CRITICAL",
+      "exp150_ups_allocation_w": 95.0,
+      "mating_part_ids": [
+        "S5.1-01",
+        "S7.SAFETY-03",
+        "S7.SAFETY-04",
+        "S7.4-04"
+      ],
+      "interlock_hooks_count": 1
+    },
+    "rtl_modules": [],
+    "rtl_audit_json": null,
+    "software_and_eda_files": [],
+    "verification_tests": []
+  },
+  "specialized_specification": null,
+  "verification_status": {
+    "cad_verified": true,
+    "pcb_verified": false,
+    "electrical_icd_verified": true,
+    "rtl_verified": false,
+    "software_or_eda_verified": false,
+    "specialized_icd_present": false,
+    "traceable": true
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "tapeout_done": false
+  }
+}

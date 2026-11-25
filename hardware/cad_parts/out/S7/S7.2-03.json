@@ -1,0 +1,346 @@
+{
+  "part_design": {
+    "part_id": "S7.2-03",
+    "parent_bom_id": "S7.2",
+    "subsystem": "S7",
+    "part_name": "PXIe / AXIe dusuk-gurultulu enstruman sasisi ve arka-panel",
+    "design_tier": "COTS_ENV_ICD",
+    "material": "Al 6061",
+    "temp_stage": "300 K (kabin)",
+    "temp_k": 300.0,
+    "vacuum_grade": "Atmosfer",
+    "tolerance_spec": "<1 ps skew",
+    "surface_finish_ra_um": 0.8,
+    "qty": 1,
+    "procurement_class": "COTS",
+    "world_origin_mm": [
+      1480.0,
+      -178.0,
+      578.95
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "pxie_18slot_bay",
+        "kind": "mechanical",
+        "position_mm": [
+          1480.0,
+          -438.0,
+          578.95
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "standard": "18-Slot PXIe/AXIe 4HP Backplane (<1 ps skew)",
+        "mating_part_id": "S7.2-01",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "world",
+        "notes": ""
+      },
+      {
+        "name": "clk_10mhz_ref_in",
+        "kind": "rf",
+        "position_mm": [
+          1480.0,
+          98.0,
+          578.95
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "standard": "BNC 10 MHz Reference Input",
+        "mating_part_id": "S7.4-01",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "world",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "WIDTH_19IN",
+        "nominal_mm": 482.6,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "482.60 ±0.50"
+      },
+      {
+        "label": "HEIGHT_4U",
+        "nominal_mm": 175.8,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "175.80 ±0.50"
+      },
+      {
+        "label": "CAGE_DEPTH",
+        "nominal_mm": 520.0,
+        "tol_plus_mm": 1.0,
+        "tol_minus_mm": -1.0,
+        "view": "right",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "520.00 ±1.00"
+      },
+      {
+        "label": "SLOT_PITCH",
+        "nominal_mm": 20.32,
+        "tol_plus_mm": 0.05,
+        "tol_minus_mm": -0.05,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "20.32 ±0.05"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "perpendicularity",
+        "tolerance_mm": 0.15,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "BACKPLANE TO CARD GUIDES",
+        "glyph": "⊥",
+        "tolerance_text": "0.15"
+      },
+      {
+        "symbol": "parallelism",
+        "tolerance_mm": 0.2,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "TOP/BOT CARD PLENUMS",
+        "glyph": "∥",
+        "tolerance_text": "0.20"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "10 MHz referans arka-panel, yuksek hava akisi",
+      "Bay 1 U10-U13; open front 18-slot cage clears S7.2-01 (slots 2-5) & S7.2-02 (slots 7-8) with zero clash."
+    ],
+    "scad_params": {
+      "u_start": 10,
+      "u_count": 4,
+      "slots": 18,
+      "slot_pitch_mm": 20.32
+    },
+    "target_mass_kg": 16.5,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S7.2-03",
+    "subsystem": "S7",
+    "design_tier": "COTS_ENV_ICD",
+    "stl_path": "hardware/cad_parts/out/S7/S7.2-03.stl",
+    "step_path": "hardware/cad_parts/out/S7/S7.2-03.step",
+    "scad_path": "hardware/cad_parts/out/S7/S7.2-03.scad",
+    "dxf_path": "hardware/cad_parts/out/S7/S7.2-03.dxf",
+    "svg_path": "hardware/cad_parts/out/S7/S7.2-03.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 16664007.739361329,
+    "surface_area_mm2": 1561769.1822526986,
+    "mass_kg": 16.500000000000004,
+    "cg_mm": [
+      1479.9999999999968,
+      -115.08451106731177,
+      578.9500000000003
+    ],
+    "bbox_min_mm": [
+      1238.7,
+      -438.0,
+      491.05
+    ],
+    "bbox_max_mm": [
+      1721.3,
+      98.1,
+      666.85
+    ],
+    "inertia_kg_mm2": [
+      491076.6221127517,
+      409219.1381609914,
+      771233.1464298933,
+      -1.1603413658004622e-08,
+      0.0,
+      -5.559969044460548e-09
+    ],
+    "triangle_count": 452,
+    "vertex_count": 234,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "shell_bboxes_mm": [
+    [
+      [
+        1260.0,
+        -438.0,
+        491.05
+      ],
+      [
+        1700.0,
+        82.0,
+        509.05
+      ]
+    ],
+    [
+      [
+        1260.0,
+        -438.0,
+        648.85
+      ],
+      [
+        1700.0,
+        82.0,
+        666.85
+      ]
+    ],
+    [
+      [
+        1260.0,
+        -438.0,
+        509.25
+      ],
+      [
+        1284.0,
+        82.0,
+        648.65
+      ]
+    ],
+    [
+      [
+        1676.0,
+        -438.0,
+        509.25
+      ],
+      [
+        1700.0,
+        82.0,
+        648.65
+      ]
+    ],
+    [
+      [
+        1284.2,
+        -8.0,
+        509.25
+      ],
+      [
+        1675.8,
+        82.0,
+        648.65
+      ]
+    ],
+    [
+      [
+        1238.7,
+        -438.0,
+        491.05
+      ],
+      [
+        1259.9,
+        -433.5,
+        666.85
+      ]
+    ],
+    [
+      [
+        1700.1,
+        -438.0,
+        491.05
+      ],
+      [
+        1721.3,
+        -433.5,
+        666.85
+      ]
+    ],
+    [
+      [
+        1473.5,
+        82.1,
+        572.45
+      ],
+      [
+        1486.5,
+        98.1,
+        585.45
+      ]
+    ]
+  ],
+  "reconciliation_notes": []
+}

@@ -1,0 +1,104 @@
+{
+  "schema_version": "1.0",
+  "part_id": "S7.1-01",
+  "parent_bom_id": "S7.1",
+  "subsystem": "S7",
+  "part_name": "Ana kontrol ve GPU GRAPE sentez is istasyonlari (2x Lambda Vector 2xRTX4500Ada)",
+  "qty": 2,
+  "unit": "adet",
+  "temp_stage": "300 K (kabin)",
+  "vacuum_grade": "Atmosfer",
+  "bom_key_spec": "Per-register GRAPE + XY8 sentez/secim (Exp61/126; Exp114 capasi)",
+  "usd_nom": 21200.0,
+  "bom_epistemic_tag": "{Liste-\u00c7apas\u0131}",
+  "electrical_class": "E3",
+  "grounding_domain": "DGND",
+  "grounding_notes": "2x Lambda Vector 2xRTX4500Ada host workstations (1200 W active GRAPE; 360 W Tier-1 hold on UPS).",
+  "supply_rails": [
+    {
+      "rail_name": "AC_UPS_TIER1",
+      "voltage_v": 230.0,
+      "current_type": "AC_1PH",
+      "max_current_a": 6.5,
+      "steady_power_w": 360.0,
+      "peak_power_w": 1200.0,
+      "source_part_id": "S7.SAFETY-04"
+    }
+  ],
+  "connectors_and_pinout": [
+    {
+      "connector_ref": "J_AC",
+      "connector_type": "2x IEC C14 Tier-1 UPS",
+      "location_side": "rack_rear",
+      "mating_part_id": "S7.SAFETY-04",
+      "pins": [
+        {
+          "pin": "L",
+          "signal": "UPS_T1_L",
+          "direction": "IN",
+          "nominal_level": "230 VAC (throttles GPUs on outage)"
+        },
+        {
+          "pin": "N",
+          "signal": "UPS_T1_N",
+          "direction": "IN",
+          "nominal_level": "Neutral"
+        },
+        {
+          "pin": "PE",
+          "signal": "FACILITY_PE",
+          "direction": "PWR",
+          "nominal_level": "Safety earth"
+        }
+      ]
+    },
+    {
+      "connector_ref": "J_NIC",
+      "connector_type": "Dual 10GbE SFP+ / RJ45",
+      "location_side": "rack_rear",
+      "mating_part_id": "S7.1-02",
+      "pins": [
+        {
+          "pin": "1-2",
+          "signal": "CTRL_SCADA_LAN",
+          "direction": "BIDIR",
+          "nominal_level": "To S7.1-02, S6.11-01, S7.2, S7.4"
+        }
+      ]
+    }
+  ],
+  "mating_part_ids": [
+    "S7.1-02",
+    "S6.11-01",
+    "S7.2-03",
+    "S7.SAFETY-04"
+  ],
+  "interlock_hooks": [
+    {
+      "signal_name": "UPS_ON_BATTERY_THROTTLE",
+      "target_part_id": "S7.SAFETY-04",
+      "action_on_trip": "Pause GPU GRAPE & enter 360 W safe-log mode",
+      "response_time_ms": 100.0
+    }
+  ],
+  "ups_tier": "TIER1_CRITICAL",
+  "ups_budget_group": "EXP150_TIER1_CRITICAL",
+  "exp150_ups_allocation_w": 360.0,
+  "supply_rails_steady_sum_w": 360.0,
+  "incremental_mains_w": 360.0,
+  "secondary_or_parent_derived_w": 0.0,
+  "non_exp150_aux_shed_w": 0.0,
+  "reconciliation_note": "Exp150 Tier-1 critical UPS load: incremental_mains_w = exp150_ups_allocation_w = 360.0 W.",
+  "timing_sync": {
+    "rb_10mhz_port": null,
+    "white_rabbit_port": null,
+    "sync_role": "NTP/PTP host orchestrator"
+  },
+  "epistemic_flags": {
+    "design_maturity": "M0_M1_ELECTRICAL_ICD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

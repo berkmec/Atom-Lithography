@@ -1,0 +1,265 @@
+{
+  "part_id": "S1.3-05",
+  "subsystem": "S1",
+  "design": {
+    "part_id": "S1.3-05",
+    "parent_bom_id": "S1.3",
+    "subsystem": "S1",
+    "part_name": "Diferansiyel pompalama apertur diyaframi ve kucuk CF63 ara-oda",
+    "design_tier": "CUSTOM_FULL",
+    "material": "316LN",
+    "temp_stage": "300 K",
+    "temp_k": 300.0,
+    "vacuum_grade": "UHV 1e-9 mbar",
+    "tolerance_spec": "±0.05 mm delik",
+    "surface_finish_ra_um": 0.4,
+    "qty": 1,
+    "procurement_class": "CUS",
+    "world_origin_mm": [
+      -121.0,
+      0.0,
+      482.0
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "diff_pump_cf63_neg_x",
+        "kind": "flange",
+        "position_mm": [
+          -184.75,
+          0.0,
+          482.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "standard": "CF63",
+        "mating_part_id": "",
+        "bore_mm": 63.5,
+        "od_mm": 113.5,
+        "pcd_mm": 92.1,
+        "bolt_count": 8,
+        "bolt_hole_mm": 8.4,
+        "bolt_spec": "M8",
+        "frame": "global",
+        "notes": "ISO 3669 CF63 Cu-gasket knife-edge"
+      },
+      {
+        "name": "source_mate_cf40_pos_x",
+        "kind": "flange",
+        "position_mm": [
+          -58.3,
+          0.0,
+          482.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "standard": "CF40",
+        "mating_part_id": "S1.1-01",
+        "bore_mm": 38.0,
+        "od_mm": 69.5,
+        "pcd_mm": 58.7,
+        "bolt_count": 6,
+        "bolt_hole_mm": 6.6,
+        "bolt_spec": "M6",
+        "frame": "global",
+        "notes": "ISO 3669 CF40 Cu-gasket knife-edge"
+      },
+      {
+        "name": "gauge_port_cf16_top",
+        "kind": "flange",
+        "position_mm": [
+          -119.0,
+          0.0,
+          533.75
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "CF16",
+        "mating_part_id": "",
+        "bore_mm": 16.0,
+        "od_mm": 33.8,
+        "pcd_mm": 27.0,
+        "bolt_count": 6,
+        "bolt_hole_mm": 4.3,
+        "bolt_spec": "M4",
+        "frame": "global",
+        "notes": "ISO 3669 CF16 Cu-gasket knife-edge"
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "FLANGE_CF63",
+        "nominal_mm": 113.5,
+        "tol_plus_mm": 0.1,
+        "tol_minus_mm": -0.1,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø113.50 ±0.10"
+      },
+      {
+        "label": "LENGTH_X",
+        "nominal_mm": 126.45,
+        "tol_plus_mm": 0.1,
+        "tol_minus_mm": -0.1,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "126.45 ±0.10"
+      },
+      {
+        "label": "DIAPH_ORIFICE",
+        "nominal_mm": 2.0,
+        "tol_plus_mm": 0.05,
+        "tol_minus_mm": -0.05,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø2.00 ±0.05"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "concentricity",
+        "tolerance_mm": 0.05,
+        "diameter_zone": true,
+        "material_condition": "",
+        "datum_primary": "B",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "MO APERTURE ORIFICE",
+        "glyph": "◎",
+        "tolerance_text": "Ø0.050"
+      },
+      {
+        "symbol": "parallelism",
+        "tolerance_mm": 0.03,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "CF63 TO CF40 FACES",
+        "glyph": "∥",
+        "tolerance_text": "0.030"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "1e-6 mbar kaynak -> 1e-9 mbar ana oda basinic dusumu",
+      "1000x differential pumping stage (1e-6 mbar source -> 1e-9 mbar UHV column); Mo conductance diaphragm + CF63 pump port"
+    ],
+    "scad_params": {
+      "chamber_od": 86.0,
+      "diaph_bore": 2.0,
+      "pressure_ratio": 1000.0
+    },
+    "target_mass_kg": 3.4,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S1.3-05",
+    "subsystem": "S1",
+    "design_tier": "CUSTOM_FULL",
+    "stl_path": "hardware/cad_parts/out/S1/S1.3-05.stl",
+    "step_path": "hardware/cad_parts/out/S1/S1.3-05.step",
+    "scad_path": "hardware/cad_parts/out/S1/S1.3-05.scad",
+    "dxf_path": "hardware/cad_parts/out/S1/S1.3-05.dxf",
+    "svg_path": "hardware/cad_parts/out/S1/S1.3-05.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 277053.45810563804,
+    "surface_area_mm2": 99534.65451936089,
+    "mass_kg": 2.216427664845104,
+    "cg_mm": [
+      -135.4091364072682,
+      -7.67898737281251e-14,
+      482.79548565574754
+    ],
+    "bbox_min_mm": [
+      -184.75,
+      -56.75,
+      425.25
+    ],
+    "bbox_max_mm": [
+      -58.300000000000004,
+      56.75,
+      538.75
+    ],
+    "inertia_kg_mm2": [
+      3724.6641356464743,
+      5570.952479308991,
+      5490.784363233542,
+      -5.8319236352776526e-12,
+      -28.931545929168706,
+      -1.8605845983687676e-11
+    ],
+    "triangle_count": 2864,
+    "vertex_count": 1392,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "engineering_checks": {},
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

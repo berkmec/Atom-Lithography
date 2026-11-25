@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1680" height="1188" viewBox="0 0 1680 1188">
+  <title>S1.2-02 — Wien filtresi elektrostatik saptirma plakalari (ISO 128 / ASME Y14.5)</title>
+  <defs>
+    <marker id="arrow-end" viewBox="0 0 10 6" refX="9" refY="3" markerWidth="8" markerHeight="5" orient="auto"><path d="M0,0 L10,3 L0,6 Z" fill="#1B365D"/></marker>
+    <marker id="arrow-start" viewBox="0 0 10 6" refX="1" refY="3" markerWidth="8" markerHeight="5" orient="auto"><path d="M10,0 L0,3 L10,6 Z" fill="#1B365D"/></marker>
+  </defs>
+  <rect x="0" y="0" width="1680" height="1188" fill="#FFFFFF"/>
+  <rect x="18" y="18" width="1644" height="1152" fill="none" stroke="#111827" stroke-width="1.2"/>
+  <rect x="38" y="38" width="1604" height="1112" fill="none" stroke="#111827" stroke-width="2.0"/>
+  <text x="138.2" y="32" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#64748B">1</text>
+  <text x="138.2" y="1164.0" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#64748B">1</text>
+  <line x1="238.5" y1="18" x2="238.5" y2="38" stroke="#64748B" stroke-width="0.8"/>
+  <line x1="238.5" y1="1150.0" x2="238.5" y2="1170.0" stroke="#64748B" stroke-width="0.8"/>
+  <text x="338.8" y="32" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#64748B">2</text>
+  <text x="338.8" y="1164.0" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#64748B">2</text>
+  <line x1="439.0" y1="18" x2="439.0" y2="38" stroke="#64748B" stroke-width="0.8"/>
+  <line x1="439.0" y1="1150.0" x2="439.0" y2="1170.0" stroke="#64748B" stroke-width="0.8"/>
+  <text x="539.2" y="32" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#64748B">3</text>
+  <text x="539.2" y="1164.0" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#64748B">3</text>
+  <line x1="639.5" y1="18" x2="639.5" y2="38" stroke="#64748B" stroke-width="0.8"/>
+  <line x1="639.5" y1="1150.0" x2="639.5" y2="1170.0" stroke="#64748B" stroke-width="0.8"/>
+  <text x="739.8" y="32" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#64748B">4</text>
+  <text x="739.8" y="1164.0" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#64748B">4</text>
+  <line x1="840.0" y1="18" x2="840.0" y2="38" stroke="#64748B" stroke-width="0.8"/>
+  <line x1="840.0" y1="1150.0" x2="840.0" y2="1170.0" stroke="#64748B" stroke-width="0.8"/>
+  <text x="940.2" y="32" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#64748B">5</text>
+  <text x="940.2" y="1164.0" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#64748B">5</text>
+  <line x1="1040.5" y1="18" x2="1040.5" y2="38" stroke="#64748B" stroke-width="0.8"/>
+  <line x1="1040.5" y1="1150.0" x2="1040.5" y2="1170.0" stroke="#64748B" stroke-width="0.8"/>
+  <text x="1140.8" y="32" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#64748B">6</text>
+  <text x="1140.8" y="1164.0" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#64748B">6</text>
+  <line x1="1241.0" y1="18" x2="1241.0" y2="38" stroke="#64748B" stroke-width="0.8"/>
+  <line x1="1241.0" y1="1150.0" x2="1241.0" y2="1170.0" stroke="#64748B" stroke-width="0.8"/>
+  <text x="1341.2" y="32" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#64748B">7</text>
+  <text x="1341.2" y="1164.0" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#64748B">7</text>
+  <line x1="1441.5" y1="18" x2="1441.5" y2="38" stroke="#64748B" stroke-width="0.8"/>
+  <line x1="1441.5" y1="1150.0" x2="1441.5" y2="1170.0" stroke="#64748B" stroke-width="0.8"/>
+  <text x="1541.8" y="32" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#64748B">8</text>
+  <text x="1541.8" y="1164.0" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#64748B">8</text>
+  <text x="28" y="134.2" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#64748B">A</text>
+  <text x="1652.0" y="134.2" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#64748B">A</text>
+  <line x1="18" y1="223.3" x2="38" y2="223.3" stroke="#64748B" stroke-width="0.8"/>
+  <line x1="1642.0" y1="223.3" x2="1662.0" y2="223.3" stroke="#64748B" stroke-width="0.8"/>
+  <text x="28" y="319.5" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#64748B">B</text>
+  <text x="1652.0" y="319.5" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#64748B">B</text>
+  <line x1="18" y1="408.7" x2="38" y2="408.7" stroke="#64748B" stroke-width="0.8"/>
+  <line x1="1642.0" y1="408.7" x2="1662.0" y2="408.7" stroke="#64748B" stroke-width="0.8"/>
+  <text x="28" y="504.8" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#64748B">C</text>
+  <text x="1652.0" y="504.8" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#64748B">C</text>
+  <line x1="18" y1="594.0" x2="38" y2="594.0" stroke="#64748B" stroke-width="0.8"/>
+  <line x1="1642.0" y1="594.0" x2="1662.0" y2="594.0" stroke="#64748B" stroke-width="0.8"/>
+  <text x="28" y="690.2" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#64748B">D</text>
+  <text x="1652.0" y="690.2" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#64748B">D</text>
+  <line x1="18" y1="779.3" x2="38" y2="779.3" stroke="#64748B" stroke-width="0.8"/>
+  <line x1="1642.0" y1="779.3" x2="1662.0" y2="779.3" stroke="#64748B" stroke-width="0.8"/>
+  <text x="28" y="875.5" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#64748B">E</text>
+  <text x="1652.0" y="875.5" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#64748B">E</text>
+  <line x1="18" y1="964.7" x2="38" y2="964.7" stroke="#64748B" stroke-width="0.8"/>
+  <line x1="1642.0" y1="964.7" x2="1662.0" y2="964.7" stroke="#64748B" stroke-width="0.8"/>
+  <text x="28" y="1060.8" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#64748B">F</text>
+  <text x="1652.0" y="1060.8" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#64748B">F</text>
+  <line x1="1088" y1="38" x2="1088" y2="1150.0" stroke="#CBD5E1" stroke-width="1.0"/>
+  <g id="view-top">
+    <path d="M307.98,366.00L445.52,366.00M303.25,361.27L307.98,366.00M445.52,366.00L450.25,361.27M450.25,361.27L450.25,349.73M445.52,345.00L450.25,349.73M307.98,345.00L445.52,345.00M303.25,349.73L307.98,345.00M303.25,361.27L303.25,349.73M392.73,413.25L393.55,413.25M390.34,413.25L392.73,413.25M386.62,413.25L390.34,413.25M381.94,413.25L386.62,413.25M376.75,413.25L381.94,413.25M371.56,413.25L376.75,413.25M366.88,413.25L371.56,413.25M363.16,413.25L366.88,413.25M360.77,413.25L363.16,413.25M359.95,413.25L360.77,413.25M392.73,367.05L393.55,367.05M390.34,367.05L392.73,367.05M386.62,367.05L390.34,367.05M381.94,367.05L386.62,367.05M376.75,367.05L381.94,367.05M371.56,367.05L376.75,367.05M366.88,367.05L371.56,367.05M363.16,367.05L366.88,367.05M360.77,367.05L363.16,367.05M359.95,367.05L360.77,367.05M307.98,240.00L445.52,240.00M303.25,235.28L307.98,240.00M445.52,240.00L450.25,235.28M450.25,235.28L450.25,223.72M445.52,219.00L450.25,223.72M307.98,219.00L445.52,219.00M303.25,223.72L307.98,219.00M303.25,235.28L303.25,223.72M392.73,217.95L393.55,217.95M390.34,217.95L392.73,217.95M386.62,217.95L390.34,217.95M381.94,217.95L386.62,217.95M376.75,217.95L381.94,217.95M371.56,217.95L376.75,217.95M366.88,217.95L371.56,217.95M363.16,217.95L366.88,217.95M360.77,217.95L363.16,217.95M359.95,217.95L360.77,217.95M392.73,171.75L393.55,171.75M390.34,171.75L392.73,171.75M386.62,171.75L390.34,171.75M381.94,171.75L386.62,171.75M376.75,171.75L381.94,171.75M371.56,171.75L376.75,171.75M366.88,171.75L371.56,171.75M363.16,171.75L366.88,171.75M360.77,171.75L363.16,171.75M359.95,171.75L360.77,171.75" fill="none" stroke="#64748B" stroke-width="0.85" stroke-dasharray="5,3.5"/>
+    <line x1="287.2" y1="292.5" x2="466.2" y2="292.5" stroke="#64748B" stroke-width="0.8" stroke-dasharray="10,4,2,4"/>
+    <line x1="376.8" y1="155.8" x2="376.8" y2="429.2" stroke="#64748B" stroke-width="0.8" stroke-dasharray="10,4,2,4"/>
+    <path d="M307.98,366.00L445.52,366.00M303.25,361.27L307.98,366.00M445.52,366.00L450.25,361.27M450.25,361.27L450.25,349.73M445.52,345.00L450.25,349.73M307.98,345.00L445.52,345.00M303.25,349.73L307.98,345.00M303.25,361.27L303.25,349.73M392.73,413.25L393.55,413.25M393.55,413.25L393.55,367.05M359.95,413.25L360.77,413.25M359.95,413.25L359.95,367.05M360.77,413.25L363.16,413.25M363.16,413.25L366.88,413.25M366.88,413.25L371.56,413.25M371.56,413.25L376.75,413.25M376.75,413.25L381.94,413.25M381.94,413.25L386.62,413.25M386.62,413.25L390.34,413.25M390.34,413.25L392.73,413.25M392.73,367.05L393.55,367.05M359.95,367.05L360.77,367.05M360.77,367.05L363.16,367.05M363.16,367.05L366.88,367.05M366.88,367.05L371.56,367.05M371.56,367.05L376.75,367.05M376.75,367.05L381.94,367.05M381.94,367.05L386.62,367.05M386.62,367.05L390.34,367.05M390.34,367.05L392.73,367.05M307.98,240.00L445.52,240.00M303.25,235.28L307.98,240.00M445.52,240.00L450.25,235.28M450.25,235.28L450.25,223.72M445.52,219.00L450.25,223.72M307.98,219.00L445.52,219.00M303.25,223.72L307.98,219.00M303.25,235.28L303.25,223.72M392.73,217.95L393.55,217.95M393.55,217.95L393.55,171.75M359.95,217.95L360.77,217.95M359.95,217.95L359.95,171.75M360.77,217.95L363.16,217.95M363.16,217.95L366.88,217.95M366.88,217.95L371.56,217.95M371.56,217.95L376.75,217.95M376.75,217.95L381.94,217.95M381.94,217.95L386.62,217.95M386.62,217.95L390.34,217.95M390.34,217.95L392.73,217.95M392.73,171.75L393.55,171.75M359.95,171.75L360.77,171.75M360.77,171.75L363.16,171.75M363.16,171.75L366.88,171.75M366.88,171.75L371.56,171.75M371.56,171.75L376.75,171.75M376.75,171.75L381.94,171.75M381.94,171.75L386.62,171.75M386.62,171.75L390.34,171.75M390.34,171.75L392.73,171.75" fill="none" stroke="#111827" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="376.8" y="147.8" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" letter-spacing="0.6" fill="#1B365D">TOP (XY)</text>
+  </g>
+  <g id="view-front">
+    <path d="M445.52,948.25L450.25,948.25M450.25,948.25L450.25,528.25M307.98,948.25L445.52,948.25M445.52,948.25L445.52,528.25M303.25,948.25L307.98,948.25M307.98,948.25L307.98,528.25M303.25,948.25L303.25,528.25M445.52,528.25L450.25,528.25M307.98,528.25L445.52,528.25M303.25,528.25L307.98,528.25M392.73,874.69L393.55,869.50M392.73,864.31L393.55,869.50M390.34,879.37L392.73,874.69M386.62,883.09L390.34,879.37M381.94,885.48L386.62,883.09M376.75,886.30L381.94,885.48M371.56,885.48L376.75,886.30M366.88,883.09L371.56,885.48M363.16,879.37L366.88,883.09M360.77,874.69L363.16,879.37M359.95,869.50L360.77,874.69M359.95,869.50L360.77,864.31M360.77,864.31L363.16,859.63M363.16,859.63L366.88,855.91M366.88,855.91L371.56,853.52M371.56,853.52L376.75,852.70M376.75,852.70L381.94,853.52M381.94,853.52L386.62,855.91M386.62,855.91L390.34,859.63M390.34,859.63L392.73,864.31M392.73,612.19L393.55,607.00M392.73,601.81L393.55,607.00M390.34,616.87L392.73,612.19M386.62,620.59L390.34,616.87M381.94,622.98L386.62,620.59M376.75,623.80L381.94,622.98M371.56,622.98L376.75,623.80M366.88,620.59L371.56,622.98M363.16,616.87L366.88,620.59M360.77,612.19L363.16,616.87M359.95,607.00L360.77,612.19M359.95,607.00L360.77,601.81M360.77,601.81L363.16,597.13M363.16,597.13L366.88,593.41M366.88,593.41L371.56,591.02M371.56,591.02L376.75,590.20M376.75,590.20L381.94,591.02M381.94,591.02L386.62,593.41M386.62,593.41L390.34,597.13M390.34,597.13L392.73,601.81" fill="none" stroke="#64748B" stroke-width="0.85" stroke-dasharray="5,3.5"/>
+    <line x1="287.2" y1="738.2" x2="466.2" y2="738.2" stroke="#64748B" stroke-width="0.8" stroke-dasharray="10,4,2,4"/>
+    <line x1="376.8" y1="512.2" x2="376.8" y2="964.2" stroke="#64748B" stroke-width="0.8" stroke-dasharray="10,4,2,4"/>
+    <path d="M307.98,948.25L445.52,948.25M303.25,948.25L307.98,948.25M307.98,948.25L307.98,528.25M445.52,948.25L450.25,948.25M445.52,948.25L445.52,528.25M450.25,948.25L450.25,528.25M303.25,948.25L303.25,528.25M307.98,528.25L445.52,528.25M303.25,528.25L307.98,528.25M445.52,528.25L450.25,528.25M392.73,874.69L393.55,869.50M392.73,864.31L393.55,869.50M390.34,879.37L392.73,874.69M386.62,883.09L390.34,879.37M381.94,885.48L386.62,883.09M376.75,886.30L381.94,885.48M371.56,885.48L376.75,886.30M366.88,883.09L371.56,885.48M363.16,879.37L366.88,883.09M360.77,874.69L363.16,879.37M359.95,869.50L360.77,874.69M359.95,869.50L360.77,864.31M360.77,864.31L363.16,859.63M363.16,859.63L366.88,855.91M366.88,855.91L371.56,853.52M371.56,853.52L376.75,852.70M376.75,852.70L381.94,853.52M381.94,853.52L386.62,855.91M386.62,855.91L390.34,859.63M390.34,859.63L392.73,864.31M392.73,612.19L393.55,607.00M392.73,601.81L393.55,607.00M390.34,616.87L392.73,612.19M386.62,620.59L390.34,616.87M381.94,622.98L386.62,620.59M376.75,623.80L381.94,622.98M371.56,622.98L376.75,623.80M366.88,620.59L371.56,622.98M363.16,616.87L366.88,620.59M360.77,612.19L363.16,616.87M359.95,607.00L360.77,612.19M359.95,607.00L360.77,601.81M360.77,601.81L363.16,597.13M363.16,597.13L366.88,593.41M366.88,593.41L371.56,591.02M371.56,591.02L376.75,590.20M376.75,590.20L381.94,591.02M381.94,591.02L386.62,593.41M386.62,593.41L390.34,597.13M390.34,597.13L392.73,601.81" fill="none" stroke="#111827" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="376.8" y="480.2" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" letter-spacing="0.6" fill="#1B365D">FRONT (XZ)</text>
+  </g>
+  <g id="view-right">
+    <path d="M622.50,948.25L627.23,948.25M622.50,948.25L622.50,528.25M638.77,948.25L643.50,948.25M643.50,948.25L643.50,528.25M627.23,948.25L638.77,948.25M638.77,948.25L638.77,528.25M627.23,948.25L627.23,528.25M622.50,528.25L627.23,528.25M638.77,528.25L643.50,528.25M627.23,528.25L638.77,528.25M575.25,886.30L575.25,885.48M575.25,885.48L575.25,883.09M575.25,883.09L575.25,879.37M575.25,879.37L575.25,874.69M575.25,874.69L575.25,869.50M575.25,869.50L575.25,864.31M575.25,864.31L575.25,859.63M575.25,859.63L575.25,855.91M575.25,855.91L575.25,853.52M575.25,853.52L575.25,852.70M621.45,886.30L621.45,885.48M621.45,885.48L621.45,883.09M621.45,883.09L621.45,879.37M621.45,879.37L621.45,874.69M621.45,874.69L621.45,869.50M621.45,869.50L621.45,864.31M621.45,864.31L621.45,859.63M621.45,859.63L621.45,855.91M621.45,855.91L621.45,853.52M621.45,853.52L621.45,852.70M575.25,623.80L575.25,622.98M575.25,622.98L575.25,620.59M575.25,620.59L575.25,616.87M575.25,616.87L575.25,612.19M575.25,612.19L575.25,607.00M575.25,607.00L575.25,601.81M575.25,601.81L575.25,597.13M575.25,597.13L575.25,593.41M575.25,593.41L575.25,591.02M575.25,591.02L575.25,590.20M621.45,623.80L621.45,622.98M621.45,622.98L621.45,620.59M621.45,620.59L621.45,616.87M621.45,616.87L621.45,612.19M621.45,612.19L621.45,607.00M621.45,607.00L621.45,601.81M621.45,601.81L621.45,597.13M621.45,597.13L621.45,593.41M621.45,593.41L621.45,591.02M621.45,591.02L621.45,590.20M748.50,948.25L753.23,948.25M748.50,948.25L748.50,528.25M764.77,948.25L769.50,948.25M769.50,948.25L769.50,528.25M753.23,948.25L764.77,948.25M764.77,948.25L764.77,528.25M753.23,948.25L753.23,528.25M748.50,528.25L753.23,528.25M764.77,528.25L769.50,528.25M753.23,528.25L764.77,528.25M770.55,886.30L770.55,885.48M770.55,885.48L770.55,883.09M770.55,883.09L770.55,879.37M770.55,879.37L770.55,874.69M770.55,874.69L770.55,869.50M770.55,869.50L770.55,864.31M770.55,864.31L770.55,859.63M770.55,859.63L770.55,855.91M770.55,855.91L770.55,853.52M770.55,853.52L770.55,852.70M816.75,886.30L816.75,885.48M816.75,885.48L816.75,883.09M816.75,883.09L816.75,879.37M816.75,879.37L816.75,874.69M816.75,874.69L816.75,869.50M816.75,869.50L816.75,864.31M816.75,864.31L816.75,859.63M816.75,859.63L816.75,855.91M816.75,855.91L816.75,853.52M816.75,853.52L816.75,852.70M770.55,623.80L770.55,622.98M770.55,622.98L770.55,620.59M770.55,620.59L770.55,616.87M770.55,616.87L770.55,612.19M770.55,612.19L770.55,607.00M770.55,607.00L770.55,601.81M770.55,601.81L770.55,597.13M770.55,597.13L770.55,593.41M770.55,593.41L770.55,591.02M770.55,591.02L770.55,590.20M816.75,623.80L816.75,622.98M816.75,622.98L816.75,620.59M816.75,620.59L816.75,616.87M816.75,616.87L816.75,612.19M816.75,612.19L816.75,607.00M816.75,607.00L816.75,601.81M816.75,601.81L816.75,597.13M816.75,597.13L816.75,593.41M816.75,593.41L816.75,591.02M816.75,591.02L816.75,590.20" fill="none" stroke="#64748B" stroke-width="0.85" stroke-dasharray="5,3.5"/>
+    <line x1="559.2" y1="738.2" x2="832.8" y2="738.2" stroke="#64748B" stroke-width="0.8" stroke-dasharray="10,4,2,4"/>
+    <line x1="696.0" y1="512.2" x2="696.0" y2="964.2" stroke="#64748B" stroke-width="0.8" stroke-dasharray="10,4,2,4"/>
+    <path d="M622.50,948.25L627.23,948.25M622.50,948.25L622.50,528.25M627.23,948.25L638.77,948.25M627.23,948.25L627.23,528.25M638.77,948.25L643.50,948.25M638.77,948.25L638.77,528.25M643.50,948.25L643.50,528.25M622.50,528.25L627.23,528.25M627.23,528.25L638.77,528.25M638.77,528.25L643.50,528.25M575.25,874.69L575.25,869.50M575.25,869.50L575.25,864.31M575.25,879.37L575.25,874.69M575.25,883.09L575.25,879.37M575.25,885.48L575.25,883.09M575.25,886.30L575.25,885.48M575.25,886.30L621.45,886.30M575.25,853.52L575.25,852.70M575.25,852.70L621.45,852.70M575.25,855.91L575.25,853.52M575.25,859.63L575.25,855.91M575.25,864.31L575.25,859.63M621.45,874.69L621.45,869.50M621.45,869.50L621.45,864.31M621.45,879.37L621.45,874.69M621.45,883.09L621.45,879.37M621.45,885.48L621.45,883.09M621.45,886.30L621.45,885.48M621.45,853.52L621.45,852.70M621.45,855.91L621.45,853.52M621.45,859.63L621.45,855.91M621.45,864.31L621.45,859.63M575.25,612.19L575.25,607.00M575.25,607.00L575.25,601.81M575.25,616.87L575.25,612.19M575.25,620.59L575.25,616.87M575.25,622.98L575.25,620.59M575.25,623.80L575.25,622.98M575.25,623.80L621.45,623.80M575.25,591.02L575.25,590.20M575.25,590.20L621.45,590.20M575.25,593.41L575.25,591.02M575.25,597.13L575.25,593.41M575.25,601.81L575.25,597.13M621.45,612.19L621.45,607.00M621.45,607.00L621.45,601.81M621.45,616.87L621.45,612.19M621.45,620.59L621.45,616.87M621.45,622.98L621.45,620.59M621.45,623.80L621.45,622.98M621.45,591.02L621.45,590.20M621.45,593.41L621.45,591.02M621.45,597.13L621.45,593.41M621.45,601.81L621.45,597.13M748.50,948.25L753.23,948.25M748.50,948.25L748.50,528.25M753.23,948.25L764.77,948.25M753.23,948.25L753.23,528.25M764.77,948.25L769.50,948.25M764.77,948.25L764.77,528.25M769.50,948.25L769.50,528.25M748.50,528.25L753.23,528.25M753.23,528.25L764.77,528.25M764.77,528.25L769.50,528.25M770.55,874.69L770.55,869.50M770.55,869.50L770.55,864.31M770.55,879.37L770.55,874.69M770.55,883.09L770.55,879.37M770.55,885.48L770.55,883.09M770.55,886.30L770.55,885.48M770.55,886.30L816.75,886.30M770.55,853.52L770.55,852.70M770.55,852.70L816.75,852.70M770.55,855.91L770.55,853.52M770.55,859.63L770.55,855.91M770.55,864.31L770.55,859.63M816.75,874.69L816.75,869.50M816.75,869.50L816.75,864.31M816.75,879.37L816.75,874.69M816.75,883.09L816.75,879.37M816.75,885.48L816.75,883.09M816.75,886.30L816.75,885.48M816.75,853.52L816.75,852.70M816.75,855.91L816.75,853.52M816.75,859.63L816.75,855.91M816.75,864.31L816.75,859.63M770.55,612.19L770.55,607.00M770.55,607.00L770.55,601.81M770.55,616.87L770.55,612.19M770.55,620.59L770.55,616.87M770.55,622.98L770.55,620.59M770.55,623.80L770.55,622.98M770.55,623.80L816.75,623.80M770.55,591.02L770.55,590.20M770.55,590.20L816.75,590.20M770.55,593.41L770.55,591.02M770.55,597.13L770.55,593.41M770.55,601.81L770.55,597.13M816.75,612.19L816.75,607.00M816.75,607.00L816.75,601.81M816.75,616.87L816.75,612.19M816.75,620.59L816.75,616.87M816.75,622.98L816.75,620.59M816.75,623.80L816.75,622.98M816.75,591.02L816.75,590.20M816.75,593.41L816.75,591.02M816.75,597.13L816.75,593.41M816.75,601.81L816.75,597.13" fill="none" stroke="#111827" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="696.0" y="480.2" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" letter-spacing="0.6" fill="#1B365D">RIGHT (YZ)</text>
+  </g>
+<line x1="303.2" y1="952.2" x2="303.2" y2="988.2" stroke="#1B365D" stroke-width="0.9"/>
+<line x1="450.2" y1="952.2" x2="450.2" y2="988.2" stroke="#1B365D" stroke-width="0.9"/>
+<line x1="303.2" y1="982.2" x2="450.2" y2="982.2" stroke="#1B365D" stroke-width="1.1" marker-start="url(#arrow-start)" marker-end="url(#arrow-end)"/>
+<rect x="341.9" y="973.2" width="69.6" height="17" fill="#FFFFFF"/>
+<text x="376.8" y="986.2" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="600" fill="#1B365D">28.00 mm</text>
+<line x1="299.2" y1="528.2" x2="263.2" y2="528.2" stroke="#1B365D" stroke-width="0.9"/>
+<line x1="299.2" y1="948.2" x2="263.2" y2="948.2" stroke="#1B365D" stroke-width="0.9"/>
+<line x1="269.2" y1="528.2" x2="269.2" y2="948.2" stroke="#1B365D" stroke-width="1.1" marker-start="url(#arrow-start)" marker-end="url(#arrow-end)"/>
+<rect x="260.2" y="704.2" width="18" height="68.0" fill="#FFFFFF"/>
+<text x="273.2" y="738.2" text-anchor="middle" transform="rotate(-90 269.2 738.2)" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="600" fill="#1B365D">80.00 mm</text>
+<line x1="299.2" y1="171.8" x2="263.2" y2="171.8" stroke="#1B365D" stroke-width="0.9"/>
+<line x1="299.2" y1="413.2" x2="263.2" y2="413.2" stroke="#1B365D" stroke-width="0.9"/>
+<line x1="269.2" y1="171.8" x2="269.2" y2="413.2" stroke="#1B365D" stroke-width="1.1" marker-start="url(#arrow-start)" marker-end="url(#arrow-end)"/>
+<rect x="260.2" y="258.5" width="18" height="68.0" fill="#FFFFFF"/>
+<text x="273.2" y="292.5" text-anchor="middle" transform="rotate(-90 269.2 292.5)" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="600" fill="#1B365D">46.00 mm</text>
+<line x1="575.2" y1="952.2" x2="575.2" y2="988.2" stroke="#1B365D" stroke-width="0.9"/>
+<line x1="816.8" y1="952.2" x2="816.8" y2="988.2" stroke="#1B365D" stroke-width="0.9"/>
+<line x1="575.2" y1="982.2" x2="816.8" y2="982.2" stroke="#1B365D" stroke-width="1.1" marker-start="url(#arrow-start)" marker-end="url(#arrow-end)"/>
+<rect x="661.2" y="973.2" width="69.6" height="17" fill="#FFFFFF"/>
+<text x="696.0" y="986.2" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="600" fill="#1B365D">46.00 mm</text>
+  <g id="datum-callouts">
+    <line x1="454.2" y1="948.2" x2="484.2" y2="948.2" stroke="#1B365D" stroke-width="1.0"/>
+<polygon points="465.2,948.2 479.2,948.2 472.2,958.2" fill="#1B365D"/>
+<line x1="472.2" y1="958.2" x2="472.2" y2="970.2" stroke="#1B365D" stroke-width="1.2"/>
+<rect x="461.2" y="970.2" width="22" height="22" fill="#FFFFFF" stroke="#1B365D" stroke-width="1.3"/>
+<text x="472.2" y="985.8" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#1B365D">A</text>
+<polygon points="376.8,507.2 376.8,521.2 386.8,514.2" fill="#1B365D"/>
+<line x1="386.8" y1="514.2" x2="396.8" y2="514.2" stroke="#1B365D" stroke-width="1.2"/>
+<rect x="396.8" y="503.2" width="22" height="22" fill="#FFFFFF" stroke="#1B365D" stroke-width="1.3"/>
+<text x="407.8" y="518.8" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#1B365D">B</text>
+<polygon points="466.2,285.5 466.2,299.5 476.2,292.5" fill="#1B365D"/>
+<line x1="476.2" y1="292.5" x2="486.2" y2="292.5" stroke="#1B365D" stroke-width="1.2"/>
+<rect x="486.2" y="281.5" width="22" height="22" fill="#FFFFFF" stroke="#1B365D" stroke-width="1.3"/>
+<text x="497.2" y="297.0" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#1B365D">C</text>
+  </g>
+  <g id="view-isometric">
+    <rect x="1105.0" y="68.0" width="515.0" height="355.0" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.0"/>
+    <rect x="1105.0" y="68.0" width="515.0" height="24" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="1.0"/>
+    <text x="1117.0" y="84.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#1B365D">ISOMETRIC VIEW (3D WIREFRAME, NOT TO SCALE)</text>
+    <path d="M1302.42,365.28L1303.12,363.42M1312.79,361.87L1360.35,393.76M1308.82,361.54L1312.79,361.87M1312.79,361.87L1312.79,138.28M1303.12,363.42L1308.82,361.54M1308.82,361.54L1308.82,137.96M1303.12,363.42L1303.12,139.83M1327.48,349.18L1329.10,349.00M1325.68,348.42L1327.48,349.18M1323.89,346.78L1325.68,348.42M1322.27,344.42L1323.89,346.78M1320.98,341.58L1322.27,344.42M1320.16,338.53L1320.98,341.58M1319.87,335.58L1320.16,338.53M1319.87,335.58L1320.16,333.01M1320.16,333.01L1320.98,331.07M1320.98,331.07L1322.27,329.95M1327.48,209.44L1329.10,209.26M1325.68,208.68L1327.48,209.44M1323.89,207.04L1325.68,208.68M1322.27,204.68L1323.89,207.04M1320.98,201.84L1322.27,204.68M1320.16,198.79L1320.98,201.84M1319.87,195.84L1320.16,198.79M1319.87,195.84L1320.16,193.26M1320.16,193.26L1320.98,191.33M1320.98,191.33L1322.27,190.21M1364.65,344.82L1365.34,342.96M1375.02,341.41L1422.58,373.31M1371.05,341.08L1375.02,341.41M1375.02,341.41L1375.02,117.83M1365.34,342.96L1371.05,341.08M1371.05,341.08L1371.05,117.50M1365.34,342.96L1365.34,119.38M1423.93,317.48L1425.55,317.29M1422.14,316.71L1423.93,317.48M1420.34,315.07L1422.14,316.71M1418.72,312.71L1420.34,315.07M1417.44,309.87L1418.72,312.71M1416.61,306.83L1417.44,309.87M1416.33,303.87L1416.61,306.83M1416.33,303.87L1416.61,301.30M1416.61,301.30L1417.44,299.36M1417.44,299.36L1418.72,298.24M1423.93,177.74L1425.55,177.55M1422.14,176.97L1423.93,177.74M1420.34,175.33L1422.14,176.97M1418.72,172.97L1420.34,175.33M1417.44,170.13L1418.72,172.97M1416.61,167.08L1417.44,170.13M1416.33,164.13L1416.61,167.08M1416.33,164.13L1416.61,161.56M1416.61,161.56L1417.44,159.62M1417.44,159.62L1418.72,158.50" fill="none" stroke="#CBD5E1" stroke-width="0.7" stroke-dasharray="3,3"/>
+    <path d="M1302.42,365.28L1349.98,397.17M1302.42,365.28L1302.42,141.69M1349.98,397.17L1353.95,397.50M1349.98,397.17L1349.98,173.59M1353.95,397.50L1359.66,395.62M1353.95,397.50L1353.95,173.92M1359.66,395.62L1360.35,393.76M1359.66,395.62L1359.66,172.04M1360.35,393.76L1360.35,170.18M1302.42,141.69L1349.98,173.59M1302.42,141.69L1303.12,139.83M1349.98,173.59L1353.95,173.92M1353.95,173.92L1359.66,172.04M1359.66,172.04L1360.35,170.18M1312.79,138.28L1360.35,170.18M1308.82,137.96L1312.79,138.28M1303.12,139.83L1308.82,137.96M1308.39,353.44L1308.67,350.87M1308.39,347.92L1308.67,350.87M1307.56,355.38L1308.39,353.44M1306.28,356.50L1307.56,355.38M1304.66,356.68L1306.28,356.50M1306.28,356.50L1329.10,349.00M1302.86,355.92L1304.66,356.68M1301.07,354.28L1302.86,355.92M1299.45,351.92L1301.07,354.28M1298.16,349.08L1299.45,351.92M1297.34,346.03L1298.16,349.08M1297.05,343.08L1297.34,346.03M1297.05,343.08L1297.34,340.51M1297.34,340.51L1298.16,338.57M1298.16,338.57L1299.45,337.45M1299.45,337.45L1301.07,337.26M1299.45,337.45L1322.27,329.95M1301.07,337.26L1302.86,338.03M1302.86,338.03L1304.66,339.67M1304.66,339.67L1306.28,342.03M1306.28,342.03L1307.56,344.87M1307.56,344.87L1308.39,347.92M1331.21,345.94L1331.49,343.37M1331.21,340.41L1331.49,343.37M1330.38,347.88L1331.21,345.94M1329.10,349.00L1330.38,347.88M1322.27,329.95L1323.89,329.76M1323.89,329.76L1325.68,330.53M1325.68,330.53L1327.48,332.17M1327.48,332.17L1329.10,334.53M1329.10,334.53L1330.38,337.37M1330.38,337.37L1331.21,340.41M1308.39,213.70L1308.67,211.13M1308.39,208.17L1308.67,211.13M1307.56,215.64L1308.39,213.70M1306.28,216.76L1307.56,215.64M1304.66,216.94L1306.28,216.76M1306.28,216.76L1329.10,209.26M1302.86,216.18L1304.66,216.94M1301.07,214.54L1302.86,216.18M1299.45,212.18L1301.07,214.54M1298.16,209.34L1299.45,212.18M1297.34,206.29L1298.16,209.34M1297.05,203.34L1297.34,206.29M1297.05,203.34L1297.34,200.77M1297.34,200.77L1298.16,198.83M1298.16,198.83L1299.45,197.71M1299.45,197.71L1301.07,197.52M1299.45,197.71L1322.27,190.21M1301.07,197.52L1302.86,198.29M1302.86,198.29L1304.66,199.93M1304.66,199.93L1306.28,202.29M1306.28,202.29L1307.56,205.13M1307.56,205.13L1308.39,208.17M1331.21,206.20L1331.49,203.63M1331.21,200.67L1331.49,203.63M1330.38,208.14L1331.21,206.20M1329.10,209.26L1330.38,208.14M1322.27,190.21L1323.89,190.02M1323.89,190.02L1325.68,190.79M1325.68,190.79L1327.48,192.43M1327.48,192.43L1329.10,194.79M1329.10,194.79L1330.38,197.63M1330.38,197.63L1331.21,200.67M1364.65,344.82L1412.21,376.72M1364.65,344.82L1364.65,121.24M1412.21,376.72L1416.18,377.04M1412.21,376.72L1412.21,153.13M1416.18,377.04L1421.88,375.17M1416.18,377.04L1416.18,153.46M1421.88,375.17L1422.58,373.31M1421.88,375.17L1421.88,151.58M1422.58,373.31L1422.58,149.72M1364.65,121.24L1412.21,153.13M1364.65,121.24L1365.34,119.38M1412.21,153.13L1416.18,153.46M1416.18,153.46L1421.88,151.58M1421.88,151.58L1422.58,149.72M1375.02,117.83L1422.58,149.72M1371.05,117.50L1375.02,117.83M1365.34,119.38L1371.05,117.50M1404.84,321.74L1405.13,319.16M1404.84,316.21L1405.13,319.16M1404.02,323.67L1404.84,321.74M1402.73,324.79L1404.02,323.67M1401.11,324.98L1402.73,324.79M1402.73,324.79L1425.55,317.29M1399.32,324.21L1401.11,324.98M1397.52,322.57L1399.32,324.21M1395.90,320.21L1397.52,322.57M1394.62,317.37L1395.90,320.21M1393.79,314.33L1394.62,317.37M1393.51,311.37L1393.79,314.33M1393.51,311.37L1393.79,308.80M1393.79,308.80L1394.62,306.86M1394.62,306.86L1395.90,305.74M1395.90,305.74L1397.52,305.56M1395.90,305.74L1418.72,298.24M1397.52,305.56L1399.32,306.32M1399.32,306.32L1401.11,307.96M1401.11,307.96L1402.73,310.32M1402.73,310.32L1404.02,313.16M1404.02,313.16L1404.84,316.21M1427.66,314.23L1427.95,311.66M1427.66,308.71L1427.95,311.66M1426.84,316.17L1427.66,314.23M1425.55,317.29L1426.84,316.17M1418.72,298.24L1420.34,298.06M1420.34,298.06L1422.14,298.82M1422.14,298.82L1423.93,300.46M1423.93,300.46L1425.55,302.82M1425.55,302.82L1426.84,305.66M1426.84,305.66L1427.66,308.71M1404.84,181.99L1405.13,179.42M1404.84,176.47L1405.13,179.42M1404.02,183.93L1404.84,181.99M1402.73,185.05L1404.02,183.93M1401.11,185.24L1402.73,185.05M1402.73,185.05L1425.55,177.55M1399.32,184.47L1401.11,185.24M1397.52,182.83L1399.32,184.47M1395.90,180.47L1397.52,182.83M1394.62,177.63L1395.90,180.47M1393.79,174.59L1394.62,177.63M1393.51,171.63L1393.79,174.59M1393.51,171.63L1393.79,169.06M1393.79,169.06L1394.62,167.12M1394.62,167.12L1395.90,166.00M1395.90,166.00L1397.52,165.82M1395.90,166.00L1418.72,158.50M1397.52,165.82L1399.32,166.58M1399.32,166.58L1401.11,168.22M1401.11,168.22L1402.73,170.58M1402.73,170.58L1404.02,173.42M1404.02,173.42L1404.84,176.47M1427.66,174.49L1427.95,171.92M1427.66,168.97L1427.95,171.92M1426.84,176.43L1427.66,174.49M1425.55,177.55L1426.84,176.43M1418.72,158.50L1420.34,158.32M1420.34,158.32L1422.14,159.08M1422.14,159.08L1423.93,160.72M1423.93,160.72L1425.55,163.08M1425.55,163.08L1426.84,165.92M1426.84,165.92L1427.66,168.97" fill="none" stroke="#111827" stroke-width="1.15" stroke-linejoin="round"/>
+    <line x1="1139.0" y1="399.0" x2="1161.0" y2="388.0" stroke="#1B365D" stroke-width="1.2"/>
+    <line x1="1139.0" y1="399.0" x2="1119.0" y2="388.0" stroke="#1B365D" stroke-width="1.2"/>
+    <line x1="1139.0" y1="399.0" x2="1139.0" y2="375.0" stroke="#1B365D" stroke-width="1.2"/>
+    <text x="1164.0" y="389.0" font-family="DejaVu Sans, sans-serif" font-size="9.5" fill="#1B365D">X</text>
+    <text x="1110.0" y="389.0" font-family="DejaVu Sans, sans-serif" font-size="9.5" fill="#1B365D">Y</text>
+    <text x="1136.0" y="372.0" font-family="DejaVu Sans, sans-serif" font-size="9.5" fill="#1B365D">Z</text>
+  </g>
+  <g id="gdt-panel">
+    <rect x="1105.0" y="438.0" width="515.0" height="392.0" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.0"/>
+    <rect x="1105.0" y="438.0" width="515.0" height="24" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="1.0"/>
+    <text x="1117.0" y="454.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#1B365D">GD&amp;T FEATURE CONTROL FRAMES (ASME Y14.5 / ISO 1101)</text>
+<path d="M1518.0,482.0 L1525.0,494.0 L1537.0,474.0 L1574.0,474.0" fill="none" stroke="#111827" stroke-width="1.3"/>
+<line x1="1518.0" y1="482.0" x2="1532.2" y2="482.0" stroke="#111827" stroke-width="1.1"/>
+<text x="1539.0" y="471.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" font-weight="600" fill="#111827">Ra 0.2 µm</text>
+<rect x="1117.0" y="470.0" width="108.0" height="22.0" fill="#FFFFFF" stroke="#1B365D" stroke-width="1.2"/>
+<text x="1130.0" y="485.5" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="14" fill="#1B365D">∥</text>
+<line x1="1143.0" y1="470.0" x2="1143.0" y2="492.0" stroke="#1B365D" stroke-width="1.1"/>
+<text x="1173.0" y="485.0" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="600" fill="#111827">0.010</text>
+<line x1="1203.0" y1="470.0" x2="1203.0" y2="492.0" stroke="#1B365D" stroke-width="1.1"/>
+<text x="1214.0" y="485.0" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#1B365D">A</text>
+<text x="1235.0" y="485.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#334155">E-PLATE FACES</text>
+<rect x="1117.0" y="497.0" width="86.0" height="22.0" fill="#FFFFFF" stroke="#1B365D" stroke-width="1.2"/>
+<text x="1130.0" y="512.5" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="14" fill="#1B365D">⏥</text>
+<line x1="1143.0" y1="497.0" x2="1143.0" y2="519.0" stroke="#1B365D" stroke-width="1.1"/>
+<text x="1173.0" y="512.0" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="600" fill="#111827">0.005</text>
+<text x="1213.0" y="512.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#334155">ACTIVE ELECTRODE</text>
+<rect x="1117.0" y="524.0" width="108.0" height="22.0" fill="#FFFFFF" stroke="#1B365D" stroke-width="1.2"/>
+<text x="1130.0" y="539.5" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="14" fill="#1B365D">⌯</text>
+<line x1="1143.0" y1="524.0" x2="1143.0" y2="546.0" stroke="#1B365D" stroke-width="1.1"/>
+<text x="1173.0" y="539.0" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="600" fill="#111827">0.010</text>
+<line x1="1203.0" y1="524.0" x2="1203.0" y2="546.0" stroke="#1B365D" stroke-width="1.1"/>
+<text x="1214.0" y="539.0" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#1B365D">B</text>
+<text x="1235.0" y="539.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#334155">BEAM AXIS CENTER</text>
+    <line x1="1105.0" y1="554.0" x2="1620.0" y2="554.0" stroke="#CBD5E1" stroke-width="0.9"/>
+    <text x="1117.0" y="568.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="9.5" font-weight="700" fill="#1B365D">DATUMS:</text>
+    <text x="1173.0" y="568.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="9.5" font-weight="600" fill="#1B365D">[A] PRIMARY MOUNTING PLANE</text>
+    <text x="1173.0" y="581.5" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="9.5" font-weight="600" fill="#1B365D">[B] DATUM AXIS / BORE CENTERLINE</text>
+    <text x="1173.0" y="595.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="9.5" font-weight="600" fill="#1B365D">[C] ANGULAR INDEX / BOLT ORIENTATION</text>
+    <line x1="1105.0" y1="613.5" x2="1620.0" y2="613.5" stroke="#CBD5E1" stroke-width="0.9"/>
+    <text x="1117.0" y="627.5" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" font-weight="700" fill="#1B365D">INTERFACES / PORTS (2):</text>
+    <text x="1121.0" y="642.0" font-family="DejaVu Sans Mono, monospace" font-size="9.2" fill="#111827">• eplate_hv_pos [SHV +5 kV Pin] -&gt; S1.2-03</text>
+    <text x="1121.0" y="655.5" font-family="DejaVu Sans Mono, monospace" font-size="9.2" fill="#111827">• eplate_hv_neg [SHV -5 kV Pin] -&gt; S1.2-03</text>
+    <text x="1117.0" y="672.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" font-weight="700" fill="#1B365D">CRITICAL DIMENSIONS:</text>
+    <text x="1121.0" y="686.5" font-family="DejaVu Sans Mono, monospace" font-size="9.2" fill="#111827">PLATE_L: 80.00 ±0.02</text>
+    <text x="1121.0" y="700.0" font-family="DejaVu Sans Mono, monospace" font-size="9.2" fill="#111827">PLATE_W: 28.00 ±0.02</text>
+    <text x="1121.0" y="713.5" font-family="DejaVu Sans Mono, monospace" font-size="9.2" fill="#111827">E_GAP: 20.00 ±0.01</text>
+  </g>
+  <g id="title-block">
+    <rect x="1105.0" y="845.0" width="515.0" height="295.0" fill="#FFFFFF" stroke="#111827" stroke-width="1.8"/>
+    <rect x="1105.0" y="845.0" width="515.0" height="46" fill="#F8FAFC" stroke="#111827" stroke-width="1.2"/>
+    <text x="1117.0" y="863.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="9.5" font-weight="600" fill="#64748B">ATOM LITHOGRAPHY MACHINE — EXACT BOM PART DRAWING (S1 / CUSTOM_FULL)</text>
+    <text x="1117.0" y="884.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="18" font-weight="700" fill="#1B365D">S1.2-02</text>
+    <text x="1608.0" y="883.0" text-anchor="end" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" font-weight="600" fill="#334155">QTY: 2 | PARENT: S1.2</text>
+    <line x1="1105.0" y1="925.0" x2="1620.0" y2="925.0" stroke="#111827" stroke-width="1.0"/>
+    <text x="1117.0" y="904.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="8.5" fill="#64748B">DESCRIPTION</text>
+    <text x="1117.0" y="919.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" font-weight="600" fill="#111827">Wien filtresi elektrostatik saptirma plakalari</text>
+    <line x1="1105.0" y1="969.0" x2="1620.0" y2="969.0" stroke="#111827" stroke-width="1.0"/>
+    <line x1="1300.0" y1="925.0" x2="1300.0" y2="969.0" stroke="#CBD5E1" stroke-width="1.0"/>
+    <line x1="1450.0" y1="925.0" x2="1450.0" y2="969.0" stroke="#CBD5E1" stroke-width="1.0"/>
+    <text x="1115.0" y="939.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="8.5" fill="#64748B">MATERIAL</text>
+    <text x="1115.0" y="958.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="600" fill="#111827">OFHC Cu</text>
+    <text x="1310.0" y="939.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="8.5" fill="#64748B">OPERATING TEMP</text>
+    <text x="1310.0" y="958.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" font-weight="600" fill="#111827">300 K</text>
+    <text x="1460.0" y="939.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="8.5" fill="#64748B">VACUUM GRADE</text>
+    <text x="1460.0" y="958.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="600" fill="#111827">UHV 1e-8 mbar</text>
+    <line x1="1105.0" y1="1017.0" x2="1620.0" y2="1017.0" stroke="#111827" stroke-width="1.0"/>
+    <line x1="1300.0" y1="969.0" x2="1300.0" y2="1017.0" stroke="#CBD5E1" stroke-width="1.0"/>
+    <line x1="1450.0" y1="969.0" x2="1450.0" y2="1017.0" stroke="#CBD5E1" stroke-width="1.0"/>
+    <text x="1115.0" y="982.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="8.5" fill="#64748B">TOLERANCE / FINISH</text>
+    <text x="1115.0" y="998.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="600" fill="#111827">±10 um paralellik</text>
+    <text x="1115.0" y="1011.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="9.5" fill="#334155">Ra 0.2 µm | ISO 2768-mK</text>
+    <text x="1310.0" y="982.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="8.5" fill="#64748B">MASS / VOLUME</text>
+    <text x="1310.0" y="998.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="600" fill="#111827">0.1682 kg</text>
+    <text x="1310.0" y="1011.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="9.5" fill="#334155">18.77 cm³</text>
+    <text x="1460.0" y="982.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="8.5" fill="#64748B">CENTER OF GRAVITY (mm)</text>
+    <text x="1460.0" y="998.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="600" fill="#111827">X=0.00  Y=0.00</text>
+    <text x="1460.0" y="1011.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="9.5" fill="#334155">Z=310.00</text>
+    <line x1="1105.0" y1="1065.0" x2="1620.0" y2="1065.0" stroke="#111827" stroke-width="1.0"/>
+    <line x1="1355.0" y1="1017.0" x2="1355.0" y2="1065.0" stroke="#CBD5E1" stroke-width="1.0"/>
+    <line x1="1485.0" y1="1017.0" x2="1485.0" y2="1065.0" stroke="#CBD5E1" stroke-width="1.0"/>
+    <text x="1115.0" y="1031.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="8.5" fill="#64748B">ENVELOPE (dX × dY × dZ)</text>
+    <text x="1115.0" y="1051.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" font-weight="600" fill="#111827">28.00 × 46.00 × 80.00 mm</text>
+    <text x="1365.0" y="1031.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="8.5" fill="#64748B">UNITS / SCALE</text>
+    <text x="1365.0" y="1051.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" font-weight="600" fill="#111827">mm | 1.4:1</text>
+    <text x="1553.0" y="1029.0" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="8" fill="#64748B">THIRD-ANGLE</text>
+<polygon points="1521.0,1041.0 1545.0,1036.0 1545.0,1058.0 1521.0,1053.0" fill="none" stroke="#111827" stroke-width="1.1"/>
+<circle cx="1569.0" cy="1047.0" r="11" fill="none" stroke="#111827" stroke-width="1.1"/>
+<circle cx="1569.0" cy="1047.0" r="6" fill="none" stroke="#111827" stroke-width="1.1"/>
+<line x1="1515.0" y1="1047.0" x2="1585.0" y2="1047.0" stroke="#64748B" stroke-width="0.7" stroke-dasharray="6,3,1.5,3"/>
+<line x1="1569.0" y1="1031.0" x2="1569.0" y2="1063.0" stroke="#64748B" stroke-width="0.7" stroke-dasharray="6,3,1.5,3"/>
+    <rect x="1105.0" y="1065.0" width="515.0" height="75.0" fill="#F8FAFC" stroke="#111827" stroke-width="1.2"/>
+    <text x="1117.0" y="1085.0" font-family="DejaVu Sans Mono, monospace" font-size="9.5" font-weight="700" fill="#1B365D">STATUS: M0_M1_DETAILED_CAD_DESIGN_ONLY</text>
+    <text x="1117.0" y="1103.0" font-family="DejaVu Sans Mono, monospace" font-size="9" fill="#334155">no_lab_measurement=true | iec61508_certified=false | semi_s2_certified=false</text>
+    <text x="1117.0" y="1121.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="9" fill="#64748B">ALL DIMENSIONS IN MILLIMETERS. DO NOT SCALE DRAWING. REMOVE ALL BURRS.</text>
+  </g>
+</svg>

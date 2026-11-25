@@ -1,0 +1,97 @@
+{
+  "schema_version": "1.0",
+  "part_id": "S1.5-03",
+  "parent_bom_id": "S1.5",
+  "subsystem": "S1",
+  "part_name": "Enerji suzgeci ultra-dusuk gurultulu cift-kutuplu besleme",
+  "qty": 1,
+  "unit": "adet",
+  "temp_stage": "300 K (kabin)",
+  "vacuum_grade": "Atmosfer",
+  "bom_key_spec": "Dalgalilik <50 mVpp, 10 ppm kararlik",
+  "usd_nom": 10000.0,
+  "bom_epistemic_tag": "{Varsay\u0131m}",
+  "electrical_class": "E3",
+  "grounding_domain": "HV_MINUS_5KV_DECK",
+  "grounding_notes": "Bipolar HDA-HiRes analyzer PSU (<50 mVpp, 10 ppm) referenced to -5 kV column liner deck.",
+  "supply_rails": [
+    {
+      "rail_name": "AC_MAINS_230V",
+      "voltage_v": 230.0,
+      "current_type": "AC_1PH",
+      "max_current_a": 1.0,
+      "steady_power_w": 120.0,
+      "peak_power_w": 180.0,
+      "source_part_id": "S7.4-03"
+    }
+  ],
+  "connectors_and_pinout": [
+    {
+      "connector_ref": "J_HDA_HV",
+      "connector_type": "SHV-10kV Pair",
+      "location_side": "rack_rear",
+      "mating_part_id": "S1.5-01",
+      "pins": [
+        {
+          "pin": "1",
+          "signal": "HDA_INNER_HEMI",
+          "direction": "OUT",
+          "nominal_level": "V_pass + dV (<50 mVpp)"
+        },
+        {
+          "pin": "2",
+          "signal": "HDA_OUTER_HEMI",
+          "direction": "OUT",
+          "nominal_level": "V_pass - dV (<50 mVpp)"
+        }
+      ]
+    },
+    {
+      "connector_ref": "J_FO",
+      "connector_type": "ST Optical Control",
+      "location_side": "rack_rear",
+      "mating_part_id": "S7.SAFETY-03",
+      "pins": [
+        {
+          "pin": "RX",
+          "signal": "HDA_HV_INHIBIT_FO",
+          "direction": "IN",
+          "nominal_level": "Optical safety inhibit"
+        }
+      ]
+    }
+  ],
+  "mating_part_ids": [
+    "S1.5-01",
+    "S1.3-03",
+    "S7.SAFETY-03"
+  ],
+  "interlock_hooks": [
+    {
+      "signal_name": "HDA_HV_INHIBIT",
+      "target_part_id": "S7.SAFETY-03",
+      "action_on_trip": "Inhibit HDA pass-energy HV",
+      "response_time_ms": 18.3
+    }
+  ],
+  "ups_tier": "TIER2_SHED",
+  "ups_budget_group": "AUX_PROCESS_SHED_ON_OUTAGE",
+  "exp150_ups_allocation_w": 0.0,
+  "supply_rails_steady_sum_w": 120.0,
+  "incremental_mains_w": 120.0,
+  "secondary_or_parent_derived_w": 0.0,
+  "non_exp150_aux_shed_w": 120.0,
+  "reconciliation_note": "Non-Exp150 auxiliary sheddable rack/facility load (TIER2_SHED): incremental_mains_w = 120.0 W AC mains (mutually exclusive process/experiment mode, shed immediately on outage; exp150_ups_allocation_w = 0.0 W).",
+  "timing_sync": {
+    "rb_10mhz_port": null,
+    "white_rabbit_port": null,
+    "sync_role": "DC energy filter supply"
+  },
+  "epistemic_flags": {
+    "design_maturity": "M0_M1_ELECTRICAL_ICD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

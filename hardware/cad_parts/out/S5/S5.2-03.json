@@ -1,0 +1,229 @@
+{
+  "part_id": "S5.2-03",
+  "subsystem": "S5",
+  "design": {
+    "part_id": "S5.2-03",
+    "parent_bom_id": "S5.2",
+    "subsystem": "S5",
+    "part_name": "Yagsiz kuru scroll on-vakum pompasi ve geri-akis tutucu",
+    "design_tier": "COTS_ENV_ICD",
+    "material": "Al 6061",
+    "temp_stage": "300 K",
+    "temp_k": 300.0,
+    "vacuum_grade": "Kaba vakum",
+    "tolerance_spec": "ISO 2768-mK",
+    "surface_finish_ra_um": 3.2,
+    "qty": 1,
+    "procurement_class": "COTS",
+    "world_origin_mm": [
+      0.0,
+      -780.0,
+      0.0
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "kf25_inlet",
+        "kind": "vacuum",
+        "position_mm": [
+          0.0,
+          164.0,
+          305.0
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "standard": "ISO-KF25",
+        "mating_part_id": "S5.2-01",
+        "bore_mm": 25.0,
+        "od_mm": 40.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      },
+      {
+        "name": "kf25_exhaust",
+        "kind": "gas",
+        "position_mm": [
+          75.0,
+          -185.0,
+          148.0
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "standard": "ISO-KF25 Exhaust",
+        "mating_part_id": "S7.SAFETY-01",
+        "bore_mm": 25.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "FOOTPRINT_X",
+        "nominal_mm": 270.0,
+        "tol_plus_mm": 1.0,
+        "tol_minus_mm": -1.0,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "270.00 ±1.00"
+      },
+      {
+        "label": "FOOTPRINT_Y",
+        "nominal_mm": 360.0,
+        "tol_plus_mm": 1.0,
+        "tol_minus_mm": -1.0,
+        "view": "right",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "360.00 ±1.00"
+      },
+      {
+        "label": "OVERALL_H",
+        "nominal_mm": 350.2,
+        "tol_plus_mm": 1.0,
+        "tol_minus_mm": -1.0,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "350.20 ±1.00"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "flatness",
+        "tolerance_mm": 0.5,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "Floor vibration mount datum plane",
+        "glyph": "⏥",
+        "tolerance_text": "0.50"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "15 m3/h, 1e-2 mbar taban, hidrokarbon sifir",
+      "Oil-free 15 m^3/h dry scroll roughing/backing pump (nXDS15i class, 1e-2 mbar base, PTFE tip-seal).",
+      "Floor mounted behind -Y TMP station (64 mm foreline flex-hose clearance) with KF25 backstream trap."
+    ],
+    "scad_params": {
+      "speed_m3_h": 15.0,
+      "base_mbar": 0.01,
+      "head_od_mm": 210.0
+    },
+    "target_mass_kg": 26.0,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifacts": {
+    "part_id": "S5.2-03",
+    "subsystem": "S5",
+    "design_tier": "COTS_ENV_ICD",
+    "stl_path": "hardware/cad_parts/out/S5/S5.2-03.stl",
+    "step_path": "hardware/cad_parts/out/S5/S5.2-03.step",
+    "scad_path": "hardware/cad_parts/out/S5/S5.2-03.scad",
+    "dxf_path": "hardware/cad_parts/out/S5/S5.2-03.dxf",
+    "svg_path": "hardware/cad_parts/out/S5/S5.2-03.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 9768013.390519941,
+    "surface_area_mm2": 619744.9859042356,
+    "mass_kg": 26.86203682392984,
+    "cg_mm": [
+      0.3503382099069246,
+      14.045584375559661,
+      134.89334397441328
+    ],
+    "bbox_min_mm": [
+      -135.0,
+      -185.0,
+      0.0
+    ],
+    "bbox_max_mm": [
+      135.0,
+      175.0,
+      350.2
+    ],
+    "inertia_kg_mm2": [
+      350138.5090473949,
+      212384.7176731033,
+      291435.1786633415,
+      1656.7294149270472,
+      -123.34409094065971,
+      -7205.88594065797
+    ],
+    "triangle_count": 1672,
+    "vertex_count": 858,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

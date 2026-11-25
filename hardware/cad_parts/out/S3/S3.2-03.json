@@ -1,0 +1,250 @@
+{
+  "part_id": "S3.2-03",
+  "subsystem": "S3",
+  "part_design": {
+    "part_id": "S3.2-03",
+    "parent_bom_id": "S3.2",
+    "subsystem": "S3",
+    "part_name": "Dedektor ters-gerilim HV filtre ve guard-ring dagitim karti (Exp127)",
+    "design_tier": "CUSTOM_FULL",
+    "material": "Al 6061",
+    "temp_stage": "300 K",
+    "temp_k": 300.0,
+    "vacuum_grade": "UHV / Atmosfer",
+    "tolerance_spec": "±1 mV",
+    "surface_finish_ra_um": 1.6,
+    "qty": 4,
+    "procurement_class": "CUS",
+    "world_origin_mm": [
+      1480.0,
+      -260.0,
+      545.6750000000001
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "rack_front_1u",
+        "kind": "mechanical",
+        "position_mm": [
+          0.0,
+          -150.0,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "standard": "EIA-310 19-inch 1U (Bay 1 U22, X=1480 mm)",
+        "mating_part_id": "S7.4-03",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      },
+      {
+        "name": "shv_guard_out",
+        "kind": "electrical",
+        "position_mm": [
+          0.0,
+          150.0,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "standard": "4x SHV 0-100 V + Driven Guard Triax (<10 uVrms)",
+        "mating_part_id": "S3.2-05",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "WIDTH_19IN",
+        "nominal_mm": 482.6,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "482.60 ±0.50"
+      },
+      {
+        "label": "HEIGHT_1U",
+        "nominal_mm": 42.45,
+        "tol_plus_mm": 0.3,
+        "tol_minus_mm": -0.3,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "42.45 ±0.30"
+      },
+      {
+        "label": "DEPTH",
+        "nominal_mm": 300.0,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "300.00 ±0.50"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "perpendicularity",
+        "tolerance_mm": 0.25,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "19-INCH FRONT FLANGE",
+        "glyph": "⊥",
+        "tolerance_text": "0.25"
+      },
+      {
+        "symbol": "flatness",
+        "tolerance_mm": 0.15,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "PTFE HV ISOLATION FLOOR",
+        "glyph": "⏥",
+        "tolerance_text": "0.15"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "0-100 V, gurultu <10 uVrms, 3-kademeli RC filtre",
+      "4x isolated 110x75 mm ibic_hv_bias_guard boards with real 2.5x54 mm HV creepage air-slots on PTFE trays.",
+      "3-stage RC filter (0-100 V, <10 uVrms noise, -227.9 dB @ 100 kHz). Rack Bay 1 (X=+1480 mm) U22 (1U)."
+    ],
+    "scad_params": {
+      "n_hv_modules": 4,
+      "hv_pcb_x_mm": 75.0,
+      "hv_pcb_y_mm": 110.0,
+      "hv_air_slot_mm": 54.0,
+      "rack_u_height": 1
+    },
+    "target_mass_kg": null,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S3.2-03",
+    "subsystem": "S3",
+    "design_tier": "CUSTOM_FULL",
+    "stl_path": "hardware/cad_parts/out/S3/S3.2-03.stl",
+    "step_path": "hardware/cad_parts/out/S3/S3.2-03.step",
+    "scad_path": "hardware/cad_parts/out/S3/S3.2-03.scad",
+    "dxf_path": "hardware/cad_parts/out/S3/S3.2-03.dxf",
+    "svg_path": "hardware/cad_parts/out/S3/S3.2-03.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 1083007.2324969408,
+    "surface_area_mm2": 846322.64060776,
+    "mass_kg": 2.599217357992659,
+    "cg_mm": [
+      -0.03164521802958551,
+      -7.3561887451456025,
+      -1.5971283380201506
+    ],
+    "bbox_min_mm": [
+      -241.3,
+      -174.2,
+      -21.225
+    ],
+    "bbox_max_mm": [
+      241.3,
+      160.79999999999998,
+      21.225
+    ],
+    "inertia_kg_mm2": [
+      20985.31642155894,
+      44199.36546415032,
+      63854.63224212425,
+      -12.437807758394966,
+      0.1313682777617275,
+      30.414561912261526
+    ],
+    "triangle_count": 1444,
+    "vertex_count": 768,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "world_bbox_min_mm": [
+    1238.7,
+    -434.2,
+    524.45
+  ],
+  "world_bbox_max_mm": [
+    1721.3,
+    -99.20000000000002,
+    566.9000000000001
+  ],
+  "reconciliation": null,
+  "thermal_contraction_checks": [],
+  "tolerance_stack_checks": []
+}

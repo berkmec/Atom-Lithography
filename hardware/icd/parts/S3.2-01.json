@@ -1,0 +1,112 @@
+{
+  "schema_version": "part_icd_v1.0",
+  "part_id": "S3.2-01",
+  "parent_bom_id": "S3.2",
+  "subsystem": "S3",
+  "part_name": "100 K soguk-ada 8-kanalli ultra-dusuk-C LTC6268 CSA modulleri (Exp127 kilitli)",
+  "part_category": "PHYSICAL_SOLID",
+  "bom_metadata": {
+    "qty": "16",
+    "unit": "modul",
+    "material": "Rogers 4350B / Al2O3 UHV PCB + LTC6268",
+    "key_spec": "128 ch (16x8), kilitli 100 K COLD_100K profili: Cf=0.25 pF, Rf=1 GOhm, tau=1.2 us, Q_ion~342 e- @5 keV, ENC=24.1 e-, eta=0.99936",
+    "tolerance": "±5% kazanc",
+    "temp_stage": "100 K (soguk ada)",
+    "vacuum_grade": "UHV 1e-9 mbar",
+    "procurement_class": "CUS",
+    "parent_cost_class": "C",
+    "usd_low": 28000.0,
+    "usd_nom": 54000.0,
+    "usd_high": 105000.0,
+    "legacy_cad_module": "s3_ibic_detector_assembly",
+    "bom_epistemic_tag": "{Varsayım}",
+    "notes": "DELTA-EXP127: 16 modul x $3,375 nom (detector_frontend.net/.cir varsayilan 100 K / 1.2 us / 1 GOhm; 204 bilesen/107 net/0 ERC)"
+  },
+  "artifact_links": {
+    "cad": {
+      "work_package": "WP-M2",
+      "design_tier": "CUSTOM_FULL",
+      "stl": "hardware/cad_parts/out/S3/S3.2-01.stl",
+      "step": "hardware/cad_parts/out/S3/S3.2-01.step",
+      "scad": "hardware/cad_parts/out/S3/S3.2-01.scad",
+      "dxf": "hardware/cad_parts/out/S3/S3.2-01.dxf",
+      "svg": "hardware/cad_parts/out/S3/S3.2-01.svg",
+      "cad_json": "hardware/cad_parts/out/S3/S3.2-01.json",
+      "watertight": true,
+      "all_6_files_valid": true,
+      "mass_kg": 0.476023,
+      "triangle_count": 5712,
+      "temp_k": 100.0,
+      "canonical_bbox_min_mm": [
+        -133.436,
+        -133.436,
+        482.718
+      ],
+      "canonical_bbox_max_mm": [
+        133.436,
+        133.436,
+        496.7
+      ],
+      "datum_shift_mm": [
+        0.0,
+        0.0,
+        500.0
+      ],
+      "port_count": 0,
+      "gdt_frame_count": 0
+    },
+    "pcb_bundles": [
+      {
+        "bundle_slug": "ibic_cryo_frontend_v3",
+        "verification_json": "hardware/pcb/ibic_cryo_frontend_v3/ibic_v3_verification.json",
+        "boards": [
+          "ibic_cold_csa_100k",
+          "ibic_warm_shaper_300k",
+          "ibic_hv_bias_guard"
+        ],
+        "kicad_sch_files": [
+          "hardware/pcb/ibic_cryo_frontend_v3/ibic_cold_csa_100k.kicad_sch",
+          "hardware/pcb/ibic_cryo_frontend_v3/ibic_warm_shaper_300k.kicad_sch",
+          "hardware/pcb/ibic_cryo_frontend_v3/ibic_hv_bias_guard.kicad_sch"
+        ],
+        "kicad_pcb_files": [
+          "hardware/pcb/ibic_cryo_frontend_v3/ibic_cold_csa_100k.kicad_pcb",
+          "hardware/pcb/ibic_cryo_frontend_v3/ibic_warm_shaper_300k.kicad_pcb",
+          "hardware/pcb/ibic_cryo_frontend_v3/ibic_hv_bias_guard.kicad_pcb"
+        ],
+        "spice_decks": [
+          "hardware/pcb/ibic_cryo_frontend_v3/ibic_cryo_chain_100k.cir"
+        ],
+        "all_passed": true
+      }
+    ],
+    "legacy_board_files": [
+      "src/board/detector_frontend.py",
+      "src/board/detector_frontend.net",
+      "src/board/detector_frontend.cir"
+    ],
+    "electrical_icd": null,
+    "rtl_modules": [],
+    "rtl_audit_json": null,
+    "software_and_eda_files": [],
+    "verification_tests": []
+  },
+  "specialized_specification": null,
+  "verification_status": {
+    "cad_verified": true,
+    "pcb_verified": true,
+    "electrical_icd_verified": false,
+    "rtl_verified": false,
+    "software_or_eda_verified": false,
+    "specialized_icd_present": false,
+    "traceable": true
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "tapeout_done": false
+  }
+}

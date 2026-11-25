@@ -1,0 +1,358 @@
+{
+  "part_design": {
+    "part_id": "S7.SAFETY-06",
+    "parent_bom_id": "S7.SAFETY",
+    "subsystem": "S7",
+    "part_name": "Hizli Yay-Donuslu UHV Izolasyon Surgu Vana Aktorleri (<80 ms), ISO 10156 %5 H2/N2 Orifis & X-Isini Dozimetresi (Exp150, 12.0 kg)",
+    "design_tier": "COTS_ENV_ICD",
+    "material": "316LN",
+    "temp_stage": "300 K (S5 manifold / oda)",
+    "temp_k": 300.0,
+    "vacuum_grade": "UHV / Atmosfer",
+    "tolerance_spec": "<80 ms vana, <=0.01 ML",
+    "surface_finish_ra_um": 0.8,
+    "qty": 1,
+    "procurement_class": "COTS/CUS",
+    "world_origin_mm": [
+      660.0,
+      -360.0,
+      440.0
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "uhv_gate_bonnet_cf63",
+        "kind": "flange",
+        "position_mm": [
+          622.0,
+          -360.0,
+          363.25
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "standard": "CF63",
+        "mating_part_id": "S5.1-03",
+        "bore_mm": 63.5,
+        "od_mm": 113.5,
+        "pcd_mm": 92.1,
+        "bolt_count": 8,
+        "bolt_hole_mm": 8.4,
+        "bolt_spec": "M8",
+        "frame": "world",
+        "notes": "<80 ms spring-return fail-close UHV gate valve actuator bonnet"
+      },
+      {
+        "name": "iso10156_vcr_in",
+        "kind": "gas",
+        "position_mm": [
+          671.8,
+          -324.0,
+          405.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "standard": "1/4-in VCR ISO 10156 5% H2/N2 Restrictor Orifice",
+        "mating_part_id": "S5.6-03",
+        "bore_mm": 0.5,
+        "od_mm": 19.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "world",
+        "notes": ""
+      },
+      {
+        "name": "solenoid_24vdc_failclose",
+        "kind": "electrical",
+        "position_mm": [
+          622.0,
+          -443.0,
+          420.0
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "standard": "24 VDC De-Energize-to-Close Solenoid (<80 ms)",
+        "mating_part_id": "S7.SAFETY-03",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "world",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "BONNET_CF63_OD",
+        "nominal_mm": 113.5,
+        "tol_plus_mm": 0.1,
+        "tol_minus_mm": -0.1,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø113.50 ±0.10"
+      },
+      {
+        "label": "ACTUATOR_OD",
+        "nominal_mm": 84.0,
+        "tol_plus_mm": 0.2,
+        "tol_minus_mm": -0.2,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø84.00 ±0.20"
+      },
+      {
+        "label": "ORIFICE_BLOCK_W",
+        "nominal_mm": 68.0,
+        "tol_plus_mm": 0.1,
+        "tol_minus_mm": -0.1,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "68.00 ±0.10"
+      },
+      {
+        "label": "ASSY_H",
+        "nominal_mm": 164.0,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "164.00 ±0.50"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "perpendicularity",
+        "tolerance_mm": 0.05,
+        "diameter_zone": true,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "ACTUATOR STEM TO CF63 FACE",
+        "glyph": "⊥",
+        "tolerance_text": "Ø0.050"
+      },
+      {
+        "symbol": "concentricity",
+        "tolerance_mm": 0.05,
+        "diameter_zone": true,
+        "material_condition": "",
+        "datum_primary": "B",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "SPRING PISTON BORE",
+        "glyph": "◎",
+        "tolerance_text": "Ø0.050"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "220x180x160 mm, 80.0 ms UHV vana kapama (Si(100) oksitlenme 6.0e-4 ML << 0.01 ML), %5 H2/N2 sinirli akis, 60 W / 0 W kriyo, kutle=12.0 kg",
+      "Exp150 S7.SAFETY-06 (12.0 kg, 60 W, 0 W cryo): <80 ms spring-return fail-close UHV gate-valve actuator + ISO 10156 5% H2/N2 orifice + X-ray survey meter.",
+      "PRELIMINARY DESIGN ONLY: iec61508_certified=False, semi_s2_certified=False."
+    ],
+    "scad_params": {
+      "close_time_ms": 80.0,
+      "bonnet_cf": "CF63",
+      "orifice_bore_mm": 0.5
+    },
+    "target_mass_kg": 12.0,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S7.SAFETY-06",
+    "subsystem": "S7",
+    "design_tier": "COTS_ENV_ICD",
+    "stl_path": "hardware/cad_parts/out/S7/S7.SAFETY-06.stl",
+    "step_path": "hardware/cad_parts/out/S7/S7.SAFETY-06.step",
+    "scad_path": "hardware/cad_parts/out/S7/S7.SAFETY-06.scad",
+    "dxf_path": "hardware/cad_parts/out/S7/S7.SAFETY-06.dxf",
+    "svg_path": "hardware/cad_parts/out/S7/S7.SAFETY-06.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 1406531.6880717806,
+    "surface_area_mm2": 141487.79994699327,
+    "mass_kg": 11.999999999999998,
+    "cg_mm": [
+      661.0957476936685,
+      -372.0357786060313,
+      424.5801980665972
+    ],
+    "bbox_min_mm": [
+      565.25,
+      -443.0,
+      363.25
+    ],
+    "bbox_max_mm": [
+      784.2,
+      -297.0,
+      527.0
+    ],
+    "inertia_kg_mm2": [
+      32014.43252782676,
+      54078.329849505404,
+      51083.07580594739,
+      3997.3227388378,
+      2868.587204025768,
+      834.5114738489806
+    ],
+    "triangle_count": 1428,
+    "vertex_count": 702,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "shell_bboxes_mm": [
+    [
+      [
+        565.25,
+        -416.75,
+        363.25
+      ],
+      [
+        678.75,
+        -303.25,
+        380.75
+      ]
+    ],
+    [
+      [
+        580.0,
+        -402.0,
+        381.0
+      ],
+      [
+        664.0,
+        -318.0,
+        527.0
+      ]
+    ],
+    [
+      [
+        599.0,
+        -443.0,
+        392.0
+      ],
+      [
+        645.0,
+        -405.0,
+        448.0
+      ]
+    ],
+    [
+      [
+        694.0,
+        -351.0,
+        383.0
+      ],
+      [
+        762.0,
+        -297.0,
+        427.0
+      ]
+    ],
+    [
+      [
+        671.8,
+        -333.5,
+        395.5
+      ],
+      [
+        693.8,
+        -314.5,
+        414.5
+      ]
+    ],
+    [
+      [
+        762.2,
+        -333.5,
+        395.5
+      ],
+      [
+        784.2,
+        -314.5,
+        414.5
+      ]
+    ],
+    [
+      [
+        694.0,
+        -430.0,
+        366.0
+      ],
+      [
+        762.0,
+        -386.0,
+        484.0
+      ]
+    ]
+  ],
+  "reconciliation_notes": []
+}

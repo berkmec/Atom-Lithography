@@ -1,0 +1,277 @@
+{
+  "part_id": "S2.4-02",
+  "subsystem": "S2",
+  "design": {
+    "part_id": "S2.4-02",
+    "parent_bom_id": "S2.4",
+    "subsystem": "S2",
+    "part_name": "Cok-karolu seramik/poliimid blanker surucu anakart duzenegi",
+    "design_tier": "CUSTOM_FULL",
+    "material": "Rogers",
+    "temp_stage": "300 K",
+    "temp_k": 300.0,
+    "vacuum_grade": "UHV 1e-9 mbar",
+    "tolerance_spec": "50 Ohm ±5%",
+    "surface_finish_ra_um": 0.8,
+    "qty": 4,
+    "procurement_class": "CUS",
+    "world_origin_mm": [
+      0.0,
+      0.0,
+      3.95
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "asic_mount_top",
+        "kind": "electrical",
+        "position_mm": [
+          0.0,
+          0.0,
+          5.15
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "4x4 SKY130 Tile Sites",
+        "mating_part_id": "S2.4-01",
+        "bore_mm": 67.0,
+        "od_mm": 128.0,
+        "pcd_mm": 118.0,
+        "bolt_count": 12,
+        "bolt_hole_mm": 3.2,
+        "bolt_spec": "",
+        "frame": "global",
+        "notes": ""
+      },
+      {
+        "name": "kapton_flex_edge",
+        "kind": "electrical",
+        "position_mm": [
+          64.0,
+          0.0,
+          3.95
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "standard": "50 Ohm UHV Flex Header",
+        "mating_part_id": "S2.4-03",
+        "bore_mm": 0.0,
+        "od_mm": 128.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "global",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "PCB_OD",
+        "nominal_mm": 128.0,
+        "tol_plus_mm": 0.1,
+        "tol_minus_mm": -0.1,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø128.00 ±0.10"
+      },
+      {
+        "label": "PCB_ID",
+        "nominal_mm": 67.0,
+        "tol_plus_mm": 0.1,
+        "tol_minus_mm": -0.1,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø67.00 ±0.10"
+      },
+      {
+        "label": "THICK",
+        "nominal_mm": 2.4,
+        "tol_plus_mm": 0.05,
+        "tol_minus_mm": -0.05,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "2.40 ±0.05"
+      },
+      {
+        "label": "QUADRANTS",
+        "nominal_mm": 4.0,
+        "tol_plus_mm": 0.0,
+        "tol_minus_mm": 0.0,
+        "view": "front",
+        "unit": "pcs",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 0,
+        "formatted": "4"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "flatness",
+        "tolerance_mm": 0.05,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "UHV ROGERS PCB",
+        "glyph": "⏥",
+        "tolerance_text": "0.050"
+      },
+      {
+        "symbol": "position",
+        "tolerance_mm": 0.05,
+        "diameter_zone": true,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "B",
+        "datum_tertiary": "",
+        "feature_note": "12X MOUNT HOLES",
+        "glyph": "⌖",
+        "tolerance_text": "Ø0.050"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "SPI cfg + start_all + 64-bit count_hit hatti, dusuk gaz cikisi",
+      "4-quadrant modular UHV Rogers/Polyimide carrier PCB (R=33.5..64.0 mm; +2.0 mm clear of S6.2-02 4K bridge @ X=-66.0, +13.4 mm outside S2.4-01)"
+    ],
+    "scad_params": {
+      "pcb_od": 128.0,
+      "pcb_id": 67.0,
+      "thickness": 2.4,
+      "quadrants": 4,
+      "z0_ohm": 50.0
+    },
+    "target_mass_kg": 0.039,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S2.4-02",
+    "subsystem": "S2",
+    "design_tier": "CUSTOM_FULL",
+    "stl_path": "hardware/cad_parts/out/S2/S2.4-02.stl",
+    "step_path": "hardware/cad_parts/out/S2/S2.4-02.step",
+    "scad_path": "hardware/cad_parts/out/S2/S2.4-02.scad",
+    "dxf_path": "hardware/cad_parts/out/S2/S2.4-02.dxf",
+    "svg_path": "hardware/cad_parts/out/S2/S2.4-02.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 20676.321676822485,
+    "surface_area_mm2": 19473.86888486119,
+    "mass_kg": 0.03845795831888983,
+    "cg_mm": [
+      -1.1326719005782068e-14,
+      1.603060643755224e-14,
+      3.9500000000000064
+    ],
+    "bbox_min_mm": [
+      -63.912290224292725,
+      -63.912290224292725,
+      2.75
+    ],
+    "bbox_max_mm": [
+      63.912290224292725,
+      63.912290224292725,
+      5.15
+    ],
+    "inertia_kg_mm2": [
+      49.938765640425025,
+      49.93876564042501,
+      99.8406116408639,
+      1.3682147255167359e-14,
+      -8.773372428549949e-16,
+      2.0359605628073082e-15
+    ],
+    "triangle_count": 1152,
+    "vertex_count": 560,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "engineering_checks": {
+    "bakeout_pcb_clearance": {
+      "outer_material": "Invar-36",
+      "inner_material": "Si",
+      "t_cold_k": 423.15,
+      "t_ref_k": 293.15,
+      "warm_outer_id_mm": 67.0,
+      "warm_inner_od_mm": 60.0,
+      "cold_outer_id_mm": 67.01742,
+      "cold_inner_od_mm": 60.022800000000004,
+      "outer_strain": 0.00025999999999992696,
+      "inner_strain": 0.00038000000000004697,
+      "warm_radial_clearance_mm": 3.5,
+      "cold_nominal_radial_clearance_mm": 3.497309999999999,
+      "cold_worst_case_radial_clearance_mm": 3.4223099999999986,
+      "delta_radial_clearance_mm": -0.0026900000000011914,
+      "min_required_radial_clearance_mm": 3.0,
+      "interference_risk": false,
+      "passed": true
+    }
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

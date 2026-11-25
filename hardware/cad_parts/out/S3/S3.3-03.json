@@ -1,0 +1,251 @@
+{
+  "part_id": "S3.3-03",
+  "subsystem": "S3",
+  "part_design": {
+    "part_id": "S3.3-03",
+    "parent_bom_id": "S3.3",
+    "subsystem": "S3",
+    "part_name": "Cok-kanalli 12-bit darbe-genligi ADC sayisallastirici ara-karti",
+    "design_tier": "COTS_ENV_ICD",
+    "material": "Al 6061",
+    "temp_stage": "300 K (kabin)",
+    "temp_k": 300.0,
+    "vacuum_grade": "Atmosfer",
+    "tolerance_spec": "±1 LSB",
+    "surface_finish_ra_um": 1.6,
+    "qty": 1,
+    "procurement_class": "COTS",
+    "world_origin_mm": [
+      1480.0,
+      -250.0,
+      679.0250000000002
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "rack_front_1u",
+        "kind": "mechanical",
+        "position_mm": [
+          0.0,
+          -160.0,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "standard": "EIA-310 19-inch 1U + VITA 57.1 FMC HPC (Bay 1 U25, X=1480 mm)",
+        "mating_part_id": "S7.4-03",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      },
+      {
+        "name": "pha_analog_inputs",
+        "kind": "rf",
+        "position_mm": [
+          0.0,
+          -160.0,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "standard": "16x SMA 50 MS/s 12-bit PHA ADC Tap",
+        "mating_part_id": "S3.2-02",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "WIDTH_19IN",
+        "nominal_mm": 482.6,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "482.60 ±0.50"
+      },
+      {
+        "label": "HEIGHT_1U",
+        "nominal_mm": 42.45,
+        "tol_plus_mm": 0.3,
+        "tol_minus_mm": -0.3,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "42.45 ±0.30"
+      },
+      {
+        "label": "FMC_W",
+        "nominal_mm": 69.0,
+        "tol_plus_mm": 0.2,
+        "tol_minus_mm": -0.2,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "69.00 ±0.20"
+      },
+      {
+        "label": "FMC_L",
+        "nominal_mm": 76.5,
+        "tol_plus_mm": 0.2,
+        "tol_minus_mm": -0.2,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "76.50 ±0.20"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "perpendicularity",
+        "tolerance_mm": 0.25,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "19-INCH FRONT FLANGE",
+        "glyph": "⊥",
+        "tolerance_text": "0.25"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "Her atisin IBIC enerji genligini sertifika icin kaydeder (DESIGN §4)",
+      "VITA 57.1 FMC 50 MS/s 12-bit pulse-height ADC digitizer recording per-shot IBIC energy for JSONL certificate.",
+      "Coupled to buffered S3.2-02 warm shaper PHA tap (26.5 MHz anti-alias). Rack Bay 1 (X=+1480 mm) U25 (1U)."
+    ],
+    "scad_params": {
+      "fmc_width_mm": 69.0,
+      "fmc_length_mm": 76.5,
+      "sample_rate_msps": 50,
+      "adc_bits": 12
+    },
+    "target_mass_kg": null,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S3.3-03",
+    "subsystem": "S3",
+    "design_tier": "COTS_ENV_ICD",
+    "stl_path": "hardware/cad_parts/out/S3/S3.3-03.stl",
+    "step_path": "hardware/cad_parts/out/S3/S3.3-03.step",
+    "scad_path": "hardware/cad_parts/out/S3/S3.3-03.scad",
+    "dxf_path": "hardware/cad_parts/out/S3/S3.3-03.dxf",
+    "svg_path": "hardware/cad_parts/out/S3/S3.3-03.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 1068841.0471715303,
+    "surface_area_mm2": 865785.9013854297,
+    "mass_kg": 2.5652185132116734,
+    "cg_mm": [
+      -2.6140161170270362e-15,
+      -10.282968936575614,
+      -1.5506805285837877
+    ],
+    "bbox_min_mm": [
+      -241.3,
+      -184.2,
+      -21.225
+    ],
+    "bbox_max_mm": [
+      241.3,
+      168.79999999999998,
+      21.225
+    ],
+    "inertia_kg_mm2": [
+      25018.363314719718,
+      43693.299297588565,
+      67300.69937459838,
+      -2.827833056130126e-12,
+      5.826027130762146e-13,
+      54.1591115700423
+    ],
+    "triangle_count": 1284,
+    "vertex_count": 690,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "world_bbox_min_mm": [
+    1238.7,
+    -434.2,
+    657.8000000000002
+  ],
+  "world_bbox_max_mm": [
+    1721.3,
+    -81.20000000000002,
+    700.2500000000002
+  ],
+  "reconciliation": null,
+  "thermal_contraction_checks": [],
+  "tolerance_stack_checks": []
+}

@@ -1,0 +1,37 @@
+{
+  "subsystem": "S9_spares_hpc",
+  "part_count": 10,
+  "all_valid": true,
+  "total_mass_kg": 283.1,
+  "option_hpc_masses_kg": {
+    "S9.HPC-01": 56.0,
+    "S9.HPC-02": 4.2,
+    "S9.HPC-03": 3.8
+  },
+  "option_hpc_total_mass_kg": 64.0,
+  "hpc_stack_center_xy_mm": [
+    2750.0,
+    -700.0
+  ],
+  "z_wafer_mm": 500.0,
+  "z_floor_mm": 0.0,
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "general_tolerance_std": "ISO 2768-mK"
+  },
+  "part_ids": [
+    "S9.1-01",
+    "S9.1-02",
+    "S9.2-01",
+    "S9.2-02",
+    "S9.3-01",
+    "S9.3-02",
+    "S9.3-03",
+    "S9.HPC-01",
+    "S9.HPC-02",
+    "S9.HPC-03"
+  ]
+}

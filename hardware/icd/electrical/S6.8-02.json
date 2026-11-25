@@ -1,0 +1,111 @@
+{
+  "schema_version": "1.0",
+  "part_id": "S6.8-02",
+  "parent_bom_id": "S6.8",
+  "subsystem": "S6",
+  "part_name": "Kapali-cevrim 3He/4He gaz isleme sistemi (GHS), turbo sirkulasyon ve soguk kapanlar",
+  "qty": 1,
+  "unit": "set",
+  "temp_stage": "300 K (kabin)",
+  "vacuum_grade": "Kapali 3He/4He dongu",
+  "bom_key_spec": "Otomatik yogusturma/toplama, 7/24 kesintisiz sirkulasyon",
+  "usd_nom": 155000.0,
+  "bom_epistemic_tag": "{Model-Kalibrasyon-Exp114}",
+  "electrical_class": "E3",
+  "grounding_domain": "FACILITY_PE",
+  "grounding_notes": "Closed-cycle 3He/4He GHS cabinet; recovery valves & turbo controller backed by Tier-1 UPS (260 W hold).",
+  "supply_rails": [
+    {
+      "rail_name": "AC_UPS_TIER1",
+      "voltage_v": 230.0,
+      "current_type": "AC_1PH",
+      "max_current_a": 6.0,
+      "steady_power_w": 260.0,
+      "peak_power_w": 1200.0,
+      "source_part_id": "S7.SAFETY-04"
+    }
+  ],
+  "connectors_and_pinout": [
+    {
+      "connector_ref": "J_AC",
+      "connector_type": "IEC C20 230VAC Tier-1 UPS",
+      "location_side": "cabinet_rear",
+      "mating_part_id": "S7.SAFETY-04",
+      "pins": [
+        {
+          "pin": "L",
+          "signal": "UPS_T1_L",
+          "direction": "IN",
+          "nominal_level": "230 VAC 260 W dump-recovery hold"
+        },
+        {
+          "pin": "N",
+          "signal": "UPS_T1_N",
+          "direction": "IN",
+          "nominal_level": "Neutral"
+        },
+        {
+          "pin": "PE",
+          "signal": "FACILITY_PE",
+          "direction": "PWR",
+          "nominal_level": "Safety earth"
+        }
+      ]
+    },
+    {
+      "connector_ref": "J_ILK",
+      "connector_type": "DB15 Safety & Telemetry",
+      "location_side": "cabinet_rear",
+      "mating_part_id": "S7.SAFETY-03",
+      "pins": [
+        {
+          "pin": "1-2",
+          "signal": "GHS_DUMP_RECOVER_CMD",
+          "direction": "IN",
+          "nominal_level": "Auto-recover 3He/4He at t=300 s"
+        },
+        {
+          "pin": "3-4",
+          "signal": "OVC_OVERPRESSURE_ALM",
+          "direction": "OUT",
+          "nominal_level": "Monitors <0.1 barg during recovery"
+        }
+      ]
+    }
+  ],
+  "mating_part_ids": [
+    "S6.8-01",
+    "S6.8-03",
+    "S7.SAFETY-03",
+    "S7.SAFETY-04",
+    "S7.SAFETY-05"
+  ],
+  "interlock_hooks": [
+    {
+      "signal_name": "GHS_SAFE_MIXTURE_RECOVERY",
+      "target_part_id": "S7.SAFETY-03",
+      "action_on_trip": "Recover 3He/4He into dump tank on EPO/outage (t=300 s)",
+      "response_time_ms": 300000.0
+    }
+  ],
+  "ups_tier": "TIER1_CRITICAL",
+  "ups_budget_group": "EXP150_TIER1_CRITICAL",
+  "exp150_ups_allocation_w": 260.0,
+  "supply_rails_steady_sum_w": 260.0,
+  "incremental_mains_w": 260.0,
+  "secondary_or_parent_derived_w": 0.0,
+  "non_exp150_aux_shed_w": 0.0,
+  "reconciliation_note": "Exp150 Tier-1 critical UPS load: incremental_mains_w = exp150_ups_allocation_w = 260.0 W.",
+  "timing_sync": {
+    "rb_10mhz_port": null,
+    "white_rabbit_port": null,
+    "sync_role": "Cryo circulation & recovery PLC"
+  },
+  "epistemic_flags": {
+    "design_maturity": "M0_M1_ELECTRICAL_ICD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

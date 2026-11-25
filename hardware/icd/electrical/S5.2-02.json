@@ -1,0 +1,92 @@
+{
+  "schema_version": "1.0",
+  "part_id": "S5.2-02",
+  "parent_bom_id": "S5.2",
+  "subsystem": "S5",
+  "part_name": "Iyon pompasi (VacIon 75 sinifi) + Titanyum Sublimasyon Pompasi (TSP)",
+  "qty": 1,
+  "unit": "set",
+  "temp_stage": "300 K",
+  "vacuum_grade": "UHV 1e-10 mbar",
+  "bom_key_spec": "75 L/s (hareketsiz/sifir titresim yazma modu, Exp114 capasi)",
+  "usd_nom": 6000.0,
+  "bom_epistemic_tag": "{Liste-\u00c7apas\u0131}",
+  "electrical_class": "E4",
+  "grounding_domain": "FACILITY_PE",
+  "grounding_notes": "VacIon 75 ion pump + TSP (zero-vibration write-mode pumping <=1e-10 mbar) on Tier-1 UPS (160 W).",
+  "supply_rails": [
+    {
+      "rail_name": "AC_UPS_TIER1",
+      "voltage_v": 230.0,
+      "current_type": "AC_1PH",
+      "max_current_a": 1.2,
+      "steady_power_w": 160.0,
+      "peak_power_w": 260.0,
+      "source_part_id": "S7.SAFETY-04"
+    },
+    {
+      "rail_name": "ION_PUMP_HV",
+      "voltage_v": 5000.0,
+      "current_type": "HV_DC",
+      "max_current_a": 0.02,
+      "steady_power_w": 40.0,
+      "peak_power_w": 100.0,
+      "source_part_id": "S5.2-02"
+    }
+  ],
+  "connectors_and_pinout": [
+    {
+      "connector_ref": "J_HV_ION",
+      "connector_type": "StarCell HV Safety Cable",
+      "location_side": "pump_ctrl",
+      "mating_part_id": "S5.1-01",
+      "pins": [
+        {
+          "pin": "1",
+          "signal": "ION_ANODE_5KV",
+          "direction": "OUT",
+          "nominal_level": "3-7 kV current-limited HV"
+        },
+        {
+          "pin": "2",
+          "signal": "INTERLOCK_SHIELD",
+          "direction": "IN",
+          "nominal_level": "Cable-disconnect interlock"
+        }
+      ]
+    }
+  ],
+  "mating_part_ids": [
+    "S5.1-01",
+    "S5.2-04",
+    "S7.SAFETY-04"
+  ],
+  "interlock_hooks": [
+    {
+      "signal_name": "ION_PUMP_OVERPRESSURE",
+      "target_part_id": "S5.2-04",
+      "action_on_trip": "Disable 5 kV ion pump if P > 1e-5 mbar",
+      "response_time_ms": 50.0
+    }
+  ],
+  "ups_tier": "TIER1_CRITICAL",
+  "ups_budget_group": "EXP150_TIER1_CRITICAL",
+  "exp150_ups_allocation_w": 160.0,
+  "supply_rails_steady_sum_w": 200.0,
+  "incremental_mains_w": 160.0,
+  "secondary_or_parent_derived_w": 40.0,
+  "non_exp150_aux_shed_w": 0.0,
+  "reconciliation_note": "Exp150 Tier-1 critical UPS load: incremental_mains_w = exp150_ups_allocation_w = 160.0 W; 40.0 W secondary output rail(s) derived internally from primary AC input (0.0 W double-count).",
+  "timing_sync": {
+    "rb_10mhz_port": null,
+    "white_rabbit_port": null,
+    "sync_role": "Zero-vibration UHV hold pump"
+  },
+  "epistemic_flags": {
+    "design_maturity": "M0_M1_ELECTRICAL_ICD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

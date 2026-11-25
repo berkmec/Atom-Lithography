@@ -1,0 +1,200 @@
+* Atom Lithography Machine - IBIC Cryo Front-End v3 (Split 3-PCB Chain, Native ngspice)
+* Epistemic status: M0/M1 DESIGN_ONLY; no_lab_measurement=true; no_physical_fab=true.
+* Cold PCB (S3.2-01): 100 K (-173.15 C) global temp, Cf=0.25pF, Rf=1G, LTC6268 + 50 Ohm coax driver.
+* Warm PCB (S3.2-02/06, S3.3-03): 300 K (temp=26.85 on warm R's), ADA4817-1 CR-RC (tau=1.2us), ADC tap, TLV3501.
+* HV Bias Filter PCB (S3.2-03): 3-stage RC (10k/1uF w/ 100mOhm ESR, 2nH ESL) @ 300 K.
+
+.temp -173.15
+
+.param C_DET=0.5p  C_PAR=0.25p  C_F=0.25p  R_F=1G
+.param C_S=600p    R_S1=2.0k    R_G1=100   R_G2=13.5k
+.param R_S2=2.0k   C_P=600p     R_HYS1=1.0k R_HYS2=1.0Meg  R_TERM=49.9
+.param Q_ION=5.474870055e-17
+.param TAU_COL=1.5n
+.param V_THR=0.00423
+
+.model D_LTC_1F D(IS=1e-14 N=1 RS=0 EG=0 XTI=0 KF=6.408706536e-12 AF=1)
+
+* --- Calibrated Cold LTC6268 CSA Macromodel (100 K: e_n=2.0 nV/rtHz, fc=2 kHz, i_n+leak=0.516 fA/rtHz) ---
+* Uses zero-DC-offset resistor thermal noise for white e_n & i_n, plus tiny-current 10 nA diode
+* through 0.016 Hz noiseless DC-block for exact 1/f flicker noise (zero transient charge drift!).
+.subckt OPAMP_LTC6268_100K inp inn out
+Cin inp inn 0.45p
+Rin inp inn 1T noisy=0
+* 1) White series voltage noise: sqrt(4*kB*300*241.43235) = 2.00000 nV/rtHz (zero DC)
+Rnw nw 0 241.43235 temp=26.85
+* 2) 1/f flicker series voltage noise: Id=10nA, KF=6.4087e-12 -> S_I,1f=6.4087e-20/f; R_H=353.31438 -> S_V,1f=8.0e-15/f (fc=2 kHz)
+Iflk 0 flk_d DC 10n
+Cflk flk_d 0 1u
+Dflk flk_d flk_s D_LTC_1F
+Vflk flk_s 0 DC 0
+Hflk flk_raw 0 Vflk 353.31438092
+Cblk flk_raw flk_ac 100u
+Rblk flk_ac 0 100k noisy=0
+* Combine white + 1/f voltage noise in series with IN+
+Evn_w  inp_w   inp   nw     0 1.0
+Evn_1f inp_int inp_w flk_ac 0 1.0
+* 3) Parallel input current noise: sqrt(2*q*0.05p + (0.5f)^2) = 0.515773 fA/rtHz (zero DC!)
+Rni ni 0 1k temp=26.85
+Gin 0 inn ni 0 1.267145e-7
+* Single-pole open-loop gain (A0=1e5, GBP=500 MHz -> fp=5 kHz) + 1 Ohm output impedance
+Egain n1 0 inp_int inn 1e5
+Rp n1 n2 1k noisy=0
+Cp n2 0 31.8309886n
+Ebuf n_out 0 n2 0 1.0
+Rout n_out out 1 noisy=0
+.ends OPAMP_LTC6268_100K
+
+* --- Calibrated Cold 50 Ohm Coax Line Driver (LTC6268 @ 100 K, e_n=2.0 nV/rtHz, GBP=500 MHz) ---
+.subckt OPAMP_LTC6268_DRV inp inn out
+Cin inp inn 0.45p
+Rin inp inn 1T noisy=0
+Rnw nw 0 241.43235 temp=26.85
+Evn inp_int inp nw 0 1.0
+Egain n1 0 inp_int inn 1e5
+Rp n1 n2 1k noisy=0
+Cp n2 0 31.8309886n
+Ebuf n_out 0 n2 0 1.0
+Rout n_out out 1 noisy=0
+.ends OPAMP_LTC6268_DRV
+
+* --- Calibrated Warm ADA4817-1 Shaper/Buffer Macromodel (300 K: e_n=4.0 nV/rtHz, GBP=1.05 GHz) ---
+.subckt OPAMP_ADA4817_300K inp inn out
+Cin inp inn 1.3p
+Rin inp inn 500G noisy=0
+* White series voltage noise: sqrt(4*kB*300*965.7294) = 4.00000 nV/rtHz (zero DC)
+Rnw nw 0 965.7294 temp=26.85
+Evn inp_int inp nw 0 1.0
+Egain n1 0 inp_int inn 1e5
+Rp n1 n2 1k noisy=0
+Cp n2 0 15.1576136n
+Ebuf n_out 0 n2 0 1.0
+Rout n_out out 1 noisy=0
+.ends OPAMP_ADA4817_300K
+
+* --- Fast Rail-to-Rail Comparator (TLV3501, t_pd=4.5 ns, 0..3.3 V) ---
+.subckt CMP_TLV3501 inp inn vcc gnd out
+Braw n1 gnd V = V(vcc) * 0.5 * (1 + tanh(V(inp, inn) / 0.2m))
+Rdel n1 out 100 noisy=0
+Cdel out gnd 45p
+.ends CMP_TLV3501
+
+* --- Power Supplies ---
+Vccd vccd 0 DC 3.3
+* Rising threshold V_DAC = V_THR = 4.23 mV; falling reset = V_THR - 3.3 mV = 0.93 mV > 0 (unique OFF DC equilibrium)
+Vthr thr_in 0 DC {V_THR}
+
+* =========================================================================
+* CHANNEL 0 FULL SPLIT 3-PCB SIGNAL CHAIN (100 K Cold -> 50 Ohm Coax -> 300 K Warm)
+* =========================================================================
+* 1) Cold-Island 100 K CSA PCB (S3.2-01, global .temp = -173.15 C)
+Cdet0 csa_sum 0 {C_DET + C_PAR}
+* Positive output polarity (5 keV 31P+ Lindhard @ 100 K: Q_ION = 341.715 e- = 0.05475 fC in 1.5 ns collection pulse)
+* Trapezoid area = Ipk * (PW + 0.5*(TR+TF)) = (Q_ION/1.5n) * (1.4n + 0.1n) = Q_ION exact with automatic SPICE breakpoints!
+Iion0 csa_sum 0 DC 0 AC 1 PULSE(0 {Q_ION/TAU_COL} 50n 0.1n 0.1n 1.4n 1m)
+Xcsa0 0 csa_sum csa_out OPAMP_LTC6268_100K
+Cf0   csa_out csa_sum {C_F}
+Rf0   csa_out csa_sum {R_F}
+
+* Cold 50 Ohm Coax Line Driver (G = +2.00 -> 49.9 Ohm series -> 50 Ohm CF63 coax -> 49.9 Ohm RX = 1.000x net)
+Xdrv0 csa_out drv_fb drv_out OPAMP_LTC6268_DRV
+Rdrv1 drv_fb  0       499
+Rdrv2 drv_out drv_fb  499
+Rtx0  drv_out coax_tx 49.9
+* 0.4 m PTFE 50 Ohm micro-coax + CF63 feedthrough (4-section pi ladder: Z0=50 Ohm, TD=2.0 ns, f_c=636 MHz)
+Ccx0  coax_tx 0       5p
+Lcx1  coax_tx cx1     25n
+Ccx1  cx1     0       10p
+Lcx2  cx1     cx2     25n
+Ccx2  cx2     0       10p
+Lcx3  cx2     cx3     25n
+Ccx3  cx3     0       10p
+Lcx4  cx3     coax_rx 25n
+Ccx4  coax_rx 0       5p
+
+* 2) Warm Ex-Vacuum 300 K Shaper PCB (S3.2-02, S3.3-03; resistors explicitly at temp=26.85 C = 300 K)
+Rrx0  coax_rx 0       49.9    temp=26.85
+Cs0   coax_rx cr_out  {C_S}
+Rs1_0 cr_out  0       {R_S1}  temp=26.85
+Xshp0 cr_out  shp_fb  shp_gain OPAMP_ADA4817_300K
+Rg1_0 shp_fb  0       {R_G1}  temp=26.85
+Rg2_0 shp_gain shp_fb {R_G2}  temp=26.85
+Rs2_0 shp_gain shp_out {R_S2} temp=26.85
+Cp0   shp_out 0       {C_P}
+
+* Buffered Analog SHP_OUT Tap to 50 MS/s 12-bit FMC PHA ADC (S3.3-03, f_c=26.5 MHz anti-alias)
+Xadc0 shp_out shp_buf shp_buf OPAMP_ADA4817_300K
+Raa0  shp_buf shp_adc 49.9    temp=26.85
+Caa0  shp_adc 0       120p
+Radc_load shp_adc 0   10k     temp=26.85
+
+* Comparator Threshold RC Filter & TLV3501 Hysteresis Comparator (3.3 mV hysteresis driven from buffered shp_buf!)
+Rdac0  thr_in  thresh  1k      temp=26.85
+Cdac0  thresh  0       100n
+Rhys1  shp_buf cmp_inp {R_HYS1} temp=26.85
+Rhys2  cmp_out cmp_inp {R_HYS2} temp=26.85
+Xcmp0  cmp_inp thresh  vccd 0 cmp_out CMP_TLV3501
+Rterm0 cmp_out count_hit {R_TERM} temp=26.85
+Rfpga0 count_hit 0     10k     temp=26.85
+
+* =========================================================================
+* S3.2-03 3-STAGE RC 0-100 V HV BIAS FILTER VERIFICATION SUBSYSTEM (300 K)
+* =========================================================================
+Vhv_in hv_in 0 DC -30.0 AC 1
+Rhv1 hv_in hv_s1 10k temp=26.85
+Chv1 hv_s1 hv_c1 1.0u
+Resr1 hv_c1 hv_l1 100m temp=26.85
+Lesl1 hv_l1 0 2n
+
+Rhv2 hv_s1 hv_s2 10k temp=26.85
+Chv2 hv_s2 hv_c2 1.0u
+Resr2 hv_c2 hv_l2 100m temp=26.85
+Lesl2 hv_l2 0 2n
+
+Rhv3 hv_s2 hv_s3 10k temp=26.85
+Chv3 hv_s3 hv_c3 1.0u
+Resr3 hv_c3 hv_l3 100m temp=26.85
+Lesl3 hv_l3 0 2n
+Rhv_load hv_s3 0 10Meg temp=26.85
+
+.control
+set noaskquit
+
+* 1) AC Analysis: IBIC chain transimpedance & S3.2-03 HV filter attenuation
+ac dec 100 10 50Meg
+meas ac z_peak_ohm MAX vm(shp_out)
+meas ac z_f_lo WHEN vm(shp_out)='0.707107*z_peak_ohm' RISE=1
+meas ac z_f_hi WHEN vm(shp_out)='0.707107*z_peak_ohm' FALL=1
+let z_peak_freq = sqrt(z_f_lo * z_f_hi)
+print z_peak_freq
+meas ac z_adc_peak_ohm MAX vm(shp_adc)
+meas ac hv_atten_100k_db FIND vdb(hv_s3) AT=100k
+meas ac hv_atten_1k_db   FIND vdb(hv_s3) AT=1k
+meas ac hv_atten_100hz_db FIND vdb(hv_s3) AT=100
+
+* 2) Transient Analysis: 5 keV 31P+ ion pulse (341.7 e-, 0.05475 fC @ 100 K)
+tran 5n 8.0u
+meas tran v_peak_5kev MAX v(shp_out)
+meas tran t_peak_abs MAX_AT v(shp_out)
+let t_peak_after_hit = t_peak_abs - 50n
+print t_peak_after_hit
+meas tran v_adc_peak_5kev MAX v(shp_adc)
+meas tran cmp_max_v MAX v(count_hit)
+meas tran cmp_t_rise WHEN v(count_hit)=1.65 RISE=1
+meas tran cmp_t_fall WHEN v(count_hit)=1.65 FALL=1
+
+* 3) Integrated Noise Analysis: IBIC shaper output RMS noise (10 Hz .. 50 MHz)
+noise v(shp_out) Iion0 dec 50 10 50Meg
+setplot noise2
+let ibic_onoise_rms_v = onoise_total
+print ibic_onoise_rms_v
+
+* 4) Integrated Noise Analysis: S3.2-03 HV bias output thermal noise (1 Hz .. 10 MHz)
+noise v(hv_s3) Vhv_in dec 40 1 10Meg
+setplot noise4
+let hv_onoise_rms_v = onoise_total
+print hv_onoise_rms_v
+
+quit 0
+.endc
+.end

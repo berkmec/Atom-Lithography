@@ -1,0 +1,139 @@
+{
+  "schema_version": "1.0",
+  "part_id": "S1.1-05",
+  "parent_bom_id": "S1.1",
+  "subsystem": "S1",
+  "part_name": "Izole yuksek gerilim ark/katot guc platformu (15 kV deck)",
+  "qty": 1,
+  "unit": "set",
+  "temp_stage": "300 K (kabin)",
+  "vacuum_grade": "Atmosfer",
+  "bom_key_spec": "0-15 kV, dalgalilik <0.01%, fiber-optik kontrol",
+  "usd_nom": 15000.0,
+  "bom_epistemic_tag": "{Model-Kalibrasyon-Exp114}",
+  "electrical_class": "E3",
+  "grounding_domain": "HV_MINUS_5KV_DECK",
+  "grounding_notes": "15 kV solid-insulated isolation transformer & fiber-optic control deck; chassis to FACILITY_PE.",
+  "supply_rails": [
+    {
+      "rail_name": "AC_MAINS_230V",
+      "voltage_v": 230.0,
+      "current_type": "AC_1PH",
+      "max_current_a": 6.5,
+      "steady_power_w": 950.0,
+      "peak_power_w": 1400.0,
+      "source_part_id": "S7.4-03"
+    },
+    {
+      "rail_name": "HV_EXTRACT_15KV",
+      "voltage_v": 15000.0,
+      "current_type": "HV_DC",
+      "max_current_a": 0.015,
+      "steady_power_w": 150.0,
+      "peak_power_w": 225.0,
+      "source_part_id": "S1.1-05"
+    }
+  ],
+  "connectors_and_pinout": [
+    {
+      "connector_ref": "J_AC",
+      "connector_type": "IEC C14 230VAC",
+      "location_side": "rack_rear",
+      "mating_part_id": "S7.4-03",
+      "pins": [
+        {
+          "pin": "L",
+          "signal": "AC_LINE_SHED",
+          "direction": "IN",
+          "nominal_level": "230 VAC 50/60 Hz"
+        },
+        {
+          "pin": "N",
+          "signal": "AC_NEUTRAL",
+          "direction": "IN",
+          "nominal_level": "Neutral"
+        },
+        {
+          "pin": "PE",
+          "signal": "FACILITY_PE",
+          "direction": "PWR",
+          "nominal_level": "Safety earth"
+        }
+      ]
+    },
+    {
+      "connector_ref": "J_HV_OUT",
+      "connector_type": "SHV-20kV Silicon-Free Solid HV",
+      "location_side": "hv_deck_top",
+      "mating_part_id": "S1.1-03",
+      "pins": [
+        {
+          "pin": "1",
+          "signal": "HV_EXTRACT_POS_15KV",
+          "direction": "OUT",
+          "nominal_level": "0-15 kV <0.01% ripple"
+        },
+        {
+          "pin": "2",
+          "signal": "ARC_FILAMENT_RETURN",
+          "direction": "BIDIR",
+          "nominal_level": "Floating on HV deck"
+        }
+      ]
+    },
+    {
+      "connector_ref": "J_FO_ILK",
+      "connector_type": "ST Fiber-Optic Duplex",
+      "location_side": "rack_rear",
+      "mating_part_id": "S7.SAFETY-03",
+      "pins": [
+        {
+          "pin": "TX",
+          "signal": "HV_STATUS_FO",
+          "direction": "OUT",
+          "nominal_level": "Optical status"
+        },
+        {
+          "pin": "RX",
+          "signal": "HV_ENABLE_SIL3_FO",
+          "direction": "IN",
+          "nominal_level": "Fail-safe 18.3 ms crowbar trip"
+        }
+      ]
+    }
+  ],
+  "mating_part_ids": [
+    "S1.1-01",
+    "S1.1-02",
+    "S1.1-03",
+    "S7.SAFETY-03"
+  ],
+  "interlock_hooks": [
+    {
+      "signal_name": "HV_DECK_ENABLE_1OO2D",
+      "target_part_id": "S7.SAFETY-03",
+      "action_on_trip": "Inhibit 15 kV deck & fire 2 MOhm crowbar (<18.3 ms)",
+      "response_time_ms": 18.3
+    }
+  ],
+  "ups_tier": "TIER2_SHED",
+  "ups_budget_group": "AUX_PROCESS_SHED_ON_OUTAGE",
+  "exp150_ups_allocation_w": 0.0,
+  "supply_rails_steady_sum_w": 1100.0,
+  "incremental_mains_w": 950.0,
+  "secondary_or_parent_derived_w": 150.0,
+  "non_exp150_aux_shed_w": 950.0,
+  "reconciliation_note": "Non-Exp150 auxiliary sheddable rack/facility load (TIER2_SHED): incremental_mains_w = 950.0 W AC mains (shed immediately on outage, exp150_ups_allocation_w = 0.0 W); 150.0 W HV_EXTRACT_15KV derived internally from own AC input (0.0 W double-count).",
+  "timing_sync": {
+    "rb_10mhz_port": null,
+    "white_rabbit_port": null,
+    "sync_role": "DC/CW HV source supply"
+  },
+  "epistemic_flags": {
+    "design_maturity": "M0_M1_ELECTRICAL_ICD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

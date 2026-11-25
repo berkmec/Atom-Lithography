@@ -1,0 +1,256 @@
+{
+  "part_design": {
+    "part_id": "S6.11-02",
+    "parent_bom_id": "S6.11",
+    "subsystem": "S6",
+    "part_name": "20 mK Josephson TWPA + Bant-Geciren Purcell Filtre + Cift Kriyo-Izolator (32 hat, Exp140 S6.5-02, 2.72 kg)",
+    "design_tier": "CUSTOM_FULL",
+    "material": "Nb",
+    "temp_stage": "20 mK (MXC)",
+    "temp_k": 0.02,
+    "vacuum_grade": "Kriyo-vakum",
+    "tolerance_spec": "F_RO>=0.995",
+    "surface_finish_ra_um": 0.8,
+    "qty": 32,
+    "procurement_class": "R&D",
+    "world_origin_mm": [
+      -650.0,
+      0.0,
+      452.0
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "mxc_20mk_mount",
+        "kind": "thermal",
+        "position_mm": [
+          0.0,
+          0.0,
+          27.5
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "4x M3 Au-OFHC MXC Mount (2.144 uW)",
+        "mating_part_id": "S6.8-01",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 4,
+        "bolt_hole_mm": 3.4,
+        "bolt_spec": "M3",
+        "frame": "local",
+        "notes": ""
+      },
+      {
+        "name": "twpa_32ch_smp",
+        "kind": "rf",
+        "position_mm": [
+          -90.0,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "standard": "32x TWPA + 625x Purcell SMP",
+        "mating_part_id": "S6.11-04",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "BOX_X",
+        "nominal_mm": 180.0,
+        "tol_plus_mm": 0.1,
+        "tol_minus_mm": -0.1,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "180.00 ±0.10"
+      },
+      {
+        "label": "BOX_Y",
+        "nominal_mm": 140.0,
+        "tol_plus_mm": 0.1,
+        "tol_minus_mm": -0.1,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "140.00 ±0.10"
+      },
+      {
+        "label": "BOX_Z",
+        "nominal_mm": 55.0,
+        "tol_plus_mm": 0.1,
+        "tol_minus_mm": -0.1,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "55.00 ±0.10"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "flatness",
+        "tolerance_mm": 0.015,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "20 mK MXC thermal contact face",
+        "glyph": "⏥",
+        "tolerance_text": "0.015"
+      },
+      {
+        "symbol": "parallelism",
+        "tolerance_mm": 0.03,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "Bottom clearance face to S9.4-02",
+        "glyph": "∥",
+        "tolerance_text": "0.030"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "N_mux*=32/hat (1024 hucre), T_N=0.30 K, G=20 dB, P_1dB=-98 dBm, 625x Purcell (T_1=124.3 ms), F_RO=0.9961 @ 2 us, 20 mK=2.144 uW, 180x140x55 mm, kutle=2.72 kg",
+      "Exact BOM part_id S6.11-02 (resolves legacy cad/params.py S6.5 aliasing bug). 32x 20 mK Josephson TWPA + Purcell + dual isolators, 10 mm corner chamfers clear Still shield R_in=116 mm by 9.0 mm (Exp140)."
+    ],
+    "scad_params": {
+      "n_twpa": 32,
+      "box_dx": 180.0,
+      "box_dy": 140.0,
+      "box_dz": 55.0,
+      "p_20mk_uw": 2.144
+    },
+    "target_mass_kg": 2.72,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact_result": {
+    "part_id": "S6.11-02",
+    "subsystem": "S6",
+    "design_tier": "CUSTOM_FULL",
+    "stl_path": "hardware/cad_parts/out/S6/S6.11-02.stl",
+    "step_path": "hardware/cad_parts/out/S6/S6.11-02.step",
+    "scad_path": "hardware/cad_parts/out/S6/S6.11-02.scad",
+    "dxf_path": "hardware/cad_parts/out/S6/S6.11-02.dxf",
+    "svg_path": "hardware/cad_parts/out/S6/S6.11-02.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 1329421.8160000003,
+    "surface_area_mm2": 164791.4707162722,
+    "mass_kg": 2.8582569043999997,
+    "cg_mm": [
+      0.0,
+      3.940577339082923e-16,
+      -0.002527784604972459
+    ],
+    "bbox_min_mm": [
+      -90.0,
+      -70.0,
+      -27.4
+    ],
+    "bbox_max_mm": [
+      90.0,
+      70.0,
+      27.4
+    ],
+    "inertia_kg_mm2": [
+      5175.619232953949,
+      8148.161857732611,
+      11961.126076424549,
+      -1.601874828338623e-13,
+      -8.009374141693116e-15,
+      -4.605674840463944e-14
+    ],
+    "triangle_count": 260,
+    "vertex_count": 128,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "json_path": "hardware/cad_parts/out/S6/S6.11-02.json",
+  "world_bbox_min_mm": [
+    -740.0,
+    -70.0,
+    424.6
+  ],
+  "world_bbox_max_mm": [
+    -560.0,
+    70.0,
+    479.4
+  ],
+  "world_cg_mm": [
+    -650.0,
+    -0.0,
+    451.9975
+  ],
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

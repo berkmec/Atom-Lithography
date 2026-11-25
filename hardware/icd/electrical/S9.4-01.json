@@ -1,0 +1,102 @@
+{
+  "schema_version": "1.0",
+  "part_id": "S9.4-01",
+  "parent_bom_id": "S9.4",
+  "subsystem": "S9",
+  "part_name": "Option-Q OVC -X CF63 Kriyo-Koaksiyel (4-Port 4-8 GHz) & 1550 nm SMF-28 Vakum Gecisi (Exp142 S9.1-01, 3.20 kg)",
+  "qty": 1,
+  "unit": "adet",
+  "temp_stage": "300 K (OVC portu)",
+  "vacuum_grade": "Kriyo-vakum",
+  "bom_key_spec": "s6_dr_ovc_upper -X dis port ([-875,0,690] mm, 100x120x120 mm, sifir ic cakisma), 0 W / 0 uW kriyo, kutle=3.20 kg",
+  "usd_nom": 32000.0,
+  "bom_epistemic_tag": "{Varsay\u0131m}",
+  "electrical_class": "E2",
+  "grounding_domain": "CRYO_OVC",
+  "grounding_notes": "Option-Q CF63 hermetic 4x SMA (4-8 GHz) + 1x 1550 nm SMF-28 vacuum feedthrough on OVC -X wall.",
+  "supply_rails": [
+    {
+      "rail_name": "PASSIVE_CF63_FEEDTHROUGH",
+      "voltage_v": 0.0,
+      "current_type": "RF",
+      "max_current_a": 0.0,
+      "steady_power_w": 0.0,
+      "peak_power_w": 0.0,
+      "source_part_id": "S9.4-03"
+    }
+  ],
+  "connectors_and_pinout": [
+    {
+      "connector_ref": "J_EXT_RF",
+      "connector_type": "SMA-F Hermetic 50R (4x) + FC/APC SMF-28 (1x)",
+      "location_side": "300K_OVC_minusX",
+      "mating_part_id": "S6.11-01",
+      "pins": [
+        {
+          "pin": "1-4",
+          "signal": "QRAM_RF_EXT[0:3]",
+          "direction": "BIDIR",
+          "nominal_level": "4-8 GHz 50 Ohm, He<=1e-10"
+        },
+        {
+          "pin": "5",
+          "signal": "ER167_OPT_1550NM",
+          "direction": "BIDIR",
+          "nominal_level": "1536/1550 nm SMF-28 single-mode"
+        },
+        {
+          "pin": "SHD",
+          "signal": "CF63_OVC_SHELL",
+          "direction": "PWR",
+          "nominal_level": "0 V CRYO_OVC"
+        }
+      ]
+    },
+    {
+      "connector_ref": "J_VAC_RF",
+      "connector_type": "SMA-F Cryo Vacuum Side (4x) + FC/APC (1x)",
+      "location_side": "vacuum_side",
+      "mating_part_id": "S9.4-03",
+      "pins": [
+        {
+          "pin": "1-4",
+          "signal": "QRAM_RF_VAC[0:3]",
+          "direction": "BIDIR",
+          "nominal_level": "Mates to S9.4-03 NbTi/CuNi loom"
+        },
+        {
+          "pin": "5",
+          "signal": "ER167_OPT_VAC",
+          "direction": "BIDIR",
+          "nominal_level": "Mates to S9.4-03 cryo fiber"
+        }
+      ]
+    }
+  ],
+  "mating_part_ids": [
+    "S6.8-04",
+    "S9.4-03",
+    "S6.11-01"
+  ],
+  "interlock_hooks": [],
+  "ups_tier": "NONE",
+  "ups_budget_group": "PASSIVE_ZERO_MAINS",
+  "exp150_ups_allocation_w": 0.0,
+  "supply_rails_steady_sum_w": 0.0,
+  "incremental_mains_w": 0.0,
+  "secondary_or_parent_derived_w": 0.0,
+  "non_exp150_aux_shed_w": 0.0,
+  "reconciliation_note": "Passive or downstream sub-assembly (0.00 W sub-rail power drawn from upstream source S9.4-03); incremental_mains_w = 0.0 W (zero double-counting).",
+  "timing_sync": {
+    "rb_10mhz_port": null,
+    "white_rabbit_port": null,
+    "sync_role": "Option-Q hermetic OVC interface"
+  },
+  "epistemic_flags": {
+    "design_maturity": "M0_M1_ELECTRICAL_ICD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

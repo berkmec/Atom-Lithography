@@ -1,0 +1,96 @@
+{
+  "schema_version": "part_icd_v1.0",
+  "part_id": "S1.2-01",
+  "parent_bom_id": "S1.2",
+  "subsystem": "S1",
+  "part_name": "Wien ExB kutle filtresi manyetik kutup ve boyunduruk",
+  "part_category": "PHYSICAL_SOLID",
+  "bom_metadata": {
+    "qty": "2",
+    "unit": "adet",
+    "material": "Yumusak demir / SmCo-elektromiknatis",
+    "key_spec": "B=0.45 T, L=150 mm, OD=110 mm (Exp124), m/dm >= 60 (28Si/29Si/31P)",
+    "tolerance": "±0.1% B homojenlik",
+    "temp_stage": "300 K",
+    "vacuum_grade": "HV 1e-7 mbar",
+    "procurement_class": "COTS/CUS",
+    "parent_cost_class": "C",
+    "usd_low": 20000.0,
+    "usd_nom": 36000.0,
+    "usd_high": 68000.0,
+    "legacy_cad_module": "s1_ion_source_column",
+    "bom_epistemic_tag": "{Model-Kalibrasyon-Exp114}",
+    "notes": "2 hat x $18,000 nom; Exp124 0.45 T / 150 mm ExB kutle secici"
+  },
+  "artifact_links": {
+    "cad": {
+      "work_package": "WP-M1",
+      "design_tier": "CUSTOM_FULL",
+      "stl": "hardware/cad_parts/out/S1/S1.2-01.stl",
+      "step": "hardware/cad_parts/out/S1/S1.2-01.step",
+      "scad": "hardware/cad_parts/out/S1/S1.2-01.scad",
+      "dxf": "hardware/cad_parts/out/S1/S1.2-01.dxf",
+      "svg": "hardware/cad_parts/out/S1/S1.2-01.svg",
+      "cad_json": "hardware/cad_parts/out/S1/S1.2-01.json",
+      "watertight": true,
+      "all_6_files_valid": true,
+      "mass_kg": 4.289351,
+      "triangle_count": 2192,
+      "temp_k": 300.0,
+      "canonical_bbox_min_mm": [
+        -55.0,
+        -55.0,
+        752.66
+      ],
+      "canonical_bbox_max_mm": [
+        55.0,
+        55.0,
+        867.66
+      ],
+      "datum_shift_mm": [
+        0.0,
+        0.0,
+        500.0
+      ],
+      "port_count": 2,
+      "gdt_frame_count": 3
+    },
+    "pcb_bundles": [],
+    "legacy_board_files": [],
+    "electrical_icd": {
+      "path": "hardware/icd/electrical/S1.2-01.json",
+      "electrical_class": "E4",
+      "grounding_domain": "FACILITY_PE",
+      "ups_tier": "NONE",
+      "exp150_ups_allocation_w": 0.0,
+      "mating_part_ids": [
+        "S1.2-02",
+        "S1.2-03",
+        "S1.1-03"
+      ],
+      "interlock_hooks_count": 0
+    },
+    "rtl_modules": [],
+    "rtl_audit_json": null,
+    "software_and_eda_files": [],
+    "verification_tests": []
+  },
+  "specialized_specification": null,
+  "verification_status": {
+    "cad_verified": true,
+    "pcb_verified": false,
+    "electrical_icd_verified": true,
+    "rtl_verified": false,
+    "software_or_eda_verified": false,
+    "specialized_icd_present": false,
+    "traceable": true
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "tapeout_done": false
+  }
+}

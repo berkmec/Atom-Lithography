@@ -1,0 +1,353 @@
+{
+  "part_id": "S5.1-03",
+  "subsystem": "S5",
+  "design": {
+    "part_id": "S5.1-03",
+    "parent_bom_id": "S5.1",
+    "subsystem": "S5",
+    "part_name": "Hizli giris yuk kilidi (load-lock) odasi ve CF100 tam-metal surgu vana",
+    "design_tier": "COTS_ENV_ICD",
+    "material": "316LN",
+    "temp_stage": "300 K",
+    "temp_k": 300.0,
+    "vacuum_grade": "UHV 1e-8 mbar",
+    "tolerance_spec": "He <=1e-10 mbar*L/s",
+    "surface_finish_ra_um": 0.4,
+    "qty": 1,
+    "procurement_class": "COTS/CUS",
+    "world_origin_mm": [
+      420.0,
+      0.0,
+      500.0
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "main_chamber_gate_in",
+        "kind": "flange",
+        "position_mm": [
+          -169.5,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "standard": "CF100",
+        "mating_part_id": "S5.1-01",
+        "bore_mm": 101.6,
+        "od_mm": 152.0,
+        "pcd_mm": 130.2,
+        "bolt_count": 16,
+        "bolt_hole_mm": 8.4,
+        "bolt_spec": "M8",
+        "frame": "local",
+        "notes": "ISO 3669 CF100 Cu-gasket knife-edge"
+      },
+      {
+        "name": "mbe_top_cf100",
+        "kind": "flange",
+        "position_mm": [
+          0.0,
+          0.0,
+          85.0
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "CF100",
+        "mating_part_id": "S5.6-01",
+        "bore_mm": 101.6,
+        "od_mm": 152.0,
+        "pcd_mm": 130.2,
+        "bolt_count": 16,
+        "bolt_hole_mm": 8.4,
+        "bolt_spec": "M8",
+        "frame": "local",
+        "notes": "Exp139 S5.6 host port at Z=585.0 mm"
+      },
+      {
+        "name": "transfer_arm_pos_x",
+        "kind": "flange",
+        "position_mm": [
+          90.0,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "standard": "CF100",
+        "mating_part_id": "S5.1-04",
+        "bore_mm": 101.6,
+        "od_mm": 152.0,
+        "pcd_mm": 130.2,
+        "bolt_count": 16,
+        "bolt_hole_mm": 8.4,
+        "bolt_spec": "M8",
+        "frame": "local",
+        "notes": "ISO 3669 CF100 Cu-gasket knife-edge"
+      },
+      {
+        "name": "operator_door_neg_y",
+        "kind": "flange",
+        "position_mm": [
+          0.0,
+          -110.1,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "standard": "CF100",
+        "mating_part_id": "",
+        "bore_mm": 80.0,
+        "od_mm": 152.0,
+        "pcd_mm": 130.2,
+        "bolt_count": 16,
+        "bolt_hole_mm": 8.4,
+        "bolt_spec": "M8",
+        "frame": "local",
+        "notes": "-Y quick-access hinged viewport door"
+      },
+      {
+        "name": "n2_vent_neg_y",
+        "kind": "flange",
+        "position_mm": [
+          -48.0,
+          -115.8,
+          -56.0
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "standard": "CF16",
+        "mating_part_id": "",
+        "bore_mm": 16.0,
+        "od_mm": 33.8,
+        "pcd_mm": 27.0,
+        "bolt_count": 6,
+        "bolt_hole_mm": 4.3,
+        "bolt_spec": "M4",
+        "frame": "local",
+        "notes": "Dry N2 purge/vent valve port"
+      },
+      {
+        "name": "roughing_pos_y",
+        "kind": "flange",
+        "position_mm": [
+          0.0,
+          116.85,
+          -20.0
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "standard": "CF40",
+        "mating_part_id": "S5.2-03",
+        "bore_mm": 38.0,
+        "od_mm": 69.5,
+        "pcd_mm": 58.7,
+        "bolt_count": 6,
+        "bolt_hole_mm": 6.6,
+        "bolt_spec": "M6",
+        "frame": "local",
+        "notes": "ISO 3669 CF40 Cu-gasket knife-edge"
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "CHAMBER_W",
+        "nominal_mm": 180.0,
+        "tol_plus_mm": 0.2,
+        "tol_minus_mm": -0.2,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "180.00 ±0.20"
+      },
+      {
+        "label": "CHAMBER_H",
+        "nominal_mm": 170.0,
+        "tol_plus_mm": 0.2,
+        "tol_minus_mm": -0.2,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "170.00 ±0.20"
+      },
+      {
+        "label": "MBE_PORT_Z",
+        "nominal_mm": 85.0,
+        "tol_plus_mm": 0.1,
+        "tol_minus_mm": -0.1,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "A",
+        "decimals": 2,
+        "formatted": "85.00 ±0.10"
+      },
+      {
+        "label": "GATE_FACE_X",
+        "nominal_mm": -169.5,
+        "tol_plus_mm": 0.15,
+        "tol_minus_mm": -0.15,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "B",
+        "decimals": 2,
+        "formatted": "-169.50 ±0.15"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "perpendicularity",
+        "tolerance_mm": 0.1,
+        "diameter_zone": true,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "Top CF100 MBE port to wafer plane",
+        "glyph": "⊥",
+        "tolerance_text": "Ø0.10"
+      },
+      {
+        "symbol": "concentricity",
+        "tolerance_mm": 0.15,
+        "diameter_zone": true,
+        "material_condition": "",
+        "datum_primary": "B",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "Gate valve & transfer arm CF100 axes",
+        "glyph": "◎",
+        "tolerance_text": "Ø0.15"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "Yonga degisimi <15 dk, ana oda vakumunu bozmadan transfer",
+      "VAT CF100 all-metal gate valve (He leak <= 1e-10 mbar*L/s) isolates 20 mK DR chamber during MBE/vent.",
+      "Operator quick-access hinged viewport door & dry N2 vent port positioned on -Y front side.",
+      "Decoupled floor pedestal clears S4 granite base (X_max=450 mm) by 15.0 mm."
+    ],
+    "scad_params": {
+      "cube_x": 180.0,
+      "cube_y": 180.0,
+      "cube_z": 170.0,
+      "stand_clear_granite": 15.0
+    },
+    "target_mass_kg": 52.0,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifacts": {
+    "part_id": "S5.1-03",
+    "subsystem": "S5",
+    "design_tier": "COTS_ENV_ICD",
+    "stl_path": "hardware/cad_parts/out/S5/S5.1-03.stl",
+    "step_path": "hardware/cad_parts/out/S5/S5.1-03.step",
+    "scad_path": "hardware/cad_parts/out/S5/S5.1-03.scad",
+    "dxf_path": "hardware/cad_parts/out/S5/S5.1-03.dxf",
+    "svg_path": "hardware/cad_parts/out/S5/S5.1-03.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 5124132.5709444,
+    "surface_area_mm2": 854014.2190188579,
+    "mass_kg": 26.645489368910887,
+    "cg_mm": [
+      -24.131576631070242,
+      -5.886088038374725,
+      -64.10002729785398
+    ],
+    "bbox_min_mm": [
+      -169.5,
+      -131.0,
+      -500.0
+    ],
+    "bbox_max_mm": [
+      90.0,
+      116.85,
+      158.2
+    ],
+    "inertia_kg_mm2": [
+      719231.7192933571,
+      838914.2111029398,
+      296297.3895821299,
+      3960.3256070082257,
+      187254.4979222452,
+      10233.47074054778
+    ],
+    "triangle_count": 7944,
+    "vertex_count": 3854,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

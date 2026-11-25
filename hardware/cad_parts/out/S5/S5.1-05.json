@@ -1,0 +1,294 @@
+{
+  "part_id": "S5.1-05",
+  "subsystem": "S5",
+  "design": {
+    "part_id": "S5.1-05",
+    "parent_bom_id": "S5.1",
+    "subsystem": "S5",
+    "part_name": "UHV tam-metal aci vanalari, gozlem pencereleri ve CF baglanti seti",
+    "design_tier": "COTS_ENV_ICD",
+    "material": "OFHC Cu",
+    "temp_stage": "300 K",
+    "temp_k": 300.0,
+    "vacuum_grade": "UHV 1e-9 mbar",
+    "tolerance_spec": "He <=1e-10 mbar*L/s",
+    "surface_finish_ra_um": 0.8,
+    "qty": 1,
+    "procurement_class": "COTS",
+    "world_origin_mm": [
+      780.0,
+      -480.0,
+      0.0
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "gasket_cf100_spec",
+        "kind": "flange",
+        "position_mm": [
+          -102.0,
+          48.0,
+          20.0
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "CF100",
+        "mating_part_id": "S5.1-01",
+        "bore_mm": 101.6,
+        "od_mm": 152.0,
+        "pcd_mm": 130.2,
+        "bolt_count": 16,
+        "bolt_hole_mm": 8.4,
+        "bolt_spec": "M8",
+        "frame": "local",
+        "notes": "OFHC Cu CF100 120.5/101.6x2.0 mm"
+      },
+      {
+        "name": "gasket_cf63_spec",
+        "kind": "flange",
+        "position_mm": [
+          18.0,
+          62.0,
+          20.0
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "CF63",
+        "mating_part_id": "S5.5-02",
+        "bore_mm": 63.5,
+        "od_mm": 113.5,
+        "pcd_mm": 92.1,
+        "bolt_count": 8,
+        "bolt_hole_mm": 8.4,
+        "bolt_spec": "M8",
+        "frame": "local",
+        "notes": "OFHC Cu CF63 82.4/63.5x2.0 mm"
+      },
+      {
+        "name": "angle_valve_cf40",
+        "kind": "flange",
+        "position_mm": [
+          25.0,
+          -66.0,
+          7.65
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "standard": "CF40",
+        "mating_part_id": "S5.1-01",
+        "bore_mm": 38.0,
+        "od_mm": 69.5,
+        "pcd_mm": 58.7,
+        "bolt_count": 6,
+        "bolt_hole_mm": 6.6,
+        "bolt_spec": "M6",
+        "frame": "local",
+        "notes": "All-metal bakeable CF40 angle valve"
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "TRAY_L",
+        "nominal_mm": 360.0,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "360.00 ±0.50"
+      },
+      {
+        "label": "TRAY_W",
+        "nominal_mm": 260.0,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "260.00 ±0.50"
+      },
+      {
+        "label": "CF100_GASK_OD",
+        "nominal_mm": 120.5,
+        "tol_plus_mm": 0.08,
+        "tol_minus_mm": -0.08,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø120.50 ±0.08"
+      },
+      {
+        "label": "CF63_GASK_OD",
+        "nominal_mm": 82.4,
+        "tol_plus_mm": 0.08,
+        "tol_minus_mm": -0.08,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø82.40 ±0.08"
+      },
+      {
+        "label": "CF40_GASK_OD",
+        "nominal_mm": 48.1,
+        "tol_plus_mm": 0.08,
+        "tol_minus_mm": -0.08,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø48.10 ±0.08"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "flatness",
+        "tolerance_mm": 0.025,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "OFHC Cu gasket sealing faces",
+        "glyph": "⏥",
+        "tolerance_text": "0.025"
+      },
+      {
+        "symbol": "parallelism",
+        "tolerance_mm": 0.03,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "Gasket top/bottom faces",
+        "glyph": "∥",
+        "tolerance_text": "0.030"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "150-250 C firinlanabilir, tum ana oda port donanimi",
+      "Complete UHV hardware kit: OFHC Cu ConFlat gaskets (CF400/250/100/63/40), Ag-plated 12-pt M8/M6 bolts,",
+      "2x bakeable all-metal CF40 angle valves (250 C) & spare CF40 viewport in cleanroom service tray."
+    ],
+    "scad_params": {
+      "tray_x": 360.0,
+      "tray_y": 260.0,
+      "cf100_gask_od": 120.5,
+      "cf63_gask_od": 82.4
+    },
+    "target_mass_kg": 14.0,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifacts": {
+    "part_id": "S5.1-05",
+    "subsystem": "S5",
+    "design_tier": "COTS_ENV_ICD",
+    "stl_path": "hardware/cad_parts/out/S5/S5.1-05.stl",
+    "step_path": "hardware/cad_parts/out/S5/S5.1-05.step",
+    "scad_path": "hardware/cad_parts/out/S5/S5.1-05.scad",
+    "dxf_path": "hardware/cad_parts/out/S5/S5.1-05.dxf",
+    "svg_path": "hardware/cad_parts/out/S5/S5.1-05.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 1305456.8940670856,
+    "surface_area_mm2": 490253.7746460503,
+    "mass_kg": 8.485469811436058,
+    "cg_mm": [
+      7.7521246992888875,
+      -18.02079327005037,
+      16.589857628852407
+    ],
+    "bbox_min_mm": [
+      -192.5,
+      -130.0,
+      0.0
+    ],
+    "bbox_max_mm": [
+      192.5,
+      130.0,
+      87.0
+    ],
+    "inertia_kg_mm2": [
+      50591.46087070392,
+      102402.05418545638,
+      147240.26153890457,
+      818.1917281908118,
+      -3028.7577292795786,
+      2835.9089985750406
+    ],
+    "triangle_count": 10600,
+    "vertex_count": 5266,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

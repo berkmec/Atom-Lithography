@@ -1,0 +1,104 @@
+{
+  "schema_version": "part_icd_v1.0",
+  "part_id": "S7.SAFETY-03",
+  "parent_bom_id": "S7.SAFETY",
+  "subsystem": "S7",
+  "part_name": "IEC 61508 SIL-3 1oo2D Donanimsal Emniyet PLC, 4x E-Stop Mantar, Kapak Anahtarlari & 2 MOhm HV Crowbar Modulu (Exp150, 18.0 kg)",
+  "part_category": "PHYSICAL_SOLID",
+  "bom_metadata": {
+    "qty": "1",
+    "unit": "set",
+    "material": "SIL-3 1oo2D emniyet PLC (3U) + 4x E-Stop + 2 MOhm aktif HV crowbar",
+    "key_spec": "482.6x350x133.4 mm, 22 kV HV crowbar 18.26 ms < 50 ms (<50 V, E=0.363 J < 0.5 J), 3.2 ms lazer kesme, max FMEA RPN 280->42, 120 W / 0 W kriyo, kutle=18.0 kg",
+    "tolerance": "SIL-3 1oo2D, <50 ms HV",
+    "temp_stage": "300 K (S7 raf ustu)",
+    "vacuum_grade": "Atmosfer",
+    "procurement_class": "COTS/CUS",
+    "parent_cost_class": "C(v7.0-Safety)",
+    "usd_low": 18000.0,
+    "usd_nom": 28000.0,
+    "usd_high": 42000.0,
+    "legacy_cad_module": "s7_electronics_rack_interconnect",
+    "bom_epistemic_tag": "{Varsayım}",
+    "notes": "DELTA-V7.0-SAFETY-EXP150 (S7.SAFETY 3/6, 18.0 kg tesis emniyeti, SIL-3; s_safety_spec.json birebir; RFQ-10)"
+  },
+  "artifact_links": {
+    "cad": {
+      "work_package": "WP-M5",
+      "design_tier": "COTS_ENV_ICD",
+      "stl": "hardware/cad_parts/out/S7/S7.SAFETY-03.stl",
+      "step": "hardware/cad_parts/out/S7/S7.SAFETY-03.step",
+      "scad": "hardware/cad_parts/out/S7/S7.SAFETY-03.scad",
+      "dxf": "hardware/cad_parts/out/S7/S7.SAFETY-03.dxf",
+      "svg": "hardware/cad_parts/out/S7/S7.SAFETY-03.svg",
+      "cad_json": "hardware/cad_parts/out/S7/S7.SAFETY-03.json",
+      "watertight": true,
+      "all_6_files_valid": true,
+      "mass_kg": 18.0,
+      "triangle_count": 4896,
+      "temp_k": 300.0,
+      "canonical_bbox_min_mm": [
+        -2000.0,
+        -2000.0,
+        0.0
+      ],
+      "canonical_bbox_max_mm": [
+        2000.0,
+        2000.0,
+        1911.45
+      ],
+      "datum_shift_mm": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "port_count": 0,
+      "gdt_frame_count": 0
+    },
+    "pcb_bundles": [
+      {
+        "bundle_slug": "safety_interlock_1oo2d",
+        "verification_json": "hardware/pcb/safety_interlock_1oo2d/safety_interlock_1oo2d_verification.json",
+        "boards": [
+          "safety_interlock_1oo2d"
+        ],
+        "kicad_sch_files": [
+          "hardware/pcb/safety_interlock_1oo2d/safety_interlock_1oo2d.kicad_sch"
+        ],
+        "kicad_pcb_files": [
+          "hardware/pcb/safety_interlock_1oo2d/safety_interlock_1oo2d.kicad_pcb"
+        ],
+        "spice_decks": [
+          "hardware/pcb/safety_interlock_1oo2d/safety_1oo2d_crowbar.cir"
+        ],
+        "all_passed": true
+      }
+    ],
+    "legacy_board_files": [],
+    "electrical_icd": null,
+    "rtl_modules": [
+      "rtl/machine_ctrl/uhv_interlock_fsm.v"
+    ],
+    "rtl_audit_json": "results/stage2_rtl_verification/rtl_machine_ctrl_audit.json",
+    "software_and_eda_files": [],
+    "verification_tests": []
+  },
+  "specialized_specification": null,
+  "verification_status": {
+    "cad_verified": true,
+    "pcb_verified": true,
+    "electrical_icd_verified": false,
+    "rtl_verified": true,
+    "software_or_eda_verified": false,
+    "specialized_icd_present": false,
+    "traceable": true
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "tapeout_done": false
+  }
+}

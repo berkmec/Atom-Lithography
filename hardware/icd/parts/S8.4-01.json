@@ -1,0 +1,75 @@
+{
+  "schema_version": "part_icd_v1.0",
+  "part_id": "S8.4-01",
+  "parent_bom_id": "S8.4",
+  "subsystem": "S8",
+  "part_name": "Degismez yonga/yazmac sertifika veritabani ve QA denetim CLI",
+  "part_category": "IN_HOUSE_SOFTWARE_RTL_EDA",
+  "bom_metadata": {
+    "qty": "1",
+    "unit": "paket",
+    "material": "JSONL / SQLite + SHA-256 zinciri",
+    "key_spec": "Her atis (yuva, enerji, IBIC) ve yazmac GRAPE paketi izlenebilirligi",
+    "tolerance": "SHA-256",
+    "temp_stage": "300 K (SW)",
+    "vacuum_grade": "Uygulanmaz (SW)",
+    "procurement_class": "IN-HOUSE",
+    "parent_cost_class": "--",
+    "usd_low": 0.0,
+    "usd_nom": 0.0,
+    "usd_high": 0.0,
+    "legacy_cad_module": "software_control_stack",
+    "bom_epistemic_tag": "{Program-NRE-Kapsam}",
+    "notes": "Urun sertifikasyonu ($0 HW; Program NRE kapsaminda)"
+  },
+  "artifact_links": {
+    "cad": null,
+    "pcb_bundles": [],
+    "legacy_board_files": [],
+    "electrical_icd": null,
+    "rtl_modules": [],
+    "rtl_audit_json": null,
+    "software_and_eda_files": [
+      "src/machine_control/factory.py",
+      "src/machine_control/programmer.py",
+      "hardware/verify_full_traceability.py"
+    ],
+    "verification_tests": [
+      "tests/test_machine_control.py",
+      "tests/test_atom_programmer.py",
+      "tests/test_full_180_traceability.py"
+    ]
+  },
+  "specialized_specification": {
+    "kind": "IN_HOUSE_SOFTWARE_RTL_EDA",
+    "role": "Immutable SHA-256 chip/register certificate ledger & QA provenance audit",
+    "implementation_files": [
+      "src/machine_control/factory.py",
+      "src/machine_control/programmer.py",
+      "hardware/verify_full_traceability.py"
+    ],
+    "rtl_files": [],
+    "verification_tests": [
+      "tests/test_machine_control.py",
+      "tests/test_atom_programmer.py",
+      "tests/test_full_180_traceability.py"
+    ]
+  },
+  "verification_status": {
+    "cad_verified": false,
+    "pcb_verified": false,
+    "electrical_icd_verified": false,
+    "rtl_verified": false,
+    "software_or_eda_verified": true,
+    "specialized_icd_present": true,
+    "traceable": true
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "tapeout_done": false
+  }
+}

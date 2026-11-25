@@ -1,0 +1,75 @@
+{
+  "schema_version": "part_icd_v1.0",
+  "part_id": "S5.4-02",
+  "parent_bom_id": "S5.4",
+  "subsystem": "S5",
+  "part_name": "Implant oncesi SIMS izotop orani ve AFM yuzey kalite sertifikasyonu",
+  "part_category": "NON_SOLID_PROCESS_SERVICE_GAS",
+  "bom_metadata": {
+    "qty": "1",
+    "unit": "lot",
+    "material": "Dis analiz hizmeti (SIMS + AFM)",
+    "key_spec": "29Si bolluk dogrulamasi + O/C kirlilik <1e16 cm-3, Ra <0.2 nm",
+    "tolerance": "±5% SIMS",
+    "temp_stage": "300 K (lab)",
+    "vacuum_grade": "—",
+    "procurement_class": "CUS",
+    "parent_cost_class": "C",
+    "usd_low": 8000.0,
+    "usd_nom": 14000.0,
+    "usd_high": 26000.0,
+    "legacy_cad_module": "s5_uhv_chamber_loadlock",
+    "bom_epistemic_tag": "{Model-Kalibrasyon-Exp114}",
+    "notes": "Exp68 f=%1 saglam bolluk giris kalite kapisi"
+  },
+  "artifact_links": {
+    "cad": null,
+    "pcb_bundles": [],
+    "legacy_board_files": [],
+    "electrical_icd": null,
+    "rtl_modules": [],
+    "rtl_audit_json": null,
+    "software_and_eda_files": [],
+    "verification_tests": []
+  },
+  "specialized_specification": {
+    "kind": "PRE_IMPLANT_METROLOGY_QUALIFICATION_SERVICE",
+    "mating_physical_part_ids": [
+      "S5.4-01",
+      "S5.4-03",
+      "S5.6-01"
+    ],
+    "qualification_methods": [
+      "Dynamic SIMS isotopic assay (28Si / 29Si / 30Si depth profile over top 500 nm epi layer)",
+      "SIMS chemical trace impurity profile ([O], [C], [B], [P] < 1e16 cm^-3)",
+      "Tapping-mode AFM surface roughness scan (5x5 um and 1x1 um fields, Ra < 0.20 nm)"
+    ],
+    "acceptance_criteria": [
+      "Mode B 29Si abundance within target tolerance (1.0% +/- 0.05% or <= 50 ppm for Mode A epi lots)",
+      "Background O and C concentration < 1.0e16 cm^-3 across implantation zone (0-50 nm)",
+      "RMS / Ra surface roughness < 0.20 nm with zero epi stacking faults per cm^2"
+    ],
+    "reference_artifacts": [
+      "hardware/cad_parts/out/S5/S5.4-01.json",
+      "hardware/cad_parts/out/S5/S5.4-03.json",
+      "results/exp139_epi_cap_process_integration/exp139.json"
+    ]
+  },
+  "verification_status": {
+    "cad_verified": false,
+    "pcb_verified": false,
+    "electrical_icd_verified": false,
+    "rtl_verified": false,
+    "software_or_eda_verified": false,
+    "specialized_icd_present": true,
+    "traceable": true
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "tapeout_done": false
+  }
+}

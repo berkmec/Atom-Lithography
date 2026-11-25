@@ -1,0 +1,90 @@
+{
+  "schema_version": "1.0",
+  "part_id": "S1.6-01",
+  "parent_bom_id": "S1.6",
+  "subsystem": "S1",
+  "part_name": "Cift-tuplu egzozlu PH3/SiF4 toksik gaz kabini (SEMI S2, Exp81/83)",
+  "qty": 1,
+  "unit": "adet",
+  "temp_stage": "300 K (tesis)",
+  "vacuum_grade": "Atmosfer (negatif basinc)",
+  "bom_key_spec": "Otomatik N2 purj, RFO akis sinirlayici, SEMI S2/NFPA 318",
+  "usd_nom": 34000.0,
+  "bom_epistemic_tag": "{Varsay\u0131m}",
+  "electrical_class": "E4",
+  "grounding_domain": "FACILITY_PE",
+  "grounding_notes": "Dual-cylinder exhausted PH3/SiF4 toxic gas cabinet (SEMI S2 / NFPA 318); interlocked to S7.SAFETY-01/03.",
+  "supply_rails": [
+    {
+      "rail_name": "AC_FACILITY_230V",
+      "voltage_v": 230.0,
+      "current_type": "AC_1PH",
+      "max_current_a": 1.5,
+      "steady_power_w": 180.0,
+      "peak_power_w": 300.0,
+      "source_part_id": "S7.SAFETY-01"
+    }
+  ],
+  "connectors_and_pinout": [
+    {
+      "connector_ref": "J_PLC_CAB",
+      "connector_type": "Phoenix 12-Pin Safety Bus",
+      "location_side": "gas_bay",
+      "mating_part_id": "S7.SAFETY-03",
+      "pins": [
+        {
+          "pin": "1-2",
+          "signal": "N2_PURGE_STATUS",
+          "direction": "OUT",
+          "nominal_level": "Auto N2 purge OK"
+        },
+        {
+          "pin": "3-4",
+          "signal": "EXHAUST_FLOW_OK",
+          "direction": "OUT",
+          "nominal_level": "Negative-pressure cabinet switch"
+        },
+        {
+          "pin": "5-6",
+          "signal": "CYL_VALVE_CLOSE_1OO2D",
+          "direction": "IN",
+          "nominal_level": "Pneumatic fail-close cylinder valve"
+        }
+      ]
+    }
+  ],
+  "mating_part_ids": [
+    "S1.1-04",
+    "S1.6-02",
+    "S7.SAFETY-01",
+    "S7.SAFETY-03"
+  ],
+  "interlock_hooks": [
+    {
+      "signal_name": "GAS_CAB_EXHAUST_FAIL",
+      "target_part_id": "S7.SAFETY-03",
+      "action_on_trip": "Slam-shut PH3 cylinder valve (<12 s)",
+      "response_time_ms": 45.0
+    }
+  ],
+  "ups_tier": "NONE",
+  "ups_budget_group": "AUX_PROCESS_SHED_ON_OUTAGE",
+  "exp150_ups_allocation_w": 0.0,
+  "supply_rails_steady_sum_w": 180.0,
+  "incremental_mains_w": 180.0,
+  "secondary_or_parent_derived_w": 0.0,
+  "non_exp150_aux_shed_w": 0.0,
+  "reconciliation_note": "Non-Exp150 auxiliary sheddable rack/facility load (NONE): incremental_mains_w = 180.0 W AC mains (mutually exclusive process/experiment mode, shed immediately on outage; exp150_ups_allocation_w = 0.0 W).",
+  "timing_sync": {
+    "rb_10mhz_port": null,
+    "white_rabbit_port": null,
+    "sync_role": "Toxic gas cabinet controller"
+  },
+  "epistemic_flags": {
+    "design_maturity": "M0_M1_ELECTRICAL_ICD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

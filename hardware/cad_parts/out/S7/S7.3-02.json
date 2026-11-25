@@ -1,0 +1,524 @@
+{
+  "part_design": {
+    "part_id": "S7.3-02",
+    "parent_bom_id": "S7.3",
+    "subsystem": "S7",
+    "part_name": "Kriyojenik 4 K BGA/tel-bag cip tasiyici PCB ve ara-katmanlari",
+    "design_tier": "CUSTOM_FULL",
+    "material": "Invar-36",
+    "temp_stage": "4 K",
+    "temp_k": 4.0,
+    "vacuum_grade": "Kriyo-vakum",
+    "tolerance_spec": "±25 um",
+    "surface_finish_ra_um": 0.4,
+    "qty": 10,
+    "procurement_class": "CUS",
+    "world_origin_mm": [
+      960.0,
+      780.0,
+      810.0
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "cic_thermal_base",
+        "kind": "thermal",
+        "position_mm": [
+          960.0,
+          780.0,
+          790.3000000000001
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "standard": "4x M2.5 Thermal Anchor (Cu-Invar-Cu)",
+        "mating_part_id": "S7.3-03",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 4,
+        "bolt_hole_mm": 2.7,
+        "bolt_spec": "",
+        "frame": "world",
+        "notes": ""
+      },
+      {
+        "name": "wirebond_cavity",
+        "kind": "electrical",
+        "position_mm": [
+          960.0,
+          780.0,
+          830.75
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "16x16 mm Au-Bond / BGA 4K Interposer",
+        "mating_part_id": "S7.3-01",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "world",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "CARRIER_SQ",
+        "nominal_mm": 46.0,
+        "tol_plus_mm": 0.025,
+        "tol_minus_mm": -0.025,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "46.00 ±0.03"
+      },
+      {
+        "label": "DIE_CAVITY",
+        "nominal_mm": 16.0,
+        "tol_plus_mm": 0.025,
+        "tol_minus_mm": -0.025,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "16.00 ±0.03"
+      },
+      {
+        "label": "STACK_H_10X",
+        "nominal_mm": 46.0,
+        "tol_plus_mm": 0.1,
+        "tol_minus_mm": -0.1,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "46.00 ±0.10"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "flatness",
+        "tolerance_mm": 0.015,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "Cu-INVAR-Cu SPREADER",
+        "glyph": "⏥",
+        "tolerance_text": "0.015"
+      },
+      {
+        "symbol": "position",
+        "tolerance_mm": 0.025,
+        "diameter_zone": true,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "4x M2.5 MOUNT HOLES",
+        "glyph": "⌖",
+        "tolerance_text": "Ø0.025"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "4 K termal cevrim dayanikli (>100 sogutma), dusuk isi kacagi",
+      "10x CTE-matched Cu-Invar-Cu / Rogers carriers; NIST 300K->4K clearance=0.0985 mm (PASS=True)."
+    ],
+    "scad_params": {
+      "qty_carriers": 10,
+      "carrier_sq_mm": 46.0,
+      "cavity_sq_mm": 16.0,
+      "carrier_t_mm": 2.6
+    },
+    "target_mass_kg": 0.4189,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S7.3-02",
+    "subsystem": "S7",
+    "design_tier": "CUSTOM_FULL",
+    "stl_path": "hardware/cad_parts/out/S7/S7.3-02.stl",
+    "step_path": "hardware/cad_parts/out/S7/S7.3-02.step",
+    "scad_path": "hardware/cad_parts/out/S7/S7.3-02.scad",
+    "dxf_path": "hardware/cad_parts/out/S7/S7.3-02.dxf",
+    "svg_path": "hardware/cad_parts/out/S7/S7.3-02.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 52036.079998643494,
+    "surface_area_mm2": 80850.64942985622,
+    "mass_kg": 0.4188904439890768,
+    "cg_mm": [
+      960.0000000061556,
+      780.0000000053398,
+      810.4243786287425
+    ],
+    "bbox_min_mm": [
+      929.5,
+      749.5,
+      787.5
+    ],
+    "bbox_max_mm": [
+      990.5,
+      810.5,
+      833.5
+    ],
+    "inertia_kg_mm2": [
+      151.4309039836876,
+      151.43090368987046,
+      178.78778540847017,
+      8.322566986083986e-07,
+      8.450313568115235e-07,
+      7.095155715942384e-07
+    ],
+    "triangle_count": 2712,
+    "vertex_count": 1304,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "shell_bboxes_mm": [
+    [
+      [
+        937.0,
+        757.0,
+        790.3
+      ],
+      [
+        983.0,
+        803.0,
+        791.9
+      ]
+    ],
+    [
+      [
+        939.0,
+        759.0,
+        791.95
+      ],
+      [
+        981.0,
+        801.0,
+        792.95
+      ]
+    ],
+    [
+      [
+        937.0,
+        757.0,
+        794.5
+      ],
+      [
+        983.0,
+        803.0,
+        796.1
+      ]
+    ],
+    [
+      [
+        939.0,
+        759.0,
+        796.15
+      ],
+      [
+        981.0,
+        801.0,
+        797.15
+      ]
+    ],
+    [
+      [
+        937.0,
+        757.0,
+        798.7
+      ],
+      [
+        983.0,
+        803.0,
+        800.3
+      ]
+    ],
+    [
+      [
+        939.0,
+        759.0,
+        800.35
+      ],
+      [
+        981.0,
+        801.0,
+        801.35
+      ]
+    ],
+    [
+      [
+        937.0,
+        757.0,
+        802.9
+      ],
+      [
+        983.0,
+        803.0,
+        804.5
+      ]
+    ],
+    [
+      [
+        939.0,
+        759.0,
+        804.55
+      ],
+      [
+        981.0,
+        801.0,
+        805.55
+      ]
+    ],
+    [
+      [
+        937.0,
+        757.0,
+        807.1
+      ],
+      [
+        983.0,
+        803.0,
+        808.7
+      ]
+    ],
+    [
+      [
+        939.0,
+        759.0,
+        808.75
+      ],
+      [
+        981.0,
+        801.0,
+        809.75
+      ]
+    ],
+    [
+      [
+        937.0,
+        757.0,
+        811.3
+      ],
+      [
+        983.0,
+        803.0,
+        812.9
+      ]
+    ],
+    [
+      [
+        939.0,
+        759.0,
+        812.95
+      ],
+      [
+        981.0,
+        801.0,
+        813.95
+      ]
+    ],
+    [
+      [
+        937.0,
+        757.0,
+        815.5
+      ],
+      [
+        983.0,
+        803.0,
+        817.1
+      ]
+    ],
+    [
+      [
+        939.0,
+        759.0,
+        817.15
+      ],
+      [
+        981.0,
+        801.0,
+        818.15
+      ]
+    ],
+    [
+      [
+        937.0,
+        757.0,
+        819.7
+      ],
+      [
+        983.0,
+        803.0,
+        821.3
+      ]
+    ],
+    [
+      [
+        939.0,
+        759.0,
+        821.35
+      ],
+      [
+        981.0,
+        801.0,
+        822.35
+      ]
+    ],
+    [
+      [
+        937.0,
+        757.0,
+        823.9
+      ],
+      [
+        983.0,
+        803.0,
+        825.5
+      ]
+    ],
+    [
+      [
+        939.0,
+        759.0,
+        825.55
+      ],
+      [
+        981.0,
+        801.0,
+        826.55
+      ]
+    ],
+    [
+      [
+        937.0,
+        757.0,
+        828.1
+      ],
+      [
+        983.0,
+        803.0,
+        829.7
+      ]
+    ],
+    [
+      [
+        939.0,
+        759.0,
+        829.75
+      ],
+      [
+        981.0,
+        801.0,
+        830.75
+      ]
+    ],
+    [
+      [
+        929.5,
+        749.5,
+        787.5
+      ],
+      [
+        934.5,
+        754.5,
+        833.5
+      ]
+    ],
+    [
+      [
+        985.5,
+        749.5,
+        787.5
+      ],
+      [
+        990.5,
+        754.5,
+        833.5
+      ]
+    ],
+    [
+      [
+        985.5,
+        805.5,
+        787.5
+      ],
+      [
+        990.5,
+        810.5,
+        833.5
+      ]
+    ],
+    [
+      [
+        929.5,
+        805.5,
+        787.5
+      ],
+      [
+        934.5,
+        810.5,
+        833.5
+      ]
+    ]
+  ],
+  "reconciliation_notes": []
+}

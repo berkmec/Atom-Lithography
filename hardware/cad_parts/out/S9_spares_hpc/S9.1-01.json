@@ -1,0 +1,404 @@
+{
+  "part_design": {
+    "part_id": "S9.1-01",
+    "parent_bom_id": "S9.1",
+    "subsystem": "S9",
+    "part_name": "Bilinen donor desenli kalibrasyon referans yongalari (5 yonga)",
+    "design_tier": "KIT_OR_ALIAS",
+    "material": "Si",
+    "temp_stage": "20 mK - 300 K",
+    "temp_k": 300.0,
+    "vacuum_grade": "UHV 1e-9 mbar",
+    "tolerance_spec": "Bilinen doz ±2%",
+    "surface_finish_ra_um": 0.4,
+    "qty": 5,
+    "procurement_class": "CUS",
+    "world_origin_mm": [
+      -900.0,
+      -1180.0,
+      46.0
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "wafer_carrier_slot",
+        "kind": "mechanical",
+        "position_mm": [
+          -900.0,
+          -1180.0,
+          40.0
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "5x Ø50 mm 28Si Reference Calibration Wafers (±2% Dose)",
+        "mating_part_id": "S5.4-01",
+        "bore_mm": 50.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "world",
+        "notes": ""
+      },
+      {
+        "name": "n2_purge_port",
+        "kind": "gas",
+        "position_mm": [
+          -820.0,
+          -1180.0,
+          35.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "standard": "Quick-Connect N2 Dry-Box Purge",
+        "mating_part_id": "",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "world",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "CASE_W",
+        "nominal_mm": 160.0,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "160.00 ±0.50"
+      },
+      {
+        "label": "CASE_D",
+        "nominal_mm": 120.0,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "right",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "120.00 ±0.50"
+      },
+      {
+        "label": "WAFER_OD",
+        "nominal_mm": 50.0,
+        "tol_plus_mm": 0.05,
+        "tol_minus_mm": -0.05,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø50.00 ±0.05"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "flatness",
+        "tolerance_mm": 0.005,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "28Si CALIBRATION WAFERS",
+        "glyph": "⏥",
+        "tolerance_text": "0.005"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "IBIC sayim verimi ve ESR/ENDOR kabul testi (Exp67/68)",
+      "5x known-dose 31P/28Si FAT/SAT IBIC & ESR/ENDOR calibration wafers in clean PEEK carrier at (-900, -1180)."
+    ],
+    "scad_params": {
+      "qty_wafers": 5,
+      "wafer_od_mm": 50.0,
+      "case_dx_mm": 160.0,
+      "case_dy_mm": 120.0
+    },
+    "target_mass_kg": 1.45,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S9.1-01",
+    "subsystem": "S9",
+    "design_tier": "KIT_OR_ALIAS",
+    "stl_path": "hardware/cad_parts/out/S9_spares_hpc/S9.1-01.stl",
+    "step_path": "hardware/cad_parts/out/S9_spares_hpc/S9.1-01.step",
+    "scad_path": "hardware/cad_parts/out/S9_spares_hpc/S9.1-01.scad",
+    "dxf_path": "hardware/cad_parts/out/S9_spares_hpc/S9.1-01.dxf",
+    "svg_path": "hardware/cad_parts/out/S9_spares_hpc/S9.1-01.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 933720.9890326952,
+    "surface_area_mm2": 212762.21907740264,
+    "mass_kg": 1.4499999999999995,
+    "cg_mm": [
+      -900.0000000000028,
+      -1181.4346315609675,
+      49.95544703951647
+    ],
+    "bbox_min_mm": [
+      -994.4,
+      -1254.4,
+      0.0
+    ],
+    "bbox_max_mm": [
+      -805.6,
+      -1118.0,
+      92.0
+    ],
+    "inertia_kg_mm2": [
+      3754.1972985376374,
+      5615.818444727697,
+      6372.0172303453355,
+      9.478310716157741e-10,
+      -1.1847888395197176e-10,
+      33.37613198510582
+    ],
+    "triangle_count": 712,
+    "vertex_count": 386,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "shell_bboxes_mm": [
+    [
+      [
+        -980.0,
+        -1240.0,
+        0.0
+      ],
+      [
+        -820.0,
+        -1120.0,
+        12.0
+      ]
+    ],
+    [
+      [
+        -980.0,
+        -1240.0,
+        12.2
+      ],
+      [
+        -972.0,
+        -1120.0,
+        73.6
+      ]
+    ],
+    [
+      [
+        -828.0,
+        -1240.0,
+        12.2
+      ],
+      [
+        -820.0,
+        -1120.0,
+        73.6
+      ]
+    ],
+    [
+      [
+        -971.8,
+        -1240.0,
+        12.2
+      ],
+      [
+        -828.2,
+        -1232.0,
+        73.6
+      ]
+    ],
+    [
+      [
+        -971.8,
+        -1128.0,
+        12.2
+      ],
+      [
+        -828.2,
+        -1120.0,
+        73.6
+      ]
+    ],
+    [
+      [
+        -982.0,
+        -1242.0,
+        74.0
+      ],
+      [
+        -818.0,
+        -1118.0,
+        92.0
+      ]
+    ],
+    [
+      [
+        -956.8,
+        -1254.4,
+        49.0
+      ],
+      [
+        -932.8,
+        -1242.4,
+        83.0
+      ]
+    ],
+    [
+      [
+        -994.4,
+        -1225.0,
+        31.9
+      ],
+      [
+        -982.4,
+        -1135.0,
+        53.9
+      ]
+    ],
+    [
+      [
+        -867.2,
+        -1254.4,
+        49.0
+      ],
+      [
+        -843.2,
+        -1242.4,
+        83.0
+      ]
+    ],
+    [
+      [
+        -817.6,
+        -1225.0,
+        31.9
+      ],
+      [
+        -805.6,
+        -1135.0,
+        53.9
+      ]
+    ],
+    [
+      [
+        -932.6,
+        -1205.0,
+        15.0
+      ],
+      [
+        -931.4,
+        -1155.0,
+        65.0
+      ]
+    ],
+    [
+      [
+        -916.6,
+        -1205.0,
+        15.0
+      ],
+      [
+        -915.4,
+        -1155.0,
+        65.0
+      ]
+    ],
+    [
+      [
+        -900.6,
+        -1205.0,
+        15.0
+      ],
+      [
+        -899.4,
+        -1155.0,
+        65.0
+      ]
+    ],
+    [
+      [
+        -884.6,
+        -1205.0,
+        15.0
+      ],
+      [
+        -883.4,
+        -1155.0,
+        65.0
+      ]
+    ],
+    [
+      [
+        -868.6,
+        -1205.0,
+        15.0
+      ],
+      [
+        -867.4,
+        -1155.0,
+        65.0
+      ]
+    ]
+  ],
+  "reconciliation_notes": []
+}

@@ -1,0 +1,93 @@
+{
+  "schema_version": "part_icd_v1.0",
+  "part_id": "S8.3-03",
+  "parent_bom_id": "S8.3",
+  "subsystem": "S8",
+  "part_name": "BOED Bayesyen uyarlamali spektroskopi & machine_control v3/v4 yazilim motoru (Exp132)",
+  "part_category": "IN_HOUSE_SOFTWARE_RTL_EDA",
+  "bom_metadata": {
+    "qty": "1",
+    "unit": "paket",
+    "material": "Python / NumPy / PyTorch (src/machine_control/)",
+    "key_spec": "5x-10x uyarlamali frekans/durum tahmini + gercek-zamanli RFSoC/GPU dongusu",
+    "tolerance": "100% birim testi",
+    "temp_stage": "300 K (SW)",
+    "vacuum_grade": "Uygulanmaz (SW)",
+    "procurement_class": "IN-HOUSE",
+    "parent_cost_class": "--",
+    "usd_low": 0.0,
+    "usd_nom": 0.0,
+    "usd_high": 0.0,
+    "legacy_cad_module": "software_control_stack",
+    "bom_epistemic_tag": "{Program-NRE-Kapsam}",
+    "notes": "DELTA-V4.0-EXP132: S7.1-04 GPU dugumunde calisan proje-ici yazilim ($0 HW; Program NRE)"
+  },
+  "artifact_links": {
+    "cad": null,
+    "pcb_bundles": [],
+    "legacy_board_files": [],
+    "electrical_icd": null,
+    "rtl_modules": [
+      "rtl/boed_fpga/boed_isqrt_cordic.v",
+      "rtl/boed_fpga/boed_lut_rom.v",
+      "rtl/boed_fpga/boed_q16_core.v",
+      "rtl/boed_fpga/boed_top_16ch.v",
+      "rtl/machine_ctrl/fpga_top_machine_ctrl.v"
+    ],
+    "rtl_audit_json": "results/stage2_rtl_verification/rtl_machine_ctrl_audit.json",
+    "software_and_eda_files": [
+      "src/machine_control/adaptive_spectroscopy.py",
+      "src/machine_control/fpga_boed_dsp.py",
+      "src/machine_control/auto_recal.py",
+      "src/machine_control/cloud_qpu_bridge.py"
+    ],
+    "verification_tests": [
+      "tests/test_boed_real_bath.py",
+      "tests/test_exp132.py",
+      "tests/test_exp140.py",
+      "tests/test_exp149.py",
+      "tests/test_rtl_machine_ctrl.py"
+    ]
+  },
+  "specialized_specification": {
+    "kind": "IN_HOUSE_SOFTWARE_RTL_EDA",
+    "role": "Bayesian Optimal Experimental Design (BOED) adaptive spectroscopy, Q16.16 FPGA DSP & autonomous recalibration",
+    "implementation_files": [
+      "src/machine_control/adaptive_spectroscopy.py",
+      "src/machine_control/fpga_boed_dsp.py",
+      "src/machine_control/auto_recal.py",
+      "src/machine_control/cloud_qpu_bridge.py"
+    ],
+    "rtl_files": [
+      "rtl/boed_fpga/boed_q16_core.v",
+      "rtl/boed_fpga/boed_top_16ch.v",
+      "rtl/boed_fpga/boed_isqrt_cordic.v",
+      "rtl/boed_fpga/boed_lut_rom.v",
+      "rtl/machine_ctrl/fpga_top_machine_ctrl.v"
+    ],
+    "verification_tests": [
+      "tests/test_boed_real_bath.py",
+      "tests/test_exp132.py",
+      "tests/test_exp140.py",
+      "tests/test_exp149.py",
+      "tests/test_rtl_machine_ctrl.py"
+    ]
+  },
+  "verification_status": {
+    "cad_verified": false,
+    "pcb_verified": false,
+    "electrical_icd_verified": false,
+    "rtl_verified": true,
+    "software_or_eda_verified": true,
+    "specialized_icd_present": true,
+    "traceable": true
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "tapeout_done": false
+  }
+}

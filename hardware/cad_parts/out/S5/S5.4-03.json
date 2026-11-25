@@ -1,0 +1,244 @@
+{
+  "part_id": "S5.4-03",
+  "subsystem": "S5",
+  "design": {
+    "part_id": "S5.4-03",
+    "parent_bom_id": "S5.4",
+    "subsystem": "S5",
+    "part_name": "UHV/N2 purjlu yonga tasima podlari ve depolama kabini",
+    "design_tier": "COTS_ENV_ICD",
+    "material": "304 SS",
+    "temp_stage": "300 K",
+    "temp_k": 300.0,
+    "vacuum_grade": "N2 atmosferi",
+    "tolerance_spec": "<1 ppm O2/H2O",
+    "surface_finish_ra_um": 1.6,
+    "qty": 1,
+    "procurement_class": "COTS",
+    "world_origin_mm": [
+      780.0,
+      -900.0,
+      0.0
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "n2_purge_in",
+        "kind": "gas",
+        "position_mm": [
+          -110.0,
+          194.0,
+          460.0
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "standard": "1/4 in VCR Dry N2",
+        "mating_part_id": "",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": "<1 ppm O2/H2O continuous N2 purge"
+      },
+      {
+        "name": "foup_dock_nest",
+        "kind": "mechanical",
+        "position_mm": [
+          0.0,
+          0.0,
+          540.5
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "SEMI E47.1 Kinematic",
+        "mating_part_id": "S5.4-01",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "CAB_W",
+        "nominal_mm": 380.0,
+        "tol_plus_mm": 1.0,
+        "tol_minus_mm": -1.0,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "380.00 ±1.00"
+      },
+      {
+        "label": "CAB_D",
+        "nominal_mm": 356.0,
+        "tol_plus_mm": 1.0,
+        "tol_minus_mm": -1.0,
+        "view": "right",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "356.00 ±1.00"
+      },
+      {
+        "label": "TOTAL_H",
+        "nominal_mm": 690.8,
+        "tol_plus_mm": 1.5,
+        "tol_minus_mm": -1.5,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "690.80 ±1.50"
+      },
+      {
+        "label": "FOUP_W",
+        "nominal_mm": 180.0,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "180.00 ±0.50"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "flatness",
+        "tolerance_mm": 0.5,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "Cabinet top FOUP kinematic dock surface",
+        "glyph": "⏥",
+        "tolerance_text": "0.50"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "Oksit buyumesini onleyen kuru N2 depolama",
+      "N2-purged (<1 ppm O2/H2O) 304 SS dry storage cabinet + PFA FOUP wafer transport pod.",
+      "Prevents native SiO2 regrowth on 28Si/29Si epi wafers before UHV load-lock insertion."
+    ],
+    "scad_params": {
+      "cab_w": 380.0,
+      "cab_d": 340.0,
+      "cab_h": 516.0,
+      "foup_w": 180.0
+    },
+    "target_mass_kg": 34.0,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifacts": {
+    "part_id": "S5.4-03",
+    "subsystem": "S5",
+    "design_tier": "COTS_ENV_ICD",
+    "stl_path": "hardware/cad_parts/out/S5/S5.4-03.stl",
+    "step_path": "hardware/cad_parts/out/S5/S5.4-03.step",
+    "scad_path": "hardware/cad_parts/out/S5/S5.4-03.scad",
+    "dxf_path": "hardware/cad_parts/out/S5/S5.4-03.dxf",
+    "svg_path": "hardware/cad_parts/out/S5/S5.4-03.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 13116349.553393936,
+    "surface_area_mm2": 2644926.4999024128,
+    "mass_kg": 41.97231857086063,
+    "cg_mm": [
+      2.2721506671026282e-15,
+      0.9922141539136639,
+      308.84081149253944
+    ],
+    "bbox_min_mm": [
+      -190.0,
+      -189.0,
+      0.0
+    ],
+    "bbox_max_mm": [
+      190.0,
+      194.0,
+      690.8
+    ],
+    "inertia_kg_mm2": [
+      2239778.887575876,
+      2363779.0956423646,
+      1365775.5076788857,
+      -2.120025430532538e-10,
+      1.2710960497784992e-10,
+      -17443.69018554673
+    ],
+    "triangle_count": 700,
+    "vertex_count": 396,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

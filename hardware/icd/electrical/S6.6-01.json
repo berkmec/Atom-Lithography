@@ -1,0 +1,145 @@
+{
+  "schema_version": "1.0",
+  "part_id": "S6.6-01",
+  "parent_bom_id": "S6.6",
+  "subsystem": "S6",
+  "part_name": "4 K kriyojenik dusuk-guclu InP HEMT LNA (56 okuma zinciri, Exp111/114)",
+  "qty": 56,
+  "unit": "adet",
+  "temp_stage": "4 K",
+  "vacuum_grade": "Kriyo-vakum",
+  "bom_key_spec": "P_DC <= 2.8 mW/hat (Rebelo 2026: 2.1 mW, Tn=1.4 K, 41.6 dB)",
+  "usd_nom": 224000.0,
+  "bom_epistemic_tag": "{Model-Kalibrasyon-Exp114}",
+  "electrical_class": "E2",
+  "grounding_domain": "CRYO_OVC",
+  "grounding_notes": "56x 4 K InP HEMT housings bolted to 4 K flange; DC bias filtered on cryo_rf_bias_panel.",
+  "supply_rails": [
+    {
+      "rail_name": "HEMT_4K_VD_56CH",
+      "voltage_v": 0.6,
+      "current_type": "DC",
+      "max_current_a": 0.25,
+      "steady_power_w": 0.118,
+      "peak_power_w": 0.437,
+      "source_part_id": "S3.2-06"
+    },
+    {
+      "rail_name": "HEMT_4K_VG_56CH",
+      "voltage_v": -0.2,
+      "current_type": "DC",
+      "max_current_a": 0.005,
+      "steady_power_w": 0.001,
+      "peak_power_w": 0.002,
+      "source_part_id": "S3.2-06"
+    }
+  ],
+  "connectors_and_pinout": [
+    {
+      "connector_ref": "J_RF_IN",
+      "connector_type": "SMA-F 50R Cryo (56x)",
+      "location_side": "4K_flange",
+      "mating_part_id": "S6.6-04",
+      "pins": [
+        {
+          "pin": "1",
+          "signal": "HEMT_RFIN[0:55]",
+          "direction": "IN",
+          "nominal_level": "4-8 GHz <= -90 dBm"
+        },
+        {
+          "pin": "2",
+          "signal": "CRYO_4K_GND",
+          "direction": "PWR",
+          "nominal_level": "0 V CRYO_OVC"
+        }
+      ]
+    },
+    {
+      "connector_ref": "J_RF_OUT",
+      "connector_type": "SMA-F 50R Cryo (56x)",
+      "location_side": "4K_flange",
+      "mating_part_id": "S6.6-05",
+      "pins": [
+        {
+          "pin": "1",
+          "signal": "HEMT_RFOUT[0:55]",
+          "direction": "OUT",
+          "nominal_level": "+41.6 dB gain, Tn=1.4 K"
+        },
+        {
+          "pin": "2",
+          "signal": "CRYO_4K_GND",
+          "direction": "PWR",
+          "nominal_level": "0 V CRYO_OVC"
+        }
+      ]
+    },
+    {
+      "connector_ref": "J_BIAS",
+      "connector_type": "Micro-D 9-pin Cryo (per bank)",
+      "location_side": "4K_flange",
+      "mating_part_id": "S6.11-04",
+      "pins": [
+        {
+          "pin": "1",
+          "signal": "VD_FORCE",
+          "direction": "IN",
+          "nominal_level": "+0.60 V (2.1-7.8 mW/ch)"
+        },
+        {
+          "pin": "2",
+          "signal": "VD_SENSE",
+          "direction": "OUT",
+          "nominal_level": "4-wire Kelvin sense"
+        },
+        {
+          "pin": "3",
+          "signal": "VG_BIAS",
+          "direction": "IN",
+          "nominal_level": "-0.20 V gate bias"
+        },
+        {
+          "pin": "4",
+          "signal": "AGND_CRYO",
+          "direction": "PWR",
+          "nominal_level": "0 V star ground"
+        }
+      ]
+    }
+  ],
+  "mating_part_ids": [
+    "S6.6-02",
+    "S6.6-04",
+    "S6.6-05",
+    "S9.3-02"
+  ],
+  "interlock_hooks": [
+    {
+      "signal_name": "CRYO_4K_OVERTEMP_INHIBIT",
+      "target_part_id": "S6.2-03",
+      "action_on_trip": "Disable HEMT drain bias if T_4K > 8 K",
+      "response_time_ms": 100.0
+    }
+  ],
+  "ups_tier": "NONE",
+  "ups_budget_group": "PASSIVE_ZERO_MAINS",
+  "exp150_ups_allocation_w": 0.0,
+  "supply_rails_steady_sum_w": 0.119,
+  "incremental_mains_w": 0.0,
+  "secondary_or_parent_derived_w": 0.119,
+  "non_exp150_aux_shed_w": 0.0,
+  "reconciliation_note": "Passive or downstream sub-assembly (0.12 W sub-rail power drawn from upstream source S3.2-06); incremental_mains_w = 0.0 W (zero double-counting).",
+  "timing_sync": {
+    "rb_10mhz_port": null,
+    "white_rabbit_port": null,
+    "sync_role": "Cryogenic LNA stage"
+  },
+  "epistemic_flags": {
+    "design_maturity": "M0_M1_ELECTRICAL_ICD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

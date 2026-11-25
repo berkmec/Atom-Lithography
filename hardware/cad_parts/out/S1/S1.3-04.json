@@ -1,0 +1,277 @@
+{
+  "part_id": "S1.3-04",
+  "subsystem": "S1",
+  "design": {
+    "part_id": "S1.3-04",
+    "parent_bom_id": "S1.3",
+    "subsystem": "S1",
+    "part_name": "Kolon ici cift katmanli mu-metal manyetik kalkan kilifi",
+    "design_tier": "CUSTOM_FULL",
+    "material": "Mu-metal",
+    "temp_stage": "300 K",
+    "temp_k": 300.0,
+    "vacuum_grade": "UHV / Dis kilif",
+    "tolerance_spec": "±0.2 mm cap",
+    "surface_finish_ra_um": 0.8,
+    "qty": 1,
+    "procurement_class": "CUS",
+    "world_origin_mm": [
+      0.0,
+      0.0,
+      128.5
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "lower_shield_bore",
+        "kind": "mechanical",
+        "position_mm": [
+          0.0,
+          0.0,
+          42.0
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "standard": "Dual-Wall Ø90/Ø108",
+        "mating_part_id": "S1.3-02",
+        "bore_mm": 90.0,
+        "od_mm": 108.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "global",
+        "notes": ""
+      },
+      {
+        "name": "upper_shield_bore",
+        "kind": "mechanical",
+        "position_mm": [
+          0.0,
+          0.0,
+          215.0
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "Dual-Wall Ø114/Ø124",
+        "mating_part_id": "S1.5-01",
+        "bore_mm": 114.0,
+        "od_mm": 124.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "global",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "HI_OUTER_OD",
+        "nominal_mm": 124.0,
+        "tol_plus_mm": 0.2,
+        "tol_minus_mm": -0.2,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø124.00 ±0.20"
+      },
+      {
+        "label": "HI_INNER_ID",
+        "nominal_mm": 114.0,
+        "tol_plus_mm": 0.2,
+        "tol_minus_mm": -0.2,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø114.00 ±0.20"
+      },
+      {
+        "label": "LO_OUTER_OD",
+        "nominal_mm": 108.0,
+        "tol_plus_mm": 0.2,
+        "tol_minus_mm": -0.2,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø108.00 ±0.20"
+      },
+      {
+        "label": "HI_AIR_GAP",
+        "nominal_mm": 2.0,
+        "tol_plus_mm": 0.1,
+        "tol_minus_mm": -0.1,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "2.00 ±0.10"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "concentricity",
+        "tolerance_mm": 0.2,
+        "diameter_zone": true,
+        "material_condition": "",
+        "datum_primary": "B",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "DUAL MU-METAL SHELLS",
+        "glyph": "◎",
+        "tolerance_text": "Ø0.20"
+      },
+      {
+        "symbol": "cylindricity",
+        "tolerance_mm": 0.15,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "H2 ANNEALED CYL",
+        "glyph": "⌭",
+        "tolerance_text": "0.15"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "AC/DC kacak alan bastirma >=40 dB (<1 uT eksende)",
+      "Hydrogen-annealed NiFe 80% dual-layer magnetic shield (>=40 dB, <1 uT); upper R=57.0..58.5 / 60.5..62.0 clears S1.5-01 (R=55) & S5.1-02 CF250 (R_in=64) by +2.0 mm"
+    ],
+    "scad_params": {
+      "hi_od": 124.0,
+      "hi_id": 114.0,
+      "lo_od": 108.0,
+      "lo_id": 90.0,
+      "attenuation_dB": 40.0
+    },
+    "target_mass_kg": 2.1,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S1.3-04",
+    "subsystem": "S1",
+    "design_tier": "CUSTOM_FULL",
+    "stl_path": "hardware/cad_parts/out/S1/S1.3-04.stl",
+    "step_path": "hardware/cad_parts/out/S1/S1.3-04.step",
+    "scad_path": "hardware/cad_parts/out/S1/S1.3-04.scad",
+    "dxf_path": "hardware/cad_parts/out/S1/S1.3-04.dxf",
+    "svg_path": "hardware/cad_parts/out/S1/S1.3-04.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 150255.29641664439,
+    "surface_area_mm2": 179946.85793681082,
+    "mass_kg": 1.3072210788248055,
+    "cg_mm": [
+      -1.1255545982600181e-14,
+      -2.2906049951414216e-14,
+      126.12759914887035
+    ],
+    "bbox_min_mm": [
+      -62.0,
+      -62.0,
+      42.0
+    ],
+    "bbox_max_mm": [
+      62.0,
+      62.0,
+      215.0
+    ],
+    "inertia_kg_mm2": [
+      6314.273871756235,
+      6314.273871756232,
+      3916.3284355239375,
+      8.346926733793228e-13,
+      -3.160157160625408e-13,
+      -1.1675076107970015e-12
+    ],
+    "triangle_count": 2432,
+    "vertex_count": 1248,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "engineering_checks": {
+    "bakeout_clearance": {
+      "outer_material": "Mu-metal",
+      "inner_material": "Ti-6Al-4V",
+      "t_cold_k": 423.15,
+      "t_ref_k": 293.15,
+      "warm_outer_id_mm": 114.0,
+      "warm_inner_od_mm": 110.0,
+      "cold_outer_id_mm": 114.19380000000001,
+      "cold_inner_od_mm": 110.12979999999999,
+      "outer_strain": 0.0017000000000000348,
+      "inner_strain": 0.0011799999999999589,
+      "warm_radial_clearance_mm": 2.0,
+      "cold_nominal_radial_clearance_mm": 2.0320000000000107,
+      "cold_worst_case_radial_clearance_mm": 1.9070000000000107,
+      "delta_radial_clearance_mm": 0.03200000000001069,
+      "min_required_radial_clearance_mm": 1.5,
+      "interference_risk": false,
+      "passed": true
+    }
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

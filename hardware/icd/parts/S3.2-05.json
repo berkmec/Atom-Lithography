@@ -1,0 +1,121 @@
+{
+  "schema_version": "part_icd_v1.0",
+  "part_id": "S3.2-05",
+  "parent_bom_id": "S3.2",
+  "subsystem": "S3",
+  "part_name": "CF63 hermetik coklu-koaksiyel UHV analog gecis flanslari",
+  "part_category": "PHYSICAL_SOLID",
+  "bom_metadata": {
+    "qty": "4",
+    "unit": "flans",
+    "material": "316LN SS / Al2O3 / SMA-SMB pin",
+    "key_spec": "32 koaksiyel/flans (128 kanal), bakout 150 C",
+    "tolerance": "He <=1e-9 mbar*L/s",
+    "temp_stage": "300 K",
+    "vacuum_grade": "UHV 1e-9 mbar",
+    "procurement_class": "COTS",
+    "parent_cost_class": "C",
+    "usd_low": 9000.0,
+    "usd_nom": 16500.0,
+    "usd_high": 31000.0,
+    "legacy_cad_module": "s3_ibic_detector_assembly",
+    "bom_epistemic_tag": "{Model-Kalibrasyon-Exp114}",
+    "notes": "4 x CF63 hermetik analog feedthrough"
+  },
+  "artifact_links": {
+    "cad": {
+      "work_package": "WP-M2",
+      "design_tier": "COTS_ENV_ICD",
+      "stl": "hardware/cad_parts/out/S3/S3.2-05.stl",
+      "step": "hardware/cad_parts/out/S3/S3.2-05.step",
+      "scad": "hardware/cad_parts/out/S3/S3.2-05.scad",
+      "dxf": "hardware/cad_parts/out/S3/S3.2-05.dxf",
+      "svg": "hardware/cad_parts/out/S3/S3.2-05.svg",
+      "cad_json": "hardware/cad_parts/out/S3/S3.2-05.json",
+      "watertight": true,
+      "all_6_files_valid": true,
+      "mass_kg": 5.331554,
+      "triangle_count": 10880,
+      "temp_k": 300.0,
+      "canonical_bbox_min_mm": [
+        -271.269,
+        -226.097,
+        338.25
+      ],
+      "canonical_bbox_max_mm": [
+        226.097,
+        262.32,
+        451.75
+      ],
+      "datum_shift_mm": [
+        0.0,
+        0.0,
+        500.0
+      ],
+      "port_count": 0,
+      "gdt_frame_count": 0
+    },
+    "pcb_bundles": [
+      {
+        "bundle_slug": "ibic_cryo_frontend_v3",
+        "verification_json": "hardware/pcb/ibic_cryo_frontend_v3/ibic_v3_verification.json",
+        "boards": [
+          "ibic_cold_csa_100k",
+          "ibic_warm_shaper_300k",
+          "ibic_hv_bias_guard"
+        ],
+        "kicad_sch_files": [
+          "hardware/pcb/ibic_cryo_frontend_v3/ibic_cold_csa_100k.kicad_sch",
+          "hardware/pcb/ibic_cryo_frontend_v3/ibic_warm_shaper_300k.kicad_sch",
+          "hardware/pcb/ibic_cryo_frontend_v3/ibic_hv_bias_guard.kicad_sch"
+        ],
+        "kicad_pcb_files": [
+          "hardware/pcb/ibic_cryo_frontend_v3/ibic_cold_csa_100k.kicad_pcb",
+          "hardware/pcb/ibic_cryo_frontend_v3/ibic_warm_shaper_300k.kicad_pcb",
+          "hardware/pcb/ibic_cryo_frontend_v3/ibic_hv_bias_guard.kicad_pcb"
+        ],
+        "spice_decks": [
+          "hardware/pcb/ibic_cryo_frontend_v3/ibic_cryo_chain_100k.cir"
+        ],
+        "all_passed": true
+      }
+    ],
+    "legacy_board_files": [],
+    "electrical_icd": {
+      "path": "hardware/icd/electrical/S3.2-05.json",
+      "electrical_class": "E4",
+      "grounding_domain": "AGND",
+      "ups_tier": "NONE",
+      "exp150_ups_allocation_w": 0.0,
+      "mating_part_ids": [
+        "S3.2-01",
+        "S3.2-02",
+        "S3.2-04",
+        "S5.1-01"
+      ],
+      "interlock_hooks_count": 0
+    },
+    "rtl_modules": [],
+    "rtl_audit_json": null,
+    "software_and_eda_files": [],
+    "verification_tests": []
+  },
+  "specialized_specification": null,
+  "verification_status": {
+    "cad_verified": true,
+    "pcb_verified": true,
+    "electrical_icd_verified": true,
+    "rtl_verified": false,
+    "software_or_eda_verified": false,
+    "specialized_icd_present": false,
+    "traceable": true
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "tapeout_done": false
+  }
+}

@@ -1,0 +1,139 @@
+{
+  "schema_version": "1.0",
+  "part_id": "S6.11-03",
+  "parent_bom_id": "S6.11",
+  "subsystem": "S6",
+  "part_name": "4 K Ultra-Dusuk-Gurultulu HEMT Bankasi (LNF-LNC4_8C sinifi, 32 adet, 7.8 mW/hat, Exp140 S6.5-03, 1.02 kg)",
+  "qty": 32,
+  "unit": "adet",
+  "temp_stage": "4 K",
+  "vacuum_grade": "Kriyo-vakum",
+  "bom_key_spec": "T_n=2.0 K -> T_sys=0.672 K (eta_meas=%21.43), 7.8 mW/hat (4K=0.2496 W), 220x120x40 mm, kutle=1.02 kg",
+  "usd_nom": 144000.0,
+  "bom_epistemic_tag": "{Liste-\u00c7apas\u0131}",
+  "electrical_class": "E2",
+  "grounding_domain": "CRYO_OVC",
+  "grounding_notes": "32x 4 K InP HEMT LNA bank (LNF-LNC4_8C class, 7.8 mW/ch = 0.2496 W @ 4 K).",
+  "supply_rails": [
+    {
+      "rail_name": "HEMT32_VD",
+      "voltage_v": 0.65,
+      "current_type": "DC",
+      "max_current_a": 0.384,
+      "steady_power_w": 0.2496,
+      "peak_power_w": 0.28,
+      "source_part_id": "S3.2-06"
+    },
+    {
+      "rail_name": "HEMT32_VG",
+      "voltage_v": -0.15,
+      "current_type": "DC",
+      "max_current_a": 0.005,
+      "steady_power_w": 0.001,
+      "peak_power_w": 0.002,
+      "source_part_id": "S3.2-06"
+    }
+  ],
+  "connectors_and_pinout": [
+    {
+      "connector_ref": "J_RFIN",
+      "connector_type": "SMA-F 50R Cryo (32x)",
+      "location_side": "4K_flange",
+      "mating_part_id": "S6.11-04",
+      "pins": [
+        {
+          "pin": "1",
+          "signal": "HEMT32_IN[0:31]",
+          "direction": "IN",
+          "nominal_level": "4-8 GHz from 20 mK TWPA"
+        },
+        {
+          "pin": "2",
+          "signal": "CRYO_4K_GND",
+          "direction": "PWR",
+          "nominal_level": "0 V CRYO_OVC"
+        }
+      ]
+    },
+    {
+      "connector_ref": "J_RFOUT",
+      "connector_type": "SMA-F 50R Cryo (32x)",
+      "location_side": "4K_flange",
+      "mating_part_id": "S6.11-01",
+      "pins": [
+        {
+          "pin": "1",
+          "signal": "HEMT32_OUT[0:31]",
+          "direction": "OUT",
+          "nominal_level": "G=38 dB, Tn=2.0 K, Tsys=0.672 K"
+        },
+        {
+          "pin": "2",
+          "signal": "CRYO_4K_GND",
+          "direction": "PWR",
+          "nominal_level": "0 V CRYO_OVC"
+        }
+      ]
+    },
+    {
+      "connector_ref": "J_DC",
+      "connector_type": "Micro-D 2x16 Cryo Bias Header",
+      "location_side": "4K_flange",
+      "mating_part_id": "S3.2-06",
+      "pins": [
+        {
+          "pin": "1",
+          "signal": "VD_CH[0:31]",
+          "direction": "IN",
+          "nominal_level": "+0.65 V @ 12 mA/ch (7.8 mW/ch)"
+        },
+        {
+          "pin": "2",
+          "signal": "VG_CH[0:31]",
+          "direction": "IN",
+          "nominal_level": "-0.15 V gate bias"
+        },
+        {
+          "pin": "3",
+          "signal": "AGND_CRYO",
+          "direction": "PWR",
+          "nominal_level": "0 V star ground"
+        }
+      ]
+    }
+  ],
+  "mating_part_ids": [
+    "S6.11-01",
+    "S6.11-02",
+    "S6.11-04",
+    "S3.2-06"
+  ],
+  "interlock_hooks": [
+    {
+      "signal_name": "CRYO_4K_OVERTEMP",
+      "target_part_id": "S6.2-03",
+      "action_on_trip": "Disable HEMT bias if T_4K > 8 K",
+      "response_time_ms": 100.0
+    }
+  ],
+  "ups_tier": "NONE",
+  "ups_budget_group": "PASSIVE_ZERO_MAINS",
+  "exp150_ups_allocation_w": 0.0,
+  "supply_rails_steady_sum_w": 0.2506,
+  "incremental_mains_w": 0.0,
+  "secondary_or_parent_derived_w": 0.2506,
+  "non_exp150_aux_shed_w": 0.0,
+  "reconciliation_note": "Passive or downstream sub-assembly (0.25 W sub-rail power drawn from upstream source S3.2-06); incremental_mains_w = 0.0 W (zero double-counting).",
+  "timing_sync": {
+    "rb_10mhz_port": null,
+    "white_rabbit_port": null,
+    "sync_role": "4 K post-TWPA LNA stage"
+  },
+  "epistemic_flags": {
+    "design_maturity": "M0_M1_ELECTRICAL_ICD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

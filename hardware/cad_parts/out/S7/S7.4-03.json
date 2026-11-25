@@ -1,0 +1,581 @@
+{
+  "part_design": {
+    "part_id": "S7.4-03",
+    "parent_bom_id": "S7.4",
+    "subsystem": "S7",
+    "part_name": "19 inc EMI-kalkanli kontrol/RF kabini ve su/hava isi esanjoru",
+    "design_tier": "COTS_ENV_ICD",
+    "material": "Steel",
+    "temp_stage": "300 K (oda)",
+    "temp_k": 300.0,
+    "vacuum_grade": "Atmosfer",
+    "tolerance_spec": "±1 C",
+    "surface_finish_ra_um": 3.2,
+    "qty": 2,
+    "procurement_class": "COTS",
+    "world_origin_mm": [
+      1790.0,
+      0.0,
+      1025.0
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "bay1_42u_aperture",
+        "kind": "mechanical",
+        "position_mm": [
+          1480.0,
+          -450.0,
+          1023.45
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "standard": "EIA-310-D 42U 19-inch",
+        "mating_part_id": "S7.1-01",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "world",
+        "notes": "Bay 1 Control/DAQ/Timing/Safety 42U bay (U17-U32 reserved for S1/S3/S4)"
+      },
+      {
+        "name": "bay2_42u_aperture",
+        "kind": "mechanical",
+        "position_mm": [
+          2100.0,
+          -450.0,
+          1023.45
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "standard": "EIA-310-D 42U 19-inch",
+        "mating_part_id": "S6.6-06",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "world",
+        "notes": "Bay 2 Cryo-RF/Magnet/ZCU216/RFSoC 42U bay (EMI segregated from Bay 1)"
+      },
+      {
+        "name": "bay1_cw_supply",
+        "kind": "cooling",
+        "position_mm": [
+          1360.0,
+          580.0,
+          180.0
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "standard": "DN25 ISO-228 G1 Chilled Water",
+        "mating_part_id": "",
+        "bore_mm": 22.0,
+        "od_mm": 32.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "world",
+        "notes": ""
+      },
+      {
+        "name": "bay2_cw_supply",
+        "kind": "cooling",
+        "position_mm": [
+          1980.0,
+          580.0,
+          180.0
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "standard": "DN25 ISO-228 G1 Chilled Water",
+        "mating_part_id": "",
+        "bore_mm": 22.0,
+        "od_mm": 32.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "world",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "CABINET_W",
+        "nominal_mm": 600.0,
+        "tol_plus_mm": 1.0,
+        "tol_minus_mm": -1.0,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "600.00 ±1.00"
+      },
+      {
+        "label": "CABINET_H_42U",
+        "nominal_mm": 2050.0,
+        "tol_plus_mm": 2.0,
+        "tol_minus_mm": -2.0,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "2050.00 ±2.00"
+      },
+      {
+        "label": "BAY_PITCH_X",
+        "nominal_mm": 620.0,
+        "tol_plus_mm": 1.0,
+        "tol_minus_mm": -1.0,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "620.00 ±1.00"
+      },
+      {
+        "label": "DEPTH_WITH_HX",
+        "nominal_mm": 975.0,
+        "tol_plus_mm": 2.0,
+        "tol_minus_mm": -2.0,
+        "view": "right",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "975.00 ±2.00"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "perpendicularity",
+        "tolerance_mm": 1.0,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "42U VERTICAL RAILS",
+        "glyph": "⊥",
+        "tolerance_text": "1.00"
+      },
+      {
+        "symbol": "flatness",
+        "tolerance_mm": 0.5,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "FLOOR PLINTH DATUM A",
+        "glyph": "⏥",
+        "tolerance_text": "0.50"
+      },
+      {
+        "symbol": "parallelism",
+        "tolerance_mm": 1.0,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "TOP EMI ROOF",
+        "glyph": "∥",
+        "tolerance_text": "1.00"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "Guc dagitimi, kablo yonetimi, sicaklik kontrolu (±1 C)",
+      "RECONCILIATION: Resolves old params.py single 30U frame conflict with 2x 42U EMI cabinets (>60 dB @ 1 GHz).",
+      "Bay 1 center X=+1480 mm (X=[1180,1780], 19.5 mm clear of S5.1-04 foot); Bay 2 center X=+2100 mm (X=[1800,2400]); 20 mm aisle.",
+      "Hollow open-bay construction guarantees 0 solid clash with all internal 19-inch chassis (U14-U35 open in Bay 1 for S4/S3/S1/S2)."
+    ],
+    "scad_params": {
+      "n_cabinets": 2,
+      "rack_u": 42,
+      "cab_w_mm": 600.0,
+      "cab_d_mm": 850.0,
+      "cab_h_mm": 2050.0,
+      "bay_pitch_x_mm": 620.0,
+      "hx_depth_mm": 120.0
+    },
+    "target_mass_kg": 310.0,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S7.4-03",
+    "subsystem": "S7",
+    "design_tier": "COTS_ENV_ICD",
+    "stl_path": "hardware/cad_parts/out/S7/S7.4-03.stl",
+    "step_path": "hardware/cad_parts/out/S7/S7.4-03.step",
+    "scad_path": "hardware/cad_parts/out/S7/S7.4-03.scad",
+    "dxf_path": "hardware/cad_parts/out/S7/S7.4-03.dxf",
+    "svg_path": "hardware/cad_parts/out/S7/S7.4-03.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 540896829.0232482,
+    "surface_area_mm2": 25028608.26324567,
+    "mass_kg": 309.99999999999983,
+    "cg_mm": [
+      1790.0000000000007,
+      198.49273442895714,
+      1020.4079887831276
+    ],
+    "bbox_min_mm": [
+      1180.0,
+      -450.0,
+      0.10000000000000142
+    ],
+    "bbox_max_mm": [
+      2400.0,
+      580.1,
+      2049.9
+    ],
+    "inertia_kg_mm2": [
+      191755737.07518125,
+      204027459.7336319,
+      71231911.09081818,
+      -2.1492083843405832e-07,
+      6.447625153021749e-07,
+      594148.6349933707
+    ],
+    "triangle_count": 1872,
+    "vertex_count": 936,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "shell_bboxes_mm": [
+    [
+      [
+        1180.0,
+        -450.0,
+        0.1
+      ],
+      [
+        1780.0,
+        400.0,
+        89.9
+      ]
+    ],
+    [
+      [
+        1180.0,
+        -450.0,
+        1957.0
+      ],
+      [
+        1780.0,
+        400.0,
+        2049.9
+      ]
+    ],
+    [
+      [
+        1180.0,
+        -450.0,
+        90.2
+      ],
+      [
+        1196.0,
+        400.0,
+        1956.7
+      ]
+    ],
+    [
+      [
+        1198.0,
+        -438.0,
+        90.2
+      ],
+      [
+        1222.0,
+        -414.0,
+        1956.7
+      ]
+    ],
+    [
+      [
+        1198.0,
+        364.0,
+        90.2
+      ],
+      [
+        1222.0,
+        388.0,
+        1956.7
+      ]
+    ],
+    [
+      [
+        1764.0,
+        -450.0,
+        90.2
+      ],
+      [
+        1780.0,
+        400.0,
+        1956.7
+      ]
+    ],
+    [
+      [
+        1738.0,
+        -438.0,
+        90.2
+      ],
+      [
+        1762.0,
+        -414.0,
+        1956.7
+      ]
+    ],
+    [
+      [
+        1738.0,
+        364.0,
+        90.2
+      ],
+      [
+        1762.0,
+        388.0,
+        1956.7
+      ]
+    ],
+    [
+      [
+        1210.0,
+        405.0,
+        60.0
+      ],
+      [
+        1750.0,
+        525.0,
+        1980.0
+      ]
+    ],
+    [
+      [
+        1344.0,
+        525.1,
+        164.0
+      ],
+      [
+        1376.0,
+        580.1,
+        196.0
+      ]
+    ],
+    [
+      [
+        1584.0,
+        525.1,
+        164.0
+      ],
+      [
+        1616.0,
+        580.1,
+        196.0
+      ]
+    ],
+    [
+      [
+        1800.0,
+        -450.0,
+        0.1
+      ],
+      [
+        2400.0,
+        400.0,
+        89.9
+      ]
+    ],
+    [
+      [
+        1800.0,
+        -450.0,
+        1957.0
+      ],
+      [
+        2400.0,
+        400.0,
+        2049.9
+      ]
+    ],
+    [
+      [
+        1800.0,
+        -450.0,
+        90.2
+      ],
+      [
+        1816.0,
+        400.0,
+        1956.7
+      ]
+    ],
+    [
+      [
+        1818.0,
+        -438.0,
+        90.2
+      ],
+      [
+        1842.0,
+        -414.0,
+        1956.7
+      ]
+    ],
+    [
+      [
+        1818.0,
+        364.0,
+        90.2
+      ],
+      [
+        1842.0,
+        388.0,
+        1956.7
+      ]
+    ],
+    [
+      [
+        2384.0,
+        -450.0,
+        90.2
+      ],
+      [
+        2400.0,
+        400.0,
+        1956.7
+      ]
+    ],
+    [
+      [
+        2358.0,
+        -438.0,
+        90.2
+      ],
+      [
+        2382.0,
+        -414.0,
+        1956.7
+      ]
+    ],
+    [
+      [
+        2358.0,
+        364.0,
+        90.2
+      ],
+      [
+        2382.0,
+        388.0,
+        1956.7
+      ]
+    ],
+    [
+      [
+        1830.0,
+        405.0,
+        60.0
+      ],
+      [
+        2370.0,
+        525.0,
+        1980.0
+      ]
+    ],
+    [
+      [
+        1964.0,
+        525.1,
+        164.0
+      ],
+      [
+        1996.0,
+        580.1,
+        196.0
+      ]
+    ],
+    [
+      [
+        2204.0,
+        525.1,
+        164.0
+      ],
+      [
+        2236.0,
+        580.1,
+        196.0
+      ]
+    ]
+  ],
+  "reconciliation_notes": [
+    "Resolved BOM v7.0 vs CAD v6.0 single-30U rack conflict: modeled 2x 42U EMI steel cabinets + rear water/air HX at X=+1480 mm and X=+2100 mm."
+  ]
+}

@@ -1,0 +1,83 @@
+{
+  "schema_version": "1.0",
+  "part_id": "S6.9-01",
+  "parent_bom_id": "S6.9",
+  "subsystem": "S6",
+  "part_name": "PT420 500 mm ofsetli uzak doner valf kutusu ve L=600 mm esnek He yuksek-basinc hatti (Exp133)",
+  "qty": 1,
+  "unit": "set",
+  "temp_stage": "300 K (tesis)",
+  "vacuum_grade": "20 bar He",
+  "bom_key_spec": "500 mm ofset uzak valf + 600 mm esnek He hatti (HF >12.7x, 1.4 Hz 3.6x bastirma; CFG4 sigma_stage=0.1024 nm)",
+  "usd_nom": 20000.0,
+  "bom_epistemic_tag": "{Varsay\u0131m}",
+  "electrical_class": "E4",
+  "grounding_domain": "FACILITY_PE",
+  "grounding_notes": "PT420 500 mm offset remote rotary valve acoustic box & stepper drive (80 W; paired w/ S6.1-02 = 9.5 kW).",
+  "supply_rails": [
+    {
+      "rail_name": "AC_FACILITY_230V",
+      "voltage_v": 230.0,
+      "current_type": "AC_1PH",
+      "max_current_a": 0.6,
+      "steady_power_w": 80.0,
+      "peak_power_w": 120.0,
+      "source_part_id": "S6.1-02"
+    }
+  ],
+  "connectors_and_pinout": [
+    {
+      "connector_ref": "J_RV_MTR",
+      "connector_type": "Binder M16 6-Pin Shielded",
+      "location_side": "remote_valve_box",
+      "mating_part_id": "S6.1-02",
+      "pins": [
+        {
+          "pin": "1-4",
+          "signal": "ROTARY_VALVE_MTR",
+          "direction": "IN",
+          "nominal_level": "1.4 Hz synchronous drive"
+        },
+        {
+          "pin": "5-6",
+          "signal": "PHASE_ENC_TAP",
+          "direction": "OUT",
+          "nominal_level": "Feeds S6.9-04 25 dB harmonic FF"
+        }
+      ]
+    }
+  ],
+  "mating_part_ids": [
+    "S6.1-01",
+    "S6.1-02",
+    "S6.9-04"
+  ],
+  "interlock_hooks": [
+    {
+      "signal_name": "PT420_VALVE_STOP",
+      "target_part_id": "S6.1-02",
+      "action_on_trip": "Stops synchronously with compressor soft-shed",
+      "response_time_ms": 500.0
+    }
+  ],
+  "ups_tier": "TIER2_SHED",
+  "ups_budget_group": "EXP150_TIER2_SHED",
+  "exp150_ups_allocation_w": 80.0,
+  "supply_rails_steady_sum_w": 80.0,
+  "incremental_mains_w": 80.0,
+  "secondary_or_parent_derived_w": 0.0,
+  "non_exp150_aux_shed_w": 0.0,
+  "reconciliation_note": "Exp150 Tier-2 sheddable baseline load: incremental_mains_w = exp150_ups_allocation_w = 80.0 W (raw supply_rails sum = 80.0 W, shed cleanly on utility outage).",
+  "timing_sync": {
+    "rb_10mhz_port": null,
+    "white_rabbit_port": "WR_COAX_3 (via S6.9-04)",
+    "sync_role": "1.4 Hz cryo rotary valve"
+  },
+  "epistemic_flags": {
+    "design_maturity": "M0_M1_ELECTRICAL_ICD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

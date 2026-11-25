@@ -1,0 +1,96 @@
+{
+  "schema_version": "part_icd_v1.0",
+  "part_id": "S2.1-03",
+  "parent_bom_id": "S2.1",
+  "subsystem": "S2",
+  "part_name": "Anti-sarj altin/Pt iletken ust membran kaplama ve koruma cercevesi",
+  "part_category": "PHYSICAL_SOLID",
+  "bom_metadata": {
+    "qty": "2",
+    "unit": "set",
+    "material": "Au/Ti ince film (50 nm) + Mo cerceve",
+    "key_spec": "Yuzey direnci <1 Ohm/sq, demet isisi dagitimi",
+    "tolerance": "±10 um hizalama",
+    "temp_stage": "300 K",
+    "vacuum_grade": "UHV 1e-9 mbar",
+    "procurement_class": "CUS",
+    "parent_cost_class": "D",
+    "usd_low": 6000.0,
+    "usd_nom": 11000.0,
+    "usd_high": 22000.0,
+    "legacy_cad_module": "s2_mems_write_head",
+    "bom_epistemic_tag": "{Varsayım}",
+    "notes": "Iyon bombardimani kaynakli yuzey sarjlanmasini onler"
+  },
+  "artifact_links": {
+    "cad": {
+      "work_package": "WP-M1",
+      "design_tier": "CUSTOM_FULL",
+      "stl": "hardware/cad_parts/out/S2/S2.1-03.stl",
+      "step": "hardware/cad_parts/out/S2/S2.1-03.step",
+      "scad": "hardware/cad_parts/out/S2/S2.1-03.scad",
+      "dxf": "hardware/cad_parts/out/S2/S2.1-03.dxf",
+      "svg": "hardware/cad_parts/out/S2/S2.1-03.svg",
+      "cad_json": "hardware/cad_parts/out/S2/S2.1-03.json",
+      "watertight": true,
+      "all_6_files_valid": true,
+      "mass_kg": 0.036766,
+      "triangle_count": 516,
+      "temp_k": 300.0,
+      "canonical_bbox_min_mm": [
+        -27.764,
+        -30.5,
+        507.94
+      ],
+      "canonical_bbox_max_mm": [
+        27.764,
+        27.0,
+        510.14
+      ],
+      "datum_shift_mm": [
+        0.0,
+        0.0,
+        500.0
+      ],
+      "port_count": 2,
+      "gdt_frame_count": 2
+    },
+    "pcb_bundles": [],
+    "legacy_board_files": [],
+    "electrical_icd": {
+      "path": "hardware/icd/electrical/S2.1-03.json",
+      "electrical_class": "E4",
+      "grounding_domain": "HV_MINUS_5KV_DECK",
+      "ups_tier": "NONE",
+      "exp150_ups_allocation_w": 0.0,
+      "mating_part_ids": [
+        "S2.1-01",
+        "S2.1-04",
+        "S1.3-02"
+      ],
+      "interlock_hooks_count": 0
+    },
+    "rtl_modules": [],
+    "rtl_audit_json": null,
+    "software_and_eda_files": [],
+    "verification_tests": []
+  },
+  "specialized_specification": null,
+  "verification_status": {
+    "cad_verified": true,
+    "pcb_verified": false,
+    "electrical_icd_verified": true,
+    "rtl_verified": false,
+    "software_or_eda_verified": false,
+    "specialized_icd_present": false,
+    "traceable": true
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "tapeout_done": false
+  }
+}

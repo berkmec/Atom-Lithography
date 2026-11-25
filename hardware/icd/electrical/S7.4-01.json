@@ -1,0 +1,124 @@
+{
+  "schema_version": "1.0",
+  "part_id": "S7.4-01",
+  "parent_bom_id": "S7.4",
+  "subsystem": "S7",
+  "part_name": "10 MHz Rubidyum atomik saat referansi ve dusuk-jitter saat dagiticisi",
+  "qty": 1,
+  "unit": "set",
+  "temp_stage": "300 K (kabin)",
+  "vacuum_grade": "Atmosfer",
+  "bom_key_spec": "Frekans kararligi <5e-11, faz gurultusu <-140 dBc/Hz",
+  "usd_nom": 7500.0,
+  "bom_epistemic_tag": "{Liste-\u00c7apas\u0131}",
+  "electrical_class": "E3",
+  "grounding_domain": "DGND",
+  "grounding_notes": "10 MHz Rubidium atomic clock (SRS FS725/PRS10, <5e-11, <-140 dBc/Hz) + 16-ch isolated amp on Tier-1 UPS.",
+  "supply_rails": [
+    {
+      "rail_name": "AC_UPS_TIER1",
+      "voltage_v": 230.0,
+      "current_type": "AC_1PH",
+      "max_current_a": 0.5,
+      "steady_power_w": 45.0,
+      "peak_power_w": 85.0,
+      "source_part_id": "S7.SAFETY-04"
+    }
+  ],
+  "connectors_and_pinout": [
+    {
+      "connector_ref": "J_10M_OUT",
+      "connector_type": "16x Isolated BNC/SMA 50R (+13 dBm)",
+      "location_side": "rack_rear",
+      "mating_part_id": "S7.4-02",
+      "pins": [
+        {
+          "pin": "CH1-2",
+          "signal": "ZU48DR_RFSOC_CLK",
+          "direction": "OUT",
+          "nominal_level": "To S6.11-01 (2x boards)"
+        },
+        {
+          "pin": "CH3-6",
+          "signal": "ESR_VSG_CLK",
+          "direction": "OUT",
+          "nominal_level": "To S6.4-01 (4x VSGs)"
+        },
+        {
+          "pin": "CH7-10",
+          "signal": "ENDOR_DDS_CLK",
+          "direction": "OUT",
+          "nominal_level": "To S6.5-01 (4x DDS)"
+        },
+        {
+          "pin": "CH11",
+          "signal": "PXIE_BP_CLK",
+          "direction": "OUT",
+          "nominal_level": "To S7.2-03 chassis"
+        },
+        {
+          "pin": "CH12",
+          "signal": "ZCU216_TREE_CLK",
+          "direction": "OUT",
+          "nominal_level": "To S6.6-06 (14x ZCU216)"
+        },
+        {
+          "pin": "CH13",
+          "signal": "IBIC_FPGA_CLK",
+          "direction": "OUT",
+          "nominal_level": "To S3.3-04 / S3.3-01"
+        },
+        {
+          "pin": "CH14",
+          "signal": "WR_GM_10M_1PPS",
+          "direction": "OUT",
+          "nominal_level": "To S7.4-02 White Rabbit"
+        },
+        {
+          "pin": "CH15",
+          "signal": "INTF_DSP_CLK",
+          "direction": "OUT",
+          "nominal_level": "To S4.4-01 / S4.5-03"
+        },
+        {
+          "pin": "CH16",
+          "signal": "SPARE_MON_CLK",
+          "direction": "OUT",
+          "nominal_level": "Phase-noise test port"
+        }
+      ]
+    }
+  ],
+  "mating_part_ids": [
+    "S6.11-01",
+    "S6.4-01",
+    "S6.5-01",
+    "S7.2-03",
+    "S6.6-06",
+    "S3.3-04",
+    "S7.4-02",
+    "S4.4-01",
+    "S7.SAFETY-04"
+  ],
+  "interlock_hooks": [],
+  "ups_tier": "TIER1_CRITICAL",
+  "ups_budget_group": "EXP150_TIER1_CRITICAL",
+  "exp150_ups_allocation_w": 45.0,
+  "supply_rails_steady_sum_w": 45.0,
+  "incremental_mains_w": 45.0,
+  "secondary_or_parent_derived_w": 0.0,
+  "non_exp150_aux_shed_w": 0.0,
+  "reconciliation_note": "Exp150 Tier-1 critical UPS load: incremental_mains_w = exp150_ups_allocation_w = 45.0 W.",
+  "timing_sync": {
+    "rb_10mhz_port": "MASTER_SOURCE",
+    "white_rabbit_port": "GM_REF_IN",
+    "sync_role": "Primary 10 MHz + 1 PPS atomic master"
+  },
+  "epistemic_flags": {
+    "design_maturity": "M0_M1_ELECTRICAL_ICD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

@@ -1,0 +1,880 @@
+"""Laser AOM RF VCA, 10 us 2-Color InGaAs/Si Pyrometer TIA, 1 ms Integrator & <0.1 ms Crowbar PCB.
+
+BOM Coverage:
+  * S5.5-03: 10 us 2-color InGaAs (1550 nm) + Si (850 nm) pyrometer TIA & +/-1.5% 1.0 ms
+    pulse-energy analog integrator.
+  * S5.5-01: 808 nm qCW diode-laser bar stack modulation & enable interface.
+  * S5.5-04: <0.1 ms hardware RF / diode-enable crowbar wired directly to 1oo2D safety interlock.
+  * S5.3-03: High-speed optical pyrometer & closed-loop anneal controller interface
+    (matching rtl/machine_ctrl/aom_pid_ctrl.v 100 kHz DAC, [0.65, 1.40] gain, T_melt=1687 K).
+
+Key Design Specs:
+  * 4-layer Rogers RO4350B / Isola FR408HR hybrid mixed-signal PCB (er=3.48 outer RF/TIA layers,
+    185 x 125 mm), exact 50.00 Ohm microstrip (w=0.5429 mm) for the 80-200 MHz AOM RF chain.
+  * Dual-channel 2-color OPA657 TIA (InGaAs 1550 nm Rf=100k/Cf=12p + Si 850 nm Rf=200k/Cf=6p)
+    with driven guard rings, In1/In2 copper keepouts, and dual 16-bit 1 MS/s ADS8860 ADCs.
+  * Gated OPA140 + ADG1211 1.0 ms pulse-energy Miller integrator (<1% linearity across 2x energy).
+  * AD5541A 16-bit 100 kHz AOM PID DAC -> AD8367 80-200 MHz RF VCA -> HMC547A RF kill switch ->
+    ADL5602 50 Ohm driver.
+  * Dual-channel opto-isolated 1oo2 hardware crowbar (ACPL-072L + series MOSFET cutoff + VCA clamp)
+    wired directly to safety_interlock_1oo2d (<50 us << 0.1 ms cutoff).
+
+Epistemic Status: M0/M1 DESIGN_ONLY; no_lab_measurement=true; no_physical_fab=true;
+iec61508_certified=false; semi_s2_certified=false.
+"""
+from __future__ import annotations
+
+from collections import defaultdict
+import json
+import math
+from pathlib import Path
+from typing import Any
+
+from hardware.pcb.kicad_eda_verify import (
+    BoardSpec,
+    ComponentSpec,
+    DEFAULT_EPISTEMIC_META,
+    DesignRules,
+    KeepoutSpec,
+    MnaCircuit,
+    NetSpec,
+    PinSpec,
+    StackupLayer,
+    TraceSpec,
+    ViaSpec,
+    ZoneSpec,
+    auto_footprint_pads,
+    auto_route_board,
+    connect_guard_ring,
+    make_manhattan_trace,
+    run_ngspice,
+    solve_microstrip_width_mm,
+    verify_board_bundle,
+)
+
+OUT_DIR = Path(__file__).resolve().parent
+
+
+def _pad_xy(comp: ComponentSpec, pin_num: str) -> tuple[float, float]:
+    rad = math.radians(comp.rotation_deg)
+    c, s = math.cos(rad), math.sin(rad)
+    for p in comp.pins:
+        if p.number == str(pin_num):
+            return (
+                round(comp.x_mm + p.dx_mm * c + p.dy_mm * s, 4),
+                round(comp.y_mm - p.dx_mm * s + p.dy_mm * c, 4),
+            )
+    raise KeyError(f"Pin {pin_num} not found on {comp.ref}")
+
+
+def _soic8_opamp_pins() -> tuple[PinSpec, ...]:
+    names = {"1": "NC1", "2": "IN-", "3": "IN+", "4": "V-", "5": "NC5", "6": "OUT", "7": "V+", "8": "NC8"}
+    types = {
+        "1": "no_connect", "2": "input", "3": "input", "4": "power_in",
+        "5": "no_connect", "6": "output", "7": "power_in", "8": "no_connect",
+    }
+    return auto_footprint_pads("Package_SO:SOIC-8_3.9x4.9mm_P1.27mm", [str(i) for i in range(1, 9)], names, types)
+
+
+def _ldo_msop10_pins() -> tuple[PinSpec, ...]:
+    names = {
+        "1": "IN1", "2": "IN2", "3": "EN", "4": "PG", "5": "ILIM",
+        "6": "GND", "7": "SET", "8": "OUTS", "9": "OUT1", "10": "OUT2",
+    }
+    types = {
+        "1": "power_in", "2": "power_in", "3": "input", "4": "no_connect", "5": "no_connect",
+        "6": "power_in", "7": "input", "8": "input", "9": "power_out", "10": "power_out",
+    }
+    return auto_footprint_pads("Package_SO:MSOP-10_3x3mm_P0.5mm", [str(i) for i in range(1, 11)], names, types)
+
+
+def _ads8860_msop10_pins() -> tuple[PinSpec, ...]:
+    """ADS8860IDGK 16-bit 1 MS/s SAR ADC (VSSOP-10)."""
+    names = {
+        "1": "REF", "2": "AVDD", "3": "AINP", "4": "AINN", "5": "GND",
+        "6": "CONVST", "7": "DOUT", "8": "SCLK", "9": "DIN", "10": "DVDD",
+    }
+    types = {
+        "1": "input", "2": "power_in", "3": "input", "4": "input", "5": "power_in",
+        "6": "input", "7": "output", "8": "input", "9": "input", "10": "power_in",
+    }
+    return auto_footprint_pads("Package_SO:MSOP-10_3x3mm_P0.5mm", [str(i) for i in range(1, 11)], names, types)
+
+
+def _ad5541_msop10_pins() -> tuple[PinSpec, ...]:
+    """AD5541ABRMZ 16-bit 1 us-settling SPI DAC (MSOP-10)."""
+    names = {
+        "1": "VOUT", "2": "AGND", "3": "VREF", "4": "CS_N", "5": "SCLK",
+        "6": "DIN", "7": "LDAC_N", "8": "DGND", "9": "VDD", "10": "NC",
+    }
+    types = {
+        "1": "output", "2": "power_in", "3": "input", "4": "input", "5": "input",
+        "6": "input", "7": "input", "8": "power_in", "9": "power_in", "10": "no_connect",
+    }
+    return auto_footprint_pads("Package_SO:MSOP-10_3x3mm_P0.5mm", [str(i) for i in range(1, 11)], names, types)
+
+
+def _ad8367_tssop14_pins() -> tuple[PinSpec, ...]:
+    """AD8367ARUZ 500 MHz 50 Ohm Linear-in-dB/V RF VCA (TSSOP-14)."""
+    names = {
+        "1": "RF_IN", "2": "GND1", "3": "MODE", "4": "GAIN_CTRL", "5": "VREF_NC", "6": "GND2", "7": "VPOS1",
+        "8": "RF_OUT", "9": "GND3", "10": "DETO_NC", "11": "HPFL_NC", "12": "DECL_NC", "13": "GND4", "14": "VPOS2",
+    }
+    types = {
+        "1": "input", "2": "power_in", "3": "input", "4": "input", "5": "no_connect", "6": "power_in", "7": "power_in",
+        "8": "output", "9": "power_in", "10": "no_connect", "11": "no_connect", "12": "no_connect", "13": "power_in", "14": "power_in",
+    }
+    return auto_footprint_pads("Package_SO:TSSOP-14_4.4x5mm_P0.65mm", [str(i) for i in range(1, 15)], names, types)
+
+
+def _rf_sw_sot23_6_pins() -> tuple[PinSpec, ...]:
+    """HMC547ALC3 / ADG901 50 Ohm absorptive RF kill switch (opposing RF1/RF2 ports, 1.27 mm pitch)."""
+    return (
+        PinSpec("1", "RF1", "bidirectional", -1.90, 0.0, 0.85, 0.60),
+        PinSpec("2", "GND1", "power_in", -0.95, 1.60, 0.70, 0.75),
+        PinSpec("3", "RF2", "bidirectional", 1.90, 0.0, 0.85, 0.60),
+        PinSpec("4", "VDD", "power_in", 0.95, -1.60, 0.70, 0.75),
+        PinSpec("5", "CTRL", "input", -0.95, -1.60, 0.70, 0.75),
+        PinSpec("6", "GND2", "power_in", 0.95, 1.60, 0.70, 0.75),
+    )
+
+
+def _rf_amp_sot89_pins() -> tuple[PinSpec, ...]:
+    """ADL5602 50 MHz - 4 GHz 50 Ohm RF output gain block (SOT-89-3 -> 4-pin with GND)."""
+    return (
+        PinSpec("1", "RF_IN", "input", -1.50, 0.0, 0.80, 1.00),
+        PinSpec("2", "GND", "power_in", 0.0, 1.80, 1.40, 1.20),
+        PinSpec("3", "RF_OUT", "output", 1.50, 0.0, 0.80, 1.00),
+        PinSpec("4", "GND_TAB", "power_in", 0.0, -1.80, 1.40, 1.20),
+    )
+
+
+def _opto_soic8_pins() -> tuple[PinSpec, ...]:
+    """ACPL-072L high-speed <60 ns optocoupler (SOIC-8)."""
+    names = {"1": "VCC1", "2": "LED_A", "3": "LED_K", "4": "GND1", "5": "GND2", "6": "VOUT", "7": "NC7", "8": "VCC2"}
+    types = {
+        "1": "power_in", "2": "input", "3": "input", "4": "power_in",
+        "5": "power_in", "6": "output", "7": "no_connect", "8": "power_in",
+    }
+    return auto_footprint_pads("Package_SO:SOIC-8_3.9x4.9mm_P1.27mm", [str(i) for i in range(1, 9)], names, types)
+
+
+def _logic_sot23_5_pins() -> tuple[PinSpec, ...]:
+    names = {"1": "A", "2": "B", "3": "GND", "4": "Y", "5": "VCC"}
+    types = {"1": "input", "2": "input", "3": "power_in", "4": "output", "5": "power_in"}
+    return auto_footprint_pads("Package_TO_SOT_SMD:SOT-23-5", [str(i) for i in range(1, 6)], names, types)
+
+
+def _nmos_sot23_3_pins() -> tuple[PinSpec, ...]:
+    return (
+        PinSpec("1", "G", "input", -1.10, -0.95, 0.80, 0.60),
+        PinSpec("2", "S", "passive", -1.10, 0.95, 0.80, 0.60),
+        PinSpec("3", "D", "passive", 1.10, 0.0, 0.80, 0.60),
+    )
+
+
+def _sw_soic8_pins() -> tuple[PinSpec, ...]:
+    """ADG1211 low-charge-injection precision CMOS analog switch (SOIC-8)."""
+    names = {"1": "IN1", "2": "D1", "3": "S1", "4": "VSS", "5": "GND", "6": "VDD", "7": "NC7", "8": "NC8"}
+    types = {
+        "1": "input", "2": "passive", "3": "passive", "4": "power_in",
+        "5": "power_in", "6": "power_in", "7": "no_connect", "8": "no_connect",
+    }
+    return auto_footprint_pads("Package_SO:SOIC-8_3.9x4.9mm_P1.27mm", [str(i) for i in range(1, 9)], names, types)
+
+
+def _pd_3p_pins() -> tuple[PinSpec, ...]:
+    """TO-46 / ceramic SMD photodiode (Anode, Cathode, Shield/Guard)."""
+    return (
+        PinSpec("1", "ANODE", "passive", 1.80, 0.0, 0.90, 0.90),
+        PinSpec("2", "CATHODE", "passive", -1.80, 0.0, 0.90, 0.90),
+        PinSpec("3", "CASE_GUARD", "passive", 0.0, 2.00, 0.90, 0.80),
+    )
+
+
+def _lt6655_msop8_pins() -> tuple[PinSpec, ...]:
+    names = {"1": "GND1", "2": "VIN", "3": "SHDN_N", "4": "GND2", "5": "GND3", "6": "VOUT_F", "7": "VOUT_S", "8": "GND4"}
+    types = {
+        "1": "power_in", "2": "power_in", "3": "input", "4": "power_in",
+        "5": "power_in", "6": "power_out", "7": "input", "8": "power_in",
+    }
+    return auto_footprint_pads("Package_SO:MSOP-8_3x3mm_P0.65mm", [str(i) for i in range(1, 9)], names, types)
+
+
+def build_laser_aom_pyrometer_board() -> BoardSpec:
+    """Build 4-layer Rogers RO4350B / FR408HR 2-Color Pyrometer TIA + 1 ms Integrator + AOM RF VCA + Crowbar PCB."""
+    stackup = (
+        StackupLayer("F.Cu", "signal", 0.035, material="Copper"),
+        StackupLayer("dielectric 1", "core", 0.254, epsilon_r=3.48, loss_tangent=0.0037, material="Rogers RO4350B"),
+        StackupLayer("In1.Cu", "power", 0.035, material="Copper"),
+        StackupLayer("dielectric 2", "core", 0.800, epsilon_r=3.66, loss_tangent=0.0092, material="Isola FR408HR"),
+        StackupLayer("In2.Cu", "power", 0.035, material="Copper"),
+        StackupLayer("dielectric 3", "core", 0.254, epsilon_r=3.48, loss_tangent=0.0037, material="Rogers RO4350B"),
+        StackupLayer("B.Cu", "signal", 0.035, material="Copper"),
+    )
+    w50 = solve_microstrip_width_mm(50.0, h_mm=0.254, t_mm=0.035, er=3.48)  # 0.5429 mm -> 50.00 Ohm
+
+    comps: list[ComponentSpec] = []
+    nets_dict: dict[str, list[tuple[str, str]]] = defaultdict(list)
+    traces: list[TraceSpec] = []
+    vias: list[ViaSpec] = []
+    keepouts: list[KeepoutSpec] = []
+
+    def add_c(c: ComponentSpec) -> ComponentSpec:
+        comps.append(c)
+        return c
+
+    def conn(net: str, ref: str, pin: str | int) -> None:
+        nets_dict[net].append((ref, str(pin)))
+
+    # =========================================================================
+    # SECTION 1 (TOP-LEFT, y=14..48 mm): 2-COLOR FAST PYROMETER TIAs (S5.5-03 / S5.3-03)
+    # =========================================================================
+    pyro_specs = [
+        ("INGAAS", "Hamamatsu_G12180-010A_1550nm", "100k_0.1pct", "12pF_C0G", 20.0, "S5.5-03"),
+        ("SI",     "Hamamatsu_S5971_850nm",        "200k_0.1pct", "6.0pF_C0G", 42.0, "S5.3-03"),
+    ]
+    for tag, pd_val, rf_val, cf_val, yc, bid in pyro_specs:
+        r_pb = add_c(ComponentSpec(f"RPB_{tag}", "1.00k_1pct", "Resistor_SMD:R_0603_1608Metric", 10.0, yc, pins=auto_footprint_pads("0603", ("1", "2")), bom_id=bid, epistemic_tag="{Pasif-COTS}"))
+        c_pb = add_c(ComponentSpec(f"CPB_{tag}", "100nF_C0G", "Capacitor_SMD:C_0603_1608Metric", 16.0, yc - 5.0, pins=auto_footprint_pads("0603", ("1", "2")), bom_id=bid, epistemic_tag="{Pasif-COTS}"))
+        pd = add_c(ComponentSpec(f"D_PD_{tag}", pd_val, "Custom:TO46_PHOTODIODE_3P", 22.0, yc, pins=_pd_3p_pins(), mpn=pd_val, bom_id=bid, epistemic_tag="{Aday-COTS}"))
+        rf = add_c(ComponentSpec(f"RF_{tag}", rf_val, "Resistor_SMD:R_0603_1608Metric", 34.0, yc - 3.0, pins=auto_footprint_pads("0603", ("1", "2")), bom_id=bid, epistemic_tag="{Pasif-COTS}"))
+        cf = add_c(ComponentSpec(f"CF_{tag}", cf_val, "Capacitor_SMD:C_0603_1608Metric", 34.0, yc + 3.0, pins=auto_footprint_pads("0603", ("1", "2")), bom_id=bid, epistemic_tag="{Pasif-COTS}"))
+        utia = add_c(ComponentSpec(f"U_TIA_{tag}", "OPA657NB_1p6GHZ_TIA", "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm", 46.0, yc, pins=_soic8_opamp_pins(), mpn="OPA657NB", bom_id=bid, epistemic_tag="{Aday-COTS}"))
+        cd_p = add_c(ComponentSpec(f"CD_TIA_{tag}P", "100nF_C0G", "Capacitor_SMD:C_0603_1608Metric", 46.0, yc - 7.0, pins=auto_footprint_pads("0603", ("1", "2")), bom_id=bid, epistemic_tag="{Pasif-COTS}"))
+        cd_n = add_c(ComponentSpec(f"CD_TIA_{tag}N", "100nF_C0G", "Capacitor_SMD:C_0603_1608Metric", 46.0, yc + 7.0, pins=auto_footprint_pads("0603", ("1", "2")), bom_id=bid, epistemic_tag="{Pasif-COTS}"))
+        raa = add_c(ComponentSpec(f"RAA_{tag}", "100R_0.1pct", "Resistor_SMD:R_0603_1608Metric", 58.0, yc, pins=auto_footprint_pads("0603", ("1", "2")), bom_id=bid, epistemic_tag="{Pasif-COTS}"))
+        caa = add_c(ComponentSpec(f"CAA_{tag}", "1.0nF_C0G", "Capacitor_SMD:C_0603_1608Metric", 64.0, yc + 5.0, pins=auto_footprint_pads("0603", ("1", "2")), bom_id=bid, epistemic_tag="{Pasif-COTS}"))
+        uadc = add_c(ComponentSpec(f"U_ADC_{tag}", "ADS8860_16B_1MSPS", "Package_SO:MSOP-10_3x3mm_P0.5mm", 74.0, yc, pins=_ads8860_msop10_pins(), mpn="ADS8860IDGK", bom_id=bid, epistemic_tag="{Aday-COTS}"))
+
+        conn("V_N5A", r_pb.ref, 1); conn(f"PD_BIAS_{tag}", r_pb.ref, 2)
+        conn(f"PD_BIAS_{tag}", c_pb.ref, 1); conn("AGND", c_pb.ref, 2)
+        conn(f"PD_BIAS_{tag}", pd.ref, 2)
+        conn(f"TIA_SUM_{tag}", pd.ref, 1); conn("AGND", pd.ref, 3)
+        conn(f"TIA_SUM_{tag}", rf.ref, 1); conn(f"TIA_SUM_{tag}", cf.ref, 1); conn(f"TIA_SUM_{tag}", utia.ref, 2)
+        conn("AGND", utia.ref, 3)
+        conn(f"TIA_OUT_{tag}", utia.ref, 6); conn(f"TIA_OUT_{tag}", rf.ref, 2); conn(f"TIA_OUT_{tag}", cf.ref, 2); conn(f"TIA_OUT_{tag}", raa.ref, 1)
+        conn("V_P5A", utia.ref, 7); conn("V_N5A", utia.ref, 4)
+        conn("V_P5A", cd_p.ref, 1); conn("AGND", cd_p.ref, 2)
+        conn("V_N5A", cd_n.ref, 1); conn("AGND", cd_n.ref, 2)
+        conn(f"ADC_IN_{tag}", raa.ref, 2); conn(f"ADC_IN_{tag}", caa.ref, 1); conn("AGND", caa.ref, 2)
+        conn("VREF_2V5", uadc.ref, 1); conn("V_P5A", uadc.ref, 2)
+        conn(f"ADC_IN_{tag}", uadc.ref, 3); conn("AGND", uadc.ref, 4); conn("AGND", uadc.ref, 5)
+        conn("ADC_PYRO_CS_N", uadc.ref, 6); conn(f"SPI_MISO_{tag}", uadc.ref, 7)
+        conn("SPI_SCLK", uadc.ref, 8); conn("V_P3V3", uadc.ref, 9); conn("V_P3V3", uadc.ref, 10)
+
+        # Ground-plane copper keepout under TIA summing node + closed 3D via-tied AGND guard cage!
+        keepouts.append(KeepoutSpec(
+            f"KO_TIA_{tag}", "copper_keepout", ("In1.Cu", "In2.Cu"),
+            x_mm=24.0, y_mm=yc - 5.2, width_mm=16.0, height_mm=10.4,
+        ))
+        gr_traces, gr_vias = connect_guard_ring(
+            "AGND", "F.Cu", 25.5, round(yc - 6.2, 3), 41.5, round(yc + 6.2, 3),
+            width_mm=0.25, via_layer="B.Cu", via_diameter_mm=0.48, via_drill_mm=0.24, top_only_rails=True,
+        )
+        traces.extend(gr_traces)
+        vias.extend(gr_vias)
+
+    # Hardware Over-Temperature Backup Comparator (T >= 1687 K Si melt abort, wired into crowbar!)
+    u_otemp = add_c(ComponentSpec("U_CMP_OTEMP", "TLV3501_OTEMP_1687K", "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm", 94.0, 32.0, pins=_soic8_opamp_pins(), mpn="TLV3501AID", bom_id="S5.5-03", epistemic_tag="{Aday-COTS}"))
+    r_ot1 = add_c(ComponentSpec("R_OTEMP_TOP", "10.0k_0.1pct", "Resistor_SMD:R_0603_1608Metric", 86.0, 24.0, pins=auto_footprint_pads("0603", ("1", "2")), bom_id="S5.5-03", epistemic_tag="{Pasif-COTS}"))
+    r_ot2 = add_c(ComponentSpec("R_OTEMP_BOT", "15.0k_0.1pct", "Resistor_SMD:R_0603_1608Metric", 86.0, 38.0, pins=auto_footprint_pads("0603", ("1", "2")), bom_id="S5.5-03", epistemic_tag="{Pasif-COTS}"))
+    conn("VREF_2V5", r_ot1.ref, 1); conn("OTEMP_THR", r_ot1.ref, 2); conn("OTEMP_THR", r_ot2.ref, 1); conn("AGND", r_ot2.ref, 2)
+    conn("OTEMP_THR", u_otemp.ref, 3); conn("TIA_OUT_SI", u_otemp.ref, 2)
+    conn("OTEMP_OK_N_LOW", u_otemp.ref, 6)  # HIGH when TIA_OUT_SI < OTEMP_THR (healthy), LOW when overtemp!
+    conn("V_P3V3", u_otemp.ref, 7); conn("DGND", u_otemp.ref, 4)
+
+    # =========================================================================
+    # SECTION 2 (MID-LEFT, y=64..92 mm): INLINE 1.0 ms PULSE-ENERGY INTEGRATOR (S5.5-03)
+    # =========================================================================
+    pd_eng = add_c(ComponentSpec("D_PD_ENERGY", "Hamamatsu_S1223-01_808nm", "Custom:TO46_PHOTODIODE_3P", 22.0, 74.0, pins=_pd_3p_pins(), mpn="Hamamatsu_S1223-01", bom_id="S5.5-03", epistemic_tag="{Aday-COTS}"))
+    r_eng_b = add_c(ComponentSpec("RPB_ENERGY", "1.00k_1pct", "Resistor_SMD:R_0603_1608Metric", 10.0, 74.0, pins=auto_footprint_pads("0603", ("1", "2")), bom_id="S5.5-03", epistemic_tag="{Pasif-COTS}"))
+    c_int = add_c(ComponentSpec("C_INT_100N", "100nF_0.5pct_C0G_INT", "Capacitor_SMD:C_1206_3216Metric", 36.0, 68.0, pins=auto_footprint_pads("1206", ("1", "2")), mpn="TDK_C3216C0G1H104J", bom_id="S5.5-03", epistemic_tag="{Pasif-COTS}"))
+    u_int_sw = add_c(ComponentSpec("U_INT_RST_SW", "ADG1211_INT_RESET", "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm", 36.0, 82.0, pins=_sw_soic8_pins(), mpn="ADG1211YRUZ", bom_id="S5.5-03", epistemic_tag="{Aday-COTS}"))
+    u_int = add_c(ComponentSpec("U_INT_AMP", "OPA140_JFET_INTEGRATOR", "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm", 52.0, 74.0, pins=_soic8_opamp_pins(), mpn="OPA140AID", bom_id="S5.5-03", epistemic_tag="{Aday-COTS}"))
+    r_int_s = add_c(ComponentSpec("R_INT_50R", "49.9R_0.1pct", "Resistor_SMD:R_0603_1608Metric", 64.0, 86.0, pins=auto_footprint_pads("0603", ("1", "2")), bom_id="S5.5-03", epistemic_tag="{Pasif-COTS}"))
+    j_int_mon = add_c(ComponentSpec(
+        "J_INT_MON", "SMA_ENERGY_INT_MON", "Connector_Coaxial:SMA_EdgeMount",
+        64.0, 118.0, edge_mount=True,
+        pins=auto_footprint_pads("SMA", ("1", "2"), {"1": "INT_MON", "2": "GND"}),
+        bom_id="S5.5-03", epistemic_tag="{Pasif-COTS}",
+    ))
+    u_adc_eng = add_c(ComponentSpec("U_ADC_ENERGY", "ADS8860_ENERGY_ADC", "Package_SO:MSOP-10_3x3mm_P0.5mm", 74.0, 74.0, pins=_ads8860_msop10_pins(), mpn="ADS8860IDGK", bom_id="S5.5-03", epistemic_tag="{Aday-COTS}"))
+
+    conn("V_N5A", r_eng_b.ref, 1); conn("PD_BIAS_ENG", r_eng_b.ref, 2); conn("PD_BIAS_ENG", pd_eng.ref, 2)
+    conn("INT_SUM", pd_eng.ref, 1); conn("AGND", pd_eng.ref, 3)
+    conn("INT_SUM", c_int.ref, 1); conn("INT_SUM", u_int_sw.ref, 2); conn("INT_SUM", u_int.ref, 2)
+    conn("AGND", u_int.ref, 3)
+    conn("INT_OUT", u_int.ref, 6); conn("INT_OUT", c_int.ref, 2); conn("INT_OUT", u_int_sw.ref, 3)
+    conn("INT_OUT", r_int_s.ref, 1); conn("INT_OUT", u_adc_eng.ref, 3)
+    conn("V_P5A", u_int.ref, 7); conn("V_N5A", u_int.ref, 4)
+    conn("INT_RST_N", u_int_sw.ref, 1); conn("V_N5A", u_int_sw.ref, 4); conn("AGND", u_int_sw.ref, 5); conn("V_P5A", u_int_sw.ref, 6)
+    conn("INT_MON_50", r_int_s.ref, 2); conn("INT_MON_50", j_int_mon.ref, 1); conn("AGND", j_int_mon.ref, 2)
+    conn("VREF_2V5", u_adc_eng.ref, 1); conn("V_P5A", u_adc_eng.ref, 2)
+    conn("AGND", u_adc_eng.ref, 4); conn("AGND", u_adc_eng.ref, 5)
+    conn("ADC_ENG_CS_N", u_adc_eng.ref, 6); conn("SPI_MISO_ENG", u_adc_eng.ref, 7)
+    conn("SPI_SCLK", u_adc_eng.ref, 8); conn("V_P3V3", u_adc_eng.ref, 9); conn("V_P3V3", u_adc_eng.ref, 10)
+
+    # =========================================================================
+    # SECTION 3 (TOP-RIGHT, x=110..180 mm, y=14..58 mm): 80-200 MHz AOM RF VCA STAGE (S5.5-01)
+    # =========================================================================
+    u_vref = add_c(ComponentSpec("U_VREF_2V5", "LT6655BHMS8-2.5", "Package_SO:MSOP-8_3x3mm_P0.65mm", 96.0, 74.0, pins=_lt6655_msop8_pins(), mpn="LT6655BHMS8-2.5", bom_id="S5.5-03", epistemic_tag="{Aday-COTS}"))
+    u_dac_aom = add_c(ComponentSpec("U_DAC_AOM", "AD5541A_16B_100KHZ", "Package_SO:MSOP-10_3x3mm_P0.5mm", 116.0, 52.0, pins=_ad5541_msop10_pins(), mpn="AD5541ABRMZ", bom_id="S5.5-01", epistemic_tag="{Aday-COTS}"))
+    u_vca_buf = add_c(ComponentSpec("U_VCA_CTRL", "ADA4898-1_VCA_DRV", "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm", 132.0, 52.0, pins=_soic8_opamp_pins(), mpn="ADA4898-1YRDZ", bom_id="S5.5-01", epistemic_tag="{Aday-COTS}"))
+    r_vca_s = add_c(ComponentSpec("R_VCA_SERIES", "499R_0.1pct", "Resistor_SMD:R_0603_1608Metric", 144.0, 52.0, pins=auto_footprint_pads("0603", ("1", "2")), bom_id="S5.5-04", epistemic_tag="{Pasif-COTS}"))
+    q_vca_clp = add_c(ComponentSpec("Q_VCA_CLAMP", "2N7002_VCA_CROWBAR", "Package_TO_SOT_SMD:SOT-23", 154.0, 52.0, pins=_nmos_sot23_3_pins(), mpn="2N7002K", bom_id="S5.5-04", epistemic_tag="{Aday-COTS}"))
+
+    # 50 Ohm Controlled-Impedance 80-200 MHz RF Chain on F.Cu (straight horizontal y=22.0 mm!)
+    j_rf_in = add_c(ComponentSpec(
+        "J_RF_LO_IN", "SMA_80_200MHZ_LO_IN", "Connector_Coaxial:SMA_EdgeMount",
+        112.0, 10.0, rotation_deg=180.0, edge_mount=True,
+        pins=auto_footprint_pads("SMA", ("1", "2"), {"1": "RF_LO", "2": "RFGND"}),
+        bom_id="S5.5-01", epistemic_tag="{Pasif-COTS}",
+    ))
+    u_vca = add_c(ComponentSpec("U_AOM_VCA", "AD8367_500MHZ_VCA", "Package_SO:TSSOP-14_4.4x5mm_P0.65mm", 126.0, 26.0, pins=_ad8367_tssop14_pins(), mpn="AD8367ARUZ", bom_id="S5.5-01", epistemic_tag="{Aday-COTS}"))
+    c_rf1 = add_c(ComponentSpec("C_RF_AC1", "100nF_RF_C0G", "Capacitor_SMD:C_0603_1608Metric", 140.0, 26.0, pins=auto_footprint_pads("0603", ("1", "2")), bom_id="S5.5-01", epistemic_tag="{Pasif-COTS}"))
+    u_rf_sw = add_c(ComponentSpec("U_RF_KILL_SW", "ADG901_RF_CROWBAR_SW", "Package_TO_SOT_SMD:SOT-23-6", 152.0, 26.0, pins=_rf_sw_sot23_6_pins(), mpn="ADG901BRMZ", bom_id="S5.5-04", epistemic_tag="{Aday-COTS}"))
+    c_rf2 = add_c(ComponentSpec("C_RF_AC2", "100nF_RF_C0G", "Capacitor_SMD:C_0603_1608Metric", 162.0, 26.0, pins=auto_footprint_pads("0603", ("1", "2")), bom_id="S5.5-01", epistemic_tag="{Pasif-COTS}"))
+    u_rf_drv = add_c(ComponentSpec("U_RF_DRV", "ADL5602_50R_RF_AMP", "Custom:SOT89_RF_4P", 170.0, 26.0, pins=_rf_amp_sot89_pins(), mpn="ADL5602ARKZ", bom_id="S5.5-01", epistemic_tag="{Aday-COTS}"))
+    j_rf_out = add_c(ComponentSpec(
+        "J_AOM_RF_OUT", "SMA_AOM_RF_MOD_OUT", "Connector_Coaxial:SMA_EdgeMount",
+        180.0, 26.0, rotation_deg=90.0, edge_mount=True,
+        pins=auto_footprint_pads("SMA", ("1", "2"), {"1": "AOM_RF", "2": "RFGND"}),
+        bom_id="S5.5-01", epistemic_tag="{Pasif-COTS}",
+    ))
+    l_rf_bias = add_c(ComponentSpec("L_RF_CHOKE", "1.0uH_RF_CHOKE", "Inductor_SMD:L_0805_2012Metric", 170.0, 14.0, pins=auto_footprint_pads("0805", ("1", "2")), bom_id="S5.5-01", epistemic_tag="{Pasif-COTS}"))
+
+    # =========================================================================
+    # SECTION 4 (BOTTOM-RIGHT, x=104..178 mm, y=68..118 mm): <0.1 ms 1oo2D HARDWARE CROWBAR (S5.5-04)
+    # =========================================================================
+    j_ilk = add_c(ComponentSpec(
+        "J_ILK_1OO2D", "HDR_6P_1OO2D_LASER_ILK", "Connector_PinHeader:HDR_1x6_2.54mm",
+        112.0, 114.0, rotation_deg=90.0,
+        pins=auto_footprint_pads("HDR_1x6_2.54mm", ("1", "2", "3", "4", "5", "6"),
+                                 {"1": "SAFE_EN_A", "2": "SAFE_EN_B", "3": "ILK_RTN", "4": "V_24V_DIODE", "5": "DIODE_EN_OUT", "6": "DIODE_RTN"}),
+        bom_id="S5.5-04", epistemic_tag="{Pasif-COTS}",
+    ))
+    r_op_a = add_c(ComponentSpec("R_OPTO_A", "2.20k_1pct", "Resistor_SMD:R_0805_2012Metric", 112.0, 96.0, pins=auto_footprint_pads("0805", ("1", "2")), bom_id="S5.5-04", epistemic_tag="{Pasif-COTS}"))
+    r_op_b = add_c(ComponentSpec("R_OPTO_B", "2.20k_1pct", "Resistor_SMD:R_0805_2012Metric", 112.0, 86.0, pins=auto_footprint_pads("0805", ("1", "2")), bom_id="S5.5-04", epistemic_tag="{Pasif-COTS}"))
+    u_opto_a = add_c(ComponentSpec("U_OPTO_ILK_A", "ACPL-072L_CH_A", "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm", 128.0, 96.0, pins=_opto_soic8_pins(), mpn="ACPL-072L", bom_id="S5.5-04", epistemic_tag="{Aday-COTS}"))
+    u_opto_b = add_c(ComponentSpec("U_OPTO_ILK_B", "ACPL-072L_CH_B", "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm", 128.0, 82.0, pins=_opto_soic8_pins(), mpn="ACPL-072L", bom_id="S5.5-04", epistemic_tag="{Aday-COTS}"))
+    u_and1 = add_c(ComponentSpec("U_AND_1OO2", "SN74LVC1G08_1OO2", "Package_TO_SOT_SMD:SOT-23-5", 142.0, 88.0, pins=_logic_sot23_5_pins(), mpn="SN74LVC1G08DBVR", bom_id="S5.5-04", epistemic_tag="{Aday-COTS}"))
+    u_and2 = add_c(ComponentSpec("U_AND_OTEMP", "SN74LVC1G08_OTEMP", "Package_TO_SOT_SMD:SOT-23-5", 152.0, 88.0, pins=_logic_sot23_5_pins(), mpn="SN74LVC1G08DBVR", bom_id="S5.5-04", epistemic_tag="{Aday-COTS}"))
+    u_and3 = add_c(ComponentSpec("U_AND_RFEN", "SN74LVC1G08_RFEN", "Package_TO_SOT_SMD:SOT-23-5", 162.0, 88.0, pins=_logic_sot23_5_pins(), mpn="SN74LVC1G08DBVR", bom_id="S5.5-04", epistemic_tag="{Aday-COTS}"))
+    u_inv_cb = add_c(ComponentSpec("U_INV_CLAMP", "SN74LVC1G04_CLAMP", "Package_TO_SOT_SMD:SOT-23-5", 162.0, 74.0, pins=_logic_sot23_5_pins(), mpn="SN74LVC1G04DBVR", bom_id="S5.5-04", epistemic_tag="{Aday-COTS}"))
+
+    # Series Dual-MOSFET Crowbar Switch on Diode-Laser Enable Output (<20 us << 0.1 ms)
+    q_diode_a = add_c(ComponentSpec("Q_DIODE_EN_A", "SI2302_DIODE_CHA", "Package_TO_SOT_SMD:SOT-23", 146.0, 106.0, pins=_nmos_sot23_3_pins(), mpn="SI2302CDS", bom_id="S5.5-04", epistemic_tag="{Aday-COTS}"))
+    q_diode_b = add_c(ComponentSpec("Q_DIODE_EN_B", "SI2302_DIODE_CHB", "Package_TO_SOT_SMD:SOT-23", 158.0, 106.0, pins=_nmos_sot23_3_pins(), mpn="SI2302CDS", bom_id="S5.5-04", epistemic_tag="{Aday-COTS}"))
+    r_diode_pd = add_c(ComponentSpec("R_DIODE_PD", "1.00k_1pct", "Resistor_SMD:R_0805_2012Metric", 170.0, 106.0, pins=auto_footprint_pads("0805", ("1", "2")), bom_id="S5.5-04", epistemic_tag="{Pasif-COTS}"))
+
+    # =========================================================================
+    # SECTION 5 (BOTTOM-LEFT, x=10..96 mm, y=96..118 mm): FPGA INTERFACE & LDO POWER TREE
+    # =========================================================================
+    j_fpga = add_c(ComponentSpec(
+        "J_FPGA_AOM", "HDR_2x8_AOM_PID_RTL", "Connector_PinHeader:HDR_2x8_2.54mm",
+        18.0, 106.0, pins=auto_footprint_pads("HDR_2x8_2.54mm", [str(i) for i in range(1, 17)], {
+            "1": "SPI_SCLK", "2": "SPI_MOSI", "3": "SPI_MISO_INGAAS", "4": "SPI_MISO_SI",
+            "5": "SPI_MISO_ENG", "6": "DAC_AOM_CS_N", "7": "ADC_PYRO_CS_N", "8": "ADC_ENG_CS_N",
+            "9": "AOM_RF_EN", "10": "SHOT_GATE", "11": "INT_RST_N", "12": "OTEMP_OK_N_LOW",
+            "13": "V_P3V3", "14": "DGND1", "15": "DGND2", "16": "HW_CROWBAR_OK",
+        }),
+        bom_id="S5.5-03", epistemic_tag="{Pasif-COTS}",
+    ))
+    j_pwr = add_c(ComponentSpec(
+        "JPWR_AFE", "HDR_5P_AFE_PWR", "Connector_PinHeader:HDR_1x5_2.54mm",
+        42.0, 108.0, pins=auto_footprint_pads("HDR_1x5_2.54mm", ("1", "2", "3", "4", "5"),
+                                              {"1": "V_P6_IN", "2": "V_N6_IN", "3": "AGND", "4": "DGND", "5": "RFGND"}),
+        bom_id="S5.5-03", epistemic_tag="{Pasif-COTS}",
+    ))
+    r_sg1 = add_c(ComponentSpec("R_STAR_AG_DG", "0R_STAR_AGND_DGND", "Resistor_SMD:R_0603_1608Metric", 52.0, 104.0, pins=auto_footprint_pads("0603", ("1", "2")), bom_id="S5.5-03", epistemic_tag="{Pasif-COTS}"))
+    r_sg2 = add_c(ComponentSpec("R_STAR_AG_RF", "0R_STAR_AGND_RFGND", "Resistor_SMD:R_0603_1608Metric", 52.0, 112.0, pins=auto_footprint_pads("0603", ("1", "2")), bom_id="S5.5-03", epistemic_tag="{Pasif-COTS}"))
+
+    u_ldo_p5 = add_c(ComponentSpec("U_LDO_P5A", "LT3045_P5A", "Package_SO:MSOP-10_3x3mm_P0.5mm", 78.0, 102.0, pins=_ldo_msop10_pins(), mpn="LT3045EDD", bom_id="S5.5-03", epistemic_tag="{Aday-COTS}"))
+    u_ldo_n5 = add_c(ComponentSpec("U_LDO_N5A", "LT3094_N5A", "Package_SO:MSOP-10_3x3mm_P0.5mm", 90.0, 102.0, pins=_ldo_msop10_pins(), mpn="LT3094EDD", bom_id="S5.5-03", epistemic_tag="{Aday-COTS}"))
+    u_ldo_rf = add_c(ComponentSpec("U_LDO_P5RF", "ADP7142_P5RF", "Package_SO:MSOP-10_3x3mm_P0.5mm", 78.0, 114.0, pins=_ldo_msop10_pins(), mpn="ADP7142AUJZ-5.0", bom_id="S5.5-01", epistemic_tag="{Aday-COTS}"))
+    u_ldo_3v3 = add_c(ComponentSpec("U_LDO_3V3", "ADP7142_3V3", "Package_SO:MSOP-10_3x3mm_P0.5mm", 90.0, 114.0, pins=_ldo_msop10_pins(), mpn="ADP7142AUJZ-3.3", bom_id="S5.5-03", epistemic_tag="{Aday-COTS}"))
+
+    for idx, (ldo, sval, rin, rout, gnd, lx, ly) in enumerate((
+        (u_ldo_p5, "49.9k_0.1pct", "V_P6_IN", "V_P5A", "AGND", 78.0, 102.0),
+        (u_ldo_n5, "49.9k_0.1pct", "V_N6_IN", "V_N5A", "AGND", 90.0, 102.0),
+        (u_ldo_rf, "49.9k_0.1pct", "V_P6_IN", "V_P5RF", "RFGND", 78.0, 114.0),
+        (u_ldo_3v3, "33.2k_0.1pct", "V_P6_IN", "V_P3V3", "DGND", 90.0, 114.0),
+    )):
+        rs = add_c(ComponentSpec(f"RSET_LDO{idx}", sval, "Resistor_SMD:R_0603_1608Metric", lx + 6.0, ly - 3.0, pins=auto_footprint_pads("0603", ("1", "2")), bom_id="S5.5-03", epistemic_tag="{Pasif-COTS}"))
+        co = add_c(ComponentSpec(f"COUT_LDO{idx}", "10uF_10V_C0G", "Capacitor_SMD:C_0603_1608Metric", lx + 6.0, ly + 3.0, pins=auto_footprint_pads("0603", ("1", "2")), bom_id="S5.5-03", epistemic_tag="{Pasif-COTS}"))
+        conn(rin, ldo.ref, 1); conn(rin, ldo.ref, 2); conn(rin, ldo.ref, 3)
+        conn(gnd, ldo.ref, 6)
+        conn(f"LDO_SET_{idx}", ldo.ref, 7); conn(f"LDO_SET_{idx}", rs.ref, 1); conn(gnd, rs.ref, 2)
+        conn(rout, ldo.ref, 8); conn(rout, ldo.ref, 9); conn(rout, ldo.ref, 10)
+        conn(rout, co.ref, 1); conn(gnd, co.ref, 2)
+
+    # =========================================================================
+    # REMAINING NETLIST CONNECTIONS
+    # =========================================================================
+    # Power & Reference
+    conn("V_P6_IN", j_pwr.ref, 1); conn("V_N6_IN", j_pwr.ref, 2)
+    conn("AGND", j_pwr.ref, 3); conn("DGND", j_pwr.ref, 4); conn("RFGND", j_pwr.ref, 5)
+    conn("AGND", r_sg1.ref, 1); conn("DGND", r_sg1.ref, 2)
+    conn("AGND", r_sg2.ref, 1); conn("RFGND", r_sg2.ref, 2)
+
+    conn("V_P5A", u_vref.ref, 2); conn("V_P5A", u_vref.ref, 3)
+    for p in (1, 4, 5, 8):
+        conn("AGND", u_vref.ref, p)
+    conn("VREF_2V5", u_vref.ref, 6); conn("VREF_2V5", u_vref.ref, 7)
+
+    # FPGA Interface Header (matching aom_pid_ctrl.v)
+    conn("SPI_SCLK", j_fpga.ref, 1); conn("SPI_MOSI", j_fpga.ref, 2)
+    conn("SPI_MISO_INGAAS", j_fpga.ref, 3); conn("SPI_MISO_SI", j_fpga.ref, 4)
+    conn("SPI_MISO_ENG", j_fpga.ref, 5); conn("DAC_AOM_CS_N", j_fpga.ref, 6)
+    conn("ADC_PYRO_CS_N", j_fpga.ref, 7); conn("ADC_ENG_CS_N", j_fpga.ref, 8)
+    conn("AOM_RF_EN", j_fpga.ref, 9); conn("SHOT_GATE", j_fpga.ref, 10)
+    conn("INT_RST_N", j_fpga.ref, 11); conn("OTEMP_OK_N_LOW", j_fpga.ref, 12)
+    conn("V_P3V3", j_fpga.ref, 13); conn("DGND", j_fpga.ref, 14); conn("DGND", j_fpga.ref, 15)
+    conn("HW_CROWBAR_OK", j_fpga.ref, 16)
+
+    # AOM DAC -> VCA Control -> Crowbar Clamp -> AD8367 -> ADG901 -> ADL5602
+    conn("DAC_AOM_RAW", u_dac_aom.ref, 1); conn("AGND", u_dac_aom.ref, 2); conn("VREF_2V5", u_dac_aom.ref, 3)
+    conn("DAC_AOM_CS_N", u_dac_aom.ref, 4); conn("SPI_SCLK", u_dac_aom.ref, 5); conn("SPI_MOSI", u_dac_aom.ref, 6)
+    conn("SHOT_GATE", u_dac_aom.ref, 7); conn("DGND", u_dac_aom.ref, 8); conn("V_P5A", u_dac_aom.ref, 9)
+
+    conn("DAC_AOM_RAW", u_vca_buf.ref, 3)
+    conn("VCA_BUF_OUT", u_vca_buf.ref, 6); conn("VCA_BUF_OUT", u_vca_buf.ref, 2); conn("VCA_BUF_OUT", r_vca_s.ref, 1)
+    conn("V_P5A", u_vca_buf.ref, 7); conn("V_N5A", u_vca_buf.ref, 4)
+    conn("VCA_CTRL", r_vca_s.ref, 2); conn("VCA_CTRL", q_vca_clp.ref, 3); conn("VCA_CTRL", u_vca.ref, 4)
+    conn("AGND", q_vca_clp.ref, 2); conn("HW_CROWBAR_TRIP", q_vca_clp.ref, 1)
+
+    # 80-200 MHz 50 Ohm RF Chain
+    conn("RF_LO_50", j_rf_in.ref, 1); conn("RFGND", j_rf_in.ref, 2)
+    conn("RF_LO_50", u_vca.ref, 1)
+    for gp in (2, 6, 9, 13):
+        conn("RFGND", u_vca.ref, gp)
+    conn("V_P5RF", u_vca.ref, 3); conn("V_P5RF", u_vca.ref, 7); conn("V_P5RF", u_vca.ref, 14)
+    conn("RF_VCA_50", u_vca.ref, 8); conn("RF_VCA_50", c_rf1.ref, 1)
+    conn("RF_SW_IN_50", c_rf1.ref, 2); conn("RF_SW_IN_50", u_rf_sw.ref, 1)
+    conn("RFGND", u_rf_sw.ref, 2); conn("RFGND", u_rf_sw.ref, 6)
+    conn("V_P3V3", u_rf_sw.ref, 4); conn("HW_CROWBAR_OK", u_rf_sw.ref, 5)
+    conn("RF_SW_OUT_50", u_rf_sw.ref, 3); conn("RF_SW_OUT_50", c_rf2.ref, 1)
+    conn("RF_DRV_IN_50", c_rf2.ref, 2); conn("RF_DRV_IN_50", u_rf_drv.ref, 1)
+    conn("RFGND", u_rf_drv.ref, 2); conn("RFGND", u_rf_drv.ref, 4)
+    conn("AOM_RF_OUT_50", u_rf_drv.ref, 3); conn("AOM_RF_OUT_50", l_rf_bias.ref, 1); conn("AOM_RF_OUT_50", j_rf_out.ref, 1)
+    conn("V_P5RF", l_rf_bias.ref, 2); conn("RFGND", j_rf_out.ref, 2)
+
+    # 1oo2D Hardware Interlock Crowbar (S5.5-04)
+    conn("SAFE_LASER_EN_A", j_ilk.ref, 1); conn("SAFE_LASER_EN_B", j_ilk.ref, 2)
+    conn("ILK_RTN", j_ilk.ref, 3); conn("V_24V_DIODE", j_ilk.ref, 4)
+    conn("DIODE_EN_OUT", j_ilk.ref, 5); conn("DIODE_RTN", j_ilk.ref, 6)
+    conn("SAFE_LASER_EN_A", r_op_a.ref, 1); conn("OPTO_A_LED", r_op_a.ref, 2); conn("OPTO_A_LED", u_opto_a.ref, 2)
+    conn("ILK_RTN", u_opto_a.ref, 3); conn("ILK_RTN", u_opto_a.ref, 4); conn("V_24V_DIODE", u_opto_a.ref, 1)
+    conn("DGND", u_opto_a.ref, 5); conn("V_P3V3", u_opto_a.ref, 8); conn("ILK_A_OK", u_opto_a.ref, 6)
+
+    conn("SAFE_LASER_EN_B", r_op_b.ref, 1); conn("OPTO_B_LED", r_op_b.ref, 2); conn("OPTO_B_LED", u_opto_b.ref, 2)
+    conn("ILK_RTN", u_opto_b.ref, 3); conn("ILK_RTN", u_opto_b.ref, 4); conn("V_24V_DIODE", u_opto_b.ref, 1)
+    conn("DGND", u_opto_b.ref, 5); conn("V_P3V3", u_opto_b.ref, 8); conn("ILK_B_OK", u_opto_b.ref, 6)
+
+    conn("ILK_A_OK", u_and1.ref, 1); conn("ILK_B_OK", u_and1.ref, 2)
+    conn("DGND", u_and1.ref, 3); conn("V_P3V3", u_and1.ref, 5); conn("ILK_1OO2_OK", u_and1.ref, 4)
+
+    conn("ILK_1OO2_OK", u_and2.ref, 1); conn("OTEMP_OK_N_LOW", u_and2.ref, 2)
+    conn("DGND", u_and2.ref, 3); conn("V_P3V3", u_and2.ref, 5); conn("SAFE_THERM_OK", u_and2.ref, 4)
+
+    conn("SAFE_THERM_OK", u_and3.ref, 1); conn("AOM_RF_EN", u_and3.ref, 2)
+    conn("DGND", u_and3.ref, 3); conn("V_P3V3", u_and3.ref, 5); conn("HW_CROWBAR_OK", u_and3.ref, 4)
+
+    conn("HW_CROWBAR_OK", u_inv_cb.ref, 1); conn("HW_CROWBAR_OK", u_inv_cb.ref, 2)
+    conn("DGND", u_inv_cb.ref, 3); conn("V_P3V3", u_inv_cb.ref, 5); conn("HW_CROWBAR_TRIP", u_inv_cb.ref, 4)
+
+    # Series Dual-MOSFET Diode-Enable Cutoff (Q_DIODE_EN_A controlled by ILK_A_OK & Q_DIODE_EN_B by HW_CROWBAR_OK)
+    conn("V_24V_DIODE", q_diode_a.ref, 3); conn("ILK_A_OK", q_diode_a.ref, 1); conn("DIODE_MID", q_diode_a.ref, 2)
+    conn("DIODE_MID", q_diode_b.ref, 3); conn("HW_CROWBAR_OK", q_diode_b.ref, 1); conn("DIODE_EN_OUT", q_diode_b.ref, 2)
+    conn("DIODE_EN_OUT", r_diode_pd.ref, 1); conn("DIODE_RTN", r_diode_pd.ref, 2)
+    # Tie DIODE_RTN to DGND via 0R isolation reference resistor
+    r_drtn = add_c(ComponentSpec("R_DIODE_RTN_TIE", "0R_DIODE_RTN", "Resistor_SMD:R_0603_1608Metric", 136.0, 114.0, pins=auto_footprint_pads("0603", ("1", "2")), bom_id="S5.5-04", epistemic_tag="{Pasif-COTS}"))
+    conn("DIODE_RTN", r_drtn.ref, 1); conn("DGND", r_drtn.ref, 2)
+
+    # =========================================================================
+    # CONTROLLED-IMPEDANCE 50 OHM RF & MONITOR TRACES (w50 = 0.5429 mm on RO4350B!)
+    # =========================================================================
+    traces.append(make_manhattan_trace("RF_LO_50", "F.Cu", _pad_xy(j_rf_in, "1"), _pad_xy(u_vca, "1"), width_mm=w50, mid_y=18.0))
+    traces.append(make_manhattan_trace("RF_VCA_50", "F.Cu", _pad_xy(u_vca, "8"), _pad_xy(c_rf1, "1"), width_mm=w50))
+    traces.append(make_manhattan_trace("RF_SW_IN_50", "F.Cu", _pad_xy(c_rf1, "2"), _pad_xy(u_rf_sw, "1"), width_mm=w50))
+    traces.append(make_manhattan_trace("RF_SW_OUT_50", "F.Cu", _pad_xy(u_rf_sw, "3"), _pad_xy(c_rf2, "1"), width_mm=w50))
+    traces.append(make_manhattan_trace("RF_DRV_IN_50", "F.Cu", _pad_xy(c_rf2, "2"), _pad_xy(u_rf_drv, "1"), width_mm=w50))
+    traces.append(make_manhattan_trace("AOM_RF_OUT_50", "F.Cu", _pad_xy(u_rf_drv, "3"), _pad_xy(j_rf_out, "1"), width_mm=w50))
+    traces.append(make_manhattan_trace("INT_MON_50", "F.Cu", _pad_xy(r_int_s, "2"), _pad_xy(j_int_mon, "1"), width_mm=w50))
+
+    # RF & Analog Ground Stitching Vias (strictly inside planes and outside TIA copper keepouts)
+    for vx in (108.0, 122.0, 144.0, 166.0):
+        vias.append(ViaSpec("RFGND", vx, 36.0, diameter_mm=0.60, drill_mm=0.30))
+    for vx in (14.0, 56.0, 86.0):
+        vias.append(ViaSpec("AGND", vx, 56.0, diameter_mm=0.60, drill_mm=0.30))
+
+    zones = (
+        ZoneSpec("AGND", "In1.Cu", ((2.0, 2.0), (104.0, 2.0), (104.0, 123.0), (2.0, 123.0))),
+        ZoneSpec("RFGND", "In1.Cu", ((106.0, 2.0), (183.0, 2.0), (183.0, 62.0), (106.0, 62.0))),
+        ZoneSpec("DGND", "In1.Cu", ((106.0, 64.0), (183.0, 64.0), (183.0, 123.0), (106.0, 123.0))),
+        ZoneSpec("V_P5A", "In2.Cu", ((2.0, 2.0), (104.0, 2.0), (104.0, 60.0), (2.0, 60.0))),
+        ZoneSpec("V_N5A", "In2.Cu", ((2.0, 62.0), (104.0, 62.0), (104.0, 123.0), (2.0, 123.0))),
+        ZoneSpec("V_P5RF", "In2.Cu", ((106.0, 2.0), (183.0, 2.0), (183.0, 62.0), (106.0, 62.0))),
+        ZoneSpec("V_P3V3", "In2.Cu", ((106.0, 64.0), (183.0, 64.0), (183.0, 123.0), (106.0, 123.0))),
+    )
+
+    rf50_nets = {"RF_LO_50", "RF_VCA_50", "RF_SW_IN_50", "RF_SW_OUT_50", "RF_DRV_IN_50", "AOM_RF_OUT_50", "INT_MON_50"}
+    pwr_nets = {
+        "V_P6_IN", "V_N6_IN", "V_24V_DIODE", "V_P5A", "V_N5A", "V_P5RF", "V_P3V3",
+        "VREF_2V5", "AGND", "DGND", "RFGND", "ILK_RTN", "DIODE_RTN",
+    }
+    flag_nets = {"V_P6_IN", "V_N6_IN", "V_24V_DIODE", "AGND", "DGND", "RFGND", "ILK_RTN", "DIODE_RTN"}
+
+    nets: list[NetSpec] = []
+    for nname, nodes in sorted(nets_dict.items()):
+        v_work = 24.0 if nname in ("V_24V_DIODE", "SAFE_LASER_EN_A", "SAFE_LASER_EN_B", "DIODE_EN_OUT") else (
+            5.0 if "5" in nname else (3.3 if "3V3" in nname else 0.0)
+        )
+        z0 = 50.0 if nname in rf50_nets else None
+        is_pwr = nname in pwr_nets
+        nets.append(NetSpec(
+            name=nname,
+            nodes=tuple(nodes),
+            net_class="RF_50" if z0 else ("Power" if is_pwr else "Default"),
+            is_power=is_pwr,
+            has_pwr_flag=(nname in flag_nets),
+            voltage_v=v_work,
+            target_z0_ohm=z0,
+        ))
+
+    spec = BoardSpec(
+        name="laser_aom_pyrometer_afe",
+        title="Laser 80-200 MHz AOM RF VCA, 10 us 2-Color Pyrometer TIA, 1 ms Integrator & <0.1 ms Crowbar PCB",
+        rev="v1.0",
+        bom_ids=("S5.5-03", "S5.5-01", "S5.5-04", "S5.3-03"),
+        width_mm=185.0,
+        height_mm=125.0,
+        stackup=stackup,
+        components=tuple(comps),
+        nets=tuple(nets),
+        traces=tuple(traces),
+        vias=tuple(vias),
+        zones=zones,
+        keepouts=tuple(keepouts),
+        rules=DesignRules(min_trace_width_mm=0.127, min_clearance_mm=0.127, min_edge_clearance_mm=0.50),
+        epistemic_meta={
+            **DEFAULT_EPISTEMIC_META,
+            "operating_temp_K": 300.0,
+            "rf_band_MHz": [80.0, 200.0],
+            "pyro_wavelengths_nm": [1550.0, 850.0],
+            "pyro_temp_range_K": [900.0, 1700.0],
+            "rtl_interface": "rtl/machine_ctrl/aom_pid_ctrl.v",
+        },
+    )
+    return auto_route_board(spec, grid_mm=0.50, preserve_existing=True)
+
+
+def render_laser_pyro_ngspice_deck() -> str:
+    """Native ngspice-47 deck verifying 2-color <10 us TIA, 1 ms integrator 2x linearity, AOM VCA & <50 us crowbar."""
+    return """* Atom Lithography Machine - Laser AOM RF VCA, 10 us 2-Color Pyrometer TIA & 1 ms Integrator
+* BOM: S5.5-03, S5.5-01, S5.5-04, S5.3-03
+* Epistemic status: M0/M1 DESIGN_ONLY; no_lab_measurement=true; no_physical_fab=true.
+
+.temp 26.85
+.options reltol=1e-4 vntol=1e-6 abstol=1e-12
+
+* --- Wideband FET-Input TIA Op-Amp (OPA657: A0=1e5, GBP=1.6 GHz, Cin=4.5 pF, en=4.8 nV/rtHz) ---
+.subckt OPAMP_OPA657 inp inn out
+Cin inp inn 4.5p
+Rin inp inn 1T noisy=0
+Rnw nw 0 1390.6 temp=26.85
+Evn inp_i inp nw 0 1.0
+Egain n1 0 inp_i inn 1e5
+Rp n1 n2 1k noisy=0
+Cp n2 0 9.9472n
+Ebuf n_out 0 n2 0 1.0
+Rout n_out out 5 noisy=0
+.ends OPAMP_OPA657
+
+* --- Precision JFET Integrator Op-Amp (OPA140: A0=1e6, GBP=11 MHz, low Ib=10 pA) ---
+.subckt OPAMP_OPA140 inp inn out
+Cin inp inn 5.0p
+Rin inp inn 1T noisy=0
+Ibias inn 0 DC 10p
+Egain n1 0 inp inn 1e6
+Rp n1 n2 1k noisy=0
+Cp n2 0 14.4686u
+Ebuf n_out 0 n2 0 1.0
+Rout n_out out 10 noisy=0
+.ends OPAMP_OPA140
+
+* --- Analog Switch Model (ADG1211: Ron=120 Ohm, Roff=10 GOhm) ---
+.model SW_ADG1211 SW(VT=1.65 VH=0.1 RON=120 ROFF=10G)
+* --- Fast NMOS Crowbar Model (2N7002 / SI2302: Ron=1.5 Ohm, Roff=100 MOhm) ---
+.model SW_MOS_CB  SW(VT=1.65 VH=0.1 RON=1.5 ROFF=100Meg)
+
+* =========================================================================
+* 1) DUAL-CHANNEL 2-COLOR PYROMETER TIAs (InGaAs 1550 nm & Si 850 nm, < 10 us)
+* =========================================================================
+* Channel 1: InGaAs 1550 nm (Cj=12 pF, Rf=100 kOhm, Cf=12 pF -> fc=132.6 kHz, tr~2.64 us << 10 us)
+Ipd_ig 0 ig_sum DC 0 AC 1 PULSE(0 10u 5u 20n 20n 80u 200u)
+Cpd_ig ig_sum 0 12.5p
+X_ig   0 ig_sum ig_out OPAMP_OPA657
+Rf_ig  ig_out ig_sum 100k
+Cf_ig  ig_out ig_sum 12p
+Rld_ig ig_out 0 10k
+
+* Channel 2: Si 850 nm (Cj=3 pF, Rf=200 kOhm, Cf=6.0 pF -> fc=132.6 kHz, tr~2.64 us << 10 us)
+Ipd_si 0 si_sum DC 0 AC 1 PULSE(0 5u 5u 20n 20n 80u 200u)
+Cpd_si si_sum 0 3.5p
+X_si   0 si_sum si_out OPAMP_OPA657
+Rf_si  si_out si_sum 200k
+Cf_si  si_out si_sum 6.0p
+Rld_si si_out 0 10k
+
+* =========================================================================
+* 2) 1.0 ms INLINE PHOTODIODE PULSE-ENERGY INTEGRATOR (1x vs 2x LINEARITY)
+* =========================================================================
+* Reset control: HIGH (closed) for t < 0.05 ms and t > 1.30 ms; LOW (integrate/hold) during 0.05..1.30 ms
+Vint_rst int_rst 0 DC 3.3 PWL(0 3.3 49u 3.3 50u 0 1.299m 0 1.300m 3.3)
+
+* 1x Nominal Energy Shot (100 uA for 1.000 ms -> Q = 100 nC across 100 nF -> V_int_1x = 1.000 V)
+Ieng_1x int1_sum 0 DC 0 PULSE(0 100u 0.100m 1u 1u 0.999m 5m)
+Cint_1x int1_out int1_sum 100n
+Rlk_1x  int1_out int1_sum 10G
+Srst_1x int1_out int1_sum int_rst 0 SW_ADG1211
+Xint_1x 0 int1_sum int1_out OPAMP_OPA140
+Rld_1x  int1_out 0 100k
+
+* 2x Energy Shot (200 uA for 1.000 ms -> Q = 200 nC across 100 nF -> V_int_2x = 2.000 V)
+Ieng_2x int2_sum 0 DC 0 PULSE(0 200u 0.100m 1u 1u 0.999m 5m)
+Cint_2x int2_out int2_sum 100n
+Rlk_2x  int2_out int2_sum 10G
+Srst_2x int2_out int2_sum int_rst 0 SW_ADG1211
+Xint_2x 0 int2_sum int2_out OPAMP_OPA140
+Rld_2x  int2_out 0 100k
+
+* =========================================================================
+* 3) 80-200 MHz AOM RF VCA [0.65, 1.40] & < 50 us HARDWARE CROWBAR (S5.5-04)
+* =========================================================================
+* 50 Ohm AC RF passband model (AC coupling caps 100 nF + 1 uH RF bias choke + 1.5 pF stray C + 100k DC ref)
+Vrf_lo  rf_src 0 DC 0 AC 1
+Rrf_src rf_src rf_in 50
+Crf_ac1 rf_in  rf_mid 100n
+Rrf_dc  rf_mid 0 100k
+Crf_par rf_mid 0 1.5p
+Crf_ac2 rf_mid rf_out 100n
+Lrf_chk rf_out 0 1.0u
+Rrf_ld  rf_out 0 50
+
+* AOM PID DAC VCA Control Voltage: 0.65 V (min gain) -> steps to 1.40 V (max gain) at t=50 us
+* Hardware 1oo2D crowbar trips at t=150 us -> opto + gate delay (~0.5 us) -> clamps VCA & cuts 24 V diode enable!
+Vdac_aom vca_buf 0 DC 0.65 PWL(0 0.65 49u 0.65 50u 1.40 300u 1.40)
+Rvca_s   vca_buf vca_ctrl 499
+Cvca_f   vca_ctrl 0 2.2n
+* Interlock 1oo2D Ch-A enable (drops 3.3 V -> 0 V at t=150 us, realistic 0.5 us opto fall)
+Vilk_a   ilk_ok 0 DC 3.3 PWL(0 3.3 150u 3.3 150.5u 0 300u 0)
+* Inverted crowbar clamp drive (0 V when healthy, 3.3 V on trip)
+Bcb_drv  cb_trip 0 V = 3.3 - V(ilk_ok)
+Scb_vca  vca_ctrl 0 cb_trip 0 SW_MOS_CB
+
+* Series Dual-MOSFET 24 V Diode-Laser Enable Cutoff (1 kOhm pulldown + 2 nF cable capacitance)
+V24_dio  v24_d 0 DC 24.0
+Sdio_a   v24_d dio_mid ilk_ok 0 SW_MOS_CB
+Sdio_b   dio_mid diode_en ilk_ok 0 SW_MOS_CB
+Rdio_pd  diode_en 0 1.0k
+Cdio_cab diode_en 0 2.0n
+
+.control
+set noaskquit
+
+* 1) AC Analysis: 2-Color TIA -3 dB bandwidth & 80-200 MHz AOM RF 50 Ohm flatness
+ac dec 100 100 500Meg
+meas ac z_dc_ingaas FIND vm(ig_out) AT=1k
+meas ac z_dc_si     FIND vm(si_out) AT=1k
+let ig_3db = 0.707107 * z_dc_ingaas
+let si_3db = 0.707107 * z_dc_si
+meas ac f3db_ingaas_hz WHEN vm(ig_out)=$&ig_3db FALL=1
+meas ac f3db_si_hz     WHEN vm(si_out)=$&si_3db FALL=1
+meas ac rf_gain_80m_db  FIND vdb(rf_out) AT=80Meg
+meas ac rf_gain_200m_db FIND vdb(rf_out) AT=200Meg
+let rf_flatness_db = abs(rf_gain_200m_db - rf_gain_80m_db)
+print rf_flatness_db
+
+* 2) Transient A: Fast 2-Color Pyrometer TIA Step (< 10 us) + AOM VCA Gain & < 50 us Crowbar Cutoff
+tran 20n 220u 0 50n
+* InGaAs TIA (negative inverting output: 0 V -> -1.000 V)
+meas tran ig_v_final FIND v(ig_out) AT=40u
+let ig_v10 = 0.10 * ig_v_final
+let ig_v90 = 0.90 * ig_v_final
+meas tran ig_t10 WHEN v(ig_out)=$&ig_v10 FALL=1
+meas tran ig_t90 WHEN v(ig_out)=$&ig_v90 FALL=1
+let tau_rise_ingaas_s = ig_t90 - ig_t10
+
+* Si TIA (0 V -> -1.000 V)
+meas tran si_v_final FIND v(si_out) AT=40u
+let si_v10 = 0.10 * si_v_final
+let si_v90 = 0.90 * si_v_final
+meas tran si_t10 WHEN v(si_out)=$&si_v10 FALL=1
+meas tran si_t90 WHEN v(si_out)=$&si_v90 FALL=1
+let tau_rise_si_s = si_t90 - si_t10
+print tau_rise_ingaas_s tau_rise_si_s
+
+* AOM VCA modulation ratio [0.65, 1.40] & Hardware Crowbar Cutoff (< 50 us << 0.1 ms)
+meas tran vca_gain_lo FIND v(vca_ctrl) AT=30u
+meas tran vca_gain_hi FIND v(vca_ctrl) AT=120u
+let vca_mod_ratio = vca_gain_hi / vca_gain_lo
+print vca_mod_ratio
+
+let vca_90 = 0.90 * vca_gain_hi
+let vca_10 = 0.10 * vca_gain_hi
+meas tran vca_cb_t90 WHEN v(vca_ctrl)=$&vca_90 FALL=1 TD=149u
+meas tran vca_cb_t10 WHEN v(vca_ctrl)=$&vca_10 FALL=1 TD=149u
+let crowbar_vca_cutoff_s = vca_cb_t10 - 150u
+
+meas tran diode_v_on  FIND v(diode_en) AT=120u
+meas tran diode_v_off FIND v(diode_en) AT=200u
+let dio_10 = 0.10 * diode_v_on
+meas tran dio_cb_t10 WHEN v(diode_en)=$&dio_10 FALL=1 TD=149u
+let crowbar_diode_cutoff_s = dio_cb_t10 - 150u
+print crowbar_vca_cutoff_s crowbar_diode_cutoff_s
+
+* 3) Transient B: 1.0 ms Pulse-Energy Integrator 2x Linearity Sweep & Clean Reset
+tran 1u 1.6m 0 2u
+meas tran v_int_1x FIND v(int1_out) AT=1.20m
+meas tran v_int_2x FIND v(int2_out) AT=1.20m
+meas tran v_int_1x_after_rst FIND v(int1_out) AT=1.55m
+let int_ratio_2x = v_int_2x / v_int_1x
+let int_lin_err_pct = abs(int_ratio_2x - 2.0) / 2.0 * 100.0
+print int_ratio_2x int_lin_err_pct
+
+quit 0
+.endc
+.end
+"""
+
+
+def run_mna_crosscheck() -> dict[str, float]:
+    """Independent Python MNA cross-check of both InGaAs & Si TIAs (DC transimpedance & -3 dB)."""
+    results: dict[str, float] = {}
+    for tag, rf, cf, cj in (("ingaas", 100e3, 12e-12, 12.5e-12), ("si", 200e3, 6e-12, 3.5e-12)):
+        c = MnaCircuit()
+        c.add_isource("0", "sum", dc=0.0, ac=1.0)
+        c.add_capacitor("sum", "0", cj)
+        c.add_opamp_single_pole("0", "sum", "out", a0=1e5, gbp_hz=1.6e9, c_in_f=4.5e-12, r_in_ohm=1e12, r_out_ohm=5.0)
+        c.add_resistor("out", "sum", rf)
+        c.add_capacitor("out", "sum", cf)
+        c.add_resistor("out", "0", 10e3)
+        freqs = [1e3, 132629.12]
+        ac = c.solve_ac(freqs)
+        z_dc = abs(ac["out"][0])
+        z_fc = abs(ac["out"][1])
+        results[f"mna_z_dc_{tag}_ohm"] = round(float(z_dc), 2)
+        results[f"mna_ratio_at_132p6khz_{tag}"] = round(float(z_fc / z_dc), 5)
+    return results
+
+
+def build_and_verify(out_dir: Path | None = None) -> dict[str, Any]:
+    od = Path(out_dir) if out_dir is not None else OUT_DIR
+    od.mkdir(parents=True, exist_ok=True)
+
+    spec = build_laser_aom_pyrometer_board()
+    board_res = verify_board_bundle(spec, od)
+
+    cir_path = od / "laser_pyro_tia_aom.cir"
+    cir_path.write_text(render_laser_pyro_ngspice_deck(), encoding="utf-8")
+    sp_res = run_ngspice(cir_path, workdir=od)
+    mna_res = run_mna_crosscheck()
+
+    m = sp_res.metrics
+    tau_ig_us = float(m.get("tau_rise_ingaas_s", 999.0)) * 1e6
+    tau_si_us = float(m.get("tau_rise_si_s", 999.0)) * 1e6
+    int_err_pct = float(m.get("int_lin_err_pct", 999.0))
+    cb_vca_us = float(m.get("crowbar_vca_cutoff_s", 999.0)) * 1e6
+    cb_dio_us = float(m.get("crowbar_diode_cutoff_s", 999.0)) * 1e6
+    vca_ratio = float(m.get("vca_mod_ratio", 0.0))
+    rf_flat_db = float(m.get("rf_flatness_db", 999.0))
+    v_rst_mv = abs(float(m.get("v_int_1x_after_rst", 999.0))) * 1e3
+    mna_ig_err_pct = abs(float(m.get("z_dc_ingaas", 0.0)) - mna_res["mna_z_dc_ingaas_ohm"]) / mna_res["mna_z_dc_ingaas_ohm"] * 100.0
+
+    drc_d = board_res["drc"]
+    checks = {
+        "board_erc_drc_zero": board_res["passed"],
+        "all_nets_routed_zero_unconnected": (
+            drc_d.get("unrouted_net_count") == 0
+            and drc_d.get("unconnected_items") == 0
+            and drc_d.get("track_dangling_count") == 0
+            and drc_d.get("routed_net_count", 0) == drc_d.get("total_multi_pin_nets", -1)
+        ),
+        "ngspice_ok": sp_res.ok,
+        "tia_ingaas_rise_lt_10us": 0.0 < tau_ig_us < 10.0,
+        "tia_si_rise_lt_10us": 0.0 < tau_si_us < 10.0,
+        "integrator_2x_linearity_lt_1pct": int_err_pct < 1.0,
+        "integrator_reset_lt_5mv": v_rst_mv < 5.0,
+        "crowbar_vca_cutoff_lt_50us": 0.0 < cb_vca_us < 50.0,
+        "crowbar_diode_cutoff_lt_50us": 0.0 < cb_dio_us < 50.0,
+        "vca_gain_ratio_matches_1p40_over_0p65": abs(vca_ratio - (1.40 / 0.65)) < 0.05,
+        "rf_80_200mhz_flatness_lt_0p5db": rf_flat_db < 0.5,
+        "mna_tia_parity_lt_0p5pct": mna_ig_err_pct < 0.5,
+    }
+
+    report = {
+        "suite": "laser_aom_pyrometer_afe",
+        "bom_ids": list(spec.bom_ids),
+        "epistemic_meta": dict(spec.epistemic_meta),
+        "board": board_res,
+        "ngspice": {
+            "cir_file": cir_path.name,
+            "version": sp_res.version,
+            "returncode": sp_res.returncode,
+            "ok": sp_res.ok,
+            "errors": sp_res.errors,
+            "warnings": sp_res.warnings,
+            "metrics_raw": sp_res.metrics,
+            "summary": {
+                "tau_rise_ingaas_us": round(tau_ig_us, 4),
+                "tau_rise_si_us": round(tau_si_us, 4),
+                "f3db_ingaas_khz": round(float(m.get("f3db_ingaas_hz", 0.0)) / 1e3, 3),
+                "f3db_si_khz": round(float(m.get("f3db_si_hz", 0.0)) / 1e3, 3),
+                "v_int_1x_v": round(float(m.get("v_int_1x", 0.0)), 6),
+                "v_int_2x_v": round(float(m.get("v_int_2x", 0.0)), 6),
+                "int_lin_err_pct": round(int_err_pct, 5),
+                "v_int_after_reset_mv": round(v_rst_mv, 4),
+                "vca_mod_ratio": round(vca_ratio, 4),
+                "crowbar_vca_cutoff_us": round(cb_vca_us, 4),
+                "crowbar_diode_cutoff_us": round(cb_dio_us, 4),
+                "diode_v_on_v": round(float(m.get("diode_v_on", 0.0)), 3),
+                "diode_v_off_v": round(float(m.get("diode_v_off", 0.0)), 6),
+                "rf_80_200mhz_flatness_db": round(rf_flat_db, 4),
+            },
+        },
+        "mna_crosscheck": {**mna_res, "tia_ingaas_z_dc_diff_pct": round(mna_ig_err_pct, 5)},
+        "checks": checks,
+        "all_passed": all(checks.values()),
+    }
+    (od / "laser_aom_pyrometer_afe_verification.json").write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
+    return report
+
+
+if __name__ == "__main__":
+    res = build_and_verify()
+    drc_d = res["board"]["drc"]
+    print(json.dumps({
+        "all_passed": res["all_passed"],
+        "erc_errors": len(res["board"]["erc"]["errors"]),
+        "drc_errors": len(drc_d["errors"]),
+        "routing": {
+            "routed_net_count": drc_d["routed_net_count"],
+            "total_multi_pin_nets": drc_d["total_multi_pin_nets"],
+            "unrouted_net_count": drc_d["unrouted_net_count"],
+            "unconnected_items": drc_d["unconnected_items"],
+            "track_dangling_count": drc_d["track_dangling_count"],
+            "segment_count": drc_d["segment_count"],
+            "via_count": drc_d["via_count"],
+        },
+        "z0_checks": len(drc_d["impedance_checks"]),
+        "ngspice_summary": res["ngspice"]["summary"],
+        "mna_crosscheck": res["mna_crosscheck"],
+        "checks": res["checks"],
+    }, indent=2))
+    if not res["all_passed"]:
+        print("ERC errors:", res["board"]["erc"]["errors"][:10])
+        print("DRC errors:", res["board"]["drc"]["errors"][:10])
+        print("SPICE errors:", res["ngspice"]["errors"][:10])
+        raise SystemExit(1)

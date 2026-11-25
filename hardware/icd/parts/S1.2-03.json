@@ -1,0 +1,116 @@
+{
+  "schema_version": "part_icd_v1.0",
+  "part_id": "S1.2-03",
+  "parent_bom_id": "S1.2",
+  "subsystem": "S1",
+  "part_name": "Wien filtresi cift-kutuplu hassas E-alani guc kaynagi",
+  "part_category": "PHYSICAL_SOLID",
+  "bom_metadata": {
+    "qty": "2",
+    "unit": "adet",
+    "material": "Elektronik modul (19 inc)",
+    "key_spec": "+/-5 kV, gurultu <5 mVpp, kararlik <10 ppm",
+    "tolerance": "±10 ppm/8 saat",
+    "temp_stage": "300 K (kabin)",
+    "vacuum_grade": "Atmosfer",
+    "procurement_class": "COTS",
+    "parent_cost_class": "C",
+    "usd_low": 10000.0,
+    "usd_nom": 16000.0,
+    "usd_high": 29000.0,
+    "legacy_cad_module": "s1_ion_source_column",
+    "bom_epistemic_tag": "{Model-Kalibrasyon-Exp114}",
+    "notes": "2 hat x $8,000 nom; izotop secim sapmasini onler"
+  },
+  "artifact_links": {
+    "cad": {
+      "work_package": "WP-M1",
+      "design_tier": "COTS_ENV_ICD",
+      "stl": "hardware/cad_parts/out/S1/S1.2-03.stl",
+      "step": "hardware/cad_parts/out/S1/S1.2-03.step",
+      "scad": "hardware/cad_parts/out/S1/S1.2-03.scad",
+      "dxf": "hardware/cad_parts/out/S1/S1.2-03.dxf",
+      "svg": "hardware/cad_parts/out/S1/S1.2-03.svg",
+      "cad_json": "hardware/cad_parts/out/S1/S1.2-03.json",
+      "watertight": true,
+      "all_6_files_valid": true,
+      "mass_kg": 5.350011,
+      "triangle_count": 788,
+      "temp_k": 300.0,
+      "canonical_bbox_min_mm": [
+        1238.7,
+        -438.0,
+        1602.3
+      ],
+      "canonical_bbox_max_mm": [
+        1721.3,
+        4.5,
+        1644.75
+      ],
+      "datum_shift_mm": [
+        0.0,
+        0.0,
+        500.0
+      ],
+      "port_count": 2,
+      "gdt_frame_count": 1
+    },
+    "pcb_bundles": [
+      {
+        "bundle_slug": "ion_column_hv_dac",
+        "verification_json": "hardware/pcb/ion_column_hv_dac/ion_column_hv_dac_verification.json",
+        "boards": [
+          "ion_column_hv_dac"
+        ],
+        "kicad_sch_files": [
+          "hardware/pcb/ion_column_hv_dac/ion_column_hv_dac.kicad_sch"
+        ],
+        "kicad_pcb_files": [
+          "hardware/pcb/ion_column_hv_dac/ion_column_hv_dac.kicad_pcb"
+        ],
+        "spice_decks": [
+          "hardware/pcb/ion_column_hv_dac/ion_hv_filter_trim.cir"
+        ],
+        "all_passed": true
+      }
+    ],
+    "legacy_board_files": [],
+    "electrical_icd": {
+      "path": "hardware/icd/electrical/S1.2-03.json",
+      "electrical_class": "E3",
+      "grounding_domain": "AGND",
+      "ups_tier": "TIER2_SHED",
+      "exp150_ups_allocation_w": 0.0,
+      "mating_part_ids": [
+        "S1.2-02",
+        "S1.3-03",
+        "S7.SAFETY-03"
+      ],
+      "interlock_hooks_count": 1
+    },
+    "rtl_modules": [
+      "rtl/machine_ctrl/spi_dac_hv_ctrl.v"
+    ],
+    "rtl_audit_json": "results/stage2_rtl_verification/rtl_machine_ctrl_audit.json",
+    "software_and_eda_files": [],
+    "verification_tests": []
+  },
+  "specialized_specification": null,
+  "verification_status": {
+    "cad_verified": true,
+    "pcb_verified": true,
+    "electrical_icd_verified": true,
+    "rtl_verified": true,
+    "software_or_eda_verified": false,
+    "specialized_icd_present": false,
+    "traceable": true
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "tapeout_done": false
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "schema_version": "1.0",
+  "part_id": "S9.HPC-03",
+  "parent_bom_id": "S9.HPC",
+  "subsystem": "S9",
+  "part_name": "Yedekli 2.6 kW Titanium PSU Paketi, Surgulu Raf Raylari & ZU48DR 100G CMAC RDMA Entegrasyon Kiti (Exp143, 3.80 kg)",
+  "qty": 1,
+  "unit": "set",
+  "temp_stage": "300 K (HPC rafi)",
+  "vacuum_grade": "Atmosfer",
+  "bom_key_spec": "4U raf montaj + ZU48DR 100G CMAC RoCEv2 donanim arayuzu, 0 W ek yuk, kutle=3.80 kg (Option-HPC toplam 64.00 kg & 2195 W)",
+  "usd_nom": 6500.0,
+  "bom_epistemic_tag": "{Varsay\u0131m}",
+  "electrical_class": "E3",
+  "grounding_domain": "FACILITY_PE",
+  "grounding_notes": "Redundant 2.6 kW 80+ Titanium PSU modules, sliding rails & ZU48DR 100G CMAC kit (0 W added load).",
+  "supply_rails": [
+    {
+      "rail_name": "AC_UPS_TIER2_SHED",
+      "voltage_v": 230.0,
+      "current_type": "AC_1PH",
+      "max_current_a": 12.0,
+      "steady_power_w": 0.0,
+      "peak_power_w": 2600.0,
+      "source_part_id": "S7.SAFETY-04"
+    }
+  ],
+  "connectors_and_pinout": [
+    {
+      "connector_ref": "J_PSU_BAY",
+      "connector_type": "CRPS Redundant Backplane + IEC C19",
+      "location_side": "rack_rear",
+      "mating_part_id": "S9.HPC-01",
+      "pins": [
+        {
+          "pin": "1",
+          "signal": "12V_HPC_REDUNDANT",
+          "direction": "OUT",
+          "nominal_level": "99.99% N+1 PSU backing S9.HPC-01"
+        }
+      ]
+    }
+  ],
+  "mating_part_ids": [
+    "S9.HPC-01",
+    "S9.HPC-02",
+    "S6.11-01",
+    "S7.SAFETY-04"
+  ],
+  "interlock_hooks": [],
+  "ups_tier": "TIER2_SHED",
+  "ups_budget_group": "EXP150_TIER2_SHED",
+  "exp150_ups_allocation_w": 0.0,
+  "supply_rails_steady_sum_w": 0.0,
+  "incremental_mains_w": 0.0,
+  "secondary_or_parent_derived_w": 0.0,
+  "non_exp150_aux_shed_w": 0.0,
+  "reconciliation_note": "Exp150 Tier-2 sheddable baseline load: incremental_mains_w = exp150_ups_allocation_w = 0.0 W (raw supply_rails sum = 0.0 W, shed cleanly on utility outage).",
+  "timing_sync": {
+    "rb_10mhz_port": null,
+    "white_rabbit_port": null,
+    "sync_role": "Redundant HPC PSU & CMAC kit"
+  },
+  "epistemic_flags": {
+    "design_maturity": "M0_M1_ELECTRICAL_ICD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

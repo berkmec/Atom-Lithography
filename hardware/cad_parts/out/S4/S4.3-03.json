@@ -1,0 +1,250 @@
+{
+  "part_id": "S4.3-03",
+  "subsystem": "S4",
+  "part_design": {
+    "part_id": "S4.3-03",
+    "parent_bom_id": "S4.3",
+    "subsystem": "S4",
+    "part_name": "Kademe ici kapasitif konum geri-besleme sensorleri ve UHV kablolari",
+    "design_tier": "COTS_ENV_ICD",
+    "material": "Au",
+    "temp_stage": "300 K (UHV)",
+    "temp_k": 300.0,
+    "vacuum_grade": "UHV 1e-9 mbar",
+    "tolerance_spec": "±0.2 nm",
+    "surface_finish_ra_um": 0.2,
+    "qty": 1,
+    "procurement_class": "COTS",
+    "world_origin_mm": [
+      0.0,
+      0.0,
+      -41.0
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "capacitive_gap_sense",
+        "kind": "electrical",
+        "position_mm": [
+          46.75,
+          38.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "standard": "4x Sub-nm Au Capacitive Electrodes (<0.02% Linearity)",
+        "mating_part_id": "S4.3-01",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      },
+      {
+        "name": "kapton_uhv_coax",
+        "kind": "rf",
+        "position_mm": [
+          53.5,
+          38.0,
+          -33.0
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "standard": "UHV Kapton Coax Harness to S4.3-04 Servo Controller",
+        "mating_part_id": "S4.3-04",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "POD_SIZE",
+        "nominal_mm": 8.5,
+        "tol_plus_mm": 0.05,
+        "tol_minus_mm": -0.05,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "8.50 ±0.05"
+      },
+      {
+        "label": "POD_H",
+        "nominal_mm": 14.0,
+        "tol_plus_mm": 0.05,
+        "tol_minus_mm": -0.05,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "14.00 ±0.05"
+      },
+      {
+        "label": "SPAN_X",
+        "nominal_mm": 110.5,
+        "tol_plus_mm": 0.1,
+        "tol_minus_mm": -0.1,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "110.50 ±0.10"
+      },
+      {
+        "label": "SPAN_Y",
+        "nominal_mm": 84.5,
+        "tol_plus_mm": 0.1,
+        "tol_minus_mm": -0.1,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "84.50 ±0.10"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "parallelism",
+        "tolerance_mm": 0.005,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "CAPACITIVE ELECTRODE FACES",
+        "glyph": "∥",
+        "tolerance_text": "0.005"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "Sub-nm dogrusallik (<0.02%), UHV uyumlu",
+      "4x UHV gold-electrode capacitive position feedback pods (±0.2 nm, <0.02% linearity) + Kapton UHV coax pigtails.",
+      "Diagonal layout (±51, ±38 mm, R_max=69.6 < 75 mm bore) clears S4.3-01 stage & S4.4-03 bar mirrors cleanly."
+    ],
+    "scad_params": {
+      "n_sensor_pods": 4,
+      "pod_x_mm": 51.0,
+      "pod_y_mm": 38.0
+    },
+    "target_mass_kg": null,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S4.3-03",
+    "subsystem": "S4",
+    "design_tier": "COTS_ENV_ICD",
+    "stl_path": "hardware/cad_parts/out/S4/S4.3-03.stl",
+    "step_path": "hardware/cad_parts/out/S4/S4.3-03.step",
+    "scad_path": "hardware/cad_parts/out/S4/S4.3-03.scad",
+    "dxf_path": "hardware/cad_parts/out/S4/S4.3-03.dxf",
+    "svg_path": "hardware/cad_parts/out/S4/S4.3-03.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 4279.707772636143,
+    "surface_area_mm2": 3032.7589714631954,
+    "mass_kg": 0.022254480417707945,
+    "cg_mm": [
+      -1.7127241511600237e-14,
+      -2.2536368386822566e-14,
+      -1.4305873481846945
+    ],
+    "bbox_min_mm": [
+      -55.25,
+      -42.25,
+      -33.0
+    ],
+    "bbox_max_mm": [
+      55.25,
+      42.25,
+      7.0
+    ],
+    "inertia_kg_mm2": [
+      33.27509359801454,
+      59.31996831805609,
+      90.55804979208621,
+      4.751316311740084e-10,
+      -1.3039842747018745e-14,
+      -1.642530291793671e-14
+    ],
+    "triangle_count": 432,
+    "vertex_count": 232,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "world_bbox_min_mm": [
+    -55.25,
+    -42.25,
+    -74.0
+  ],
+  "world_bbox_max_mm": [
+    55.25,
+    42.25,
+    -34.0
+  ],
+  "reconciliation": null,
+  "thermal_contraction_checks": [],
+  "tolerance_stack_checks": []
+}

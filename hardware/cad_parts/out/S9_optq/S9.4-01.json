@@ -1,0 +1,293 @@
+{
+  "part_design": {
+    "part_id": "S9.4-01",
+    "parent_bom_id": "S9.4",
+    "subsystem": "S9",
+    "part_name": "Option-Q OVC -X CF63 Kriyo-Koaksiyel (4-Port 4-8 GHz) & 1550 nm SMF-28 Vakum Gecisi (Exp142 S9.1-01, 3.20 kg)",
+    "design_tier": "CUSTOM_FULL",
+    "material": "316LN",
+    "temp_stage": "300 K (OVC portu)",
+    "temp_k": 300.0,
+    "vacuum_grade": "Kriyo-vakum",
+    "tolerance_spec": "He<=1e-10 mbar*L/s",
+    "surface_finish_ra_um": 0.8,
+    "qty": 1,
+    "procurement_class": "CUS",
+    "world_origin_mm": [
+      -876.0,
+      0.0,
+      690.0
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "ovc_west_cf63",
+        "kind": "flange",
+        "position_mm": [
+          50.0,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "standard": "CF63",
+        "mating_part_id": "S6.8-04",
+        "bore_mm": 50.0,
+        "od_mm": 113.5,
+        "pcd_mm": 92.1,
+        "bolt_count": 8,
+        "bolt_hole_mm": 8.4,
+        "bolt_spec": "M8",
+        "frame": "local",
+        "notes": "ISO 3669 CF63 Cu-gasket knife-edge"
+      },
+      {
+        "name": "sma_4port_4_8ghz",
+        "kind": "rf",
+        "position_mm": [
+          -50.0,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "standard": "4x Hermetic SMA 4-8 GHz",
+        "mating_part_id": "S9.4-03",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      },
+      {
+        "name": "fiber_1550nm_smf28",
+        "kind": "optical",
+        "position_mm": [
+          -50.0,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "standard": "1550 nm SMF-28 Vacuum Feedthrough",
+        "mating_part_id": "S9.4-03",
+        "bore_mm": 9.6,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "LEN_X",
+        "nominal_mm": 100.0,
+        "tol_plus_mm": 0.2,
+        "tol_minus_mm": -0.2,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "100.00 ±0.20"
+      },
+      {
+        "label": "BULK_Y",
+        "nominal_mm": 120.0,
+        "tol_plus_mm": 0.2,
+        "tol_minus_mm": -0.2,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "120.00 ±0.20"
+      },
+      {
+        "label": "BULK_Z",
+        "nominal_mm": 120.0,
+        "tol_plus_mm": 0.2,
+        "tol_minus_mm": -0.2,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "120.00 ±0.20"
+      },
+      {
+        "label": "CF63_OD",
+        "nominal_mm": 113.5,
+        "tol_plus_mm": 0.1,
+        "tol_minus_mm": -0.1,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø113.50 ±0.10"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "perpendicularity",
+        "tolerance_mm": 0.05,
+        "diameter_zone": true,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "CF63 knife-edge axis",
+        "glyph": "⊥",
+        "tolerance_text": "Ø0.050"
+      },
+      {
+        "symbol": "flatness",
+        "tolerance_mm": 0.02,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "Hermetic bulkhead plate",
+        "glyph": "⏥",
+        "tolerance_text": "0.020"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "s6_dr_ovc_upper -X dis port ([-875,0,690] mm, 100x120x120 mm, sifir ic cakisma), 0 W / 0 uW kriyo, kutle=3.20 kg",
+      "Exact BOM part_id S9.4-01 (resolves legacy cad/params.py S9.1 aliasing bug). Option-Q OVC -X CF63 4xSMA + 1550 nm SMF-28 vacuum feedthrough, 3.20 kg (Exp142)."
+    ],
+    "scad_params": {
+      "cf_size": "CF63",
+      "n_sma": 4,
+      "fiber_nm": 1550.0,
+      "mass_kg": 3.2
+    },
+    "target_mass_kg": 3.2,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact_result": {
+    "part_id": "S9.4-01",
+    "subsystem": "S9",
+    "design_tier": "CUSTOM_FULL",
+    "stl_path": "hardware/cad_parts/out/S9_optq/S9.4-01.stl",
+    "step_path": "hardware/cad_parts/out/S9_optq/S9.4-01.step",
+    "scad_path": "hardware/cad_parts/out/S9_optq/S9.4-01.scad",
+    "dxf_path": "hardware/cad_parts/out/S9_optq/S9.4-01.dxf",
+    "svg_path": "hardware/cad_parts/out/S9_optq/S9.4-01.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 403031.1422819256,
+    "surface_area_mm2": 92728.63358016184,
+    "mass_kg": 3.2242491382554057,
+    "cg_mm": [
+      3.8121145955497684,
+      1.9419413075832918e-15,
+      -1.7425463353747848e-15
+    ],
+    "bbox_min_mm": [
+      -50.0,
+      -60.0,
+      -60.0
+    ],
+    "bbox_max_mm": [
+      50.0,
+      60.0,
+      60.0
+    ],
+    "inertia_kg_mm2": [
+      5449.73294160776,
+      5937.116051409376,
+      5937.116051409375,
+      1.2638704576487542e-13,
+      -1.947713261997785e-13,
+      -7.869675755500797e-14
+    ],
+    "triangle_count": 1616,
+    "vertex_count": 794,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "json_path": "hardware/cad_parts/out/S9_optq/S9.4-01.json",
+  "world_bbox_min_mm": [
+    -926.0,
+    -60.0,
+    630.0
+  ],
+  "world_bbox_max_mm": [
+    -826.0,
+    60.0,
+    750.0
+  ],
+  "world_cg_mm": [
+    -872.1879,
+    0.0,
+    690.0
+  ],
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

@@ -1,0 +1,119 @@
+{
+  "schema_version": "part_icd_v1.0",
+  "part_id": "S4.5-03",
+  "parent_bom_id": "S4.5",
+  "subsystem": "S4",
+  "part_name": "Atis-ani sapma telafi arayuzu (interferometre -> demet saptirici DSP)",
+  "part_category": "PHYSICAL_SOLID",
+  "bom_metadata": {
+    "qty": "1",
+    "unit": "adet",
+    "material": "Gercek zamanli FPGA/DSP karti",
+    "key_spec": "Gecikme <5 us, kafa-kademe sapmasini elektriksel telafi eder",
+    "tolerance": "±0.1 nm",
+    "temp_stage": "300 K (kabin)",
+    "vacuum_grade": "Atmosfer",
+    "procurement_class": "CUS",
+    "parent_cost_class": "B",
+    "usd_low": 3000.0,
+    "usd_nom": 5000.0,
+    "usd_high": 9500.0,
+    "legacy_cad_module": "s4_piezo_stage_interferometry",
+    "bom_epistemic_tag": "{Model-Kalibrasyon-Exp114}",
+    "notes": "DESIGN §5.4 gercek zamanli kapali-cevrim duzeltme"
+  },
+  "artifact_links": {
+    "cad": {
+      "work_package": "WP-M2",
+      "design_tier": "CUSTOM_FULL",
+      "stl": "hardware/cad_parts/out/S4/S4.5-03.stl",
+      "step": "hardware/cad_parts/out/S4/S4.5-03.step",
+      "scad": "hardware/cad_parts/out/S4/S4.5-03.scad",
+      "dxf": "hardware/cad_parts/out/S4/S4.5-03.dxf",
+      "svg": "hardware/cad_parts/out/S4/S4.5-03.svg",
+      "cad_json": "hardware/cad_parts/out/S4/S4.5-03.json",
+      "watertight": true,
+      "all_6_files_valid": true,
+      "mass_kg": 2.935387,
+      "triangle_count": 996,
+      "temp_k": 300.0,
+      "canonical_bbox_min_mm": [
+        1238.7,
+        -434.2,
+        802.2
+      ],
+      "canonical_bbox_max_mm": [
+        1721.3,
+        -61.2,
+        844.65
+      ],
+      "datum_shift_mm": [
+        0.0,
+        0.0,
+        500.0
+      ],
+      "port_count": 0,
+      "gdt_frame_count": 0
+    },
+    "pcb_bundles": [
+      {
+        "bundle_slug": "fpga_brain_carrier",
+        "verification_json": "hardware/pcb/fpga_brain_carrier/fpga_brain_carrier_verification.json",
+        "boards": [
+          "fpga_brain_carrier"
+        ],
+        "kicad_sch_files": [
+          "hardware/pcb/fpga_brain_carrier/fpga_brain_carrier.kicad_sch"
+        ],
+        "kicad_pcb_files": [
+          "hardware/pcb/fpga_brain_carrier/fpga_brain_carrier.kicad_pcb"
+        ],
+        "spice_decks": [
+          "hardware/pcb/fpga_brain_carrier/fpga_pdn_1v0.cir"
+        ],
+        "all_passed": true
+      },
+      {
+        "bundle_slug": "ion_column_hv_dac",
+        "verification_json": "hardware/pcb/ion_column_hv_dac/ion_column_hv_dac_verification.json",
+        "boards": [
+          "ion_column_hv_dac"
+        ],
+        "kicad_sch_files": [
+          "hardware/pcb/ion_column_hv_dac/ion_column_hv_dac.kicad_sch"
+        ],
+        "kicad_pcb_files": [
+          "hardware/pcb/ion_column_hv_dac/ion_column_hv_dac.kicad_pcb"
+        ],
+        "spice_decks": [
+          "hardware/pcb/ion_column_hv_dac/ion_hv_filter_trim.cir"
+        ],
+        "all_passed": true
+      }
+    ],
+    "legacy_board_files": [],
+    "electrical_icd": null,
+    "rtl_modules": [],
+    "rtl_audit_json": null,
+    "software_and_eda_files": [],
+    "verification_tests": []
+  },
+  "specialized_specification": null,
+  "verification_status": {
+    "cad_verified": true,
+    "pcb_verified": true,
+    "electrical_icd_verified": false,
+    "rtl_verified": false,
+    "software_or_eda_verified": false,
+    "specialized_icd_present": false,
+    "traceable": true
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "tapeout_done": false
+  }
+}

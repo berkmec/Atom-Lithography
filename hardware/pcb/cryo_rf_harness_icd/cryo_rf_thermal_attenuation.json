@@ -1,0 +1,776 @@
+{
+  "schema_version": "1.0",
+  "title": "Cryo-RF Staged Attenuation, Filter, TWPA/HEMT & 6-Stage Thermal Budget (Exp125 / Exp140 / Exp142)",
+  "epistemic_flags": {
+    "design_maturity": "M0_M1_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  },
+  "covered_e2_part_ids": [
+    "S3.2-04",
+    "S6.4-03",
+    "S6.5-03",
+    "S6.6-01",
+    "S6.6-02",
+    "S6.6-03",
+    "S6.6-04",
+    "S6.6-07",
+    "S6.7-01",
+    "S6.10-01",
+    "S6.11-02",
+    "S6.11-03",
+    "S6.11-04",
+    "S9.3-02",
+    "S9.4-01",
+    "S9.4-02",
+    "S9.4-03"
+  ],
+  "covered_quench_part_id": "S6.3-04",
+  "total_covered_parts": 18,
+  "staged_attenuation_300K_to_20mK": {
+    "total_input_attenuation_dB": 60.0,
+    "pattern_dB": "-20 dB (4 K) / -10 dB (800 mK Still) / -10 dB (100 mK CP) / -20 dB (20 mK MXC)",
+    "eval_freq_GHz": 6.0,
+    "final_n_th_at_20mK": 0.00505,
+    "stages": [
+      {
+        "stage": "300K_room",
+        "temp_K": 300.0,
+        "att_dB": 0.0,
+        "coax_upper": "SMA/UT085-CuNi",
+        "role": "OVC vacuum feedthrough (S6.8-04 / S9.4-01)",
+        "n_th_local_6GHz": 1041.331036,
+        "n_th_cascaded_6GHz": 1041.331036
+      },
+      {
+        "stage": "50K_PT1",
+        "temp_K": 50.0,
+        "att_dB": 0.0,
+        "coax_upper": "SS304/CuNi 0.86 mm",
+        "role": "Thermal anchor clamp (0 dB block)",
+        "n_th_local_6GHz": 173.138973,
+        "n_th_cascaded_6GHz": 1041.331036
+      },
+      {
+        "stage": "4K_PT2",
+        "temp_K": 4.2,
+        "att_dB": 20.0,
+        "coax_upper": "SS304/CuNi 0.86 mm",
+        "role": "-20 dB cryo attenuator + 4 K InP HEMT bank (S6.6-01 / S6.11-03)",
+        "n_th_local_6GHz": 14.091346,
+        "n_th_cascaded_6GHz": 24.363743
+      },
+      {
+        "stage": "800mK_Still",
+        "temp_K": 0.8,
+        "att_dB": 10.0,
+        "coax_upper": "CuNi 0.86 mm (in) / NbTi (out)",
+        "role": "-10 dB cryo attenuator + Still thermal clamp",
+        "n_th_local_6GHz": 2.308147,
+        "n_th_cascaded_6GHz": 4.513706
+      },
+      {
+        "stage": "100mK_CP",
+        "temp_K": 0.1,
+        "att_dB": 10.0,
+        "coax_upper": "CuNi 0.86 mm (in) / NbTi (out)",
+        "role": "-10 dB cryo attenuator + Cold Plate anchor",
+        "n_th_local_6GHz": 0.059502,
+        "n_th_cascaded_6GHz": 0.504922
+      },
+      {
+        "stage": "20mK_MXC",
+        "temp_K": 0.02,
+        "att_dB": 20.0,
+        "coax_upper": "NbTi/NbTi superconducting (<0.1 dB/m)",
+        "role": "-20 dB cryo attenuator + Eccosorb CR-124 LPF + 32x TWPA/Purcell/dual-iso + S9.4-02 Chebyshev bridge",
+        "n_th_local_6GHz": 1e-06,
+        "n_th_cascaded_6GHz": 0.00505
+      }
+    ]
+  },
+  "eccosorb_cr124_lpf": {
+    "bom_id": "S6.5-03",
+    "material": "Emerson & Cuming Eccosorb CR-124 cast epoxy iron-loaded absorber",
+    "stopband_attenuation_dB": ">40 dB @ >1 GHz (IR/THz/GHz pair-breaking photon suppression)",
+    "passband_MHz": "DC - 200 MHz (RF/ENDOR & DC bias lines)",
+    "stage": "20 mK MXC & 4 K anchor bulkhead"
+  },
+  "active_cryo_amplifiers": {
+    "twpa_20mK_bank": {
+      "bom_id": "S6.11-02",
+      "qty": 32,
+      "gain_dB": 20.0,
+      "noise_temp_K": 0.3,
+      "p1db_dBm": -98.0,
+      "purcell_protection_factor": 625.0,
+      "t1_purcell_filtered_ms": 124.3,
+      "dual_isolator_isolation_dB": 40.0,
+      "fidelity_2us": 0.9961,
+      "mxc_20mK_load_uW": 2.144
+    },
+    "hemt_4K_bank_m4_32ch": {
+      "bom_id": "S6.11-03",
+      "qty": 32,
+      "class": "LNF-LNC4_8C 4-8 GHz InP HEMT",
+      "power_per_ch_mW": 7.8,
+      "total_4K_load_W": 0.2496,
+      "noise_temp_K": 2.0,
+      "t_sys_with_twpa_K": 0.672,
+      "eta_meas_pct": 21.43,
+      "bias_point": {
+        "Vd_V": 0.65,
+        "Id_mA": 12.0,
+        "Vg_V": -0.15
+      }
+    },
+    "hemt_4K_bank_9000ch_56ch": {
+      "bom_id": "S6.6-01",
+      "qty": 56,
+      "class": "Ultra-low-power InP HEMT (Rebelo 2026 class)",
+      "power_per_ch_mW_low": 2.1,
+      "total_4K_load_low_W": 0.1176,
+      "power_per_ch_mW_nominal": 7.8,
+      "total_4K_load_nominal_W": 0.4368,
+      "noise_temp_K": 1.4,
+      "gain_dB": 41.6,
+      "spares_bom_id": "S9.3-02",
+      "spares_qty": 4
+    }
+  },
+  "thermal_load_budget": {
+    "exp140_m4_1024_cell_s611": {
+      "mxc_20mK_uW": 6.256,
+      "cp_100mK_uW": 59.58,
+      "still_800mK_mW": 1.06,
+      "stage_4K_W": 0.488,
+      "stage_50K_W": 8.26
+    },
+    "exp142_option_q_s94": {
+      "mxc_20mK_uW": 0.78,
+      "cp_100mK_uW": 6.15,
+      "still_800mK_mW": 0.03,
+      "stage_4K_W": 0.062,
+      "stage_50K_W": 0.48
+    },
+    "combined_m4_plus_option_q": {
+      "mxc_20mK_uW": 7.036,
+      "cp_100mK_uW": 65.73,
+      "still_800mK_mW": 1.09,
+      "stage_4K_W": 0.55,
+      "stage_50K_W": 8.74
+    },
+    "ld400_pt420_capacities": {
+      "mxc_20mK_uW": 14.0,
+      "cp_100mK_uW": 400.0,
+      "still_800mK_mW": 40.0,
+      "stage_4K_W": 2.0,
+      "stage_50K_W": 40.0,
+      "stage_50K_pt420_peak_W": 55.0
+    },
+    "margins": {
+      "mxc_20mK_margin_uW": 6.964,
+      "mxc_20mK_util_pct": 50.26,
+      "cp_100mK_util_pct": 16.43,
+      "stage_4K_margin_W": 1.45,
+      "stage_4K_util_pct": 27.5,
+      "stage_50K_util_pct": 21.85,
+      "all_stages_pass": true
+    },
+    "exp125_9000ch_56line_rebelo_2p1mW_baseline": {
+      "lines": 56,
+      "nl_per_line": 163,
+      "mxc_20mK_uW": 3.94,
+      "cp_100mK_uW": 54.5,
+      "still_800mK_mW": 1.14,
+      "stage_4K_W": 0.325,
+      "stage_50K_W": 7.54
+    }
+  },
+  "pcb_verification": {
+    "board_name": "cryo_rf_bias_panel",
+    "bom_ids": [
+      "S3.2-04",
+      "S6.4-03",
+      "S6.5-03",
+      "S6.6-01",
+      "S6.6-02",
+      "S6.6-03",
+      "S6.6-04",
+      "S6.6-07",
+      "S6.7-01",
+      "S6.10-01",
+      "S6.11-02",
+      "S6.11-03",
+      "S6.11-04",
+      "S9.3-02",
+      "S9.4-01",
+      "S9.4-02",
+      "S9.4-03",
+      "S6.3-04"
+    ],
+    "sch_file": "cryo_rf_bias_panel.kicad_sch",
+    "pcb_file": "cryo_rf_bias_panel.kicad_pcb",
+    "sexpr_valid": true,
+    "erc": {
+      "passed": true,
+      "errors": [],
+      "warnings": [],
+      "component_count": 94,
+      "net_count": 59,
+      "sch_pcb_parity_ok": true,
+      "details": {
+        "power_rails_driven": [
+          "AGND_CRYO",
+          "CRYO_OVC",
+          "VBIAS_P3V3",
+          "VGATE_N2V5",
+          "VIN_N5V",
+          "VIN_P5V"
+        ],
+        "pwr_flags_found": [
+          "AGND_CRYO",
+          "CRYO_OVC",
+          "VBIAS_P3V3",
+          "VGATE_N2V5",
+          "VIN_N5V",
+          "VIN_P5V"
+        ],
+        "lib_symbol_count": 12
+      }
+    },
+    "drc": {
+      "passed": true,
+      "errors": [],
+      "warnings": [],
+      "pad_count": 226,
+      "segment_count": 278,
+      "via_count": 74,
+      "zone_count": 2,
+      "air_slot_count": 1,
+      "min_measured_clearance_mm": 0.1485,
+      "impedance_checks": [
+        {
+          "net": "RF50_IN0",
+          "layer": "F.Cu",
+          "mode": "microstrip",
+          "width_mm": 0.5429,
+          "h_or_b_mm": 0.254,
+          "epsilon_r": 3.48,
+          "target_z0_ohm": 50.0,
+          "computed_z0_ohm": 50.0,
+          "error_pct": 0.001,
+          "passed": true
+        },
+        {
+          "net": "RF50_IN0",
+          "layer": "F.Cu",
+          "mode": "microstrip",
+          "width_mm": 0.5429,
+          "h_or_b_mm": 0.254,
+          "epsilon_r": 3.48,
+          "target_z0_ohm": 50.0,
+          "computed_z0_ohm": 50.0,
+          "error_pct": 0.001,
+          "passed": true
+        },
+        {
+          "net": "RF50_IN0",
+          "layer": "F.Cu",
+          "mode": "microstrip",
+          "width_mm": 0.5429,
+          "h_or_b_mm": 0.254,
+          "epsilon_r": 3.48,
+          "target_z0_ohm": 50.0,
+          "computed_z0_ohm": 50.0,
+          "error_pct": 0.001,
+          "passed": true
+        },
+        {
+          "net": "RF50_IN0",
+          "layer": "F.Cu",
+          "mode": "microstrip",
+          "width_mm": 0.5429,
+          "h_or_b_mm": 0.254,
+          "epsilon_r": 3.48,
+          "target_z0_ohm": 50.0,
+          "computed_z0_ohm": 50.0,
+          "error_pct": 0.001,
+          "passed": true
+        },
+        {
+          "net": "RF50_IN1",
+          "layer": "F.Cu",
+          "mode": "microstrip",
+          "width_mm": 0.5429,
+          "h_or_b_mm": 0.254,
+          "epsilon_r": 3.48,
+          "target_z0_ohm": 50.0,
+          "computed_z0_ohm": 50.0,
+          "error_pct": 0.001,
+          "passed": true
+        },
+        {
+          "net": "RF50_IN1",
+          "layer": "F.Cu",
+          "mode": "microstrip",
+          "width_mm": 0.5429,
+          "h_or_b_mm": 0.254,
+          "epsilon_r": 3.48,
+          "target_z0_ohm": 50.0,
+          "computed_z0_ohm": 50.0,
+          "error_pct": 0.001,
+          "passed": true
+        },
+        {
+          "net": "RF50_IN1",
+          "layer": "F.Cu",
+          "mode": "microstrip",
+          "width_mm": 0.5429,
+          "h_or_b_mm": 0.254,
+          "epsilon_r": 3.48,
+          "target_z0_ohm": 50.0,
+          "computed_z0_ohm": 50.0,
+          "error_pct": 0.001,
+          "passed": true
+        },
+        {
+          "net": "RF50_IN1",
+          "layer": "F.Cu",
+          "mode": "microstrip",
+          "width_mm": 0.5429,
+          "h_or_b_mm": 0.254,
+          "epsilon_r": 3.48,
+          "target_z0_ohm": 50.0,
+          "computed_z0_ohm": 50.0,
+          "error_pct": 0.001,
+          "passed": true
+        },
+        {
+          "net": "RF50_IN2",
+          "layer": "F.Cu",
+          "mode": "microstrip",
+          "width_mm": 0.5429,
+          "h_or_b_mm": 0.254,
+          "epsilon_r": 3.48,
+          "target_z0_ohm": 50.0,
+          "computed_z0_ohm": 50.0,
+          "error_pct": 0.001,
+          "passed": true
+        },
+        {
+          "net": "RF50_IN2",
+          "layer": "F.Cu",
+          "mode": "microstrip",
+          "width_mm": 0.5429,
+          "h_or_b_mm": 0.254,
+          "epsilon_r": 3.48,
+          "target_z0_ohm": 50.0,
+          "computed_z0_ohm": 50.0,
+          "error_pct": 0.001,
+          "passed": true
+        },
+        {
+          "net": "RF50_IN2",
+          "layer": "F.Cu",
+          "mode": "microstrip",
+          "width_mm": 0.5429,
+          "h_or_b_mm": 0.254,
+          "epsilon_r": 3.48,
+          "target_z0_ohm": 50.0,
+          "computed_z0_ohm": 50.0,
+          "error_pct": 0.001,
+          "passed": true
+        },
+        {
+          "net": "RF50_IN2",
+          "layer": "F.Cu",
+          "mode": "microstrip",
+          "width_mm": 0.5429,
+          "h_or_b_mm": 0.254,
+          "epsilon_r": 3.48,
+          "target_z0_ohm": 50.0,
+          "computed_z0_ohm": 50.0,
+          "error_pct": 0.001,
+          "passed": true
+        },
+        {
+          "net": "RF50_IN3",
+          "layer": "F.Cu",
+          "mode": "microstrip",
+          "width_mm": 0.5429,
+          "h_or_b_mm": 0.254,
+          "epsilon_r": 3.48,
+          "target_z0_ohm": 50.0,
+          "computed_z0_ohm": 50.0,
+          "error_pct": 0.001,
+          "passed": true
+        },
+        {
+          "net": "RF50_IN3",
+          "layer": "F.Cu",
+          "mode": "microstrip",
+          "width_mm": 0.5429,
+          "h_or_b_mm": 0.254,
+          "epsilon_r": 3.48,
+          "target_z0_ohm": 50.0,
+          "computed_z0_ohm": 50.0,
+          "error_pct": 0.001,
+          "passed": true
+        },
+        {
+          "net": "RF50_IN3",
+          "layer": "F.Cu",
+          "mode": "microstrip",
+          "width_mm": 0.5429,
+          "h_or_b_mm": 0.254,
+          "epsilon_r": 3.48,
+          "target_z0_ohm": 50.0,
+          "computed_z0_ohm": 50.0,
+          "error_pct": 0.001,
+          "passed": true
+        },
+        {
+          "net": "RF50_IN3",
+          "layer": "F.Cu",
+          "mode": "microstrip",
+          "width_mm": 0.5429,
+          "h_or_b_mm": 0.254,
+          "epsilon_r": 3.48,
+          "target_z0_ohm": 50.0,
+          "computed_z0_ohm": 50.0,
+          "error_pct": 0.001,
+          "passed": true
+        },
+        {
+          "net": "RF50_OUT0",
+          "layer": "F.Cu",
+          "mode": "microstrip",
+          "width_mm": 0.5429,
+          "h_or_b_mm": 0.254,
+          "epsilon_r": 3.48,
+          "target_z0_ohm": 50.0,
+          "computed_z0_ohm": 50.0,
+          "error_pct": 0.001,
+          "passed": true
+        },
+        {
+          "net": "RF50_OUT0",
+          "layer": "F.Cu",
+          "mode": "microstrip",
+          "width_mm": 0.5429,
+          "h_or_b_mm": 0.254,
+          "epsilon_r": 3.48,
+          "target_z0_ohm": 50.0,
+          "computed_z0_ohm": 50.0,
+          "error_pct": 0.001,
+          "passed": true
+        },
+        {
+          "net": "RF50_OUT0",
+          "layer": "F.Cu",
+          "mode": "microstrip",
+          "width_mm": 0.5429,
+          "h_or_b_mm": 0.254,
+          "epsilon_r": 3.48,
+          "target_z0_ohm": 50.0,
+          "computed_z0_ohm": 50.0,
+          "error_pct": 0.001,
+          "passed": true
+        },
+        {
+          "net": "RF50_OUT0",
+          "layer": "F.Cu",
+          "mode": "microstrip",
+          "width_mm": 0.5429,
+          "h_or_b_mm": 0.254,
+          "epsilon_r": 3.48,
+          "target_z0_ohm": 50.0,
+          "computed_z0_ohm": 50.0,
+          "error_pct": 0.001,
+          "passed": true
+        },
+        {
+          "net": "RF50_OUT1",
+          "layer": "F.Cu",
+          "mode": "microstrip",
+          "width_mm": 0.5429,
+          "h_or_b_mm": 0.254,
+          "epsilon_r": 3.48,
+          "target_z0_ohm": 50.0,
+          "computed_z0_ohm": 50.0,
+          "error_pct": 0.001,
+          "passed": true
+        },
+        {
+          "net": "RF50_OUT1",
+          "layer": "F.Cu",
+          "mode": "microstrip",
+          "width_mm": 0.5429,
+          "h_or_b_mm": 0.254,
+          "epsilon_r": 3.48,
+          "target_z0_ohm": 50.0,
+          "computed_z0_ohm": 50.0,
+          "error_pct": 0.001,
+          "passed": true
+        },
+        {
+          "net": "RF50_OUT1",
+          "layer": "F.Cu",
+          "mode": "microstrip",
+          "width_mm": 0.5429,
+          "h_or_b_mm": 0.254,
+          "epsilon_r": 3.48,
+          "target_z0_ohm": 50.0,
+          "computed_z0_ohm": 50.0,
+          "error_pct": 0.001,
+          "passed": true
+        },
+        {
+          "net": "RF50_OUT1",
+          "layer": "F.Cu",
+          "mode": "microstrip",
+          "width_mm": 0.5429,
+          "h_or_b_mm": 0.254,
+          "epsilon_r": 3.48,
+          "target_z0_ohm": 50.0,
+          "computed_z0_ohm": 50.0,
+          "error_pct": 0.001,
+          "passed": true
+        },
+        {
+          "net": "RF50_OUT2",
+          "layer": "F.Cu",
+          "mode": "microstrip",
+          "width_mm": 0.5429,
+          "h_or_b_mm": 0.254,
+          "epsilon_r": 3.48,
+          "target_z0_ohm": 50.0,
+          "computed_z0_ohm": 50.0,
+          "error_pct": 0.001,
+          "passed": true
+        },
+        {
+          "net": "RF50_OUT2",
+          "layer": "F.Cu",
+          "mode": "microstrip",
+          "width_mm": 0.5429,
+          "h_or_b_mm": 0.254,
+          "epsilon_r": 3.48,
+          "target_z0_ohm": 50.0,
+          "computed_z0_ohm": 50.0,
+          "error_pct": 0.001,
+          "passed": true
+        },
+        {
+          "net": "RF50_OUT2",
+          "layer": "F.Cu",
+          "mode": "microstrip",
+          "width_mm": 0.5429,
+          "h_or_b_mm": 0.254,
+          "epsilon_r": 3.48,
+          "target_z0_ohm": 50.0,
+          "computed_z0_ohm": 50.0,
+          "error_pct": 0.001,
+          "passed": true
+        },
+        {
+          "net": "RF50_OUT2",
+          "layer": "F.Cu",
+          "mode": "microstrip",
+          "width_mm": 0.5429,
+          "h_or_b_mm": 0.254,
+          "epsilon_r": 3.48,
+          "target_z0_ohm": 50.0,
+          "computed_z0_ohm": 50.0,
+          "error_pct": 0.001,
+          "passed": true
+        },
+        {
+          "net": "RF50_OUT3",
+          "layer": "F.Cu",
+          "mode": "microstrip",
+          "width_mm": 0.5429,
+          "h_or_b_mm": 0.254,
+          "epsilon_r": 3.48,
+          "target_z0_ohm": 50.0,
+          "computed_z0_ohm": 50.0,
+          "error_pct": 0.001,
+          "passed": true
+        },
+        {
+          "net": "RF50_OUT3",
+          "layer": "F.Cu",
+          "mode": "microstrip",
+          "width_mm": 0.5429,
+          "h_or_b_mm": 0.254,
+          "epsilon_r": 3.48,
+          "target_z0_ohm": 50.0,
+          "computed_z0_ohm": 50.0,
+          "error_pct": 0.001,
+          "passed": true
+        },
+        {
+          "net": "RF50_OUT3",
+          "layer": "F.Cu",
+          "mode": "microstrip",
+          "width_mm": 0.5429,
+          "h_or_b_mm": 0.254,
+          "epsilon_r": 3.48,
+          "target_z0_ohm": 50.0,
+          "computed_z0_ohm": 50.0,
+          "error_pct": 0.001,
+          "passed": true
+        },
+        {
+          "net": "RF50_OUT3",
+          "layer": "F.Cu",
+          "mode": "microstrip",
+          "width_mm": 0.5429,
+          "h_or_b_mm": 0.254,
+          "epsilon_r": 3.48,
+          "target_z0_ohm": 50.0,
+          "computed_z0_ohm": 50.0,
+          "error_pct": 0.001,
+          "passed": true
+        }
+      ],
+      "hv_checks": [
+        {
+          "pattern": "VTAP_*",
+          "matched_nets": [
+            "VTAP_N_400V",
+            "VTAP_P_400V",
+            "VTAP_SENSE_N",
+            "VTAP_SENSE_P"
+          ],
+          "working_voltage_v": 400.0,
+          "standard": "IPC-2221B / IEC 61010-1 (S6.3-04 400 V magnet quench tap isolation)",
+          "req_clearance_mm": 2.5,
+          "req_creepage_mm": 5.0,
+          "measured_clearance_mm": 15.1,
+          "measured_creepage_mm": 32.2442,
+          "worst_pair": "pad:J_QUENCH_MAG.1(VTAP_P_400V) vs zone(AGND_CRYO) on In1.Cu",
+          "through_board_ok": true,
+          "passed": true
+        }
+      ],
+      "stackup_summary": {
+        "copper_layers": 4,
+        "total_thickness_mm": 1.478,
+        "board_size_mm": [
+          170.0,
+          120.0
+        ]
+      },
+      "routed_net_count": 59,
+      "unrouted_net_count": 0,
+      "unconnected_items": 0,
+      "track_dangling_count": 0,
+      "total_multi_pin_nets": 59
+    },
+    "passed": true,
+    "epistemic_meta": {
+      "design_stage": "M0/M1_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "no_physical_fab": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "design_maturity": "M0_M1_DESIGN_ONLY",
+      "operating_temp_K": "300 K bulkhead feeding 4 K HEMT & 20 mK TWPA/rf-SET"
+    }
+  },
+  "ngspice_simulations": {
+    "qram_chebyshev_50_to_3k": {
+      "cir_file": "qram_chebyshev_50_to_3k.cir",
+      "bom_id": "S9.4-02",
+      "ngspice_ok": true,
+      "ngspice_version": "ngspice-47",
+      "z_sections_ohm": [
+        62.2481,
+        126.176,
+        387.2983,
+        1188.8155,
+        2409.7114
+      ],
+      "max_s11_4_8_db": -39.5549,
+      "min_s21_4_8_db": -0.000723,
+      "s11_6ghz_db": -102.932,
+      "s21_6ghz_db": -0.00023,
+      "s11_4ghz_db": -39.5669,
+      "s11_8ghz_db": -39.5669,
+      "bw20_lo_ghz": 3.5923,
+      "bw20_hi_ghz": 8.4077,
+      "bw20_ghz": 4.8154,
+      "max_passivity": 0.999947,
+      "abcd_crosscheck": {
+        "max_s11_4_8_db": -39.5569,
+        "min_s21_4_8_db": -0.001012,
+        "s11_parity_diff_db": 0.002,
+        "s21_parity_diff_db": 0.00029
+      },
+      "pass": true
+    },
+    "magnet_quench_dump_1p563ohm": {
+      "cir_file": "magnet_quench_dump_1p563ohm.cir",
+      "bom_id": "S6.3-04",
+      "dump_bank_bom_id": "S7.SAFETY-05",
+      "ngspice_ok": true,
+      "ngspice_version": "ngspice-47",
+      "n_coils": 8,
+      "L_eq_H": 0.578416,
+      "I0_A": 255.9139,
+      "E_stored_kJ": 18.9408,
+      "R_dump_ohm": 1.563026,
+      "t_detect_ms": 30.0,
+      "v_peak_V": 396.694,
+      "v_dump_peak_V": 396.669,
+      "tau_decay_s": 0.37032,
+      "i_final_3s_A": 0.0841,
+      "e_dump_kJ": 18.817,
+      "e_quench_coil_J": 56.43,
+      "e_dump_fraction_pct": 99.347,
+      "dump_bank_dT_K": 15.05,
+      "dump_bank_T_peak_C": 38.05,
+      "analytical_crosscheck": {
+        "v_peak_V": 398.671,
+        "tau_decay_s": 0.37027,
+        "e_dump_fraction_pct": 99.392,
+        "tau_rel_diff_pct": 0.014,
+        "v_peak_diff_V": 1.977
+      },
+      "pass": true
+    },
+    "rf_set_tank_biastee": {
+      "cir_file": "rf_set_tank_biastee.cir",
+      "bom_id": "S6.7-01",
+      "ngspice_ok": true,
+      "ngspice_version": "ngspice-47",
+      "L_tank_nH": 820.0,
+      "R_L_ser_ohm": 4.0,
+      "C_par_pF": 0.3,
+      "R_SET_states_kOhm": [
+        50.0,
+        200.0
+      ],
+      "f_res_MHz": 321.5,
+      "gamma_50k_mag": 0.08215,
+      "gamma_200k_mag": 0.47807,
+      "delta_gamma_mag": 0.39592,
+      "delta_gamma_vec": 0.55704,
+      "return_loss_50k_dB": -21.708,
+      "return_loss_200k_dB": -6.41,
+      "dc_bias_isolation_at_fres_dB": 113.23,
+      "dc_bias_isolation_worst_200_450MHz_dB": 98.46,
+      "mna_crosscheck": {
+        "delta_gamma_mag": 0.39592,
+        "delta_gamma_diff": 0.0,
+        "dc_bias_isolation_dB": 113.23,
+        "iso_diff_dB": 0.0001
+      },
+      "pass": true
+    }
+  }
+}

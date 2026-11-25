@@ -1,0 +1,229 @@
+{
+  "part_design": {
+    "part_id": "S6.8-02",
+    "parent_bom_id": "S6.8",
+    "subsystem": "S6",
+    "part_name": "Kapali-cevrim 3He/4He gaz isleme sistemi (GHS), turbo sirkulasyon ve soguk kapanlar",
+    "design_tier": "COTS_ENV_ICD",
+    "material": "316L",
+    "temp_stage": "300 K (kabin)",
+    "temp_k": 300.0,
+    "vacuum_grade": "Kapali 3He/4He dongu",
+    "tolerance_spec": "He <=1e-10 mbar*L/s",
+    "surface_finish_ra_um": 0.8,
+    "qty": 1,
+    "procurement_class": "COTS",
+    "world_origin_mm": [
+      -1300.0,
+      -800.0,
+      825.0
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "still_pumping_line",
+        "kind": "flange",
+        "position_mm": [
+          -120.0,
+          0.0,
+          837.2
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "ISO-K DN50",
+        "mating_part_id": "S6.8-04",
+        "bore_mm": 50.0,
+        "od_mm": 75.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 4,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "Claw Clamp",
+        "frame": "local",
+        "notes": "ISO 1609 DN50 claw-clamp O-ring"
+      },
+      {
+        "name": "condensing_return_line",
+        "kind": "flange",
+        "position_mm": [
+          120.0,
+          0.0,
+          837.2
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "ISO-K DN50",
+        "mating_part_id": "S6.8-04",
+        "bore_mm": 50.0,
+        "od_mm": 75.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 4,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "Claw Clamp",
+        "frame": "local",
+        "notes": "ISO 1609 DN50 claw-clamp O-ring"
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "CAB_W",
+        "nominal_mm": 600.0,
+        "tol_plus_mm": 2.0,
+        "tol_minus_mm": -2.0,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "600.00 ±2.00"
+      },
+      {
+        "label": "CAB_D",
+        "nominal_mm": 560.0,
+        "tol_plus_mm": 2.0,
+        "tol_minus_mm": -2.0,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "560.00 ±2.00"
+      },
+      {
+        "label": "CAB_H",
+        "nominal_mm": 1662.2,
+        "tol_plus_mm": 2.0,
+        "tol_minus_mm": -2.0,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "1662.20 ±2.00"
+      }
+    ],
+    "gdt_frames": [],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "Otomatik yogusturma/toplama, 7/24 kesintisiz sirkulasyon"
+    ],
+    "scad_params": {
+      "ghs_w": 600.0,
+      "ghs_d": 560.0,
+      "ghs_h": 1650.0,
+      "he3_stp_l": 20.0
+    },
+    "target_mass_kg": 240.0,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact_result": {
+    "part_id": "S6.8-02",
+    "subsystem": "S6",
+    "design_tier": "COTS_ENV_ICD",
+    "stl_path": "hardware/cad_parts/out/S6/S6.8-02.stl",
+    "step_path": "hardware/cad_parts/out/S6/S6.8-02.step",
+    "scad_path": "hardware/cad_parts/out/S6/S6.8-02.scad",
+    "dxf_path": "hardware/cad_parts/out/S6/S6.8-02.dxf",
+    "svg_path": "hardware/cad_parts/out/S6/S6.8-02.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 65327184.995063625,
+    "surface_area_mm2": 9922092.258890964,
+    "mass_kg": 169.85068098716542,
+    "cg_mm": [
+      -23.98866050834412,
+      4.553823052604977e-15,
+      -294.00033004320755
+    ],
+    "bbox_min_mm": [
+      -300.0,
+      -280.0,
+      -825.0
+    ],
+    "bbox_max_mm": [
+      300.0,
+      280.0,
+      837.2
+    ],
+    "inertia_kg_mm2": [
+      35106745.83112181,
+      37526081.98671414,
+      7374084.012015794,
+      -3.6073285268847734e-10,
+      -2064334.445216265,
+      3.652128006418194e-10
+    ],
+    "triangle_count": 3128,
+    "vertex_count": 1582,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "json_path": "hardware/cad_parts/out/S6/S6.8-02.json",
+  "world_bbox_min_mm": [
+    -1600.0,
+    -1080.0,
+    0.0
+  ],
+  "world_bbox_max_mm": [
+    -1000.0,
+    -520.0,
+    1662.2
+  ],
+  "world_cg_mm": [
+    -1323.9887,
+    -800.0,
+    530.9997
+  ],
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

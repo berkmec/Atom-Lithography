@@ -1,0 +1,84 @@
+{
+  "schema_version": "1.0",
+  "part_id": "S6.4-01",
+  "parent_bom_id": "S6.4",
+  "subsystem": "S6",
+  "part_name": "Mikrodalga ESR vektor sinyal ureticileri (10-45 GHz, dusuk faz gurultusu)",
+  "qty": 4,
+  "unit": "adet",
+  "temp_stage": "300 K (kabin)",
+  "vacuum_grade": "Atmosfer",
+  "bom_key_spec": "10-45 GHz (0.3-1.5 T ESR), GRAPE darbe hatasi eps<=1e-3 (Exp61/68)",
+  "usd_nom": 46000.0,
+  "bom_epistemic_tag": "{Model-Kalibrasyon-Exp114}",
+  "electrical_class": "E3",
+  "grounding_domain": "AGND",
+  "grounding_notes": "4x 10-45 GHz low-phase-noise ESR VSGs (<-120 dBc/Hz) locked to 10 MHz Rb Ch 3-6.",
+  "supply_rails": [
+    {
+      "rail_name": "AC_MAINS_230V",
+      "voltage_v": 230.0,
+      "current_type": "AC_1PH",
+      "max_current_a": 2.5,
+      "steady_power_w": 440.0,
+      "peak_power_w": 600.0,
+      "source_part_id": "S7.4-03"
+    }
+  ],
+  "connectors_and_pinout": [
+    {
+      "connector_ref": "J_MW_OUT",
+      "connector_type": "2.92mm-K 50R (4x)",
+      "location_side": "front_panel",
+      "mating_part_id": "S6.4-02",
+      "pins": [
+        {
+          "pin": "1",
+          "signal": "ESR_LO_OUT[0:3]",
+          "direction": "OUT",
+          "nominal_level": "10-45 GHz +15 dBm"
+        }
+      ]
+    },
+    {
+      "connector_ref": "J_10MHZ",
+      "connector_type": "BNC-F 50R (4x)",
+      "location_side": "rack_rear",
+      "mating_part_id": "S7.4-01",
+      "pins": [
+        {
+          "pin": "1",
+          "signal": "CLK_10MHZ_RB[3:6]",
+          "direction": "IN",
+          "nominal_level": "+13 dBm Rb atomic clock"
+        }
+      ]
+    }
+  ],
+  "mating_part_ids": [
+    "S6.4-02",
+    "S7.4-01",
+    "S7.4-03"
+  ],
+  "interlock_hooks": [],
+  "ups_tier": "TIER2_SHED",
+  "ups_budget_group": "AUX_PROCESS_SHED_ON_OUTAGE",
+  "exp150_ups_allocation_w": 0.0,
+  "supply_rails_steady_sum_w": 440.0,
+  "incremental_mains_w": 440.0,
+  "secondary_or_parent_derived_w": 0.0,
+  "non_exp150_aux_shed_w": 440.0,
+  "reconciliation_note": "Non-Exp150 auxiliary sheddable rack/facility load (TIER2_SHED): incremental_mains_w = 440.0 W AC mains (mutually exclusive process/experiment mode, shed immediately on outage; exp150_ups_allocation_w = 0.0 W).",
+  "timing_sync": {
+    "rb_10mhz_port": "CH3-CH6",
+    "white_rabbit_port": null,
+    "sync_role": "Coherent ESR LO synthesis"
+  },
+  "epistemic_flags": {
+    "design_maturity": "M0_M1_ELECTRICAL_ICD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

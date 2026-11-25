@@ -1,0 +1,99 @@
+{
+  "schema_version": "1.0",
+  "part_id": "S9.HPC-02",
+  "parent_bom_id": "S9.HPC",
+  "subsystem": "S9",
+  "part_name": "1U Ultra-Dusuk-Gecikmeli Cut-Through 100 GbE RoCEv2 Optik Kopru + 4x QSFP28-100G-SR4 + 20m OM4 MPO-12 (Exp143, 4.20 kg)",
+  "qty": 1,
+  "unit": "set",
+  "temp_stage": "300 K (HPC rafi)",
+  "vacuum_grade": "Atmosfer",
+  "bom_key_spec": "482.6x380x44.5 mm, 4x 100G QSFP28 port, tek-yon giris gecikmesi 0.777 us (RFSoC 0.32 + RDMA 0.45 + koaks 0.007 us), 95 W / 0 W kriyo, kutle=4.20 kg",
+  "usd_nom": 13500.0,
+  "bom_epistemic_tag": "{Liste-\u00c7apas\u0131}",
+  "electrical_class": "E3",
+  "grounding_domain": "DGND",
+  "grounding_notes": "1U cut-through 100GbE RoCEv2 optical switch + 4x QSFP28-SR4 + 20 m OM4 (0.777 us ingest); Tier-2.",
+  "supply_rails": [
+    {
+      "rail_name": "AC_UPS_TIER2_SHED",
+      "voltage_v": 230.0,
+      "current_type": "AC_1PH",
+      "max_current_a": 0.8,
+      "steady_power_w": 95.0,
+      "peak_power_w": 140.0,
+      "source_part_id": "S7.SAFETY-04"
+    }
+  ],
+  "connectors_and_pinout": [
+    {
+      "connector_ref": "J_QSFP28",
+      "connector_type": "4x QSFP28-100G-SR4 MPO-12",
+      "location_side": "rack_front",
+      "mating_part_id": "S9.HPC-01",
+      "pins": [
+        {
+          "pin": "P1-P2",
+          "signal": "QEC_NODE_100G[0:1]",
+          "direction": "BIDIR",
+          "nominal_level": "To S9.HPC-01 ConnectX-7"
+        },
+        {
+          "pin": "P3-P4",
+          "signal": "ZU48DR_CMAC_100G[0:1]",
+          "direction": "BIDIR",
+          "nominal_level": "To S6.11-01 RFSoC CMAC"
+        }
+      ]
+    },
+    {
+      "connector_ref": "J_WR",
+      "connector_type": "SFP+ PTP/WR Sync",
+      "location_side": "rack_front",
+      "mating_part_id": "S7.4-02",
+      "pins": [
+        {
+          "pin": "1",
+          "signal": "WR_SFP_4",
+          "direction": "IN",
+          "nominal_level": "Deterministic RDMA epoch"
+        }
+      ]
+    }
+  ],
+  "mating_part_ids": [
+    "S9.HPC-01",
+    "S9.HPC-03",
+    "S6.11-01",
+    "S7.4-02",
+    "S7.SAFETY-04"
+  ],
+  "interlock_hooks": [
+    {
+      "signal_name": "UPS_TIER2_SHED",
+      "target_part_id": "S7.SAFETY-04",
+      "action_on_trip": "Power down after S9.HPC-01 halt",
+      "response_time_ms": 60000.0
+    }
+  ],
+  "ups_tier": "TIER2_SHED",
+  "ups_budget_group": "EXP150_TIER2_SHED",
+  "exp150_ups_allocation_w": 95.0,
+  "supply_rails_steady_sum_w": 95.0,
+  "incremental_mains_w": 95.0,
+  "secondary_or_parent_derived_w": 0.0,
+  "non_exp150_aux_shed_w": 0.0,
+  "reconciliation_note": "Exp150 Tier-2 sheddable baseline load: incremental_mains_w = exp150_ups_allocation_w = 95.0 W (raw supply_rails sum = 95.0 W, shed cleanly on utility outage).",
+  "timing_sync": {
+    "rb_10mhz_port": null,
+    "white_rabbit_port": "WR_SFP_4",
+    "sync_role": "Cut-through 100G QEC fabric"
+  },
+  "epistemic_flags": {
+    "design_maturity": "M0_M1_ELECTRICAL_ICD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

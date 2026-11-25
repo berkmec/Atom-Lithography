@@ -1,0 +1,84 @@
+{
+  "schema_version": "part_icd_v1.0",
+  "part_id": "S6.9-02",
+  "parent_bom_id": "S6.9",
+  "subsystem": "S6",
+  "part_name": "Kenar-kaynakli 316L CF63 OVC/UHV ayrilma korugu (s6_cryo_bridge_ovc, k=2000 N/m, Exp133)",
+  "part_category": "PHYSICAL_SOLID",
+  "bom_metadata": {
+    "qty": "1",
+    "unit": "adet",
+    "material": "316L paslanmaz celik (0.15 mm sac, 28 bogum)",
+    "key_spec": "ID=44 mm, OD=68 mm, L_aktif=120 mm, k_bellows=2000 N/m <= 6282 N/m (3.14x emniyet); 4.96 MN/m rijit kopruyu degistirir",
+    "tolerance": "±10% yay sabiti",
+    "temp_stage": "300 K",
+    "vacuum_grade": "UHV 1e-9 mbar",
+    "procurement_class": "CUS",
+    "parent_cost_class": "C(v4.0)",
+    "usd_low": 9000.0,
+    "usd_nom": 16000.0,
+    "usd_high": 29000.0,
+    "legacy_cad_module": "s6_cryo_dr_magnet_readout",
+    "bom_epistemic_tag": "{Varsayım}",
+    "notes": "DELTA-V4.0-EXP133 (PT420 2/4): s6_cryo_bridge_ovc kenar-kaynakli koruk (RFQ-07)"
+  },
+  "artifact_links": {
+    "cad": {
+      "work_package": "WP-M4",
+      "design_tier": "CUSTOM_FULL",
+      "stl": "hardware/cad_parts/out/S6/S6.9-02.stl",
+      "step": "hardware/cad_parts/out/S6/S6.9-02.step",
+      "scad": "hardware/cad_parts/out/S6/S6.9-02.scad",
+      "dxf": "hardware/cad_parts/out/S6/S6.9-02.dxf",
+      "svg": "hardware/cad_parts/out/S6/S6.9-02.svg",
+      "cad_json": "hardware/cad_parts/out/S6/S6.9-02.json",
+      "watertight": true,
+      "all_6_files_valid": true,
+      "mass_kg": 2.640669,
+      "triangle_count": 18144,
+      "temp_k": 300.0,
+      "canonical_bbox_min_mm": [
+        -474.5,
+        -56.75,
+        436.75
+      ],
+      "canonical_bbox_max_mm": [
+        -274.0,
+        56.75,
+        550.25
+      ],
+      "datum_shift_mm": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "port_count": 0,
+      "gdt_frame_count": 0
+    },
+    "pcb_bundles": [],
+    "legacy_board_files": [],
+    "electrical_icd": null,
+    "rtl_modules": [],
+    "rtl_audit_json": null,
+    "software_and_eda_files": [],
+    "verification_tests": []
+  },
+  "specialized_specification": null,
+  "verification_status": {
+    "cad_verified": true,
+    "pcb_verified": false,
+    "electrical_icd_verified": false,
+    "rtl_verified": false,
+    "software_or_eda_verified": false,
+    "specialized_icd_present": false,
+    "traceable": true
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "tapeout_done": false
+  }
+}

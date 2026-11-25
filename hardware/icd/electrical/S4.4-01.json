@@ -1,0 +1,98 @@
+{
+  "schema_version": "1.0",
+  "part_id": "S4.4-01",
+  "parent_bom_id": "S4.4",
+  "subsystem": "S4",
+  "part_name": "3-eksenli frekans-kararli He-Ne lazer interferometre kafasi (Renishaw XL-80/RLE)",
+  "qty": 1,
+  "unit": "set",
+  "temp_stage": "300 K",
+  "vacuum_grade": "Atmosfer (fiber ciki\u015f)",
+  "bom_key_spec": "pm-sinifi cozunurluk (<=0.05 nm), frekans kararlik \u00b10.05 ppm (Exp114)",
+  "usd_nom": 42000.0,
+  "bom_epistemic_tag": "{Liste-\u00c7apas\u0131}",
+  "electrical_class": "E3",
+  "grounding_domain": "DGND",
+  "grounding_notes": "3-axis stabilized 632.8 nm He-Ne laser interferometer (Renishaw XL-80/RLE class, \u00b10.05 ppm).",
+  "supply_rails": [
+    {
+      "rail_name": "AC_MAINS_230V",
+      "voltage_v": 230.0,
+      "current_type": "AC_1PH",
+      "max_current_a": 0.6,
+      "steady_power_w": 75.0,
+      "peak_power_w": 120.0,
+      "source_part_id": "S7.4-03"
+    }
+  ],
+  "connectors_and_pinout": [
+    {
+      "connector_ref": "J_OPT",
+      "connector_type": "PM Fiber FC/APC (3x)",
+      "location_side": "front_panel",
+      "mating_part_id": "S4.4-02",
+      "pins": [
+        {
+          "pin": "1-3",
+          "signal": "HENE_632NM_XYZ",
+          "direction": "OUT",
+          "nominal_level": "3-axis stabilized 632.8 nm fiber"
+        }
+      ]
+    },
+    {
+      "connector_ref": "J_QUAD",
+      "connector_type": "DB25 A/B-Quad + Parallel",
+      "location_side": "rack_rear",
+      "mating_part_id": "S4.5-03",
+      "pins": [
+        {
+          "pin": "1-12",
+          "signal": "INTF_XYZ_LVDS",
+          "direction": "OUT",
+          "nominal_level": "<=0.05 nm position stream"
+        }
+      ]
+    },
+    {
+      "connector_ref": "J_10MHZ",
+      "connector_type": "SMA-F 50R",
+      "location_side": "rack_rear",
+      "mating_part_id": "S7.4-01",
+      "pins": [
+        {
+          "pin": "1",
+          "signal": "CLK_10MHZ_RB",
+          "direction": "IN",
+          "nominal_level": "Shared with S4.5-03 via CH15"
+        }
+      ]
+    }
+  ],
+  "mating_part_ids": [
+    "S4.4-02",
+    "S4.5-03",
+    "S7.4-01"
+  ],
+  "interlock_hooks": [],
+  "ups_tier": "TIER2_SHED",
+  "ups_budget_group": "AUX_PROCESS_SHED_ON_OUTAGE",
+  "exp150_ups_allocation_w": 0.0,
+  "supply_rails_steady_sum_w": 75.0,
+  "incremental_mains_w": 75.0,
+  "secondary_or_parent_derived_w": 0.0,
+  "non_exp150_aux_shed_w": 75.0,
+  "reconciliation_note": "Non-Exp150 auxiliary sheddable rack/facility load (TIER2_SHED): incremental_mains_w = 75.0 W AC mains (mutually exclusive process/experiment mode, shed immediately on outage; exp150_ups_allocation_w = 0.0 W).",
+  "timing_sync": {
+    "rb_10mhz_port": "CH15",
+    "white_rabbit_port": null,
+    "sync_role": "Interferometer phase-locked sampling"
+  },
+  "epistemic_flags": {
+    "design_maturity": "M0_M1_ELECTRICAL_ICD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

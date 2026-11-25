@@ -1,0 +1,70 @@
+{
+  "schema_version": "1.0",
+  "part_id": "S4.5-02",
+  "parent_bom_id": "S4.5",
+  "subsystem": "S4",
+  "part_name": "Yonga referans isareti (fiducial) hizalama optigi ve karanlik-alan kamera",
+  "qty": 1,
+  "unit": "set",
+  "temp_stage": "300 K",
+  "vacuum_grade": "UHV / Viewport",
+  "bom_key_spec": "Isaret merkezleme <=1 nm tekrarlanabilirlik (coklu ortalama)",
+  "usd_nom": 9000.0,
+  "bom_epistemic_tag": "{Model-Kalibrasyon-Exp114}",
+  "electrical_class": "E4",
+  "grounding_domain": "DGND",
+  "grounding_notes": "Dark-field CMOS fiducial alignment microscope on UHV viewport (<=1 nm multi-frame centroid).",
+  "supply_rails": [
+    {
+      "rail_name": "POE_OR_12V_CAM",
+      "voltage_v": 12.0,
+      "current_type": "DC",
+      "max_current_a": 0.8,
+      "steady_power_w": 8.0,
+      "peak_power_w": 10.0,
+      "source_part_id": "S7.1-01"
+    }
+  ],
+  "connectors_and_pinout": [
+    {
+      "connector_ref": "J_GIGE",
+      "connector_type": "RJ45 GigE Vision PoE",
+      "location_side": "viewport_air",
+      "mating_part_id": "S7.1-01",
+      "pins": [
+        {
+          "pin": "1-8",
+          "signal": "FIDUCIAL_GIGE",
+          "direction": "OUT",
+          "nominal_level": "Raw dark-field frames to host"
+        }
+      ]
+    }
+  ],
+  "mating_part_ids": [
+    "S4.5-01",
+    "S7.1-01",
+    "S5.1-05"
+  ],
+  "interlock_hooks": [],
+  "ups_tier": "NONE",
+  "ups_budget_group": "PASSIVE_ZERO_MAINS",
+  "exp150_ups_allocation_w": 0.0,
+  "supply_rails_steady_sum_w": 8.0,
+  "incremental_mains_w": 0.0,
+  "secondary_or_parent_derived_w": 8.0,
+  "non_exp150_aux_shed_w": 0.0,
+  "reconciliation_note": "Passive or downstream sub-assembly (8.00 W sub-rail power drawn from upstream source S7.1-01); incremental_mains_w = 0.0 W (zero double-counting).",
+  "timing_sync": {
+    "rb_10mhz_port": null,
+    "white_rabbit_port": null,
+    "sync_role": "Pre-write fiducial registration"
+  },
+  "epistemic_flags": {
+    "design_maturity": "M0_M1_ELECTRICAL_ICD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

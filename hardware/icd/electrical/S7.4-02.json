@@ -1,0 +1,193 @@
+{
+  "schema_version": "1.0",
+  "part_id": "S7.4-02",
+  "parent_bom_id": "S7.4",
+  "subsystem": "S7",
+  "part_name": "White Rabbit / sub-ns donanim tetikleme (trigger) fan-out modulu",
+  "qty": 1,
+  "unit": "adet",
+  "temp_stage": "300 K (kabin)",
+  "vacuum_grade": "Atmosfer",
+  "bom_key_spec": "Kanal-arasi gecikme sapmasi <200 ps",
+  "usd_nom": 4500.0,
+  "bom_epistemic_tag": "{Model-Kalibrasyon-Exp114}",
+  "electrical_class": "E3",
+  "grounding_domain": "DGND",
+  "grounding_notes": "White Rabbit <200 ps sub-ns trigger fan-out switch (8x SFP+ optical + 8x 50R coax) on Tier-1 UPS.",
+  "supply_rails": [
+    {
+      "rail_name": "AC_UPS_TIER1",
+      "voltage_v": 230.0,
+      "current_type": "AC_1PH",
+      "max_current_a": 0.4,
+      "steady_power_w": 35.0,
+      "peak_power_w": 55.0,
+      "source_part_id": "S7.SAFETY-04"
+    }
+  ],
+  "connectors_and_pinout": [
+    {
+      "connector_ref": "J_GM_REF",
+      "connector_type": "2x SMA-F (10 MHz + 1 PPS)",
+      "location_side": "rack_front",
+      "mating_part_id": "S7.4-01",
+      "pins": [
+        {
+          "pin": "1",
+          "signal": "RB_10MHZ_IN",
+          "direction": "IN",
+          "nominal_level": "From S7.4-01 CH14"
+        },
+        {
+          "pin": "2",
+          "signal": "RB_1PPS_IN",
+          "direction": "IN",
+          "nominal_level": "1 PPS epoch sync"
+        }
+      ]
+    },
+    {
+      "connector_ref": "J_WR_SFP",
+      "connector_type": "8x SFP+ 1000BASE-BX Single-Mode",
+      "location_side": "rack_front",
+      "mating_part_id": "S6.11-01",
+      "pins": [
+        {
+          "pin": "SFP1",
+          "signal": "WR_ZU48DR_BOED",
+          "direction": "OUT",
+          "nominal_level": "To S6.11-01"
+        },
+        {
+          "pin": "SFP2",
+          "signal": "WR_ZCU216_BANK",
+          "direction": "OUT",
+          "nominal_level": "To S6.6-06"
+        },
+        {
+          "pin": "SFP3",
+          "signal": "WR_BLANKER_ISO",
+          "direction": "OUT",
+          "nominal_level": "To S3.3-02 (-5 kV optical)"
+        },
+        {
+          "pin": "SFP4",
+          "signal": "WR_QEC_100G_SW",
+          "direction": "OUT",
+          "nominal_level": "To S9.HPC-02"
+        },
+        {
+          "pin": "SFP5",
+          "signal": "WR_PYRO_AOM",
+          "direction": "OUT",
+          "nominal_level": "To S5.5-03"
+        },
+        {
+          "pin": "SFP6",
+          "signal": "WR_TRIM_DSP",
+          "direction": "OUT",
+          "nominal_level": "To S4.5-03"
+        },
+        {
+          "pin": "SFP7",
+          "signal": "WR_CERT_DB",
+          "direction": "OUT",
+          "nominal_level": "To S7.1-02"
+        },
+        {
+          "pin": "SFP8",
+          "signal": "WR_SPARE_OPT",
+          "direction": "OUT",
+          "nominal_level": "Expansion port"
+        }
+      ]
+    },
+    {
+      "connector_ref": "J_WR_COAX",
+      "connector_type": "8x SMA-F 50R LVTTL Trigger",
+      "location_side": "rack_rear",
+      "mating_part_id": "S3.3-04",
+      "pins": [
+        {
+          "pin": "COAX1",
+          "signal": "TRIG_IBIC_FPGA",
+          "direction": "OUT",
+          "nominal_level": "To S3.3-04 / S3.3-01"
+        },
+        {
+          "pin": "COAX2",
+          "signal": "TRIG_BEAM_DOSE",
+          "direction": "OUT",
+          "nominal_level": "To S1.4-03"
+        },
+        {
+          "pin": "COAX3",
+          "signal": "TRIG_PT420_FF",
+          "direction": "OUT",
+          "nominal_level": "To S6.9-04"
+        },
+        {
+          "pin": "COAX4",
+          "signal": "TRIG_PXIE_SEQ",
+          "direction": "OUT",
+          "nominal_level": "To S7.2-02"
+        },
+        {
+          "pin": "COAX5",
+          "signal": "TRIG_PIEZO_STG",
+          "direction": "OUT",
+          "nominal_level": "To S4.3-04"
+        },
+        {
+          "pin": "COAX6",
+          "signal": "TRIG_FLASH_ANN",
+          "direction": "OUT",
+          "nominal_level": "To S5.3-01"
+        },
+        {
+          "pin": "COAX7",
+          "signal": "TRIG_SAFETY_LOG",
+          "direction": "OUT",
+          "nominal_level": "To S7.SAFETY-03"
+        },
+        {
+          "pin": "COAX8",
+          "signal": "TRIG_SPARE_COAX",
+          "direction": "OUT",
+          "nominal_level": "Scope verification port"
+        }
+      ]
+    }
+  ],
+  "mating_part_ids": [
+    "S7.4-01",
+    "S6.11-01",
+    "S6.6-06",
+    "S3.3-02",
+    "S3.3-04",
+    "S7.2-02",
+    "S9.HPC-02",
+    "S7.SAFETY-04"
+  ],
+  "interlock_hooks": [],
+  "ups_tier": "TIER1_CRITICAL",
+  "ups_budget_group": "EXP150_TIER1_CRITICAL",
+  "exp150_ups_allocation_w": 35.0,
+  "supply_rails_steady_sum_w": 35.0,
+  "incremental_mains_w": 35.0,
+  "secondary_or_parent_derived_w": 0.0,
+  "non_exp150_aux_shed_w": 0.0,
+  "reconciliation_note": "Exp150 Tier-1 critical UPS load: incremental_mains_w = exp150_ups_allocation_w = 35.0 W.",
+  "timing_sync": {
+    "rb_10mhz_port": "CH14",
+    "white_rabbit_port": "MASTER_DISTRIBUTOR",
+    "sync_role": "Sub-200 ps deterministic trigger switch"
+  },
+  "epistemic_flags": {
+    "design_maturity": "M0_M1_ELECTRICAL_ICD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

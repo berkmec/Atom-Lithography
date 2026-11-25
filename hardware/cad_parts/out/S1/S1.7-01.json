@@ -1,0 +1,278 @@
+{
+  "part_id": "S1.7-01",
+  "subsystem": "S1",
+  "design": {
+    "part_id": "S1.7-01",
+    "parent_bom_id": "S1.7",
+    "subsystem": "S1",
+    "part_name": "S1-Multi Hizli-Degisim 3-Turlu Kaynak Kartus Yuvasi (31P Gaz / 121Sb 450C Firin / 167Er Mikro-Paul, Exp142 S1.6-01, 4.80 kg)",
+    "design_tier": "CUSTOM_FULL",
+    "material": "Ti-6Al-4V",
+    "temp_stage": "300 K (UHV kolon)",
+    "temp_k": 300.0,
+    "vacuum_grade": "UHV 1e-9 mbar",
+    "tolerance_spec": "±0.05 mm eksen",
+    "surface_finish_ra_um": 0.4,
+    "qty": 1,
+    "procurement_class": "CUS",
+    "world_origin_mm": [
+      0.0,
+      110.0,
+      492.66
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "duoplasmatron_mate_cf40",
+        "kind": "flange",
+        "position_mm": [
+          0.0,
+          47.0,
+          492.66
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "standard": "CF40",
+        "mating_part_id": "S1.1-01",
+        "bore_mm": 38.0,
+        "od_mm": 69.5,
+        "pcd_mm": 58.7,
+        "bolt_count": 6,
+        "bolt_hole_mm": 6.6,
+        "bolt_spec": "M6",
+        "frame": "global",
+        "notes": "ISO 3669 CF40 Cu-gasket knife-edge"
+      },
+      {
+        "name": "oven_heater_feed",
+        "kind": "electrical",
+        "position_mm": [
+          0.0,
+          148.0,
+          476.66
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "standard": "180 W DC / RF Paul",
+        "mating_part_id": "",
+        "bore_mm": 0.0,
+        "od_mm": 16.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "global",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "BAY_X",
+        "nominal_mm": 76.0,
+        "tol_plus_mm": 0.05,
+        "tol_minus_mm": -0.05,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "76.00 ±0.05"
+      },
+      {
+        "label": "BAY_Y",
+        "nominal_mm": 76.0,
+        "tol_plus_mm": 0.05,
+        "tol_minus_mm": -0.05,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "76.00 ±0.05"
+      },
+      {
+        "label": "BAY_Z",
+        "nominal_mm": 95.0,
+        "tol_plus_mm": 0.05,
+        "tol_minus_mm": -0.05,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "95.00 ±0.05"
+      },
+      {
+        "label": "FLANGE_CF40",
+        "nominal_mm": 69.5,
+        "tol_plus_mm": 0.1,
+        "tol_minus_mm": -0.1,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø69.50 ±0.10"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "concentricity",
+        "tolerance_mm": 0.05,
+        "diameter_zone": true,
+        "material_condition": "",
+        "datum_primary": "B",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "CF40 TO OVEN AXIS",
+        "glyph": "◎",
+        "tolerance_text": "Ø0.050"
+      },
+      {
+        "symbol": "perpendicularity",
+        "tolerance_mm": 0.025,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "CF40 SEAL FACE",
+        "glyph": "⊥",
+        "tolerance_text": "0.025"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "s1_duoplasmatron +Y flans (76x76x95 mm, [0,110,992.66] mm, min bosluk 27 mm), 31P+ / 121Sb+ / 167Er+ (1536 nm F_P_eff=1520, beta_ZPL=0.9993), 180 W tepe / 0 W kriyo, kutle=4.80 kg",
+      "Exp142 Option-Q S1-Multi cartridge (76x76x95 mm @ [0, +110, 492.66] in Z_wafer=0 frame, 27.0 mm body clearance to S1.1-01)",
+      "STRICTLY tagged S1.7-01 — fixes legacy CAD v6 S1.6 aliasing bug; 31P gas / 121Sb 450 C PBN oven / 167Er micro-Paul"
+    ],
+    "scad_params": {
+      "bay_x": 76.0,
+      "bay_y": 76.0,
+      "bay_z": 95.0,
+      "sb_oven_C": 450.0,
+      "er_zpl_nm": 1536.0
+    },
+    "target_mass_kg": 4.8,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S1.7-01",
+    "subsystem": "S1",
+    "design_tier": "CUSTOM_FULL",
+    "stl_path": "hardware/cad_parts/out/S1/S1.7-01.stl",
+    "step_path": "hardware/cad_parts/out/S1/S1.7-01.step",
+    "scad_path": "hardware/cad_parts/out/S1/S1.7-01.scad",
+    "dxf_path": "hardware/cad_parts/out/S1/S1.7-01.dxf",
+    "svg_path": "hardware/cad_parts/out/S1/S1.7-01.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 247261.05596470743,
+    "surface_area_mm2": 100063.42357019914,
+    "mass_kg": 1.0953664779236538,
+    "cg_mm": [
+      7.219538551835721e-14,
+      102.58802712277145,
+      492.24097611603827
+    ],
+    "bbox_min_mm": [
+      -38.0,
+      47.0,
+      445.16
+    ],
+    "bbox_max_mm": [
+      38.0,
+      148.0,
+      540.1600000000001
+    ],
+    "inertia_kg_mm2": [
+      2082.803505170357,
+      1717.6162374758478,
+      1768.784023323329,
+      7.317198882630978e-13,
+      8.292855210237308e-12,
+      5.429731827931957
+    ],
+    "triangle_count": 1540,
+    "vertex_count": 768,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "engineering_checks": {
+    "oven_450c_clearance": {
+      "outer_material": "316LN",
+      "inner_material": "Al2O3",
+      "t_cold_k": 723.15,
+      "t_ref_k": 293.15,
+      "warm_outer_id_mm": 38.0,
+      "warm_inner_od_mm": 22.0,
+      "cold_outer_id_mm": 38.27063544457978,
+      "cold_inner_od_mm": 22.06146172959805,
+      "outer_strain": 0.007121985383678364,
+      "inner_strain": 0.0027937149817296447,
+      "warm_radial_clearance_mm": 8.0,
+      "cold_nominal_radial_clearance_mm": 8.104586857490865,
+      "cold_worst_case_radial_clearance_mm": 8.004586857490866,
+      "delta_radial_clearance_mm": 0.10458685749086527,
+      "min_required_radial_clearance_mm": 5.0,
+      "interference_risk": false,
+      "passed": true
+    }
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

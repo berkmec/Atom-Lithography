@@ -1,0 +1,122 @@
+* Atom Lithography Machine - 1oo2D Safety Interlock & 22 kV 2 MOhm HV Crowbar Verification
+* BOM: S7.SAFETY-03, S7.SAFETY-02, S7.SAFETY-05, S7.SAFETY-06, S7.SAFETY-01, S7.4-04, S5.5-04
+* STRICT EPISTEMIC NOTICE: DESIGN_ONLY_NOT_CERTIFIED (iec61508_certified=false, semi_s2_certified=false)
+
+.temp 26.85
+.options reltol=1e-4 vntol=1e-6 abstol=1e-12
+
+* --- Switch Models ---
+* Normally-Closed 25 kV HV Vacuum Crowbar Relay: CLOSED (Ron=0.1 Ohm) when coil V < 2 V (de-energized), OPEN (100 GOhm) when V > 2 V
+.model SW_HV_NC  SW(VT=2.5 VH=0.2 RON=100G ROFF=0.1)
+* HV PSU Isolation Contactor (OPEN on trip, CLOSED when healthy)
+.model SW_HV_NO  SW(VT=2.5 VH=0.2 RON=100  ROFF=100G)
+* LV Safety Relay / MOSFET Cutoff (CLOSED when energized > 2.5 V, OPEN = 100 MOhm when de-energized)
+.model SW_LV_NO  SW(VT=2.5 VH=0.2 RON=0.05 ROFF=100Meg)
+* Fast 36 V TVS Zener Demagnetization Clamp Model
+.model D_TVS36   D(IS=1e-12 BV=36.0 IBV=1m N=1.5 RS=0.5)
+
+* Trip command: HEALTHY (5.0 V) for t < 1.0 ms; TRIPPED (0.0 V) for t >= 1.0 ms
+Vtrip_cmd trip_ok 0 DC 5.0 PWL(0 5.0 0.999m 5.0 1.000m 0.0 50m 0.0)
+* Always-HIGH rail (for modeling stuck-ON / stuck-welded Channel-A fault!)
+Vstuck_hi stuck_hi 0 DC 5.0
+
+* =========================================================================
+* 1) NOMINAL 22 kV 1.5 nF ACTIVE 2.00 MOhm HV CROWBAR DISCHARGE (BOTH Ch-A & Ch-B TRIP)
+* =========================================================================
+* C_stray = 1.500 nF charged to 22,000 V; at t=1.0 ms HV PSU disconnects & K_CROWBAR_A || K_CROWBAR_B close
+* onto R_CROWBAR_1 (1.00 MOhm) + R_CROWBAR_2 (1.00 MOhm) = 2.00 MOhm.
+* Analytical: tau = 2.00M * 1.5n = 3.000 ms; t_50V = 3.000 * ln(22000/50) = 18.2603 ms; E = 0.3630 J.
+Vhv_nom   hv_src_n 0 DC 22000
+Spsu_nom  hv_src_n hv_bus_n trip_ok 0 SW_HV_NO
+Cstray_n  hv_bus_n 0 1.5n IC=22000
+Sk_cba_n  hv_bus_n hv_dmp_n trip_ok 0 SW_HV_NC
+Sk_cbb_n  hv_bus_n hv_dmp_n trip_ok 0 SW_HV_NC
+Rcb1_n    hv_dmp_n hv_mid_n 1.00Meg
+Rcb2_n    hv_mid_n 0        1.00Meg
+* Instantaneous power dissipated in 2.00 MOhm dump resistor: P = V(hv_dmp_n)^2 / 2.00Meg
+Bp_nom    p_dump_n 0 V = (V(hv_dmp_n) * V(hv_dmp_n)) / 2.0e6
+
+* =========================================================================
+* 2) SINGLE-CHANNEL FAULT INJECTION #1: K_CROWBAR_A STUCK OPEN (FAILED RELAY)
+* =========================================================================
+* K_CROWBAR_A coil stuck energized (HV contact STUCK OPEN = 100 GOhm!), ONLY diverse Ch-B K_CROWBAR_B closes!
+Vhv_flt   hv_src_f 0 DC 22000
+Spsu_flt  hv_src_f hv_bus_f trip_ok  0 SW_HV_NO
+Cstray_f  hv_bus_f 0 1.5n IC=22000
+Sk_cba_f  hv_bus_f hv_dmp_f stuck_hi 0 SW_HV_NC
+Sk_cbb_f  hv_bus_f hv_dmp_f trip_ok  0 SW_HV_NC
+Rcb1_f    hv_dmp_f hv_mid_f 1.00Meg
+Rcb2_f    hv_mid_f 0        1.00Meg
+Bp_flt    p_dump_f 0 V = (V(hv_dmp_f) * V(hv_dmp_f)) / 2.0e6
+
+* =========================================================================
+* 3) SINGLE-CHANNEL FAULT INJECTION #2: K_FG_A1 STUCK WELDED CLOSED ON 24 V SHUTTER
+* =========================================================================
+* Channel-A force-guided relay K_FG_A1 sticks WELDED CLOSED (10 mOhm!).
+* Diverse Channel-B P-MOSFET SSR Q_SSR_B1 in SERIES still opens at t=1.0 ms -> de-energizes shutter coil!
+* 36 V TVS zener clamp accelerates coil demagnetization (< 1 ms << 3.2 ms mechanical shutter spec!).
+V24_sh    v24_sh 0 DC 24.0
+R_weld_a  v24_sh sh_mid_ab 10m
+Sq_ssr_b  sh_mid_ab sh_out trip_ok 0 SW_LV_NO
+* Dual-coil shutter actuator load (48 Ohm, 20 mH -> 500 mA hold current) + 36 V fast-drop TVS clamp
+R_sh_c    sh_out sh_ind 48.0
+L_sh_c    sh_ind 0      20m
+D_sh_tvs  0      sh_out D_TVS36
+R_sh_bleed sh_out 0     100k
+
+* Cross-channel diagnostic discrepancy comparator:
+* Mirror feedback A reads 0 V (welded closed!) while Ch-B feedback reads 5 V (open!) -> XOR asserts 5 V FAULT!
+B_fb_a    diag_fb_a 0 V = 0.0
+B_fb_b    diag_fb_b 0 V = 5.0 * (1.0 - V(trip_ok) / 5.0)
+B_xor_d   discrep_fault 0 V = abs(V(diag_fb_a) - V(diag_fb_b))
+
+* =========================================================================
+* 4) SINGLE-CHANNEL FAULT INJECTION #3: OPEN-WIRE SENSOR BREAK ON Ch-A E-STOP
+* =========================================================================
+* ESTOP_A breaks (5 V -> 0 V at t=1.0 ms) while ESTOP_B stays 5.0 V -> 1oo2 hardware AND drops BOTH channels!
+Vestop_a  es_a 0 DC 5.0 PWL(0 5.0 0.999m 5.0 1.000m 0.0 50m 0.0)
+Vestop_b  es_b 0 DC 5.0
+B_vote1oo2 vote_1oo2 0 V = min(V(es_a), V(es_b))
+V24_ow    v24_ow 0 DC 24.0
+S_ow_a    v24_ow ow_mid vote_1oo2 0 SW_LV_NO
+S_ow_b    ow_mid ow_load vote_1oo2 0 SW_LV_NO
+R_ow_ld   ow_load 0 48.0
+
+.control
+set noaskquit
+
+tran 20u 45m 0 50u
+
+* 1) Nominal 22 kV -> <50 V active 2 MOhm crowbar discharge
+meas tran hv_nom_init_v  FIND v(hv_bus_n) AT=0.5m
+meas tran hv_nom_t50_abs WHEN v(hv_bus_n)=50.0 FALL=1 TD=0.99m
+let hv_nom_t50_ms = (hv_nom_t50_abs - 1.0m) * 1e3
+meas tran hv_nom_v_at_40m FIND v(hv_bus_n) AT=40m
+meas tran hv_nom_energy_j INTEG v(p_dump_n) FROM=0.99m TO=44m
+print hv_nom_t50_ms
+
+* 2) Fault-Injected 22 kV Crowbar (K_CROWBAR_A stuck OPEN; Ch-B K_CROWBAR_B discharges!)
+meas tran hv_flt_t50_abs WHEN v(hv_bus_f)=50.0 FALL=1 TD=0.99m
+let hv_flt_t50_ms = (hv_flt_t50_abs - 1.0m) * 1e3
+meas tran hv_flt_v_at_40m FIND v(hv_bus_f) AT=40m
+meas tran hv_flt_energy_j INTEG v(p_dump_f) FROM=0.99m TO=44m
+print hv_flt_t50_ms
+
+* 3) Fault-Injected Welded Ch-A Relay (K_FG_A1 welded 10 mOhm; Ch-B SSR cuts 24 V shutter safe!)
+meas tran sh_i_on   FIND i(L_sh_c) AT=0.5m
+meas tran sh_v_on   FIND v(sh_out) AT=0.5m
+meas tran sh_v_safe FIND v(sh_out) AT=5.0m
+meas tran sh_i_safe FIND i(L_sh_c) AT=5.0m
+let sh_i10 = 0.10 * sh_i_on
+meas tran sh_t_drop_abs WHEN i(L_sh_c)=$&sh_i10 FALL=1 TD=0.99m
+let sh_drop_ms = (sh_t_drop_abs - 1.0m) * 1e3
+meas tran discrep_fault_v FIND v(discrep_fault) AT=5.0m
+print sh_drop_ms
+
+* 4) Fault-Injected Open-Wire Sensor Break (ESTOP_A broken while ESTOP_B=5V -> 1oo2 load safe!)
+meas tran ow_v_on   FIND v(ow_load) AT=0.5m
+meas tran ow_v_safe FIND v(ow_load) AT=5.0m
+
+quit 0
+.endc
+.end

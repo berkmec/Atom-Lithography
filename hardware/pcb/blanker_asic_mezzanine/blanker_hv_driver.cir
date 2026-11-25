@@ -1,0 +1,142 @@
+* Blanker ASIC Mezzanine — 1.8 V CMOS -> 53.3 V Push-Pull HV Deflector & Hardwired Override
+* Native ngspice-47 deck (zero PSpice syntax) — M0/M1 DESIGN_ONLY
+* BOM: S2.4-01 (SKY130 1.8 V blanker_tile), S2.4-02 (HV driver), S2.2-03 (LTCC), S2.2-01 (MEMS plate)
+* Load: C_plate = 5 pF (MEMS electrode) + C_int = 2 pF (LTCC/interconnect) + L_trace = 5 nH + R_damp = 50 Ohm
+* Logic polarity (FAIL-SAFE):
+*   blanker_open = 1.8 V AND ovrd_n = 1.8 V  --> V_plate =  0.0 V (beam OPEN)
+*   blanker_open = 0.0 V OR  ovrd_n = 0.0 V  --> V_plate = 53.3 V (beam BLANKED / deflected to dump)
+
+.temp 26.85
+.options reltol=1e-4 gmin=1e-11
+
+* Power rails (referenced to local -5,000 V floating deck ground = node 0)
+Vdd1v8 vdd1v8 0 DC 1.8
+Vdd5v0 vdd5v0 0 DC 5.0
+Vdef   vdef   0 DC 53.3
+Vclamp vhs_lo 0 DC 48.3
+
+* Stimulus:
+*   0..200 ns:     v_open=0 (blanked -> 53.3 V)
+*   200..600 ns:   v_open=1.8 V (open -> 0 V; measure 90-10% fall time)
+*   600..1000 ns:  v_open=0 V (normal blank -> 53.3 V; measure 10-90% rise time)
+*   1000..1600 ns: v_open=1.8 V (stuck OPEN!), while at t=1200 ns v_pri_ovrd_n drops 1.8 V -> 0 V (FAULT!)
+*                  passing through realistic 25 ns 5 kV opto-isolator (ACPL-M61L) delay into deck v_ovrd_n
+*                  -> hardwired override clamps V_plate -> 53.3 V in <200 ns (<< 1 us)!
+Vopen v_open 0 PULSE(0 1.8 200n 1n 1n 400n 800n)
+Vovrd v_pri_ovrd_n 0 PWL(0 1.8 1199n 1.8 1201n 0.0 1600n 0.0)
+* 5 kV Opto-Isolator propagation model (ACPL-M61L: 25 ns propagation delay across 5 kV barrier)
+Riso_1 v_pri_ovrd_n n_iso1 2.0k
+Ciso_1 n_iso1 0 10p
+Eiso_b n_iso2 0 n_iso1 0 1.0
+Riso_2 n_iso2 v_ovrd_n 2.0k
+Ciso_2 v_ovrd_n 0 10p
+
+* Transistor models (calibrated 1.8 V CMOS logic + 5 V pre-driver + 60 V HV push-pull MOSFETs)
+.model NMOS_1V8 NMOS(LEVEL=1 VTO=0.45 KP=220u LAMBDA=0.02 CGSO=120p CGDO=120p)
+.model PMOS_1V8 PMOS(LEVEL=1 VTO=-0.45 KP=110u LAMBDA=0.02 CGSO=120p CGDO=120p)
+.model NMOS_5V  NMOS(LEVEL=1 VTO=0.70 KP=400u LAMBDA=0.01 CGSO=250p CGDO=250p)
+.model PMOS_5V  PMOS(LEVEL=1 VTO=-0.70 KP=200u LAMBDA=0.01 CGSO=250p CGDO=250p)
+.model NMOS_HV  NMOS(LEVEL=1 VTO=1.20 KP=3.5m LAMBDA=0.005 CGSO=600p CGDO=300p RD=20 RS=10)
+.model PMOS_HV  PMOS(LEVEL=1 VTO=-1.20 KP=2.2m LAMBDA=0.005 CGSO=600p CGDO=300p RD=25 RS=12)
+.model D_CLAMP  D(IS=1e-13 N=1.05 RS=5 CJO=0.3p)
+
+* Stage 1: Hard-Wired 1.8 V CMOS NAND2 Global Blank-Override Gate
+*   blank_1v8 = NOT(v_open AND v_ovrd_n)  (HIGH=1.8 V when BLANKED or FAULT!)
+Mpa1 blank_1v8 v_open   vdd1v8 vdd1v8 PMOS_1V8 W=12u L=0.5u
+Mpa2 blank_1v8 v_ovrd_n vdd1v8 vdd1v8 PMOS_1V8 W=12u L=0.5u
+Mna1 blank_1v8 v_open   n_nand 0      NMOS_1V8 W=12u L=0.5u
+Mna2 n_nand    v_ovrd_n 0      0      NMOS_1V8 W=12u L=0.5u
+Cstr_s1 blank_1v8 0 0.2p
+
+* Complementary open_1v8 = NOT(blank_1v8) = (v_open AND v_ovrd_n)
+Mpi1 open_1v8 blank_1v8 vdd1v8 vdd1v8 PMOS_1V8 W=12u L=0.5u
+Mni1 open_1v8 blank_1v8 0      0      NMOS_1V8 W=6u  L=0.5u
+Cstr_s2 open_1v8 0 0.2p
+
+* Stage 2: 1.8 V -> 5.0 V Cross-Coupled Pre-Driver Level-Shifter
+Mls_n1 ls_open_b open_1v8  0 0 NMOS_5V W=40u L=0.5u
+Mls_n2 ls_open   blank_1v8 0 0 NMOS_5V W=40u L=0.5u
+Mls_p1 ls_open_b ls_open   vdd5v0 vdd5v0 PMOS_5V W=16u L=0.5u
+Mls_p2 ls_open   ls_open_b vdd5v0 vdd5v0 PMOS_5V W=16u L=0.5u
+
+* Buffered 5 V complementary drives: drv_open_5v (HIGH=open), drv_blank_5v (HIGH=blank)
+Mbuf_p1 drv_open_5v  ls_open_b vdd5v0 vdd5v0 PMOS_5V W=60u L=0.5u
+Mbuf_n1 drv_open_5v  ls_open_b 0      0      NMOS_5V W=30u L=0.5u
+Mbuf_p2 drv_blank_5v ls_open   vdd5v0 vdd5v0 PMOS_5V W=60u L=0.5u
+Mbuf_n2 drv_blank_5v ls_open   0      0      NMOS_5V W=30u L=0.5u
+
+* Stage 3: Zero-Static-Power Pulsed-Edge 5.0 V -> 53.3 V HV Level-Shifter + High-Side CMOS Latch
+*   Short RC edge-pulses fire Mhv_s1 (SET BLANK) or Mhv_s2 (SET OPEN) for ~15 ns only on transitions,
+*   eliminating continuous DC crowbar current across the 53.3 V barrier (critical for 256-ch UHV thermal load!).
+*   High-side CMOS latch powered between vdef (53.3 V) and vhs_lo (48.3 V), fail-safe biased BLANKED at DC.
+Cpls_b drv_blank_5v pls_blank 10p
+Rpls_b pls_blank    0         1.5k
+Dpls_b 0            pls_blank D_CLAMP
+Cpls_o drv_open_5v  pls_open  10p
+Rpls_o pls_open     0         1.5k
+Dpls_o 0            pls_open  D_CLAMP
+
+Mhv_s1 hs_p_gate_d  pls_blank 0 0 NMOS_HV W=12u L=1u
+Mhv_s2 hs_p_bar_d   pls_open  0 0 NMOS_HV W=12u L=1u
+Rlim1  hs_p_gate    hs_p_gate_d 800
+Rlim2  hs_p_bar     hs_p_bar_d  800
+
+* High-side 5 V CMOS cross-coupled latch (referenced between vdef=53.3 V and vhs_lo=48.3 V)
+Mhs_p1 hs_p_gate hs_p_bar  vdef   vdef   PMOS_5V W=16u L=0.5u
+Mhs_n1 hs_p_gate hs_p_bar  vhs_lo vhs_lo NMOS_5V W=16u L=0.5u
+Mhs_p2 hs_p_bar  hs_p_gate vdef   vdef   PMOS_5V W=16u L=0.5u
+Mhs_n2 hs_p_bar  hs_p_gate vhs_lo vhs_lo NMOS_5V W=16u L=0.5u
+* Fail-safe power-on bias (forces hs_p_gate = 48.3 V -> Mout_p ON -> V_plate = 53.3 V BLANKED at t=0)
+Rfs_g  hs_p_gate vhs_lo 10Meg
+Rfs_b  hs_p_bar  vdef   10Meg
+* Clamp diodes protect high-side gate oxide (|Vgs| <= 5.6 V) during pulse edge
+Dcl1   vhs_lo hs_p_gate D_CLAMP
+Dcl2   vhs_lo hs_p_bar  D_CLAMP
+.nodeset v(hs_p_gate)=48.3 v(hs_p_bar)=53.3 v(ls_open)=0.0 v(ls_open_b)=5.0 v(v_plate)=53.3
+
+* Stage 4: 53.3 V HV Push-Pull Deflector Output Stage (controlled slew, zero shoot-through)
+Rg_p   hs_p_gate   gate_out_p 120
+Rg_n   drv_open_5v gate_out_n 120
+Mout_p drv_out gate_out_p vdef vdef PMOS_HV W=20u L=1u
+Mout_n drv_out gate_out_n 0    0    NMOS_HV W=14u L=1u
+
+* Realistic MEMS Blanker Plate + LTCC Interposer Load (S2.2-01 + S2.2-03)
+Rdamp  drv_out n_l     50
+Ltrace n_l     v_plate 5n
+Cint   v_plate 0       2p
+Cplate v_plate 0       5p
+Rleak  v_plate 0       100Meg
+
+.control
+set noaskquit
+
+tran 0.2n 1600n
+
+* Steady-state output levels
+meas tran v_plate_init_v FIND v(v_plate) AT=180n
+meas tran v_plate_lo_v   FIND v(v_plate) AT=550n
+meas tran v_plate_hi_v   FIND v(v_plate) AT=950n
+meas tran v_plate_ovrd_v FIND v(v_plate) AT=1550n
+
+* 90% -> 10% Fall Time (Blanked 53.3 V -> Open 0 V at t=200 ns)
+meas tran t_fall_90_10_s TRIG v(v_plate) VAL=47.97 FALL=1 TARG v(v_plate) VAL=5.33 FALL=1
+
+* 10% -> 90% Rise Time (Open 0 V -> Blanked 53.3 V at t=600 ns)
+meas tran t_rise_10_90_s TRIG v(v_plate) VAL=5.33 RISE=1 TARG v(v_plate) VAL=47.97 RISE=1
+
+* End-to-End Global Blank-Override Clamp Time (incl. 5 kV opto-isolator delay):
+*   from primary v_pri_ovrd_n falling past 0.9 V (t~1200 ns) to v_plate >= 47.97 V (90% V_def)
+meas tran t_ovrd_clamp_s TRIG v(v_pri_ovrd_n) VAL=0.9 FALL=1 TARG v(v_plate) VAL=47.97 RISE=2
+
+* Switching Energy per full 0 -> 53.3 V -> 0 cycle (t = 180 ns .. 980 ns) across all rails
+let p_hv_w = -53.3 * i(Vdef) - 48.3 * i(Vclamp)
+let p_5v_w = -5.0 * i(Vdd5v0)
+let p_1v8_w = -1.8 * i(Vdd1v8)
+meas tran e_hv_cycle_j   INTEG p_hv_w  FROM=180n TO=980n
+meas tran e_5v_cycle_j   INTEG p_5v_w  FROM=180n TO=980n
+meas tran e_1v8_cycle_j  INTEG p_1v8_w FROM=180n TO=980n
+meas tran p_hv_static_w  AVG   p_hv_w  FROM=800n TO=980n
+
+quit 0
+.endc
+.end

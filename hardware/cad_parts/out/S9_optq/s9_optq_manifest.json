@@ -1,0 +1,175 @@
+{
+  "subsystem": "S9_optq",
+  "work_package": "WP-M4",
+  "part_count": 3,
+  "total_computed_mass_kg": 3.5496,
+  "all_parts_valid": true,
+  "clash_report": {
+    "parts_checked": 43,
+    "broadphase_aabb_pairs": 108,
+    "clash_count": 0,
+    "clashes": [],
+    "passed": true
+  },
+  "parts": {
+    "S9.4-01": {
+      "part_id": "S9.4-01",
+      "subsystem": "S9",
+      "design_tier": "CUSTOM_FULL",
+      "stl_path": "hardware/cad_parts/out/S9_optq/S9.4-01.stl",
+      "step_path": "hardware/cad_parts/out/S9_optq/S9.4-01.step",
+      "scad_path": "hardware/cad_parts/out/S9_optq/S9.4-01.scad",
+      "dxf_path": "hardware/cad_parts/out/S9_optq/S9.4-01.dxf",
+      "svg_path": "hardware/cad_parts/out/S9_optq/S9.4-01.svg",
+      "watertight": true,
+      "boundary_edges": 0,
+      "non_manifold_edges": 0,
+      "signed_volume_mm3": 403031.1422819256,
+      "surface_area_mm2": 92728.63358016184,
+      "mass_kg": 3.2242491382554057,
+      "cg_mm": [
+        3.8121145955497684,
+        1.9419413075832918e-15,
+        -1.7425463353747848e-15
+      ],
+      "bbox_min_mm": [
+        -50.0,
+        -60.0,
+        -60.0
+      ],
+      "bbox_max_mm": [
+        50.0,
+        60.0,
+        60.0
+      ],
+      "inertia_kg_mm2": [
+        5449.73294160776,
+        5937.116051409376,
+        5937.116051409375,
+        1.2638704576487542e-13,
+        -1.947713261997785e-13,
+        -7.869675755500797e-14
+      ],
+      "triangle_count": 1616,
+      "vertex_count": 794,
+      "step_valid": true,
+      "dxf_valid": true,
+      "svg_valid": true,
+      "scad_valid": true,
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "warnings": [],
+      "all_valid": true
+    },
+    "S9.4-02": {
+      "part_id": "S9.4-02",
+      "subsystem": "S9",
+      "design_tier": "CUSTOM_FULL",
+      "stl_path": "hardware/cad_parts/out/S9_optq/S9.4-02.stl",
+      "step_path": "hardware/cad_parts/out/S9_optq/S9.4-02.step",
+      "scad_path": "hardware/cad_parts/out/S9_optq/S9.4-02.scad",
+      "dxf_path": "hardware/cad_parts/out/S9_optq/S9.4-02.dxf",
+      "svg_path": "hardware/cad_parts/out/S9_optq/S9.4-02.svg",
+      "watertight": true,
+      "boundary_edges": 0,
+      "non_manifold_edges": 0,
+      "signed_volume_mm3": 24291.510186025353,
+      "surface_area_mm2": 14746.332252864133,
+      "mass_kg": 0.2081782422942373,
+      "cg_mm": [
+        3.2292730022624535e-16,
+        -1.6947101863096096e-17,
+        -0.04100624300496342
+      ],
+      "bbox_min_mm": [
+        -34.05,
+        -15.0,
+        -8.0
+      ],
+      "bbox_max_mm": [
+        34.05,
+        15.0,
+        8.0
+      ],
+      "inertia_kg_mm2": [
+        22.571372635675033,
+        73.88532676662808,
+        86.2814931419939,
+        -3.741297405213118e-16,
+        2.4608463500315737e-16,
+        2.569402244687008e-16
+      ],
+      "triangle_count": 436,
+      "vertex_count": 224,
+      "step_valid": true,
+      "dxf_valid": true,
+      "svg_valid": true,
+      "scad_valid": true,
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "warnings": [],
+      "all_valid": true
+    },
+    "S9.4-03": {
+      "part_id": "S9.4-03",
+      "subsystem": "S9",
+      "design_tier": "CUSTOM_FULL",
+      "stl_path": "hardware/cad_parts/out/S9_optq/S9.4-03.stl",
+      "step_path": "hardware/cad_parts/out/S9_optq/S9.4-03.step",
+      "scad_path": "hardware/cad_parts/out/S9_optq/S9.4-03.scad",
+      "dxf_path": "hardware/cad_parts/out/S9_optq/S9.4-03.dxf",
+      "svg_path": "hardware/cad_parts/out/S9_optq/S9.4-03.svg",
+      "watertight": true,
+      "boundary_edges": 0,
+      "non_manifold_edges": 0,
+      "signed_volume_mm3": 13077.599999999999,
+      "surface_area_mm2": 17987.542288387,
+      "mass_kg": 0.11717529600000003,
+      "cg_mm": [
+        2.042913597646339e-16,
+        3.4772997406746197e-16,
+        -2.2254718340317564e-15
+      ],
+      "bbox_min_mm": [
+        -5.0,
+        -15.0,
+        -154.0
+      ],
+      "bbox_max_mm": [
+        5.0,
+        15.0,
+        154.0
+      ],
+      "inertia_kg_mm2": [
+        1174.03682034594,
+        1167.82549352354,
+        7.854223245480061,
+        1.2427335605025293e-16,
+        1.434236764907837e-15,
+        -2.216547727584839e-15
+      ],
+      "triangle_count": 336,
+      "vertex_count": 194,
+      "step_valid": true,
+      "dxf_valid": true,
+      "svg_valid": true,
+      "scad_valid": true,
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "warnings": [],
+      "all_valid": true
+    }
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

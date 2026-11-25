@@ -1,0 +1,85 @@
+{
+  "schema_version": "1.0",
+  "part_id": "S5.6-01",
+  "parent_bom_id": "S5.6",
+  "subsystem": "S5",
+  "part_name": "CF100 potasiz DC 28Si cubuk sublimasyon kaynagi, kriyo/su kalkani, pnomatik deklansor & PSU (Exp139, 11.8 kg)",
+  "qty": 1,
+  "unit": "set",
+  "temp_stage": "300 K (UHV kaynak)",
+  "vacuum_grade": "UHV 1.5e-10 Torr",
+  "bom_key_spec": "s5_loadlock_chamber +Z CF100 (\u00d8152x280 mm, Z=585..865 mm, min bosluk 70 mm), P_base=1.5e-10 / P_growth=3.5e-10 Torr, 0.10 nm/s (8.0\u00b10.3 nm / 80 s), 400 W / 0 uW kriyo, kutle=11.8 kg",
+  "usd_nom": 48000.0,
+  "bom_epistemic_tag": "{Varsay\u0131m}",
+  "electrical_class": "E4",
+  "grounding_domain": "FACILITY_PE",
+  "grounding_notes": "CF100 crucible-free DC 28Si rod sublimation source & PSU (400 W growth, 0 uW cryo); Tier-2 shed.",
+  "supply_rails": [
+    {
+      "rail_name": "DC_SUBLIMATION_400W",
+      "voltage_v": 20.0,
+      "current_type": "DC",
+      "max_current_a": 25.0,
+      "steady_power_w": 400.0,
+      "peak_power_w": 450.0,
+      "source_part_id": "S7.SAFETY-04"
+    }
+  ],
+  "connectors_and_pinout": [
+    {
+      "connector_ref": "J_SUB_PWR",
+      "connector_type": "CF100 High-Current Water-Cooled Feedthrough",
+      "location_side": "loadlock_plusZ",
+      "mating_part_id": "S7.SAFETY-04",
+      "pins": [
+        {
+          "pin": "1-2",
+          "signal": "SI28_ROD_DC_PN",
+          "direction": "IN",
+          "nominal_level": "400 W DC sublimation current"
+        },
+        {
+          "pin": "3-4",
+          "signal": "SHUTTER_SOL_24V",
+          "direction": "IN",
+          "nominal_level": "Pneumatic shutter fail-close (45 ms)"
+        }
+      ]
+    }
+  ],
+  "mating_part_ids": [
+    "S5.1-03",
+    "S5.6-02",
+    "S5.6-04",
+    "S7.SAFETY-03",
+    "S7.SAFETY-04"
+  ],
+  "interlock_hooks": [
+    {
+      "signal_name": "MBE_SHUTTER_EPO_CUT",
+      "target_part_id": "S7.SAFETY-03",
+      "action_on_trip": "Close pneumatic shutter & cut 400 W at t=45 ms",
+      "response_time_ms": 45.0
+    }
+  ],
+  "ups_tier": "TIER2_SHED",
+  "ups_budget_group": "EXP150_TIER2_SHED",
+  "exp150_ups_allocation_w": 400.0,
+  "supply_rails_steady_sum_w": 400.0,
+  "incremental_mains_w": 400.0,
+  "secondary_or_parent_derived_w": 0.0,
+  "non_exp150_aux_shed_w": 0.0,
+  "reconciliation_note": "Exp150 Tier-2 sheddable baseline load: incremental_mains_w = exp150_ups_allocation_w = 400.0 W (raw supply_rails sum = 400.0 W, shed cleanly on utility outage).",
+  "timing_sync": {
+    "rb_10mhz_port": null,
+    "white_rabbit_port": null,
+    "sync_role": "In-situ 28Si MBE capper"
+  },
+  "epistemic_flags": {
+    "design_maturity": "M0_M1_ELECTRICAL_ICD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

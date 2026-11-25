@@ -1,0 +1,276 @@
+{
+  "part_id": "S4.1-02",
+  "subsystem": "S4",
+  "part_design": {
+    "part_id": "S4.1-02",
+    "parent_bom_id": "S4.1",
+    "subsystem": "S4",
+    "part_name": "Pnomatik dusuk-frekansli hava yayli izolatör seti (4 ayak)",
+    "design_tier": "COTS_ENV_ICD",
+    "material": "304 SS",
+    "temp_stage": "300 K",
+    "temp_k": 300.0,
+    "vacuum_grade": "Atmosfer",
+    "tolerance_spec": "±0.1 mm seviye",
+    "surface_finish_ra_um": 1.6,
+    "qty": 1,
+    "procurement_class": "COTS",
+    "world_origin_mm": [
+      0.0,
+      0.0,
+      -462.0
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "granite_support_plane",
+        "kind": "mechanical",
+        "position_mm": [
+          0.0,
+          0.0,
+          40.0
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "4x Pneumatic Piston Pads @ (±350, ±250) mm",
+        "mating_part_id": "S4.1-01",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      },
+      {
+        "name": "subframe_mount_plane",
+        "kind": "mechanical",
+        "position_mm": [
+          0.0,
+          0.0,
+          -40.0
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "standard": "4x Flanged Feet + Perimeter Tie-Bars (R_clear >= 240 mm)",
+        "mating_part_id": "S4.1-03",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      },
+      {
+        "name": "cda_air_supply",
+        "kind": "gas",
+        "position_mm": [
+          -429.0,
+          -250.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "standard": "6 bar Clean Dry Air / N2 Auto-Leveling Manifold",
+        "mating_part_id": "S7.4-04",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "SPAN_X",
+        "nominal_mm": 700.0,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "700.00 ±0.50"
+      },
+      {
+        "label": "SPAN_Y",
+        "nominal_mm": 500.0,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "500.00 ±0.50"
+      },
+      {
+        "label": "ISOLATOR_OD",
+        "nominal_mm": 112.0,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø112.00 ±0.50"
+      },
+      {
+        "label": "HEIGHT",
+        "nominal_mm": 80.0,
+        "tol_plus_mm": 0.2,
+        "tol_minus_mm": -0.2,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "80.00 ±0.20"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "flatness",
+        "tolerance_mm": 0.1,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "COPLANAR 4-PISTON LEVELING PLANE",
+        "glyph": "⏥",
+        "tolerance_text": "0.10"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "Kose frekansi 1.0-2.0 Hz, otomatik seviyeleme",
+      "4x Newport/TMC-class 1.0-2.0 Hz pneumatic air-spring isolators with 3-point auto-leveling valves & perimeter tie-bars.",
+      "Tie-bars run at |X|=350 / |Y|=250 mm, preserving >240 mm central clear radius for lower DR OVC (R=210 mm)."
+    ],
+    "scad_params": {
+      "n_isolators": 4,
+      "span_x_mm": 700.0,
+      "span_y_mm": 500.0,
+      "isolator_h_mm": 80.0,
+      "corner_freq_hz": 1.5
+    },
+    "target_mass_kg": null,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S4.1-02",
+    "subsystem": "S4",
+    "design_tier": "COTS_ENV_ICD",
+    "stl_path": "hardware/cad_parts/out/S4/S4.1-02.stl",
+    "step_path": "hardware/cad_parts/out/S4/S4.1-02.step",
+    "scad_path": "hardware/cad_parts/out/S4/S4.1-02.scad",
+    "dxf_path": "hardware/cad_parts/out/S4/S4.1-02.dxf",
+    "svg_path": "hardware/cad_parts/out/S4/S4.1-02.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 1846963.8886456303,
+    "surface_area_mm2": 717265.0017020744,
+    "mass_kg": 6.649069999124269,
+    "cg_mm": [
+      5.670607890270784,
+      -3.3915118960955364,
+      -5.423657510043379
+    ],
+    "bbox_min_mm": [
+      -429.0,
+      -306.0,
+      -40.0
+    ],
+    "bbox_max_mm": [
+      429.0,
+      306.0,
+      40.0
+    ],
+    "inertia_kg_mm2": [
+      382410.30445465224,
+      718300.255595563,
+      1090379.566523189,
+      -9553.941676168533,
+      -204.49504063778556,
+      122.30564631452145
+    ],
+    "triangle_count": 9620,
+    "vertex_count": 4840,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "world_bbox_min_mm": [
+    -429.0,
+    -306.0,
+    -502.0
+  ],
+  "world_bbox_max_mm": [
+    429.0,
+    306.0,
+    -422.0
+  ],
+  "reconciliation": null,
+  "thermal_contraction_checks": [],
+  "tolerance_stack_checks": []
+}

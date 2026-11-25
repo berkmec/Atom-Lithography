@@ -1,0 +1,316 @@
+{
+  "part_design": {
+    "part_id": "S6.8-01",
+    "parent_bom_id": "S6.8",
+    "subsystem": "S6",
+    "part_name": "Seyreltme kriyostati ic-eklenti kulesi (MXC ~20 mK, Still, CP, isi esanjorleri)",
+    "design_tier": "COTS_ENV_ICD",
+    "material": "OFHC Cu",
+    "temp_stage": "50K/4K/0.8K/100mK/20mK",
+    "temp_k": 0.02,
+    "vacuum_grade": "Kriyo-vakum",
+    "tolerance_spec": "±1 mK",
+    "surface_finish_ra_um": 0.8,
+    "qty": 1,
+    "procurement_class": "COTS",
+    "world_origin_mm": [
+      -650.0,
+      0.0,
+      720.0
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "mxc_20mk_face",
+        "kind": "thermal",
+        "position_mm": [
+          0.0,
+          0.0,
+          -236.0
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "standard": "20 mK Au-OFHC MXC Payload Plate",
+        "mating_part_id": "S6.11-02",
+        "bore_mm": 24.0,
+        "od_mm": 190.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      },
+      {
+        "name": "mxc_bridge_east",
+        "kind": "thermal",
+        "position_mm": [
+          95.0,
+          0.0,
+          -228.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "standard": "20 mK Horizontal Busbar Clamp",
+        "mating_part_id": "S6.9-03",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      },
+      {
+        "name": "pt420_50k_bore",
+        "kind": "mechanical",
+        "position_mm": [
+          0.0,
+          0.0,
+          134.0
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "Ø92 mm PT420 Cold-Head Pass-Through",
+        "mating_part_id": "S6.1-01",
+        "bore_mm": 92.0,
+        "od_mm": 296.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      },
+      {
+        "name": "stage_4k_mount",
+        "kind": "thermal",
+        "position_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "standard": "4 K Au-OFHC Readout Flange",
+        "mating_part_id": "S6.6-01",
+        "bore_mm": 28.0,
+        "od_mm": 260.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "PLATE_50K_OD",
+        "nominal_mm": 296.0,
+        "tol_plus_mm": 0.15,
+        "tol_minus_mm": -0.15,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø296.00 ±0.15"
+      },
+      {
+        "label": "PLATE_4K_OD",
+        "nominal_mm": 260.0,
+        "tol_plus_mm": 0.15,
+        "tol_minus_mm": -0.15,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø260.00 ±0.15"
+      },
+      {
+        "label": "PLATE_MXC_OD",
+        "nominal_mm": 190.0,
+        "tol_plus_mm": 0.1,
+        "tol_minus_mm": -0.1,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø190.00 ±0.10"
+      },
+      {
+        "label": "TOWER_H",
+        "nominal_mm": 475.5,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "475.50 ±0.50"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "parallelism",
+        "tolerance_mm": 0.05,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "50K/4K/Still/CP/MXC plates",
+        "glyph": "∥",
+        "tolerance_text": "0.050"
+      },
+      {
+        "symbol": "concentricity",
+        "tolerance_mm": 0.1,
+        "diameter_zone": true,
+        "material_condition": "",
+        "datum_primary": "B",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "Stage stack axis",
+        "glyph": "◎",
+        "tolerance_text": "Ø0.10"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "T_base <= 20 mK, >=400 uW @ 100 mK (MXC yuku 5.2 uW rahat, Exp110/121)"
+    ],
+    "scad_params": {
+      "t_mxc_mk": 20.0,
+      "p_cool_100mk_uw": 400.0,
+      "n_stages": 5,
+      "n_ag_hx": 3
+    },
+    "target_mass_kg": 34.0,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact_result": {
+    "part_id": "S6.8-01",
+    "subsystem": "S6",
+    "design_tier": "COTS_ENV_ICD",
+    "stl_path": "hardware/cad_parts/out/S6/S6.8-01.stl",
+    "step_path": "hardware/cad_parts/out/S6/S6.8-01.step",
+    "scad_path": "hardware/cad_parts/out/S6/S6.8-01.scad",
+    "dxf_path": "hardware/cad_parts/out/S6/S6.8-01.dxf",
+    "svg_path": "hardware/cad_parts/out/S6/S6.8-01.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 3032601.2353347396,
+    "surface_area_mm2": 543010.6348441637,
+    "mass_kg": 27.17210706859927,
+    "cg_mm": [
+      -0.13042709733839455,
+      -1.468480318415849e-14,
+      -32.85637611962876
+    ],
+    "bbox_min_mm": [
+      -148.0,
+      -148.0,
+      -236.0
+    ],
+    "bbox_max_mm": [
+      148.0,
+      148.0,
+      239.5
+    ],
+    "inertia_kg_mm2": [
+      570839.0361286085,
+      571534.4569359979,
+      217817.10403254663,
+      6.646020394511141e-12,
+      167.03576149185616,
+      -2.3582501908614395e-12
+    ],
+    "triangle_count": 6000,
+    "vertex_count": 2906,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "json_path": "hardware/cad_parts/out/S6/S6.8-01.json",
+  "world_bbox_min_mm": [
+    -798.0,
+    -148.0,
+    484.0
+  ],
+  "world_bbox_max_mm": [
+    -502.0,
+    148.0,
+    959.5
+  ],
+  "world_cg_mm": [
+    -650.1304,
+    -0.0,
+    687.1436
+  ],
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

@@ -1,0 +1,83 @@
+{
+  "schema_version": "1.0",
+  "part_id": "S5.2-03",
+  "parent_bom_id": "S5.2",
+  "subsystem": "S5",
+  "part_name": "Yagsiz kuru scroll on-vakum pompasi ve geri-akis tutucu",
+  "qty": 1,
+  "unit": "adet",
+  "temp_stage": "300 K",
+  "vacuum_grade": "Kaba vakum",
+  "bom_key_spec": "15 m3/h, 1e-2 mbar taban, hidrokarbon sifir",
+  "usd_nom": 5500.0,
+  "bom_epistemic_tag": "{Liste-\u00c7apas\u0131}",
+  "electrical_class": "E4",
+  "grounding_domain": "FACILITY_PE",
+  "grounding_notes": "Oil-free dry scroll backing pump (15 m3/h); facility mains with fast foreline isolation valve on outage.",
+  "supply_rails": [
+    {
+      "rail_name": "AC_FACILITY_230V",
+      "voltage_v": 230.0,
+      "current_type": "AC_1PH",
+      "max_current_a": 3.0,
+      "steady_power_w": 450.0,
+      "peak_power_w": 650.0,
+      "source_part_id": "S7.4-03"
+    }
+  ],
+  "connectors_and_pinout": [
+    {
+      "connector_ref": "J_AC",
+      "connector_type": "IEC C14 + Remote Start/Stop",
+      "location_side": "pump_base",
+      "mating_part_id": "S7.4-03",
+      "pins": [
+        {
+          "pin": "L-N-PE",
+          "signal": "FACILITY_230V",
+          "direction": "IN",
+          "nominal_level": "450 W scroll motor"
+        },
+        {
+          "pin": "CTRL",
+          "signal": "SCROLL_STATUS_OK",
+          "direction": "OUT",
+          "nominal_level": "Trips foreline valve on loss"
+        }
+      ]
+    }
+  ],
+  "mating_part_ids": [
+    "S5.2-01",
+    "S5.1-03",
+    "S7.SAFETY-06"
+  ],
+  "interlock_hooks": [
+    {
+      "signal_name": "BACKING_LOSS_SEAL",
+      "target_part_id": "S7.SAFETY-06",
+      "action_on_trip": "Close foreline valve <80 ms on scroll power loss",
+      "response_time_ms": 80.0
+    }
+  ],
+  "ups_tier": "TIER2_SHED",
+  "ups_budget_group": "AUX_PROCESS_SHED_ON_OUTAGE",
+  "exp150_ups_allocation_w": 0.0,
+  "supply_rails_steady_sum_w": 450.0,
+  "incremental_mains_w": 450.0,
+  "secondary_or_parent_derived_w": 0.0,
+  "non_exp150_aux_shed_w": 450.0,
+  "reconciliation_note": "Non-Exp150 auxiliary sheddable rack/facility load (TIER2_SHED): incremental_mains_w = 450.0 W AC mains (mutually exclusive process/experiment mode, shed immediately on outage; exp150_ups_allocation_w = 0.0 W).",
+  "timing_sync": {
+    "rb_10mhz_port": null,
+    "white_rabbit_port": null,
+    "sync_role": "Roughing/backing pump"
+  },
+  "epistemic_flags": {
+    "design_maturity": "M0_M1_ELECTRICAL_ICD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

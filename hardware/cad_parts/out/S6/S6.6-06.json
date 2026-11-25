@@ -1,0 +1,230 @@
+{
+  "part_design": {
+    "part_id": "S6.6-06",
+    "parent_bom_id": "S6.6",
+    "subsystem": "S6",
+    "part_name": "RFSoC cogullamali sayisallastirici / AWG kartlari (AMD ZCU216, 14 kart = 56/4)",
+    "design_tier": "COTS_ENV_ICD",
+    "material": "Al 6061",
+    "temp_stage": "300 K (kabin)",
+    "temp_k": 300.0,
+    "vacuum_grade": "Atmosfer",
+    "tolerance_spec": "14-bit ADC/DAC",
+    "surface_finish_ra_um": 0.8,
+    "qty": 14,
+    "procurement_class": "COTS",
+    "world_origin_mm": [
+      2100.0,
+      0.0,
+      1467.9500000000003
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "rfsoc_56ch_rf",
+        "kind": "rf",
+        "position_mm": [
+          0.0,
+          -277.0,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "standard": "14x ZCU216 XM655 56-ch RF",
+        "mating_part_id": "S6.6-05",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      },
+      {
+        "name": "rack_bay2_u25_u38",
+        "kind": "mechanical",
+        "position_mm": [
+          0.0,
+          -270.0,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "standard": "19\" EIA-310 14U (7x2U, U25-U38)",
+        "mating_part_id": "S7.4-03",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "WIDTH_19IN",
+        "nominal_mm": 482.6,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "482.60 ±0.50"
+      },
+      {
+        "label": "DEPTH",
+        "nominal_mm": 540.0,
+        "tol_plus_mm": 1.0,
+        "tol_minus_mm": -1.0,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "540.00 ±1.00"
+      },
+      {
+        "label": "HEIGHT_14U",
+        "nominal_mm": 620.3000000000001,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "620.30 ±0.50"
+      }
+    ],
+    "gdt_frames": [],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "4 hat/kart varsayimi (56 hat = 14 kart; Exp114 $14,394/kart)",
+      "Reconciled 42U Rack Bay 2 U-allocation: 14x ZCU216 housed in 7x 2U dual-card 19-in EMI enclosures (U25-U38), resolving legacy single-30U lumping."
+    ],
+    "scad_params": {
+      "rack_u": 14,
+      "u_start": 25,
+      "n_zcu216_cards": 14,
+      "n_2u_enclosures": 7
+    },
+    "target_mass_kg": 78.0,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact_result": {
+    "part_id": "S6.6-06",
+    "subsystem": "S6",
+    "design_tier": "COTS_ENV_ICD",
+    "stl_path": "hardware/cad_parts/out/S6/S6.6-06.stl",
+    "step_path": "hardware/cad_parts/out/S6/S6.6-06.step",
+    "scad_path": "hardware/cad_parts/out/S6/S6.6-06.scad",
+    "dxf_path": "hardware/cad_parts/out/S6/S6.6-06.dxf",
+    "svg_path": "hardware/cad_parts/out/S6/S6.6-06.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 17930469.311499145,
+    "surface_area_mm2": 12188429.412437065,
+    "mass_kg": 48.412267141047714,
+    "cg_mm": [
+      -5.978059230351969e-15,
+      -9.061229327982726,
+      -6.13793992471909
+    ],
+    "bbox_min_mm": [
+      -241.3,
+      -282.05,
+      -310.15000000000003
+    ],
+    "bbox_max_mm": [
+      241.3,
+      270.0,
+      310.15000000000003
+    ],
+    "inertia_kg_mm2": [
+      2944800.2646672893,
+      2493323.15818931,
+      2288182.0386677827,
+      1.7381189440656566e-09,
+      8.248405904757671e-11,
+      3301.7194320110148
+    ],
+    "triangle_count": 2284,
+    "vertex_count": 1164,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "json_path": "hardware/cad_parts/out/S6/S6.6-06.json",
+  "world_bbox_min_mm": [
+    1858.7,
+    -282.05,
+    1157.8
+  ],
+  "world_bbox_max_mm": [
+    2341.3,
+    270.0,
+    1778.1
+  ],
+  "world_cg_mm": [
+    2100.0,
+    -9.0612,
+    1461.8121
+  ],
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

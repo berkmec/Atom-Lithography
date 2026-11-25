@@ -1,0 +1,230 @@
+{
+  "part_id": "S1.6-02",
+  "subsystem": "S1",
+  "design": {
+    "part_id": "S1.6-02",
+    "parent_bom_id": "S1.6",
+    "subsystem": "S1",
+    "part_name": "Kuru-yatakli PH3 gaz yikayici (scrubber) ve 50 ppb gaz dedektoru",
+    "design_tier": "COTS_ENV_ICD",
+    "material": "Steel",
+    "temp_stage": "300 K (tesis)",
+    "temp_k": 300.0,
+    "vacuum_grade": "Egzoz hatti",
+    "tolerance_spec": "±10 ppb alarm",
+    "surface_finish_ra_um": 3.2,
+    "qty": 1,
+    "procurement_class": "COTS",
+    "world_origin_mm": [
+      -1350.0,
+      1650.0,
+      260.0
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "scrubber_inlet",
+        "kind": "gas",
+        "position_mm": [
+          -1370.0,
+          1480.0,
+          750.0
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "standard": "DN150 Inlet",
+        "mating_part_id": "S1.6-01",
+        "bore_mm": 144.0,
+        "od_mm": 152.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "global",
+        "notes": ""
+      },
+      {
+        "name": "scrubber_exhaust",
+        "kind": "gas",
+        "position_mm": [
+          -1370.0,
+          1650.0,
+          1020.0
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "DN150 Facility Exhaust",
+        "mating_part_id": "",
+        "bore_mm": 144.0,
+        "od_mm": 152.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "global",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "SKID_XY",
+        "nominal_mm": 440.0,
+        "tol_plus_mm": 2.0,
+        "tol_minus_mm": -2.0,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "440.00 ±2.00"
+      },
+      {
+        "label": "COLUMN_OD",
+        "nominal_mm": 340.0,
+        "tol_plus_mm": 1.5,
+        "tol_minus_mm": -1.5,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø340.00 ±1.50"
+      },
+      {
+        "label": "TOTAL_H",
+        "nominal_mm": 1520.0,
+        "tol_plus_mm": 3.0,
+        "tol_minus_mm": -3.0,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "1520.00 ±3.00"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "perpendicularity",
+        "tolerance_mm": 1.5,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "ABSORBER COLUMN",
+        "glyph": "⊥",
+        "tolerance_text": "1.50"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "Cikis PH3 <50 ppb, PLC acil kapama kilidi (<5 s)",
+      "Facility floor placement X=[-1570, -1130], Y=[+1430, +1870], Z=[-500, +1020]; 80 mm service aisle to S1.6-01; <50 ppb outlet"
+    ],
+    "scad_params": {
+      "skid_xy": 440.0,
+      "col_od": 340.0,
+      "total_h": 1520.0,
+      "alarm_ppb": 50.0
+    },
+    "target_mass_kg": 95.0,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S1.6-02",
+    "subsystem": "S1",
+    "design_tier": "COTS_ENV_ICD",
+    "stl_path": "hardware/cad_parts/out/S1/S1.6-02.stl",
+    "step_path": "hardware/cad_parts/out/S1/S1.6-02.step",
+    "scad_path": "hardware/cad_parts/out/S1/S1.6-02.scad",
+    "dxf_path": "hardware/cad_parts/out/S1/S1.6-02.dxf",
+    "svg_path": "hardware/cad_parts/out/S1/S1.6-02.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 15081078.159141747,
+    "surface_area_mm2": 3710307.5246590273,
+    "mass_kg": 118.38646354926324,
+    "cg_mm": [
+      -1321.6268230190208,
+      1649.999999999999,
+      149.52892333082653
+    ],
+    "bbox_min_mm": [
+      -1570.0,
+      1430.0,
+      -500.0
+    ],
+    "bbox_max_mm": [
+      -1130.0,
+      1870.0,
+      1019.0
+    ],
+    "inertia_kg_mm2": [
+      29362831.290045325,
+      30070116.70636983,
+      3828372.472281595,
+      -5.212890625000001e-07,
+      -1250579.6366039063,
+      -5.941162109375001e-07
+    ],
+    "triangle_count": 1800,
+    "vertex_count": 880,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "engineering_checks": {},
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

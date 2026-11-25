@@ -1,0 +1,609 @@
+{
+  "part_design": {
+    "part_id": "S9.HPC-01",
+    "parent_bom_id": "S9.HPC",
+    "subsystem": "S9",
+    "part_name": "2U Cift-Hizlandiricili QEC Dekoder Dugumu (2x H100/Alveo-U280 Sinifi + Cift-100G ConnectX-7 RoCEv2 NIC, Exp143, 56.00 kg)",
+    "design_tier": "COTS_ENV_ICD",
+    "material": "Steel",
+    "temp_stage": "300 K (HPC rafi)",
+    "temp_k": 300.0,
+    "vacuum_grade": "Atmosfer",
+    "tolerance_spec": "<6.7 us d=37 / <2.6 us qLDPC",
+    "surface_finish_ra_um": 0.8,
+    "qty": 2,
+    "procurement_class": "COTS/CUS",
+    "world_origin_mm": [
+      2750.0,
+      -700.0,
+      174.25
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "connectx7_100g_node1",
+        "kind": "optical",
+        "position_mm": [
+          2850.0,
+          -1101.0,
+          128.75
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "standard": "2x 100GbE QSFP28 ConnectX-7 RoCEv2 RDMA (Node 1)",
+        "mating_part_id": "S9.HPC-02",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "world",
+        "notes": ""
+      },
+      {
+        "name": "connectx7_100g_node2",
+        "kind": "optical",
+        "position_mm": [
+          2850.0,
+          -1101.0,
+          219.75
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "standard": "2x 100GbE QSFP28 ConnectX-7 RoCEv2 RDMA (Node 2)",
+        "mating_part_id": "S9.HPC-02",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "world",
+        "notes": ""
+      },
+      {
+        "name": "hpc_psu_feed",
+        "kind": "electrical",
+        "position_mm": [
+          2900.0,
+          -298.0,
+          174.25
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "standard": "2100 W Dual-Redundant 230 VAC Feed",
+        "mating_part_id": "S9.HPC-03",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "world",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "WIDTH_19IN",
+        "nominal_mm": 482.6,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "482.60 ±0.50"
+      },
+      {
+        "label": "DEPTH_NODE",
+        "nominal_mm": 780.0,
+        "tol_plus_mm": 1.0,
+        "tol_minus_mm": -1.0,
+        "view": "right",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "780.00 ±1.00"
+      },
+      {
+        "label": "HEIGHT_4U_STACK",
+        "nominal_mm": 177.8,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "177.80 ±0.50"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "flatness",
+        "tolerance_mm": 0.5,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "2U FRONT EARS & RAILS",
+        "glyph": "⏥",
+        "tolerance_text": "0.50"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "482.6x780x177.8 mm (4U dogrudan / 5U anahtarli), Surface d=37 e2e=6.34 us (<6.70 us D3 dongu, 16L/modul) & qLDPC [[144,12,12]] e2e=2.32 us (<2.62 us, 108L/modul), 2100 W / 0 W kriyo, kutle=56.00 kg",
+      "Exp143 S9.HPC-01 (56.00 kg, 2100 W, 0 W cryo): 2x 2U QEC decoder GPU/FPGA compute nodes (d=37 e2e=6.34 us; qLDPC 2.32 us).",
+      "Mounted inside S9.HPC-03 open rail stack at X=+2750 mm, Y=-700 mm."
+    ],
+    "scad_params": {
+      "qty_nodes": 2,
+      "u_per_node": 2,
+      "depth_mm": 780.0,
+      "power_W": 2100
+    },
+    "target_mass_kg": 56.0,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S9.HPC-01",
+    "subsystem": "S9",
+    "design_tier": "COTS_ENV_ICD",
+    "stl_path": "hardware/cad_parts/out/S9_spares_hpc/S9.HPC-01.stl",
+    "step_path": "hardware/cad_parts/out/S9_spares_hpc/S9.HPC-01.step",
+    "scad_path": "hardware/cad_parts/out/S9_spares_hpc/S9.HPC-01.scad",
+    "dxf_path": "hardware/cad_parts/out/S9_spares_hpc/S9.HPC-01.dxf",
+    "svg_path": "hardware/cad_parts/out/S9_spares_hpc/S9.HPC-01.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 58355277.6905242,
+    "surface_area_mm2": 1989397.646185177,
+    "mass_kg": 56.000000000000036,
+    "cg_mm": [
+      2750.053894205197,
+      -699.9256510021307,
+      174.2500000000002
+    ],
+    "bbox_min_mm": [
+      2508.7,
+      -1116.2,
+      85.3
+    ],
+    "bbox_max_mm": [
+      2991.3,
+      -297.79999999999995,
+      263.2
+    ],
+    "inertia_kg_mm2": [
+      2996998.1942785247,
+      1054354.8273612745,
+      3752220.6755643683,
+      265.02721525711024,
+      8.246897607997263e-08,
+      -1.6868654198176218e-08
+    ],
+    "triangle_count": 3544,
+    "vertex_count": 1784,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "shell_bboxes_mm": [
+    [
+      [
+        2508.7,
+        -1090.0,
+        85.3
+      ],
+      [
+        2991.3,
+        -1086.0,
+        172.2
+      ]
+    ],
+    [
+      [
+        2530.0,
+        -1085.9,
+        86.3
+      ],
+      [
+        2970.0,
+        -310.0,
+        171.2
+      ]
+    ],
+    [
+      [
+        2542.5,
+        -1108.1,
+        101.3525
+      ],
+      [
+        2549.5,
+        -1090.1,
+        108.3525
+      ]
+    ],
+    [
+      [
+        2542.5,
+        -1108.1,
+        149.1475
+      ],
+      [
+        2549.5,
+        -1090.1,
+        156.1475
+      ]
+    ],
+    [
+      [
+        2542.0,
+        -1116.2,
+        100.8525
+      ],
+      [
+        2550.0,
+        -1108.2,
+        156.6475
+      ]
+    ],
+    [
+      [
+        2950.5,
+        -1108.1,
+        101.3525
+      ],
+      [
+        2957.5,
+        -1090.1,
+        108.3525
+      ]
+    ],
+    [
+      [
+        2950.5,
+        -1108.1,
+        149.1475
+      ],
+      [
+        2957.5,
+        -1090.1,
+        156.1475
+      ]
+    ],
+    [
+      [
+        2950.0,
+        -1116.2,
+        100.8525
+      ],
+      [
+        2958.0,
+        -1108.2,
+        156.6475
+      ]
+    ],
+    [
+      [
+        2814.5,
+        -1101.1,
+        123.25
+      ],
+      [
+        2825.5,
+        -1090.1,
+        134.25
+      ]
+    ],
+    [
+      [
+        2844.5,
+        -1101.1,
+        123.25
+      ],
+      [
+        2855.5,
+        -1090.1,
+        134.25
+      ]
+    ],
+    [
+      [
+        2874.5,
+        -1101.1,
+        123.25
+      ],
+      [
+        2885.5,
+        -1090.1,
+        134.25
+      ]
+    ],
+    [
+      [
+        2904.5,
+        -1101.1,
+        123.25
+      ],
+      [
+        2915.5,
+        -1090.1,
+        134.25
+      ]
+    ],
+    [
+      [
+        2609.436,
+        -309.8,
+        98.186
+      ],
+      [
+        2670.564,
+        -299.8,
+        159.314
+      ]
+    ],
+    [
+      [
+        2719.436,
+        -309.8,
+        98.186
+      ],
+      [
+        2780.564,
+        -299.8,
+        159.314
+      ]
+    ],
+    [
+      [
+        2884.0,
+        -309.8,
+        116.75
+      ],
+      [
+        2916.0,
+        -297.8,
+        140.75
+      ]
+    ],
+    [
+      [
+        2508.7,
+        -1090.0,
+        176.3
+      ],
+      [
+        2991.3,
+        -1086.0,
+        263.2
+      ]
+    ],
+    [
+      [
+        2530.0,
+        -1085.9,
+        177.3
+      ],
+      [
+        2970.0,
+        -310.0,
+        262.2
+      ]
+    ],
+    [
+      [
+        2542.5,
+        -1108.1,
+        192.3525
+      ],
+      [
+        2549.5,
+        -1090.1,
+        199.3525
+      ]
+    ],
+    [
+      [
+        2542.5,
+        -1108.1,
+        240.1475
+      ],
+      [
+        2549.5,
+        -1090.1,
+        247.1475
+      ]
+    ],
+    [
+      [
+        2542.0,
+        -1116.2,
+        191.8525
+      ],
+      [
+        2550.0,
+        -1108.2,
+        247.6475
+      ]
+    ],
+    [
+      [
+        2950.5,
+        -1108.1,
+        192.3525
+      ],
+      [
+        2957.5,
+        -1090.1,
+        199.3525
+      ]
+    ],
+    [
+      [
+        2950.5,
+        -1108.1,
+        240.1475
+      ],
+      [
+        2957.5,
+        -1090.1,
+        247.1475
+      ]
+    ],
+    [
+      [
+        2950.0,
+        -1116.2,
+        191.8525
+      ],
+      [
+        2958.0,
+        -1108.2,
+        247.6475
+      ]
+    ],
+    [
+      [
+        2814.5,
+        -1101.1,
+        214.25
+      ],
+      [
+        2825.5,
+        -1090.1,
+        225.25
+      ]
+    ],
+    [
+      [
+        2844.5,
+        -1101.1,
+        214.25
+      ],
+      [
+        2855.5,
+        -1090.1,
+        225.25
+      ]
+    ],
+    [
+      [
+        2874.5,
+        -1101.1,
+        214.25
+      ],
+      [
+        2885.5,
+        -1090.1,
+        225.25
+      ]
+    ],
+    [
+      [
+        2904.5,
+        -1101.1,
+        214.25
+      ],
+      [
+        2915.5,
+        -1090.1,
+        225.25
+      ]
+    ],
+    [
+      [
+        2609.436,
+        -309.8,
+        189.186
+      ],
+      [
+        2670.564,
+        -299.8,
+        250.314
+      ]
+    ],
+    [
+      [
+        2719.436,
+        -309.8,
+        189.186
+      ],
+      [
+        2780.564,
+        -299.8,
+        250.314
+      ]
+    ],
+    [
+      [
+        2884.0,
+        -309.8,
+        207.75
+      ],
+      [
+        2916.0,
+        -297.8,
+        231.75
+      ]
+    ]
+  ],
+  "reconciliation_notes": []
+}

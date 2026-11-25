@@ -1,0 +1,97 @@
+{
+  "schema_version": "part_icd_v1.0",
+  "part_id": "S7.4-03",
+  "parent_bom_id": "S7.4",
+  "subsystem": "S7",
+  "part_name": "19 inc EMI-kalkanli kontrol/RF kabini ve su/hava isi esanjoru",
+  "part_category": "PHYSICAL_SOLID",
+  "bom_metadata": {
+    "qty": "2",
+    "unit": "kabin",
+    "material": "42U celik EMI kabin (>60 dB @ 1 GHz)",
+    "key_spec": "Guc dagitimi, kablo yonetimi, sicaklik kontrolu (±1 C)",
+    "tolerance": "±1 C",
+    "temp_stage": "300 K (oda)",
+    "vacuum_grade": "Atmosfer",
+    "procurement_class": "COTS",
+    "parent_cost_class": "B",
+    "usd_low": 4000.0,
+    "usd_nom": 7000.0,
+    "usd_high": 13000.0,
+    "legacy_cad_module": "s7_electronics_rack_interconnect",
+    "bom_epistemic_tag": "{Model-Kalibrasyon-Exp114}",
+    "notes": "2 x 42U EMI kabin (RF + kontrol ayirimi)"
+  },
+  "artifact_links": {
+    "cad": {
+      "work_package": "WP-M5",
+      "design_tier": "COTS_ENV_ICD",
+      "stl": "hardware/cad_parts/out/S7/S7.4-03.stl",
+      "step": "hardware/cad_parts/out/S7/S7.4-03.step",
+      "scad": "hardware/cad_parts/out/S7/S7.4-03.scad",
+      "dxf": "hardware/cad_parts/out/S7/S7.4-03.dxf",
+      "svg": "hardware/cad_parts/out/S7/S7.4-03.svg",
+      "cad_json": "hardware/cad_parts/out/S7/S7.4-03.json",
+      "watertight": true,
+      "all_6_files_valid": true,
+      "mass_kg": 310.0,
+      "triangle_count": 1872,
+      "temp_k": 300.0,
+      "canonical_bbox_min_mm": [
+        1180.0,
+        -450.0,
+        0.1
+      ],
+      "canonical_bbox_max_mm": [
+        2400.0,
+        580.1,
+        2049.9
+      ],
+      "datum_shift_mm": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "port_count": 0,
+      "gdt_frame_count": 0
+    },
+    "pcb_bundles": [],
+    "legacy_board_files": [],
+    "electrical_icd": {
+      "path": "hardware/icd/electrical/S7.4-03.json",
+      "electrical_class": "E3",
+      "grounding_domain": "FACILITY_PE",
+      "ups_tier": "TIER1_CRITICAL",
+      "exp150_ups_allocation_w": 35.0,
+      "mating_part_ids": [
+        "S7.SAFETY-04",
+        "S7.1-03",
+        "S7.1-01",
+        "S6.11-01"
+      ],
+      "interlock_hooks_count": 1
+    },
+    "rtl_modules": [],
+    "rtl_audit_json": null,
+    "software_and_eda_files": [],
+    "verification_tests": []
+  },
+  "specialized_specification": null,
+  "verification_status": {
+    "cad_verified": true,
+    "pcb_verified": false,
+    "electrical_icd_verified": true,
+    "rtl_verified": false,
+    "software_or_eda_verified": false,
+    "specialized_icd_present": false,
+    "traceable": true
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "tapeout_done": false
+  }
+}

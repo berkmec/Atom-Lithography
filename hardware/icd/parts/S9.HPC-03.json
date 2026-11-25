@@ -1,0 +1,97 @@
+{
+  "schema_version": "part_icd_v1.0",
+  "part_id": "S9.HPC-03",
+  "parent_bom_id": "S9.HPC",
+  "subsystem": "S9",
+  "part_name": "Yedekli 2.6 kW Titanium PSU Paketi, Surgulu Raf Raylari & ZU48DR 100G CMAC RDMA Entegrasyon Kiti (Exp143, 3.80 kg)",
+  "part_category": "PHYSICAL_SOLID",
+  "bom_metadata": {
+    "qty": "1",
+    "unit": "set",
+    "material": "2.6 kW 80+ Titanium PSU + celik raf rayi + ZU48DR 100G CMAC FW",
+    "key_spec": "4U raf montaj + ZU48DR 100G CMAC RoCEv2 donanim arayuzu, 0 W ek yuk, kutle=3.80 kg (Option-HPC toplam 64.00 kg & 2195 W)",
+    "tolerance": "99.99% yedekli PSU",
+    "temp_stage": "300 K (HPC rafi)",
+    "vacuum_grade": "Atmosfer",
+    "procurement_class": "COTS/CUS",
+    "parent_cost_class": "B(v6.0-OptHPC)",
+    "usd_low": 4500.0,
+    "usd_nom": 6500.0,
+    "usd_high": 9500.0,
+    "legacy_cad_module": "s7_electronics_rack_interconnect",
+    "bom_epistemic_tag": "{Varsayım}",
+    "notes": "DELTA-V6.0-OPTHPC-EXP143 (Exp143 S9.HPC-03 Option-HPC 3/3, 3.80 kg; Option-HPC toplam 64.00 kg & $98k/$132k/$181k; s9hpc_hardware_spec.json birebir; RFQ-09)"
+  },
+  "artifact_links": {
+    "cad": {
+      "work_package": "WP-M5",
+      "design_tier": "COTS_ENV_ICD",
+      "stl": "hardware/cad_parts/out/S9_spares_hpc/S9.HPC-03.stl",
+      "step": "hardware/cad_parts/out/S9_spares_hpc/S9.HPC-03.step",
+      "scad": "hardware/cad_parts/out/S9_spares_hpc/S9.HPC-03.scad",
+      "dxf": "hardware/cad_parts/out/S9_spares_hpc/S9.HPC-03.dxf",
+      "svg": "hardware/cad_parts/out/S9_spares_hpc/S9.HPC-03.svg",
+      "cad_json": "hardware/cad_parts/out/S9_spares_hpc/S9.HPC-03.json",
+      "watertight": true,
+      "all_6_files_valid": true,
+      "mass_kg": 3.8,
+      "triangle_count": 584,
+      "temp_k": 300.0,
+      "canonical_bbox_min_mm": [
+        2486.0,
+        -1090.0,
+        0.0
+      ],
+      "canonical_bbox_max_mm": [
+        3042.0,
+        -310.0,
+        365.2
+      ],
+      "datum_shift_mm": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "port_count": 0,
+      "gdt_frame_count": 0
+    },
+    "pcb_bundles": [],
+    "legacy_board_files": [],
+    "electrical_icd": {
+      "path": "hardware/icd/electrical/S9.HPC-03.json",
+      "electrical_class": "E3",
+      "grounding_domain": "FACILITY_PE",
+      "ups_tier": "TIER2_SHED",
+      "exp150_ups_allocation_w": 0.0,
+      "mating_part_ids": [
+        "S9.HPC-01",
+        "S9.HPC-02",
+        "S6.11-01",
+        "S7.SAFETY-04"
+      ],
+      "interlock_hooks_count": 0
+    },
+    "rtl_modules": [],
+    "rtl_audit_json": null,
+    "software_and_eda_files": [],
+    "verification_tests": []
+  },
+  "specialized_specification": null,
+  "verification_status": {
+    "cad_verified": true,
+    "pcb_verified": false,
+    "electrical_icd_verified": true,
+    "rtl_verified": false,
+    "software_or_eda_verified": false,
+    "specialized_icd_present": false,
+    "traceable": true
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "tapeout_done": false
+  }
+}

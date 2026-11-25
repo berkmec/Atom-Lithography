@@ -1,0 +1,97 @@
+{
+  "schema_version": "1.0",
+  "part_id": "S7.SAFETY-06",
+  "parent_bom_id": "S7.SAFETY",
+  "subsystem": "S7",
+  "part_name": "Hizli Yay-Donuslu UHV Izolasyon Surgu Vana Aktorleri (<80 ms), ISO 10156 %5 H2/N2 Orifis & X-Isini Dozimetresi (Exp150, 12.0 kg)",
+  "qty": 1,
+  "unit": "set",
+  "temp_stage": "300 K (S5 manifold / oda)",
+  "vacuum_grade": "UHV / Atmosfer",
+  "bom_key_spec": "220x180x160 mm, 80.0 ms UHV vana kapama (Si(100) oksitlenme 6.0e-4 ML << 0.01 ML), %5 H2/N2 sinirli akis, 60 W / 0 W kriyo, kutle=12.0 kg",
+  "usd_nom": 15000.0,
+  "bom_epistemic_tag": "{Varsay\u0131m}",
+  "electrical_class": "E4",
+  "grounding_domain": "FACILITY_PE",
+  "grounding_notes": "Fast spring-return UHV gate-valve actuators (<80 ms), ISO 10156 5% H2/N2 orifice & X-ray survey meter (60 W Tier-1).",
+  "supply_rails": [
+    {
+      "rail_name": "DC_24V_UPS_T1",
+      "voltage_v": 24.0,
+      "current_type": "DC",
+      "max_current_a": 3.0,
+      "steady_power_w": 60.0,
+      "peak_power_w": 90.0,
+      "source_part_id": "S7.SAFETY-04"
+    }
+  ],
+  "connectors_and_pinout": [
+    {
+      "connector_ref": "J_ACT_SOL",
+      "connector_type": "Phoenix 8-Pin De-Energize-To-Close",
+      "location_side": "uhv_manifolds",
+      "mating_part_id": "S7.SAFETY-03",
+      "pins": [
+        {
+          "pin": "1-2",
+          "signal": "GV_LL_SOL_24V",
+          "direction": "IN",
+          "nominal_level": "Load-lock gate valve (<=80 ms seal)"
+        },
+        {
+          "pin": "3-4",
+          "signal": "GV_FORE_SOL_24V",
+          "direction": "IN",
+          "nominal_level": "Foreline gate valve (<=80 ms seal)"
+        },
+        {
+          "pin": "5-6",
+          "signal": "XRAY_DOSE_4_20MA",
+          "direction": "OUT",
+          "nominal_level": "Area X-ray monitor (<0.01 uSv/h target)"
+        },
+        {
+          "pin": "7-8",
+          "signal": "VALVE_SEALED_FB",
+          "direction": "OUT",
+          "nominal_level": "Closed-position proof switches"
+        }
+      ]
+    }
+  ],
+  "mating_part_ids": [
+    "S5.1-03",
+    "S5.2-01",
+    "S5.6-03",
+    "S7.SAFETY-03",
+    "S7.SAFETY-04"
+  ],
+  "interlock_hooks": [
+    {
+      "signal_name": "UHV_GATE_VALVE_80MS",
+      "target_part_id": "S7.SAFETY-03",
+      "action_on_trip": "De-energize pneumatic solenoids -> seal in 80 ms",
+      "response_time_ms": 80.0
+    }
+  ],
+  "ups_tier": "TIER1_CRITICAL",
+  "ups_budget_group": "EXP150_TIER1_CRITICAL",
+  "exp150_ups_allocation_w": 60.0,
+  "supply_rails_steady_sum_w": 60.0,
+  "incremental_mains_w": 60.0,
+  "secondary_or_parent_derived_w": 0.0,
+  "non_exp150_aux_shed_w": 0.0,
+  "reconciliation_note": "Exp150 Tier-1 critical UPS load: incremental_mains_w = exp150_ups_allocation_w = 60.0 W.",
+  "timing_sync": {
+    "rb_10mhz_port": null,
+    "white_rabbit_port": null,
+    "sync_role": "Fast UHV isolation & X-ray survey"
+  },
+  "epistemic_flags": {
+    "design_maturity": "M0_M1_ELECTRICAL_ICD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

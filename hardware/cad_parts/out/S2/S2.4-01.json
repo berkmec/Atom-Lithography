@@ -1,0 +1,219 @@
+{
+  "part_id": "S2.4-01",
+  "subsystem": "S2",
+  "design": {
+    "part_id": "S2.4-01",
+    "parent_bom_id": "S2.4",
+    "subsystem": "S2",
+    "part_name": "SKY130 blanker_tile 64-kanalli surucu ASIC yongalari (16 aktif karo + yedek, 1024 ch)",
+    "design_tier": "CUSTOM_FULL",
+    "material": "Si",
+    "temp_stage": "300 K / 4 K uyumlu",
+    "temp_k": 4.0,
+    "vacuum_grade": "UHV 1e-9 mbar",
+    "tolerance_spec": "Anten ECO kapali",
+    "surface_finish_ra_um": 0.1,
+    "qty": 24,
+    "procurement_class": "CUS",
+    "world_origin_mm": [
+      0.0,
+      0.0,
+      5.825
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "tile_solder_pad_ring",
+        "kind": "electrical",
+        "position_mm": [
+          0.0,
+          0.0,
+          5.4
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "standard": "16x64-ch SKY130 BGA",
+        "mating_part_id": "S2.4-02",
+        "bore_mm": 87.5,
+        "od_mm": 104.5,
+        "pcd_mm": 96.0,
+        "bolt_count": 16,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "global",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "TILE_PCD",
+        "nominal_mm": 96.0,
+        "tol_plus_mm": 0.05,
+        "tol_minus_mm": -0.05,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø96.00 ±0.05"
+      },
+      {
+        "label": "PKG_XY",
+        "nominal_mm": 6.0,
+        "tol_plus_mm": 0.05,
+        "tol_minus_mm": -0.05,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "6.00 ±0.05"
+      },
+      {
+        "label": "PKG_H",
+        "nominal_mm": 0.85,
+        "tol_plus_mm": 0.03,
+        "tol_minus_mm": -0.03,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "0.85 ±0.03"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "position",
+        "tolerance_mm": 0.05,
+        "diameter_zone": true,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "B",
+        "datum_tertiary": "",
+        "feature_note": "16 ACTIVE ASIC TILES",
+        "glyph": "⌖",
+        "tolerance_text": "Ø0.050"
+      },
+      {
+        "symbol": "flatness",
+        "tolerance_mm": 0.015,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "BGA COPLANARITY",
+        "glyph": "⏥",
+        "tolerance_text": "0.015"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "16x 64-ch aktif karo (1024 demetcik Arch-B baz) + 8 yedek, WNS +7.21 ns @10 ns, DRC=0, LVS=MATCH",
+      "16 active 64-ch SKY130 130 nm CMOS blanker_tile ASIC packages (1,024 ch total; +8 spares in BOM); WNS +7.21 ns, DRC=0, LVS=MATCH"
+    ],
+    "scad_params": {
+      "active_tiles": 16,
+      "spare_tiles": 8,
+      "ch_per_tile": 64,
+      "tile_pcd": 96.0,
+      "pkg_xy": 6.0
+    },
+    "target_mass_kg": 0.0012,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S2.4-01",
+    "subsystem": "S2",
+    "design_tier": "CUSTOM_FULL",
+    "stl_path": "hardware/cad_parts/out/S2/S2.4-01.stl",
+    "step_path": "hardware/cad_parts/out/S2/S2.4-01.step",
+    "scad_path": "hardware/cad_parts/out/S2/S2.4-01.scad",
+    "dxf_path": "hardware/cad_parts/out/S2/S2.4-01.dxf",
+    "svg_path": "hardware/cad_parts/out/S2/S2.4-01.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 488.988000000001,
+    "surface_area_mm2": 1472.179982668964,
+    "mass_kg": 0.0011388530520000028,
+    "cg_mm": [
+      -4.537268179200527e-14,
+      2.3830647922782594e-14,
+      5.824999999999988
+    ],
+    "bbox_min_mm": [
+      -50.57605671831072,
+      -50.57605671831072,
+      5.4
+    ],
+    "bbox_max_mm": [
+      50.57605671831072,
+      50.57605671831072,
+      6.25
+    ],
+    "inertia_kg_mm2": [
+      1.3154357136755213,
+      1.315435713675519,
+      2.630734290462695,
+      5.588524807365036e-16,
+      3.4155152928150966e-17,
+      4.5685348393220364e-17
+    ],
+    "triangle_count": 448,
+    "vertex_count": 256,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "engineering_checks": {},
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

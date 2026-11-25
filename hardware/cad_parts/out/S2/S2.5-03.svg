@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1680" height="1188" viewBox="0 0 1680 1188">
+  <title>S2.5-03 — Kafa cercevesi referans optik aynasi ve lazer hedef prizmasi (ISO 128 / ASME Y14.5)</title>
+  <defs>
+    <marker id="arrow-end" viewBox="0 0 10 6" refX="9" refY="3" markerWidth="8" markerHeight="5" orient="auto"><path d="M0,0 L10,3 L0,6 Z" fill="#1B365D"/></marker>
+    <marker id="arrow-start" viewBox="0 0 10 6" refX="1" refY="3" markerWidth="8" markerHeight="5" orient="auto"><path d="M10,0 L0,3 L10,6 Z" fill="#1B365D"/></marker>
+  </defs>
+  <rect x="0" y="0" width="1680" height="1188" fill="#FFFFFF"/>
+  <rect x="18" y="18" width="1644" height="1152" fill="none" stroke="#111827" stroke-width="1.2"/>
+  <rect x="38" y="38" width="1604" height="1112" fill="none" stroke="#111827" stroke-width="2.0"/>
+  <text x="138.2" y="32" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#64748B">1</text>
+  <text x="138.2" y="1164.0" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#64748B">1</text>
+  <line x1="238.5" y1="18" x2="238.5" y2="38" stroke="#64748B" stroke-width="0.8"/>
+  <line x1="238.5" y1="1150.0" x2="238.5" y2="1170.0" stroke="#64748B" stroke-width="0.8"/>
+  <text x="338.8" y="32" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#64748B">2</text>
+  <text x="338.8" y="1164.0" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#64748B">2</text>
+  <line x1="439.0" y1="18" x2="439.0" y2="38" stroke="#64748B" stroke-width="0.8"/>
+  <line x1="439.0" y1="1150.0" x2="439.0" y2="1170.0" stroke="#64748B" stroke-width="0.8"/>
+  <text x="539.2" y="32" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#64748B">3</text>
+  <text x="539.2" y="1164.0" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#64748B">3</text>
+  <line x1="639.5" y1="18" x2="639.5" y2="38" stroke="#64748B" stroke-width="0.8"/>
+  <line x1="639.5" y1="1150.0" x2="639.5" y2="1170.0" stroke="#64748B" stroke-width="0.8"/>
+  <text x="739.8" y="32" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#64748B">4</text>
+  <text x="739.8" y="1164.0" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#64748B">4</text>
+  <line x1="840.0" y1="18" x2="840.0" y2="38" stroke="#64748B" stroke-width="0.8"/>
+  <line x1="840.0" y1="1150.0" x2="840.0" y2="1170.0" stroke="#64748B" stroke-width="0.8"/>
+  <text x="940.2" y="32" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#64748B">5</text>
+  <text x="940.2" y="1164.0" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#64748B">5</text>
+  <line x1="1040.5" y1="18" x2="1040.5" y2="38" stroke="#64748B" stroke-width="0.8"/>
+  <line x1="1040.5" y1="1150.0" x2="1040.5" y2="1170.0" stroke="#64748B" stroke-width="0.8"/>
+  <text x="1140.8" y="32" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#64748B">6</text>
+  <text x="1140.8" y="1164.0" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#64748B">6</text>
+  <line x1="1241.0" y1="18" x2="1241.0" y2="38" stroke="#64748B" stroke-width="0.8"/>
+  <line x1="1241.0" y1="1150.0" x2="1241.0" y2="1170.0" stroke="#64748B" stroke-width="0.8"/>
+  <text x="1341.2" y="32" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#64748B">7</text>
+  <text x="1341.2" y="1164.0" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#64748B">7</text>
+  <line x1="1441.5" y1="18" x2="1441.5" y2="38" stroke="#64748B" stroke-width="0.8"/>
+  <line x1="1441.5" y1="1150.0" x2="1441.5" y2="1170.0" stroke="#64748B" stroke-width="0.8"/>
+  <text x="1541.8" y="32" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#64748B">8</text>
+  <text x="1541.8" y="1164.0" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#64748B">8</text>
+  <text x="28" y="134.2" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#64748B">A</text>
+  <text x="1652.0" y="134.2" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#64748B">A</text>
+  <line x1="18" y1="223.3" x2="38" y2="223.3" stroke="#64748B" stroke-width="0.8"/>
+  <line x1="1642.0" y1="223.3" x2="1662.0" y2="223.3" stroke="#64748B" stroke-width="0.8"/>
+  <text x="28" y="319.5" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#64748B">B</text>
+  <text x="1652.0" y="319.5" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#64748B">B</text>
+  <line x1="18" y1="408.7" x2="38" y2="408.7" stroke="#64748B" stroke-width="0.8"/>
+  <line x1="1642.0" y1="408.7" x2="1662.0" y2="408.7" stroke="#64748B" stroke-width="0.8"/>
+  <text x="28" y="504.8" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#64748B">C</text>
+  <text x="1652.0" y="504.8" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#64748B">C</text>
+  <line x1="18" y1="594.0" x2="38" y2="594.0" stroke="#64748B" stroke-width="0.8"/>
+  <line x1="1642.0" y1="594.0" x2="1662.0" y2="594.0" stroke="#64748B" stroke-width="0.8"/>
+  <text x="28" y="690.2" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#64748B">D</text>
+  <text x="1652.0" y="690.2" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#64748B">D</text>
+  <line x1="18" y1="779.3" x2="38" y2="779.3" stroke="#64748B" stroke-width="0.8"/>
+  <line x1="1642.0" y1="779.3" x2="1662.0" y2="779.3" stroke="#64748B" stroke-width="0.8"/>
+  <text x="28" y="875.5" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#64748B">E</text>
+  <text x="1652.0" y="875.5" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#64748B">E</text>
+  <line x1="18" y1="964.7" x2="38" y2="964.7" stroke="#64748B" stroke-width="0.8"/>
+  <line x1="1642.0" y1="964.7" x2="1662.0" y2="964.7" stroke="#64748B" stroke-width="0.8"/>
+  <text x="28" y="1060.8" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#64748B">F</text>
+  <text x="1652.0" y="1060.8" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#64748B">F</text>
+  <line x1="1088" y1="38" x2="1088" y2="1150.0" stroke="#CBD5E1" stroke-width="1.0"/>
+  <g id="view-top">
+    <path d="M456.27,316.94L469.64,293.79M454.24,317.48L456.27,316.94M469.09,291.76L469.64,293.79M426.65,267.25L469.09,291.76M424.62,267.80L426.65,267.25M411.26,290.95L424.62,267.80M411.26,290.95L411.80,292.98M411.80,292.98L454.24,317.48M106.85,451.26L133.58,451.26M133.58,451.26L135.07,452.75M105.36,452.75L106.85,451.26M105.36,501.76L105.36,452.75M105.36,501.76L106.85,503.24M106.85,503.24L133.58,503.24M133.58,503.24L135.07,501.76M135.07,501.76L135.07,452.75M411.26,663.56L424.62,686.71M411.26,663.56L411.80,661.53M424.62,686.71L426.65,687.25M426.65,687.25L469.09,662.75M469.09,662.75L469.64,660.72M456.27,637.57L469.64,660.72M454.24,637.02L456.27,637.57M411.80,661.53L454.24,637.02" fill="none" stroke="#64748B" stroke-width="0.85" stroke-dasharray="5,3.5"/>
+    <line x1="89.4" y1="477.3" x2="485.6" y2="477.3" stroke="#64748B" stroke-width="0.8" stroke-dasharray="10,4,2,4"/>
+    <line x1="287.5" y1="251.3" x2="287.5" y2="703.3" stroke="#64748B" stroke-width="0.8" stroke-dasharray="10,4,2,4"/>
+    <path d="M456.27,316.94L469.64,293.79M454.24,317.48L456.27,316.94M469.09,291.76L469.64,293.79M426.65,267.25L469.09,291.76M424.62,267.80L426.65,267.25M411.26,290.95L424.62,267.80M411.26,290.95L411.80,292.98M411.80,292.98L454.24,317.48M106.85,451.26L133.58,451.26M133.58,451.26L135.07,452.75M105.36,452.75L106.85,451.26M105.36,501.76L105.36,452.75M105.36,501.76L106.85,503.24M106.85,503.24L133.58,503.24M133.58,503.24L135.07,501.76M135.07,501.76L135.07,452.75M411.26,663.56L424.62,686.71M411.26,663.56L411.80,661.53M424.62,686.71L426.65,687.25M426.65,687.25L469.09,662.75M469.09,662.75L469.64,660.72M456.27,637.57L469.64,660.72M454.24,637.02L456.27,637.57M411.80,661.53L454.24,637.02" fill="none" stroke="#111827" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="287.5" y="243.3" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" letter-spacing="0.6" fill="#1B365D">TOP (XY)</text>
+  </g>
+  <g id="view-front">
+    <path d="M469.09,852.75L469.64,852.75M426.65,852.75L469.09,852.75M469.09,852.75L469.09,802.25M424.62,852.75L426.65,852.75M426.65,852.75L426.65,802.25M411.26,852.75L424.62,852.75M424.62,852.75L424.62,802.25M469.09,802.25L469.64,802.25M426.65,802.25L469.09,802.25M424.62,802.25L426.65,802.25M411.26,802.25L424.62,802.25M106.85,852.75L133.58,852.75M133.58,852.75L135.07,852.75M133.58,852.75L133.58,802.25M105.36,852.75L106.85,852.75M106.85,852.75L106.85,802.25M105.36,852.75L105.36,802.25M135.07,852.75L135.07,802.25M106.85,802.25L133.58,802.25M133.58,802.25L135.07,802.25M105.36,802.25L106.85,802.25M411.26,852.75L411.80,852.75M456.27,852.75L469.64,852.75M454.24,852.75L456.27,852.75M456.27,852.75L456.27,802.25M411.80,852.75L454.24,852.75M454.24,852.75L454.24,802.25M411.80,852.75L411.80,802.25M411.26,802.25L411.80,802.25M456.27,802.25L469.64,802.25M454.24,802.25L456.27,802.25M411.80,802.25L454.24,802.25" fill="none" stroke="#64748B" stroke-width="0.85" stroke-dasharray="5,3.5"/>
+    <line x1="89.4" y1="827.5" x2="485.6" y2="827.5" stroke="#64748B" stroke-width="0.8" stroke-dasharray="10,4,2,4"/>
+    <line x1="287.5" y1="786.3" x2="287.5" y2="868.7" stroke="#64748B" stroke-width="0.8" stroke-dasharray="10,4,2,4"/>
+    <path d="M456.27,852.75L469.64,852.75M454.24,852.75L456.27,852.75M456.27,852.75L456.27,802.25M469.64,852.75L469.64,802.25M411.26,852.75L411.80,852.75M411.26,852.75L411.26,802.25M411.80,852.75L454.24,852.75M411.80,852.75L411.80,802.25M454.24,852.75L454.24,802.25M456.27,802.25L469.64,802.25M454.24,802.25L456.27,802.25M411.26,802.25L411.80,802.25M411.80,802.25L454.24,802.25M105.36,852.75L106.85,852.75M105.36,852.75L105.36,802.25M106.85,852.75L133.58,852.75M106.85,852.75L106.85,802.25M133.58,852.75L135.07,852.75M133.58,852.75L133.58,802.25M135.07,852.75L135.07,802.25M105.36,802.25L106.85,802.25M106.85,802.25L133.58,802.25M133.58,802.25L135.07,802.25M411.26,852.75L424.62,852.75M424.62,852.75L426.65,852.75M424.62,852.75L424.62,802.25M426.65,852.75L469.09,852.75M426.65,852.75L426.65,802.25M469.09,852.75L469.64,852.75M469.09,852.75L469.09,802.25M411.26,802.25L424.62,802.25M424.62,802.25L426.65,802.25M426.65,802.25L469.09,802.25M469.09,802.25L469.64,802.25" fill="none" stroke="#111827" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="287.5" y="754.3" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" letter-spacing="0.6" fill="#1B365D">FRONT (XZ)</text>
+  </g>
+  <g id="view-right">
+    <path d="M1014.09,852.75L1014.64,852.75M990.94,852.75L1014.09,852.75M1014.09,852.75L1014.09,802.25M988.91,852.75L990.94,852.75M990.94,852.75L990.94,802.25M964.41,852.75L988.91,852.75M988.91,852.75L988.91,802.25M1014.09,802.25L1014.64,802.25M990.94,802.25L1014.09,802.25M988.91,802.25L990.94,802.25M964.41,802.25L988.91,802.25M829.14,852.75L830.63,852.75M830.63,852.75L830.63,802.25M780.13,852.75L829.14,852.75M829.14,852.75L829.14,802.25M778.65,852.75L780.13,852.75M780.13,852.75L780.13,802.25M778.65,852.75L778.65,802.25M829.14,802.25L830.63,802.25M780.13,802.25L829.14,802.25M778.65,802.25L780.13,802.25M595.18,852.75L618.33,852.75M618.33,852.75L620.36,852.75M618.33,852.75L618.33,802.25M594.64,852.75L595.18,852.75M595.18,852.75L595.18,802.25M620.36,852.75L644.87,852.75M620.36,852.75L620.36,802.25M595.18,802.25L618.33,802.25M618.33,802.25L620.36,802.25M594.64,802.25L595.18,802.25M620.36,802.25L644.87,802.25" fill="none" stroke="#64748B" stroke-width="0.85" stroke-dasharray="5,3.5"/>
+    <line x1="578.6" y1="827.5" x2="1030.6" y2="827.5" stroke="#64748B" stroke-width="0.8" stroke-dasharray="10,4,2,4"/>
+    <line x1="804.6" y1="786.3" x2="804.6" y2="868.7" stroke="#64748B" stroke-width="0.8" stroke-dasharray="10,4,2,4"/>
+    <path d="M964.95,852.75L988.10,852.75M964.41,852.75L964.95,852.75M964.95,852.75L964.95,802.25M988.10,852.75L990.13,852.75M988.10,852.75L988.10,802.25M990.13,852.75L1014.64,852.75M990.13,852.75L990.13,802.25M1014.64,852.75L1014.64,802.25M964.41,852.75L964.41,802.25M964.95,802.25L988.10,802.25M964.41,802.25L964.95,802.25M988.10,802.25L990.13,802.25M990.13,802.25L1014.64,802.25M829.14,852.75L830.63,852.75M830.63,852.75L830.63,802.25M778.65,852.75L780.13,852.75M778.65,852.75L778.65,802.25M780.13,852.75L829.14,852.75M780.13,852.75L780.13,802.25M829.14,852.75L829.14,802.25M829.14,802.25L830.63,802.25M778.65,802.25L780.13,802.25M780.13,802.25L829.14,802.25M594.64,852.75L619.14,852.75M594.64,852.75L594.64,802.25M619.14,852.75L621.17,852.75M619.14,852.75L619.14,802.25M621.17,852.75L644.32,852.75M621.17,852.75L621.17,802.25M644.32,852.75L644.87,852.75M644.32,852.75L644.32,802.25M644.87,852.75L644.87,802.25M594.64,802.25L619.14,802.25M619.14,802.25L621.17,802.25M621.17,802.25L644.32,802.25M644.32,802.25L644.87,802.25" fill="none" stroke="#111827" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="804.6" y="754.3" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" letter-spacing="0.6" fill="#1B365D">RIGHT (YZ)</text>
+  </g>
+<line x1="105.4" y1="856.7" x2="105.4" y2="892.7" stroke="#1B365D" stroke-width="0.9"/>
+<line x1="469.6" y1="856.7" x2="469.6" y2="892.7" stroke="#1B365D" stroke-width="0.9"/>
+<line x1="105.4" y1="886.7" x2="469.6" y2="886.7" stroke="#1B365D" stroke-width="1.1" marker-start="url(#arrow-start)" marker-end="url(#arrow-end)"/>
+<rect x="252.7" y="877.7" width="69.6" height="17" fill="#FFFFFF"/>
+<text x="287.5" y="890.7" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="600" fill="#1B365D">98.11 mm</text>
+<line x1="101.4" y1="802.3" x2="65.4" y2="802.3" stroke="#1B365D" stroke-width="0.9"/>
+<line x1="101.4" y1="852.7" x2="65.4" y2="852.7" stroke="#1B365D" stroke-width="0.9"/>
+<line x1="71.4" y1="802.3" x2="71.4" y2="852.7" stroke="#1B365D" stroke-width="1.1" marker-start="url(#arrow-start)" marker-end="url(#arrow-end)"/>
+<rect x="62.4" y="793.5" width="18" height="68.0" fill="#FFFFFF"/>
+<text x="75.4" y="827.5" text-anchor="middle" transform="rotate(-90 71.4 827.5)" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="600" fill="#1B365D">13.60 mm</text>
+<line x1="101.4" y1="267.3" x2="65.4" y2="267.3" stroke="#1B365D" stroke-width="0.9"/>
+<line x1="101.4" y1="687.3" x2="65.4" y2="687.3" stroke="#1B365D" stroke-width="0.9"/>
+<line x1="71.4" y1="267.3" x2="71.4" y2="687.3" stroke="#1B365D" stroke-width="1.1" marker-start="url(#arrow-start)" marker-end="url(#arrow-end)"/>
+<rect x="62.4" y="439.8" width="18" height="75.0" fill="#FFFFFF"/>
+<text x="75.4" y="477.3" text-anchor="middle" transform="rotate(-90 71.4 477.3)" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="600" fill="#1B365D">113.12 mm</text>
+<line x1="594.6" y1="856.7" x2="594.6" y2="892.7" stroke="#1B365D" stroke-width="0.9"/>
+<line x1="1014.6" y1="856.7" x2="1014.6" y2="892.7" stroke="#1B365D" stroke-width="0.9"/>
+<line x1="594.6" y1="886.7" x2="1014.6" y2="886.7" stroke="#1B365D" stroke-width="1.1" marker-start="url(#arrow-start)" marker-end="url(#arrow-end)"/>
+<rect x="766.2" y="877.7" width="76.8" height="17" fill="#FFFFFF"/>
+<text x="804.6" y="890.7" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="600" fill="#1B365D">113.12 mm</text>
+  <g id="datum-callouts">
+    <line x1="473.6" y1="852.7" x2="503.6" y2="852.7" stroke="#1B365D" stroke-width="1.0"/>
+<polygon points="484.6,852.7 498.6,852.7 491.6,862.7" fill="#1B365D"/>
+<line x1="491.6" y1="862.7" x2="491.6" y2="874.7" stroke="#1B365D" stroke-width="1.2"/>
+<rect x="480.6" y="874.7" width="22" height="22" fill="#FFFFFF" stroke="#1B365D" stroke-width="1.3"/>
+<text x="491.6" y="890.2" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#1B365D">A</text>
+<polygon points="287.5,781.3 287.5,795.3 297.5,788.3" fill="#1B365D"/>
+<line x1="297.5" y1="788.3" x2="307.5" y2="788.3" stroke="#1B365D" stroke-width="1.2"/>
+<rect x="307.5" y="777.3" width="22" height="22" fill="#FFFFFF" stroke="#1B365D" stroke-width="1.3"/>
+<text x="318.5" y="792.8" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#1B365D">B</text>
+<polygon points="485.6,470.3 485.6,484.3 495.6,477.3" fill="#1B365D"/>
+<line x1="495.6" y1="477.3" x2="505.6" y2="477.3" stroke="#1B365D" stroke-width="1.2"/>
+<rect x="505.6" y="466.3" width="22" height="22" fill="#FFFFFF" stroke="#1B365D" stroke-width="1.3"/>
+<text x="516.6" y="481.8" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#1B365D">C</text>
+  </g>
+  <g id="view-isometric">
+    <rect x="1105.0" y="68.0" width="515.0" height="355.0" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.0"/>
+    <rect x="1105.0" y="68.0" width="515.0" height="24" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="1.0"/>
+    <text x="1117.0" y="84.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#1B365D">ISOMETRIC VIEW (3D WIREFRAME, NOT TO SCALE)</text>
+    <path d="M1578.86,254.81L1583.83,281.44M1576.99,254.07L1578.86,254.81M1578.86,254.81L1578.86,203.01M1546.05,255.35L1576.99,254.07M1576.99,254.07L1576.99,202.28M1544.49,256.22L1546.05,255.35M1546.05,255.35L1546.05,203.55M1190.64,169.50L1208.46,181.44M1188.24,169.30L1190.64,169.50M1190.64,169.50L1190.64,117.70M1141.60,184.63L1188.24,169.30M1188.24,169.30L1188.24,117.50M1141.17,185.76L1141.60,184.63M1141.60,184.63L1141.60,132.83M1178.33,385.13L1191.45,371.91M1191.45,371.91L1193.75,371.52M1191.45,371.91L1191.45,320.12M1245.35,382.82L1246.18,383.89M1193.75,371.52L1245.35,382.82M1245.35,382.82L1245.35,331.02M1193.75,371.52L1193.75,319.72" fill="none" stroke="#CBD5E1" stroke-width="0.7" stroke-dasharray="3,3"/>
+    <path d="M1551.32,283.59L1582.26,282.32M1549.45,282.85L1551.32,283.59M1551.32,283.59L1551.32,231.79M1582.26,282.32L1583.83,281.44M1582.26,282.32L1582.26,230.52M1583.83,281.44L1583.83,229.64M1544.49,256.22L1549.45,282.85M1544.49,256.22L1544.49,204.43M1549.45,282.85L1549.45,231.06M1551.32,231.79L1582.26,230.52M1549.45,231.06L1551.32,231.79M1582.26,230.52L1583.83,229.64M1578.86,203.01L1583.83,229.64M1576.99,202.28L1578.86,203.01M1546.05,203.55L1576.99,202.28M1544.49,204.43L1546.05,203.55M1544.49,204.43L1549.45,231.06M1208.03,182.57L1208.46,181.44M1208.46,181.44L1208.46,129.64M1141.17,185.76L1158.99,197.70M1141.17,185.76L1141.17,133.96M1158.99,197.70L1161.39,197.90M1158.99,197.70L1158.99,145.90M1161.39,197.90L1208.03,182.57M1161.39,197.90L1161.39,146.10M1208.03,182.57L1208.03,130.77M1190.64,117.70L1208.46,129.64M1208.03,130.77L1208.46,129.64M1188.24,117.50L1190.64,117.70M1141.60,132.83L1188.24,117.50M1141.17,133.96L1141.60,132.83M1141.17,133.96L1158.99,145.90M1158.99,145.90L1161.39,146.10M1161.39,146.10L1208.03,130.77M1178.33,385.13L1179.16,386.20M1178.33,385.13L1178.33,333.33M1179.16,386.20L1230.77,397.50M1179.16,386.20L1179.16,334.41M1230.77,397.50L1233.06,397.11M1230.77,397.50L1230.77,345.70M1233.06,397.11L1246.18,383.89M1233.06,397.11L1233.06,345.31M1246.18,383.89L1246.18,332.10M1178.33,333.33L1191.45,320.12M1191.45,320.12L1193.75,319.72M1178.33,333.33L1179.16,334.41M1179.16,334.41L1230.77,345.70M1230.77,345.70L1233.06,345.31M1233.06,345.31L1246.18,332.10M1245.35,331.02L1246.18,332.10M1193.75,319.72L1245.35,331.02" fill="none" stroke="#111827" stroke-width="1.15" stroke-linejoin="round"/>
+    <line x1="1139.0" y1="399.0" x2="1161.0" y2="388.0" stroke="#1B365D" stroke-width="1.2"/>
+    <line x1="1139.0" y1="399.0" x2="1119.0" y2="388.0" stroke="#1B365D" stroke-width="1.2"/>
+    <line x1="1139.0" y1="399.0" x2="1139.0" y2="375.0" stroke="#1B365D" stroke-width="1.2"/>
+    <text x="1164.0" y="389.0" font-family="DejaVu Sans, sans-serif" font-size="9.5" fill="#1B365D">X</text>
+    <text x="1110.0" y="389.0" font-family="DejaVu Sans, sans-serif" font-size="9.5" fill="#1B365D">Y</text>
+    <text x="1136.0" y="372.0" font-family="DejaVu Sans, sans-serif" font-size="9.5" fill="#1B365D">Z</text>
+  </g>
+  <g id="gdt-panel">
+    <rect x="1105.0" y="438.0" width="515.0" height="392.0" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.0"/>
+    <rect x="1105.0" y="438.0" width="515.0" height="24" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="1.0"/>
+    <text x="1117.0" y="454.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#1B365D">GD&amp;T FEATURE CONTROL FRAMES (ASME Y14.5 / ISO 1101)</text>
+<path d="M1518.0,482.0 L1525.0,494.0 L1537.0,474.0 L1574.0,474.0" fill="none" stroke="#111827" stroke-width="1.3"/>
+<line x1="1518.0" y1="482.0" x2="1532.2" y2="482.0" stroke="#111827" stroke-width="1.1"/>
+<text x="1539.0" y="471.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" font-weight="600" fill="#111827">Ra 0.02 µm</text>
+<rect x="1117.0" y="470.0" width="88.0" height="22.0" fill="#FFFFFF" stroke="#1B365D" stroke-width="1.2"/>
+<text x="1130.0" y="485.5" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="14" fill="#1B365D">⏥</text>
+<line x1="1143.0" y1="470.0" x2="1143.0" y2="492.0" stroke="#1B365D" stroke-width="1.1"/>
+<text x="1174.0" y="485.0" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="600" fill="#111827">0.0000</text>
+<text x="1215.0" y="485.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#334155">LAMBDA/20 @ 633 NM</text>
+<rect x="1117.0" y="497.0" width="108.0" height="22.0" fill="#FFFFFF" stroke="#1B365D" stroke-width="1.2"/>
+<text x="1130.0" y="512.5" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="14" fill="#1B365D">⊥</text>
+<line x1="1143.0" y1="497.0" x2="1143.0" y2="519.0" stroke="#1B365D" stroke-width="1.1"/>
+<text x="1173.0" y="512.0" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="600" fill="#111827">0.001</text>
+<line x1="1203.0" y1="497.0" x2="1203.0" y2="519.0" stroke="#1B365D" stroke-width="1.1"/>
+<text x="1214.0" y="512.0" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#1B365D">A</text>
+<text x="1235.0" y="512.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#334155">±2 ARCSEC MIRROR FACE</text>
+    <line x1="1105.0" y1="527.0" x2="1620.0" y2="527.0" stroke="#CBD5E1" stroke-width="0.9"/>
+    <text x="1117.0" y="541.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="9.5" font-weight="700" fill="#1B365D">DATUMS:</text>
+    <text x="1173.0" y="541.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="9.5" font-weight="600" fill="#1B365D">[A] PRIMARY MOUNTING PLANE</text>
+    <text x="1173.0" y="554.5" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="9.5" font-weight="600" fill="#1B365D">[B] DATUM AXIS / BORE CENTERLINE</text>
+    <text x="1173.0" y="568.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="9.5" font-weight="600" fill="#1B365D">[C] ANGULAR INDEX / BOLT ORIENTATION</text>
+    <line x1="1105.0" y1="586.5" x2="1620.0" y2="586.5" stroke="#CBD5E1" stroke-width="0.9"/>
+    <text x="1117.0" y="600.5" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" font-weight="700" fill="#1B365D">INTERFACES / PORTS (3):</text>
+    <text x="1121.0" y="615.0" font-family="DejaVu Sans Mono, monospace" font-size="9.2" fill="#111827">• interf_mirror_x [λ/20 @ 633 nm]</text>
+    <text x="1121.0" y="628.5" font-family="DejaVu Sans Mono, monospace" font-size="9.2" fill="#111827">• interf_mirror_y [λ/20 @ 633 nm]</text>
+    <text x="1121.0" y="642.0" font-family="DejaVu Sans Mono, monospace" font-size="9.2" fill="#111827">• interf_mirror_z [λ/20 @ 633 nm]</text>
+    <text x="1117.0" y="658.5" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" font-weight="700" fill="#1B365D">CRITICAL DIMENSIONS:</text>
+    <text x="1121.0" y="673.0" font-family="DejaVu Sans Mono, monospace" font-size="9.2" fill="#111827">MIRROR_PCD: Ø115.00 ±0.02</text>
+    <text x="1121.0" y="686.5" font-family="DejaVu Sans Mono, monospace" font-size="9.2" fill="#111827">MIRROR_W: 14.00 ±0.05</text>
+    <text x="1121.0" y="700.0" font-family="DejaVu Sans Mono, monospace" font-size="9.2" fill="#111827">MIRROR_H: 13.60 ±0.05</text>
+  </g>
+  <g id="title-block">
+    <rect x="1105.0" y="845.0" width="515.0" height="295.0" fill="#FFFFFF" stroke="#111827" stroke-width="1.8"/>
+    <rect x="1105.0" y="845.0" width="515.0" height="46" fill="#F8FAFC" stroke="#111827" stroke-width="1.2"/>
+    <text x="1117.0" y="863.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="9.5" font-weight="600" fill="#64748B">ATOM LITHOGRAPHY MACHINE — EXACT BOM PART DRAWING (S2 / COTS_ENV_ICD)</text>
+    <text x="1117.0" y="884.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="18" font-weight="700" fill="#1B365D">S2.5-03</text>
+    <text x="1608.0" y="883.0" text-anchor="end" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" font-weight="600" fill="#334155">QTY: 1 | PARENT: S2.5</text>
+    <line x1="1105.0" y1="925.0" x2="1620.0" y2="925.0" stroke="#111827" stroke-width="1.0"/>
+    <text x="1117.0" y="904.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="8.5" fill="#64748B">DESCRIPTION</text>
+    <text x="1117.0" y="919.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" font-weight="600" fill="#111827">Kafa cercevesi referans optik aynasi ve lazer hedef prizmasi</text>
+    <line x1="1105.0" y1="969.0" x2="1620.0" y2="969.0" stroke="#111827" stroke-width="1.0"/>
+    <line x1="1300.0" y1="925.0" x2="1300.0" y2="969.0" stroke="#CBD5E1" stroke-width="1.0"/>
+    <line x1="1450.0" y1="925.0" x2="1450.0" y2="969.0" stroke="#CBD5E1" stroke-width="1.0"/>
+    <text x="1115.0" y="939.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="8.5" fill="#64748B">MATERIAL</text>
+    <text x="1115.0" y="958.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="600" fill="#111827">Zerodur</text>
+    <text x="1310.0" y="939.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="8.5" fill="#64748B">OPERATING TEMP</text>
+    <text x="1310.0" y="958.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" font-weight="600" fill="#111827">300 K</text>
+    <text x="1460.0" y="939.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="8.5" fill="#64748B">VACUUM GRADE</text>
+    <text x="1460.0" y="958.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="600" fill="#111827">UHV 1e-9 mbar</text>
+    <line x1="1105.0" y1="1017.0" x2="1620.0" y2="1017.0" stroke="#111827" stroke-width="1.0"/>
+    <line x1="1300.0" y1="969.0" x2="1300.0" y2="1017.0" stroke="#CBD5E1" stroke-width="1.0"/>
+    <line x1="1450.0" y1="969.0" x2="1450.0" y2="1017.0" stroke="#CBD5E1" stroke-width="1.0"/>
+    <text x="1115.0" y="982.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="8.5" fill="#64748B">TOLERANCE / FINISH</text>
+    <text x="1115.0" y="998.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="600" fill="#111827">±2 arcsec</text>
+    <text x="1115.0" y="1011.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="9.5" fill="#334155">Ra 0.02 µm | ISO 2768-mK</text>
+    <text x="1310.0" y="982.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="8.5" fill="#64748B">MASS / VOLUME</text>
+    <text x="1310.0" y="998.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="600" fill="#111827">0.0115 kg</text>
+    <text x="1310.0" y="1011.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="9.5" fill="#334155">4.56 cm³</text>
+    <text x="1460.0" y="982.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="8.5" fill="#64748B">CENTER OF GRAVITY (mm)</text>
+    <text x="1460.0" y="998.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="600" fill="#111827">X=0.00  Y=0.00</text>
+    <text x="1460.0" y="1011.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="9.5" fill="#334155">Z=20.00</text>
+    <line x1="1105.0" y1="1065.0" x2="1620.0" y2="1065.0" stroke="#111827" stroke-width="1.0"/>
+    <line x1="1355.0" y1="1017.0" x2="1355.0" y2="1065.0" stroke="#CBD5E1" stroke-width="1.0"/>
+    <line x1="1485.0" y1="1017.0" x2="1485.0" y2="1065.0" stroke="#CBD5E1" stroke-width="1.0"/>
+    <text x="1115.0" y="1031.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="8.5" fill="#64748B">ENVELOPE (dX × dY × dZ)</text>
+    <text x="1115.0" y="1051.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" font-weight="600" fill="#111827">98.11 × 113.12 × 13.60 mm</text>
+    <text x="1365.0" y="1031.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="8.5" fill="#64748B">UNITS / SCALE</text>
+    <text x="1365.0" y="1051.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" font-weight="600" fill="#111827">mm | 1:1.0</text>
+    <text x="1553.0" y="1029.0" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="8" fill="#64748B">THIRD-ANGLE</text>
+<polygon points="1521.0,1041.0 1545.0,1036.0 1545.0,1058.0 1521.0,1053.0" fill="none" stroke="#111827" stroke-width="1.1"/>
+<circle cx="1569.0" cy="1047.0" r="11" fill="none" stroke="#111827" stroke-width="1.1"/>
+<circle cx="1569.0" cy="1047.0" r="6" fill="none" stroke="#111827" stroke-width="1.1"/>
+<line x1="1515.0" y1="1047.0" x2="1585.0" y2="1047.0" stroke="#64748B" stroke-width="0.7" stroke-dasharray="6,3,1.5,3"/>
+<line x1="1569.0" y1="1031.0" x2="1569.0" y2="1063.0" stroke="#64748B" stroke-width="0.7" stroke-dasharray="6,3,1.5,3"/>
+    <rect x="1105.0" y="1065.0" width="515.0" height="75.0" fill="#F8FAFC" stroke="#111827" stroke-width="1.2"/>
+    <text x="1117.0" y="1085.0" font-family="DejaVu Sans Mono, monospace" font-size="9.5" font-weight="700" fill="#1B365D">STATUS: M0_M1_DETAILED_CAD_DESIGN_ONLY</text>
+    <text x="1117.0" y="1103.0" font-family="DejaVu Sans Mono, monospace" font-size="9" fill="#334155">no_lab_measurement=true | iec61508_certified=false | semi_s2_certified=false</text>
+    <text x="1117.0" y="1121.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="9" fill="#64748B">ALL DIMENSIONS IN MILLIMETERS. DO NOT SCALE DRAWING. REMOVE ALL BURRS.</text>
+  </g>
+</svg>

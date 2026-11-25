@@ -1,0 +1,355 @@
+{
+  "part_design": {
+    "part_id": "S9.2-02",
+    "parent_bom_id": "S9.2",
+    "subsystem": "S9",
+    "part_name": "Yedek duoplasmatron katot/filaman, TSP kartus ve CF bakir conta kiti",
+    "design_tier": "KIT_OR_ALIAS",
+    "material": "OFHC Cu",
+    "temp_stage": "300 K",
+    "temp_k": 300.0,
+    "vacuum_grade": "UHV 1e-9 mbar",
+    "tolerance_spec": "ISO 2768-mK",
+    "surface_finish_ra_um": 0.8,
+    "qty": 1,
+    "procurement_class": "COTS",
+    "world_origin_mm": [
+      -620.0,
+      -1520.0,
+      120.0
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "uhv_service_spares_tray",
+        "kind": "mechanical",
+        "position_mm": [
+          -620.0,
+          -1520.0,
+          240.0
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "1-Yr UHV Source Cathode/TSP/OFHC CF Gasket Kit",
+        "mating_part_id": "S5.1-05",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "world",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "CHEST_W",
+        "nominal_mm": 460.0,
+        "tol_plus_mm": 1.0,
+        "tol_minus_mm": -1.0,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "460.00 ±1.00"
+      },
+      {
+        "label": "CHEST_D",
+        "nominal_mm": 340.0,
+        "tol_plus_mm": 1.0,
+        "tol_minus_mm": -1.0,
+        "view": "right",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "340.00 ±1.00"
+      },
+      {
+        "label": "CHEST_H",
+        "nominal_mm": 240.0,
+        "tol_plus_mm": 1.0,
+        "tol_minus_mm": -1.0,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "240.00 ±1.00"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "flatness",
+        "tolerance_mm": 0.5,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "GASKETED LID RIM",
+        "glyph": "⏥",
+        "tolerance_text": "0.50"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "1 yillik periyodik kaynak ve vakum bakim seti",
+      "Annual UHV/source maintenance chest: W/LaB6 cathodes, Ti TSP filaments, OFHC CF gaskets & sensors."
+    ],
+    "scad_params": {
+      "chest_dx_mm": 460.0,
+      "chest_dy_mm": 340.0,
+      "chest_dz_mm": 240.0
+    },
+    "target_mass_kg": 14.5,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S9.2-02",
+    "subsystem": "S9",
+    "design_tier": "KIT_OR_ALIAS",
+    "stl_path": "hardware/cad_parts/out/S9_spares_hpc/S9.2-02.stl",
+    "step_path": "hardware/cad_parts/out/S9_spares_hpc/S9.2-02.step",
+    "scad_path": "hardware/cad_parts/out/S9_spares_hpc/S9.2-02.scad",
+    "dxf_path": "hardware/cad_parts/out/S9_spares_hpc/S9.2-02.dxf",
+    "svg_path": "hardware/cad_parts/out/S9_spares_hpc/S9.2-02.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 8833326.108710602,
+    "surface_area_mm2": 1523482.5446456086,
+    "mass_kg": 14.500000000000004,
+    "cg_mm": [
+      -604.3670435858363,
+      -1520.395523221604,
+      118.65819280702738
+    ],
+    "bbox_min_mm": [
+      -864.4,
+      -1704.4,
+      0.0
+    ],
+    "bbox_max_mm": [
+      -375.6,
+      -1348.0,
+      240.0
+    ],
+    "inertia_kg_mm2": [
+      300036.5270961452,
+      441011.0734716343,
+      482679.0169723175,
+      -89.6563606385778,
+      17160.70934120447,
+      546.7935316579435
+    ],
+    "triangle_count": 612,
+    "vertex_count": 328,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "shell_bboxes_mm": [
+    [
+      [
+        -850.0,
+        -1690.0,
+        0.0
+      ],
+      [
+        -390.0,
+        -1350.0,
+        12.0
+      ]
+    ],
+    [
+      [
+        -850.0,
+        -1690.0,
+        12.2
+      ],
+      [
+        -842.0,
+        -1350.0,
+        221.6
+      ]
+    ],
+    [
+      [
+        -398.0,
+        -1690.0,
+        12.2
+      ],
+      [
+        -390.0,
+        -1350.0,
+        221.6
+      ]
+    ],
+    [
+      [
+        -841.8,
+        -1690.0,
+        12.2
+      ],
+      [
+        -398.2,
+        -1682.0,
+        221.6
+      ]
+    ],
+    [
+      [
+        -841.8,
+        -1358.0,
+        12.2
+      ],
+      [
+        -398.2,
+        -1350.0,
+        221.6
+      ]
+    ],
+    [
+      [
+        -852.0,
+        -1692.0,
+        222.0
+      ],
+      [
+        -388.0,
+        -1348.0,
+        240.0
+      ]
+    ],
+    [
+      [
+        -760.8,
+        -1704.4,
+        197.0
+      ],
+      [
+        -736.8,
+        -1692.4,
+        231.0
+      ]
+    ],
+    [
+      [
+        -864.4,
+        -1565.0,
+        105.9
+      ],
+      [
+        -852.4,
+        -1475.0,
+        127.9
+      ]
+    ],
+    [
+      [
+        -503.2,
+        -1704.4,
+        197.0
+      ],
+      [
+        -479.2,
+        -1692.4,
+        231.0
+      ]
+    ],
+    [
+      [
+        -387.6,
+        -1565.0,
+        105.9
+      ],
+      [
+        -375.6,
+        -1475.0,
+        127.9
+      ]
+    ],
+    [
+      [
+        -800.0,
+        -1580.0,
+        16.0
+      ],
+      [
+        -680.0,
+        -1460.0,
+        48.0
+      ]
+    ],
+    [
+      [
+        -661.0,
+        -1561.0,
+        16.0
+      ],
+      [
+        -579.0,
+        -1479.0,
+        48.0
+      ]
+    ],
+    [
+      [
+        -550.0,
+        -1630.0,
+        17.0
+      ],
+      [
+        -440.0,
+        -1410.0,
+        67.0
+      ]
+    ]
+  ],
+  "reconciliation_notes": []
+}

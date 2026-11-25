@@ -1,0 +1,71 @@
+{
+  "schema_version": "part_icd_v1.0",
+  "part_id": "S8.1-02",
+  "parent_bom_id": "S8.1",
+  "subsystem": "S8",
+  "part_name": "CellISA atom-yazmac programlama derleyicisi ve pulse_engine (Exp126/127)",
+  "part_category": "IN_HOUSE_SOFTWARE_RTL_EDA",
+  "bom_metadata": {
+    "qty": "1",
+    "unit": "paket",
+    "material": "Python / PyTorch CUDA (programmer.py)",
+    "key_spec": "K=8 yazmac kapi derleyicisi + GRAPE/XY8 darbe motoru",
+    "tolerance": "F_gate >= 0.99",
+    "temp_stage": "300 K (SW)",
+    "vacuum_grade": "Uygulanmaz (SW)",
+    "procurement_class": "IN-HOUSE",
+    "parent_cost_class": "--",
+    "usd_low": 0.0,
+    "usd_nom": 0.0,
+    "usd_high": 0.0,
+    "legacy_cad_module": "software_control_stack",
+    "bom_epistemic_tag": "{Program-NRE-Kapsam}",
+    "notes": "Proje ici yazilir ($0 HW; Program NRE kapsaminda)"
+  },
+  "artifact_links": {
+    "cad": null,
+    "pcb_bundles": [],
+    "legacy_board_files": [],
+    "electrical_icd": null,
+    "rtl_modules": [],
+    "rtl_audit_json": null,
+    "software_and_eda_files": [
+      "src/machine_control/programmer.py",
+      "src/machine_control/pulse_engine.py"
+    ],
+    "verification_tests": [
+      "tests/test_atom_programmer.py",
+      "tests/test_exp126.py"
+    ]
+  },
+  "specialized_specification": {
+    "kind": "IN_HOUSE_SOFTWARE_RTL_EDA",
+    "role": "CellISA v4.0 (20-opcode) atom-register compiler & GRAPE/XY8 pulse engine",
+    "implementation_files": [
+      "src/machine_control/programmer.py",
+      "src/machine_control/pulse_engine.py"
+    ],
+    "rtl_files": [],
+    "verification_tests": [
+      "tests/test_atom_programmer.py",
+      "tests/test_exp126.py"
+    ]
+  },
+  "verification_status": {
+    "cad_verified": false,
+    "pcb_verified": false,
+    "electrical_icd_verified": false,
+    "rtl_verified": false,
+    "software_or_eda_verified": true,
+    "specialized_icd_present": true,
+    "traceable": true
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "tapeout_done": false
+  }
+}

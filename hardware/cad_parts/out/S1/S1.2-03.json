@@ -1,0 +1,230 @@
+{
+  "part_id": "S1.2-03",
+  "subsystem": "S1",
+  "design": {
+    "part_id": "S1.2-03",
+    "parent_bom_id": "S1.2",
+    "subsystem": "S1",
+    "part_name": "Wien filtresi cift-kutuplu hassas E-alani guc kaynagi",
+    "design_tier": "COTS_ENV_ICD",
+    "material": "Al 6061",
+    "temp_stage": "300 K (kabin)",
+    "temp_k": 300.0,
+    "vacuum_grade": "Atmosfer",
+    "tolerance_spec": "±10 ppm/8 saat",
+    "surface_finish_ra_um": 1.6,
+    "qty": 2,
+    "procurement_class": "COTS",
+    "world_origin_mm": [
+      1480.0,
+      -223.0,
+      1123.525
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "shv_bipolar_ch1",
+        "kind": "electrical",
+        "position_mm": [
+          1440.0,
+          4.5,
+          1123.525
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "standard": "SHV-5 ±5 kV",
+        "mating_part_id": "S1.2-02",
+        "bore_mm": 0.0,
+        "od_mm": 14.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "global",
+        "notes": ""
+      },
+      {
+        "name": "shv_bipolar_ch2",
+        "kind": "electrical",
+        "position_mm": [
+          1520.0,
+          4.5,
+          1123.525
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "standard": "SHV-5 ±5 kV",
+        "mating_part_id": "S1.2-02",
+        "bore_mm": 0.0,
+        "od_mm": 14.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "global",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "RACK_W_X",
+        "nominal_mm": 482.6,
+        "tol_plus_mm": 0.3,
+        "tol_minus_mm": -0.3,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "482.60 ±0.30"
+      },
+      {
+        "label": "HEIGHT_1U",
+        "nominal_mm": 42.45,
+        "tol_plus_mm": 0.3,
+        "tol_minus_mm": -0.3,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "42.45 ±0.30"
+      },
+      {
+        "label": "DEPTH_Y",
+        "nominal_mm": 430.0,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "430.00 ±0.50"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "perpendicularity",
+        "tolerance_mm": 0.25,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "19-IN EARS",
+        "glyph": "⊥",
+        "tolerance_text": "0.25"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "+/-5 kV, gurultu <5 mVpp, kararlik <10 ppm",
+      "19-in Rack Bay 1 slot U35 (X=1480.0, front -Y @ -438.0, Z_nat=[1102.30, 1144.75]); dual ±5 kV <5 mVpp bipolar Wien PSU"
+    ],
+    "scad_params": {
+      "rack_u": 1,
+      "u_slot": "U35",
+      "v_bipolar_kV": 5.0,
+      "noise_mVpp": 5.0
+    },
+    "target_mass_kg": 5.6,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S1.2-03",
+    "subsystem": "S1",
+    "design_tier": "COTS_ENV_ICD",
+    "stl_path": "hardware/cad_parts/out/S1/S1.2-03.stl",
+    "step_path": "hardware/cad_parts/out/S1/S1.2-03.step",
+    "scad_path": "hardware/cad_parts/out/S1/S1.2-03.scad",
+    "dxf_path": "hardware/cad_parts/out/S1/S1.2-03.dxf",
+    "svg_path": "hardware/cad_parts/out/S1/S1.2-03.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 1981485.4909593156,
+    "surface_area_mm2": 967126.7882934142,
+    "mass_kg": 5.350010825590125,
+    "cg_mm": [
+      1479.8983558255036,
+      -219.4724416401836,
+      1123.524999999965
+    ],
+    "bbox_min_mm": [
+      1238.7,
+      -438.0,
+      1102.3000000000002
+    ],
+    "bbox_max_mm": [
+      1721.3,
+      4.5,
+      1144.75
+    ],
+    "inertia_kg_mm2": [
+      67084.54805141847,
+      83936.66242672705,
+      148463.71843962432,
+      -109.59016907076416,
+      -8.4375e-08,
+      -4.910888671875e-08
+    ],
+    "triangle_count": 788,
+    "vertex_count": 412,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "engineering_checks": {},
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

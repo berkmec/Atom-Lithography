@@ -1,0 +1,374 @@
+{
+  "part_id": "S3.1-03",
+  "subsystem": "S3",
+  "part_design": {
+    "part_id": "S3.1-03",
+    "parent_bom_id": "S3.1",
+    "subsystem": "S3",
+    "part_name": "Dusuk kapasitansli safir/AlN yonga yalitkan tasiyici tabani",
+    "design_tier": "CUSTOM_FULL",
+    "material": "AlN",
+    "temp_stage": "20 mK - 300 K",
+    "temp_k": 0.02,
+    "vacuum_grade": "UHV 1e-9 mbar",
+    "tolerance_spec": "±5 um duzlemlik",
+    "surface_finish_ra_um": 0.2,
+    "qty": 2,
+    "procurement_class": "CUS",
+    "world_origin_mm": [
+      0.0,
+      0.0,
+      -3.0
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "wafer_pocket",
+        "kind": "mechanical",
+        "position_mm": [
+          0.0,
+          0.0,
+          2.15
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "Ø50.40 mm Stepped Pocket",
+        "mating_part_id": "S3.1-01",
+        "bore_mm": 50.4,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      },
+      {
+        "name": "rear_thermal_boss",
+        "kind": "thermal",
+        "position_mm": [
+          0.0,
+          0.0,
+          -2.85
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "standard": "Ø34.0 mm Cryo Thermal Boss + 3x Ø3 H7 Pins",
+        "mating_part_id": "S6.2-01",
+        "bore_mm": 0.0,
+        "od_mm": 34.0,
+        "pcd_mm": 66.0,
+        "bolt_count": 3,
+        "bolt_hole_mm": 3.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "WIDTH_X",
+        "nominal_mm": 80.0,
+        "tol_plus_mm": 0.02,
+        "tol_minus_mm": -0.02,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "80.00 ±0.02"
+      },
+      {
+        "label": "WIDTH_Y",
+        "nominal_mm": 80.0,
+        "tol_plus_mm": 0.02,
+        "tol_minus_mm": -0.02,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "80.00 ±0.02"
+      },
+      {
+        "label": "POCKET_ID",
+        "nominal_mm": 50.4,
+        "tol_plus_mm": 0.02,
+        "tol_minus_mm": -0.02,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø50.40 ±0.02"
+      },
+      {
+        "label": "THERMAL_BOSS_OD",
+        "nominal_mm": 34.0,
+        "tol_plus_mm": 0.02,
+        "tol_minus_mm": -0.02,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø34.00 ±0.02"
+      },
+      {
+        "label": "TOTAL_H",
+        "nominal_mm": 5.7,
+        "tol_plus_mm": 0.02,
+        "tol_minus_mm": -0.02,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "5.70 ±0.02"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "flatness",
+        "tolerance_mm": 0.005,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "POCKET FLOOR DATUM A",
+        "glyph": "⏥",
+        "tolerance_text": "0.005"
+      },
+      {
+        "symbol": "parallelism",
+        "tolerance_mm": 0.005,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "THERMAL BOSS SEAT",
+        "glyph": "∥",
+        "tolerance_text": "0.005"
+      },
+      {
+        "symbol": "position",
+        "tolerance_mm": 0.01,
+        "diameter_zone": true,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "B",
+        "datum_tertiary": "",
+        "feature_note": "3x Ø3.0 H7 ALIGNMENT PINS",
+        "glyph": "⌖",
+        "tolerance_text": "Ø0.010"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "Yuksek termal iletkenlik @ 4K, dusuk parazitik C (<0.05 pF)",
+      "Exp80 BC1 locked 80x80 mm AlN/Sapphire carrier (diag 113.1 mm < Ø150 mm magnet bore).",
+      "300K->100K AlN pocket vs Si wafer WC rad clearance: 0.1717 mm (PASS).",
+      "300K->20mK AlN pocket vs Si wafer WC rad clearance: 0.1703 mm (PASS).",
+      "300K->100K OFHC Cu chuck vs Ø34 AlN boss WC rad clearance: 0.1857 mm (PASS)."
+    ],
+    "scad_params": {
+      "carrier_size_mm": 80.0,
+      "wafer_pocket_id_mm": 50.4,
+      "thermal_boss_od_mm": 34.0,
+      "align_pin_pcd_mm": 66.0
+    },
+    "target_mass_kg": null,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S3.1-03",
+    "subsystem": "S3",
+    "design_tier": "CUSTOM_FULL",
+    "stl_path": "hardware/cad_parts/out/S3/S3.1-03.stl",
+    "step_path": "hardware/cad_parts/out/S3/S3.1-03.step",
+    "scad_path": "hardware/cad_parts/out/S3/S3.1-03.scad",
+    "dxf_path": "hardware/cad_parts/out/S3/S3.1-03.dxf",
+    "svg_path": "hardware/cad_parts/out/S3/S3.1-03.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 29362.418111540876,
+    "surface_area_mm2": 24903.485502673495,
+    "mass_kg": 0.09572148304362325,
+    "cg_mm": [
+      4.6953726588261897e-17,
+      1.0156947858789873e-15,
+      0.2485419073429379
+    ],
+    "bbox_min_mm": [
+      -40.0,
+      -40.0,
+      -2.85
+    ],
+    "bbox_max_mm": [
+      40.0,
+      40.0,
+      2.85
+    ],
+    "inertia_kg_mm2": [
+      51.57463652757841,
+      51.574636527578576,
+      102.77425388395058,
+      -3.3563264878466725e-15,
+      9.844402876230717e-17,
+      -5.747624515251335e-17
+    ],
+    "triangle_count": 1496,
+    "vertex_count": 726,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "world_bbox_min_mm": [
+    -40.0,
+    -40.0,
+    -5.85
+  ],
+  "world_bbox_max_mm": [
+    40.0,
+    40.0,
+    -0.1499999999999999
+  ],
+  "reconciliation": null,
+  "thermal_contraction_checks": [
+    {
+      "outer_material": "AlN",
+      "inner_material": "Si",
+      "t_cold_k": 100.0,
+      "t_ref_k": 293.15,
+      "warm_outer_id_mm": 50.4,
+      "warm_inner_od_mm": 50.0,
+      "cold_outer_id_mm": 50.371776,
+      "cold_inner_od_mm": 49.9884,
+      "outer_strain": -0.0005600000000000049,
+      "inner_strain": -0.00023200000000000998,
+      "warm_radial_clearance_mm": 0.1999999999999993,
+      "cold_nominal_radial_clearance_mm": 0.1916879999999992,
+      "cold_worst_case_radial_clearance_mm": 0.1716879999999992,
+      "delta_radial_clearance_mm": -0.008312000000000097,
+      "min_required_radial_clearance_mm": 0.1,
+      "interference_risk": false,
+      "passed": true
+    },
+    {
+      "outer_material": "AlN",
+      "inner_material": "Si",
+      "t_cold_k": 0.02,
+      "t_ref_k": 293.15,
+      "warm_outer_id_mm": 50.4,
+      "warm_inner_od_mm": 50.0,
+      "cold_outer_id_mm": 50.36976,
+      "cold_inner_od_mm": 49.9892,
+      "outer_strain": -0.0006000000000000449,
+      "inner_strain": -0.00021599999999999397,
+      "warm_radial_clearance_mm": 0.1999999999999993,
+      "cold_nominal_radial_clearance_mm": 0.19028000000000134,
+      "cold_worst_case_radial_clearance_mm": 0.17028000000000135,
+      "delta_radial_clearance_mm": -0.009719999999997953,
+      "min_required_radial_clearance_mm": 0.1,
+      "interference_risk": false,
+      "passed": true
+    },
+    {
+      "outer_material": "OFHC Cu",
+      "inner_material": "AlN",
+      "t_cold_k": 100.0,
+      "t_ref_k": 293.15,
+      "warm_outer_id_mm": 34.5,
+      "warm_inner_od_mm": 34.0,
+      "cold_outer_id_mm": 34.402365,
+      "cold_inner_od_mm": 33.98096,
+      "outer_strain": -0.002829999999999999,
+      "inner_strain": -0.0005600000000000049,
+      "warm_radial_clearance_mm": 0.25,
+      "cold_nominal_radial_clearance_mm": 0.21070250000000001,
+      "cold_worst_case_radial_clearance_mm": 0.18570250000000002,
+      "delta_radial_clearance_mm": -0.039297499999999985,
+      "min_required_radial_clearance_mm": 0.1,
+      "interference_risk": false,
+      "passed": true
+    }
+  ],
+  "tolerance_stack_checks": [
+    {
+      "nominal_mm": 8.881784197001252e-16,
+      "mean_mm": 8.881784197001252e-16,
+      "wc_half_band_mm": 0.025,
+      "wc_min_mm": -0.024999999999999113,
+      "wc_max_mm": 0.02500000000000089,
+      "rss_half_band_mm": 0.015,
+      "rss_min_mm": -0.014999999999999111,
+      "rss_max_mm": 0.015000000000000888,
+      "modified_rss_half_band_mm": 0.0225,
+      "modified_rss_min_mm": -0.02249999999999911,
+      "modified_rss_max_mm": 0.022500000000000887,
+      "target_min_mm": -0.025,
+      "target_max_mm": 0.025,
+      "wc_pass": true,
+      "rss_pass": true,
+      "modified_rss_pass": true,
+      "variance_shares_pct": {
+        "aln_carrier_floor": 11.111111111111112,
+        "ohmic_gap_nominal": 44.44444444444445,
+        "si_wafer_thickness": 44.44444444444445,
+        "datum_offset": 0.0
+      }
+    }
+  ]
+}

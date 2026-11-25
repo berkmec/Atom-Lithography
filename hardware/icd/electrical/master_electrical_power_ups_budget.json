@@ -1,0 +1,1053 @@
+{
+  "schema_version": "1.0",
+  "title": "Master Electrical Power, 15 kVA LFP UPS Load-Shed, Grounding & 10 MHz Rb / White Rabbit Timing ICD",
+  "epistemic_flags": {
+    "design_maturity": "M0_M1_ELECTRICAL_ICD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  },
+  "icd_coverage": {
+    "total_per_part_icds": 95,
+    "by_electrical_class": {
+      "E2": 17,
+      "E3": 35,
+      "E4": 43
+    },
+    "e1_custom_pcbs_note": "30 E1 custom PCBs are designed as full KiCad 8 + ngspice bundles in hardware/pcb/*",
+    "total_usd_nom_covered_95": 3434800.0
+  },
+  "ups_s7_safety_04": {
+    "part_id": "S7.SAFETY-04",
+    "topology": "Online Double-Conversion LFP UPS + Tiered Load-Shed PDU",
+    "rating_kVA": 15.0,
+    "power_factor": 0.9,
+    "rated_real_power_kW": 13.5,
+    "battery_energy_kWh": 10.0,
+    "usable_lfp_dod_fraction": 0.9,
+    "usable_battery_energy_90pct_dod_kWh": 9.0,
+    "inverter_efficiency": 0.9,
+    "internal_loss_W": 350.0,
+    "transfer_time_ms": 0.0,
+    "tier1_critical": {
+      "total_W": 2533.0,
+      "total_kW": 2.533,
+      "from_95_icds_W": 2325.0,
+      "from_e1_boards_W": 208.0,
+      "exp150_buckets_W": {
+        "sil3_safety_plc_and_sensors": 215.0,
+        "uhv_gate_valves_and_ion_tmp_spindown": 650.0,
+        "ph3_sds_cabinet_and_scrubber": 480.0,
+        "s7_host_rfsoc_logging_cryo_inst": 1188.0
+      },
+      "runtime_min": 213.2,
+      "runtime_tier1_min_exp150_nominal_eta090": 213.2,
+      "battery_dc_draw_incl_350w_loss_W": 3164.44,
+      "runtime_tier1_min_conservative_100pct_dod_incl_350w_loss": 189.6,
+      "runtime_tier1_min_conservative_90pct_dod_incl_350w_loss": 170.6,
+      "meets_180min_requirement": true,
+      "tier1_conservative_100pct_dod_meets_180min": true,
+      "tier1_conservative_90pct_dod_meets_180min": false,
+      "conservative_sizing_requirements_for_180min_at_90pct_dod": {
+        "min_lfp_pack_kWh_at_2p533kW": 10.55,
+        "recommended_nominal_lfp_pack_kWh": 11.0,
+        "max_tier1_load_kW_at_10kWh": 2.385,
+        "sizing_note": "Exp150 reference formula (10 kWh * 0.90 / 2.533 kW) gives 213.2 min. Including continuous 350.0 W online double-conversion internal loss (P_batt_dc = 3164.44 W), runtime is 189.6 min at 100% DoD (PASS >= 180 min) and 170.6 min at conservative 90% usable LFP DoD (9.0 kWh, 9.4 min below 180 min). Meeting >= 180 min under 90% DoD + 350 W idle loss requires either >= 10.6 kWh (11 kWh nominal) LFP pack or trimming Tier-1 outage hold load to <= 2.35 kW."
+      },
+      "items_from_95_icds": [
+        {
+          "part_id": "S3.2-06",
+          "part_name": "EMI kalkanli analog on-uc sasisi ve ultra-dusuk gurultulu lineer PSU",
+          "electrical_class": "E3",
+          "power_w": 40.0
+        },
+        {
+          "part_id": "S3.3-04",
+          "part_name": "1U EMI kalkanli sayim sase ve senkronizasyon arayuzu",
+          "electrical_class": "E3",
+          "power_w": 25.0
+        },
+        {
+          "part_id": "S5.2-04",
+          "part_name": "Tam-aralikli Pirani/soguk-katot vakum olcerler ve RGA (kutle spektrometre)",
+          "electrical_class": "E3",
+          "power_w": 95.0
+        },
+        {
+          "part_id": "S6.2-03",
+          "part_name": "Cernox / RuO2 kriyojenik termometri seti ve PID isitici kontroloru",
+          "electrical_class": "E3",
+          "power_w": 60.0
+        },
+        {
+          "part_id": "S6.8-02",
+          "part_name": "Kapali-cevrim 3He/4He gaz isleme sistemi (GHS), turbo sirkulasyon ve soguk kapanlar",
+          "electrical_class": "E3",
+          "power_w": 260.0
+        },
+        {
+          "part_id": "S7.1-01",
+          "part_name": "Ana kontrol ve GPU GRAPE sentez is istasyonlari (2x Lambda Vector 2xRTX4500Ada)",
+          "electrical_class": "E3",
+          "power_w": 360.0
+        },
+        {
+          "part_id": "S7.1-02",
+          "part_name": "Yuksek hizli NVMe RAID sertifika ve spektroskopi veri sunucusu",
+          "electrical_class": "E3",
+          "power_w": 220.0
+        },
+        {
+          "part_id": "S7.1-03",
+          "part_name": "Cift-donusumlu kesintisiz guc kaynagi (UPS 6 kVA) ve akilli PDU",
+          "electrical_class": "E3",
+          "power_w": 20.0
+        },
+        {
+          "part_id": "S7.4-01",
+          "part_name": "10 MHz Rubidyum atomik saat referansi ve dusuk-jitter saat dagiticisi",
+          "electrical_class": "E3",
+          "power_w": 45.0
+        },
+        {
+          "part_id": "S7.4-02",
+          "part_name": "White Rabbit / sub-ns donanim tetikleme (trigger) fan-out modulu",
+          "electrical_class": "E3",
+          "power_w": 35.0
+        },
+        {
+          "part_id": "S7.4-03",
+          "part_name": "19 inc EMI-kalkanli kontrol/RF kabini ve su/hava isi esanjoru",
+          "electrical_class": "E3",
+          "power_w": 35.0
+        },
+        {
+          "part_id": "S7.SAFETY-05",
+          "part_name": "Temizoda O2 Eksikligi Izleyici (%19.5 Alarm), ASME DN50 0.5 barg OVC Patlama Diski & 1.563 Ohm Quench Bosaltma Bankasi (Exp150, 24.0 kg)",
+          "electrical_class": "E3",
+          "power_w": 35.0
+        },
+        {
+          "part_id": "S5.1-03",
+          "part_name": "Hizli giris yuk kilidi (load-lock) odasi ve CF100 tam-metal surgu vana",
+          "electrical_class": "E4",
+          "power_w": 65.0
+        },
+        {
+          "part_id": "S5.2-01",
+          "part_name": "UHV turbomolekuler pompa (HiPace 300 sinifi) + titresim korugu",
+          "electrical_class": "E4",
+          "power_w": 220.0
+        },
+        {
+          "part_id": "S5.2-02",
+          "part_name": "Iyon pompasi (VacIon 75 sinifi) + Titanyum Sublimasyon Pompasi (TSP)",
+          "electrical_class": "E4",
+          "power_w": 160.0
+        },
+        {
+          "part_id": "S5.6-04",
+          "part_name": "Yuk-kilidi S5.6 kompakt 80 L/s TMP + NEG yardimci UHV pompalama paketi (Exp139, 3.0 kg)",
+          "electrical_class": "E4",
+          "power_w": 110.0
+        },
+        {
+          "part_id": "S7.SAFETY-01",
+          "part_name": "Sub-Atmosferik SDS PH3 Mikro-Tup Gaz Kabini (<650 Torr, 10 g), Vakum-Ceketli Hat, 250 CFM Kuru Yikayici & Cift 0.02 ppm Sensor (Exp150, 118.0 kg)",
+          "electrical_class": "E4",
+          "power_w": 480.0
+        },
+        {
+          "part_id": "S7.SAFETY-06",
+          "part_name": "Hizli Yay-Donuslu UHV Izolasyon Surgu Vana Aktorleri (<80 ms), ISO 10156 %5 H2/N2 Orifis & X-Isini Dozimetresi (Exp150, 12.0 kg)",
+          "electrical_class": "E4",
+          "power_w": 60.0
+        }
+      ],
+      "items_from_e1_boards": [
+        {
+          "part_id": "S7.SAFETY-03",
+          "part_name": "IEC 61508 SIL-3 1oo2D Donanimsal Emniyet PLC, 4x E-Stop Mantar, Kapak Anahtarlari & 2 MOhm HV Crowbar Modulu (Exp150, 18.0 kg)",
+          "electrical_class": "E1",
+          "power_w": 120.0
+        },
+        {
+          "part_id": "S6.11-01",
+          "part_name": "ZU48DR RFSoC Q16.16 BOED-FPGA 2U Raf Sasisi (2x Kart, 32 Direct-RF Zinciri, Exp140 S6.5-01, 11.50 kg)",
+          "electrical_class": "E1",
+          "power_w": 88.0
+        }
+      ]
+    },
+    "tier2_sheddable": {
+      "total_W": 12275.0,
+      "total_kW": 12.275,
+      "exp150_buckets_W": {
+        "pt420_compressor_controlled_stop": 9500.0,
+        "s9hpc_100g_rdma_graceful_halt": 2195.0,
+        "s56_mbe_pbn_and_option_q_cut": 580.0
+      },
+      "shed_timeline_note": "PT420 (9.5 kW, 3-ph breaker) soft-shed at t=0.5 s; S5.6/Opt-Q cut at t=45 ms; S9.HPC graceful halt at t=60 s.",
+      "items": [
+        {
+          "part_id": "S9.HPC-01",
+          "part_name": "2U Cift-Hizlandiricili QEC Dekoder Dugumu (2x H100/Alveo-U280 Sinifi + Cift-100G ConnectX-7 RoCEv2 NIC, Exp143, 56.00 kg)",
+          "electrical_class": "E3",
+          "power_w": 2100.0
+        },
+        {
+          "part_id": "S9.HPC-02",
+          "part_name": "1U Ultra-Dusuk-Gecikmeli Cut-Through 100 GbE RoCEv2 Optik Kopru + 4x QSFP28-100G-SR4 + 20m OM4 MPO-12 (Exp143, 4.20 kg)",
+          "electrical_class": "E3",
+          "power_w": 95.0
+        },
+        {
+          "part_id": "S9.HPC-03",
+          "part_name": "Yedekli 2.6 kW Titanium PSU Paketi, Surgulu Raf Raylari & ZU48DR 100G CMAC RDMA Entegrasyon Kiti (Exp143, 3.80 kg)",
+          "electrical_class": "E3",
+          "power_w": 0.0
+        },
+        {
+          "part_id": "S1.7-01",
+          "part_name": "S1-Multi Hizli-Degisim 3-Turlu Kaynak Kartus Yuvasi (31P Gaz / 121Sb 450C Firin / 167Er Mikro-Paul, Exp142 S1.6-01, 4.80 kg)",
+          "electrical_class": "E4",
+          "power_w": 180.0
+        },
+        {
+          "part_id": "S5.6-01",
+          "part_name": "CF100 potasiz DC 28Si cubuk sublimasyon kaynagi, kriyo/su kalkani, pnomatik deklansor & PSU (Exp139, 11.8 kg)",
+          "electrical_class": "E4",
+          "power_w": 400.0
+        },
+        {
+          "part_id": "S6.1-02",
+          "part_name": "Uzak doner valf, su sogutmali He kompresoru ve esnek hatlar",
+          "electrical_class": "E4",
+          "power_w": 9420.0
+        },
+        {
+          "part_id": "S6.9-01",
+          "part_name": "PT420 500 mm ofsetli uzak doner valf kutusu ve L=600 mm esnek He yuksek-basinc hatti (Exp133)",
+          "electrical_class": "E4",
+          "power_w": 80.0
+        }
+      ],
+      "tier2_shed_28part_reconciliation": {
+        "tier2_shed_part_count": 28,
+        "raw_supply_rails_steady_sum_W": 18026.0,
+        "exp150_tier2_ups_allocation_W": 12275.0,
+        "non_exp150_aux_incremental_mains_W": 5401.0,
+        "secondary_and_backplane_derived_overlap_W": 350.0,
+        "total_incremental_mains_tier2_W": 17676.0,
+        "reconciliation_discrepancy_W": 0.0,
+        "formula": "raw_supply_rails_steady_sum_W == exp150_tier2_ups_allocation_W + non_exp150_aux_incremental_mains_W + secondary_and_backplane_derived_overlap_W",
+        "per_part_breakdown": [
+          {
+            "part_id": "S1.1-05",
+            "ups_budget_group": "AUX_PROCESS_SHED_ON_OUTAGE",
+            "supply_rails_steady_sum_w": 1100.0,
+            "incremental_mains_w": 950.0,
+            "exp150_ups_allocation_w": 0.0,
+            "non_exp150_aux_shed_w": 950.0,
+            "secondary_or_parent_derived_w": 150.0,
+            "reconciliation_note": "Non-Exp150 auxiliary sheddable rack/facility load (TIER2_SHED): incremental_mains_w = 950.0 W AC mains (shed immediately on outage, exp150_ups_allocation_w = 0.0 W); 150.0 W HV_EXTRACT_15KV derived internally from own AC input (0.0 W double-count)."
+          },
+          {
+            "part_id": "S1.2-03",
+            "ups_budget_group": "AUX_PROCESS_SHED_ON_OUTAGE",
+            "supply_rails_steady_sum_w": 205.0,
+            "incremental_mains_w": 180.0,
+            "exp150_ups_allocation_w": 0.0,
+            "non_exp150_aux_shed_w": 180.0,
+            "secondary_or_parent_derived_w": 25.0,
+            "reconciliation_note": "Non-Exp150 auxiliary sheddable rack/facility load (TIER2_SHED): incremental_mains_w = 180.0 W AC mains (shed immediately on outage, exp150_ups_allocation_w = 0.0 W); 25.0 W WIEN_HV_BIPOLAR derived internally from own AC input (0.0 W double-count)."
+          },
+          {
+            "part_id": "S1.4-02",
+            "ups_budget_group": "AUX_PROCESS_SHED_ON_OUTAGE",
+            "supply_rails_steady_sum_w": 60.0,
+            "incremental_mains_w": 60.0,
+            "exp150_ups_allocation_w": 0.0,
+            "non_exp150_aux_shed_w": 60.0,
+            "secondary_or_parent_derived_w": 0.0,
+            "reconciliation_note": "Non-Exp150 auxiliary sheddable rack/facility load (TIER2_SHED): incremental_mains_w = 60.0 W AC mains (mutually exclusive process/experiment mode, shed immediately on outage; exp150_ups_allocation_w = 0.0 W)."
+          },
+          {
+            "part_id": "S1.5-03",
+            "ups_budget_group": "AUX_PROCESS_SHED_ON_OUTAGE",
+            "supply_rails_steady_sum_w": 120.0,
+            "incremental_mains_w": 120.0,
+            "exp150_ups_allocation_w": 0.0,
+            "non_exp150_aux_shed_w": 120.0,
+            "secondary_or_parent_derived_w": 0.0,
+            "reconciliation_note": "Non-Exp150 auxiliary sheddable rack/facility load (TIER2_SHED): incremental_mains_w = 120.0 W AC mains (mutually exclusive process/experiment mode, shed immediately on outage; exp150_ups_allocation_w = 0.0 W)."
+          },
+          {
+            "part_id": "S4.2-03",
+            "ups_budget_group": "AUX_PROCESS_SHED_ON_OUTAGE",
+            "supply_rails_steady_sum_w": 160.0,
+            "incremental_mains_w": 160.0,
+            "exp150_ups_allocation_w": 0.0,
+            "non_exp150_aux_shed_w": 160.0,
+            "secondary_or_parent_derived_w": 0.0,
+            "reconciliation_note": "Non-Exp150 auxiliary sheddable rack/facility load (TIER2_SHED): incremental_mains_w = 160.0 W AC mains (mutually exclusive process/experiment mode, shed immediately on outage; exp150_ups_allocation_w = 0.0 W)."
+          },
+          {
+            "part_id": "S4.3-04",
+            "ups_budget_group": "AUX_PROCESS_SHED_ON_OUTAGE",
+            "supply_rails_steady_sum_w": 220.0,
+            "incremental_mains_w": 220.0,
+            "exp150_ups_allocation_w": 0.0,
+            "non_exp150_aux_shed_w": 220.0,
+            "secondary_or_parent_derived_w": 0.0,
+            "reconciliation_note": "Non-Exp150 auxiliary sheddable rack/facility load (TIER2_SHED): incremental_mains_w = 220.0 W AC mains (mutually exclusive process/experiment mode, shed immediately on outage; exp150_ups_allocation_w = 0.0 W)."
+          },
+          {
+            "part_id": "S4.4-01",
+            "ups_budget_group": "AUX_PROCESS_SHED_ON_OUTAGE",
+            "supply_rails_steady_sum_w": 75.0,
+            "incremental_mains_w": 75.0,
+            "exp150_ups_allocation_w": 0.0,
+            "non_exp150_aux_shed_w": 75.0,
+            "secondary_or_parent_derived_w": 0.0,
+            "reconciliation_note": "Non-Exp150 auxiliary sheddable rack/facility load (TIER2_SHED): incremental_mains_w = 75.0 W AC mains (mutually exclusive process/experiment mode, shed immediately on outage; exp150_ups_allocation_w = 0.0 W)."
+          },
+          {
+            "part_id": "S5.3-01",
+            "ups_budget_group": "AUX_PROCESS_SHED_ON_OUTAGE",
+            "supply_rails_steady_sum_w": 1200.0,
+            "incremental_mains_w": 1200.0,
+            "exp150_ups_allocation_w": 0.0,
+            "non_exp150_aux_shed_w": 1200.0,
+            "secondary_or_parent_derived_w": 0.0,
+            "reconciliation_note": "Non-Exp150 auxiliary sheddable rack/facility load (TIER2_SHED): incremental_mains_w = 1200.0 W AC mains (mutually exclusive process/experiment mode, shed immediately on outage; exp150_ups_allocation_w = 0.0 W)."
+          },
+          {
+            "part_id": "S5.3-03",
+            "ups_budget_group": "AUX_PROCESS_SHED_ON_OUTAGE",
+            "supply_rails_steady_sum_w": 45.0,
+            "incremental_mains_w": 45.0,
+            "exp150_ups_allocation_w": 0.0,
+            "non_exp150_aux_shed_w": 45.0,
+            "secondary_or_parent_derived_w": 0.0,
+            "reconciliation_note": "Non-Exp150 auxiliary sheddable rack/facility load (TIER2_SHED): incremental_mains_w = 45.0 W AC mains (mutually exclusive process/experiment mode, shed immediately on outage; exp150_ups_allocation_w = 0.0 W)."
+          },
+          {
+            "part_id": "S6.3-05",
+            "ups_budget_group": "AUX_PROCESS_SHED_ON_OUTAGE",
+            "supply_rails_steady_sum_w": 120.0,
+            "incremental_mains_w": 120.0,
+            "exp150_ups_allocation_w": 0.0,
+            "non_exp150_aux_shed_w": 120.0,
+            "secondary_or_parent_derived_w": 0.0,
+            "reconciliation_note": "Non-Exp150 auxiliary sheddable rack/facility load (TIER2_SHED): incremental_mains_w = 120.0 W AC mains (mutually exclusive process/experiment mode, shed immediately on outage; exp150_ups_allocation_w = 0.0 W)."
+          },
+          {
+            "part_id": "S6.4-01",
+            "ups_budget_group": "AUX_PROCESS_SHED_ON_OUTAGE",
+            "supply_rails_steady_sum_w": 440.0,
+            "incremental_mains_w": 440.0,
+            "exp150_ups_allocation_w": 0.0,
+            "non_exp150_aux_shed_w": 440.0,
+            "secondary_or_parent_derived_w": 0.0,
+            "reconciliation_note": "Non-Exp150 auxiliary sheddable rack/facility load (TIER2_SHED): incremental_mains_w = 440.0 W AC mains (mutually exclusive process/experiment mode, shed immediately on outage; exp150_ups_allocation_w = 0.0 W)."
+          },
+          {
+            "part_id": "S6.4-02",
+            "ups_budget_group": "AUX_PROCESS_SHED_ON_OUTAGE",
+            "supply_rails_steady_sum_w": 36.0,
+            "incremental_mains_w": 36.0,
+            "exp150_ups_allocation_w": 0.0,
+            "non_exp150_aux_shed_w": 36.0,
+            "secondary_or_parent_derived_w": 0.0,
+            "reconciliation_note": "Non-Exp150 auxiliary sheddable rack DC load (TIER2_SHED, fed via S7.4-03 rack PSU): incremental_mains_w = 36.0 W (shed immediately on outage; exp150_ups_allocation_w = 0.0 W)."
+          },
+          {
+            "part_id": "S6.5-01",
+            "ups_budget_group": "AUX_PROCESS_SHED_ON_OUTAGE",
+            "supply_rails_steady_sum_w": 110.0,
+            "incremental_mains_w": 110.0,
+            "exp150_ups_allocation_w": 0.0,
+            "non_exp150_aux_shed_w": 110.0,
+            "secondary_or_parent_derived_w": 0.0,
+            "reconciliation_note": "Non-Exp150 auxiliary sheddable rack/facility load (TIER2_SHED): incremental_mains_w = 110.0 W AC mains (mutually exclusive process/experiment mode, shed immediately on outage; exp150_ups_allocation_w = 0.0 W)."
+          },
+          {
+            "part_id": "S6.5-02",
+            "ups_budget_group": "AUX_PROCESS_SHED_ON_OUTAGE",
+            "supply_rails_steady_sum_w": 240.0,
+            "incremental_mains_w": 240.0,
+            "exp150_ups_allocation_w": 0.0,
+            "non_exp150_aux_shed_w": 240.0,
+            "secondary_or_parent_derived_w": 0.0,
+            "reconciliation_note": "Non-Exp150 auxiliary sheddable rack/facility load (TIER2_SHED): incremental_mains_w = 240.0 W AC mains (mutually exclusive process/experiment mode, shed immediately on outage; exp150_ups_allocation_w = 0.0 W)."
+          },
+          {
+            "part_id": "S6.6-05",
+            "ups_budget_group": "AUX_PROCESS_SHED_ON_OUTAGE",
+            "supply_rails_steady_sum_w": 45.0,
+            "incremental_mains_w": 45.0,
+            "exp150_ups_allocation_w": 0.0,
+            "non_exp150_aux_shed_w": 45.0,
+            "secondary_or_parent_derived_w": 0.0,
+            "reconciliation_note": "Non-Exp150 auxiliary sheddable rack DC load (TIER2_SHED, fed via S7.4-03 rack PSU): incremental_mains_w = 45.0 W (shed immediately on outage; exp150_ups_allocation_w = 0.0 W)."
+          },
+          {
+            "part_id": "S6.6-06",
+            "ups_budget_group": "AUX_PROCESS_SHED_ON_OUTAGE",
+            "supply_rails_steady_sum_w": 630.0,
+            "incremental_mains_w": 630.0,
+            "exp150_ups_allocation_w": 0.0,
+            "non_exp150_aux_shed_w": 630.0,
+            "secondary_or_parent_derived_w": 0.0,
+            "reconciliation_note": "Non-Exp150 auxiliary sheddable rack/facility load (TIER2_SHED): incremental_mains_w = 630.0 W AC mains (mutually exclusive process/experiment mode, shed immediately on outage; exp150_ups_allocation_w = 0.0 W)."
+          },
+          {
+            "part_id": "S7.2-01",
+            "ups_budget_group": "AUX_PROCESS_SHED_ON_OUTAGE",
+            "supply_rails_steady_sum_w": 140.0,
+            "incremental_mains_w": 0.0,
+            "exp150_ups_allocation_w": 0.0,
+            "non_exp150_aux_shed_w": 0.0,
+            "secondary_or_parent_derived_w": 140.0,
+            "reconciliation_note": "PXIe plug-in card (140.0 W DC backplane load) powered wholly by parent chassis S7.2-03 (320.0 W AC mains): incremental_mains_w = 0.0 W, exp150_ups_allocation_w = 0.0 W (0.0 W double-count)."
+          },
+          {
+            "part_id": "S7.2-02",
+            "ups_budget_group": "AUX_PROCESS_SHED_ON_OUTAGE",
+            "supply_rails_steady_sum_w": 35.0,
+            "incremental_mains_w": 0.0,
+            "exp150_ups_allocation_w": 0.0,
+            "non_exp150_aux_shed_w": 0.0,
+            "secondary_or_parent_derived_w": 35.0,
+            "reconciliation_note": "PXIe plug-in card (35.0 W DC backplane load) powered wholly by parent chassis S7.2-03 (320.0 W AC mains): incremental_mains_w = 0.0 W, exp150_ups_allocation_w = 0.0 W (0.0 W double-count)."
+          },
+          {
+            "part_id": "S7.2-03",
+            "ups_budget_group": "AUX_PROCESS_SHED_ON_OUTAGE",
+            "supply_rails_steady_sum_w": 320.0,
+            "incremental_mains_w": 320.0,
+            "exp150_ups_allocation_w": 0.0,
+            "non_exp150_aux_shed_w": 320.0,
+            "secondary_or_parent_derived_w": 0.0,
+            "reconciliation_note": "Non-Exp150 auxiliary sheddable rack/facility load (TIER2_SHED): incremental_mains_w = 320.0 W AC mains (mutually exclusive process/experiment mode, shed immediately on outage; exp150_ups_allocation_w = 0.0 W)."
+          },
+          {
+            "part_id": "S9.HPC-01",
+            "ups_budget_group": "EXP150_TIER2_SHED",
+            "supply_rails_steady_sum_w": 2100.0,
+            "incremental_mains_w": 2100.0,
+            "exp150_ups_allocation_w": 2100.0,
+            "non_exp150_aux_shed_w": 0.0,
+            "secondary_or_parent_derived_w": 0.0,
+            "reconciliation_note": "Exp150 Tier-2 sheddable baseline load: incremental_mains_w = exp150_ups_allocation_w = 2100.0 W (raw supply_rails sum = 2100.0 W, shed cleanly on utility outage)."
+          },
+          {
+            "part_id": "S9.HPC-02",
+            "ups_budget_group": "EXP150_TIER2_SHED",
+            "supply_rails_steady_sum_w": 95.0,
+            "incremental_mains_w": 95.0,
+            "exp150_ups_allocation_w": 95.0,
+            "non_exp150_aux_shed_w": 0.0,
+            "secondary_or_parent_derived_w": 0.0,
+            "reconciliation_note": "Exp150 Tier-2 sheddable baseline load: incremental_mains_w = exp150_ups_allocation_w = 95.0 W (raw supply_rails sum = 95.0 W, shed cleanly on utility outage)."
+          },
+          {
+            "part_id": "S9.HPC-03",
+            "ups_budget_group": "EXP150_TIER2_SHED",
+            "supply_rails_steady_sum_w": 0.0,
+            "incremental_mains_w": 0.0,
+            "exp150_ups_allocation_w": 0.0,
+            "non_exp150_aux_shed_w": 0.0,
+            "secondary_or_parent_derived_w": 0.0,
+            "reconciliation_note": "Exp150 Tier-2 sheddable baseline load: incremental_mains_w = exp150_ups_allocation_w = 0.0 W (raw supply_rails sum = 0.0 W, shed cleanly on utility outage)."
+          },
+          {
+            "part_id": "S1.7-01",
+            "ups_budget_group": "EXP150_TIER2_SHED",
+            "supply_rails_steady_sum_w": 180.0,
+            "incremental_mains_w": 180.0,
+            "exp150_ups_allocation_w": 180.0,
+            "non_exp150_aux_shed_w": 0.0,
+            "secondary_or_parent_derived_w": 0.0,
+            "reconciliation_note": "Exp150 Tier-2 sheddable baseline load: incremental_mains_w = exp150_ups_allocation_w = 180.0 W (raw supply_rails sum = 180.0 W, shed cleanly on utility outage)."
+          },
+          {
+            "part_id": "S5.2-03",
+            "ups_budget_group": "AUX_PROCESS_SHED_ON_OUTAGE",
+            "supply_rails_steady_sum_w": 450.0,
+            "incremental_mains_w": 450.0,
+            "exp150_ups_allocation_w": 0.0,
+            "non_exp150_aux_shed_w": 450.0,
+            "secondary_or_parent_derived_w": 0.0,
+            "reconciliation_note": "Non-Exp150 auxiliary sheddable rack/facility load (TIER2_SHED): incremental_mains_w = 450.0 W AC mains (mutually exclusive process/experiment mode, shed immediately on outage; exp150_ups_allocation_w = 0.0 W)."
+          },
+          {
+            "part_id": "S5.6-01",
+            "ups_budget_group": "EXP150_TIER2_SHED",
+            "supply_rails_steady_sum_w": 400.0,
+            "incremental_mains_w": 400.0,
+            "exp150_ups_allocation_w": 400.0,
+            "non_exp150_aux_shed_w": 0.0,
+            "secondary_or_parent_derived_w": 0.0,
+            "reconciliation_note": "Exp150 Tier-2 sheddable baseline load: incremental_mains_w = exp150_ups_allocation_w = 400.0 W (raw supply_rails sum = 400.0 W, shed cleanly on utility outage)."
+          },
+          {
+            "part_id": "S5.6-03",
+            "ups_budget_group": "AUX_PROCESS_SHED_ON_OUTAGE",
+            "supply_rails_steady_sum_w": 0.0,
+            "incremental_mains_w": 0.0,
+            "exp150_ups_allocation_w": 0.0,
+            "non_exp150_aux_shed_w": 0.0,
+            "secondary_or_parent_derived_w": 0.0,
+            "reconciliation_note": "Sequential non-simultaneous process load (0.0 W steady concurrent draw; peak 150.0 W interlocked against simultaneous peak): incremental_mains_w = 0.0 W, exp150_ups_allocation_w = 0.0 W."
+          },
+          {
+            "part_id": "S6.1-02",
+            "ups_budget_group": "EXP150_TIER2_SHED",
+            "supply_rails_steady_sum_w": 9420.0,
+            "incremental_mains_w": 9420.0,
+            "exp150_ups_allocation_w": 9420.0,
+            "non_exp150_aux_shed_w": 0.0,
+            "secondary_or_parent_derived_w": 0.0,
+            "reconciliation_note": "Exp150 Tier-2 sheddable baseline load: incremental_mains_w = exp150_ups_allocation_w = 9420.0 W (raw supply_rails sum = 9420.0 W, shed cleanly on utility outage)."
+          },
+          {
+            "part_id": "S6.9-01",
+            "ups_budget_group": "EXP150_TIER2_SHED",
+            "supply_rails_steady_sum_w": 80.0,
+            "incremental_mains_w": 80.0,
+            "exp150_ups_allocation_w": 80.0,
+            "non_exp150_aux_shed_w": 0.0,
+            "secondary_or_parent_derived_w": 0.0,
+            "reconciliation_note": "Exp150 Tier-2 sheddable baseline load: incremental_mains_w = exp150_ups_allocation_w = 80.0 W (raw supply_rails sum = 80.0 W, shed cleanly on utility outage)."
+          }
+        ]
+      }
+    },
+    "reconciliation": {
+      "exp150_combined_tier1_plus_tier2_W": 14808.0,
+      "exp150_combined_tier1_plus_tier2_kW": 14.808,
+      "ups_bus_pre_shed_excl_3ph_pt420_kW": 5.308,
+      "ups_bus_utilization_pre_shed_pct": 39.32,
+      "runtime_at_rated_13p5kW_min": 40.0,
+      "runtime_at_rated_13p5kW_conservative_100pct_dod_incl_350w_min": 39.1,
+      "runtime_at_rated_13p5kW_conservative_90pct_dod_incl_350w_min": 35.2,
+      "meets_30min_full_load_requirement": true,
+      "aux_experiment_rack_sheddable_W": 5581.0,
+      "aux_experiment_rack_items": [
+        {
+          "part_id": "S1.1-05",
+          "part_name": "Izole yuksek gerilim ark/katot guc platformu (15 kV deck)",
+          "electrical_class": "E3",
+          "incremental_mains_w": 950.0,
+          "sub_rail_power_w": 1100.0,
+          "secondary_or_parent_derived_w": 150.0
+        },
+        {
+          "part_id": "S1.2-03",
+          "part_name": "Wien filtresi cift-kutuplu hassas E-alani guc kaynagi",
+          "electrical_class": "E3",
+          "incremental_mains_w": 180.0,
+          "sub_rail_power_w": 205.0,
+          "secondary_or_parent_derived_w": 25.0
+        },
+        {
+          "part_id": "S1.4-02",
+          "part_name": "Femtoamper / pikoamper elektrometre okuma modulu",
+          "electrical_class": "E3",
+          "incremental_mains_w": 60.0,
+          "sub_rail_power_w": 60.0,
+          "secondary_or_parent_derived_w": 0.0
+        },
+        {
+          "part_id": "S1.5-03",
+          "part_name": "Enerji suzgeci ultra-dusuk gurultulu cift-kutuplu besleme",
+          "electrical_class": "E3",
+          "incremental_mains_w": 120.0,
+          "sub_rail_power_w": 120.0,
+          "secondary_or_parent_derived_w": 0.0
+        },
+        {
+          "part_id": "S4.2-03",
+          "part_name": "Aktif sonumleme DSP denetleyici ve yuksek-hizli piezo amplifikatoru",
+          "electrical_class": "E3",
+          "incremental_mains_w": 160.0,
+          "sub_rail_power_w": 160.0,
+          "secondary_or_parent_derived_w": 0.0
+        },
+        {
+          "part_id": "S4.3-04",
+          "part_name": "6-kanalli dusuk gurultulu piezo servo denetleyici ve HV surucu",
+          "electrical_class": "E3",
+          "incremental_mains_w": 220.0,
+          "sub_rail_power_w": 220.0,
+          "secondary_or_parent_derived_w": 0.0
+        },
+        {
+          "part_id": "S4.4-01",
+          "part_name": "3-eksenli frekans-kararli He-Ne lazer interferometre kafasi (Renishaw XL-80/RLE)",
+          "electrical_class": "E3",
+          "incremental_mains_w": 75.0,
+          "sub_rail_power_w": 75.0,
+          "secondary_or_parent_derived_w": 0.0
+        },
+        {
+          "part_id": "S5.3-01",
+          "part_name": "Yerinde hizli termal / flas optik tavlama modulu (Exp66/91)",
+          "electrical_class": "E3",
+          "incremental_mains_w": 1200.0,
+          "sub_rail_power_w": 1200.0,
+          "secondary_or_parent_derived_w": 0.0
+        },
+        {
+          "part_id": "S5.3-03",
+          "part_name": "Yuksek hizli optik pirometre ve kapali-cevrim tavlama kontroloru",
+          "electrical_class": "E3",
+          "incremental_mains_w": 45.0,
+          "sub_rail_power_w": 45.0,
+          "secondary_or_parent_derived_w": 0.0
+        },
+        {
+          "part_id": "S6.3-05",
+          "part_name": "Cift-kutuplu superiletken miknatis guc kaynagi (\u00b1100 A) ve HTS akim uclari",
+          "electrical_class": "E3",
+          "incremental_mains_w": 120.0,
+          "sub_rail_power_w": 120.0,
+          "secondary_or_parent_derived_w": 0.0
+        },
+        {
+          "part_id": "S6.4-01",
+          "part_name": "Mikrodalga ESR vektor sinyal ureticileri (10-45 GHz, dusuk faz gurultusu)",
+          "electrical_class": "E3",
+          "incremental_mains_w": 440.0,
+          "sub_rail_power_w": 440.0,
+          "secondary_or_parent_derived_w": 0.0
+        },
+        {
+          "part_id": "S6.4-02",
+          "part_name": "Genis-bantli I/Q modulatorler, hizli anahtarlar ve oda-sicakligi surucu amp.",
+          "electrical_class": "E3",
+          "incremental_mains_w": 36.0,
+          "sub_rail_power_w": 36.0,
+          "secondary_or_parent_derived_w": 0.0
+        },
+        {
+          "part_id": "S6.5-01",
+          "part_name": "RF/ENDOR cekirdek adresleme DDS sinyal kaynaklari (1-200 MHz)",
+          "electrical_class": "E3",
+          "incremental_mains_w": 110.0,
+          "sub_rail_power_w": 110.0,
+          "secondary_or_parent_derived_w": 0.0
+        },
+        {
+          "part_id": "S6.5-02",
+          "part_name": "Genis-bantli RF guc yukselticileri ve yonlu kuplorler",
+          "electrical_class": "E3",
+          "incremental_mains_w": 240.0,
+          "sub_rail_power_w": 240.0,
+          "secondary_or_parent_derived_w": 0.0
+        },
+        {
+          "part_id": "S6.6-05",
+          "part_name": "Oda-sicakligi dusuk gurultulu RF yukseltici (Mini-Circuits ZX60 sinifi, 56x)",
+          "electrical_class": "E3",
+          "incremental_mains_w": 45.0,
+          "sub_rail_power_w": 45.0,
+          "secondary_or_parent_derived_w": 0.0
+        },
+        {
+          "part_id": "S6.6-06",
+          "part_name": "RFSoC cogullamali sayisallastirici / AWG kartlari (AMD ZCU216, 14 kart = 56/4)",
+          "electrical_class": "E3",
+          "incremental_mains_w": 630.0,
+          "sub_rail_power_w": 630.0,
+          "secondary_or_parent_derived_w": 0.0
+        },
+        {
+          "part_id": "S7.2-01",
+          "part_name": "Cok-kanalli keyfi dalga formu uretici (AWG) kartlari (GRAPE XY/ENDOR)",
+          "electrical_class": "E3",
+          "incremental_mains_w": 0.0,
+          "sub_rail_power_w": 140.0,
+          "secondary_or_parent_derived_w": 140.0
+        },
+        {
+          "part_id": "S7.2-02",
+          "part_name": "Yuksek hizli dijital isaretci (marker) ve darbe siralamaci karti",
+          "electrical_class": "E3",
+          "incremental_mains_w": 0.0,
+          "sub_rail_power_w": 35.0,
+          "secondary_or_parent_derived_w": 35.0
+        },
+        {
+          "part_id": "S7.2-03",
+          "part_name": "PXIe / AXIe dusuk-gurultulu enstruman sasisi ve arka-panel",
+          "electrical_class": "E3",
+          "incremental_mains_w": 320.0,
+          "sub_rail_power_w": 320.0,
+          "secondary_or_parent_derived_w": 0.0
+        },
+        {
+          "part_id": "S1.6-01",
+          "part_name": "Cift-tuplu egzozlu PH3/SiF4 toksik gaz kabini (SEMI S2, Exp81/83)",
+          "electrical_class": "E4",
+          "incremental_mains_w": 180.0,
+          "sub_rail_power_w": 180.0,
+          "secondary_or_parent_derived_w": 0.0
+        },
+        {
+          "part_id": "S5.1-02",
+          "part_name": "Ust kolon montaj flansi ve cikarilabilir 150 C bakeout isitma ceketi",
+          "electrical_class": "E4",
+          "incremental_mains_w": 0.0,
+          "sub_rail_power_w": 0.0,
+          "secondary_or_parent_derived_w": 0.0
+        },
+        {
+          "part_id": "S5.2-03",
+          "part_name": "Yagsiz kuru scroll on-vakum pompasi ve geri-akis tutucu",
+          "electrical_class": "E4",
+          "incremental_mains_w": 450.0,
+          "sub_rail_power_w": 450.0,
+          "secondary_or_parent_derived_w": 0.0
+        },
+        {
+          "part_id": "S5.6-03",
+          "part_name": "Yuk-kilidi 345 C pirolitik-BN radyatif isitici + 350 C %5 H2/N2 FG/atomik-H pasivasyon manifoldu (Exp139, 4.2 kg)",
+          "electrical_class": "E4",
+          "incremental_mains_w": 0.0,
+          "sub_rail_power_w": 0.0,
+          "secondary_or_parent_derived_w": 0.0
+        }
+      ],
+      "operational_phase_ups_load_kW": {
+        "cryo_readout_mode_excl_pt420_kW": 6.669,
+        "ion_write_mode_excl_pt420_kW": 5.508,
+        "flash_anneal_ups_mode_excl_3ph_flash_kW": 3.028,
+        "utility_outage_tier1_hold_kW": 2.533,
+        "all_modes_within_13p5kW_ups": true
+      }
+    }
+  },
+  "grounding_domains": {
+    "domains": {
+      "AGND": {
+        "count": 25,
+        "description": "Quiet analog/metrology/IBIC star ground tied single-point to FACILITY_PE.",
+        "part_ids": [
+          "S3.2-04",
+          "S1.2-03",
+          "S1.4-02",
+          "S3.2-06",
+          "S4.2-03",
+          "S4.3-04",
+          "S5.3-03",
+          "S6.4-01",
+          "S6.4-02",
+          "S6.5-02",
+          "S6.6-05",
+          "S1.2-02",
+          "S1.4-01",
+          "S1.5-02",
+          "S2.2-04",
+          "S2.3-01",
+          "S2.5-01",
+          "S2.5-02",
+          "S3.1-04",
+          "S3.2-05",
+          "S4.2-02",
+          "S4.3-01",
+          "S4.3-02",
+          "S4.3-03",
+          "S5.6-02"
+        ]
+      },
+      "DGND": {
+        "count": 15,
+        "description": "Digital FPGA/RFSoC/AWG/HPC/timing ground isolated from AGND via single star tie.",
+        "part_ids": [
+          "S3.3-04",
+          "S4.4-01",
+          "S5.2-04",
+          "S6.5-01",
+          "S6.6-06",
+          "S7.1-01",
+          "S7.1-02",
+          "S7.2-01",
+          "S7.2-02",
+          "S7.2-03",
+          "S7.4-01",
+          "S7.4-02",
+          "S9.HPC-01",
+          "S9.HPC-02",
+          "S4.5-02"
+        ]
+      },
+      "HV_MINUS_5KV_DECK": {
+        "count": 10,
+        "description": "Floating -5 kV upper column / +15 kV source HV deck; 5 kV galvanic optical/transformer isolation.",
+        "part_ids": [
+          "S1.1-05",
+          "S1.5-03",
+          "S1.1-01",
+          "S1.1-02",
+          "S1.1-03",
+          "S1.3-02",
+          "S1.5-01",
+          "S1.7-01",
+          "S2.1-03",
+          "S2.2-01"
+        ]
+      },
+      "CRYO_OVC": {
+        "count": 21,
+        "description": "Dilution cryostat OVC/4K/MXC Faraday shield single-point tied to quiet cryo star.",
+        "part_ids": [
+          "S6.4-03",
+          "S6.5-03",
+          "S6.6-01",
+          "S6.6-02",
+          "S6.6-03",
+          "S6.6-04",
+          "S6.6-07",
+          "S6.7-01",
+          "S6.10-01",
+          "S6.11-02",
+          "S6.11-03",
+          "S6.11-04",
+          "S9.3-02",
+          "S9.4-01",
+          "S9.4-02",
+          "S9.4-03",
+          "S6.2-03",
+          "S6.3-05",
+          "S6.3-01",
+          "S6.3-02",
+          "S7.3-03"
+        ]
+      },
+      "FACILITY_PE": {
+        "count": 24,
+        "description": "Protective safety earth for 230/400 VAC mains, UHV chamber, pumps, gas cabinet & safety PLC.",
+        "part_ids": [
+          "S5.3-01",
+          "S6.8-02",
+          "S7.1-03",
+          "S7.4-03",
+          "S7.SAFETY-04",
+          "S7.SAFETY-05",
+          "S9.HPC-03",
+          "S1.1-04",
+          "S1.2-01",
+          "S1.6-01",
+          "S1.6-02",
+          "S4.2-01",
+          "S5.1-02",
+          "S5.1-03",
+          "S5.2-01",
+          "S5.2-02",
+          "S5.2-03",
+          "S5.6-01",
+          "S5.6-03",
+          "S5.6-04",
+          "S6.1-02",
+          "S6.9-01",
+          "S7.SAFETY-01",
+          "S7.SAFETY-06"
+        ]
+      }
+    },
+    "total_assigned": 95
+  },
+  "timing_distribution": {
+    "rb_10mhz_atomic_clock": {
+      "source_part_id": "S7.4-01",
+      "model_class": "SRS FS725 / PRS10 Rubidium + 16-Port Isolated Distribution Amp",
+      "frequency_MHz": 10.0,
+      "stability": "<5e-11",
+      "phase_noise_1kHz_dBc_Hz": -140.0,
+      "output_level_dBm": 13.0,
+      "impedance_ohm": 50.0,
+      "fanout_channels": [
+        {
+          "ch": "CH1",
+          "target_part_id": "S6.11-01",
+          "role": "ZU48DR RFSoC Board-A LMK04828 PLL"
+        },
+        {
+          "ch": "CH2",
+          "target_part_id": "S6.11-01",
+          "role": "ZU48DR RFSoC Board-B LMK04828 PLL"
+        },
+        {
+          "ch": "CH3",
+          "target_part_id": "S6.4-01",
+          "role": "ESR Microwave VSG #1 (10-45 GHz)"
+        },
+        {
+          "ch": "CH4",
+          "target_part_id": "S6.4-01",
+          "role": "ESR Microwave VSG #2 (10-45 GHz)"
+        },
+        {
+          "ch": "CH5",
+          "target_part_id": "S6.4-01",
+          "role": "ESR Microwave VSG #3 (10-45 GHz)"
+        },
+        {
+          "ch": "CH6",
+          "target_part_id": "S6.4-01",
+          "role": "ESR Microwave VSG #4 (10-45 GHz)"
+        },
+        {
+          "ch": "CH7",
+          "target_part_id": "S6.5-01",
+          "role": "RF/ENDOR DDS #1 (1-200 MHz)"
+        },
+        {
+          "ch": "CH8",
+          "target_part_id": "S6.5-01",
+          "role": "RF/ENDOR DDS #2 (1-200 MHz)"
+        },
+        {
+          "ch": "CH9",
+          "target_part_id": "S6.5-01",
+          "role": "RF/ENDOR DDS #3 (1-200 MHz)"
+        },
+        {
+          "ch": "CH10",
+          "target_part_id": "S6.5-01",
+          "role": "RF/ENDOR DDS #4 (1-200 MHz)"
+        },
+        {
+          "ch": "CH11",
+          "target_part_id": "S7.2-03",
+          "role": "18-Slot PXIe Backplane (4x S7.2-01 AWG + 2x S7.2-02 Seq)"
+        },
+        {
+          "ch": "CH12",
+          "target_part_id": "S6.6-06",
+          "role": "14x ZCU216 RFSoC Clock Distribution Splitter"
+        },
+        {
+          "ch": "CH13",
+          "target_part_id": "S3.3-04",
+          "role": "1U IBIC Counting-Gate FPGA Chassis (S3.3-01)"
+        },
+        {
+          "ch": "CH14",
+          "target_part_id": "S7.4-02",
+          "role": "White Rabbit Grandmaster 10 MHz + 1 PPS Discipline"
+        },
+        {
+          "ch": "CH15",
+          "target_part_id": "S4.4-01",
+          "role": "He-Ne Interferometer & S4.5-03 Deflection Trim DSP"
+        },
+        {
+          "ch": "CH16",
+          "target_part_id": "S7.4-01",
+          "role": "Spare / Phase-Noise Calibration Monitor Port"
+        }
+      ]
+    },
+    "white_rabbit_trigger_fanout": {
+      "source_part_id": "S7.4-02",
+      "max_interchannel_skew_ps": 200.0,
+      "optical_sfp_ports": [
+        {
+          "port": "WR_SFP_1",
+          "target_part_id": "S6.11-01",
+          "medium": "SMF-28 1000BASE-BX",
+          "role": "BOED-FPGA readout/syndrome epoch"
+        },
+        {
+          "port": "WR_SFP_2",
+          "target_part_id": "S6.6-06",
+          "medium": "SMF-28 1000BASE-BX",
+          "role": "14x ZCU216 SYSREF alignment"
+        },
+        {
+          "port": "WR_SFP_3",
+          "target_part_id": "S3.3-02",
+          "medium": "SMF-28 5 kV Isolated",
+          "role": "Blanker start_all & hit-gate across -5 kV barrier"
+        },
+        {
+          "port": "WR_SFP_4",
+          "target_part_id": "S9.HPC-02",
+          "medium": "SMF-28 1000BASE-BX",
+          "role": "100G RoCEv2 QEC cycle timestamp"
+        },
+        {
+          "port": "WR_SFP_5",
+          "target_part_id": "S5.5-03",
+          "medium": "SMF-28 1000BASE-BX",
+          "role": "808 nm flash-anneal pyrometer trigger"
+        },
+        {
+          "port": "WR_SFP_6",
+          "target_part_id": "S4.5-03",
+          "medium": "SMF-28 1000BASE-BX",
+          "role": "On-the-fly beam-deflection trim strobe"
+        },
+        {
+          "port": "WR_SFP_7",
+          "target_part_id": "S7.1-02",
+          "medium": "SMF-28 1000BASE-BX",
+          "role": "Immutable certificate DB epoch stamp"
+        },
+        {
+          "port": "WR_SFP_8",
+          "target_part_id": "S7.4-02",
+          "medium": "SMF-28 Spare",
+          "role": "Multi-cryostat expansion link"
+        }
+      ],
+      "coax_50ohm_ports": [
+        {
+          "port": "WR_COAX_1",
+          "target_part_id": "S3.3-04",
+          "role": "IBIC 100 MHz blanker_gate trigger"
+        },
+        {
+          "port": "WR_COAX_2",
+          "target_part_id": "S1.4-03",
+          "role": "Beam-dose PID shutter strobe"
+        },
+        {
+          "port": "WR_COAX_3",
+          "target_part_id": "S6.9-04",
+          "role": "PT420 1.4 Hz harmonic FF phase sync"
+        },
+        {
+          "port": "WR_COAX_4",
+          "target_part_id": "S7.2-02",
+          "role": "PXIe 1 ns pulse sequencer epoch"
+        },
+        {
+          "port": "WR_COAX_5",
+          "target_part_id": "S4.3-04",
+          "role": "Piezo stage step-and-settle gate"
+        },
+        {
+          "port": "WR_COAX_6",
+          "target_part_id": "S5.3-01",
+          "role": "In-situ optical anneal strobe"
+        },
+        {
+          "port": "WR_COAX_7",
+          "target_part_id": "S7.SAFETY-03",
+          "role": "Safety event recorder timestamp"
+        },
+        {
+          "port": "WR_COAX_8",
+          "target_part_id": "S7.4-02",
+          "role": "Oscilloscope skew verification port"
+        }
+      ]
+    }
+  }
+}

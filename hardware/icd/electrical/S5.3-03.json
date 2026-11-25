@@ -1,0 +1,97 @@
+{
+  "schema_version": "1.0",
+  "part_id": "S5.3-03",
+  "parent_bom_id": "S5.3",
+  "subsystem": "S5",
+  "part_name": "Yuksek hizli optik pirometre ve kapali-cevrim tavlama kontroloru",
+  "qty": 1,
+  "unit": "set",
+  "temp_stage": "300 K",
+  "vacuum_grade": "Atmosfer (optik)",
+  "bom_key_spec": "300-1200 C olcum, tepki <100 us",
+  "usd_nom": 10500.0,
+  "bom_epistemic_tag": "{Model-Kalibrasyon-Exp114}",
+  "electrical_class": "E3",
+  "grounding_domain": "AGND",
+  "grounding_notes": "Dual-wavelength InGaAs/Si optical pyrometer & closed-loop anneal controller (<100 us).",
+  "supply_rails": [
+    {
+      "rail_name": "AC_MAINS_230V",
+      "voltage_v": 230.0,
+      "current_type": "AC_1PH",
+      "max_current_a": 0.4,
+      "steady_power_w": 45.0,
+      "peak_power_w": 70.0,
+      "source_part_id": "S7.4-03"
+    }
+  ],
+  "connectors_and_pinout": [
+    {
+      "connector_ref": "J_OPT",
+      "connector_type": "SMA-905 Multimode Fiber",
+      "location_side": "front_panel",
+      "mating_part_id": "S5.3-02",
+      "pins": [
+        {
+          "pin": "1",
+          "signal": "PYRO_IR_OPT",
+          "direction": "IN",
+          "nominal_level": "300-1200 C thermal emission"
+        }
+      ]
+    },
+    {
+      "connector_ref": "J_CTRL",
+      "connector_type": "BNC Analog Out + RJ45",
+      "location_side": "rack_rear",
+      "mating_part_id": "S5.3-01",
+      "pins": [
+        {
+          "pin": "1",
+          "signal": "ANNEAL_PID_CMD",
+          "direction": "OUT",
+          "nominal_level": "0-10 V closed-loop command"
+        },
+        {
+          "pin": "2",
+          "signal": "ETH_CERT_LOG",
+          "direction": "OUT",
+          "nominal_level": "Wafer anneal profile log"
+        }
+      ]
+    }
+  ],
+  "mating_part_ids": [
+    "S5.3-01",
+    "S5.3-02",
+    "S7.1-02"
+  ],
+  "interlock_hooks": [
+    {
+      "signal_name": "OVERTEMP_1200C_TRIP",
+      "target_part_id": "S7.SAFETY-03",
+      "action_on_trip": "Abort flash anneal on over-temperature",
+      "response_time_ms": 1.0
+    }
+  ],
+  "ups_tier": "TIER2_SHED",
+  "ups_budget_group": "AUX_PROCESS_SHED_ON_OUTAGE",
+  "exp150_ups_allocation_w": 0.0,
+  "supply_rails_steady_sum_w": 45.0,
+  "incremental_mains_w": 45.0,
+  "secondary_or_parent_derived_w": 0.0,
+  "non_exp150_aux_shed_w": 45.0,
+  "reconciliation_note": "Non-Exp150 auxiliary sheddable rack/facility load (TIER2_SHED): incremental_mains_w = 45.0 W AC mains (mutually exclusive process/experiment mode, shed immediately on outage; exp150_ups_allocation_w = 0.0 W).",
+  "timing_sync": {
+    "rb_10mhz_port": null,
+    "white_rabbit_port": null,
+    "sync_role": "Real-time anneal feedback"
+  },
+  "epistemic_flags": {
+    "design_maturity": "M0_M1_ELECTRICAL_ICD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

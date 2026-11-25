@@ -1,0 +1,242 @@
+{
+  "part_id": "S1.1-05",
+  "subsystem": "S1",
+  "design": {
+    "part_id": "S1.1-05",
+    "parent_bom_id": "S1.1",
+    "subsystem": "S1",
+    "part_name": "Izole yuksek gerilim ark/katot guc platformu (15 kV deck)",
+    "design_tier": "CUSTOM_FULL",
+    "material": "Al 6061",
+    "temp_stage": "300 K (kabin)",
+    "temp_k": 300.0,
+    "vacuum_grade": "Atmosfer",
+    "tolerance_spec": "±10 ppm/saat",
+    "surface_finish_ra_um": 1.6,
+    "qty": 1,
+    "procurement_class": "CUS",
+    "world_origin_mm": [
+      1480.0,
+      -223.0,
+      812.375
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "hv_15kv_out",
+        "kind": "electrical",
+        "position_mm": [
+          1480.0,
+          4.5,
+          812.375
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "standard": "20 kV Coax HV",
+        "mating_part_id": "S1.1-01",
+        "bore_mm": 0.0,
+        "od_mm": 14.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "global",
+        "notes": ""
+      },
+      {
+        "name": "fiber_ctrl",
+        "kind": "optical",
+        "position_mm": [
+          1390.0,
+          4.5,
+          812.375
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "standard": "ST Multimode Fiber",
+        "mating_part_id": "S1.4-03",
+        "bore_mm": 0.0,
+        "od_mm": 10.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "global",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "RACK_W_X",
+        "nominal_mm": 482.6,
+        "tol_plus_mm": 0.3,
+        "tol_minus_mm": -0.3,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "482.60 ±0.30"
+      },
+      {
+        "label": "HEIGHT_3U",
+        "nominal_mm": 131.35,
+        "tol_plus_mm": 0.3,
+        "tol_minus_mm": -0.3,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "131.35 ±0.30"
+      },
+      {
+        "label": "DEPTH_Y",
+        "nominal_mm": 430.0,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "430.00 ±0.50"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "perpendicularity",
+        "tolerance_mm": 0.25,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "19-IN FRONT EARS",
+        "glyph": "⊥",
+        "tolerance_text": "0.25"
+      },
+      {
+        "symbol": "flatness",
+        "tolerance_mm": 0.2,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "RACK RAIL BASE",
+        "glyph": "⏥",
+        "tolerance_text": "0.20"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "0-15 kV, dalgalilik <0.01%, fiber-optik kontrol",
+      "19-in Rack Bay 1 slots U27-U29 (X=1480.0 mm, front -Y @ -438.0, Z_nat=[746.70, 878.05]); solid SF6-free 15 kV deck"
+    ],
+    "scad_params": {
+      "rack_u": 3,
+      "u_slots": "U27-U29",
+      "v_max_kV": 15.0,
+      "sf6_free": "true"
+    },
+    "target_mass_kg": 12.2,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S1.1-05",
+    "subsystem": "S1",
+    "design_tier": "CUSTOM_FULL",
+    "stl_path": "hardware/cad_parts/out/S1/S1.1-05.stl",
+    "step_path": "hardware/cad_parts/out/S1/S1.1-05.step",
+    "scad_path": "hardware/cad_parts/out/S1/S1.1-05.scad",
+    "dxf_path": "hardware/cad_parts/out/S1/S1.1-05.dxf",
+    "svg_path": "hardware/cad_parts/out/S1/S1.1-05.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 4150691.1159591093,
+    "surface_area_mm2": 1334297.1672010364,
+    "mass_kg": 11.206866013089622,
+    "cg_mm": [
+      1479.6825768516055,
+      -222.08080673512183,
+      812.3750000000099
+    ],
+    "bbox_min_mm": [
+      1238.7,
+      -438.0,
+      746.7
+    ],
+    "bbox_max_mm": [
+      1721.3,
+      4.5,
+      878.05
+    ],
+    "inertia_kg_mm2": [
+      137542.4882295965,
+      185239.12501741992,
+      287982.7464627356,
+      -707.6189647351318,
+      6.591796875e-08,
+      -5.9326171875e-09
+    ],
+    "triangle_count": 1156,
+    "vertex_count": 590,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "engineering_checks": {},
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

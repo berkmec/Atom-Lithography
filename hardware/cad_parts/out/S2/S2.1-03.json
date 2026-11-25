@@ -1,0 +1,295 @@
+{
+  "part_id": "S2.1-03",
+  "subsystem": "S2",
+  "design": {
+    "part_id": "S2.1-03",
+    "parent_bom_id": "S2.1",
+    "subsystem": "S2",
+    "part_name": "Anti-sarj altin/Pt iletken ust membran kaplama ve koruma cercevesi",
+    "design_tier": "CUSTOM_FULL",
+    "material": "Mo",
+    "temp_stage": "300 K",
+    "temp_k": 300.0,
+    "vacuum_grade": "UHV 1e-9 mbar",
+    "tolerance_spec": "±10 um hizalama",
+    "surface_finish_ra_um": 0.2,
+    "qty": 2,
+    "procurement_class": "CUS",
+    "world_origin_mm": [
+      0.0,
+      0.0,
+      9.04
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "aperture_clamp_bot",
+        "kind": "mechanical",
+        "position_mm": [
+          0.0,
+          0.0,
+          7.94
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "standard": "Ø28.0 mm Guard Lip",
+        "mating_part_id": "S2.1-01",
+        "bore_mm": 28.0,
+        "od_mm": 54.0,
+        "pcd_mm": 46.0,
+        "bolt_count": 6,
+        "bolt_hole_mm": 2.4,
+        "bolt_spec": "",
+        "frame": "global",
+        "notes": ""
+      },
+      {
+        "name": "cassette_seat_top",
+        "kind": "mechanical",
+        "position_mm": [
+          0.0,
+          0.0,
+          10.14
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "6xM2 PCD 46",
+        "mating_part_id": "S2.1-04",
+        "bore_mm": 28.0,
+        "od_mm": 54.0,
+        "pcd_mm": 46.0,
+        "bolt_count": 6,
+        "bolt_hole_mm": 2.4,
+        "bolt_spec": "",
+        "frame": "global",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "CLEAR_BORE",
+        "nominal_mm": 28.0,
+        "tol_plus_mm": 0.01,
+        "tol_minus_mm": -0.01,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø28.00 ±0.01"
+      },
+      {
+        "label": "FRAME_OD",
+        "nominal_mm": 54.0,
+        "tol_plus_mm": 0.02,
+        "tol_minus_mm": -0.02,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø54.00 ±0.02"
+      },
+      {
+        "label": "THICK",
+        "nominal_mm": 2.2,
+        "tol_plus_mm": 0.01,
+        "tol_minus_mm": -0.01,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "2.20 ±0.01"
+      },
+      {
+        "label": "PCD_6XM2",
+        "nominal_mm": 46.0,
+        "tol_plus_mm": 0.02,
+        "tol_minus_mm": -0.02,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø46.00 ±0.02"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "flatness",
+        "tolerance_mm": 0.005,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "SOI CLAMP FACE",
+        "glyph": "⏥",
+        "tolerance_text": "0.005"
+      },
+      {
+        "symbol": "concentricity",
+        "tolerance_mm": 0.01,
+        "diameter_zone": true,
+        "material_condition": "",
+        "datum_primary": "B",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "Ø28 GUARD BORE",
+        "glyph": "◎",
+        "tolerance_text": "Ø0.010"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "Yuzey direnci <1 Ohm/sq, demet isisi dagitimi",
+      "50 nm Au/Ti anti-charge conductive coating (<1 Ohm/sq) on Mo precision clamping frame; 2.686 mm radial margin to beam diagonal"
+    ],
+    "scad_params": {
+      "bore_id": 28.0,
+      "frame_od": 54.0,
+      "thickness": 2.2,
+      "au_ti_coat_nm": 50.0
+    },
+    "target_mass_kg": 0.039,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S2.1-03",
+    "subsystem": "S2",
+    "design_tier": "CUSTOM_FULL",
+    "stl_path": "hardware/cad_parts/out/S2/S2.1-03.stl",
+    "step_path": "hardware/cad_parts/out/S2/S2.1-03.step",
+    "scad_path": "hardware/cad_parts/out/S2/S2.1-03.scad",
+    "dxf_path": "hardware/cad_parts/out/S2/S2.1-03.dxf",
+    "svg_path": "hardware/cad_parts/out/S2/S2.1-03.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 3576.41232291392,
+    "surface_area_mm2": 4020.2801252031622,
+    "mass_kg": 0.03676551867955508,
+    "cg_mm": [
+      -1.236253478084675e-15,
+      3.178795604556818e-16,
+      9.039999999999983
+    ],
+    "bbox_min_mm": [
+      -27.76377481542538,
+      -30.5,
+      7.9399999999999995
+    ],
+    "bbox_max_mm": [
+      27.76377481542538,
+      27.0,
+      10.139999999999999
+    ],
+    "inertia_kg_mm2": [
+      8.328109442347344,
+      8.328109442347339,
+      16.626842923157145,
+      2.8289861120356363e-16,
+      -7.102515496626431e-16,
+      6.48950276627147e-16
+    ],
+    "triangle_count": 516,
+    "vertex_count": 252,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "engineering_checks": {
+    "bakeout_aln_mo": {
+      "outer_material": "AlN",
+      "inner_material": "Mo",
+      "t_cold_k": 423.15,
+      "t_ref_k": 293.15,
+      "warm_outer_id_mm": 54.5,
+      "warm_inner_od_mm": 54.0,
+      "cold_outer_id_mm": 54.53488,
+      "cold_inner_od_mm": 54.0351,
+      "outer_strain": 0.0006399999999999739,
+      "inner_strain": 0.0006500000000000394,
+      "warm_radial_clearance_mm": 0.25,
+      "cold_nominal_radial_clearance_mm": 0.2498900000000006,
+      "cold_worst_case_radial_clearance_mm": 0.22989000000000062,
+      "delta_radial_clearance_mm": -0.00010999999999938836,
+      "min_required_radial_clearance_mm": 0.15,
+      "interference_risk": false,
+      "passed": true
+    },
+    "cold100k_aln_mo": {
+      "outer_material": "AlN",
+      "inner_material": "Mo",
+      "t_cold_k": 100.0,
+      "t_ref_k": 293.15,
+      "warm_outer_id_mm": 54.5,
+      "warm_inner_od_mm": 54.0,
+      "cold_outer_id_mm": 54.46948,
+      "cold_inner_od_mm": 53.95599,
+      "outer_strain": -0.0005600000000000049,
+      "inner_strain": -0.0008150000000000102,
+      "warm_radial_clearance_mm": 0.25,
+      "cold_nominal_radial_clearance_mm": 0.25674499999999867,
+      "cold_worst_case_radial_clearance_mm": 0.23674499999999868,
+      "delta_radial_clearance_mm": 0.006744999999998669,
+      "min_required_radial_clearance_mm": 0.15,
+      "interference_risk": false,
+      "passed": true
+    }
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

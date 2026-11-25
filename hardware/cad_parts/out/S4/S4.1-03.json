@@ -1,0 +1,279 @@
+{
+  "part_id": "S4.1-03",
+  "subsystem": "S4",
+  "part_design": {
+    "part_id": "S4.1-03",
+    "parent_bom_id": "S4.1",
+    "subsystem": "S4",
+    "part_name": "Yapisal celik alt-sase ve titresim sonumlu terazi ayaklari",
+    "design_tier": "COTS_ENV_ICD",
+    "material": "Steel",
+    "temp_stage": "300 K",
+    "temp_k": 300.0,
+    "vacuum_grade": "Atmosfer",
+    "tolerance_spec": "±0.5 mm",
+    "surface_finish_ra_um": 3.2,
+    "qty": 1,
+    "procurement_class": "COTS",
+    "world_origin_mm": [
+      0.0,
+      0.0,
+      -581.5
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "isolator_top_deck",
+        "kind": "mechanical",
+        "position_mm": [
+          0.0,
+          0.0,
+          78.5
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "4x Isolator Pads @ (±350, ±250) mm",
+        "mating_part_id": "S4.1-02",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      },
+      {
+        "name": "lab_floor_anchor",
+        "kind": "mechanical",
+        "position_mm": [
+          0.0,
+          0.0,
+          -78.5
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "standard": "4x M24 Leveling Soleplates (Z_floor = -660.0 mm)",
+        "mating_part_id": "S7.4-04",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "OUTER_X",
+        "nominal_mm": 920.0,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "920.00 ±0.50"
+      },
+      {
+        "label": "OUTER_Y",
+        "nominal_mm": 720.0,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "720.00 ±0.50"
+      },
+      {
+        "label": "CLEAR_BAY_X",
+        "nominal_mm": 640.0,
+        "tol_plus_mm": 1.0,
+        "tol_minus_mm": -1.0,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "640.00 ±1.00"
+      },
+      {
+        "label": "CLEAR_BAY_Y",
+        "nominal_mm": 480.0,
+        "tol_plus_mm": 1.0,
+        "tol_minus_mm": -1.0,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "480.00 ±1.00"
+      },
+      {
+        "label": "TOTAL_H",
+        "nominal_mm": 157.0,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "157.00 ±0.50"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "flatness",
+        "tolerance_mm": 0.5,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "TOP MACHINED PAD PLANE",
+        "glyph": "⏥",
+        "tolerance_text": "0.50"
+      },
+      {
+        "symbol": "parallelism",
+        "tolerance_mm": 0.5,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "FLOOR SOLEPLATE PLANE",
+        "glyph": "∥",
+        "tolerance_text": "0.50"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "Yuk kapasitesi >=1000 kg, ilk mod >80 Hz",
+      "Welded 140x116 mm RHS structural steel sub-frame filled with dry silica sand (>=1000 kg capacity, f1 > 80 Hz).",
+      "Open 640x480 mm central bay clears R=210 mm lower DR bore by >=30 mm; outer X=±460 mm clears -X DR OVC (-475 mm)."
+    ],
+    "scad_params": {
+      "frame_x_mm": 920.0,
+      "frame_y_mm": 720.0,
+      "bay_x_mm": 640.0,
+      "bay_y_mm": 480.0,
+      "load_capacity_kg": 1000,
+      "min_f1_hz": 80.0
+    },
+    "target_mass_kg": null,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S4.1-03",
+    "subsystem": "S4",
+    "design_tier": "COTS_ENV_ICD",
+    "stl_path": "hardware/cad_parts/out/S4/S4.1-03.stl",
+    "step_path": "hardware/cad_parts/out/S4/S4.1-03.step",
+    "scad_path": "hardware/cad_parts/out/S4/S4.1-03.scad",
+    "dxf_path": "hardware/cad_parts/out/S4/S4.1-03.dxf",
+    "svg_path": "hardware/cad_parts/out/S4/S4.1-03.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 41674314.72351881,
+    "surface_area_mm2": 1433478.591815718,
+    "mass_kg": 200.0367106728903,
+    "cg_mm": [
+      -7.924682584436273e-15,
+      -4.40964327021606e-15,
+      19.500383945206902
+    ],
+    "bbox_min_mm": [
+      -466.1,
+      -360.0,
+      -78.5
+    ],
+    "bbox_max_mm": [
+      466.1,
+      360.0,
+      78.5
+    ],
+    "inertia_kg_mm2": [
+      13059608.146839842,
+      20742941.30262145,
+      33323896.46689043,
+      -1.4648437500000002e-10,
+      -1.480820505160236e-10,
+      2.8583784681834843e-11
+    ],
+    "triangle_count": 1008,
+    "vertex_count": 520,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "world_bbox_min_mm": [
+    -466.1,
+    -360.0,
+    -660.0
+  ],
+  "world_bbox_max_mm": [
+    466.1,
+    360.0,
+    -503.0
+  ],
+  "reconciliation": null,
+  "thermal_contraction_checks": [],
+  "tolerance_stack_checks": []
+}

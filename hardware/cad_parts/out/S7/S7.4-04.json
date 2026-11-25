@@ -1,0 +1,380 @@
+{
+  "part_design": {
+    "part_id": "S7.4-04",
+    "parent_bom_id": "S7.4",
+    "subsystem": "S7",
+    "part_name": "Makine guvenlik kilidi PLC (UHV, HV, PH3 gaz, kriyo quench acil-dur)",
+    "design_tier": "COTS_ENV_ICD",
+    "material": "Steel",
+    "temp_stage": "300 K (kabin)",
+    "temp_k": 300.0,
+    "vacuum_grade": "Atmosfer",
+    "tolerance_spec": "<10 ms kesme",
+    "surface_finish_ra_um": 0.8,
+    "qty": 1,
+    "procurement_class": "COTS",
+    "world_origin_mm": [
+      1480.0,
+      -228.0,
+      1756.875
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "interlock_io_bus",
+        "kind": "electrical",
+        "position_mm": [
+          1580.0,
+          -449.0,
+          1756.875
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "standard": "24 VDC Keyed Interlock Terminal Bus (UHV/HV/PH3/Quench)",
+        "mating_part_id": "S7.SAFETY-03",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "world",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "WIDTH_19IN",
+        "nominal_mm": 482.6,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "482.60 ±0.50"
+      },
+      {
+        "label": "HEIGHT_1U",
+        "nominal_mm": 42.45,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "42.45 ±0.50"
+      },
+      {
+        "label": "DEPTH",
+        "nominal_mm": 420.0,
+        "tol_plus_mm": 1.0,
+        "tol_minus_mm": -1.0,
+        "view": "right",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "420.00 ±1.00"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "flatness",
+        "tolerance_mm": 0.5,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "19-INCH FACEPLATE",
+        "glyph": "⏥",
+        "tolerance_text": "0.50"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "Donanimsal E-Stop, PH3 >50 ppb / vakum kaybi / HV kapak kilidi",
+      "Bay 1 U38; machine equipment protection PLC (<10 ms cutoff) + PDU interlock distribution.",
+      "Design-only M0/M1 (iec61508_certified=False, semi_s2_certified=False)."
+    ],
+    "scad_params": {
+      "u_start": 38,
+      "u_count": 1,
+      "depth_mm": 420.0
+    },
+    "target_mass_kg": 9.8,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S7.4-04",
+    "subsystem": "S7",
+    "design_tier": "COTS_ENV_ICD",
+    "stl_path": "hardware/cad_parts/out/S7/S7.4-04.stl",
+    "step_path": "hardware/cad_parts/out/S7/S7.4-04.step",
+    "scad_path": "hardware/cad_parts/out/S7/S7.4-04.scad",
+    "dxf_path": "hardware/cad_parts/out/S7/S7.4-04.dxf",
+    "svg_path": "hardware/cad_parts/out/S7/S7.4-04.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 7497534.002561607,
+    "surface_area_mm2": 489292.0960208794,
+    "mass_kg": 9.79999999999998,
+    "cg_mm": [
+      1480.2577104355576,
+      -227.76828183521377,
+      1756.8749999999513
+    ],
+    "bbox_min_mm": [
+      1238.7,
+      -449.1,
+      1735.65
+    ],
+    "bbox_max_mm": [
+      1721.3,
+      -5.799999999999999,
+      1778.1
+    ],
+    "inertia_kg_mm2": [
+      146320.59501756637,
+      159787.44758916684,
+      303435.7058655375,
+      -46.07912350633369,
+      -1.9912797320957963e-07,
+      -7.02053751700441e-09
+    ],
+    "triangle_count": 1620,
+    "vertex_count": 820,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "shell_bboxes_mm": [
+    [
+      [
+        1238.7,
+        -438.0,
+        1735.65
+      ],
+      [
+        1721.3,
+        -434.0,
+        1778.1
+      ]
+    ],
+    [
+      [
+        1260.0,
+        -433.9,
+        1736.65
+      ],
+      [
+        1700.0,
+        -18.0,
+        1777.1
+      ]
+    ],
+    [
+      [
+        1537.2,
+        -449.1,
+        1753.075
+      ],
+      [
+        1544.8,
+        -438.1,
+        1760.675
+      ]
+    ],
+    [
+      [
+        1549.2,
+        -449.1,
+        1753.075
+      ],
+      [
+        1556.8,
+        -438.1,
+        1760.675
+      ]
+    ],
+    [
+      [
+        1561.2,
+        -449.1,
+        1753.075
+      ],
+      [
+        1568.8,
+        -438.1,
+        1760.675
+      ]
+    ],
+    [
+      [
+        1573.2,
+        -449.1,
+        1753.075
+      ],
+      [
+        1580.8,
+        -438.1,
+        1760.675
+      ]
+    ],
+    [
+      [
+        1585.2,
+        -449.1,
+        1753.075
+      ],
+      [
+        1592.8,
+        -438.1,
+        1760.675
+      ]
+    ],
+    [
+      [
+        1597.2,
+        -449.1,
+        1753.075
+      ],
+      [
+        1604.8,
+        -438.1,
+        1760.675
+      ]
+    ],
+    [
+      [
+        1609.2,
+        -449.1,
+        1753.075
+      ],
+      [
+        1616.8,
+        -438.1,
+        1760.675
+      ]
+    ],
+    [
+      [
+        1621.2,
+        -449.1,
+        1753.075
+      ],
+      [
+        1628.8,
+        -438.1,
+        1760.675
+      ]
+    ],
+    [
+      [
+        1633.2,
+        -449.1,
+        1753.075
+      ],
+      [
+        1640.8,
+        -438.1,
+        1760.675
+      ]
+    ],
+    [
+      [
+        1645.2,
+        -449.1,
+        1753.075
+      ],
+      [
+        1652.8,
+        -438.1,
+        1760.675
+      ]
+    ],
+    [
+      [
+        1355.438,
+        -17.8,
+        1742.313
+      ],
+      [
+        1384.562,
+        -7.8,
+        1771.437
+      ]
+    ],
+    [
+      [
+        1465.438,
+        -17.8,
+        1742.313
+      ],
+      [
+        1494.562,
+        -7.8,
+        1771.437
+      ]
+    ],
+    [
+      [
+        1614.0,
+        -17.8,
+        1744.875
+      ],
+      [
+        1646.0,
+        -5.8,
+        1768.875
+      ]
+    ]
+  ],
+  "reconciliation_notes": []
+}

@@ -1,0 +1,465 @@
+{
+  "part_design": {
+    "part_id": "S7.3-01",
+    "parent_bom_id": "S7.3",
+    "subsystem": "S7",
+    "part_name": "SKY130 yerel 4 K kontrol cipleri (SEG8 / blanker_tile MPW tape-out partisi)",
+    "design_tier": "CUSTOM_FULL",
+    "material": "PEEK",
+    "temp_stage": "4 K",
+    "temp_k": 4.0,
+    "vacuum_grade": "Kriyo-vakum",
+    "tolerance_spec": "DRC/LVS/Ant=0",
+    "surface_finish_ra_um": 0.4,
+    "qty": 1,
+    "procurement_class": "CUS",
+    "world_origin_mm": [
+      820.0,
+      780.0,
+      800.0
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "socket_mount_m3",
+        "kind": "bolt",
+        "position_mm": [
+          820.0,
+          780.0,
+          793.0
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "standard": "4x M3 Non-Magnetic BeCu + 2x Ø3 H7 Dowels",
+        "mating_part_id": "S7.3-03",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 4,
+        "bolt_hole_mm": 3.4,
+        "bolt_spec": "",
+        "frame": "world",
+        "notes": ""
+      },
+      {
+        "name": "die_array_face",
+        "kind": "electrical",
+        "position_mm": [
+          820.0,
+          780.0,
+          810.3
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "BeCu Spring-Finger 4K Die Socket (16-site tray / 100+ MPW lot)",
+        "mating_part_id": "S7.3-02",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "world",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "BODY_SQ",
+        "nominal_mm": 88.0,
+        "tol_plus_mm": 0.05,
+        "tol_minus_mm": -0.05,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "88.00 ±0.05"
+      },
+      {
+        "label": "DIE_POCKET",
+        "nominal_mm": 8.25,
+        "tol_plus_mm": 0.02,
+        "tol_minus_mm": -0.02,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "8.25 ±0.02"
+      },
+      {
+        "label": "TOTAL_H",
+        "nominal_mm": 17.3,
+        "tol_plus_mm": 0.05,
+        "tol_minus_mm": -0.05,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "17.30 ±0.05"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "flatness",
+        "tolerance_mm": 0.01,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "4K SEATING DATUM A",
+        "glyph": "⏥",
+        "tolerance_text": "0.010"
+      },
+      {
+        "symbol": "position",
+        "tolerance_mm": 0.02,
+        "diameter_zone": true,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "B",
+        "datum_tertiary": "",
+        "feature_note": "2x Ø3.0 H7 DOWELS",
+        "glyph": "⌖",
+        "tolerance_text": "Ø0.020"
+      },
+      {
+        "symbol": "parallelism",
+        "tolerance_mm": 0.015,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "BeCu RETAINER PLANE",
+        "glyph": "∥",
+        "tolerance_text": "0.015"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "Anten-temiz post-Exp123 ECO sonrasi 100+ cip partisi (R5 acik)",
+      "NIST 300K->4K cold clearance PEEK(8.25 mm)/Si(8.00 mm): 0.0900 mm (PASS=True).",
+      "Non-magnetic PEEK/BeCu 4 K retention socket housing SKY130 SEG8/blanker_tile MPW die array."
+    ],
+    "scad_params": {
+      "body_sq_mm": 88.0,
+      "die_size_mm": 8.0,
+      "die_grid_n": 4,
+      "cbore_m3_d": 6.2
+    },
+    "target_mass_kg": 0.1533,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S7.3-01",
+    "subsystem": "S7",
+    "design_tier": "CUSTOM_FULL",
+    "stl_path": "hardware/cad_parts/out/S7/S7.3-01.stl",
+    "step_path": "hardware/cad_parts/out/S7/S7.3-01.step",
+    "scad_path": "hardware/cad_parts/out/S7/S7.3-01.scad",
+    "dxf_path": "hardware/cad_parts/out/S7/S7.3-01.dxf",
+    "svg_path": "hardware/cad_parts/out/S7/S7.3-01.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 116102.4906752848,
+    "surface_area_mm2": 30293.23095782027,
+    "mass_kg": 0.15325528769137622,
+    "cg_mm": [
+      820.0000000001587,
+      780.0000000000813,
+      800.6297793844237
+    ],
+    "bbox_min_mm": [
+      776.0,
+      736.0,
+      793.0
+    ],
+    "bbox_max_mm": [
+      864.0,
+      824.0,
+      810.3000000000001
+    ],
+    "inertia_kg_mm2": [
+      101.09361250775757,
+      100.76366174374147,
+      195.6402203588379,
+      5.8612060546875e-09,
+      7.49267578125e-09,
+      4.149169921875001e-09
+    ],
+    "triangle_count": 900,
+    "vertex_count": 472,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "shell_bboxes_mm": [
+    [
+      [
+        776.0,
+        736.0,
+        793.0
+      ],
+      [
+        864.0,
+        824.0,
+        807.0
+      ]
+    ],
+    [
+      [
+        784.0,
+        744.0,
+        807.1
+      ],
+      [
+        856.0,
+        816.0,
+        810.3
+      ]
+    ],
+    [
+      [
+        799.5,
+        759.5,
+        807.075
+      ],
+      [
+        807.5,
+        767.5,
+        807.825
+      ]
+    ],
+    [
+      [
+        799.5,
+        770.5,
+        807.075
+      ],
+      [
+        807.5,
+        778.5,
+        807.825
+      ]
+    ],
+    [
+      [
+        799.5,
+        781.5,
+        807.075
+      ],
+      [
+        807.5,
+        789.5,
+        807.825
+      ]
+    ],
+    [
+      [
+        799.5,
+        792.5,
+        807.075
+      ],
+      [
+        807.5,
+        800.5,
+        807.825
+      ]
+    ],
+    [
+      [
+        810.5,
+        759.5,
+        807.075
+      ],
+      [
+        818.5,
+        767.5,
+        807.825
+      ]
+    ],
+    [
+      [
+        810.5,
+        770.5,
+        807.075
+      ],
+      [
+        818.5,
+        778.5,
+        807.825
+      ]
+    ],
+    [
+      [
+        810.5,
+        781.5,
+        807.075
+      ],
+      [
+        818.5,
+        789.5,
+        807.825
+      ]
+    ],
+    [
+      [
+        810.5,
+        792.5,
+        807.075
+      ],
+      [
+        818.5,
+        800.5,
+        807.825
+      ]
+    ],
+    [
+      [
+        821.5,
+        759.5,
+        807.075
+      ],
+      [
+        829.5,
+        767.5,
+        807.825
+      ]
+    ],
+    [
+      [
+        821.5,
+        770.5,
+        807.075
+      ],
+      [
+        829.5,
+        778.5,
+        807.825
+      ]
+    ],
+    [
+      [
+        821.5,
+        781.5,
+        807.075
+      ],
+      [
+        829.5,
+        789.5,
+        807.825
+      ]
+    ],
+    [
+      [
+        821.5,
+        792.5,
+        807.075
+      ],
+      [
+        829.5,
+        800.5,
+        807.825
+      ]
+    ],
+    [
+      [
+        832.5,
+        759.5,
+        807.075
+      ],
+      [
+        840.5,
+        767.5,
+        807.825
+      ]
+    ],
+    [
+      [
+        832.5,
+        770.5,
+        807.075
+      ],
+      [
+        840.5,
+        778.5,
+        807.825
+      ]
+    ],
+    [
+      [
+        832.5,
+        781.5,
+        807.075
+      ],
+      [
+        840.5,
+        789.5,
+        807.825
+      ]
+    ],
+    [
+      [
+        832.5,
+        792.5,
+        807.075
+      ],
+      [
+        840.5,
+        800.5,
+        807.825
+      ]
+    ]
+  ],
+  "reconciliation_notes": []
+}

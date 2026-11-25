@@ -1,0 +1,132 @@
+{
+  "schema_version": "1.0",
+  "part_id": "S1.2-03",
+  "parent_bom_id": "S1.2",
+  "subsystem": "S1",
+  "part_name": "Wien filtresi cift-kutuplu hassas E-alani guc kaynagi",
+  "qty": 2,
+  "unit": "adet",
+  "temp_stage": "300 K (kabin)",
+  "vacuum_grade": "Atmosfer",
+  "bom_key_spec": "+/-5 kV, gurultu <5 mVpp, kararlik <10 ppm",
+  "usd_nom": 16000.0,
+  "bom_epistemic_tag": "{Model-Kalibrasyon-Exp114}",
+  "electrical_class": "E3",
+  "grounding_domain": "AGND",
+  "grounding_notes": "Bipolar +/-5 kV ultra-low-noise Wien E-field PSU (<5 mVpp, <10 ppm); chassis to FACILITY_PE.",
+  "supply_rails": [
+    {
+      "rail_name": "AC_MAINS_230V",
+      "voltage_v": 230.0,
+      "current_type": "AC_1PH",
+      "max_current_a": 1.5,
+      "steady_power_w": 180.0,
+      "peak_power_w": 280.0,
+      "source_part_id": "S7.4-03"
+    },
+    {
+      "rail_name": "WIEN_HV_BIPOLAR",
+      "voltage_v": 5000.0,
+      "current_type": "HV_DC",
+      "max_current_a": 0.005,
+      "steady_power_w": 25.0,
+      "peak_power_w": 50.0,
+      "source_part_id": "S1.2-03"
+    }
+  ],
+  "connectors_and_pinout": [
+    {
+      "connector_ref": "J_HV_P",
+      "connector_type": "SHV-10kV (2x)",
+      "location_side": "rack_rear",
+      "mating_part_id": "S1.2-02",
+      "pins": [
+        {
+          "pin": "1",
+          "signal": "WIEN_E_POS",
+          "direction": "OUT",
+          "nominal_level": "0 to +5 kV <5 mVpp"
+        },
+        {
+          "pin": "2",
+          "signal": "HV_RET_SHIELD",
+          "direction": "PWR",
+          "nominal_level": "AGND star"
+        }
+      ]
+    },
+    {
+      "connector_ref": "J_HV_N",
+      "connector_type": "SHV-10kV (2x)",
+      "location_side": "rack_rear",
+      "mating_part_id": "S1.2-02",
+      "pins": [
+        {
+          "pin": "1",
+          "signal": "WIEN_E_NEG",
+          "direction": "OUT",
+          "nominal_level": "0 to -5 kV <5 mVpp"
+        },
+        {
+          "pin": "2",
+          "signal": "HV_RET_SHIELD",
+          "direction": "PWR",
+          "nominal_level": "AGND star"
+        }
+      ]
+    },
+    {
+      "connector_ref": "J_CTRL",
+      "connector_type": "DB9 + Interlock",
+      "location_side": "rack_rear",
+      "mating_part_id": "S1.3-03",
+      "pins": [
+        {
+          "pin": "1-2",
+          "signal": "HV_INHIBIT_NC",
+          "direction": "IN",
+          "nominal_level": "24 V dry-contact interlock"
+        },
+        {
+          "pin": "3-5",
+          "signal": "RS485_CTRL",
+          "direction": "BIDIR",
+          "nominal_level": "Isolated telemetry"
+        }
+      ]
+    }
+  ],
+  "mating_part_ids": [
+    "S1.2-02",
+    "S1.3-03",
+    "S7.SAFETY-03"
+  ],
+  "interlock_hooks": [
+    {
+      "signal_name": "WIEN_HV_INHIBIT",
+      "target_part_id": "S7.SAFETY-03",
+      "action_on_trip": "Crowbar & zero Wien E-plates",
+      "response_time_ms": 18.3
+    }
+  ],
+  "ups_tier": "TIER2_SHED",
+  "ups_budget_group": "AUX_PROCESS_SHED_ON_OUTAGE",
+  "exp150_ups_allocation_w": 0.0,
+  "supply_rails_steady_sum_w": 205.0,
+  "incremental_mains_w": 180.0,
+  "secondary_or_parent_derived_w": 25.0,
+  "non_exp150_aux_shed_w": 180.0,
+  "reconciliation_note": "Non-Exp150 auxiliary sheddable rack/facility load (TIER2_SHED): incremental_mains_w = 180.0 W AC mains (shed immediately on outage, exp150_ups_allocation_w = 0.0 W); 25.0 W WIEN_HV_BIPOLAR derived internally from own AC input (0.0 W double-count).",
+  "timing_sync": {
+    "rb_10mhz_port": null,
+    "white_rabbit_port": null,
+    "sync_role": "DC mass-filter supply"
+  },
+  "epistemic_flags": {
+    "design_maturity": "M0_M1_ELECTRICAL_ICD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

@@ -1,0 +1,236 @@
+{
+  "part_id": "S4.4-01",
+  "subsystem": "S4",
+  "part_design": {
+    "part_id": "S4.4-01",
+    "parent_bom_id": "S4.4",
+    "subsystem": "S4",
+    "part_name": "3-eksenli frekans-kararli He-Ne lazer interferometre kafasi (Renishaw XL-80/RLE)",
+    "design_tier": "COTS_ENV_ICD",
+    "material": "Al 6061",
+    "temp_stage": "300 K",
+    "temp_k": 300.0,
+    "vacuum_grade": "Atmosfer (fiber cikiş)",
+    "tolerance_spec": "±0.05 ppm",
+    "surface_finish_ra_um": 0.8,
+    "qty": 1,
+    "procurement_class": "COTS",
+    "world_origin_mm": [
+      330.0,
+      245.0,
+      -205.0
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "pm_fiber_3axis_out",
+        "kind": "optical",
+        "position_mm": [
+          -82.0,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "standard": "3x FC/APC PM Fiber @ 632.8 nm (±0.05 ppm)",
+        "mating_part_id": "S4.4-04",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      },
+      {
+        "name": "kinematic_table_mount",
+        "kind": "mechanical",
+        "position_mm": [
+          0.0,
+          0.0,
+          -34.0
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "standard": "3-Point Kinematic Mount on S4.2-01 Active Table",
+        "mating_part_id": "S4.2-01",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "BODY_X",
+        "nominal_mm": 136.0,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "136.00 ±0.50"
+      },
+      {
+        "label": "BODY_Y",
+        "nominal_mm": 84.0,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "84.00 ±0.50"
+      },
+      {
+        "label": "TOTAL_H",
+        "nominal_mm": 66.0,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "66.00 ±0.50"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "flatness",
+        "tolerance_mm": 0.05,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "3-POINT KINEMATIC FOOT PLANE",
+        "glyph": "⏥",
+        "tolerance_text": "0.050"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "pm-sinifi cozunurluk (<=0.05 nm), frekans kararlik ±0.05 ppm (Exp114)",
+      "Renishaw XL-80/RLE-class frequency-stabilized 632.8 nm He-Ne heterodyne laser (±0.05 ppm, <=0.05 nm res).",
+      "Mounted on +X/+Y corner of S4.2-01 active table (330, 245, -205 mm), clear of UHV chamber & CF63/CF40 ports."
+    ],
+    "scad_params": {
+      "wavelength_nm": 632.8,
+      "freq_stab_ppm": 0.05,
+      "n_fiber_axes": 3
+    },
+    "target_mass_kg": null,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S4.4-01",
+    "subsystem": "S4",
+    "design_tier": "COTS_ENV_ICD",
+    "stl_path": "hardware/cad_parts/out/S4/S4.4-01.stl",
+    "step_path": "hardware/cad_parts/out/S4/S4.4-01.step",
+    "scad_path": "hardware/cad_parts/out/S4/S4.4-01.scad",
+    "dxf_path": "hardware/cad_parts/out/S4/S4.4-01.dxf",
+    "svg_path": "hardware/cad_parts/out/S4/S4.4-01.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 621591.4371149574,
+    "surface_area_mm2": 61649.212875181205,
+    "mass_kg": 1.3053420179414104,
+    "cg_mm": [
+      0.6654527016294244,
+      -0.0682965866780042,
+      0.27404190182076377
+    ],
+    "bbox_min_mm": [
+      -82.1,
+      -42.0,
+      -33.9
+    ],
+    "bbox_max_mm": [
+      80.1,
+      42.0,
+      31.9
+    ],
+    "inertia_kg_mm2": [
+      1061.7462384110686,
+      2421.5309288157687,
+      2864.740866077348,
+      -0.059325377374721405,
+      0.2380446817736493,
+      -2.698943074518313
+    ],
+    "triangle_count": 516,
+    "vertex_count": 286,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "world_bbox_min_mm": [
+    247.9,
+    203.0,
+    -238.9
+  ],
+  "world_bbox_max_mm": [
+    410.1,
+    287.0,
+    -173.1
+  ],
+  "reconciliation": null,
+  "thermal_contraction_checks": [],
+  "tolerance_stack_checks": []
+}

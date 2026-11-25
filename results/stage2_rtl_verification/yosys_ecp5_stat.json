@@ -1,0 +1,29 @@
+{
+  "family": "ecp5",
+  "top_module": "fpga_top_machine_ctrl",
+  "measurement_kind": "yosys_pre_pnr_measured",
+  "no_vendor_vivado_pnr": true,
+  "no_lab_measurement_rtl": true,
+  "iec61508_certified": false,
+  "lut_pure": 14731,
+  "srl_total": 0,
+  "lut_total": 14731,
+  "ff_total": 11973,
+  "bram_blocks": 12,
+  "bram36_equiv": 6.0,
+  "dsp_total": 131,
+  "carry_cells": 3281,
+  "total_cells": 31231,
+  "cells_by_type": {
+    "CCU2C": 3281,
+    "DP16KD": 12,
+    "L6MUX21": 36,
+    "LUT4": 14731,
+    "MULT18X18D": 131,
+    "PFUMX": 1067,
+    "TRELLIS_FF": 11973
+  },
+  "synth_command": "synth_ecp5 -top fpga_top_machine_ctrl",
+  "returncode": 0,
+  "passed": true
+}

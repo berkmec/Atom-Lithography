@@ -1,0 +1,377 @@
+{
+  "schema_version": "stage2_rtl_machine_ctrl_audit_v1",
+  "top_module": "fpga_top_machine_ctrl",
+  "clock_MHz": 100.0,
+  "measurement_kind": "real_open_source_eda_verified_pre_pnr",
+  "no_external_eda_sim": false,
+  "no_vendor_vivado_pnr": true,
+  "no_lab_measurement_rtl": true,
+  "iec61508_certified": false,
+  "semi_s2_certified": false,
+  "certification_status": "DESIGN_ONLY_NOT_CERTIFIED",
+  "bom_traceability": {
+    "blanker_array_ctrl.v": [
+      "S2.2-01",
+      "S2.4-01",
+      "S2.4-02",
+      "S3.3-01",
+      "S3.3-02"
+    ],
+    "uhv_interlock_fsm.v": [
+      "S5.5-04",
+      "S7.4-04",
+      "S7.SAFETY-01",
+      "S7.SAFETY-02",
+      "S7.SAFETY-03",
+      "S7.SAFETY-04",
+      "S7.SAFETY-05",
+      "S7.SAFETY-06"
+    ],
+    "aom_pid_ctrl.v": [
+      "S5.3-03",
+      "S5.5-01",
+      "S5.5-03",
+      "S1.4-03"
+    ],
+    "spi_dac_hv_ctrl.v": [
+      "S1.2-03",
+      "S1.3-03",
+      "S2.3-04",
+      "S3.2-02",
+      "S6.7-02",
+      "S6.10-03",
+      "S6.10-04"
+    ],
+    "cryo_mux_ddc_ctrl.v": [
+      "S6.6-06",
+      "S6.11-01"
+    ],
+    "uart_axi_regmap.v": [
+      "S3.3-01",
+      "S3.3-04",
+      "S7.2-02",
+      "S8.4-02"
+    ],
+    "fpga_top_machine_ctrl.v": [
+      "S3.3-01",
+      "S3.3-04",
+      "S6.11-01",
+      "S7.2-02",
+      "S8.3-03",
+      "S8.4-02"
+    ]
+  },
+  "static_hygiene": {
+    "loc_by_file": {
+      "blanker_array_ctrl.v": 331,
+      "uhv_interlock_fsm.v": 338,
+      "aom_pid_ctrl.v": 304,
+      "spi_dac_hv_ctrl.v": 278,
+      "cryo_mux_ddc_ctrl.v": 426,
+      "uart_axi_regmap.v": 448,
+      "fpga_top_machine_ctrl.v": 1087
+    },
+    "total_ctrl_rtl_loc": 3212,
+    "combinational_div_hits": [],
+    "pragma_hits": [],
+    "forbidden_hits": [],
+    "host_path_hits": [],
+    "xdc_clk_period_ns": 10.0,
+    "xdc_freq_MHz": 100.0,
+    "xdc_has_multicycle_waiver": false,
+    "passed": true
+  },
+  "verilator_lint": {
+    "tool": "verilator",
+    "version": "Verilator 5.055 devel rev v5.054-374-gb3a6da96b (mod)",
+    "flags": "--lint-only -Wall",
+    "targets": {
+      "blanker_array_ctrl": {
+        "returncode": 0,
+        "warning_count": 0,
+        "error_count": 0,
+        "warnings": [],
+        "errors": [],
+        "passed": true
+      },
+      "uhv_interlock_fsm": {
+        "returncode": 0,
+        "warning_count": 0,
+        "error_count": 0,
+        "warnings": [],
+        "errors": [],
+        "passed": true
+      },
+      "aom_pid_ctrl": {
+        "returncode": 0,
+        "warning_count": 0,
+        "error_count": 0,
+        "warnings": [],
+        "errors": [],
+        "passed": true
+      },
+      "spi_dac_hv_ctrl": {
+        "returncode": 0,
+        "warning_count": 0,
+        "error_count": 0,
+        "warnings": [],
+        "errors": [],
+        "passed": true
+      },
+      "cryo_mux_ddc_ctrl": {
+        "returncode": 0,
+        "warning_count": 0,
+        "error_count": 0,
+        "warnings": [],
+        "errors": [],
+        "passed": true
+      },
+      "cryo_mux_ddc_ctrl_32ch": {
+        "returncode": 0,
+        "warning_count": 0,
+        "error_count": 0,
+        "warnings": [],
+        "errors": [],
+        "passed": true
+      },
+      "uart_axi_regmap": {
+        "returncode": 0,
+        "warning_count": 0,
+        "error_count": 0,
+        "warnings": [],
+        "errors": [],
+        "passed": true
+      },
+      "fpga_top_machine_ctrl": {
+        "returncode": 0,
+        "warning_count": 0,
+        "error_count": 0,
+        "warnings": [],
+        "errors": [],
+        "passed": true
+      }
+    },
+    "all_passed": true
+  },
+  "iverilog_simulation": {
+    "simulator": "iverilog -g2012 -Wall + vvp",
+    "iverilog_version": "Icarus Verilog version 14.0 (devel) (s20260301-1285-g231fb9245-dirty)",
+    "testbenches": {
+      "tb_blanker_array_ctrl": {
+        "compile_returncode": 0,
+        "compile_warning_count": 0,
+        "vvp_returncode": 0,
+        "pass_marker": true,
+        "errors": 0,
+        "frames_verified": 2,
+        "bits_per_frame": 1024,
+        "trip_latency_ns": 6,
+        "passed": true
+      },
+      "tb_uhv_interlock_fsm": {
+        "compile_returncode": 0,
+        "compile_warning_count": 0,
+        "vvp_returncode": 0,
+        "pass_marker": true,
+        "errors": 0,
+        "channels_tested": 16,
+        "discrep_ok": true,
+        "wdt_ok": true,
+        "max_trip_ns": 16,
+        "trips": 20,
+        "status_certified": 0,
+        "status_design_only": 1,
+        "passed": true
+      },
+      "tb_aom_pid_ctrl": {
+        "compile_returncode": 0,
+        "compile_warning_count": 0,
+        "vvp_returncode": 0,
+        "pass_marker": true,
+        "errors": 0,
+        "steps": 24,
+        "tb_max_lsb_err": 0,
+        "python_ref_max_lsb_err": 0,
+        "sat_hi": 8,
+        "sat_lo": 8,
+        "overtemp_1687k_ok": true,
+        "interlock_ok": true,
+        "passed": true
+      },
+      "tb_spi_dac_hv_ctrl": {
+        "compile_returncode": 0,
+        "compile_warning_count": 0,
+        "vvp_returncode": 0,
+        "pass_marker": true,
+        "errors": 0,
+        "channels": 8,
+        "selective_ok": true,
+        "full_sync_ldac_ok": true,
+        "hv_safe_clamp_zero_ok": true,
+        "passed": true
+      },
+      "tb_cryo_mux_ddc_ctrl": {
+        "compile_returncode": 0,
+        "compile_warning_count": 0,
+        "vvp_returncode": 0,
+        "pass_marker": true,
+        "errors": 0,
+        "win8_cnt": 2,
+        "mask8_hex": "94",
+        "tones32_beats": 32,
+        "mask32_hex": "aaaaaaaa",
+        "python_ref_max_lsb_err": 0,
+        "passed": true
+      },
+      "tb_fpga_top_machine_ctrl": {
+        "compile_returncode": 0,
+        "compile_warning_count": 0,
+        "vvp_returncode": 0,
+        "pass_marker": true,
+        "errors": 0,
+        "uart_ok": true,
+        "sw_bypass_rejected": true,
+        "cfg_lock_ok": true,
+        "boed_cycles": 584,
+        "boed_mu_off_q8": -171749,
+        "boed_std_q4": 5711,
+        "boed_next_probe_q8": 5611,
+        "boed_0lsb_ok": true,
+        "ddc_autofeed_ok": true,
+        "simultaneous_trip_ns": 6,
+        "spi_zero_clamp_ok": true,
+        "passed": true
+      }
+    },
+    "all_passed": true
+  },
+  "yosys_check_assert": {
+    "tool": "yosys",
+    "version": "Yosys 0.71+101 (git sha1 c20ecc62a, Release, Clang /usr/bin/clang++ 21.1.8)",
+    "returncode": 0,
+    "passed": true
+  },
+  "yosys_synthesis": {
+    "tool": "yosys",
+    "version": "Yosys 0.71+101 (git sha1 c20ecc62a, Release, Clang /usr/bin/clang++ 21.1.8)",
+    "targets": {
+      "xcup": {
+        "family": "xcup",
+        "top_module": "fpga_top_machine_ctrl",
+        "measurement_kind": "yosys_pre_pnr_measured",
+        "no_vendor_vivado_pnr": true,
+        "no_lab_measurement_rtl": true,
+        "iec61508_certified": false,
+        "lut_pure": 15165,
+        "srl_total": 128,
+        "lut_total": 15293,
+        "ff_total": 11221,
+        "bram_blocks": 12,
+        "bram36_equiv": 6.0,
+        "dsp_total": 124,
+        "carry_cells": 1585,
+        "total_cells": 28708,
+        "cells_by_type": {
+          "BUFG": 1,
+          "CARRY4": 1585,
+          "DSP48E2": 124,
+          "FDRE": 10739,
+          "FDSE": 482,
+          "IBUF": 208,
+          "INV": 526,
+          "LUT2": 4210,
+          "LUT3": 2751,
+          "LUT4": 2439,
+          "LUT5": 2095,
+          "LUT6": 3144,
+          "MUXF7": 55,
+          "MUXF8": 17,
+          "OBUF": 192,
+          "RAMB18E2": 12,
+          "SRL16E": 128
+        },
+        "zu48dr_pct": {
+          "lut_pct": 3.6,
+          "ff_pct": 1.32,
+          "bram36_equiv_pct": 0.56,
+          "dsp48e2_pct": 2.9
+        },
+        "fits_zu48dr": true,
+        "synth_command": "synth_xilinx -family xcup -top fpga_top_machine_ctrl",
+        "returncode": 0,
+        "passed": true
+      },
+      "xc7": {
+        "family": "xc7",
+        "top_module": "fpga_top_machine_ctrl",
+        "measurement_kind": "yosys_pre_pnr_measured",
+        "no_vendor_vivado_pnr": true,
+        "no_lab_measurement_rtl": true,
+        "iec61508_certified": false,
+        "lut_pure": 14168,
+        "srl_total": 128,
+        "lut_total": 14296,
+        "ff_total": 10517,
+        "bram_blocks": 12,
+        "bram36_equiv": 6.0,
+        "dsp_total": 124,
+        "carry_cells": 1342,
+        "total_cells": 26794,
+        "cells_by_type": {
+          "BUFG": 1,
+          "CARRY4": 1342,
+          "DSP48E1": 124,
+          "FDRE": 10034,
+          "FDSE": 483,
+          "IBUF": 208,
+          "INV": 522,
+          "LUT1": 2,
+          "LUT2": 3768,
+          "LUT3": 2392,
+          "LUT4": 2102,
+          "LUT5": 2062,
+          "LUT6": 3320,
+          "MUXF7": 70,
+          "MUXF8": 32,
+          "OBUF": 192,
+          "RAMB18E1": 12,
+          "SRL16E": 128
+        },
+        "synth_command": "synth_xilinx -family xc7 -top fpga_top_machine_ctrl",
+        "returncode": 0,
+        "passed": true
+      },
+      "ecp5": {
+        "family": "ecp5",
+        "top_module": "fpga_top_machine_ctrl",
+        "measurement_kind": "yosys_pre_pnr_measured",
+        "no_vendor_vivado_pnr": true,
+        "no_lab_measurement_rtl": true,
+        "iec61508_certified": false,
+        "lut_pure": 14731,
+        "srl_total": 0,
+        "lut_total": 14731,
+        "ff_total": 11973,
+        "bram_blocks": 12,
+        "bram36_equiv": 6.0,
+        "dsp_total": 131,
+        "carry_cells": 3281,
+        "total_cells": 31231,
+        "cells_by_type": {
+          "CCU2C": 3281,
+          "DP16KD": 12,
+          "L6MUX21": 36,
+          "LUT4": 14731,
+          "MULT18X18D": 131,
+          "PFUMX": 1067,
+          "TRELLIS_FF": 11973
+        },
+        "synth_command": "synth_ecp5 -top fpga_top_machine_ctrl",
+        "returncode": 0,
+        "passed": true
+      }
+    },
+    "all_passed": true
+  },
+  "all_gates_passed": true
+}

@@ -1,0 +1,241 @@
+{
+  "part_id": "S1.1-04",
+  "subsystem": "S1",
+  "design": {
+    "part_id": "S1.1-04",
+    "parent_bom_id": "S1.1",
+    "subsystem": "S1",
+    "part_name": "UHV VCR kutle akis denetleyici ve kaynak gaz manifoldu",
+    "design_tier": "COTS_ENV_ICD",
+    "material": "316L",
+    "temp_stage": "300 K",
+    "temp_k": 300.0,
+    "vacuum_grade": "UHV 1e-9 mbar",
+    "tolerance_spec": "±1% FS akis",
+    "surface_finish_ra_um": 0.4,
+    "qty": 2,
+    "procurement_class": "COTS",
+    "world_origin_mm": [
+      0.0,
+      -102.0,
+      492.66
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "vcr_out_to_source",
+        "kind": "gas",
+        "position_mm": [
+          0.0,
+          -47.5,
+          492.66
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "standard": "1/4 VCR Female",
+        "mating_part_id": "S1.1-01",
+        "bore_mm": 9.0,
+        "od_mm": 12.7,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "global",
+        "notes": ""
+      },
+      {
+        "name": "vcr_in_from_cabinet",
+        "kind": "gas",
+        "position_mm": [
+          -24.0,
+          -148.0,
+          468.0
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "standard": "1/4 VCR Double-Walled",
+        "mating_part_id": "S1.6-01",
+        "bore_mm": 6.4,
+        "od_mm": 9.5,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "global",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "MANIFOLD_W",
+        "nominal_mm": 92.0,
+        "tol_plus_mm": 0.2,
+        "tol_minus_mm": -0.2,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "92.00 ±0.20"
+      },
+      {
+        "label": "VCR_FEED_OD",
+        "nominal_mm": 12.7,
+        "tol_plus_mm": 0.1,
+        "tol_minus_mm": -0.1,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø12.70 ±0.10"
+      },
+      {
+        "label": "MFC_RANGE",
+        "nominal_mm": 10.0,
+        "tol_plus_mm": 0.1,
+        "tol_minus_mm": -0.1,
+        "view": "front",
+        "unit": "sccm",
+        "prefix": "",
+        "suffix": " sccm",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "10.00 ±0.10 sccm"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "perpendicularity",
+        "tolerance_mm": 0.05,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "VCR SEAL GLAND",
+        "glyph": "⊥",
+        "tolerance_text": "0.050"
+      },
+      {
+        "symbol": "flatness",
+        "tolerance_mm": 0.02,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "MFC MOUNT FACE",
+        "glyph": "⏥",
+        "tolerance_text": "0.020"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "0.1-10 sccm MFC, He sizinti <=1e-10 mbar*L/s",
+      "Electropolished 316L VAR metal-gasket VCR dual PH3/SiF4 manifold; He leak <=1e-10 mbar*L/s"
+    ],
+    "scad_params": {
+      "manifold_w": 92.0,
+      "manifold_d": 40.0,
+      "vcr_od": 12.7
+    },
+    "target_mass_kg": 2.6,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S1.1-04",
+    "subsystem": "S1",
+    "design_tier": "COTS_ENV_ICD",
+    "stl_path": "hardware/cad_parts/out/S1/S1.1-04.stl",
+    "step_path": "hardware/cad_parts/out/S1/S1.1-04.step",
+    "scad_path": "hardware/cad_parts/out/S1/S1.1-04.scad",
+    "dxf_path": "hardware/cad_parts/out/S1/S1.1-04.dxf",
+    "svg_path": "hardware/cad_parts/out/S1/S1.1-04.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 209864.59996315057,
+    "surface_area_mm2": 37265.41245453816,
+    "mass_kg": 1.6789167997052028,
+    "cg_mm": [
+      -0.13669477358061985,
+      -115.30674251543728,
+      499.68126527863683
+    ],
+    "bbox_min_mm": [
+      -46.0,
+      -152.75,
+      468.0
+    ],
+    "bbox_max_mm": [
+      46.0,
+      -47.5,
+      535.0
+    ],
+    "inertia_kg_mm2": [
+      788.6940132778703,
+      1652.497412475521,
+      1402.314651952488,
+      -7.1634873679023245,
+      -3.7019372624479687,
+      5.377818133270265
+    ],
+    "triangle_count": 796,
+    "vertex_count": 398,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "engineering_checks": {},
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

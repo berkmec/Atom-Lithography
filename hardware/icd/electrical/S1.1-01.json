@@ -1,0 +1,105 @@
+{
+  "schema_version": "1.0",
+  "part_id": "S1.1-01",
+  "parent_bom_id": "S1.1",
+  "subsystem": "S1",
+  "part_name": "Duoplasmatron plazma odasi (31P+ donor hatti)",
+  "qty": 1,
+  "unit": "adet",
+  "temp_stage": "300 K (su sogutmali)",
+  "vacuum_grade": "HV 1e-6 mbar (kaynak)",
+  "bom_key_spec": "J>=10 mA/cm2, B>=3.18e5 A/m2/sr @Ti=1 eV (Exp81)",
+  "usd_nom": 36000.0,
+  "bom_epistemic_tag": "{Model-Kalibrasyon-Exp114}",
+  "electrical_class": "E4",
+  "grounding_domain": "HV_MINUS_5KV_DECK",
+  "grounding_notes": "31P+ PH3 duoplasmatron plasma chamber floating on +5..+15 kV source deck; water-cooled.",
+  "supply_rails": [
+    {
+      "rail_name": "ARC_DISCHARGE_DC",
+      "voltage_v": 120.0,
+      "current_type": "DC",
+      "max_current_a": 3.0,
+      "steady_power_w": 240.0,
+      "peak_power_w": 360.0,
+      "source_part_id": "S1.1-05"
+    },
+    {
+      "rail_name": "CATHODE_FILAMENT",
+      "voltage_v": 12.0,
+      "current_type": "DC",
+      "max_current_a": 15.0,
+      "steady_power_w": 140.0,
+      "peak_power_w": 180.0,
+      "source_part_id": "S1.1-05"
+    }
+  ],
+  "connectors_and_pinout": [
+    {
+      "connector_ref": "J_ARC_HV",
+      "connector_type": "CF40 HV Ceramic Power Feedthrough",
+      "location_side": "source_head",
+      "mating_part_id": "S1.1-05",
+      "pins": [
+        {
+          "pin": "1",
+          "signal": "ANODE_POS",
+          "direction": "IN",
+          "nominal_level": "+120 V arc over HV deck"
+        },
+        {
+          "pin": "2",
+          "signal": "CATHODE_FIL_A",
+          "direction": "IN",
+          "nominal_level": "15 A filament"
+        },
+        {
+          "pin": "3",
+          "signal": "CATHODE_FIL_B",
+          "direction": "IN",
+          "nominal_level": "Filament return"
+        },
+        {
+          "pin": "4",
+          "signal": "INTERMEDIATE_ELEC",
+          "direction": "IN",
+          "nominal_level": "Duoplasmatron Z-focus"
+        }
+      ]
+    }
+  ],
+  "mating_part_ids": [
+    "S1.1-03",
+    "S1.1-04",
+    "S1.1-05",
+    "S1.6-01"
+  ],
+  "interlock_hooks": [
+    {
+      "signal_name": "COOLING_WATER_FLOW_OK",
+      "target_part_id": "S7.4-04",
+      "action_on_trip": "Cut arc/filament on water-flow loss",
+      "response_time_ms": 50.0
+    }
+  ],
+  "ups_tier": "NONE",
+  "ups_budget_group": "PASSIVE_ZERO_MAINS",
+  "exp150_ups_allocation_w": 0.0,
+  "supply_rails_steady_sum_w": 380.0,
+  "incremental_mains_w": 0.0,
+  "secondary_or_parent_derived_w": 380.0,
+  "non_exp150_aux_shed_w": 0.0,
+  "reconciliation_note": "Passive or downstream sub-assembly (380.00 W sub-rail power drawn from upstream source S1.1-05); incremental_mains_w = 0.0 W (zero double-counting).",
+  "timing_sync": {
+    "rb_10mhz_port": null,
+    "white_rabbit_port": null,
+    "sync_role": "CW 31P+ plasma ion source"
+  },
+  "epistemic_flags": {
+    "design_maturity": "M0_M1_ELECTRICAL_ICD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

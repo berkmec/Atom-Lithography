@@ -1,0 +1,90 @@
+* S6.3-04 + S7.SAFETY-05: 8-Coil 18.94 kJ Superconducting Magnet Quench Dump Simulation
+* Anchored to Exp125 (L_eq = 0.578416 H, I0 = 255.913899 A, E_mag = 18940.78 J)
+* External dump resistor R_DUMP = 1.5630257 Ohm, t_detect = 30 ms, V_max <= 400 V, tau ~ 0.370 s
+* Epistemic: DESIGN_ONLY, no_lab_measurement=true, iec61508_certified=false
+
+.temp 27
+
+* 8-Coil Superconducting Magnet Bank (M_upper/lower, S_upper/lower, A_upper/lower, B_upper/lower)
+* Section 1: M_upper (energy-weighted L_eq share)
+L_M_upper 0 c1 0.00743200 IC=255.913899
+* Section 2: M_lower (energy-weighted L_eq share)
+L_M_lower c1 c2 0.21508400 IC=255.913899
+* Section 3: S_upper (energy-weighted L_eq share)
+L_S_upper c2 c3 0.16058200 IC=255.913899
+* Section 4: S_lower (energy-weighted L_eq share)
+L_S_lower c3 c4 0.09348600 IC=255.913899
+* Section 5: A_upper (energy-weighted L_eq share)
+L_A_upper c4 c5 0.08965100 IC=255.913899
+* Section 6: A_lower (energy-weighted L_eq share)
+L_A_lower c5 c6 0.01039500 IC=255.913899
+* Section 7: B_upper (energy-weighted L_eq share)
+L_B_upper c6 c7 0.00166600 IC=255.913899
+* Section 8: B_lower (energy-weighted L_eq share)
+L_B_lower c7 mag_top 0.00012000 IC=255.913899
+
+* Incipient quench normal-zone resistance inside hot-spot coil S_upper (4 mOhm during fast dump)
+* + 0 A current sense probe V_IMAG
+R_QUENCH mag_top mag_p 4.0e-3
+V_IMAG   mag_p   bus_p DC 0
+
+* Persistent-mode NbTi superconducting switch (S_PCS): 10 uOhm for t < 30 ms, opens to 500 Ohm at t = 30 ms
+V_PCS_CTRL pcs_ctrl 0 PULSE(1.0 0.0 30.0m 0.5m 0.5m 10.0 20.0)
+S_PCS      bus_p 0 pcs_ctrl 0 SW_PCS_MOD
+.model SW_PCS_MOD SW(Ron=10u Roff=500.0 Vt=0.5 Vh=0.1)
+
+* External 1.563026 Ohm Dump Bank (S7.SAFETY-05) connected across bus_p -> 0 via quench contactor S_DUMP
+* (and back-to-back cold protection diodes D_COLD_REV for reverse-polarity clamp + D_COLD_OVP string @ >405 V)
+V_DMP_CTRL dmp_ctrl 0 PULSE(0.0 1.0 29.8m 0.2m 0.2m 10.0 20.0)
+S_DUMP     bus_p dump_in dmp_ctrl 0 SW_DMP_MOD
+.model SW_DMP_MOD SW(Ron=100u Roff=1e6 Vt=0.5 Vh=0.1)
+R_DUMP     dump_in 0 1.5630257
+
+* Cold cryogenic protection diodes (4.2 K silicon stack):
+*  1) D_COLD_REV: anti-parallel reverse-voltage freewheel clamp (prevents negative bus overvoltage)
+*  2) D_COLD_OVP: forward overvoltage clamp string (N=550 series cryo junctions, clamps >405 V on open-dump fault)
+D_COLD_REV 0 bus_p D_CRYO_SI
+D_COLD_OVP bus_p 0 D_CRYO_OVP_STACK
+.model D_CRYO_SI D(Is=1e-12 N=1.8 Rs=2m BV=600)
+.model D_CRYO_OVP_STACK D(Is=1e-12 N=550 Rs=50m BV=1000)
+
+* Exact behavioral energy integrators (1 F capacitor driven by instantaneous power in Watts -> V = Joules)
+B_P_DUMP   0 e_dump_j  I = (v(dump_in) * v(dump_in)) / 1.5630257
+C_E_DUMP   e_dump_j  0 1.0 IC=0
+R_E_DUMP   e_dump_j  0 1e12
+
+B_P_QUENCH 0 e_quench_j I = (v(mag_top, mag_p) * v(mag_top, mag_p)) / 4.0e-3
+C_E_QUENCH e_quench_j 0 1.0 IC=0
+R_E_QUENCH e_quench_j 0 1e12
+
+B_P_PCS    0 e_pcs_j   I = v(bus_p) * (-i(V_IMAG) - v(dump_in)/1.5630257)
+C_E_PCS    e_pcs_j   0 1.0 IC=0
+R_E_PCS    e_pcs_j   0 1e12
+
+.options method=gear reltol=1e-4 abstol=1e-9
+
+.control
+set noaskquit
+tran 0.2m 3.0 0 0.5m uic
+let i_mag = i(V_IMAG)
+let v_term = v(bus_p)
+let v_dump = v(dump_in)
+
+meas tran i_init_a FIND i_mag AT=1.0m
+meas tran i_at_detect_a FIND i_mag AT=30.0m
+meas tran v_peak_v MAX v_term FROM=0.0 TO=3.0
+meas tran t_vpeak_s MAX_AT v_term FROM=0.0 TO=3.0
+meas tran v_dump_peak_v MAX v_dump FROM=0.0 TO=3.0
+let i_one_e = i_at_detect_a / exp(1.0)
+meas tran t_one_e_s WHEN i_mag=i_one_e FALL=1
+let tau_decay_s = t_one_e_s - t_vpeak_s
+meas tran i_final_a FIND i_mag AT=3.0
+meas tran e_dump_final_j FIND v(e_dump_j) AT=3.0
+meas tran e_quench_final_j FIND v(e_quench_j) AT=3.0
+let e_stored_j = 18940.775826
+let e_dump_frac = e_dump_final_j / e_stored_j
+echo "tau_decay_s = $&tau_decay_s"
+echo "e_dump_frac = $&e_dump_frac"
+quit
+.endc
+.end

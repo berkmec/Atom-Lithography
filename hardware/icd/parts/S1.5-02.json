@@ -1,0 +1,95 @@
+{
+  "schema_version": "part_icd_v1.0",
+  "part_id": "S1.5-02",
+  "parent_bom_id": "S1.5",
+  "subsystem": "S1",
+  "part_name": "Piezo-tahrikli hassas enerji suzgeci giris/cikis yariklari",
+  "part_category": "PHYSICAL_SOLID",
+  "bom_metadata": {
+    "qty": "1",
+    "unit": "set",
+    "material": "Molibden / UHV piezo aktor",
+    "key_spec": "5-50 um yarik genisligi (dE ayari)",
+    "tolerance": "±0.5 um adim",
+    "temp_stage": "300 K",
+    "vacuum_grade": "UHV 1e-9 mbar",
+    "procurement_class": "CUS",
+    "parent_cost_class": "B(ADDER)",
+    "usd_low": 7000.0,
+    "usd_nom": 12000.0,
+    "usd_high": 22000.0,
+    "legacy_cad_module": "s1_ion_source_column",
+    "bom_epistemic_tag": "{Varsayım}",
+    "notes": "DELTA-EXP124/ADDER: parlaklik-enerji yayilimi takas ayari"
+  },
+  "artifact_links": {
+    "cad": {
+      "work_package": "WP-M1",
+      "design_tier": "CUSTOM_FULL",
+      "stl": "hardware/cad_parts/out/S1/S1.5-02.stl",
+      "step": "hardware/cad_parts/out/S1/S1.5-02.step",
+      "scad": "hardware/cad_parts/out/S1/S1.5-02.scad",
+      "dxf": "hardware/cad_parts/out/S1/S1.5-02.dxf",
+      "svg": "hardware/cad_parts/out/S1/S1.5-02.svg",
+      "cad_json": "hardware/cad_parts/out/S1/S1.5-02.json",
+      "watertight": true,
+      "all_6_files_valid": true,
+      "mass_kg": 0.637243,
+      "triangle_count": 1312,
+      "temp_k": 300.0,
+      "canonical_bbox_min_mm": [
+        -43.0,
+        -43.0,
+        606.16
+      ],
+      "canonical_bbox_max_mm": [
+        43.0,
+        43.0,
+        716.66
+      ],
+      "datum_shift_mm": [
+        0.0,
+        0.0,
+        500.0
+      ],
+      "port_count": 2,
+      "gdt_frame_count": 2
+    },
+    "pcb_bundles": [],
+    "legacy_board_files": [],
+    "electrical_icd": {
+      "path": "hardware/icd/electrical/S1.5-02.json",
+      "electrical_class": "E4",
+      "grounding_domain": "AGND",
+      "ups_tier": "NONE",
+      "exp150_ups_allocation_w": 0.0,
+      "mating_part_ids": [
+        "S1.5-01",
+        "S4.3-04"
+      ],
+      "interlock_hooks_count": 0
+    },
+    "rtl_modules": [],
+    "rtl_audit_json": null,
+    "software_and_eda_files": [],
+    "verification_tests": []
+  },
+  "specialized_specification": null,
+  "verification_status": {
+    "cad_verified": true,
+    "pcb_verified": false,
+    "electrical_icd_verified": true,
+    "rtl_verified": false,
+    "software_or_eda_verified": false,
+    "specialized_icd_present": false,
+    "traceable": true
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "tapeout_done": false
+  }
+}

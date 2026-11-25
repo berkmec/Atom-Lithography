@@ -1,0 +1,81 @@
+{
+  "schema_version": "part_icd_v1.0",
+  "part_id": "S2.3-02",
+  "parent_bom_id": "S2.3",
+  "subsystem": "S2",
+  "part_name": "Mini-lens dizisi e-beam litografi + anodik yapistirma fab NRE",
+  "part_category": "NON_SOLID_PROCESS_SERVICE_GAS",
+  "bom_metadata": {
+    "qty": "1",
+    "unit": "lot",
+    "material": "SOI + borosilikat cam yonga sureci",
+    "key_spec": "3-yonga hizali birlestirme (wafer-bonding) AR-GE lotu",
+    "tolerance": "±0.2 um yonga-yonga",
+    "temp_stage": "300 K (fab)",
+    "vacuum_grade": "Temizoda",
+    "procurement_class": "R&D",
+    "parent_cost_class": "D",
+    "usd_low": 55000.0,
+    "usd_nom": 115000.0,
+    "usd_high": 245000.0,
+    "legacy_cad_module": "s2_mems_write_head",
+    "bom_epistemic_tag": "{Varsayım}",
+    "notes": "DELTA-MEMS-NRE: sub-2 nm odaklama icin kritik lens NRE"
+  },
+  "artifact_links": {
+    "cad": null,
+    "pcb_bundles": [],
+    "legacy_board_files": [],
+    "electrical_icd": null,
+    "rtl_modules": [],
+    "rtl_audit_json": null,
+    "software_and_eda_files": [],
+    "verification_tests": []
+  },
+  "specialized_specification": {
+    "kind": "MEMS_MINILENS_WAFER_BONDING_NRE",
+    "mating_physical_part_ids": [
+      "S2.3-01",
+      "S2.3-03",
+      "S2.3-04"
+    ],
+    "process_stack": "E-beam lithography + 3-wafer aligned anodic/eutectic bonding (Arch-B mini-lens stack h=1.76 mm, WD=0.250 mm, D=0.30 mm)",
+    "critical_dimension_spec": "Inter-wafer coaxial registration <= +/-0.50 um; gap flatness <= +/-1.0 um; breakdown > 6.5 kV/mm across borosilicate/sapphire spacers",
+    "mask_layers": [
+      "L1_WAFER1_ENTRANCE_ELECTRODE",
+      "L2_SPACER1_BOROSILICATE_CAVITY",
+      "L3_WAFER2_FOCUS_ELECTRODE",
+      "L4_SPACER2_BOROSILICATE_CAVITY",
+      "L5_WAFER3_EXIT_GROUND_ELECTRODE",
+      "L6_ANODIC_BOND_ALIGNMENT_VERNIERS"
+    ],
+    "acceptance_criteria": [
+      "IR transmission Vernier alignment error <= +/-0.5 um across 16x16 mm array",
+      "High-pot test to 1.25x operating lens bias with < 10 nA leakage",
+      "Total stack height h = 1.760 +/-0.005 mm verified by white-light interferometry"
+    ],
+    "reference_artifacts": [
+      "hardware/cad_parts/out/S2/S2.3-01.json",
+      "hardware/cad_parts/out/S2/S2.3-03.json",
+      "hardware/pcb/ion_column_hv_dac/ion_column_hv_dac_verification.json",
+      "research/atom_lithography_machine/RFQ_SPECIFICATIONS.md"
+    ]
+  },
+  "verification_status": {
+    "cad_verified": false,
+    "pcb_verified": false,
+    "electrical_icd_verified": false,
+    "rtl_verified": false,
+    "software_or_eda_verified": false,
+    "specialized_icd_present": true,
+    "traceable": true
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "tapeout_done": false
+  }
+}

@@ -1,0 +1,312 @@
+{
+  "part_id": "S2.1-04",
+  "subsystem": "S2",
+  "design": {
+    "part_id": "S2.1-04",
+    "parent_bom_id": "S2.1",
+    "subsystem": "S2",
+    "part_name": "Hassas seramik/Si kinematik apertur alt-tasiyici cerceve",
+    "design_tier": "CUSTOM_FULL",
+    "material": "AlN",
+    "temp_stage": "300 K",
+    "temp_k": 300.0,
+    "vacuum_grade": "UHV 1e-9 mbar",
+    "tolerance_spec": "±5 um duzlemlik",
+    "surface_finish_ra_um": 0.2,
+    "qty": 1,
+    "procurement_class": "CUS",
+    "world_origin_mm": [
+      0.0,
+      0.0,
+      21.025
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "guard_mount_bot",
+        "kind": "mechanical",
+        "position_mm": [
+          0.0,
+          0.0,
+          10.39
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "standard": "Ø28.0 mm Bore",
+        "mating_part_id": "S2.1-03",
+        "bore_mm": 28.0,
+        "od_mm": 100.0,
+        "pcd_mm": 46.0,
+        "bolt_count": 6,
+        "bolt_hole_mm": 2.4,
+        "bolt_spec": "",
+        "frame": "global",
+        "notes": ""
+      },
+      {
+        "name": "kinematic_top",
+        "kind": "mechanical",
+        "position_mm": [
+          0.0,
+          0.0,
+          31.66
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "Maxwell 3-V / 12xM4 PCD 88",
+        "mating_part_id": "S2.5-02",
+        "bore_mm": 28.0,
+        "od_mm": 100.0,
+        "pcd_mm": 88.0,
+        "bolt_count": 12,
+        "bolt_hole_mm": 4.5,
+        "bolt_spec": "",
+        "frame": "global",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "OD",
+        "nominal_mm": 100.0,
+        "tol_plus_mm": 0.02,
+        "tol_minus_mm": -0.02,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø100.00 ±0.02"
+      },
+      {
+        "label": "CLEAR_BORE",
+        "nominal_mm": 28.0,
+        "tol_plus_mm": 0.01,
+        "tol_minus_mm": -0.01,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø28.00 ±0.01"
+      },
+      {
+        "label": "HEIGHT",
+        "nominal_mm": 21.27,
+        "tol_plus_mm": 0.005,
+        "tol_minus_mm": -0.005,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "21.27 ±0.005"
+      },
+      {
+        "label": "Z_TOP_REF",
+        "nominal_mm": 31.66,
+        "tol_plus_mm": 0.01,
+        "tol_minus_mm": -0.01,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "31.66 ±0.01"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "flatness",
+        "tolerance_mm": 0.005,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "KINEMATIC DATUM A",
+        "glyph": "⏥",
+        "tolerance_text": "0.005"
+      },
+      {
+        "symbol": "parallelism",
+        "tolerance_mm": 0.005,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "TOP/BOT FACES",
+        "glyph": "∥",
+        "tolerance_text": "0.005"
+      },
+      {
+        "symbol": "concentricity",
+        "tolerance_mm": 0.005,
+        "diameter_zone": true,
+        "material_condition": "",
+        "datum_primary": "B",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "OPTICAL BORE",
+        "glyph": "◎",
+        "tolerance_text": "Ø0.005"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "Termal genlesme uyumlu (4.5 ppm/K), degistirilebilir kaset",
+      "Exp124 kinematic aperture sub-carrier cassette (top at Z=31.660 mm); AlN core (4.5 ppm/K) + Ti-6Al-4V Maxwell 3-V outer ring"
+    ],
+    "scad_params": {
+      "od": 100.0,
+      "bore_id": 28.0,
+      "height": 21.27,
+      "cte_ppm_K": 4.5
+    },
+    "target_mass_kg": 0.72,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S2.1-04",
+    "subsystem": "S2",
+    "design_tier": "CUSTOM_FULL",
+    "stl_path": "hardware/cad_parts/out/S2/S2.1-04.stl",
+    "step_path": "hardware/cad_parts/out/S2/S2.1-04.step",
+    "scad_path": "hardware/cad_parts/out/S2/S2.1-04.scad",
+    "dxf_path": "hardware/cad_parts/out/S2/S2.1-04.dxf",
+    "svg_path": "hardware/cad_parts/out/S2/S2.1-04.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 130720.95350971802,
+    "surface_area_mm2": 34142.589418279094,
+    "mass_kg": 0.4261503084416808,
+    "cg_mm": [
+      -4.431510527250162e-15,
+      2.3459914919551198e-15,
+      20.210864760555857
+    ],
+    "bbox_min_mm": [
+      -50.0,
+      -50.0,
+      10.389999999999999
+    ],
+    "bbox_max_mm": [
+      50.0,
+      50.0,
+      31.659999999999997
+    ],
+    "inertia_kg_mm2": [
+      315.2782840122387,
+      315.27828401223917,
+      600.8139121830926,
+      4.303684477235947e-14,
+      -1.2671915683650274e-14,
+      -1.8223226666735383e-14
+    ],
+    "triangle_count": 1380,
+    "vertex_count": 660,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "engineering_checks": {
+    "bakeout_aln_mo": {
+      "outer_material": "AlN",
+      "inner_material": "Mo",
+      "t_cold_k": 423.15,
+      "t_ref_k": 293.15,
+      "warm_outer_id_mm": 54.5,
+      "warm_inner_od_mm": 54.0,
+      "cold_outer_id_mm": 54.53488,
+      "cold_inner_od_mm": 54.0351,
+      "outer_strain": 0.0006399999999999739,
+      "inner_strain": 0.0006500000000000394,
+      "warm_radial_clearance_mm": 0.25,
+      "cold_nominal_radial_clearance_mm": 0.2498900000000006,
+      "cold_worst_case_radial_clearance_mm": 0.22989000000000062,
+      "delta_radial_clearance_mm": -0.00010999999999938836,
+      "min_required_radial_clearance_mm": 0.15,
+      "interference_risk": false,
+      "passed": true
+    },
+    "wd_stack": {
+      "nominal_mm": 0.24999999999999978,
+      "mean_mm": 0.24999999999999978,
+      "wc_half_band_mm": 0.0125,
+      "wc_min_mm": 0.23749999999999977,
+      "wc_max_mm": 0.2624999999999998,
+      "rss_half_band_mm": 0.007365459931328118,
+      "rss_min_mm": 0.24263454006867166,
+      "rss_max_mm": 0.2573654599313279,
+      "modified_rss_half_band_mm": 0.011048189896992178,
+      "modified_rss_min_mm": 0.2389518101030076,
+      "modified_rss_max_mm": 0.26104818989699197,
+      "target_min_mm": 0.22,
+      "target_max_mm": 0.28,
+      "wc_pass": true,
+      "rss_pass": true,
+      "modified_rss_pass": true,
+      "variance_shares_pct": {
+        "S2.5-02_piezo_mount_datum": 46.08294930875576,
+        "S2.1-04_aln_cassette_seat": 46.08294930875576,
+        "S2.3-03_sapphire_spacer_ring": 0.46082949308755755,
+        "S2.3-01_archB_minilens_h": 7.373271889400921
+      }
+    }
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

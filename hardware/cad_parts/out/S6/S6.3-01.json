@@ -1,0 +1,557 @@
+{
+  "part_design": {
+    "part_id": "S6.3-01",
+    "parent_bom_id": "S6.3",
+    "subsystem": "S6",
+    "part_name": "Ana NbTi superiletken ESR miknatis bobinleri (8-bobinli cift-yarik, Exp125 delta)",
+    "design_tier": "CUSTOM_FULL",
+    "material": "NbTi",
+    "temp_stage": "4.2 K",
+    "temp_k": 4.2,
+    "vacuum_grade": "Kriyo-vakum",
+    "tolerance_spec": "±17.8 ppm Bz",
+    "surface_finish_ra_um": 0.8,
+    "qty": 1,
+    "procurement_class": "CUS",
+    "world_origin_mm": [
+      0.0,
+      0.0,
+      500.0
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "clear_bore_150",
+        "kind": "mechanical",
+        "position_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "Ø150 mm Magnet Bore",
+        "mating_part_id": "",
+        "bore_mm": 150.0,
+        "od_mm": 352.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      },
+      {
+        "name": "split_gap_36mm",
+        "kind": "optical",
+        "position_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "standard": "36 mm Radial Split Gap",
+        "mating_part_id": "",
+        "bore_mm": 36.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      },
+      {
+        "name": "chamber_mount_feet",
+        "kind": "bolt",
+        "position_mm": [
+          0.0,
+          0.0,
+          -214.0
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "standard": "4x M8 Ti Feet @ R=156",
+        "mating_part_id": "S5.1-01",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 312.0,
+        "bolt_count": 4,
+        "bolt_hole_mm": 8.4,
+        "bolt_spec": "M8",
+        "frame": "local",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "BORE_ID",
+        "nominal_mm": 150.0,
+        "tol_plus_mm": 0.05,
+        "tol_minus_mm": -0.05,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø150.00 ±0.05"
+      },
+      {
+        "label": "FORMER_OD",
+        "nominal_mm": 352.0,
+        "tol_plus_mm": 0.1,
+        "tol_minus_mm": -0.1,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø352.00 ±0.10"
+      },
+      {
+        "label": "SPLIT_GAP",
+        "nominal_mm": 36.0,
+        "tol_plus_mm": 0.05,
+        "tol_minus_mm": -0.05,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "36.00 ±0.05"
+      },
+      {
+        "label": "STACK_H",
+        "nominal_mm": 239.0,
+        "tol_plus_mm": 0.1,
+        "tol_minus_mm": -0.1,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "239.00 ±0.10"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "concentricity",
+        "tolerance_mm": 0.02,
+        "diameter_zone": true,
+        "material_condition": "",
+        "datum_primary": "B",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "Upper/lower M/S coils",
+        "glyph": "◎",
+        "tolerance_text": "Ø0.020"
+      },
+      {
+        "symbol": "parallelism",
+        "tolerance_mm": 0.02,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "36 mm split gap cheeks",
+        "glyph": "∥",
+        "tolerance_text": "0.020"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "8-bobin (M/S/A/B), bore Ø150 mm, yarik 36 mm, OD Ø352 mm, Bz=1.500000 T, 17.8 ppm @ r<=2.3 mm (Exp125)"
+    ],
+    "scad_params": {
+      "bore_id": 150.0,
+      "former_od": 352.0,
+      "split_gap": 36.0,
+      "b_sample_t": 1.5
+    },
+    "target_mass_kg": 42.0,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact_result": {
+    "part_id": "S6.3-01",
+    "subsystem": "S6",
+    "design_tier": "CUSTOM_FULL",
+    "stl_path": "hardware/cad_parts/out/S6/S6.3-01.stl",
+    "step_path": "hardware/cad_parts/out/S6/S6.3-01.step",
+    "scad_path": "hardware/cad_parts/out/S6/S6.3-01.scad",
+    "dxf_path": "hardware/cad_parts/out/S6/S6.3-01.dxf",
+    "svg_path": "hardware/cad_parts/out/S6/S6.3-01.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 5845694.762698021,
+    "surface_area_mm2": 887123.2051836927,
+    "mass_kg": 38.17238680041808,
+    "cg_mm": [
+      1.0076843768907544e-14,
+      2.349935898678044e-15,
+      -2.6313495331127186
+    ],
+    "bbox_min_mm": [
+      -176.0,
+      -176.0,
+      -214.0
+    ],
+    "bbox_max_mm": [
+      176.0,
+      176.0,
+      119.5
+    ],
+    "inertia_kg_mm2": [
+      489867.84629104484,
+      489867.8462910448,
+      530487.3634007229,
+      -1.2175235897302627e-11,
+      5.245733482260212e-12,
+      5.604858043728807e-11
+    ],
+    "triangle_count": 6080,
+    "vertex_count": 3008,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "json_path": "hardware/cad_parts/out/S6/S6.3-01.json",
+  "world_bbox_min_mm": [
+    -176.0,
+    -176.0,
+    286.0
+  ],
+  "world_bbox_max_mm": [
+    176.0,
+    176.0,
+    619.5
+  ],
+  "world_cg_mm": [
+    -0.0,
+    0.0,
+    497.3687
+  ],
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  },
+  "analysis": {
+    "all_passed": true,
+    "cold_clearance_count": 11,
+    "cold_clearances": {
+      "uhv_chamber_vs_magnet_former_4k": {
+        "outer_material": "316LN",
+        "inner_material": "Ti-6Al-4V",
+        "t_cold_k": 4.2,
+        "t_ref_k": 293.15,
+        "warm_outer_id_mm": 364.0,
+        "warm_inner_od_mm": 352.0,
+        "cold_outer_id_mm": 362.9189291,
+        "cold_inner_od_mm": 351.39104879999996,
+        "outer_strain": -0.002969974999999958,
+        "inner_strain": -0.0017299750000000502,
+        "warm_radial_clearance_mm": 6.0,
+        "cold_nominal_radial_clearance_mm": 5.763940150000025,
+        "cold_worst_case_radial_clearance_mm": 5.663940150000025,
+        "delta_radial_clearance_mm": -0.2360598499999753,
+        "min_required_radial_clearance_mm": 5.0,
+        "interference_risk": false,
+        "passed": true
+      },
+      "magnet_former_vs_a_coil_4k": {
+        "outer_material": "Ti-6Al-4V",
+        "inner_material": "NbTi",
+        "t_cold_k": 4.2,
+        "t_ref_k": 293.15,
+        "warm_outer_id_mm": 338.0,
+        "warm_inner_od_mm": 335.0,
+        "cold_outer_id_mm": 337.41526845,
+        "cold_inner_od_mm": 334.373558375,
+        "outer_strain": -0.0017299750000000502,
+        "inner_strain": -0.0018699749999999682,
+        "warm_radial_clearance_mm": 1.5,
+        "cold_nominal_radial_clearance_mm": 1.5208550374999845,
+        "cold_worst_case_radial_clearance_mm": 1.4708550374999845,
+        "delta_radial_clearance_mm": 0.02085503749998452,
+        "min_required_radial_clearance_mm": 1.0,
+        "interference_risk": false,
+        "passed": true
+      },
+      "b_bucking_coil_vs_invar_pedestal_4k": {
+        "outer_material": "NbTi",
+        "inner_material": "Invar-36",
+        "t_cold_k": 4.2,
+        "t_ref_k": 293.15,
+        "warm_outer_id_mm": 112.0,
+        "warm_inner_od_mm": 104.0,
+        "cold_outer_id_mm": 111.7905628,
+        "cold_inner_od_mm": 103.9584026,
+        "outer_strain": -0.0018699749999999682,
+        "inner_strain": -0.00039997499999999686,
+        "warm_radial_clearance_mm": 4.0,
+        "cold_nominal_radial_clearance_mm": 3.916080100000002,
+        "cold_worst_case_radial_clearance_mm": 3.8660801000000022,
+        "delta_radial_clearance_mm": -0.08391989999999794,
+        "min_required_radial_clearance_mm": 3.5,
+        "interference_risk": false,
+        "passed": true
+      },
+      "invar_pedestal_vs_cryoperm10_4k": {
+        "outer_material": "Invar-36",
+        "inner_material": "Mu-metal",
+        "t_cold_k": 4.0,
+        "t_ref_k": 293.15,
+        "warm_outer_id_mm": 90.0,
+        "warm_inner_od_mm": 82.0,
+        "cold_outer_id_mm": 89.964,
+        "cold_inner_od_mm": 81.8114,
+        "outer_strain": -0.00039999999999995595,
+        "inner_strain": -0.0022999999999999687,
+        "warm_radial_clearance_mm": 4.0,
+        "cold_nominal_radial_clearance_mm": 4.076299999999996,
+        "cold_worst_case_radial_clearance_mm": 4.026299999999996,
+        "delta_radial_clearance_mm": 0.07629999999999626,
+        "min_required_radial_clearance_mm": 3.5,
+        "interference_risk": false,
+        "passed": true
+      },
+      "cryoperm10_vs_nb_meissner_20mk": {
+        "outer_material": "Mu-metal",
+        "inner_material": "Nb",
+        "t_cold_k": 0.02,
+        "t_ref_k": 293.15,
+        "warm_outer_id_mm": 78.0,
+        "warm_inner_od_mm": 69.0,
+        "cold_outer_id_mm": 77.8206,
+        "cold_inner_od_mm": 68.90133,
+        "outer_strain": -0.0022999999999999687,
+        "inner_strain": -0.0014300000000000423,
+        "warm_radial_clearance_mm": 4.5,
+        "cold_nominal_radial_clearance_mm": 4.459634999999999,
+        "cold_worst_case_radial_clearance_mm": 4.409634999999999,
+        "delta_radial_clearance_mm": -0.040365000000001316,
+        "min_required_radial_clearance_mm": 4.0,
+        "interference_risk": false,
+        "passed": true
+      },
+      "nb_meissner_vs_nbtin_resonator_20mk": {
+        "outer_material": "Nb",
+        "inner_material": "OFHC Cu",
+        "t_cold_k": 0.02,
+        "t_ref_k": 293.15,
+        "warm_outer_id_mm": 64.0,
+        "warm_inner_od_mm": 50.0,
+        "cold_outer_id_mm": 63.90848,
+        "cold_inner_od_mm": 49.836999999999996,
+        "outer_strain": -0.0014300000000000423,
+        "inner_strain": -0.0032600000000000406,
+        "warm_radial_clearance_mm": 7.0,
+        "cold_nominal_radial_clearance_mm": 7.0357400000000005,
+        "cold_worst_case_radial_clearance_mm": 6.985740000000001,
+        "delta_radial_clearance_mm": 0.03574000000000055,
+        "min_required_radial_clearance_mm": 6.5,
+        "interference_risk": false,
+        "passed": true
+      },
+      "dr_ovc_vs_50k_shield_50k": {
+        "outer_material": "316LN",
+        "inner_material": "Al 6061",
+        "t_cold_k": 50.0,
+        "t_ref_k": 293.15,
+        "warm_outer_id_mm": 334.0,
+        "warm_inner_od_mm": 308.0,
+        "cold_outer_id_mm": 333.01136,
+        "cold_inner_od_mm": 306.73720000000003,
+        "outer_strain": -0.0029599999999999627,
+        "inner_strain": -0.0040999999999999925,
+        "warm_radial_clearance_mm": 13.0,
+        "cold_nominal_radial_clearance_mm": 13.137079999999997,
+        "cold_worst_case_radial_clearance_mm": 12.937079999999998,
+        "delta_radial_clearance_mm": 0.13707999999999743,
+        "min_required_radial_clearance_mm": 10.0,
+        "interference_risk": false,
+        "passed": true
+      },
+      "50k_shield_vs_4k_shield_4k": {
+        "outer_material": "Al 6061",
+        "inner_material": "OFHC Cu",
+        "t_cold_k": 4.0,
+        "t_ref_k": 293.15,
+        "warm_outer_id_mm": 300.0,
+        "warm_inner_od_mm": 272.0,
+        "cold_outer_id_mm": 298.755,
+        "cold_inner_od_mm": 271.11328,
+        "outer_strain": -0.004149999999999987,
+        "inner_strain": -0.0032600000000000406,
+        "warm_radial_clearance_mm": 14.0,
+        "cold_nominal_radial_clearance_mm": 13.82086000000001,
+        "cold_worst_case_radial_clearance_mm": 13.620860000000011,
+        "delta_radial_clearance_mm": -0.17913999999998964,
+        "min_required_radial_clearance_mm": 12.0,
+        "interference_risk": false,
+        "passed": true
+      },
+      "4k_shield_vs_still_shield_0p8k": {
+        "outer_material": "OFHC Cu",
+        "inner_material": "OFHC Cu",
+        "t_cold_k": 0.8,
+        "t_ref_k": 293.15,
+        "warm_outer_id_mm": 264.0,
+        "warm_inner_od_mm": 238.0,
+        "cold_outer_id_mm": 263.13936,
+        "cold_inner_od_mm": 237.22412,
+        "outer_strain": -0.0032600000000000406,
+        "inner_strain": -0.0032600000000000406,
+        "warm_radial_clearance_mm": 13.0,
+        "cold_nominal_radial_clearance_mm": 12.957620000000006,
+        "cold_worst_case_radial_clearance_mm": 12.757620000000006,
+        "delta_radial_clearance_mm": -0.04237999999999431,
+        "min_required_radial_clearance_mm": 11.0,
+        "interference_risk": false,
+        "passed": true
+      },
+      "cf63_bellows_vs_4k_bridge_tube_4k": {
+        "outer_material": "316LN",
+        "inner_material": "OFHC Cu",
+        "t_cold_k": 4.0,
+        "t_ref_k": 293.15,
+        "warm_outer_id_mm": 44.0,
+        "warm_inner_od_mm": 21.0,
+        "cold_outer_id_mm": 43.86932,
+        "cold_inner_od_mm": 20.93154,
+        "outer_strain": -0.002970000000000028,
+        "inner_strain": -0.0032600000000000406,
+        "warm_radial_clearance_mm": 11.5,
+        "cold_nominal_radial_clearance_mm": 11.468890000000002,
+        "cold_worst_case_radial_clearance_mm": 11.368890000000002,
+        "delta_radial_clearance_mm": -0.031109999999998195,
+        "min_required_radial_clearance_mm": 10.0,
+        "interference_risk": false,
+        "passed": true
+      },
+      "4k_bridge_tube_vs_20mk_cu_busbar_20mk": {
+        "outer_material": "OFHC Cu",
+        "inner_material": "OFHC Cu",
+        "t_cold_k": 0.02,
+        "t_ref_k": 293.15,
+        "warm_outer_id_mm": 18.0,
+        "warm_inner_od_mm": 12.0,
+        "cold_outer_id_mm": 17.941319999999997,
+        "cold_inner_od_mm": 11.96088,
+        "outer_strain": -0.0032600000000000406,
+        "inner_strain": -0.0032600000000000406,
+        "warm_radial_clearance_mm": 3.0,
+        "cold_nominal_radial_clearance_mm": 2.990219999999999,
+        "cold_worst_case_radial_clearance_mm": 2.940219999999999,
+        "delta_radial_clearance_mm": -0.00978000000000101,
+        "min_required_radial_clearance_mm": 2.5,
+        "interference_risk": false,
+        "passed": true
+      }
+    },
+    "tolerance_stacks": {
+      "magnet_split_gap_vs_4k_bridge_tube": {
+        "nominal_mm": 15.0,
+        "mean_mm": 15.0,
+        "wc_half_band_mm": 0.22,
+        "wc_min_mm": 14.78,
+        "wc_max_mm": 15.22,
+        "rss_half_band_mm": 0.1392838827718412,
+        "rss_min_mm": 14.86071611722816,
+        "rss_max_mm": 15.13928388277184,
+        "modified_rss_half_band_mm": 0.20892582415776179,
+        "modified_rss_min_mm": 14.791074175842239,
+        "modified_rss_max_mm": 15.208925824157761,
+        "target_min_mm": 14.0,
+        "target_max_mm": 16.0,
+        "wc_pass": true,
+        "rss_pass": true,
+        "modified_rss_pass": true,
+        "variance_shares_pct": {
+          "magnet_split_gap": 12.886597938144332,
+          "bridge_4k_tube_od": 12.886597938144332,
+          "thermal_z_shift_4k": 74.22680412371133
+        }
+      },
+      "twpa_vs_option_q_qram_z_clearance": {
+        "nominal_mm": 8.5,
+        "mean_mm": 8.5,
+        "wc_half_band_mm": 0.25,
+        "wc_min_mm": 8.25,
+        "wc_max_mm": 8.75,
+        "rss_half_band_mm": 0.15000000000000002,
+        "rss_min_mm": 8.35,
+        "rss_max_mm": 8.65,
+        "modified_rss_half_band_mm": 0.22500000000000003,
+        "modified_rss_min_mm": 8.275,
+        "modified_rss_max_mm": 8.725,
+        "target_min_mm": 7.5,
+        "target_max_mm": 9.5,
+        "wc_pass": true,
+        "rss_pass": true,
+        "modified_rss_pass": true,
+        "variance_shares_pct": {
+          "twpa_bottom_z": 44.44444444444444,
+          "qram_top_z": 44.44444444444444,
+          "mxc_standoff_tol": 11.11111111111111
+        }
+      }
+    },
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "schema_version": "1.0",
+  "part_id": "S6.3-02",
+  "parent_bom_id": "S6.3",
+  "subsystem": "S6",
+  "part_name": "Aktif karsi-sargili (bucking) bobin ciftleri (A/B karsi-bobin, Exp125 delta)",
+  "qty": 1,
+  "unit": "set",
+  "temp_stage": "4.2 K",
+  "vacuum_grade": "Kriyo-vakum",
+  "bom_key_spec": "8-bobinli aktif kalkan (OD \u00d8352 mm); rezonatorde kalkanli B_res=22.3 uT << 0.40 T (Exp125)",
+  "usd_nom": 46000.0,
+  "bom_epistemic_tag": "{Varsay\u0131m}",
+  "electrical_class": "E4",
+  "grounding_domain": "CRYO_OVC",
+  "grounding_notes": "Active bucking/shielding coil pairs (A/B coils) series-coupled with S6.3-01 (B_res=22.3 uT).",
+  "supply_rails": [
+    {
+      "rail_name": "SC_BUCKING_BUS",
+      "voltage_v": 400.0,
+      "current_type": "DC",
+      "max_current_a": 170.0,
+      "steady_power_w": 0.0,
+      "peak_power_w": 200.0,
+      "source_part_id": "S6.3-05"
+    }
+  ],
+  "connectors_and_pinout": [
+    {
+      "connector_ref": "J_BUCK",
+      "connector_type": "4.2 K Superconducting Splice Bus",
+      "location_side": "4K_magnet",
+      "mating_part_id": "S6.3-04",
+      "pins": [
+        {
+          "pin": "1-2",
+          "signal": "BUCK_AB_SERIES",
+          "direction": "IN",
+          "nominal_level": "Active field cancellation (-168/-57/+84/+22 A)"
+        },
+        {
+          "pin": "3-4",
+          "signal": "BUCK_VTAP",
+          "direction": "OUT",
+          "nominal_level": "Quench voltage-tap sense"
+        }
+      ]
+    }
+  ],
+  "mating_part_ids": [
+    "S6.3-01",
+    "S6.3-03",
+    "S6.3-04",
+    "S6.3-05"
+  ],
+  "interlock_hooks": [
+    {
+      "signal_name": "BUCKING_QUENCH_TAP",
+      "target_part_id": "S6.3-04",
+      "action_on_trip": "Co-extract with S6.3-01 into 1.563 Ohm dump",
+      "response_time_ms": 30.0
+    }
+  ],
+  "ups_tier": "NONE",
+  "ups_budget_group": "PASSIVE_ZERO_MAINS",
+  "exp150_ups_allocation_w": 0.0,
+  "supply_rails_steady_sum_w": 0.0,
+  "incremental_mains_w": 0.0,
+  "secondary_or_parent_derived_w": 0.0,
+  "non_exp150_aux_shed_w": 0.0,
+  "reconciliation_note": "Passive or downstream sub-assembly (0.00 W sub-rail power drawn from upstream source S6.3-05); incremental_mains_w = 0.0 W (zero double-counting).",
+  "timing_sync": {
+    "rb_10mhz_port": null,
+    "white_rabbit_port": null,
+    "sync_role": "Active magnetic field shield"
+  },
+  "epistemic_flags": {
+    "design_maturity": "M0_M1_ELECTRICAL_ICD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

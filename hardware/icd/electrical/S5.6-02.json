@@ -1,0 +1,75 @@
+{
+  "schema_version": "1.0",
+  "part_id": "S5.6-02",
+  "parent_bom_id": "S5.6",
+  "subsystem": "S5",
+  "part_name": "Zenginlestirilmis 28Si cubuk (<50 ppm 29Si, >1000 yonga) + UHV QCM kalinlik izleme & vana (Exp139, 3.4 kg)",
+  "qty": 1,
+  "unit": "set",
+  "temp_stage": "300 K",
+  "vacuum_grade": "UHV 1.5e-10 Torr",
+  "bom_key_spec": ">1000 yonga @ 8 nm, QCM \u00b10.3 nm gercek-zamanli kalinlik izleme, He<=1e-10 mbar*L/s, kutle=3.4 kg",
+  "usd_nom": 18000.0,
+  "bom_epistemic_tag": "{Varsay\u0131m}",
+  "electrical_class": "E4",
+  "grounding_domain": "AGND",
+  "grounding_notes": "Enriched 28Si rod (<50 ppm 29Si) + UHV 6 MHz quartz QCM thickness monitor (\u00b10.3 nm).",
+  "supply_rails": [
+    {
+      "rail_name": "QCM_OSC_12V",
+      "voltage_v": 12.0,
+      "current_type": "DC",
+      "max_current_a": 0.2,
+      "steady_power_w": 2.0,
+      "peak_power_w": 3.0,
+      "source_part_id": "S5.6-01"
+    }
+  ],
+  "connectors_and_pinout": [
+    {
+      "connector_ref": "J_QCM",
+      "connector_type": "CF16 BNC UHV Feedthrough",
+      "location_side": "loadlock_plusZ",
+      "mating_part_id": "S5.6-01",
+      "pins": [
+        {
+          "pin": "1",
+          "signal": "QCM_6MHZ_RF",
+          "direction": "BIDIR",
+          "nominal_level": "Real-time 0.10 nm/s thickness monitor"
+        },
+        {
+          "pin": "2",
+          "signal": "AGND_SHIELD",
+          "direction": "PWR",
+          "nominal_level": "0 V AGND"
+        }
+      ]
+    }
+  ],
+  "mating_part_ids": [
+    "S5.6-01",
+    "S5.1-03"
+  ],
+  "interlock_hooks": [],
+  "ups_tier": "NONE",
+  "ups_budget_group": "PASSIVE_ZERO_MAINS",
+  "exp150_ups_allocation_w": 0.0,
+  "supply_rails_steady_sum_w": 2.0,
+  "incremental_mains_w": 0.0,
+  "secondary_or_parent_derived_w": 2.0,
+  "non_exp150_aux_shed_w": 0.0,
+  "reconciliation_note": "Passive or downstream sub-assembly (2.00 W sub-rail power drawn from upstream source S5.6-01); incremental_mains_w = 0.0 W (zero double-counting).",
+  "timing_sync": {
+    "rb_10mhz_port": null,
+    "white_rabbit_port": null,
+    "sync_role": "QCM deposition metrology"
+  },
+  "epistemic_flags": {
+    "design_maturity": "M0_M1_ELECTRICAL_ICD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

@@ -1,0 +1,54 @@
+* S9.4-02 Option-Q 5-Stage Chebyshev Quarter-Wave Impedance Transformer (50 Ohm <-> 3000 Ohm)
+* Band: 4.0 - 8.0 GHz (f0 = 6.0 GHz), Superconducting NbTiN Q_int = 1e5 @ 20 mK MXC
+* Exact Exp142 equal-ripple impedances: Z1..Z5 = 62.2481, 126.1760, 387.2983, 1188.8155, 2409.7114 Ohm
+* Epistemic: DESIGN_ONLY, no_lab_measurement=true
+
+.temp -273.13
+
+* Port 1: 50 Ohm source with V_src = 2 V AC so incident wave a1 = 1/sqrt(50)
+* Exact Kurokawa power-wave S-parameters between Z0=50 Ohm and ZL=3000 Ohm:
+*   S11 = (2*V(p1) - V_src)/V_src = V(p1) - 1
+*   S21 = V(p2) * sqrt(50 / 3000)
+VSRC src 0 DC 0 AC 2.0
+RS   src p1 50.0
+
+* 5-Stage Quarter-Wave Transmission Lines (TD = 41.6666667 ps @ 6.0 GHz) + NbTiN Q_int=1e5 loss
+T1 p1  0 n1a 0 Z0=62.24811791 TD=4.166666666667e-11
+R1 n1a n1 9.77791150e-04
+T2 n1  0 n2a 0 Z0=126.17601100 TD=4.166666666667e-11
+R2 n2a n2 1.98196815e-03
+T3 n2  0 n3a 0 Z0=387.29833462 TD=4.166666666667e-11
+R3 n3a n3 6.08366801e-03
+T4 n3  0 n4a 0 Z0=1188.81551899 TD=4.166666666667e-11
+R4 n4a n4 1.86738705e-02
+T5 n4  0 n5a 0 Z0=2409.71141017 TD=4.166666666667e-11
+R5 n5a p2 3.78516583e-02
+
+* Port 2: 3000 Ohm high-Z NbTiN M4 cavity-QED bus load
+RL p2 0 3000.0
+
+.control
+set noaskquit
+ac lin 801 2.0e9 10.0e9
+let s11_c = v(p1) - 1.0
+let s21_c = v(p2) * sqrt(50.0 / 3000.0)
+let s11_mag = mag(s11_c)
+let s21_mag = mag(s21_c)
+let s11_db = 20.0 * log10(s11_mag + 1e-12)
+let s21_db = 20.0 * log10(s21_mag + 1e-12)
+let passivity = s11_mag * s11_mag + s21_mag * s21_mag
+
+meas ac s11_6ghz_db FIND s11_db AT=6.0e9
+meas ac s21_6ghz_db FIND s21_db AT=6.0e9
+meas ac s11_4ghz_db FIND s11_db AT=4.0e9
+meas ac s11_8ghz_db FIND s11_db AT=8.0e9
+meas ac max_s11_4_8_db MAX s11_db FROM=4.0e9 TO=8.0e9
+meas ac min_s21_4_8_db MIN s21_db FROM=4.0e9 TO=8.0e9
+meas ac max_passivity MAX passivity FROM=4.0e9 TO=8.0e9
+meas ac bw20_lo_hz WHEN s11_db=-20.0 CROSS=1
+meas ac bw20_hi_hz WHEN s11_db=-20.0 CROSS=LAST
+let bw20_ghz = (bw20_hi_hz - bw20_lo_hz) / 1.0e9
+echo "bw20_ghz = $&bw20_ghz"
+quit
+.endc
+.end

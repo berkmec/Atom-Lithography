@@ -1,0 +1,313 @@
+{
+  "part_id": "S3.2-05",
+  "subsystem": "S3",
+  "part_design": {
+    "part_id": "S3.2-05",
+    "parent_bom_id": "S3.2",
+    "subsystem": "S3",
+    "part_name": "CF63 hermetik coklu-koaksiyel UHV analog gecis flanslari",
+    "design_tier": "COTS_ENV_ICD",
+    "material": "316LN",
+    "temp_stage": "300 K",
+    "temp_k": 300.0,
+    "vacuum_grade": "UHV 1e-9 mbar",
+    "tolerance_spec": "He <=1e-9 mbar*L/s",
+    "surface_finish_ra_um": 0.4,
+    "qty": 4,
+    "procurement_class": "COTS",
+    "world_origin_mm": [
+      0.0,
+      0.0,
+      -105.0
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "cf63_feedthrough_1",
+        "kind": "flange",
+        "position_mm": [
+          173.59471478129743,
+          173.5947147812974,
+          0.0
+        ],
+        "normal": [
+          -0.7071067811865476,
+          -0.7071067811865475,
+          0.0
+        ],
+        "standard": "CF63",
+        "mating_part_id": "S5.1-01",
+        "bore_mm": 63.5,
+        "od_mm": 113.5,
+        "pcd_mm": 92.1,
+        "bolt_count": 8,
+        "bolt_hole_mm": 8.4,
+        "bolt_spec": "M8",
+        "frame": "local",
+        "notes": "32-coax hermetic CF63 analog feedthrough #1 (45 deg, 150 C bakeable)"
+      },
+      {
+        "name": "cf63_feedthrough_2",
+        "kind": "flange",
+        "position_mm": [
+          -103.75278325734169,
+          222.49856171749758,
+          0.0
+        ],
+        "normal": [
+          0.42261826174069933,
+          -0.90630778703665,
+          0.0
+        ],
+        "standard": "CF63",
+        "mating_part_id": "S5.1-01",
+        "bore_mm": 63.5,
+        "od_mm": 113.5,
+        "pcd_mm": 92.1,
+        "bolt_count": 8,
+        "bolt_hole_mm": 8.4,
+        "bolt_spec": "M8",
+        "frame": "local",
+        "notes": "32-coax hermetic CF63 analog feedthrough #2 (115 deg, 150 C bakeable)"
+      },
+      {
+        "name": "cf63_feedthrough_3",
+        "kind": "flange",
+        "position_mm": [
+          -233.4843747504602,
+          75.86367211904961,
+          0.0
+        ],
+        "normal": [
+          0.9510565162951535,
+          -0.3090169943749475,
+          0.0
+        ],
+        "standard": "CF63",
+        "mating_part_id": "S5.1-01",
+        "bore_mm": 63.5,
+        "od_mm": 113.5,
+        "pcd_mm": 92.1,
+        "bolt_count": 8,
+        "bolt_hole_mm": 8.4,
+        "bolt_spec": "M8",
+        "frame": "local",
+        "notes": "32-coax hermetic CF63 analog feedthrough #3 (162 deg, 150 C bakeable)"
+      },
+      {
+        "name": "cf63_feedthrough_4",
+        "kind": "flange",
+        "position_mm": [
+          173.59471478129737,
+          -173.59471478129745,
+          0.0
+        ],
+        "normal": [
+          -0.7071067811865474,
+          0.7071067811865477,
+          0.0
+        ],
+        "standard": "CF63",
+        "mating_part_id": "S5.1-01",
+        "bore_mm": 63.5,
+        "od_mm": 113.5,
+        "pcd_mm": 92.1,
+        "bolt_count": 8,
+        "bolt_hole_mm": 8.4,
+        "bolt_spec": "M8",
+        "frame": "local",
+        "notes": "32-coax hermetic CF63 analog feedthrough #4 (315 deg, 150 C bakeable)"
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "CF63_OD",
+        "nominal_mm": 113.5,
+        "tol_plus_mm": 0.15,
+        "tol_minus_mm": -0.15,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø113.50 ±0.15"
+      },
+      {
+        "label": "CF63_PCD",
+        "nominal_mm": 92.1,
+        "tol_plus_mm": 0.1,
+        "tol_minus_mm": -0.1,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø92.10 ±0.10"
+      },
+      {
+        "label": "FLANGE_THK",
+        "nominal_mm": 17.5,
+        "tol_plus_mm": 0.15,
+        "tol_minus_mm": -0.15,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "17.50 ±0.15"
+      },
+      {
+        "label": "PORT_RADIUS",
+        "nominal_mm": 245.5,
+        "tol_plus_mm": 0.25,
+        "tol_minus_mm": -0.25,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "R",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "R245.50 ±0.25"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "flatness",
+        "tolerance_mm": 0.02,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "CF63 KNIFE-EDGE FACE",
+        "glyph": "⏥",
+        "tolerance_text": "0.020"
+      },
+      {
+        "symbol": "position",
+        "tolerance_mm": 0.15,
+        "diameter_zone": true,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "B",
+        "datum_tertiary": "",
+        "feature_note": "8x Ø8.4 BOLT CIRCLE @ PCD 92.1",
+        "glyph": "⌖",
+        "tolerance_text": "Ø0.15"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "32 koaksiyel/flans (128 kanal), bakout 150 C",
+      "4x ISO 3669 CF63 hermetic 32-coax feedthrough flanges (128 analog channels total, He leak <=1e-9 mbar*L/s).",
+      "Positioned at 45/115/162/315 deg, R_face=245.5 mm (0.5 mm gasket gap to S5.1-01), Z=-105 mm (Z_canon=395 mm)."
+    ],
+    "scad_params": {
+      "n_flanges": 4,
+      "coax_per_flange": 32,
+      "cf63_od_mm": 113.5,
+      "cf63_pcd_mm": 92.1,
+      "cf63_bolts": 8,
+      "cf63_bolt_d_mm": 8.4
+    },
+    "target_mass_kg": null,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S3.2-05",
+    "subsystem": "S3",
+    "design_tier": "COTS_ENV_ICD",
+    "stl_path": "hardware/cad_parts/out/S3/S3.2-05.stl",
+    "step_path": "hardware/cad_parts/out/S3/S3.2-05.step",
+    "scad_path": "hardware/cad_parts/out/S3/S3.2-05.scad",
+    "dxf_path": "hardware/cad_parts/out/S3/S3.2-05.dxf",
+    "svg_path": "hardware/cad_parts/out/S3/S3.2-05.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 666444.2829295733,
+    "surface_area_mm2": 155629.85915615293,
+    "mass_kg": 5.331554263436586,
+    "cg_mm": [
+      2.581358911938592,
+      77.38735896218068,
+      -7.159505801754615e-15
+    ],
+    "bbox_min_mm": [
+      -271.2692639147036,
+      -226.0973932843986,
+      -56.75
+    ],
+    "bbox_max_mm": [
+      226.09739328439858,
+      262.31970728454246,
+      56.75000000000001
+    ],
+    "inertia_kg_mm2": [
+      140116.17840635913,
+      186222.2265034676,
+      318178.5890043115,
+      58938.555397084136,
+      1.2451941694178641e-11,
+      6.15502287732129e-12
+    ],
+    "triangle_count": 10880,
+    "vertex_count": 5896,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "world_bbox_min_mm": [
+    -271.2692639147036,
+    -226.0973932843986,
+    -161.75
+  ],
+  "world_bbox_max_mm": [
+    226.09739328439858,
+    262.31970728454246,
+    -48.24999999999999
+  ],
+  "reconciliation": null,
+  "thermal_contraction_checks": [],
+  "tolerance_stack_checks": []
+}

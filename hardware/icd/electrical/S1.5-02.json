@@ -1,0 +1,75 @@
+{
+  "schema_version": "1.0",
+  "part_id": "S1.5-02",
+  "parent_bom_id": "S1.5",
+  "subsystem": "S1",
+  "part_name": "Piezo-tahrikli hassas enerji suzgeci giris/cikis yariklari",
+  "qty": 1,
+  "unit": "set",
+  "temp_stage": "300 K",
+  "vacuum_grade": "UHV 1e-9 mbar",
+  "bom_key_spec": "5-50 um yarik genisligi (dE ayari)",
+  "usd_nom": 12000.0,
+  "bom_epistemic_tag": "{Varsay\u0131m}",
+  "electrical_class": "E4",
+  "grounding_domain": "AGND",
+  "grounding_notes": "UHV piezo-driven 5-50 um HDA entrance/exit slits (\u00b10.5 um step).",
+  "supply_rails": [
+    {
+      "rail_name": "PIEZO_SLIT_100V",
+      "voltage_v": 100.0,
+      "current_type": "DC",
+      "max_current_a": 0.05,
+      "steady_power_w": 2.0,
+      "peak_power_w": 5.0,
+      "source_part_id": "S4.3-04"
+    }
+  ],
+  "connectors_and_pinout": [
+    {
+      "connector_ref": "J_SLIT",
+      "connector_type": "CF16 9-Pin Sub-D UHV",
+      "location_side": "column_mid",
+      "mating_part_id": "S4.3-04",
+      "pins": [
+        {
+          "pin": "1-4",
+          "signal": "SLIT_PIEZO_DRV",
+          "direction": "IN",
+          "nominal_level": "0-100 V stick-slip piezo"
+        },
+        {
+          "pin": "5-8",
+          "signal": "SLIT_ENC_FB",
+          "direction": "OUT",
+          "nominal_level": "\u00b10.5 um width readback"
+        }
+      ]
+    }
+  ],
+  "mating_part_ids": [
+    "S1.5-01",
+    "S4.3-04"
+  ],
+  "interlock_hooks": [],
+  "ups_tier": "NONE",
+  "ups_budget_group": "PASSIVE_ZERO_MAINS",
+  "exp150_ups_allocation_w": 0.0,
+  "supply_rails_steady_sum_w": 2.0,
+  "incremental_mains_w": 0.0,
+  "secondary_or_parent_derived_w": 2.0,
+  "non_exp150_aux_shed_w": 0.0,
+  "reconciliation_note": "Passive or downstream sub-assembly (2.00 W sub-rail power drawn from upstream source S4.3-04); incremental_mains_w = 0.0 W (zero double-counting).",
+  "timing_sync": {
+    "rb_10mhz_port": null,
+    "white_rabbit_port": null,
+    "sync_role": "Motorized energy slit actuator"
+  },
+  "epistemic_flags": {
+    "design_maturity": "M0_M1_ELECTRICAL_ICD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

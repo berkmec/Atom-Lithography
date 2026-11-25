@@ -1,0 +1,428 @@
+{
+  "part_design": {
+    "part_id": "S7.4-02",
+    "parent_bom_id": "S7.4",
+    "subsystem": "S7",
+    "part_name": "White Rabbit / sub-ns donanim tetikleme (trigger) fan-out modulu",
+    "design_tier": "COTS_ENV_ICD",
+    "material": "Steel",
+    "temp_stage": "300 K (kabin)",
+    "temp_k": 300.0,
+    "vacuum_grade": "Atmosfer",
+    "tolerance_spec": "<200 ps",
+    "surface_finish_ra_um": 0.8,
+    "qty": 1,
+    "procurement_class": "COTS",
+    "world_origin_mm": [
+      1480.0,
+      -248.0,
+      1712.4250000000002
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "wr_sfp_18port",
+        "kind": "optical",
+        "position_mm": [
+          1580.0,
+          -449.0,
+          1712.4250000000002
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "standard": "18x SFP White Rabbit Sub-ns (<200 ps skew)",
+        "mating_part_id": "S6.11-01",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "world",
+        "notes": ""
+      },
+      {
+        "name": "wr_10mhz_in",
+        "kind": "rf",
+        "position_mm": [
+          1535.0,
+          -449.0,
+          1712.4250000000002
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "standard": "SMA 10 MHz / 1 PPS Grandmaster Input",
+        "mating_part_id": "S7.4-01",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "world",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "WIDTH_19IN",
+        "nominal_mm": 482.6,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "482.60 ±0.50"
+      },
+      {
+        "label": "HEIGHT_1U",
+        "nominal_mm": 42.45,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "42.45 ±0.50"
+      },
+      {
+        "label": "DEPTH",
+        "nominal_mm": 380.0,
+        "tol_plus_mm": 1.0,
+        "tol_minus_mm": -1.0,
+        "view": "right",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "380.00 ±1.00"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "flatness",
+        "tolerance_mm": 0.5,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "19-INCH FACEPLATE",
+        "glyph": "⏥",
+        "tolerance_text": "0.50"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "Kanal-arasi gecikme sapmasi <200 ps",
+      "Bay 1 U37; deterministic <200 ps hardware trigger fan-out across implant/IBIC/spectroscopy."
+    ],
+    "scad_params": {
+      "u_start": 37,
+      "u_count": 1,
+      "sfp_ports": 18,
+      "depth_mm": 380.0
+    },
+    "target_mass_kg": 5.2,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S7.4-02",
+    "subsystem": "S7",
+    "design_tier": "COTS_ENV_ICD",
+    "stl_path": "hardware/cad_parts/out/S7/S7.4-02.stl",
+    "step_path": "hardware/cad_parts/out/S7/S7.4-02.step",
+    "scad_path": "hardware/cad_parts/out/S7/S7.4-02.scad",
+    "dxf_path": "hardware/cad_parts/out/S7/S7.4-02.dxf",
+    "svg_path": "hardware/cad_parts/out/S7/S7.4-02.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 6787970.617164977,
+    "surface_area_mm2": 451960.0548932119,
+    "mass_kg": 5.199999999999992,
+    "cg_mm": [
+      1480.2888926911867,
+      -247.83391316716305,
+      1712.4250000000122
+    ],
+    "bbox_min_mm": [
+      1238.7,
+      -449.1,
+      1691.2000000000003
+    ],
+    "bbox_max_mm": [
+      1721.3,
+      -45.8,
+      1733.65
+    ],
+    "inertia_kg_mm2": [
+      63773.31905194662,
+      84792.6129284057,
+      147148.420917368,
+      -20.011236509330807,
+      4.9375029578424926e-08,
+      3.366479289438063e-09
+    ],
+    "triangle_count": 1672,
+    "vertex_count": 852,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "shell_bboxes_mm": [
+    [
+      [
+        1238.7,
+        -438.0,
+        1691.2
+      ],
+      [
+        1721.3,
+        -434.0,
+        1733.65
+      ]
+    ],
+    [
+      [
+        1260.0,
+        -433.9,
+        1692.2
+      ],
+      [
+        1700.0,
+        -58.0,
+        1732.65
+      ]
+    ],
+    [
+      [
+        1536.2,
+        -449.1,
+        1708.625
+      ],
+      [
+        1543.8,
+        -438.1,
+        1716.225
+      ]
+    ],
+    [
+      [
+        1546.2,
+        -449.1,
+        1708.625
+      ],
+      [
+        1553.8,
+        -438.1,
+        1716.225
+      ]
+    ],
+    [
+      [
+        1556.2,
+        -449.1,
+        1708.625
+      ],
+      [
+        1563.8,
+        -438.1,
+        1716.225
+      ]
+    ],
+    [
+      [
+        1566.2,
+        -449.1,
+        1708.625
+      ],
+      [
+        1573.8,
+        -438.1,
+        1716.225
+      ]
+    ],
+    [
+      [
+        1576.2,
+        -449.1,
+        1708.625
+      ],
+      [
+        1583.8,
+        -438.1,
+        1716.225
+      ]
+    ],
+    [
+      [
+        1586.2,
+        -449.1,
+        1708.625
+      ],
+      [
+        1593.8,
+        -438.1,
+        1716.225
+      ]
+    ],
+    [
+      [
+        1596.2,
+        -449.1,
+        1708.625
+      ],
+      [
+        1603.8,
+        -438.1,
+        1716.225
+      ]
+    ],
+    [
+      [
+        1606.2,
+        -449.1,
+        1708.625
+      ],
+      [
+        1613.8,
+        -438.1,
+        1716.225
+      ]
+    ],
+    [
+      [
+        1616.2,
+        -449.1,
+        1708.625
+      ],
+      [
+        1623.8,
+        -438.1,
+        1716.225
+      ]
+    ],
+    [
+      [
+        1626.2,
+        -449.1,
+        1708.625
+      ],
+      [
+        1633.8,
+        -438.1,
+        1716.225
+      ]
+    ],
+    [
+      [
+        1636.2,
+        -449.1,
+        1708.625
+      ],
+      [
+        1643.8,
+        -438.1,
+        1716.225
+      ]
+    ],
+    [
+      [
+        1646.2,
+        -449.1,
+        1708.625
+      ],
+      [
+        1653.8,
+        -438.1,
+        1716.225
+      ]
+    ],
+    [
+      [
+        1355.438,
+        -57.8,
+        1697.863
+      ],
+      [
+        1384.562,
+        -47.8,
+        1726.987
+      ]
+    ],
+    [
+      [
+        1465.438,
+        -57.8,
+        1697.863
+      ],
+      [
+        1494.562,
+        -47.8,
+        1726.987
+      ]
+    ],
+    [
+      [
+        1614.0,
+        -57.8,
+        1700.425
+      ],
+      [
+        1646.0,
+        -45.8,
+        1724.425
+      ]
+    ]
+  ],
+  "reconciliation_notes": []
+}

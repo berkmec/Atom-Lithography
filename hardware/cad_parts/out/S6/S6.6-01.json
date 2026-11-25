@@ -1,0 +1,242 @@
+{
+  "part_design": {
+    "part_id": "S6.6-01",
+    "parent_bom_id": "S6.6",
+    "subsystem": "S6",
+    "part_name": "4 K kriyojenik dusuk-guclu InP HEMT LNA (56 okuma zinciri, Exp111/114)",
+    "design_tier": "CUSTOM_FULL",
+    "material": "OFHC Cu",
+    "temp_stage": "4 K",
+    "temp_k": 4.0,
+    "vacuum_grade": "Kriyo-vakum",
+    "tolerance_spec": "P_DC <= 2.8 mW",
+    "surface_finish_ra_um": 0.8,
+    "qty": 56,
+    "procurement_class": "R&D",
+    "world_origin_mm": [
+      -650.0,
+      0.0,
+      700.0
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "ring_4k_mount",
+        "kind": "thermal",
+        "position_mm": [
+          0.0,
+          0.0,
+          18.0
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "16x M3 Au-OFHC 4K Mount",
+        "mating_part_id": "S6.8-01",
+        "bore_mm": 196.0,
+        "od_mm": 252.0,
+        "pcd_mm": 224.0,
+        "bolt_count": 16,
+        "bolt_hole_mm": 3.2,
+        "bolt_spec": "M3",
+        "frame": "local",
+        "notes": ""
+      },
+      {
+        "name": "sma_56ch_in",
+        "kind": "rf",
+        "position_mm": [
+          0.0,
+          0.0,
+          -17.0
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "standard": "56x Cryo SMA InP HEMT Ports",
+        "mating_part_id": "S6.6-04",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "RING_OD",
+        "nominal_mm": 252.0,
+        "tol_plus_mm": 0.1,
+        "tol_minus_mm": -0.1,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø252.00 ±0.10"
+      },
+      {
+        "label": "RING_ID",
+        "nominal_mm": 196.0,
+        "tol_plus_mm": 0.1,
+        "tol_minus_mm": -0.1,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø196.00 ±0.10"
+      },
+      {
+        "label": "RING_H",
+        "nominal_mm": 36.0,
+        "tol_plus_mm": 0.1,
+        "tol_minus_mm": -0.1,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "36.00 ±0.10"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "flatness",
+        "tolerance_mm": 0.02,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "4 K thermal clamp ring face",
+        "glyph": "⏥",
+        "tolerance_text": "0.020"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "P_DC <= 2.8 mW/hat (Rebelo 2026: 2.1 mW, Tn=1.4 K, 41.6 dB)"
+    ],
+    "scad_params": {
+      "n_hemt": 56,
+      "ring_id": 196.0,
+      "ring_od": 252.0,
+      "p_dc_mw_per_ch": 2.1
+    },
+    "target_mass_kg": 1.85,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact_result": {
+    "part_id": "S6.6-01",
+    "subsystem": "S6",
+    "design_tier": "CUSTOM_FULL",
+    "stl_path": "hardware/cad_parts/out/S6/S6.6-01.stl",
+    "step_path": "hardware/cad_parts/out/S6/S6.6-01.step",
+    "scad_path": "hardware/cad_parts/out/S6/S6.6-01.scad",
+    "dxf_path": "hardware/cad_parts/out/S6/S6.6-01.dxf",
+    "svg_path": "hardware/cad_parts/out/S6/S6.6-01.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 194639.17064083763,
+    "surface_area_mm2": 98380.47482747435,
+    "mass_kg": 1.128907189716858,
+    "cg_mm": [
+      1.2560276281061688e-14,
+      4.26152230964593e-15,
+      7.8076635582094625
+    ],
+    "bbox_min_mm": [
+      -126.0,
+      -126.0,
+      -17.0
+    ],
+    "bbox_max_mm": [
+      126.0,
+      126.0,
+      18.0
+    ],
+    "inertia_kg_mm2": [
+      7286.945310361456,
+      7286.945310361452,
+      14335.377035199144,
+      1.8028076738119133e-13,
+      1.588165086449488e-13,
+      5.46950260809397e-14
+    ],
+    "triangle_count": 1824,
+    "vertex_count": 992,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "json_path": "hardware/cad_parts/out/S6/S6.6-01.json",
+  "world_bbox_min_mm": [
+    -776.0,
+    -126.0,
+    683.0
+  ],
+  "world_bbox_max_mm": [
+    -524.0,
+    126.0,
+    718.0
+  ],
+  "world_cg_mm": [
+    -650.0,
+    0.0,
+    707.8077
+  ],
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

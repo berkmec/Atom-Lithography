@@ -1,0 +1,97 @@
+{
+  "schema_version": "1.0",
+  "part_id": "S6.6-02",
+  "parent_bom_id": "S6.6",
+  "subsystem": "S6",
+  "part_name": "Kriyojenik izolator / sirkulator (56 zincir, Exp114)",
+  "qty": 56,
+  "unit": "adet",
+  "temp_stage": "20 mK / 4 K",
+  "vacuum_grade": "Kriyo-vakum",
+  "bom_key_spec": "Izolasyon >=20 dB, ekleme kaybi <=0.5 dB, 20 mK-4 K",
+  "usd_nom": 84000.0,
+  "bom_epistemic_tag": "{Model-Kalibrasyon-Exp114}",
+  "electrical_class": "E2",
+  "grounding_domain": "CRYO_OVC",
+  "grounding_notes": "Magnetically shielded cryo ferrite housings bolted to 20 mK MXC / 4 K bracket (passive).",
+  "supply_rails": [
+    {
+      "rail_name": "PASSIVE_ISOLATOR",
+      "voltage_v": 0.0,
+      "current_type": "PASSIVE",
+      "max_current_a": 0.0,
+      "steady_power_w": 0.0,
+      "peak_power_w": 0.0,
+      "source_part_id": "S6.6-01"
+    }
+  ],
+  "connectors_and_pinout": [
+    {
+      "connector_ref": "J_PORT1",
+      "connector_type": "SMA-F 50R Cryo (56x)",
+      "location_side": "20mK_4K_stage",
+      "mating_part_id": "S6.6-07",
+      "pins": [
+        {
+          "pin": "1",
+          "signal": "ISO_IN[0:55]",
+          "direction": "IN",
+          "nominal_level": "4-8 GHz IL<=0.5 dB"
+        },
+        {
+          "pin": "2",
+          "signal": "CRYO_SHIELD",
+          "direction": "PWR",
+          "nominal_level": "0 V CRYO_OVC"
+        }
+      ]
+    },
+    {
+      "connector_ref": "J_PORT2",
+      "connector_type": "SMA-F 50R Cryo (56x)",
+      "location_side": "20mK_4K_stage",
+      "mating_part_id": "S6.6-04",
+      "pins": [
+        {
+          "pin": "1",
+          "signal": "ISO_OUT[0:55]",
+          "direction": "OUT",
+          "nominal_level": "Reverse isolation >=20 dB"
+        },
+        {
+          "pin": "2",
+          "signal": "CRYO_SHIELD",
+          "direction": "PWR",
+          "nominal_level": "0 V CRYO_OVC"
+        }
+      ]
+    }
+  ],
+  "mating_part_ids": [
+    "S6.6-01",
+    "S6.6-04",
+    "S6.6-07",
+    "S9.3-02"
+  ],
+  "interlock_hooks": [],
+  "ups_tier": "NONE",
+  "ups_budget_group": "PASSIVE_ZERO_MAINS",
+  "exp150_ups_allocation_w": 0.0,
+  "supply_rails_steady_sum_w": 0.0,
+  "incremental_mains_w": 0.0,
+  "secondary_or_parent_derived_w": 0.0,
+  "non_exp150_aux_shed_w": 0.0,
+  "reconciliation_note": "Passive or downstream sub-assembly (0.00 W sub-rail power drawn from upstream source S6.6-01); incremental_mains_w = 0.0 W (zero double-counting).",
+  "timing_sync": {
+    "rb_10mhz_port": null,
+    "white_rabbit_port": null,
+    "sync_role": "Passive non-reciprocal isolator"
+  },
+  "epistemic_flags": {
+    "design_maturity": "M0_M1_ELECTRICAL_ICD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

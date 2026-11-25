@@ -1,0 +1,316 @@
+{
+  "part_design": {
+    "part_id": "S6.1-01",
+    "parent_bom_id": "S6.1",
+    "subsystem": "S6",
+    "part_name": "Kapali cevrim 4 K pulse-tube sogutucu (PT420 2.0 W @ 4.2 K sinifi, yeni)",
+    "design_tier": "COTS_ENV_ICD",
+    "material": "316LN",
+    "temp_stage": "50 K / 4 K",
+    "temp_k": 4.0,
+    "vacuum_grade": "Kriyo-vakum",
+    "tolerance_spec": "±0.05 K",
+    "surface_finish_ra_um": 0.8,
+    "qty": 1,
+    "procurement_class": "COTS",
+    "world_origin_mm": [
+      -650.0,
+      0.0,
+      985.0
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "dr_top_isok",
+        "kind": "flange",
+        "position_mm": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "standard": "ISO-K DN160",
+        "mating_part_id": "S6.8-04",
+        "bore_mm": 153.0,
+        "od_mm": 180.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 4,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "Claw Clamp",
+        "frame": "local",
+        "notes": "ISO 1609 DN160 claw-clamp O-ring"
+      },
+      {
+        "name": "he_flex_inlet",
+        "kind": "gas",
+        "position_mm": [
+          -73.0,
+          0.0,
+          145.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "standard": "Aeroquip 1/2-in He",
+        "mating_part_id": "S6.9-01",
+        "bore_mm": 16.0,
+        "od_mm": 28.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      },
+      {
+        "name": "thermal_45k",
+        "kind": "thermal",
+        "position_mm": [
+          40.0,
+          0.0,
+          -135.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "standard": "OFHC M6 Strap Pad",
+        "mating_part_id": "S6.1-03",
+        "bore_mm": 0.0,
+        "od_mm": 80.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      },
+      {
+        "name": "thermal_4k",
+        "kind": "thermal",
+        "position_mm": [
+          24.0,
+          0.0,
+          -236.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "standard": "OFHC M6 Strap Pad",
+        "mating_part_id": "S6.1-03",
+        "bore_mm": 0.0,
+        "od_mm": 48.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "HEAD_OD",
+        "nominal_mm": 128.0,
+        "tol_plus_mm": 0.2,
+        "tol_minus_mm": -0.2,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø128.00 ±0.20"
+      },
+      {
+        "label": "TOTAL_H",
+        "nominal_mm": 478.0,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "478.00 ±0.50"
+      },
+      {
+        "label": "STG1_OD",
+        "nominal_mm": 80.0,
+        "tol_plus_mm": 0.1,
+        "tol_minus_mm": -0.1,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø80.00 ±0.10"
+      },
+      {
+        "label": "STG2_OD",
+        "nominal_mm": 48.0,
+        "tol_plus_mm": 0.1,
+        "tol_minus_mm": -0.1,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø48.00 ±0.10"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "perpendicularity",
+        "tolerance_mm": 0.05,
+        "diameter_zone": true,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "2nd stage axis",
+        "glyph": "⊥",
+        "tolerance_text": "Ø0.050"
+      },
+      {
+        "symbol": "flatness",
+        "tolerance_mm": 0.02,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "4.2 K cold tip face",
+        "glyph": "⏥",
+        "tolerance_text": "0.020"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "2.0 W @ 4.2 K, 55 W @ 45 K (Exp111 PT420 yukseltmesi)"
+    ],
+    "scad_params": {
+      "head_od": 128.0,
+      "stage1_od": 80.0,
+      "stage2_od": 48.0,
+      "cooling_4k_w": 2.0
+    },
+    "target_mass_kg": 24.0,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact_result": {
+    "part_id": "S6.1-01",
+    "subsystem": "S6",
+    "design_tier": "COTS_ENV_ICD",
+    "stl_path": "hardware/cad_parts/out/S6/S6.1-01.stl",
+    "step_path": "hardware/cad_parts/out/S6/S6.1-01.step",
+    "scad_path": "hardware/cad_parts/out/S6/S6.1-01.scad",
+    "dxf_path": "hardware/cad_parts/out/S6/S6.1-01.dxf",
+    "svg_path": "hardware/cad_parts/out/S6/S6.1-01.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 3242524.239103677,
+    "surface_area_mm2": 207454.88420558313,
+    "mass_kg": 10.37607756513177,
+    "cg_mm": [
+      -0.20272018967111208,
+      1.3863204195368752e-16,
+      69.42061974227406
+    ],
+    "bbox_min_mm": [
+      -90.0,
+      -90.0,
+      -243.0
+    ],
+    "bbox_max_mm": [
+      90.0,
+      90.0,
+      235.0
+    ],
+    "inertia_kg_mm2": [
+      125179.42342346271,
+      125314.07563963,
+      17684.78941071609,
+      -1.8595075948904545e-13,
+      158.9767227514681,
+      1.2729524789250542e-12
+    ],
+    "triangle_count": 2232,
+    "vertex_count": 1124,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "json_path": "hardware/cad_parts/out/S6/S6.1-01.json",
+  "world_bbox_min_mm": [
+    -740.0,
+    -90.0,
+    742.0
+  ],
+  "world_bbox_max_mm": [
+    -560.0,
+    90.0,
+    1220.0
+  ],
+  "world_cg_mm": [
+    -650.2027,
+    0.0,
+    1054.4206
+  ],
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

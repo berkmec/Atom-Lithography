@@ -1,0 +1,229 @@
+{
+  "part_design": {
+    "part_id": "S6.11-04",
+    "parent_bom_id": "S6.11",
+    "subsystem": "S6",
+    "part_name": "Kriyo-Koaksiyel Demet & Zayiflatici Paketi (96 hat: CuNi/NbTi, 0.86 mm, Exp140 S6.5-04, 4.03 kg)",
+    "design_tier": "COTS_ENV_ICD",
+    "material": "CuNi",
+    "temp_stage": "300 K -> 20 mK",
+    "temp_k": 0.02,
+    "vacuum_grade": "Kriyo-vakum",
+    "tolerance_spec": "0.86 mm, <=0.1 dB/m",
+    "surface_finish_ra_um": 0.8,
+    "qty": 96,
+    "procurement_class": "COTS/CUS",
+    "world_origin_mm": [
+      -716.0,
+      0.0,
+      730.0
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "coax96_top_300k",
+        "kind": "rf",
+        "position_mm": [
+          0.0,
+          0.0,
+          228.0
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "96x Hermetic SMP/SMA 300 K Bulkhead",
+        "mating_part_id": "S6.11-01",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      },
+      {
+        "name": "coax96_bot_mxc",
+        "kind": "rf",
+        "position_mm": [
+          0.0,
+          0.0,
+          -228.0
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "standard": "96x Thermalized + Eccosorb MXC Loom",
+        "mating_part_id": "S6.11-02",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "BUNDLE_X",
+        "nominal_mm": 20.0,
+        "tol_plus_mm": 0.2,
+        "tol_minus_mm": -0.2,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "20.00 ±0.20"
+      },
+      {
+        "label": "BUNDLE_Y",
+        "nominal_mm": 68.0,
+        "tol_plus_mm": 0.2,
+        "tol_minus_mm": -0.2,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "68.00 ±0.20"
+      },
+      {
+        "label": "SPAN_Z",
+        "nominal_mm": 456.0,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "456.00 ±0.50"
+      }
+    ],
+    "gdt_frames": [],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "32 RO in + 32 RO out + 32 XY (1024 hucre modulu), 50K=5.76 W (toplam S6.5: 20mK=6.256 uW, 100mK=59.58 uW, 4K=0.488 W, 50K=8.26 W), 95x95x620 mm, kutle=4.03 kg",
+      "Exact BOM part_id S6.11-04 (resolves legacy cad/params.py S6.5 aliasing bug). 96-line (32 RO in + 32 RO out + 32 XY) CuNi/NbTi cryo-coax + stepped attenuators & Eccosorb LPF, 4.03 kg (Exp140)."
+    ],
+    "scad_params": {
+      "n_lines": 96,
+      "coax_od_mm": 0.86,
+      "mass_kg": 4.03
+    },
+    "target_mass_kg": 4.03,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact_result": {
+    "part_id": "S6.11-04",
+    "subsystem": "S6",
+    "design_tier": "COTS_ENV_ICD",
+    "stl_path": "hardware/cad_parts/out/S6/S6.11-04.stl",
+    "step_path": "hardware/cad_parts/out/S6/S6.11-04.step",
+    "scad_path": "hardware/cad_parts/out/S6/S6.11-04.scad",
+    "dxf_path": "hardware/cad_parts/out/S6/S6.11-04.dxf",
+    "svg_path": "hardware/cad_parts/out/S6/S6.11-04.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 79452.14402709117,
+    "surface_area_mm2": 83086.4826851472,
+    "mass_kg": 0.7071240818411116,
+    "cg_mm": [
+      1.0732080556040922e-15,
+      -2.101575769632426e-14,
+      -17.060760079537626
+    ],
+    "bbox_min_mm": [
+      -10.0,
+      -34.0,
+      -228.0
+    ],
+    "bbox_max_mm": [
+      10.0,
+      34.0,
+      228.0
+    ],
+    "inertia_kg_mm2": [
+      14838.188787146839,
+      14433.479782825172,
+      450.18635347374686,
+      9.828244174059349e-15,
+      2.425880986089839e-13,
+      4.360505126278307e-13
+    ],
+    "triangle_count": 5680,
+    "vertex_count": 3020,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "json_path": "hardware/cad_parts/out/S6/S6.11-04.json",
+  "world_bbox_min_mm": [
+    -726.0,
+    -34.0,
+    502.0
+  ],
+  "world_bbox_max_mm": [
+    -706.0,
+    34.0,
+    958.0
+  ],
+  "world_cg_mm": [
+    -716.0,
+    0.0,
+    712.9392
+  ],
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

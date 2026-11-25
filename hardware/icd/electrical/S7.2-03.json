@@ -1,0 +1,86 @@
+{
+  "schema_version": "1.0",
+  "part_id": "S7.2-03",
+  "parent_bom_id": "S7.2",
+  "subsystem": "S7",
+  "part_name": "PXIe / AXIe dusuk-gurultulu enstruman sasisi ve arka-panel",
+  "qty": 1,
+  "unit": "adet",
+  "temp_stage": "300 K (kabin)",
+  "vacuum_grade": "Atmosfer",
+  "bom_key_spec": "10 MHz referans arka-panel, yuksek hava akisi",
+  "usd_nom": 15000.0,
+  "bom_epistemic_tag": "{Model-Kalibrasyon-Exp114}",
+  "electrical_class": "E3",
+  "grounding_domain": "DGND",
+  "grounding_notes": "18-slot 19-in PXIe chassis with <1 ps backplane skew locked to S7.4-01 CH11.",
+  "supply_rails": [
+    {
+      "rail_name": "AC_MAINS_230V",
+      "voltage_v": 230.0,
+      "current_type": "AC_1PH",
+      "max_current_a": 3.5,
+      "steady_power_w": 320.0,
+      "peak_power_w": 600.0,
+      "source_part_id": "S7.4-03"
+    }
+  ],
+  "connectors_and_pinout": [
+    {
+      "connector_ref": "J_10MHZ",
+      "connector_type": "BNC-F 50R External Ref",
+      "location_side": "rack_rear",
+      "mating_part_id": "S7.4-01",
+      "pins": [
+        {
+          "pin": "1",
+          "signal": "CLK_10MHZ_RB_CH11",
+          "direction": "IN",
+          "nominal_level": "Backplane 10 MHz / 100 MHz PLL"
+        }
+      ]
+    },
+    {
+      "connector_ref": "J_PCIE",
+      "connector_type": "MXI-Express Fiber/Copper",
+      "location_side": "front_panel",
+      "mating_part_id": "S7.1-01",
+      "pins": [
+        {
+          "pin": "1-8",
+          "signal": "PXIE_HOST_LINK",
+          "direction": "BIDIR",
+          "nominal_level": "Gen3 x8 host control"
+        }
+      ]
+    }
+  ],
+  "mating_part_ids": [
+    "S7.2-01",
+    "S7.2-02",
+    "S7.4-01",
+    "S7.1-01",
+    "S7.4-03"
+  ],
+  "interlock_hooks": [],
+  "ups_tier": "TIER2_SHED",
+  "ups_budget_group": "AUX_PROCESS_SHED_ON_OUTAGE",
+  "exp150_ups_allocation_w": 0.0,
+  "supply_rails_steady_sum_w": 320.0,
+  "incremental_mains_w": 320.0,
+  "secondary_or_parent_derived_w": 0.0,
+  "non_exp150_aux_shed_w": 320.0,
+  "reconciliation_note": "Non-Exp150 auxiliary sheddable rack/facility load (TIER2_SHED): incremental_mains_w = 320.0 W AC mains (mutually exclusive process/experiment mode, shed immediately on outage; exp150_ups_allocation_w = 0.0 W).",
+  "timing_sync": {
+    "rb_10mhz_port": "CH11",
+    "white_rabbit_port": null,
+    "sync_role": "PXIe 10 MHz backplane distribution"
+  },
+  "epistemic_flags": {
+    "design_maturity": "M0_M1_ELECTRICAL_ICD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

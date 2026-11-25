@@ -1,0 +1,181 @@
+* Atom Lithography Machine - Ion Column HV DAC, 5 kV Filter, 1000:1 Divider & <5 us Trim
+* BOM: S1.3-03, S2.3-04, S6.10-04, S1.1-05, S1.2-03, S1.5-03, S4.5-03
+* Epistemic status: M0/M1 DESIGN_ONLY; no_lab_measurement=true; no_physical_fab=true.
+
+.temp 26.85
+.options reltol=1e-4 vntol=1e-6 abstol=1e-12
+
+* --- High-Speed Low-Noise Op-Amp Macromodel (THS4031 / ADA4898-1: A0=1e5, GBP=100 MHz, en=1.1 nV/rtHz) ---
+.subckt OPAMP_FAST_LN inp inn out
+Cin inp inn 2.0p
+Rin inp inn 100Meg noisy=0
+Rnw nw 0 73.033 temp=26.85
+Evn inp_i inp nw 0 1.0
+Egain n1 0 inp_i inn 1e5
+Rp n1 n2 1k noisy=0
+Cp n2 0 159.155n
+Ebuf n_out 0 n2 0 1.0
+Rout n_out out 5 noisy=0
+.ends OPAMP_FAST_LN
+
+* --- Precision Zero-Drift Op-Amp (OPA211 / ADA4522-1: A0=1e6, GBP=45 MHz, en=1.1 nV/rtHz) ---
+.subckt OPAMP_PREC inp inn out
+Cin inp inn 3.0p
+Rin inp inn 1G noisy=0
+Rnw nw 0 73.033 temp=26.85
+Evn inp_i inp nw 0 1.0
+Egain n1 0 inp_i inn 1e6
+Rp n1 n2 1k noisy=0
+Cp n2 0 3.5368u
+Ebuf n_out 0 n2 0 1.0
+Rout n_out out 10 noisy=0
+.ends OPAMP_PREC
+
+* =========================================================================
+* 1) 5.000 kV 3-STAGE RC + ACTIVE ANTI-PHASE RIPPLE FILTER & 1000:1 DIVIDER
+* =========================================================================
+* 5000.000 V DC + 10 Vpp (5.0 Vpk) 100 kHz HV PSU switching ripple + AC=1 stimulus
+* Compensated DC supply (5001.500 V) accounts for 30 kOhm * 50 uA = 1.500 V divider drop
+* (which the closed-loop HV error amplifier regulates out at hv_out = 5000.000 V).
+Vhv_psu hv_in 0 DC 5001.500 AC 1 SIN(5001.500 5.0 100k 0 0)
+
+* Stage 1..3 RC (3 x 10 kOhm 5 kV MOX + 3 x 10 nF 6 kV WIMA FKP1 w/ 50 mOhm ESR & 15 nH ESL)
+Rhv1 hv_in hv_s1 10k
+Chv1 hv_s1 c1_esr 10n
+Resr1 c1_esr c1_esl 50m
+Lesl1 c1_esl 0 15n
+
+Rhv2 hv_s1 hv_s2 10k
+Chv2 hv_s2 c2_esr 10n
+Resr2 c2_esr c2_esl 50m
+Lesl2 c2_esl 0 15n
+
+Rhv3 hv_s2 hv_out 10k
+Chv3 hv_out c3_esr 10n
+Resr3 c3_esr c3_esl 50m
+Lesl3 c3_esl rip_inj 15n
+
+* Closed-loop active anti-phase ripple cancellation stage:
+* Senses residual AC ripple directly on hv_out via 1.0 nF 6 kV cap and drives bottom of Chv3
+* in negative feedback (G = -10 at 100 kHz -> adds >20 dB rejection on top of passive -107.9 dB!).
+Crip_s hv_out rip_s_ac 1.0n
+Rrip_g rip_s_ac 0 10Meg
+Rrip_in rip_s_ac rip_inn 10.0k
+Rrip_fb rip_amp rip_inn 100k
+Crip_fb rip_amp rip_inn 10p
+Xrip 0 rip_inn rip_amp OPAMP_FAST_LN
+Rrip_inj rip_amp rip_inj 100
+Rrip_dc  rip_inj 0       100k
+
+* Precision Caddock USF370 1000:1 Compensated HV Feedback Divider (99.900 MOhm / 100.00 kOhm)
+* Ratio = 100k / (99.9M + 100k) = 1.000000e-3 exact!
+Rdiv_top hv_out hv_fb 99.9Meg
+Cdiv_top hv_out hv_fb 2.0p
+Rdiv_bot hv_fb  0     100k
+Cdiv_bot hv_fb  0     1.998n
+Xfb_buf  hv_fb  hv_fb_buf hv_fb_buf OPAMP_PREC
+Rfb_load hv_fb_buf 0 1Meg
+
+* High-impedance buffered AC-coupled ripple measurement probe (ZERO loading on hv_out)
+Erip_prb hv_prb_buf 0 hv_out 0 1.0
+Crip_prb hv_prb_buf hv_rip_ac 100n
+Rrip_prb hv_rip_ac  0         10Meg
+
+* Separate passive-only 3-stage reference branch for exact AC comparison (zero active boost)
+Vhv_ref  hv_ref_in 0 DC 5001.500 AC 1
+Rhv1p hv_ref_in hv_p1 10k
+Chv1p hv_p1     cp1   10n
+Resr1p cp1      lp1   50m
+Lesl1p lp1      0     15n
+Rhv2p hv_p1     hv_p2 10k
+Chv2p hv_p2     cp2   10n
+Resr2p cp2      lp2   50m
+Lesl2p lp2      0     15n
+Rhv3p hv_p2     hv_p3 10k
+Chv3p hv_p3     cp3   10n
+Resr3p cp3      lp3   50m
+Lesl3p lp3      0     15n
+Rloadp hv_p3    0     100Meg
+
+* =========================================================================
+* 2) FAST < 5 us ON-THE-FLY INTERFEROMETER DEFLECTOR TRIM SUMMER (S4.5-03)
+* =========================================================================
+* 50 Ohm source stepping 0 -> +2.0 V (1.0 V at terminated 50 Ohm input) at t=2 us (single-shot)
+Vtrim_src trim_src 0 DC 0 PULSE(0 2.0 2u 50n 50n 10m 20m)
+Rtrim_src trim_src trim_in 49.9
+Rtrim_trm trim_in  0       49.9
+* Static 20-bit DAC DC offset = -2.500 V (inverted by summer to +2.500 V baseline)
+Vdac_dc   dac_dc   0 DC -2.500
+Rtrim_in  trim_in  trim_sum 1.0k
+Rtrim_dc  dac_dc   trim_sum 1.0k
+Rtrim_fb  trim_amp trim_sum 1.0k
+Ctrim_fb  trim_amp trim_sum 330p
+Xtrim     0        trim_sum trim_amp OPAMP_FAST_LN
+Rtrim_out trim_amp defl_out 49.9
+Rdefl_ld  defl_out 0        10k
+
+* =========================================================================
+* 3) M4 20-BIT ULTRA-LOW-NOISE DC DIPOLE GATE DAC CHANNEL (S6.10-04)
+* =========================================================================
+* AD5791 output noise modeled as 7.5 nV/rtHz white source (R_eq = 3.395 kOhm @ 300 K)
+Rm4_dac  m4_dac_n 0 3395.1 temp=26.85
+Em4_src  m4_raw   0 m4_dac_n 0 1.0
+Vm4_ac   m4_in    m4_raw DC 0 AC 1
+Rm4_f    m4_in    m4_filt 1.0k
+Cm4_f    m4_filt  0       10n
+Xm4_buf  m4_filt  m4_out  m4_out OPAMP_PREC
+Rm4_load m4_out   0       10k
+
+.control
+set noaskquit
+
+* 1) DC Operating Point: Verify 1000:1 HV feedback divider accuracy
+op
+let hv_dc_v = v(hv_out)
+let hv_fb_dc_v = v(hv_fb_buf)
+let hv_div_ratio = hv_dc_v / hv_fb_dc_v
+let hv_div_err_ppm = abs(hv_div_ratio - 1000.0) / 1000.0 * 1e6
+print hv_dc_v hv_fb_dc_v hv_div_ratio hv_div_err_ppm
+
+* 2) AC Analysis: 3-stage HV ripple rejection at 100 kHz & divider AC ratio
+ac dec 100 1 10Meg
+meas ac hv_atten_100k_db FIND vdb(hv_out) AT=100k
+meas ac hv_passive_100k_db FIND vdb(hv_p3) AT=100k
+meas ac hv_atten_10k_db  FIND vdb(hv_out) AT=10k
+meas ac div_ac_10k_db    FIND vdb(hv_fb_buf) AT=10k
+
+* 3) Transient A: Fast < 5 us Deflector Trim Summer Step Response (t=0..15 us)
+tran 10n 15u 0 10n
+meas tran trim_v_init  FIND v(defl_out) AT=1.5u
+meas tran trim_v_final FIND v(defl_out) AT=14.5u
+let v10_thr = trim_v_init + 0.10 * (trim_v_final - trim_v_init)
+let v90_thr = trim_v_init + 0.90 * (trim_v_final - trim_v_init)
+let v99_thr = trim_v_init + 0.99 * (trim_v_final - trim_v_init)
+meas tran trim_t10 WHEN v(defl_out)=$&v10_thr FALL=1
+meas tran trim_t90 WHEN v(defl_out)=$&v90_thr FALL=1
+meas tran trim_t99 WHEN v(defl_out)=$&v99_thr FALL=1
+let trim_rise_10_90_s = trim_t90 - trim_t10
+let trim_settle_1pct_s = trim_t99 - 2.0u
+print trim_rise_10_90_s trim_settle_1pct_s
+
+* 4) Transient B: Steady-state 5.000 kV + 10 Vpp 100 kHz switching ripple (after 1.5 ms settle)
+tran 250n 1.6m 1.5m 250n
+meas tran hv_out_dc_chk AVG v(hv_out) FROM=1.52m TO=1.60m
+meas tran hv_ac_max MAX v(hv_rip_ac) FROM=1.52m TO=1.60m
+meas tran hv_ac_min MIN v(hv_rip_ac) FROM=1.52m TO=1.60m
+let hv_ripple_vpp = hv_ac_max - hv_ac_min
+print hv_ripple_vpp
+
+* 5) Noise Analysis: M4 20-bit DC dipole gate output noise PSD @ 1 kHz (< 0.5 uV/rtHz)
+* dec 30 from 10 Hz -> index 0=10 Hz, 30=100 Hz, 60=1000 Hz
+noise v(m4_out) Vm4_ac dec 30 10 1Meg
+let m4_onoise_rms_v = onoise_total
+print m4_onoise_rms_v
+setplot previous
+let m4_noise_freq_chk = frequency[60]
+let m4_noise_1khz_v_rthz = onoise_spectrum[60]
+print m4_noise_freq_chk m4_noise_1khz_v_rthz
+
+quit 0
+.endc
+.end

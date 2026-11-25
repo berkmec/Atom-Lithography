@@ -1,0 +1,229 @@
+{
+  "part_design": {
+    "part_id": "S6.3-05",
+    "parent_bom_id": "S6.3",
+    "subsystem": "S6",
+    "part_name": "Cift-kutuplu superiletken miknatis guc kaynagi (±100 A) ve HTS akim uclari",
+    "design_tier": "COTS_ENV_ICD",
+    "material": "Steel",
+    "temp_stage": "300 K -> 4 K",
+    "temp_k": 4.0,
+    "vacuum_grade": "Atmosfer/Kriyo",
+    "tolerance_spec": "±10 ppm",
+    "surface_finish_ra_um": 0.8,
+    "qty": 1,
+    "procurement_class": "COTS",
+    "world_origin_mm": [
+      2100.0,
+      0.0,
+      156.675
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "hts_100a_out",
+        "kind": "electrical",
+        "position_mm": [
+          0.0,
+          292.5,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "standard": "+/-100 A Bi-2223 HTS Pair",
+        "mating_part_id": "S6.3-04",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      },
+      {
+        "name": "rack_bay2_u1_u3",
+        "kind": "mechanical",
+        "position_mm": [
+          0.0,
+          -270.0,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "standard": "19\" EIA-310 3U (U1-U3)",
+        "mating_part_id": "S7.4-03",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "WIDTH_19IN",
+        "nominal_mm": 482.6,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "482.60 ±0.50"
+      },
+      {
+        "label": "DEPTH",
+        "nominal_mm": 562.5,
+        "tol_plus_mm": 1.0,
+        "tol_minus_mm": -1.0,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "562.50 ±1.00"
+      },
+      {
+        "label": "HEIGHT_3U",
+        "nominal_mm": 131.35000000000002,
+        "tol_plus_mm": 0.3,
+        "tol_minus_mm": -0.3,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "131.35 ±0.30"
+      }
+    ],
+    "gdt_frames": [],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "±100 A, 10 ppm kararlik, 4K isi kacagi <50 mW/cift"
+    ],
+    "scad_params": {
+      "rack_u": 3,
+      "bay": 2,
+      "u_start": 1,
+      "i_max_a": 100.0
+    },
+    "target_mass_kg": 22.0,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact_result": {
+    "part_id": "S6.3-05",
+    "subsystem": "S6",
+    "design_tier": "COTS_ENV_ICD",
+    "stl_path": "hardware/cad_parts/out/S6/S6.3-05.stl",
+    "step_path": "hardware/cad_parts/out/S6/S6.3-05.step",
+    "scad_path": "hardware/cad_parts/out/S6/S6.3-05.scad",
+    "dxf_path": "hardware/cad_parts/out/S6/S6.3-05.dxf",
+    "svg_path": "hardware/cad_parts/out/S6/S6.3-05.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 2830827.0496672723,
+    "surface_area_mm2": 1930487.4740700903,
+    "mass_kg": 22.221992339888107,
+    "cg_mm": [
+      -6.017489471258376e-14,
+      -10.393044497639709,
+      -8.398128208784176
+    ],
+    "bbox_min_mm": [
+      -241.3,
+      -282.05,
+      -65.67500000000001
+    ],
+    "bbox_max_mm": [
+      241.3,
+      292.5,
+      65.67500000000001
+    ],
+    "inertia_kg_mm2": [
+      726014.9389312735,
+      495788.43408883753,
+      1122680.0655796602,
+      -7.968165032388704e-11,
+      -4.1028158198250225e-11,
+      2322.1600443304515
+    ],
+    "triangle_count": 1324,
+    "vertex_count": 672,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "json_path": "hardware/cad_parts/out/S6/S6.3-05.json",
+  "world_bbox_min_mm": [
+    1858.7,
+    -282.05,
+    91.0
+  ],
+  "world_bbox_max_mm": [
+    2341.3,
+    292.5,
+    222.35
+  ],
+  "world_cg_mm": [
+    2100.0,
+    -10.393,
+    148.2769
+  ],
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

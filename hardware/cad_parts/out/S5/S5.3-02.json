@@ -1,0 +1,241 @@
+{
+  "part_id": "S5.3-02",
+  "subsystem": "S5",
+  "design": {
+    "part_id": "S5.3-02",
+    "parent_bom_id": "S5.3",
+    "subsystem": "S5",
+    "part_name": "Safir / erimis-silika UHV tavlama optik penceresi ve odak aynalari",
+    "design_tier": "COTS_ENV_ICD",
+    "material": "316LN",
+    "temp_stage": "300 K",
+    "temp_k": 300.0,
+    "vacuum_grade": "UHV 1e-9 mbar",
+    "tolerance_spec": "lambda/4",
+    "surface_finish_ra_um": 0.4,
+    "qty": 1,
+    "procurement_class": "COTS",
+    "world_origin_mm": [
+      -211.0452,
+      177.088,
+      500.0
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      140.0
+    ],
+    "ports": [
+      {
+        "name": "chamber_cf100_mate",
+        "kind": "flange",
+        "position_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "standard": "CF100",
+        "mating_part_id": "S5.1-01",
+        "bore_mm": 88.0,
+        "od_mm": 152.0,
+        "pcd_mm": 130.2,
+        "bolt_count": 16,
+        "bolt_hole_mm": 8.4,
+        "bolt_spec": "M8",
+        "frame": "local",
+        "notes": "ISO 3669 CF100 Cu-gasket knife-edge"
+      },
+      {
+        "name": "lamp_head_mount",
+        "kind": "optical",
+        "position_mm": [
+          78.0,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "standard": "Dia 128 mm Kinematic Barrel",
+        "mating_part_id": "S5.3-01",
+        "bore_mm": 88.0,
+        "od_mm": 128.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "CF100_OD",
+        "nominal_mm": 152.0,
+        "tol_plus_mm": 0.15,
+        "tol_minus_mm": -0.15,
+        "view": "right",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø152.00 ±0.15"
+      },
+      {
+        "label": "CLEAR_AP",
+        "nominal_mm": 88.0,
+        "tol_plus_mm": 0.1,
+        "tol_minus_mm": -0.1,
+        "view": "right",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø88.00 ±0.10"
+      },
+      {
+        "label": "ASSY_LEN",
+        "nominal_mm": 78.0,
+        "tol_plus_mm": 0.25,
+        "tol_minus_mm": -0.25,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "78.00 ±0.25"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "flatness",
+        "tolerance_mm": 0.015,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "Quartz optical window seat (lambda/4)",
+        "glyph": "⏥",
+        "tolerance_text": "0.015"
+      },
+      {
+        "symbol": "concentricity",
+        "tolerance_mm": 0.08,
+        "diameter_zone": true,
+        "material_condition": "",
+        "datum_primary": "B",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "Focusing barrel to CF100 bore",
+        "glyph": "◎",
+        "tolerance_text": "Ø0.080"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "Yuksek optik guc dayanimi (>10 J/cm2), genis bant gecirgenlik",
+      "CF100 UV-IR fused-silica optical viewport (Dia 88 mm CA, >10 J/cm^2 LIDT, lambda/4) + focusing barrel.",
+      "Mates S5.1-01 140 deg CF100 port with 0.5 mm compressed OFHC Cu gasket gap."
+    ],
+    "scad_params": {
+      "clear_aperture_mm": 88.0,
+      "window_d_mm": 96.0,
+      "barrel_l_mm": 58.0
+    },
+    "target_mass_kg": 3.2,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifacts": {
+    "part_id": "S5.3-02",
+    "subsystem": "S5",
+    "design_tier": "COTS_ENV_ICD",
+    "stl_path": "hardware/cad_parts/out/S5/S5.3-02.stl",
+    "step_path": "hardware/cad_parts/out/S5/S5.3-02.step",
+    "scad_path": "hardware/cad_parts/out/S5/S5.3-02.scad",
+    "dxf_path": "hardware/cad_parts/out/S5/S5.3-02.dxf",
+    "svg_path": "hardware/cad_parts/out/S5/S5.3-02.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 602100.5494379969,
+    "surface_area_mm2": 131441.95690051914,
+    "mass_kg": 3.2513429669651845,
+    "cg_mm": [
+      34.2632020785282,
+      4.8337159771568605e-17,
+      -3.1811893274663587e-15
+    ],
+    "bbox_min_mm": [
+      0.0,
+      -76.0,
+      -76.0
+    ],
+    "bbox_max_mm": [
+      78.0,
+      76.0,
+      76.0
+    ],
+    "inertia_kg_mm2": [
+      9636.476431467261,
+      6872.616813513708,
+      6872.616813513717,
+      -9.763400037702951e-14,
+      -1.0473926460495401e-13,
+      1.2541422620415688e-13
+    ],
+    "triangle_count": 2416,
+    "vertex_count": 1184,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

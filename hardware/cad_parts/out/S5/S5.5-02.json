@@ -1,0 +1,283 @@
+{
+  "part_id": "S5.5-02",
+  "subsystem": "S5",
+  "design": {
+    "part_id": "S5.5-02",
+    "parent_bom_id": "S5.5",
+    "subsystem": "S5",
+    "part_name": "CF63 +Y ekvatoral (Z=500 mm) AR-kapli safir vakum penceresi ve optik flans (Exp130)",
+    "design_tier": "COTS_ENV_ICD",
+    "material": "316LN",
+    "temp_stage": "300 K",
+    "temp_k": 300.0,
+    "vacuum_grade": "UHV 1e-9 mbar",
+    "tolerance_spec": "lambda/10, He<=1e-10",
+    "surface_finish_ra_um": 0.1,
+    "qty": 1,
+    "procurement_class": "COTS/CUS",
+    "world_origin_mm": [
+      0.0,
+      295.5,
+      500.0
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "chamber_pos_y_cf63",
+        "kind": "flange",
+        "position_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "standard": "CF63",
+        "mating_part_id": "S5.1-01",
+        "bore_mm": 44.0,
+        "od_mm": 113.5,
+        "pcd_mm": 92.1,
+        "bolt_count": 8,
+        "bolt_hole_mm": 8.4,
+        "bolt_spec": "M8",
+        "frame": "local",
+        "notes": "ISO 3669 CF63 Cu-gasket knife-edge"
+      },
+      {
+        "name": "optical_808nm_in",
+        "kind": "optical",
+        "position_mm": [
+          0.0,
+          17.5,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "standard": "Dia 44 mm CA AR@808nm",
+        "mating_part_id": "S5.5-04",
+        "bore_mm": 44.0,
+        "od_mm": 50.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "CF63_OD",
+        "nominal_mm": 113.5,
+        "tol_plus_mm": 0.1,
+        "tol_minus_mm": -0.1,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø113.50 ±0.10"
+      },
+      {
+        "label": "CF63_PCD",
+        "nominal_mm": 92.1,
+        "tol_plus_mm": 0.1,
+        "tol_minus_mm": -0.1,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": true,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "[Ø92.10]"
+      },
+      {
+        "label": "CLEAR_AP",
+        "nominal_mm": 44.0,
+        "tol_plus_mm": 0.05,
+        "tol_minus_mm": -0.05,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø44.00 ±0.05"
+      },
+      {
+        "label": "WIN_OD",
+        "nominal_mm": 50.0,
+        "tol_plus_mm": 0.05,
+        "tol_minus_mm": -0.05,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø50.00 ±0.05"
+      },
+      {
+        "label": "FLANGE_T",
+        "nominal_mm": 17.5,
+        "tol_plus_mm": 0.1,
+        "tol_minus_mm": -0.1,
+        "view": "right",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "17.50 ±0.10"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "flatness",
+        "tolerance_mm": 0.005,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "Sapphire optical face (lambda/10 @ 808 nm)",
+        "glyph": "⏥",
+        "tolerance_text": "0.005"
+      },
+      {
+        "symbol": "perpendicularity",
+        "tolerance_mm": 0.02,
+        "diameter_zone": true,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "Dia 44 mm clear aperture to CF63 sealing face",
+        "glyph": "⊥",
+        "tolerance_text": "Ø0.020"
+      },
+      {
+        "symbol": "concentricity",
+        "tolerance_mm": 0.05,
+        "diameter_zone": true,
+        "material_condition": "",
+        "datum_primary": "B",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "Window counterbore seat to CF63 PCD",
+        "glyph": "◎",
+        "tolerance_text": "Ø0.050"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "Temiz aciklik Ø44 mm, demet Ø36 mm (4 mm radyal pay), n(808nm)=1.760, T_AR=98.0%, F_win=10.56-11.16 J/cm2 (8.96-9.47x LIDT @ 100 J/cm2)",
+      "Exp130/139 S5.5 +Y Z=500 mm CF63 AR sapphire viewport: Dia 50x8 mm, Dia 44 mm CA (4.0 mm radial margin to Dia 36 mm beam).",
+      "n(808nm)=1.760, T_AR=98.0%, F_win=11.16 J/cm^2 (8.96x LIDT @ 100 J/cm^2); He leak <= 1e-10 mbar*L/s.",
+      "Leaves full +Y wrap-around clearance for S7.SAFETY-02 (280x260x220 mm) OD8 + 3 mm steel shroud."
+    ],
+    "scad_params": {
+      "cf63_od": 113.5,
+      "clear_aperture_mm": 44.0,
+      "sapphire_d": 50.0,
+      "sapphire_t": 8.0
+    },
+    "target_mass_kg": 1.1,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifacts": {
+    "part_id": "S5.5-02",
+    "subsystem": "S5",
+    "design_tier": "COTS_ENV_ICD",
+    "stl_path": "hardware/cad_parts/out/S5/S5.5-02.stl",
+    "step_path": "hardware/cad_parts/out/S5/S5.5-02.step",
+    "scad_path": "hardware/cad_parts/out/S5/S5.5-02.scad",
+    "dxf_path": "hardware/cad_parts/out/S5/S5.5-02.dxf",
+    "svg_path": "hardware/cad_parts/out/S5/S5.5-02.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 147741.33770784698,
+    "surface_area_mm2": 33734.287814283656,
+    "mass_kg": 1.1080600328088523,
+    "cg_mm": [
+      -1.671352211658193e-15,
+      9.386559555590157,
+      -4.98789366296888e-15
+    ],
+    "bbox_min_mm": [
+      -56.75,
+      0.0,
+      -56.75
+    ],
+    "bbox_max_mm": [
+      56.75,
+      17.5,
+      56.75
+    ],
+    "inertia_kg_mm2": [
+      963.4860624746726,
+      1873.6366554341919,
+      963.486062474673,
+      2.923223387305865e-15,
+      1.2063310350640686e-14,
+      -5.0496293260382056e-14
+    ],
+    "triangle_count": 896,
+    "vertex_count": 434,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

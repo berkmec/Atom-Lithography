@@ -1,0 +1,98 @@
+{
+  "schema_version": "part_icd_v1.0",
+  "part_id": "S5.1-03",
+  "parent_bom_id": "S5.1",
+  "subsystem": "S5",
+  "part_name": "Hizli giris yuk kilidi (load-lock) odasi ve CF100 tam-metal surgu vana",
+  "part_category": "PHYSICAL_SOLID",
+  "bom_metadata": {
+    "qty": "1",
+    "unit": "set",
+    "material": "316LN SS + VAT tam-metal kapi vanasi",
+    "key_spec": "Yonga degisimi <15 dk, ana oda vakumunu bozmadan transfer",
+    "tolerance": "He <=1e-10 mbar*L/s",
+    "temp_stage": "300 K",
+    "vacuum_grade": "UHV 1e-8 mbar",
+    "procurement_class": "COTS/CUS",
+    "parent_cost_class": "C",
+    "usd_low": 10000.0,
+    "usd_nom": 17000.0,
+    "usd_high": 31000.0,
+    "legacy_cad_module": "s5_uhv_chamber_loadlock",
+    "bom_epistemic_tag": "{Model-Kalibrasyon-Exp114}",
+    "notes": "Ana odayi atmosferden izole eden yukleme kilidi"
+  },
+  "artifact_links": {
+    "cad": {
+      "work_package": "WP-M3",
+      "design_tier": "COTS_ENV_ICD",
+      "stl": "hardware/cad_parts/out/S5/S5.1-03.stl",
+      "step": "hardware/cad_parts/out/S5/S5.1-03.step",
+      "scad": "hardware/cad_parts/out/S5/S5.1-03.scad",
+      "dxf": "hardware/cad_parts/out/S5/S5.1-03.dxf",
+      "svg": "hardware/cad_parts/out/S5/S5.1-03.svg",
+      "cad_json": "hardware/cad_parts/out/S5/S5.1-03.json",
+      "watertight": true,
+      "all_6_files_valid": true,
+      "mass_kg": 26.645489,
+      "triangle_count": 7944,
+      "temp_k": 300.0,
+      "canonical_bbox_min_mm": [
+        250.5,
+        -131.0,
+        0.0
+      ],
+      "canonical_bbox_max_mm": [
+        510.0,
+        116.85,
+        658.2
+      ],
+      "datum_shift_mm": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "port_count": 6,
+      "gdt_frame_count": 2
+    },
+    "pcb_bundles": [],
+    "legacy_board_files": [],
+    "electrical_icd": {
+      "path": "hardware/icd/electrical/S5.1-03.json",
+      "electrical_class": "E4",
+      "grounding_domain": "FACILITY_PE",
+      "ups_tier": "TIER1_CRITICAL",
+      "exp150_ups_allocation_w": 65.0,
+      "mating_part_ids": [
+        "S5.1-01",
+        "S5.1-04",
+        "S7.SAFETY-03",
+        "S7.SAFETY-04",
+        "S7.SAFETY-06"
+      ],
+      "interlock_hooks_count": 1
+    },
+    "rtl_modules": [],
+    "rtl_audit_json": null,
+    "software_and_eda_files": [],
+    "verification_tests": []
+  },
+  "specialized_specification": null,
+  "verification_status": {
+    "cad_verified": true,
+    "pcb_verified": false,
+    "electrical_icd_verified": true,
+    "rtl_verified": false,
+    "software_or_eda_verified": false,
+    "specialized_icd_present": false,
+    "traceable": true
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "tapeout_done": false
+  }
+}

@@ -1,0 +1,116 @@
+{
+  "schema_version": "part_icd_v1.0",
+  "part_id": "S6.6-03",
+  "parent_bom_id": "S6.6",
+  "subsystem": "S6",
+  "part_name": "Giris kriyo koaksiyel (SS) + 3x kriyo zayiflatici seti (56 zincir, Exp114)",
+  "part_category": "PHYSICAL_SOLID",
+  "bom_metadata": {
+    "qty": "56",
+    "unit": "set",
+    "material": "SS304 0.086 inc koaksiyel + 3x kriyo att.",
+    "key_spec": "Ton gucu <=-100 dBm/kanal (Exp113), 4K yuku <=1 mW/hat (Exp110)",
+    "tolerance": "±1 dB",
+    "temp_stage": "300 K -> 20 mK",
+    "vacuum_grade": "Kriyo-vakum",
+    "procurement_class": "COTS",
+    "parent_cost_class": "D",
+    "usd_low": 67200.0,
+    "usd_nom": 100800.0,
+    "usd_high": 140000.0,
+    "legacy_cad_module": "s6_cryo_dr_magnet_readout",
+    "bom_epistemic_tag": "{Model-Kalibrasyon-Exp114}",
+    "notes": "EXP114 ZINCIR-3/6: 56 x $1,800 ($1,200-$2,500/set); zayif piyasa capasi"
+  },
+  "artifact_links": {
+    "cad": {
+      "work_package": "WP-M4",
+      "design_tier": "COTS_ENV_ICD",
+      "stl": "hardware/cad_parts/out/S6/S6.6-03.stl",
+      "step": "hardware/cad_parts/out/S6/S6.6-03.step",
+      "scad": "hardware/cad_parts/out/S6/S6.6-03.scad",
+      "dxf": "hardware/cad_parts/out/S6/S6.6-03.dxf",
+      "svg": "hardware/cad_parts/out/S6/S6.6-03.svg",
+      "cad_json": "hardware/cad_parts/out/S6/S6.6-03.json",
+      "watertight": true,
+      "all_6_files_valid": true,
+      "mass_kg": 0.490508,
+      "triangle_count": 3040,
+      "temp_k": 0.02,
+      "canonical_bbox_min_mm": [
+        -672.0,
+        65.0,
+        502.0
+      ],
+      "canonical_bbox_max_mm": [
+        -628.0,
+        87.0,
+        836.0
+      ],
+      "datum_shift_mm": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "port_count": 0,
+      "gdt_frame_count": 0
+    },
+    "pcb_bundles": [
+      {
+        "bundle_slug": "cryo_rf_harness_icd",
+        "verification_json": "hardware/pcb/cryo_rf_harness_icd/cryo_rf_thermal_attenuation.json",
+        "boards": [
+          "cryo_rf_bias_panel"
+        ],
+        "kicad_sch_files": [
+          "hardware/pcb/cryo_rf_harness_icd/cryo_rf_bias_panel.kicad_sch"
+        ],
+        "kicad_pcb_files": [
+          "hardware/pcb/cryo_rf_harness_icd/cryo_rf_bias_panel.kicad_pcb"
+        ],
+        "spice_decks": [
+          "hardware/pcb/cryo_rf_harness_icd/magnet_quench_dump_1p563ohm.cir",
+          "hardware/pcb/cryo_rf_harness_icd/qram_chebyshev_50_to_3k.cir",
+          "hardware/pcb/cryo_rf_harness_icd/rf_set_tank_biastee.cir"
+        ],
+        "all_passed": true
+      }
+    ],
+    "legacy_board_files": [],
+    "electrical_icd": {
+      "path": "hardware/icd/electrical/S6.6-03.json",
+      "electrical_class": "E2",
+      "grounding_domain": "CRYO_OVC",
+      "ups_tier": "NONE",
+      "exp150_ups_allocation_w": 0.0,
+      "mating_part_ids": [
+        "S6.6-06",
+        "S6.6-07",
+        "S6.8-04"
+      ],
+      "interlock_hooks_count": 0
+    },
+    "rtl_modules": [],
+    "rtl_audit_json": null,
+    "software_and_eda_files": [],
+    "verification_tests": []
+  },
+  "specialized_specification": null,
+  "verification_status": {
+    "cad_verified": true,
+    "pcb_verified": true,
+    "electrical_icd_verified": true,
+    "rtl_verified": false,
+    "software_or_eda_verified": false,
+    "specialized_icd_present": false,
+    "traceable": true
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "tapeout_done": false
+  }
+}

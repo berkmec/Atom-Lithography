@@ -1,0 +1,76 @@
+{
+  "schema_version": "1.0",
+  "part_id": "S2.5-02",
+  "parent_bom_id": "S2.5",
+  "subsystem": "S2",
+  "part_name": "Kinematik piezo egim/Z kafa hizalama tutucusu (2.59 MHz rijit)",
+  "qty": 1,
+  "unit": "set",
+  "temp_stage": "300 K",
+  "vacuum_grade": "UHV 1e-9 mbar",
+  "bom_key_spec": "Tip/tilt \u00b11 mrad, Z \u00b1100 um, modal f1>=2.59 MHz (Exp84)",
+  "usd_nom": 12000.0,
+  "bom_epistemic_tag": "{Model-Kalibrasyon-Exp114}",
+  "electrical_class": "E4",
+  "grounding_domain": "AGND",
+  "grounding_notes": "Kinematic Invar-36 UHV piezo tip/tilt/Z head aligner (f1>=2.59 MHz, \u00b10.1 urad).",
+  "supply_rails": [
+    {
+      "rail_name": "PIEZO_HEAD_120V",
+      "voltage_v": 120.0,
+      "current_type": "DC",
+      "max_current_a": 0.05,
+      "steady_power_w": 2.0,
+      "peak_power_w": 6.0,
+      "source_part_id": "S4.3-04"
+    }
+  ],
+  "connectors_and_pinout": [
+    {
+      "connector_ref": "J_HEAD_PZT",
+      "connector_type": "UHV 9-Pin Micro-D",
+      "location_side": "write_head_uhv",
+      "mating_part_id": "S4.3-04",
+      "pins": [
+        {
+          "pin": "1-6",
+          "signal": "HEAD_PZT_TTZ[0:2]",
+          "direction": "IN",
+          "nominal_level": "0-120 V tip/tilt/Z actuators"
+        },
+        {
+          "pin": "7-9",
+          "signal": "SG_FB_RETURN",
+          "direction": "OUT",
+          "nominal_level": "Strain-gauge feedback"
+        }
+      ]
+    }
+  ],
+  "mating_part_ids": [
+    "S2.5-01",
+    "S2.5-03",
+    "S4.3-04"
+  ],
+  "interlock_hooks": [],
+  "ups_tier": "NONE",
+  "ups_budget_group": "PASSIVE_ZERO_MAINS",
+  "exp150_ups_allocation_w": 0.0,
+  "supply_rails_steady_sum_w": 2.0,
+  "incremental_mains_w": 0.0,
+  "secondary_or_parent_derived_w": 2.0,
+  "non_exp150_aux_shed_w": 0.0,
+  "reconciliation_note": "Passive or downstream sub-assembly (2.00 W sub-rail power drawn from upstream source S4.3-04); incremental_mains_w = 0.0 W (zero double-counting).",
+  "timing_sync": {
+    "rb_10mhz_port": null,
+    "white_rabbit_port": null,
+    "sync_role": "Quasi-static head alignment"
+  },
+  "epistemic_flags": {
+    "design_maturity": "M0_M1_ELECTRICAL_ICD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

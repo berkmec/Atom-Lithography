@@ -1,0 +1,75 @@
+{
+  "schema_version": "part_icd_v1.0",
+  "part_id": "S6.10-02",
+  "parent_bom_id": "S6.10",
+  "subsystem": "S6",
+  "part_name": "Δz_cap* = 8 ± 1 nm harici 28Si epi kaplama lotu [v5.0'da S5.6 yerinde MBE ile degistirildi — $0]",
+  "part_category": "SUPERSEDED_ZERO_DOLLAR_POINTER",
+  "bom_metadata": {
+    "qty": "10",
+    "unit": "yonga",
+    "material": "28Si (>99.95%) — S5.6 yerinde MBE'ye tasindi",
+    "key_spec": "v4.0 harici kaplama lotu v5.0'da S5.6 (22.4 kg, $95k, >1000 yonga) ile yer degistirdi; cift-sayim kredisi -$30k/-$54k/-$102k",
+    "tolerance": "±0.3 nm (S5.6)",
+    "temp_stage": "300 K (fab) -> 20 mK",
+    "vacuum_grade": "UHV / MBE",
+    "procurement_class": "CUS/R&D",
+    "parent_cost_class": "D(v4.0)",
+    "usd_low": 0.0,
+    "usd_nom": 0.0,
+    "usd_high": 0.0,
+    "legacy_cad_module": "s6_cryo_dr_magnet_readout",
+    "bom_epistemic_tag": "{Varsayım}",
+    "notes": "SUPERSEDED-BY-V5.0 (DELTA-V4.0-EXP131 M4 2/4 harici kaplama lotu S5.6 yerinde 28Si UHV MBE capper ile degistirildi; cift-sayim kredisi -$30k/-$54k/-$102k; RFQ-07->RFQ-08)"
+  },
+  "artifact_links": {
+    "cad": null,
+    "pcb_bundles": [],
+    "legacy_board_files": [],
+    "electrical_icd": null,
+    "rtl_modules": [],
+    "rtl_audit_json": null,
+    "software_and_eda_files": [],
+    "verification_tests": []
+  },
+  "specialized_specification": {
+    "kind": "SUPERSEDED_ZERO_DOLLAR_POINTER",
+    "superseded_in_version": "v5.0",
+    "active_replacement_part_ids": [
+      "S5.6-01",
+      "S5.6-02",
+      "S5.6-03",
+      "S5.6-04"
+    ],
+    "anti_double_count_credit_usd": {
+      "low": -30000.0,
+      "nom": -54000.0,
+      "high": -102000.0
+    },
+    "rationale": "v4.0 external 28Si epitaxial capping foundry lot was replaced in v5.0+ by the in-situ UHV 28Si LT-MBE capper subsystem (S5.6-01..04, 22.4 kg, $95,000 nom, >1,000 wafer capacity without vacuum break); retained at $0 in BOM_DETAILED.csv for strict cross-version audit continuity.",
+    "reference_artifacts": [
+      "hardware/cad_parts/out/S5/S5.6-01.json",
+      "hardware/cad_parts/out/S5/S5.6-02.json",
+      "hardware/cad_parts/out/S5/S5.6-03.json",
+      "hardware/cad_parts/out/S5/S5.6-04.json",
+      "results/exp139_epi_cap_process_integration/exp139.json"
+    ]
+  },
+  "verification_status": {
+    "cad_verified": false,
+    "pcb_verified": false,
+    "electrical_icd_verified": false,
+    "rtl_verified": false,
+    "software_or_eda_verified": false,
+    "specialized_icd_present": true,
+    "traceable": true
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "tapeout_done": false
+  }
+}

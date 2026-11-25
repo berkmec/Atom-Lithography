@@ -1,0 +1,96 @@
+{
+  "schema_version": "1.0",
+  "part_id": "S6.6-03",
+  "parent_bom_id": "S6.6",
+  "subsystem": "S6",
+  "part_name": "Giris kriyo koaksiyel (SS) + 3x kriyo zayiflatici seti (56 zincir, Exp114)",
+  "qty": 56,
+  "unit": "set",
+  "temp_stage": "300 K -> 20 mK",
+  "vacuum_grade": "Kriyo-vakum",
+  "bom_key_spec": "Ton gucu <=-100 dBm/kanal (Exp113), 4K yuku <=1 mW/hat (Exp110)",
+  "usd_nom": 100800.0,
+  "bom_epistemic_tag": "{Model-Kalibrasyon-Exp114}",
+  "electrical_class": "E2",
+  "grounding_domain": "CRYO_OVC",
+  "grounding_notes": "56x SS304 0.086 in input coax looms with -20/-10/-10/-20 dB thermalized attenuators.",
+  "supply_rails": [
+    {
+      "rail_name": "PASSIVE_ATT_COAX",
+      "voltage_v": 0.0,
+      "current_type": "RF",
+      "max_current_a": 0.001,
+      "steady_power_w": 0.0,
+      "peak_power_w": 0.001,
+      "source_part_id": "S6.6-06"
+    }
+  ],
+  "connectors_and_pinout": [
+    {
+      "connector_ref": "J_300K",
+      "connector_type": "SMA-F Hermetic Bulkhead (56x)",
+      "location_side": "300K_OVC",
+      "mating_part_id": "S6.6-06",
+      "pins": [
+        {
+          "pin": "1",
+          "signal": "RO_DRIVE_300K[0:55]",
+          "direction": "IN",
+          "nominal_level": "<= -40 dBm/tone @ 300 K"
+        },
+        {
+          "pin": "2",
+          "signal": "OVC_SHIELD",
+          "direction": "PWR",
+          "nominal_level": "0 V CRYO_OVC"
+        }
+      ]
+    },
+    {
+      "connector_ref": "J_20MK",
+      "connector_type": "SMP-M 50R Cryo (56x)",
+      "location_side": "20mK_MXC",
+      "mating_part_id": "S6.6-07",
+      "pins": [
+        {
+          "pin": "1",
+          "signal": "RO_DRIVE_MXC[0:55]",
+          "direction": "OUT",
+          "nominal_level": "<= -100 dBm/tone @ 20 mK"
+        },
+        {
+          "pin": "2",
+          "signal": "MXC_GND",
+          "direction": "PWR",
+          "nominal_level": "0 V CRYO_OVC"
+        }
+      ]
+    }
+  ],
+  "mating_part_ids": [
+    "S6.6-06",
+    "S6.6-07",
+    "S6.8-04"
+  ],
+  "interlock_hooks": [],
+  "ups_tier": "NONE",
+  "ups_budget_group": "PASSIVE_ZERO_MAINS",
+  "exp150_ups_allocation_w": 0.0,
+  "supply_rails_steady_sum_w": 0.0,
+  "incremental_mains_w": 0.0,
+  "secondary_or_parent_derived_w": 0.0,
+  "non_exp150_aux_shed_w": 0.0,
+  "reconciliation_note": "Passive or downstream sub-assembly (0.00 W sub-rail power drawn from upstream source S6.6-06); incremental_mains_w = 0.0 W (zero double-counting).",
+  "timing_sync": {
+    "rb_10mhz_port": null,
+    "white_rabbit_port": null,
+    "sync_role": "Attenuated readout drive loom"
+  },
+  "epistemic_flags": {
+    "design_maturity": "M0_M1_ELECTRICAL_ICD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

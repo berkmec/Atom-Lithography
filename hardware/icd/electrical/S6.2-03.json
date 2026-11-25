@@ -1,0 +1,106 @@
+{
+  "schema_version": "1.0",
+  "part_id": "S6.2-03",
+  "parent_bom_id": "S6.2",
+  "subsystem": "S6",
+  "part_name": "Cernox / RuO2 kriyojenik termometri seti ve PID isitici kontroloru",
+  "qty": 1,
+  "unit": "set",
+  "temp_stage": "20 mK - 300 K",
+  "vacuum_grade": "Kriyo-vakum",
+  "bom_key_spec": "10 mK - 300 K kalibreli okuma (50K, 4K, Still, CP, MXC)",
+  "usd_nom": 6500.0,
+  "bom_epistemic_tag": "{Model-Kalibrasyon-Exp114}",
+  "electrical_class": "E3",
+  "grounding_domain": "CRYO_OVC",
+  "grounding_notes": "Lake Shore 372/336 AC-resistance bridge & 8x Cernox/RuO2 thermometry on Tier-1 UPS.",
+  "supply_rails": [
+    {
+      "rail_name": "AC_UPS_TIER1",
+      "voltage_v": 230.0,
+      "current_type": "AC_1PH",
+      "max_current_a": 0.4,
+      "steady_power_w": 60.0,
+      "peak_power_w": 100.0,
+      "source_part_id": "S7.SAFETY-04"
+    }
+  ],
+  "connectors_and_pinout": [
+    {
+      "connector_ref": "J_THERM",
+      "connector_type": "Fischer 104 / Micro-D 25-Pin Cryo",
+      "location_side": "rack_rear",
+      "mating_part_id": "S6.8-04",
+      "pins": [
+        {
+          "pin": "1-16",
+          "signal": "CERNOX_RUO2_4W[0:7]",
+          "direction": "IN",
+          "nominal_level": "50K/4K/Still/CP/MXC 10 mK-300 K"
+        },
+        {
+          "pin": "17-20",
+          "signal": "MXC_PID_HEATER",
+          "direction": "OUT",
+          "nominal_level": "0-100 mW PID heater"
+        },
+        {
+          "pin": "21",
+          "signal": "CRYO_OVC_SHIELD",
+          "direction": "PWR",
+          "nominal_level": "0 V CRYO_OVC"
+        }
+      ]
+    },
+    {
+      "connector_ref": "J_ILK",
+      "connector_type": "DB9 Alarm Relay",
+      "location_side": "rack_rear",
+      "mating_part_id": "S7.SAFETY-03",
+      "pins": [
+        {
+          "pin": "1-2",
+          "signal": "MXC_LT_1K_INTERLOCK",
+          "direction": "OUT",
+          "nominal_level": "Blocks S5.5 laser when MXC < 1 K"
+        }
+      ]
+    }
+  ],
+  "mating_part_ids": [
+    "S6.2-01",
+    "S6.8-01",
+    "S6.8-04",
+    "S5.5-04",
+    "S7.SAFETY-03",
+    "S7.SAFETY-04"
+  ],
+  "interlock_hooks": [
+    {
+      "signal_name": "MXC_BELOW_1K_LASER_BLOCK",
+      "target_part_id": "S5.5-04",
+      "action_on_trip": "Hard-inhibit 808 nm flash laser while cold",
+      "response_time_ms": 5.0
+    }
+  ],
+  "ups_tier": "TIER1_CRITICAL",
+  "ups_budget_group": "EXP150_TIER1_CRITICAL",
+  "exp150_ups_allocation_w": 60.0,
+  "supply_rails_steady_sum_w": 60.0,
+  "incremental_mains_w": 60.0,
+  "secondary_or_parent_derived_w": 0.0,
+  "non_exp150_aux_shed_w": 0.0,
+  "reconciliation_note": "Exp150 Tier-1 critical UPS load: incremental_mains_w = exp150_ups_allocation_w = 60.0 W.",
+  "timing_sync": {
+    "rb_10mhz_port": null,
+    "white_rabbit_port": null,
+    "sync_role": "1 Hz 5-stage cryo thermometry"
+  },
+  "epistemic_flags": {
+    "design_maturity": "M0_M1_ELECTRICAL_ICD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

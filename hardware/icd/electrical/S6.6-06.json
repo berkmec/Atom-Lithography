@@ -1,0 +1,106 @@
+{
+  "schema_version": "1.0",
+  "part_id": "S6.6-06",
+  "parent_bom_id": "S6.6",
+  "subsystem": "S6",
+  "part_name": "RFSoC cogullamali sayisallastirici / AWG kartlari (AMD ZCU216, 14 kart = 56/4)",
+  "qty": 14,
+  "unit": "kart",
+  "temp_stage": "300 K (kabin)",
+  "vacuum_grade": "Atmosfer",
+  "bom_key_spec": "4 hat/kart varsayimi (56 hat = 14 kart; Exp114 $14,394/kart)",
+  "usd_nom": 201600.0,
+  "bom_epistemic_tag": "{Liste-\u00c7apas\u0131}",
+  "electrical_class": "E3",
+  "grounding_domain": "DGND",
+  "grounding_notes": "14x AMD ZCU216 RFSoC digitizer/AWG boards (56 chains, 14-bit ADC/DAC) locked to Rb Ch-12 & WR.",
+  "supply_rails": [
+    {
+      "rail_name": "AC_MAINS_230V",
+      "voltage_v": 230.0,
+      "current_type": "AC_1PH",
+      "max_current_a": 4.5,
+      "steady_power_w": 630.0,
+      "peak_power_w": 840.0,
+      "source_part_id": "S7.4-03"
+    }
+  ],
+  "connectors_and_pinout": [
+    {
+      "connector_ref": "J_RF_ADC",
+      "connector_type": "XM655/SMPM 50R (56x ADC + 56x DAC)",
+      "location_side": "rack_front",
+      "mating_part_id": "S6.6-05",
+      "pins": [
+        {
+          "pin": "1-56",
+          "signal": "RFSOC_ADC_IN[0:55]",
+          "direction": "IN",
+          "nominal_level": "4-8 GHz multiplexed readout"
+        },
+        {
+          "pin": "57-112",
+          "signal": "RFSOC_DAC_OUT[0:55]",
+          "direction": "OUT",
+          "nominal_level": "Multi-tone probe combs"
+        }
+      ]
+    },
+    {
+      "connector_ref": "J_CLK_10M",
+      "connector_type": "SMA-F 50R Splitter Tree",
+      "location_side": "rack_rear",
+      "mating_part_id": "S7.4-01",
+      "pins": [
+        {
+          "pin": "1",
+          "signal": "CLK_10MHZ_RB_CH12",
+          "direction": "IN",
+          "nominal_level": "Locked LMK04828 PLL"
+        }
+      ]
+    },
+    {
+      "connector_ref": "J_WR",
+      "connector_type": "SFP+ Optical Trigger",
+      "location_side": "rack_rear",
+      "mating_part_id": "S7.4-02",
+      "pins": [
+        {
+          "pin": "1",
+          "signal": "WR_SYNC_FIBER[2]",
+          "direction": "IN",
+          "nominal_level": "<200 ps SYSREF/trigger"
+        }
+      ]
+    }
+  ],
+  "mating_part_ids": [
+    "S6.6-03",
+    "S6.6-05",
+    "S7.4-01",
+    "S7.4-02",
+    "S7.1-01"
+  ],
+  "interlock_hooks": [],
+  "ups_tier": "TIER2_SHED",
+  "ups_budget_group": "AUX_PROCESS_SHED_ON_OUTAGE",
+  "exp150_ups_allocation_w": 0.0,
+  "supply_rails_steady_sum_w": 630.0,
+  "incremental_mains_w": 630.0,
+  "secondary_or_parent_derived_w": 0.0,
+  "non_exp150_aux_shed_w": 630.0,
+  "reconciliation_note": "Non-Exp150 auxiliary sheddable rack/facility load (TIER2_SHED): incremental_mains_w = 630.0 W AC mains (mutually exclusive process/experiment mode, shed immediately on outage; exp150_ups_allocation_w = 0.0 W).",
+  "timing_sync": {
+    "rb_10mhz_port": "CH12",
+    "white_rabbit_port": "WR_SFP_2",
+    "sync_role": "56-chain RFSoC readout/AWG"
+  },
+  "epistemic_flags": {
+    "design_maturity": "M0_M1_ELECTRICAL_ICD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

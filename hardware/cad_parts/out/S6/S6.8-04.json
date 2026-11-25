@@ -1,0 +1,317 @@
+{
+  "part_design": {
+    "part_id": "S6.8-04",
+    "parent_bom_id": "S6.8",
+    "subsystem": "S6",
+    "part_name": "Dis vakum kabi (OVC), dogrudan-gorus demet portu ve titresim-izole DR cercevesi",
+    "design_tier": "COTS_ENV_ICD",
+    "material": "316LN",
+    "temp_stage": "300 K",
+    "temp_k": 300.0,
+    "vacuum_grade": "Kriyo-vakum / UHV",
+    "tolerance_spec": "±0.2 mm",
+    "surface_finish_ra_um": 0.8,
+    "qty": 1,
+    "procurement_class": "COTS/CUS",
+    "world_origin_mm": [
+      -650.0,
+      0.0,
+      500.0
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "asme_rupture_disk_port",
+        "kind": "flange",
+        "position_mm": [
+          0.0,
+          198.0,
+          320.0
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "standard": "ISO-K DN50",
+        "mating_part_id": "S7.SAFETY-05",
+        "bore_mm": 50.0,
+        "od_mm": 75.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 4,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "Claw Clamp",
+        "frame": "local",
+        "notes": "ASME Sec VIII Div 1 DN50 0.5 barg rupture-disk clearance"
+      },
+      {
+        "name": "bridge_bellows_east",
+        "kind": "flange",
+        "position_mm": [
+          175.0,
+          0.0,
+          -6.5
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "standard": "CF63",
+        "mating_part_id": "S6.9-02",
+        "bore_mm": 44.0,
+        "od_mm": 113.5,
+        "pcd_mm": 92.1,
+        "bolt_count": 8,
+        "bolt_hole_mm": 8.4,
+        "bolt_spec": "M8",
+        "frame": "local",
+        "notes": "ISO 3669 CF63 Cu-gasket knife-edge"
+      },
+      {
+        "name": "option_q_west",
+        "kind": "flange",
+        "position_mm": [
+          -175.0,
+          0.0,
+          190.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "standard": "CF63",
+        "mating_part_id": "S9.4-01",
+        "bore_mm": 63.5,
+        "od_mm": 113.5,
+        "pcd_mm": 92.1,
+        "bolt_count": 8,
+        "bolt_hole_mm": 8.4,
+        "bolt_spec": "M8",
+        "frame": "local",
+        "notes": "ISO 3669 CF63 Cu-gasket knife-edge"
+      },
+      {
+        "name": "pt420_top_port",
+        "kind": "flange",
+        "position_mm": [
+          0.0,
+          0.0,
+          485.0
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "ISO-K DN160",
+        "mating_part_id": "S6.1-01",
+        "bore_mm": 92.0,
+        "od_mm": 180.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 4,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "Claw Clamp",
+        "frame": "local",
+        "notes": "ISO 1609 DN160 claw-clamp O-ring"
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "OVC_OD",
+        "nominal_mm": 350.0,
+        "tol_plus_mm": 0.25,
+        "tol_minus_mm": -0.25,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø350.00 ±0.25"
+      },
+      {
+        "label": "OVC_ID",
+        "nominal_mm": 334.0,
+        "tol_plus_mm": 0.25,
+        "tol_minus_mm": -0.25,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø334.00 ±0.25"
+      },
+      {
+        "label": "TOP_FLANGE_OD",
+        "nominal_mm": 390.0,
+        "tol_plus_mm": 0.2,
+        "tol_minus_mm": -0.2,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø390.00 ±0.20"
+      },
+      {
+        "label": "TOTAL_H",
+        "nominal_mm": 985.0,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "985.00 ±0.50"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "perpendicularity",
+        "tolerance_mm": 0.1,
+        "diameter_zone": true,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "OVC cylinder axis",
+        "glyph": "⊥",
+        "tolerance_text": "Ø0.10"
+      },
+      {
+        "symbol": "flatness",
+        "tolerance_mm": 0.05,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "Top 300 K O-ring flange face",
+        "glyph": "⏥",
+        "tolerance_text": "0.050"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "S5.1 UHV odasiyla arayuz, 56+ RF koaksiyel gecis flanslari",
+      "Includes dedicated +Y ASME DN50 ISO-K relief nozzle at (-650, +198, 820) mm leaving clean clearance for S7.SAFETY-05 rupture disk."
+    ],
+    "scad_params": {
+      "ovc_id": 334.0,
+      "ovc_od": 350.0,
+      "top_flange_od": 390.0,
+      "relief_dn": 50
+    },
+    "target_mass_kg": 112.0,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact_result": {
+    "part_id": "S6.8-04",
+    "subsystem": "S6",
+    "design_tier": "COTS_ENV_ICD",
+    "stl_path": "hardware/cad_parts/out/S6/S6.8-04.stl",
+    "step_path": "hardware/cad_parts/out/S6/S6.8-04.step",
+    "scad_path": "hardware/cad_parts/out/S6/S6.8-04.scad",
+    "dxf_path": "hardware/cad_parts/out/S6/S6.8-04.dxf",
+    "svg_path": "hardware/cad_parts/out/S6/S6.8-04.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 15816878.434582705,
+    "surface_area_mm2": 2833388.2144397534,
+    "mass_kg": 126.53502747666163,
+    "cg_mm": [
+      0.145351982090028,
+      0.34000667864749423,
+      -50.98667280049316
+    ],
+    "bbox_min_mm": [
+      -195.0,
+      -195.0,
+      -500.0
+    ],
+    "bbox_max_mm": [
+      195.0,
+      198.0,
+      485.0
+    ],
+    "inertia_kg_mm2": [
+      17599067.22630942,
+      17550178.482510332,
+      3411073.9359505316,
+      6.253442630852233,
+      -27937.78480724887,
+      -15960.868518810825
+    ],
+    "triangle_count": 5576,
+    "vertex_count": 2748,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "json_path": "hardware/cad_parts/out/S6/S6.8-04.json",
+  "world_bbox_min_mm": [
+    -845.0,
+    -195.0,
+    0.0
+  ],
+  "world_bbox_max_mm": [
+    -455.0,
+    198.0,
+    985.0
+  ],
+  "world_cg_mm": [
+    -649.8546,
+    0.34,
+    449.0133
+  ],
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

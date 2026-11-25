@@ -1,0 +1,268 @@
+{
+  "part_id": "S1.2-01",
+  "subsystem": "S1",
+  "design": {
+    "part_id": "S1.2-01",
+    "parent_bom_id": "S1.2",
+    "subsystem": "S1",
+    "part_name": "Wien ExB kutle filtresi manyetik kutup ve boyunduruk",
+    "design_tier": "CUSTOM_FULL",
+    "material": "Soft Iron",
+    "temp_stage": "300 K",
+    "temp_k": 300.0,
+    "vacuum_grade": "HV 1e-7 mbar",
+    "tolerance_spec": "±0.1% B homojenlik",
+    "surface_finish_ra_um": 0.4,
+    "qty": 2,
+    "procurement_class": "COTS/CUS",
+    "world_origin_mm": [
+      0.0,
+      0.0,
+      310.16
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "wien_inlet",
+        "kind": "mechanical",
+        "position_mm": [
+          0.0,
+          0.0,
+          367.66
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "12xM5 PCD 98",
+        "mating_part_id": "S1.3-01",
+        "bore_mm": 84.0,
+        "od_mm": 110.0,
+        "pcd_mm": 98.0,
+        "bolt_count": 12,
+        "bolt_hole_mm": 5.5,
+        "bolt_spec": "",
+        "frame": "global",
+        "notes": ""
+      },
+      {
+        "name": "wien_exit_drift",
+        "kind": "mechanical",
+        "position_mm": [
+          0.0,
+          0.0,
+          252.66
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "standard": "12xM5 PCD 98",
+        "mating_part_id": "S1.2-04",
+        "bore_mm": 84.0,
+        "od_mm": 110.0,
+        "pcd_mm": 98.0,
+        "bolt_count": 12,
+        "bolt_hole_mm": 5.5,
+        "bolt_spec": "",
+        "frame": "global",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "OD",
+        "nominal_mm": 110.0,
+        "tol_plus_mm": 0.05,
+        "tol_minus_mm": -0.05,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø110.00 ±0.05"
+      },
+      {
+        "label": "YOKE_H",
+        "nominal_mm": 115.0,
+        "tol_plus_mm": 0.05,
+        "tol_minus_mm": -0.05,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "115.00 ±0.05"
+      },
+      {
+        "label": "POLE_GAP",
+        "nominal_mm": 36.0,
+        "tol_plus_mm": 0.02,
+        "tol_minus_mm": -0.02,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "36.00 ±0.02"
+      },
+      {
+        "label": "B_FIELD",
+        "nominal_mm": 0.45,
+        "tol_plus_mm": 0.0005,
+        "tol_minus_mm": -0.0005,
+        "view": "front",
+        "unit": "T",
+        "prefix": "",
+        "suffix": " T",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "0.45 ±0.001 T"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "parallelism",
+        "tolerance_mm": 0.01,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "POLE SHOE FACES",
+        "glyph": "∥",
+        "tolerance_text": "0.010"
+      },
+      {
+        "symbol": "concentricity",
+        "tolerance_mm": 0.02,
+        "diameter_zone": true,
+        "material_condition": "",
+        "datum_primary": "B",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "RETURN YOKE",
+        "glyph": "◎",
+        "tolerance_text": "Ø0.020"
+      },
+      {
+        "symbol": "perpendicularity",
+        "tolerance_mm": 0.015,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "MOUNT FLANGES",
+        "glyph": "⊥",
+        "tolerance_text": "0.015"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "B=0.45 T, L=150 mm, OD=110 mm (Exp124), m/dm >= 60 (28Si/29Si/31P)",
+      "Exp124 0.45 T dipole Wien yoke + SmCo magnets; paired with S1.2-04 drift/slit collar for exact 150 mm total Wien length"
+    ],
+    "scad_params": {
+      "od": 110.0,
+      "yoke_h": 115.0,
+      "pole_gap": 36.0,
+      "b_tesla": 0.45
+    },
+    "target_mass_kg": 5.4,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S1.2-01",
+    "subsystem": "S1",
+    "design_tier": "CUSTOM_FULL",
+    "stl_path": "hardware/cad_parts/out/S1/S1.2-01.stl",
+    "step_path": "hardware/cad_parts/out/S1/S1.2-01.step",
+    "scad_path": "hardware/cad_parts/out/S1/S1.2-01.scad",
+    "dxf_path": "hardware/cad_parts/out/S1/S1.2-01.dxf",
+    "svg_path": "hardware/cad_parts/out/S1/S1.2-01.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 545025.5104509183,
+    "surface_area_mm2": 122254.44359668801,
+    "mass_kg": 4.2893507672487265,
+    "cg_mm": [
+      1.2754023201408442e-14,
+      -5.320712151994088e-15,
+      310.1599999999996
+    ],
+    "bbox_min_mm": [
+      -55.0,
+      -55.0,
+      252.65999999999997
+    ],
+    "bbox_max_mm": [
+      55.0,
+      55.0,
+      367.66
+    ],
+    "inertia_kg_mm2": [
+      8520.4449816037,
+      9136.112419654899,
+      9098.098004492142,
+      -2.9066082788631353e-13,
+      -2.6666184057832584e-13,
+      8.091196642271835e-12
+    ],
+    "triangle_count": 2192,
+    "vertex_count": 1056,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "engineering_checks": {},
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

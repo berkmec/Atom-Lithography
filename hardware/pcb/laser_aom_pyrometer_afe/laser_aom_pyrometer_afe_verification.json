@@ -1,0 +1,373 @@
+{
+  "suite": "laser_aom_pyrometer_afe",
+  "bom_ids": [
+    "S5.5-03",
+    "S5.5-01",
+    "S5.5-04",
+    "S5.3-03"
+  ],
+  "epistemic_meta": {
+    "design_stage": "M0/M1_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_physical_fab": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "operating_temp_K": 300.0,
+    "rf_band_MHz": [
+      80.0,
+      200.0
+    ],
+    "pyro_wavelengths_nm": [
+      1550.0,
+      850.0
+    ],
+    "pyro_temp_range_K": [
+      900.0,
+      1700.0
+    ],
+    "rtl_interface": "rtl/machine_ctrl/aom_pid_ctrl.v"
+  },
+  "board": {
+    "board_name": "laser_aom_pyrometer_afe",
+    "bom_ids": [
+      "S5.5-03",
+      "S5.5-01",
+      "S5.5-04",
+      "S5.3-03"
+    ],
+    "sch_file": "laser_aom_pyrometer_afe.kicad_sch",
+    "pcb_file": "laser_aom_pyrometer_afe.kicad_pcb",
+    "sexpr_valid": true,
+    "erc": {
+      "passed": true,
+      "errors": [],
+      "warnings": [],
+      "component_count": 75,
+      "net_count": 63,
+      "sch_pcb_parity_ok": true,
+      "details": {
+        "power_rails_driven": [
+          "AGND",
+          "DGND",
+          "DIODE_RTN",
+          "ILK_RTN",
+          "RFGND",
+          "VREF_2V5",
+          "V_24V_DIODE",
+          "V_N5A",
+          "V_N6_IN",
+          "V_P3V3",
+          "V_P5A",
+          "V_P5RF",
+          "V_P6_IN"
+        ],
+        "pwr_flags_found": [
+          "AGND",
+          "DGND",
+          "DIODE_RTN",
+          "ILK_RTN",
+          "RFGND",
+          "V_24V_DIODE",
+          "V_N6_IN",
+          "V_P6_IN"
+        ],
+        "lib_symbol_count": 36
+      }
+    },
+    "drc": {
+      "passed": true,
+      "errors": [],
+      "warnings": [],
+      "pad_count": 325,
+      "segment_count": 835,
+      "via_count": 221,
+      "zone_count": 7,
+      "air_slot_count": 0,
+      "min_measured_clearance_mm": 0.145,
+      "impedance_checks": [
+        {
+          "net": "AOM_RF_OUT_50",
+          "layer": "F.Cu",
+          "mode": "microstrip",
+          "width_mm": 0.5429,
+          "h_or_b_mm": 0.254,
+          "epsilon_r": 3.48,
+          "target_z0_ohm": 50.0,
+          "computed_z0_ohm": 50.0,
+          "error_pct": 0.001,
+          "passed": true
+        },
+        {
+          "net": "AOM_RF_OUT_50",
+          "layer": "F.Cu",
+          "mode": "microstrip",
+          "width_mm": 0.5429,
+          "h_or_b_mm": 0.254,
+          "epsilon_r": 3.48,
+          "target_z0_ohm": 50.0,
+          "computed_z0_ohm": 50.0,
+          "error_pct": 0.001,
+          "passed": true
+        },
+        {
+          "net": "AOM_RF_OUT_50",
+          "layer": "F.Cu",
+          "mode": "microstrip",
+          "width_mm": 0.5429,
+          "h_or_b_mm": 0.254,
+          "epsilon_r": 3.48,
+          "target_z0_ohm": 50.0,
+          "computed_z0_ohm": 50.0,
+          "error_pct": 0.001,
+          "passed": true
+        },
+        {
+          "net": "AOM_RF_OUT_50",
+          "layer": "F.Cu",
+          "mode": "microstrip",
+          "width_mm": 0.5429,
+          "h_or_b_mm": 0.254,
+          "epsilon_r": 3.48,
+          "target_z0_ohm": 50.0,
+          "computed_z0_ohm": 50.0,
+          "error_pct": 0.001,
+          "passed": true
+        },
+        {
+          "net": "INT_MON_50",
+          "layer": "F.Cu",
+          "mode": "microstrip",
+          "width_mm": 0.5429,
+          "h_or_b_mm": 0.254,
+          "epsilon_r": 3.48,
+          "target_z0_ohm": 50.0,
+          "computed_z0_ohm": 50.0,
+          "error_pct": 0.001,
+          "passed": true
+        },
+        {
+          "net": "INT_MON_50",
+          "layer": "F.Cu",
+          "mode": "microstrip",
+          "width_mm": 0.5429,
+          "h_or_b_mm": 0.254,
+          "epsilon_r": 3.48,
+          "target_z0_ohm": 50.0,
+          "computed_z0_ohm": 50.0,
+          "error_pct": 0.001,
+          "passed": true
+        },
+        {
+          "net": "RF_DRV_IN_50",
+          "layer": "F.Cu",
+          "mode": "microstrip",
+          "width_mm": 0.5429,
+          "h_or_b_mm": 0.254,
+          "epsilon_r": 3.48,
+          "target_z0_ohm": 50.0,
+          "computed_z0_ohm": 50.0,
+          "error_pct": 0.001,
+          "passed": true
+        },
+        {
+          "net": "RF_LO_50",
+          "layer": "F.Cu",
+          "mode": "microstrip",
+          "width_mm": 0.5429,
+          "h_or_b_mm": 0.254,
+          "epsilon_r": 3.48,
+          "target_z0_ohm": 50.0,
+          "computed_z0_ohm": 50.0,
+          "error_pct": 0.001,
+          "passed": true
+        },
+        {
+          "net": "RF_LO_50",
+          "layer": "F.Cu",
+          "mode": "microstrip",
+          "width_mm": 0.5429,
+          "h_or_b_mm": 0.254,
+          "epsilon_r": 3.48,
+          "target_z0_ohm": 50.0,
+          "computed_z0_ohm": 50.0,
+          "error_pct": 0.001,
+          "passed": true
+        },
+        {
+          "net": "RF_LO_50",
+          "layer": "F.Cu",
+          "mode": "microstrip",
+          "width_mm": 0.5429,
+          "h_or_b_mm": 0.254,
+          "epsilon_r": 3.48,
+          "target_z0_ohm": 50.0,
+          "computed_z0_ohm": 50.0,
+          "error_pct": 0.001,
+          "passed": true
+        },
+        {
+          "net": "RF_SW_IN_50",
+          "layer": "F.Cu",
+          "mode": "microstrip",
+          "width_mm": 0.5429,
+          "h_or_b_mm": 0.254,
+          "epsilon_r": 3.48,
+          "target_z0_ohm": 50.0,
+          "computed_z0_ohm": 50.0,
+          "error_pct": 0.001,
+          "passed": true
+        },
+        {
+          "net": "RF_SW_OUT_50",
+          "layer": "F.Cu",
+          "mode": "microstrip",
+          "width_mm": 0.5429,
+          "h_or_b_mm": 0.254,
+          "epsilon_r": 3.48,
+          "target_z0_ohm": 50.0,
+          "computed_z0_ohm": 50.0,
+          "error_pct": 0.001,
+          "passed": true
+        },
+        {
+          "net": "RF_VCA_50",
+          "layer": "F.Cu",
+          "mode": "microstrip",
+          "width_mm": 0.5429,
+          "h_or_b_mm": 0.254,
+          "epsilon_r": 3.48,
+          "target_z0_ohm": 50.0,
+          "computed_z0_ohm": 50.0,
+          "error_pct": 0.001,
+          "passed": true
+        },
+        {
+          "net": "RF_VCA_50",
+          "layer": "F.Cu",
+          "mode": "microstrip",
+          "width_mm": 0.5429,
+          "h_or_b_mm": 0.254,
+          "epsilon_r": 3.48,
+          "target_z0_ohm": 50.0,
+          "computed_z0_ohm": 50.0,
+          "error_pct": 0.001,
+          "passed": true
+        }
+      ],
+      "hv_checks": [],
+      "stackup_summary": {
+        "copper_layers": 4,
+        "total_thickness_mm": 1.478,
+        "board_size_mm": [
+          185.0,
+          125.0
+        ]
+      },
+      "routed_net_count": 63,
+      "unrouted_net_count": 0,
+      "unconnected_items": 0,
+      "track_dangling_count": 0,
+      "total_multi_pin_nets": 63
+    },
+    "passed": true,
+    "epistemic_meta": {
+      "design_stage": "M0/M1_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "no_physical_fab": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "operating_temp_K": 300.0,
+      "rf_band_MHz": [
+        80.0,
+        200.0
+      ],
+      "pyro_wavelengths_nm": [
+        1550.0,
+        850.0
+      ],
+      "pyro_temp_range_K": [
+        900.0,
+        1700.0
+      ],
+      "rtl_interface": "rtl/machine_ctrl/aom_pid_ctrl.v"
+    }
+  },
+  "ngspice": {
+    "cir_file": "laser_pyro_tia_aom.cir",
+    "version": "ngspice-47",
+    "returncode": 0,
+    "ok": true,
+    "errors": [],
+    "warnings": [],
+    "metrics_raw": {
+      "z_dc_ingaas": 99996.2,
+      "z_dc_si": 199992.0,
+      "f3db_ingaas_hz": 132652.0,
+      "f3db_si_hz": 132652.0,
+      "rf_gain_80m_db": -6.02681,
+      "rf_gain_200m_db": -6.02603,
+      "rf_flatness_db": 0.000782,
+      "ig_v_final": -0.99999,
+      "ig_t10": 5.13676e-06,
+      "ig_t90": 7.77293e-06,
+      "si_v_final": -0.99999,
+      "si_t10": 5.13675e-06,
+      "si_t90": 7.77294e-06,
+      "tau_rise_ingaas_s": 2.636166e-06,
+      "tau_rise_si_s": 2.636181e-06,
+      "vca_gain_lo": 0.649997,
+      "vca_gain_hi": 1.39999,
+      "vca_mod_ratio": 2.153846,
+      "vca_cb_t90": 0.000150265,
+      "vca_cb_t10": 0.000150273,
+      "diode_v_on": 23.9282,
+      "diode_v_off": 0.00012,
+      "dio_cb_t10": 0.00015487,
+      "crowbar_vca_cutoff_s": 2.726e-07,
+      "crowbar_diode_cutoff_s": 4.87e-06,
+      "v_int_1x": 0.999993,
+      "v_int_2x": 1.99999,
+      "v_int_1x_after_rst": 2.02846e-09,
+      "int_ratio_2x": 2.0,
+      "int_lin_err_pct": 1.000007e-05
+    },
+    "summary": {
+      "tau_rise_ingaas_us": 2.6362,
+      "tau_rise_si_us": 2.6362,
+      "f3db_ingaas_khz": 132.652,
+      "f3db_si_khz": 132.652,
+      "v_int_1x_v": 0.999993,
+      "v_int_2x_v": 1.99999,
+      "int_lin_err_pct": 1e-05,
+      "v_int_after_reset_mv": 0.0,
+      "vca_mod_ratio": 2.1538,
+      "crowbar_vca_cutoff_us": 0.2726,
+      "crowbar_diode_cutoff_us": 4.87,
+      "diode_v_on_v": 23.928,
+      "diode_v_off_v": 0.00012,
+      "rf_80_200mhz_flatness_db": 0.0008
+    }
+  },
+  "mna_crosscheck": {
+    "mna_z_dc_ingaas_ohm": 99996.16,
+    "mna_ratio_at_132p6khz_ingaas": 0.70716,
+    "mna_z_dc_si_ohm": 199992.32,
+    "mna_ratio_at_132p6khz_si": 0.70716,
+    "tia_ingaas_z_dc_diff_pct": 4e-05
+  },
+  "checks": {
+    "board_erc_drc_zero": true,
+    "all_nets_routed_zero_unconnected": true,
+    "ngspice_ok": true,
+    "tia_ingaas_rise_lt_10us": true,
+    "tia_si_rise_lt_10us": true,
+    "integrator_2x_linearity_lt_1pct": true,
+    "integrator_reset_lt_5mv": true,
+    "crowbar_vca_cutoff_lt_50us": true,
+    "crowbar_diode_cutoff_lt_50us": true,
+    "vca_gain_ratio_matches_1p40_over_0p65": true,
+    "rf_80_200mhz_flatness_lt_0p5db": true,
+    "mna_tia_parity_lt_0p5pct": true
+  },
+  "all_passed": true
+}

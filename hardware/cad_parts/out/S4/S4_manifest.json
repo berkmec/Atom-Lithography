@@ -1,0 +1,436 @@
+{
+  "subsystem": "S4",
+  "part_count": 17,
+  "custom_full_count": 6,
+  "cots_env_icd_count": 11,
+  "all_watertight": true,
+  "all_valid": true,
+  "total_mass_kg": 448.9998,
+  "coordinate_frame": {
+    "z_wafer_top_mm": 0.0,
+    "z_floor_mm": -660.0,
+    "dr_clear_bore_r_mm": 210.0,
+    "rack_bay1_x_mm": 1480.0,
+    "rack_bay1_front_y_mm": -410.0,
+    "rack_u_range": "U14-U17"
+  },
+  "reconciliations": {
+    "S4.1-01": {
+      "part_id": "S4.1-01",
+      "conflict": "BOM_DETAILED.csv v7.0 specifies 600x450x150 mm (~120 kg) whereas canonical CAD params.py v6.0 specifies 900x700x120 mm (223 kg solid).",
+      "bom_dims_mm": [
+        600.0,
+        450.0,
+        150.0
+      ],
+      "selected_cad_dims_mm": [
+        900.0,
+        700.0,
+        120.0
+      ],
+      "central_dr_bore_mm": 420.0,
+      "m6_insert_hole_count": 42,
+      "decision": "SELECTED 900x700x120 mm DIN 876/00 granite base plate with Ø420 mm (R=210 mm) central DR clear bore and 44x M6 threaded stainless inserts (~174 kg).",
+      "justification": "A 600x450 mm block cannot structurally support the Ø456 mm CF400 UHV bottom flange, the 820x620 mm S4.2-01 active 6-DOF isolation table, the metrology bridge footprint, and the S4.4-01 He-Ne laser shelf while preserving a clear R=210 mm bore. 900x700x120 mm spans all supports cleanly and clears the -X DR OVC (x_min=-450 mm > -475 mm)."
+    }
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  },
+  "parts": {
+    "S4.1-01": {
+      "design_tier": "COTS_ENV_ICD",
+      "mass_kg": 176.388974,
+      "watertight": true,
+      "all_valid": true,
+      "triangle_count": 1688,
+      "world_origin_mm": [
+        0.0,
+        0.0,
+        -361.0
+      ],
+      "world_bbox_min_mm": [
+        -450.0,
+        -350.0,
+        -421.0
+      ],
+      "world_bbox_max_mm": [
+        450.0,
+        350.0,
+        -301.0
+      ],
+      "json_path": "hardware/cad_parts/out/S4/S4.1-01.json"
+    },
+    "S4.1-02": {
+      "design_tier": "COTS_ENV_ICD",
+      "mass_kg": 6.64907,
+      "watertight": true,
+      "all_valid": true,
+      "triangle_count": 9620,
+      "world_origin_mm": [
+        0.0,
+        0.0,
+        -462.0
+      ],
+      "world_bbox_min_mm": [
+        -429.0,
+        -306.0,
+        -502.0
+      ],
+      "world_bbox_max_mm": [
+        429.0,
+        306.0,
+        -422.0
+      ],
+      "json_path": "hardware/cad_parts/out/S4/S4.1-02.json"
+    },
+    "S4.1-03": {
+      "design_tier": "COTS_ENV_ICD",
+      "mass_kg": 200.036711,
+      "watertight": true,
+      "all_valid": true,
+      "triangle_count": 1008,
+      "world_origin_mm": [
+        0.0,
+        0.0,
+        -581.5
+      ],
+      "world_bbox_min_mm": [
+        -466.1,
+        -360.0,
+        -660.0
+      ],
+      "world_bbox_max_mm": [
+        466.1,
+        360.0,
+        -503.0
+      ],
+      "json_path": "hardware/cad_parts/out/S4/S4.1-03.json"
+    },
+    "S4.2-01": {
+      "design_tier": "COTS_ENV_ICD",
+      "mass_kg": 35.110844,
+      "watertight": true,
+      "all_valid": true,
+      "triangle_count": 1232,
+      "world_origin_mm": [
+        0.0,
+        0.0,
+        -270.0
+      ],
+      "world_bbox_min_mm": [
+        -410.0,
+        -310.0,
+        -300.0
+      ],
+      "world_bbox_max_mm": [
+        410.0,
+        310.0,
+        -240.0
+      ],
+      "json_path": "hardware/cad_parts/out/S4/S4.2-01.json"
+    },
+    "S4.2-02": {
+      "design_tier": "COTS_ENV_ICD",
+      "mass_kg": 1.256447,
+      "watertight": true,
+      "all_valid": true,
+      "triangle_count": 1036,
+      "world_origin_mm": [
+        0.0,
+        0.0,
+        -216.0
+      ],
+      "world_bbox_min_mm": [
+        -372.0,
+        -275.0,
+        -239.0
+      ],
+      "world_bbox_max_mm": [
+        370.0,
+        275.0,
+        -193.0
+      ],
+      "json_path": "hardware/cad_parts/out/S4/S4.2-02.json"
+    },
+    "S4.2-03": {
+      "design_tier": "COTS_ENV_ICD",
+      "mass_kg": 5.128584,
+      "watertight": true,
+      "all_valid": true,
+      "triangle_count": 996,
+      "world_origin_mm": [
+        1480.0,
+        -220.0,
+        190.07500000000002
+      ],
+      "world_bbox_min_mm": [
+        1238.7,
+        -434.2,
+        168.85
+      ],
+      "world_bbox_max_mm": [
+        1721.3,
+        -11.2,
+        211.3
+      ],
+      "json_path": "hardware/cad_parts/out/S4/S4.2-03.json"
+    },
+    "S4.3-01": {
+      "design_tier": "CUSTOM_FULL",
+      "mass_kg": 0.628385,
+      "watertight": true,
+      "all_valid": true,
+      "triangle_count": 992,
+      "world_origin_mm": [
+        0.0,
+        0.0,
+        -41.0
+      ],
+      "world_bbox_min_mm": [
+        -45.0,
+        -45.0,
+        -53.0
+      ],
+      "world_bbox_max_mm": [
+        45.0,
+        45.0,
+        -29.0
+      ],
+      "json_path": "hardware/cad_parts/out/S4/S4.3-01.json"
+    },
+    "S4.3-02": {
+      "design_tier": "CUSTOM_FULL",
+      "mass_kg": 3.114955,
+      "watertight": true,
+      "all_valid": true,
+      "triangle_count": 1320,
+      "world_origin_mm": [
+        0.0,
+        0.0,
+        -145.0
+      ],
+      "world_bbox_min_mm": [
+        -55.5,
+        -55.5,
+        -214.0
+      ],
+      "world_bbox_max_mm": [
+        55.0,
+        55.0,
+        -54.5
+      ],
+      "json_path": "hardware/cad_parts/out/S4/S4.3-02.json"
+    },
+    "S4.3-03": {
+      "design_tier": "COTS_ENV_ICD",
+      "mass_kg": 0.022254,
+      "watertight": true,
+      "all_valid": true,
+      "triangle_count": 432,
+      "world_origin_mm": [
+        0.0,
+        0.0,
+        -41.0
+      ],
+      "world_bbox_min_mm": [
+        -55.25,
+        -42.25,
+        -74.0
+      ],
+      "world_bbox_max_mm": [
+        55.25,
+        42.25,
+        -34.0
+      ],
+      "json_path": "hardware/cad_parts/out/S4/S4.3-03.json"
+    },
+    "S4.3-04": {
+      "design_tier": "COTS_ENV_ICD",
+      "mass_kg": 10.410369,
+      "watertight": true,
+      "all_valid": true,
+      "triangle_count": 1332,
+      "world_origin_mm": [
+        1480.0,
+        -200.0,
+        256.75000000000006
+      ],
+      "world_bbox_min_mm": [
+        1238.7,
+        -434.2,
+        213.3
+      ],
+      "world_bbox_max_mm": [
+        1721.3,
+        28.8,
+        300.2
+      ],
+      "json_path": "hardware/cad_parts/out/S4/S4.3-04.json"
+    },
+    "S4.4-01": {
+      "design_tier": "COTS_ENV_ICD",
+      "mass_kg": 1.305342,
+      "watertight": true,
+      "all_valid": true,
+      "triangle_count": 516,
+      "world_origin_mm": [
+        330.0,
+        245.0,
+        -205.0
+      ],
+      "world_bbox_min_mm": [
+        247.9,
+        203.0,
+        -238.9
+      ],
+      "world_bbox_max_mm": [
+        410.1,
+        287.0,
+        -173.1
+      ],
+      "json_path": "hardware/cad_parts/out/S4/S4.4-01.json"
+    },
+    "S4.4-02": {
+      "design_tier": "COTS_ENV_ICD",
+      "mass_kg": 0.052304,
+      "watertight": true,
+      "all_valid": true,
+      "triangle_count": 468,
+      "world_origin_mm": [
+        0.0,
+        0.0,
+        -133.0
+      ],
+      "world_bbox_min_mm": [
+        -7.0,
+        -102.4,
+        -140.5
+      ],
+      "world_bbox_max_mm": [
+        102.4,
+        102.4,
+        -125.5
+      ],
+      "json_path": "hardware/cad_parts/out/S4/S4.4-02.json"
+    },
+    "S4.4-03": {
+      "design_tier": "CUSTOM_FULL",
+      "mass_kg": 0.042752,
+      "watertight": true,
+      "all_valid": true,
+      "triangle_count": 156,
+      "world_origin_mm": [
+        0.0,
+        0.0,
+        -41.0
+      ],
+      "world_bbox_min_mm": [
+        -26.0,
+        -55.6,
+        -49.0
+      ],
+      "world_bbox_max_mm": [
+        54.6,
+        54.6,
+        -33.0
+      ],
+      "json_path": "hardware/cad_parts/out/S4/S4.4-03.json"
+    },
+    "S4.4-04": {
+      "design_tier": "COTS_ENV_ICD",
+      "mass_kg": 1.456273,
+      "watertight": true,
+      "all_valid": true,
+      "triangle_count": 4164,
+      "world_origin_mm": [
+        0.0,
+        0.0,
+        -133.0
+      ],
+      "world_bbox_min_mm": [
+        -37.2,
+        -280.7,
+        -167.75
+      ],
+      "world_bbox_max_mm": [
+        280.7,
+        280.7,
+        -98.25
+      ],
+      "json_path": "hardware/cad_parts/out/S4/S4.4-04.json"
+    },
+    "S4.5-01": {
+      "design_tier": "CUSTOM_FULL",
+      "mass_kg": 3.524061,
+      "watertight": true,
+      "all_valid": true,
+      "triangle_count": 1828,
+      "world_origin_mm": [
+        0.0,
+        0.0,
+        -169.0
+      ],
+      "world_bbox_min_mm": [
+        -132.0,
+        -132.0,
+        -214.0
+      ],
+      "world_bbox_max_mm": [
+        132.0,
+        132.0,
+        -124.0
+      ],
+      "json_path": "hardware/cad_parts/out/S4/S4.5-01.json"
+    },
+    "S4.5-02": {
+      "design_tier": "CUSTOM_FULL",
+      "mass_kg": 0.937073,
+      "watertight": true,
+      "all_valid": true,
+      "triangle_count": 1708,
+      "world_origin_mm": [
+        0.0,
+        0.0,
+        60.0
+      ],
+      "world_bbox_min_mm": [
+        112.3234,
+        143.2137,
+        25.3822
+      ],
+      "world_bbox_max_mm": [
+        218.3404,
+        253.2837,
+        94.6178
+      ],
+      "json_path": "hardware/cad_parts/out/S4/S4.5-02.json"
+    },
+    "S4.5-03": {
+      "design_tier": "CUSTOM_FULL",
+      "mass_kg": 2.935387,
+      "watertight": true,
+      "all_valid": true,
+      "triangle_count": 996,
+      "world_origin_mm": [
+        1480.0,
+        -240.0,
+        323.42500000000007
+      ],
+      "world_bbox_min_mm": [
+        1238.7,
+        -434.2,
+        302.2
+      ],
+      "world_bbox_max_mm": [
+        1721.3,
+        -61.2,
+        344.65
+      ],
+      "json_path": "hardware/cad_parts/out/S4/S4.5-03.json"
+    }
+  }
+}

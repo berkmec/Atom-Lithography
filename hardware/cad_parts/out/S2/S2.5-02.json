@@ -1,0 +1,295 @@
+{
+  "part_id": "S2.5-02",
+  "subsystem": "S2",
+  "design": {
+    "part_id": "S2.5-02",
+    "parent_bom_id": "S2.5",
+    "subsystem": "S2",
+    "part_name": "Kinematik piezo egim/Z kafa hizalama tutucusu (2.59 MHz rijit)",
+    "design_tier": "CUSTOM_FULL",
+    "material": "Invar-36",
+    "temp_stage": "300 K",
+    "temp_k": 300.0,
+    "vacuum_grade": "UHV 1e-9 mbar",
+    "tolerance_spec": "±0.1 urad",
+    "surface_finish_ra_um": 0.2,
+    "qty": 1,
+    "procurement_class": "CUS",
+    "world_origin_mm": [
+      0.0,
+      0.0,
+      35.66
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "head_mate_bot",
+        "kind": "mechanical",
+        "position_mm": [
+          0.0,
+          0.0,
+          31.91
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "standard": "12xM4 PCD 92",
+        "mating_part_id": "S2.1-04",
+        "bore_mm": 28.0,
+        "od_mm": 104.0,
+        "pcd_mm": 92.0,
+        "bolt_count": 12,
+        "bolt_hole_mm": 4.5,
+        "bolt_spec": "",
+        "frame": "global",
+        "notes": ""
+      },
+      {
+        "name": "column_mate_top",
+        "kind": "mechanical",
+        "position_mm": [
+          0.0,
+          0.0,
+          39.41
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "12xM4 PCD 92",
+        "mating_part_id": "S1.3-02",
+        "bore_mm": 28.0,
+        "od_mm": 104.0,
+        "pcd_mm": 92.0,
+        "bolt_count": 12,
+        "bolt_hole_mm": 4.5,
+        "bolt_spec": "",
+        "frame": "global",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "OD",
+        "nominal_mm": 104.0,
+        "tol_plus_mm": 0.02,
+        "tol_minus_mm": -0.02,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø104.00 ±0.02"
+      },
+      {
+        "label": "CLEAR_BORE",
+        "nominal_mm": 28.0,
+        "tol_plus_mm": 0.01,
+        "tol_minus_mm": -0.01,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø28.00 ±0.01"
+      },
+      {
+        "label": "STACK_H",
+        "nominal_mm": 7.5,
+        "tol_plus_mm": 0.005,
+        "tol_minus_mm": -0.005,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "7.50 ±0.005"
+      },
+      {
+        "label": "Z_STROKE",
+        "nominal_mm": 0.1,
+        "tol_plus_mm": 0.001,
+        "tol_minus_mm": -0.001,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "±",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 3,
+        "formatted": "±0.100 ±0.001"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "parallelism",
+        "tolerance_mm": 0.002,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "KINEMATIC PLANES",
+        "glyph": "∥",
+        "tolerance_text": "0.002"
+      },
+      {
+        "symbol": "flatness",
+        "tolerance_mm": 0.002,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "INVAR-36 DATUM A",
+        "glyph": "⏥",
+        "tolerance_text": "0.002"
+      },
+      {
+        "symbol": "concentricity",
+        "tolerance_mm": 0.005,
+        "diameter_zone": true,
+        "material_condition": "",
+        "datum_primary": "B",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "Ø28 OPTICAL AXIS",
+        "glyph": "◎",
+        "tolerance_text": "Ø0.005"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "Tip/tilt ±1 mrad, Z ±100 um, modal f1>=2.59 MHz (Exp84)",
+      "Invar-36 3-DOF kinematic piezo tip/tilt/Z head alignment mount (tip/tilt ±1 mrad, Z ±100 um, modal f1>=2.59 MHz); bridges S2.1-04 to S1.3-02"
+    ],
+    "scad_params": {
+      "od": 104.0,
+      "bore_id": 28.0,
+      "height": 7.5,
+      "tip_tilt_mrad": 1.0,
+      "z_stroke_um": 100.0,
+      "f1_MHz": 2.59
+    },
+    "target_mass_kg": 0.28,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S2.5-02",
+    "subsystem": "S2",
+    "design_tier": "CUSTOM_FULL",
+    "stl_path": "hardware/cad_parts/out/S2/S2.5-02.stl",
+    "step_path": "hardware/cad_parts/out/S2/S2.5-02.step",
+    "scad_path": "hardware/cad_parts/out/S2/S2.5-02.scad",
+    "dxf_path": "hardware/cad_parts/out/S2/S2.5-02.dxf",
+    "svg_path": "hardware/cad_parts/out/S2/S2.5-02.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 34667.321798067635,
+    "surface_area_mm2": 34282.21741769152,
+    "mass_kg": 0.2790719404744445,
+    "cg_mm": [
+      -5.634975654606614e-15,
+      -3.6974852074747506e-16,
+      35.660000000000224
+    ],
+    "bbox_min_mm": [
+      -52.0,
+      -52.0,
+      31.909999999999997
+    ],
+    "bbox_max_mm": [
+      52.0,
+      52.0,
+      39.410000000000004
+    ],
+    "inertia_kg_mm2": [
+      200.27230037178168,
+      200.27230037178236,
+      396.51810815774604,
+      5.392006130477968e-15,
+      -2.3683025027310473e-14,
+      -4.456159140886487e-14
+    ],
+    "triangle_count": 2232,
+    "vertex_count": 1080,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "engineering_checks": {
+    "wd_stack": {
+      "nominal_mm": 0.24999999999999978,
+      "mean_mm": 0.24999999999999978,
+      "wc_half_band_mm": 0.0125,
+      "wc_min_mm": 0.23749999999999977,
+      "wc_max_mm": 0.2624999999999998,
+      "rss_half_band_mm": 0.007365459931328118,
+      "rss_min_mm": 0.24263454006867166,
+      "rss_max_mm": 0.2573654599313279,
+      "modified_rss_half_band_mm": 0.011048189896992178,
+      "modified_rss_min_mm": 0.2389518101030076,
+      "modified_rss_max_mm": 0.26104818989699197,
+      "target_min_mm": 0.22,
+      "target_max_mm": 0.28,
+      "wc_pass": true,
+      "rss_pass": true,
+      "modified_rss_pass": true,
+      "variance_shares_pct": {
+        "S2.5-02_piezo_mount_datum": 46.08294930875576,
+        "S2.1-04_aln_cassette_seat": 46.08294930875576,
+        "S2.3-03_sapphire_spacer_ring": 0.46082949308755755,
+        "S2.3-01_archB_minilens_h": 7.373271889400921
+      }
+    }
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

@@ -1,0 +1,415 @@
+{
+  "part_design": {
+    "part_id": "S9.1-02",
+    "parent_bom_id": "S9.1",
+    "subsystem": "S9",
+    "part_name": "Demet nokta boyutu (knife-edge) ve litografik fiducial kalibrasyon hedefleri",
+    "design_tier": "KIT_OR_ALIAS",
+    "material": "Si",
+    "temp_stage": "300 K",
+    "temp_k": 300.0,
+    "vacuum_grade": "UHV 1e-9 mbar",
+    "tolerance_spec": "±1 nm kenar",
+    "surface_finish_ra_um": 0.1,
+    "qty": 4,
+    "procurement_class": "CUS",
+    "world_origin_mm": [
+      -710.0,
+      -1180.0,
+      26.0
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "fiducial_target_coupons",
+        "kind": "optical",
+        "position_mm": [
+          -710.0,
+          -1180.0,
+          17.5
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "4x 25x25 mm Au/W 10 nm Knife-Edge Targets (±1 nm edge)",
+        "mating_part_id": "S4.5-02",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "world",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "CASE_W",
+        "nominal_mm": 140.0,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "140.00 ±0.50"
+      },
+      {
+        "label": "COUPON_SQ",
+        "nominal_mm": 25.0,
+        "tol_plus_mm": 0.05,
+        "tol_minus_mm": -0.05,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "25.00 ±0.05"
+      },
+      {
+        "label": "CASE_H",
+        "nominal_mm": 52.0,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "52.00 ±0.50"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "flatness",
+        "tolerance_mm": 0.002,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "10 nm KNIFE-EDGE SURFACE",
+        "glyph": "⏥",
+        "tolerance_text": "0.002"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "sigma_spot <= 1.5 nm dogrudan olcum hedefi",
+      "4x 10 nm Au/W knife-edge & fiducial calibration targets (sigma_spot <= 1.5 nm metrology) at (-710, -1180)."
+    ],
+    "scad_params": {
+      "qty_targets": 4,
+      "coupon_sq_mm": 25.0,
+      "edge_nm": 10.0
+    },
+    "target_mass_kg": 1.15,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S9.1-02",
+    "subsystem": "S9",
+    "design_tier": "KIT_OR_ALIAS",
+    "stl_path": "hardware/cad_parts/out/S9_spares_hpc/S9.1-02.stl",
+    "step_path": "hardware/cad_parts/out/S9_spares_hpc/S9.1-02.step",
+    "scad_path": "hardware/cad_parts/out/S9_spares_hpc/S9.1-02.scad",
+    "dxf_path": "hardware/cad_parts/out/S9_spares_hpc/S9.1-02.dxf",
+    "svg_path": "hardware/cad_parts/out/S9_spares_hpc/S9.1-02.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 584643.0400000073,
+    "surface_area_mm2": 125435.93575695733,
+    "mass_kg": 1.1499999999999995,
+    "cg_mm": [
+      -709.9999999999978,
+      -1181.9562459855824,
+      27.362920554052792
+    ],
+    "bbox_min_mm": [
+      -794.4,
+      -1244.4,
+      0.0
+    ],
+    "bbox_max_mm": [
+      -625.6,
+      -1128.0,
+      52.0
+    ],
+    "inertia_kg_mm2": [
+      1494.6290356948068,
+      2810.168170242007,
+      3669.6381226470676,
+      1.2005689777389486e-10,
+      3.0014224443473715e-11,
+      -3.0661390418801924
+    ],
+    "triangle_count": 248,
+    "vertex_count": 160,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "shell_bboxes_mm": [
+    [
+      [
+        -780.0,
+        -1230.0,
+        0.0
+      ],
+      [
+        -640.0,
+        -1130.0,
+        12.0
+      ]
+    ],
+    [
+      [
+        -780.0,
+        -1230.0,
+        12.2
+      ],
+      [
+        -772.0,
+        -1130.0,
+        33.6
+      ]
+    ],
+    [
+      [
+        -648.0,
+        -1230.0,
+        12.2
+      ],
+      [
+        -640.0,
+        -1130.0,
+        33.6
+      ]
+    ],
+    [
+      [
+        -771.8,
+        -1230.0,
+        12.2
+      ],
+      [
+        -648.2,
+        -1222.0,
+        33.6
+      ]
+    ],
+    [
+      [
+        -771.8,
+        -1138.0,
+        12.2
+      ],
+      [
+        -648.2,
+        -1130.0,
+        33.6
+      ]
+    ],
+    [
+      [
+        -782.0,
+        -1232.0,
+        34.0
+      ],
+      [
+        -638.0,
+        -1128.0,
+        52.0
+      ]
+    ],
+    [
+      [
+        -761.2,
+        -1244.4,
+        9.0
+      ],
+      [
+        -737.2,
+        -1232.4,
+        43.0
+      ]
+    ],
+    [
+      [
+        -794.4,
+        -1225.0,
+        11.9
+      ],
+      [
+        -782.4,
+        -1135.0,
+        33.9
+      ]
+    ],
+    [
+      [
+        -682.8,
+        -1244.4,
+        9.0
+      ],
+      [
+        -658.8,
+        -1232.4,
+        43.0
+      ]
+    ],
+    [
+      [
+        -637.6,
+        -1225.0,
+        11.9
+      ],
+      [
+        -625.6,
+        -1135.0,
+        33.9
+      ]
+    ],
+    [
+      [
+        -746.5,
+        -1210.5,
+        15.25
+      ],
+      [
+        -721.5,
+        -1185.5,
+        16.75
+      ]
+    ],
+    [
+      [
+        -741.0,
+        -1199.5,
+        16.85
+      ],
+      [
+        -727.0,
+        -1196.5,
+        17.65
+      ]
+    ],
+    [
+      [
+        -698.5,
+        -1210.5,
+        15.25
+      ],
+      [
+        -673.5,
+        -1185.5,
+        16.75
+      ]
+    ],
+    [
+      [
+        -693.0,
+        -1199.5,
+        16.85
+      ],
+      [
+        -679.0,
+        -1196.5,
+        17.65
+      ]
+    ],
+    [
+      [
+        -698.5,
+        -1174.5,
+        15.25
+      ],
+      [
+        -673.5,
+        -1149.5,
+        16.75
+      ]
+    ],
+    [
+      [
+        -693.0,
+        -1163.5,
+        16.85
+      ],
+      [
+        -679.0,
+        -1160.5,
+        17.65
+      ]
+    ],
+    [
+      [
+        -746.5,
+        -1174.5,
+        15.25
+      ],
+      [
+        -721.5,
+        -1149.5,
+        16.75
+      ]
+    ],
+    [
+      [
+        -741.0,
+        -1163.5,
+        16.85
+      ],
+      [
+        -727.0,
+        -1160.5,
+        17.65
+      ]
+    ]
+  ],
+  "reconciliation_notes": []
+}

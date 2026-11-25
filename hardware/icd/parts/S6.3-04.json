@@ -1,0 +1,104 @@
+{
+  "schema_version": "part_icd_v1.0",
+  "part_id": "S6.3-04",
+  "parent_bom_id": "S6.3",
+  "subsystem": "S6",
+  "part_name": "Kalici-mod (persistent) superiletken anahtar ve quench koruma devresi",
+  "part_category": "PHYSICAL_SOLID",
+  "bom_metadata": {
+    "qty": "1",
+    "unit": "set",
+    "material": "NbTi anahtar + soguk diyotlar + bosaltma direnci",
+    "key_spec": "Suruklenme <0.1 ppm/saat, adyabatik quench tepe 64.6 K, E_mag=18.9 kJ (Exp125)",
+    "tolerance": "<0.1 ppm/h",
+    "temp_stage": "4.2 K / 300 K",
+    "vacuum_grade": "Kriyo-vakum",
+    "procurement_class": "COTS/CUS",
+    "parent_cost_class": "C",
+    "usd_low": 7000.0,
+    "usd_nom": 12500.0,
+    "usd_high": 23000.0,
+    "legacy_cad_module": "s6_cryo_dr_magnet_readout",
+    "bom_epistemic_tag": "{Model-Kalibrasyon-Exp114}",
+    "notes": "Exp125 64.6 K guvenli quench sicakligi ve ESR/ENDOR frekans kararligi"
+  },
+  "artifact_links": {
+    "cad": {
+      "work_package": "WP-M4",
+      "design_tier": "COTS_ENV_ICD",
+      "stl": "hardware/cad_parts/out/S6/S6.3-04.stl",
+      "step": "hardware/cad_parts/out/S6/S6.3-04.step",
+      "scad": "hardware/cad_parts/out/S6/S6.3-04.scad",
+      "dxf": "hardware/cad_parts/out/S6/S6.3-04.dxf",
+      "svg": "hardware/cad_parts/out/S6/S6.3-04.svg",
+      "cad_json": "hardware/cad_parts/out/S6/S6.3-04.json",
+      "watertight": true,
+      "all_6_files_valid": true,
+      "mass_kg": 0.403593,
+      "triangle_count": 440,
+      "temp_k": 4.2,
+      "canonical_bbox_min_mm": [
+        -616.0,
+        -23.0,
+        765.5
+      ],
+      "canonical_bbox_max_mm": [
+        -580.0,
+        23.0,
+        819.4
+      ],
+      "datum_shift_mm": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "port_count": 0,
+      "gdt_frame_count": 0
+    },
+    "pcb_bundles": [
+      {
+        "bundle_slug": "cryo_rf_harness_icd",
+        "verification_json": "hardware/pcb/cryo_rf_harness_icd/cryo_rf_thermal_attenuation.json",
+        "boards": [
+          "cryo_rf_bias_panel"
+        ],
+        "kicad_sch_files": [
+          "hardware/pcb/cryo_rf_harness_icd/cryo_rf_bias_panel.kicad_sch"
+        ],
+        "kicad_pcb_files": [
+          "hardware/pcb/cryo_rf_harness_icd/cryo_rf_bias_panel.kicad_pcb"
+        ],
+        "spice_decks": [
+          "hardware/pcb/cryo_rf_harness_icd/magnet_quench_dump_1p563ohm.cir",
+          "hardware/pcb/cryo_rf_harness_icd/qram_chebyshev_50_to_3k.cir",
+          "hardware/pcb/cryo_rf_harness_icd/rf_set_tank_biastee.cir"
+        ],
+        "all_passed": true
+      }
+    ],
+    "legacy_board_files": [],
+    "electrical_icd": null,
+    "rtl_modules": [],
+    "rtl_audit_json": null,
+    "software_and_eda_files": [],
+    "verification_tests": []
+  },
+  "specialized_specification": null,
+  "verification_status": {
+    "cad_verified": true,
+    "pcb_verified": true,
+    "electrical_icd_verified": false,
+    "rtl_verified": false,
+    "software_or_eda_verified": false,
+    "specialized_icd_present": false,
+    "traceable": true
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "tapeout_done": false
+  }
+}

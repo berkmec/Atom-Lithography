@@ -1,0 +1,228 @@
+{
+  "part_design": {
+    "part_id": "S6.4-02",
+    "parent_bom_id": "S6.4",
+    "subsystem": "S6",
+    "part_name": "Genis-bantli I/Q modulatorler, hizli anahtarlar ve oda-sicakligi surucu amp.",
+    "design_tier": "COTS_ENV_ICD",
+    "material": "Al 6061",
+    "temp_stage": "300 K (kabin)",
+    "temp_k": 300.0,
+    "vacuum_grade": "Atmosfer",
+    "tolerance_spec": "±0.2 dB",
+    "surface_finish_ra_um": 0.8,
+    "qty": 4,
+    "procurement_class": "COTS",
+    "world_origin_mm": [
+      2100.0,
+      0.0,
+      845.6500000000001
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "iq_drive_out",
+        "kind": "rf",
+        "position_mm": [
+          0.0,
+          -237.0,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "standard": "8x 2.92mm MW Drive Out",
+        "mating_part_id": "S6.4-03",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      },
+      {
+        "name": "rack_bay2_u17_u18",
+        "kind": "mechanical",
+        "position_mm": [
+          0.0,
+          -230.0,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "standard": "19\" EIA-310 2U (U17-U18)",
+        "mating_part_id": "S7.4-03",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "WIDTH_19IN",
+        "nominal_mm": 482.6,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "482.60 ±0.50"
+      },
+      {
+        "label": "DEPTH",
+        "nominal_mm": 460.0,
+        "tol_plus_mm": 1.0,
+        "tol_minus_mm": -1.0,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "460.00 ±1.00"
+      },
+      {
+        "label": "HEIGHT_2U",
+        "nominal_mm": 86.9,
+        "tol_plus_mm": 0.3,
+        "tol_minus_mm": -0.3,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "86.90 ±0.30"
+      }
+    ],
+    "gdt_frames": [],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "200 MHz IF bant, >60 dB ac/kapa izolasyonu"
+    ],
+    "scad_params": {
+      "rack_u": 2,
+      "qty_sets": 4,
+      "if_bw_mhz": 200.0
+    },
+    "target_mass_kg": 10.5,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact_result": {
+    "part_id": "S6.4-02",
+    "subsystem": "S6",
+    "design_tier": "COTS_ENV_ICD",
+    "stl_path": "hardware/cad_parts/out/S6/S6.4-02.stl",
+    "step_path": "hardware/cad_parts/out/S6/S6.4-02.step",
+    "scad_path": "hardware/cad_parts/out/S6/S6.4-02.scad",
+    "dxf_path": "hardware/cad_parts/out/S6/S6.4-02.dxf",
+    "svg_path": "hardware/cad_parts/out/S6/S6.4-02.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 3406901.596977565,
+    "surface_area_mm2": 2689309.083686913,
+    "mass_kg": 9.198634311839424,
+    "cg_mm": [
+      3.506100565335345e-14,
+      -5.204612568510166,
+      -2.4229924330662582
+    ],
+    "bbox_min_mm": [
+      -241.3,
+      -242.05,
+      -43.45
+    ],
+    "bbox_max_mm": [
+      241.3,
+      230.0,
+      43.45
+    ],
+    "inertia_kg_mm2": [
+      187671.28562935654,
+      170491.7497348265,
+      344242.06654572603,
+      -5.15676448139895e-11,
+      4.282898442115026e-12,
+      161.6924106058101
+    ],
+    "triangle_count": 1236,
+    "vertex_count": 640,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "json_path": "hardware/cad_parts/out/S6/S6.4-02.json",
+  "world_bbox_min_mm": [
+    1858.7,
+    -242.05,
+    802.2
+  ],
+  "world_bbox_max_mm": [
+    2341.3,
+    230.0,
+    889.1
+  ],
+  "world_cg_mm": [
+    2100.0,
+    -5.2046,
+    843.227
+  ],
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

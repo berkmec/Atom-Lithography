@@ -1,0 +1,257 @@
+{
+  "part_design": {
+    "part_id": "S6.9-01",
+    "parent_bom_id": "S6.9",
+    "subsystem": "S6",
+    "part_name": "PT420 500 mm ofsetli uzak doner valf kutusu ve L=600 mm esnek He yuksek-basinc hatti (Exp133)",
+    "design_tier": "CUSTOM_FULL",
+    "material": "Al 6061",
+    "temp_stage": "300 K (tesis)",
+    "temp_k": 300.0,
+    "vacuum_grade": "20 bar He",
+    "tolerance_spec": "20 bar He, He<=1e-9",
+    "surface_finish_ra_um": 0.8,
+    "qty": 1,
+    "procurement_class": "CUS",
+    "world_origin_mm": [
+      -1150.0,
+      0.0,
+      610.0
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "he_uloop_to_pt420",
+        "kind": "gas",
+        "position_mm": [
+          423.0,
+          0.0,
+          520.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "standard": "L=600 mm Braided 316L He U-Loop",
+        "mating_part_id": "S6.1-01",
+        "bore_mm": 15.0,
+        "od_mm": 21.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      },
+      {
+        "name": "floor_anchor_base",
+        "kind": "bolt",
+        "position_mm": [
+          0.0,
+          0.0,
+          -610.0
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "standard": "4x M12 Vibration-Isolated Anchor",
+        "mating_part_id": "",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 4,
+        "bolt_hole_mm": 13.0,
+        "bolt_spec": "M12",
+        "frame": "local",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "VALVE_OFFSET",
+        "nominal_mm": 500.0,
+        "tol_plus_mm": 1.0,
+        "tol_minus_mm": -1.0,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "500.00 ±1.00"
+      },
+      {
+        "label": "FLEX_HE_LEN",
+        "nominal_mm": 600.0,
+        "tol_plus_mm": 5.0,
+        "tol_minus_mm": -5.0,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "600.00 ±5.00"
+      },
+      {
+        "label": "BOX_W",
+        "nominal_mm": 180.0,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "180.00 ±0.50"
+      },
+      {
+        "label": "STAND_H",
+        "nominal_mm": 1190.0,
+        "tol_plus_mm": 1.0,
+        "tol_minus_mm": -1.0,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "1190.00 ±1.00"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "flatness",
+        "tolerance_mm": 0.2,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "Floor isolation anchor plate",
+        "glyph": "⏥",
+        "tolerance_text": "0.20"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "500 mm ofset uzak valf + 600 mm esnek He hatti (HF >12.7x, 1.4 Hz 3.6x bastirma; CFG4 sigma_stage=0.1024 nm)"
+    ],
+    "scad_params": {
+      "valve_offset_mm": 500.0,
+      "flex_he_length_mm": 600.0,
+      "box_dx": 180.0,
+      "box_dy": 160.0,
+      "box_dz": 180.0
+    },
+    "target_mass_kg": 29.5,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact_result": {
+    "part_id": "S6.9-01",
+    "subsystem": "S6",
+    "design_tier": "CUSTOM_FULL",
+    "stl_path": "hardware/cad_parts/out/S6/S6.9-01.stl",
+    "step_path": "hardware/cad_parts/out/S6/S6.9-01.step",
+    "scad_path": "hardware/cad_parts/out/S6/S6.9-01.scad",
+    "dxf_path": "hardware/cad_parts/out/S6/S6.9-01.dxf",
+    "svg_path": "hardware/cad_parts/out/S6/S6.9-01.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 11807673.090168124,
+    "surface_area_mm2": 1723421.0992438963,
+    "mass_kg": 42.50762312460527,
+    "cg_mm": [
+      1.8940764895891047,
+      -3.046367830514448e-17,
+      -22.031040395672466
+    ],
+    "bbox_min_mm": [
+      -110.0,
+      -110.0,
+      -610.0
+    ],
+    "bbox_max_mm": [
+      423.0,
+      110.0,
+      580.0
+    ],
+    "inertia_kg_mm2": [
+      5710263.173305724,
+      5737197.325222254,
+      308303.24014205247,
+      4.907186684539933e-06,
+      -38505.0677028012,
+      -2.2363765450070975e-05
+    ],
+    "triangle_count": 2500,
+    "vertex_count": 1242,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "json_path": "hardware/cad_parts/out/S6/S6.9-01.json",
+  "world_bbox_min_mm": [
+    -1260.0,
+    -110.0,
+    0.0
+  ],
+  "world_bbox_max_mm": [
+    -727.0,
+    110.0,
+    1190.0
+  ],
+  "world_cg_mm": [
+    -1148.1059,
+    -0.0,
+    587.969
+  ],
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

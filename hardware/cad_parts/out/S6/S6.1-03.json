@@ -1,0 +1,241 @@
+{
+  "part_design": {
+    "part_id": "S6.1-03",
+    "parent_bom_id": "S6.1",
+    "subsystem": "S6",
+    "part_name": "Titresim-ayrisik orgulu OFHC bakir termal baglanti seritleri (50K/4K)",
+    "design_tier": "CUSTOM_FULL",
+    "material": "OFHC Cu",
+    "temp_stage": "50 K / 4 K",
+    "temp_k": 4.0,
+    "vacuum_grade": "Kriyo-vakum",
+    "tolerance_spec": "<0.1 K/W",
+    "surface_finish_ra_um": 0.8,
+    "qty": 1,
+    "procurement_class": "CUS",
+    "world_origin_mm": [
+      -650.0,
+      0.0,
+      802.0
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "pt420_45k_ring",
+        "kind": "thermal",
+        "position_mm": [
+          0.0,
+          0.0,
+          60.0
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "standard": "4x Au-OFHC M6 Clamp",
+        "mating_part_id": "S6.1-01",
+        "bore_mm": 0.0,
+        "od_mm": 170.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      },
+      {
+        "name": "pt420_4k_ring",
+        "kind": "thermal",
+        "position_mm": [
+          0.0,
+          0.0,
+          -59.0
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "standard": "4x Au-OFHC M6 Clamp",
+        "mating_part_id": "S6.8-01",
+        "bore_mm": 0.0,
+        "od_mm": 138.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "SPAN_50K",
+        "nominal_mm": 46.0,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "46.00 ±0.50"
+      },
+      {
+        "label": "SPAN_4K",
+        "nominal_mm": 44.0,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "44.00 ±0.50"
+      },
+      {
+        "label": "STG_DZ",
+        "nominal_mm": 119.0,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "119.00 ±0.50"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "flatness",
+        "tolerance_mm": 0.02,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "Au-plated clamp lug faces",
+        "glyph": "⏥",
+        "tolerance_text": "0.020"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "4 K'de <0.1 K/W termal direnc, PT 1.4 Hz titresimini keser"
+    ],
+    "scad_params": {
+      "n_braids_50k": 4,
+      "n_braids_4k": 4,
+      "rrr_min": 200
+    },
+    "target_mass_kg": 0.85,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact_result": {
+    "part_id": "S6.1-03",
+    "subsystem": "S6",
+    "design_tier": "CUSTOM_FULL",
+    "stl_path": "hardware/cad_parts/out/S6/S6.1-03.stl",
+    "step_path": "hardware/cad_parts/out/S6/S6.1-03.step",
+    "scad_path": "hardware/cad_parts/out/S6/S6.1-03.scad",
+    "dxf_path": "hardware/cad_parts/out/S6/S6.1-03.dxf",
+    "svg_path": "hardware/cad_parts/out/S6/S6.1-03.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 10243.92269352912,
+    "surface_area_mm2": 10965.853810831239,
+    "mass_kg": 0.0917855473340209,
+    "cg_mm": [
+      3.604623540873261e-13,
+      -3.054163788326113e-14,
+      7.337679843604431
+    ],
+    "bbox_min_mm": [
+      -80.58383382103128,
+      -80.58383382103126,
+      -65.54164838696917
+    ],
+    "bbox_max_mm": [
+      80.58383382103126,
+      80.58383382103128,
+      67.23203814275328
+    ],
+    "inertia_kg_mm2": [
+      478.7431903780019,
+      478.74319037800115,
+      315.184464396502,
+      6.682239472866049e-13,
+      -1.315920542512045e-12,
+      1.2560315278086353e-12
+    ],
+    "triangle_count": 3392,
+    "vertex_count": 1744,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "json_path": "hardware/cad_parts/out/S6/S6.1-03.json",
+  "world_bbox_min_mm": [
+    -730.5838,
+    -80.5838,
+    736.4584
+  ],
+  "world_bbox_max_mm": [
+    -569.4162,
+    80.5838,
+    869.232
+  ],
+  "world_cg_mm": [
+    -650.0,
+    -0.0,
+    809.3377
+  ],
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

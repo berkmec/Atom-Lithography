@@ -1,0 +1,82 @@
+{
+  "schema_version": "1.0",
+  "part_id": "S5.1-02",
+  "parent_bom_id": "S5.1",
+  "subsystem": "S5",
+  "part_name": "Ust kolon montaj flansi ve cikarilabilir 150 C bakeout isitma ceketi",
+  "qty": 1,
+  "unit": "set",
+  "temp_stage": "300-423 K",
+  "vacuum_grade": "UHV / Dis yuzey",
+  "bom_key_spec": "Tekduze 150 C firinlama, 4-bolge PID sicaklik kontrolu",
+  "usd_nom": 8500.0,
+  "bom_epistemic_tag": "{Model-Kalibrasyon-Exp114}",
+  "electrical_class": "E4",
+  "grounding_domain": "FACILITY_PE",
+  "grounding_notes": "Removable 150 C 4-zone PID UHV bakeout heater jacket (non-simultaneous maintenance phase only).",
+  "supply_rails": [
+    {
+      "rail_name": "AC_BAKEOUT_230V",
+      "voltage_v": 230.0,
+      "current_type": "AC_1PH",
+      "max_current_a": 10.0,
+      "steady_power_w": 0.0,
+      "peak_power_w": 2200.0,
+      "source_part_id": "S7.4-03"
+    }
+  ],
+  "connectors_and_pinout": [
+    {
+      "connector_ref": "J_BAKE",
+      "connector_type": "4x Harting / Type-K PID Channels",
+      "location_side": "chamber_ext",
+      "mating_part_id": "S7.4-04",
+      "pins": [
+        {
+          "pin": "1-8",
+          "signal": "BAKE_HTR_Z[1:4]",
+          "direction": "IN",
+          "nominal_level": "230 VAC SSR PID (off during ops)"
+        },
+        {
+          "pin": "9-16",
+          "signal": "BAKE_TC_K[1:4]",
+          "direction": "OUT",
+          "nominal_level": "150 C \u00b13 C feedback + 170 C thermal cutoff"
+        }
+      ]
+    }
+  ],
+  "mating_part_ids": [
+    "S5.1-01",
+    "S7.4-04"
+  ],
+  "interlock_hooks": [
+    {
+      "signal_name": "BAKEOUT_170C_CUTOFF",
+      "target_part_id": "S7.4-04",
+      "action_on_trip": "Hard-cut heater SSR if T > 170 C or cryo cold",
+      "response_time_ms": 50.0
+    }
+  ],
+  "ups_tier": "NONE",
+  "ups_budget_group": "AUX_PROCESS_SHED_ON_OUTAGE",
+  "exp150_ups_allocation_w": 0.0,
+  "supply_rails_steady_sum_w": 0.0,
+  "incremental_mains_w": 0.0,
+  "secondary_or_parent_derived_w": 0.0,
+  "non_exp150_aux_shed_w": 0.0,
+  "reconciliation_note": "Non-Exp150 auxiliary sheddable rack/facility load (NONE): incremental_mains_w = 0.0 W AC mains (mutually exclusive process/experiment mode, shed immediately on outage; exp150_ups_allocation_w = 0.0 W).",
+  "timing_sync": {
+    "rb_10mhz_port": null,
+    "white_rabbit_port": null,
+    "sync_role": "Maintenance-only UHV bakeout"
+  },
+  "epistemic_flags": {
+    "design_maturity": "M0_M1_ELECTRICAL_ICD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

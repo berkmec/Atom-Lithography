@@ -1,0 +1,326 @@
+{
+  "part_id": "S1.5-01",
+  "subsystem": "S1",
+  "design": {
+    "part_id": "S1.5-01",
+    "parent_bom_id": "S1.5",
+    "subsystem": "S1",
+    "part_name": "Yari-kuresel HDA-HiRes enerji suzgeci (R0=40 mm, dE=0.453 eV, Exp124)",
+    "design_tier": "CUSTOM_FULL",
+    "material": "Ti-6Al-4V",
+    "temp_stage": "300 K",
+    "temp_k": 300.0,
+    "vacuum_grade": "UHV 1e-9 mbar",
+    "tolerance_spec": "±5 um kure profili",
+    "surface_finish_ra_um": 0.1,
+    "qty": 1,
+    "procurement_class": "CUS",
+    "world_origin_mm": [
+      0.0,
+      0.0,
+      162.16
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "hda_inlet_top",
+        "kind": "vacuum",
+        "position_mm": [
+          0.0,
+          0.0,
+          209.66
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "Ø16 mm Pass Port",
+        "mating_part_id": "S1.5-02",
+        "bore_mm": 16.0,
+        "od_mm": 110.0,
+        "pcd_mm": 106.0,
+        "bolt_count": 16,
+        "bolt_hole_mm": 3.2,
+        "bolt_spec": "",
+        "frame": "global",
+        "notes": ""
+      },
+      {
+        "name": "hda_outlet_bot",
+        "kind": "vacuum",
+        "position_mm": [
+          0.0,
+          0.0,
+          114.66
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "standard": "Ø16 mm Pass Port",
+        "mating_part_id": "S1.5-02",
+        "bore_mm": 16.0,
+        "od_mm": 110.0,
+        "pcd_mm": 106.0,
+        "bolt_count": 16,
+        "bolt_hole_mm": 3.2,
+        "bolt_spec": "",
+        "frame": "global",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "HDA_R0",
+        "nominal_mm": 40.0,
+        "tol_plus_mm": 0.005,
+        "tol_minus_mm": -0.005,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "R",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 3,
+        "formatted": "R40.000 ±0.005"
+      },
+      {
+        "label": "HEMI_R1",
+        "nominal_mm": 36.0,
+        "tol_plus_mm": 0.005,
+        "tol_minus_mm": -0.005,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "R",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 3,
+        "formatted": "R36.000 ±0.005"
+      },
+      {
+        "label": "HEMI_R2",
+        "nominal_mm": 44.0,
+        "tol_plus_mm": 0.005,
+        "tol_minus_mm": -0.005,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "R",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 3,
+        "formatted": "R44.000 ±0.005"
+      },
+      {
+        "label": "HOUSING_OD",
+        "nominal_mm": 110.0,
+        "tol_plus_mm": 0.05,
+        "tol_minus_mm": -0.05,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø110.00 ±0.05"
+      },
+      {
+        "label": "HEIGHT",
+        "nominal_mm": 95.0,
+        "tol_plus_mm": 0.05,
+        "tol_minus_mm": -0.05,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "95.00 ±0.05"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "profile_surface",
+        "tolerance_mm": 0.005,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "B",
+        "datum_tertiary": "",
+        "feature_note": "HEMISPHERES R36/R44",
+        "glyph": "⌓",
+        "tolerance_text": "0.005"
+      },
+      {
+        "symbol": "concentricity",
+        "tolerance_mm": 0.005,
+        "diameter_zone": true,
+        "material_condition": "",
+        "datum_primary": "B",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "CONCENTRIC R0=40",
+        "glyph": "◎",
+        "tolerance_text": "Ø0.005"
+      },
+      {
+        "symbol": "perpendicularity",
+        "tolerance_mm": 0.01,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "EQUATORIAL PLATE",
+        "glyph": "⊥",
+        "tolerance_text": "0.010"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "HDA-HiRes R0=40 mm, dE_FWHM=0.453 eV (h=95 mm, OD=110 mm; Exp124 Arch-B Cc=2.660 mm uyumlu)",
+      "Exp124 HDA-HiRes true concentric hemispheres (R1=36, R2=44 -> R0=40.000 mm, dE_FWHM=0.453 eV) + Jost lenses"
+    ],
+    "scad_params": {
+      "r0_mm": 40.0,
+      "r_inner_mm": 36.0,
+      "r_outer_mm": 44.0,
+      "e_pass_eV": 100.0,
+      "dE_fwhm_eV": 0.453
+    },
+    "target_mass_kg": 5.2,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S1.5-01",
+    "subsystem": "S1",
+    "design_tier": "CUSTOM_FULL",
+    "stl_path": "hardware/cad_parts/out/S1/S1.5-01.stl",
+    "step_path": "hardware/cad_parts/out/S1/S1.5-01.step",
+    "scad_path": "hardware/cad_parts/out/S1/S1.5-01.scad",
+    "dxf_path": "hardware/cad_parts/out/S1/S1.5-01.dxf",
+    "svg_path": "hardware/cad_parts/out/S1/S1.5-01.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 203055.07755563312,
+    "surface_area_mm2": 142825.51480323274,
+    "mass_kg": 0.8995339935714548,
+    "cg_mm": [
+      2.285188954673418,
+      8.723517972877003e-15,
+      162.1600000000008
+    ],
+    "bbox_min_mm": [
+      -55.0,
+      -55.0,
+      114.66
+    ],
+    "bbox_max_mm": [
+      55.0,
+      55.0,
+      209.66
+    ],
+    "inertia_kg_mm2": [
+      1580.8241316907743,
+      1464.3367719982998,
+      1771.8661154419656,
+      -2.6545596325317365e-13,
+      -5.479007959365845e-12,
+      -5.971275876618105e-13
+    ],
+    "triangle_count": 10068,
+    "vertex_count": 5012,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "engineering_checks": {
+    "hda_gap_stack": {
+      "nominal_mm": 8.0,
+      "mean_mm": 8.0,
+      "wc_half_band_mm": 0.013000000000000001,
+      "wc_min_mm": 7.987,
+      "wc_max_mm": 8.013,
+      "rss_half_band_mm": 0.0076811457478686085,
+      "rss_min_mm": 7.992318854252131,
+      "rss_max_mm": 8.007681145747869,
+      "modified_rss_half_band_mm": 0.011521718621802913,
+      "modified_rss_min_mm": 7.988478281378197,
+      "modified_rss_max_mm": 8.011521718621802,
+      "target_min_mm": 7.985,
+      "target_max_mm": 8.015,
+      "wc_pass": true,
+      "rss_pass": true,
+      "modified_rss_pass": true,
+      "variance_shares_pct": {
+        "outer_hemisphere_R2": 42.3728813559322,
+        "inner_hemisphere_R1": 42.3728813559322,
+        "sapphire_standoff_concentricity": 15.254237288135592
+      }
+    },
+    "bakeout_mumetal": {
+      "outer_material": "Mu-metal",
+      "inner_material": "Ti-6Al-4V",
+      "t_cold_k": 423.15,
+      "t_ref_k": 293.15,
+      "warm_outer_id_mm": 114.0,
+      "warm_inner_od_mm": 110.0,
+      "cold_outer_id_mm": 114.19380000000001,
+      "cold_inner_od_mm": 110.12979999999999,
+      "outer_strain": 0.0017000000000000348,
+      "inner_strain": 0.0011799999999999589,
+      "warm_radial_clearance_mm": 2.0,
+      "cold_nominal_radial_clearance_mm": 2.0320000000000107,
+      "cold_worst_case_radial_clearance_mm": 1.9070000000000107,
+      "delta_radial_clearance_mm": 0.03200000000001069,
+      "min_required_radial_clearance_mm": 1.5,
+      "interference_risk": false,
+      "passed": true
+    }
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

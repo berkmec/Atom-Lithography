@@ -1,0 +1,95 @@
+{
+  "schema_version": "part_icd_v1.0",
+  "part_id": "S5.1-02",
+  "parent_bom_id": "S5.1",
+  "subsystem": "S5",
+  "part_name": "Ust kolon montaj flansi ve cikarilabilir 150 C bakeout isitma ceketi",
+  "part_category": "PHYSICAL_SOLID",
+  "bom_metadata": {
+    "qty": "1",
+    "unit": "set",
+    "material": "316LN CF250 + silikon/cam-elyaf ceket",
+    "key_spec": "Tekduze 150 C firinlama, 4-bolge PID sicaklik kontrolu",
+    "tolerance": "±3 C",
+    "temp_stage": "300-423 K",
+    "vacuum_grade": "UHV / Dis yuzey",
+    "procurement_class": "CUS",
+    "parent_cost_class": "C",
+    "usd_low": 5000.0,
+    "usd_nom": 8500.0,
+    "usd_high": 15500.0,
+    "legacy_cad_module": "s5_uhv_chamber_loadlock",
+    "bom_epistemic_tag": "{Model-Kalibrasyon-Exp114}",
+    "notes": "UHV 10^-9 mbar icin su buhari uzaklastirma"
+  },
+  "artifact_links": {
+    "cad": {
+      "work_package": "WP-M3",
+      "design_tier": "CUSTOM_FULL",
+      "stl": "hardware/cad_parts/out/S5/S5.1-02.stl",
+      "step": "hardware/cad_parts/out/S5/S5.1-02.step",
+      "scad": "hardware/cad_parts/out/S5/S5.1-02.scad",
+      "dxf": "hardware/cad_parts/out/S5/S5.1-02.dxf",
+      "svg": "hardware/cad_parts/out/S5/S5.1-02.svg",
+      "cad_json": "hardware/cad_parts/out/S5/S5.1-02.json",
+      "watertight": true,
+      "all_6_files_valid": true,
+      "mass_kg": 12.719761,
+      "triangle_count": 4832,
+      "temp_k": 423.15,
+      "canonical_bbox_min_mm": [
+        -212.87,
+        -213.0,
+        293.0
+      ],
+      "canonical_bbox_max_mm": [
+        212.87,
+        213.0,
+        705.0
+      ],
+      "datum_shift_mm": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "port_count": 3,
+      "gdt_frame_count": 2
+    },
+    "pcb_bundles": [],
+    "legacy_board_files": [],
+    "electrical_icd": {
+      "path": "hardware/icd/electrical/S5.1-02.json",
+      "electrical_class": "E4",
+      "grounding_domain": "FACILITY_PE",
+      "ups_tier": "NONE",
+      "exp150_ups_allocation_w": 0.0,
+      "mating_part_ids": [
+        "S5.1-01",
+        "S7.4-04"
+      ],
+      "interlock_hooks_count": 1
+    },
+    "rtl_modules": [],
+    "rtl_audit_json": null,
+    "software_and_eda_files": [],
+    "verification_tests": []
+  },
+  "specialized_specification": null,
+  "verification_status": {
+    "cad_verified": true,
+    "pcb_verified": false,
+    "electrical_icd_verified": true,
+    "rtl_verified": false,
+    "software_or_eda_verified": false,
+    "specialized_icd_present": false,
+    "traceable": true
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "tapeout_done": false
+  }
+}

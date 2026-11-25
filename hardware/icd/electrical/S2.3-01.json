@@ -1,0 +1,89 @@
+{
+  "schema_version": "1.0",
+  "part_id": "S2.3-01",
+  "parent_bom_id": "S2.3",
+  "subsystem": "S2",
+  "part_name": "Cok-aciklikli elektrostatik mini-lens dizisi (Arch-B 0.50 mm, 32x32=1024, Exp124)",
+  "qty": 1,
+  "unit": "adet",
+  "temp_stage": "300 K",
+  "vacuum_grade": "UHV 1e-9 mbar",
+  "bom_key_spec": "Arch-B 0.50 mm es-adim 32x32=1024 (16.0x16.0 mm < \u00d828.0 mm), h=1.76 mm, WD=0.250 mm, Cc=2.660 mm, E_gap=10.60 MV/m, sigma_spot=1.428 nm",
+  "usd_nom": 72000.0,
+  "bom_epistemic_tag": "{Varsay\u0131m}",
+  "electrical_class": "E4",
+  "grounding_domain": "AGND",
+  "grounding_notes": "32x32=1024 Arch-B electrostatic mini-lens array (WD=0.250 mm, E_gap=10.60 MV/m, wafer=0 V).",
+  "supply_rails": [
+    {
+      "rail_name": "MINILENS_HV_3RAIL",
+      "voltage_v": 2000.0,
+      "current_type": "HV_DC",
+      "max_current_a": 0.001,
+      "steady_power_w": 1.0,
+      "peak_power_w": 2.0,
+      "source_part_id": "S2.3-04"
+    }
+  ],
+  "connectors_and_pinout": [
+    {
+      "connector_ref": "J_LENS_HV",
+      "connector_type": "3x UHV Ceramic HV Clips",
+      "location_side": "write_head_uhv",
+      "mating_part_id": "S2.3-04",
+      "pins": [
+        {
+          "pin": "1",
+          "signal": "LENS_TOP_ELEC",
+          "direction": "IN",
+          "nominal_level": "\u00b12 kV <2 mVpp"
+        },
+        {
+          "pin": "2",
+          "signal": "LENS_MID_FOCUS",
+          "direction": "IN",
+          "nominal_level": "\u00b12 kV <5 ppm"
+        },
+        {
+          "pin": "3",
+          "signal": "LENS_BOT_0V",
+          "direction": "PWR",
+          "nominal_level": "0 V wafer-plane reference"
+        }
+      ]
+    }
+  ],
+  "mating_part_ids": [
+    "S2.3-03",
+    "S2.3-04",
+    "S2.2-04"
+  ],
+  "interlock_hooks": [
+    {
+      "signal_name": "MINILENS_HV_CROWBAR",
+      "target_part_id": "S7.SAFETY-03",
+      "action_on_trip": "Clamp mini-lens HV on interlock",
+      "response_time_ms": 18.3
+    }
+  ],
+  "ups_tier": "NONE",
+  "ups_budget_group": "PASSIVE_ZERO_MAINS",
+  "exp150_ups_allocation_w": 0.0,
+  "supply_rails_steady_sum_w": 1.0,
+  "incremental_mains_w": 0.0,
+  "secondary_or_parent_derived_w": 1.0,
+  "non_exp150_aux_shed_w": 0.0,
+  "reconciliation_note": "Passive or downstream sub-assembly (1.00 W sub-rail power drawn from upstream source S2.3-04); incremental_mains_w = 0.0 W (zero double-counting).",
+  "timing_sync": {
+    "rb_10mhz_port": null,
+    "white_rabbit_port": null,
+    "sync_role": "Sub-2 nm electrostatic focus array"
+  },
+  "epistemic_flags": {
+    "design_maturity": "M0_M1_ELECTRICAL_ICD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

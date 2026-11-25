@@ -1,0 +1,85 @@
+{
+  "schema_version": "part_icd_v1.0",
+  "part_id": "S8.2-01",
+  "parent_bom_id": "S8.2",
+  "subsystem": "S8",
+  "part_name": "blanker_gate.v ve blanker_tile.v sentezlenebilir Verilog RTL + formel BMC",
+  "part_category": "IN_HOUSE_SOFTWARE_RTL_EDA",
+  "bom_metadata": {
+    "qty": "1",
+    "unit": "paket",
+    "material": "Verilog / Yosys / SymbiYosys",
+    "key_spec": "100 MHz kapi mantigi, 64 ch/karo, formel dogrulama PASS (Exp73/76)",
+    "tolerance": "0 BMC hatasi",
+    "temp_stage": "300 K (RTL)",
+    "vacuum_grade": "Uygulanmaz (SW)",
+    "procurement_class": "IN-HOUSE",
+    "parent_cost_class": "--",
+    "usd_low": 0.0,
+    "usd_nom": 0.0,
+    "usd_high": 0.0,
+    "legacy_cad_module": "software_control_stack",
+    "bom_epistemic_tag": "{Program-NRE-Kapsam}",
+    "notes": "Proje ici RTL ($0 HW; Program NRE kapsaminda)"
+  },
+  "artifact_links": {
+    "cad": null,
+    "pcb_bundles": [],
+    "legacy_board_files": [],
+    "electrical_icd": null,
+    "rtl_modules": [
+      "rtl/machine_ctrl/blanker_array_ctrl.v",
+      "src/rtl/blanker_gate.v",
+      "src/rtl/blanker_gate_spec.v",
+      "src/rtl/blanker_tile.v",
+      "src/rtl/blanker_tile_formal.v"
+    ],
+    "rtl_audit_json": "results/stage2_rtl_verification/rtl_machine_ctrl_audit.json",
+    "software_and_eda_files": [
+      "src/rtl/BLANKER_TILE.md",
+      "src/rtl/bmc64.ys"
+    ],
+    "verification_tests": [
+      "tests/test_rtl_contract.py",
+      "tests/test_blanker_tile.py",
+      "tests/test_rtl_machine_ctrl.py"
+    ]
+  },
+  "specialized_specification": {
+    "kind": "IN_HOUSE_SOFTWARE_RTL_EDA",
+    "role": "Synthesizable 64-ch counted-implantation blanker ASIC Verilog RTL & formal BMC",
+    "implementation_files": [
+      "src/rtl/BLANKER_TILE.md",
+      "src/rtl/bmc64.ys"
+    ],
+    "rtl_files": [
+      "src/rtl/blanker_gate.v",
+      "src/rtl/blanker_gate_spec.v",
+      "src/rtl/blanker_tile.v",
+      "src/rtl/blanker_tile_formal.v",
+      "rtl/machine_ctrl/blanker_array_ctrl.v"
+    ],
+    "verification_tests": [
+      "tests/test_rtl_contract.py",
+      "tests/test_blanker_tile.py",
+      "tests/test_rtl_machine_ctrl.py"
+    ]
+  },
+  "verification_status": {
+    "cad_verified": false,
+    "pcb_verified": false,
+    "electrical_icd_verified": false,
+    "rtl_verified": true,
+    "software_or_eda_verified": true,
+    "specialized_icd_present": true,
+    "traceable": true
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "tapeout_done": false
+  }
+}

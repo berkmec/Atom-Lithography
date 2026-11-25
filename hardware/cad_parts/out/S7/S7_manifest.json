@@ -1,0 +1,59 @@
+{
+  "subsystem": "S7",
+  "part_count": 19,
+  "all_valid": true,
+  "total_mass_kg": 820.998,
+  "s7_safety_masses_kg": {
+    "S7.SAFETY-01": 118.0,
+    "S7.SAFETY-02": 38.0,
+    "S7.SAFETY-03": 18.0,
+    "S7.SAFETY-04": 145.0,
+    "S7.SAFETY-05": 24.0,
+    "S7.SAFETY-06": 12.0
+  },
+  "s7_safety_total_mass_kg": 355.0,
+  "rack_bay1_x_mm": 1480.0,
+  "rack_bay2_x_mm": 2100.0,
+  "z_wafer_mm": 500.0,
+  "z_floor_mm": 0.0,
+  "bay1_u_allocation": {
+    "U1-U3": "S7.1-03 (6 kVA UPS 2U + Smart PDU 1U)",
+    "U4-U7": "S7.1-01 (2x 2U GPU GRAPE Workstations)",
+    "U8-U9": "S7.1-02 (2U NVMe RAID-10 Server)",
+    "U10-U13": "S7.2-03 (18-slot PXIe Chassis) holding S7.2-01 (Slots 2-5) & S7.2-02 (Slots 7-8)",
+    "U14-U35": "RESERVED OPEN for S4 (U14-U17), S3 (U18-U26), S1/S2 (U27-U35)",
+    "U36": "S7.4-01 (1U 10 MHz Rb Atomic Clock + 16-ch Dist)",
+    "U37": "S7.4-02 (1U White Rabbit Trigger Fan-Out)",
+    "U38": "S7.4-04 (1U Machine Interlock PLC & PDU Patch)",
+    "U39-U41": "S7.SAFETY-03 (3U 1oo2D Safety PLC)",
+    "U42": "SPARE"
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "general_tolerance_std": "ISO 2768-mK"
+  },
+  "part_ids": [
+    "S7.1-01",
+    "S7.1-02",
+    "S7.1-03",
+    "S7.2-01",
+    "S7.2-02",
+    "S7.2-03",
+    "S7.3-01",
+    "S7.3-02",
+    "S7.3-03",
+    "S7.4-01",
+    "S7.4-02",
+    "S7.4-03",
+    "S7.4-04",
+    "S7.SAFETY-01",
+    "S7.SAFETY-02",
+    "S7.SAFETY-03",
+    "S7.SAFETY-04",
+    "S7.SAFETY-05",
+    "S7.SAFETY-06"
+  ]
+}

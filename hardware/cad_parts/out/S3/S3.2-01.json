@@ -1,0 +1,296 @@
+{
+  "part_id": "S3.2-01",
+  "subsystem": "S3",
+  "part_design": {
+    "part_id": "S3.2-01",
+    "parent_bom_id": "S3.2",
+    "subsystem": "S3",
+    "part_name": "100 K soguk-ada 8-kanalli ultra-dusuk-C LTC6268 CSA modulleri (Exp127 kilitli)",
+    "design_tier": "CUSTOM_FULL",
+    "material": "OFHC Cu",
+    "temp_stage": "100 K (soguk ada)",
+    "temp_k": 100.0,
+    "vacuum_grade": "UHV 1e-9 mbar",
+    "tolerance_spec": "±5% kazanc",
+    "surface_finish_ra_um": 0.8,
+    "qty": 16,
+    "procurement_class": "CUS",
+    "world_origin_mm": [
+      0.0,
+      0.0,
+      -8.5
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "csa_16x_coax_in",
+        "kind": "rf",
+        "position_mm": [
+          86.0,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "standard": "16x Ultra-Low-C Micro-Coax Inputs (128 ch)",
+        "mating_part_id": "S3.2-04",
+        "bore_mm": 172.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      },
+      {
+        "name": "cold_island_100k_bus",
+        "kind": "thermal",
+        "position_mm": [
+          138.0,
+          0.0,
+          -3.0
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "standard": "4x Quadrant 100 K OFHC Cu Thermal Bus",
+        "mating_part_id": "S6.2-01",
+        "bore_mm": 268.0,
+        "od_mm": 284.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "INNER_BORE",
+        "nominal_mm": 172.0,
+        "tol_plus_mm": 0.2,
+        "tol_minus_mm": -0.2,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø172.00 ±0.20"
+      },
+      {
+        "label": "BUS_ARC_OD",
+        "nominal_mm": 284.0,
+        "tol_plus_mm": 0.2,
+        "tol_minus_mm": -0.2,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø284.00 ±0.20"
+      },
+      {
+        "label": "MODULE_H",
+        "nominal_mm": 10.8,
+        "tol_plus_mm": 0.1,
+        "tol_minus_mm": -0.1,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "10.80 ±0.10"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "flatness",
+        "tolerance_mm": 0.05,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "100 K THERMAL BUS PLANE",
+        "glyph": "⏥",
+        "tolerance_text": "0.050"
+      },
+      {
+        "symbol": "position",
+        "tolerance_mm": 0.2,
+        "diameter_zone": true,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "B",
+        "datum_tertiary": "",
+        "feature_note": "16x CSA QUADRANT ARRAY",
+        "glyph": "⌖",
+        "tolerance_text": "Ø0.20"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "128 ch (16x8), kilitli 100 K COLD_100K profili: Cf=0.25 pF, Rf=1 GOhm, tau=1.2 us, Q_ion~342 e- @5 keV, ENC=24.1 e-, eta=0.99936",
+      "All 16x 8-ch 100 K LTC6268 CSA modules instantiated around wafer perimeter (4x4 quadrants, R=86..118 mm).",
+      "Fits cleanly inside 36 mm Exp125 magnet split gap (Z=-14.0..-3.2 mm) & UHV bore (R_max=142 < 180 mm).",
+      "300K->100K OFHC Cu cold-island bore vs AlN carrier WC rad clearance: 29.093 mm (PASS).",
+      "300K->100K OFHC Cu clamp vs Al2O3/Rogers substrate WC rad clearance: 0.915 mm (PASS)."
+    ],
+    "scad_params": {
+      "n_csa_modules": 16,
+      "channels_total": 128,
+      "module_r_in_mm": 86.0,
+      "module_r_out_mm": 118.0,
+      "bus_r_out_mm": 142.0,
+      "operating_temp_k": 100.0
+    },
+    "target_mass_kg": null,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S3.2-01",
+    "subsystem": "S3",
+    "design_tier": "CUSTOM_FULL",
+    "stl_path": "hardware/cad_parts/out/S3/S3.2-01.stl",
+    "step_path": "hardware/cad_parts/out/S3/S3.2-01.step",
+    "scad_path": "hardware/cad_parts/out/S3/S3.2-01.scad",
+    "dxf_path": "hardware/cad_parts/out/S3/S3.2-01.dxf",
+    "svg_path": "hardware/cad_parts/out/S3/S3.2-01.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 91542.80702283724,
+    "surface_area_mm2": 72636.53760720242,
+    "mass_kg": 0.4760225965187537,
+    "cg_mm": [
+      2.434538143204904e-14,
+      4.6111862371420564e-14,
+      -0.9158353853813546
+    ],
+    "bbox_min_mm": [
+      -133.436352151599,
+      -133.436352151599,
+      -8.781705996280504
+    ],
+    "bbox_max_mm": [
+      133.436352151599,
+      133.436352151599,
+      5.2
+    ],
+    "inertia_kg_mm2": [
+      2960.154262478185,
+      2960.1542624781814,
+      5911.195679019719,
+      -6.875351578717552e-13,
+      -8.236561773414052e-14,
+      1.0522238448239814e-13
+    ],
+    "triangle_count": 5712,
+    "vertex_count": 2992,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "world_bbox_min_mm": [
+    -133.436352151599,
+    -133.436352151599,
+    -17.281705996280504
+  ],
+  "world_bbox_max_mm": [
+    133.436352151599,
+    133.436352151599,
+    -3.3
+  ],
+  "reconciliation": {
+    "issue": "Legacy params.py CAD lumped 16x 8-ch LTC6268 CSA modules into 2 placeholder boxes at +-Y; bench KiCad prototype ibic_cold_csa_100k is 125x105 mm.",
+    "bom_spec": "16 modules x 8-ch LTC6268 @ 100 K cold island (128 ch total, Cf=0.25 pF, Rf=1 GOhm, tau=1.2 us, ENC=24.1 e-, eta=0.99936).",
+    "cad_resolution": "Instantiated all 16 distinct 100 K cryo-hybrid CSA modules (32x14.5x10.8 mm each) in 4x4 radial quadrants (R=86..118 mm, Z=-14..-3.2 mm inside 36 mm Exp125 split gap) with 16 OFHC Cu thermal straps + 4 quadrant 100 K bus arcs (R=134..142 mm), clearing all 4 cardinal UHV ports & <5 cm coax limit."
+  },
+  "thermal_contraction_checks": [
+    {
+      "outer_material": "OFHC Cu",
+      "inner_material": "AlN",
+      "t_cold_k": 100.0,
+      "t_ref_k": 293.15,
+      "warm_outer_id_mm": 172.0,
+      "warm_inner_od_mm": 113.14,
+      "cold_outer_id_mm": 171.51324,
+      "cold_inner_od_mm": 113.0766416,
+      "outer_strain": -0.002829999999999999,
+      "inner_strain": -0.0005600000000000049,
+      "warm_radial_clearance_mm": 29.43,
+      "cold_nominal_radial_clearance_mm": 29.218299199999997,
+      "cold_worst_case_radial_clearance_mm": 29.093299199999997,
+      "delta_radial_clearance_mm": -0.2117008000000027,
+      "min_required_radial_clearance_mm": 25.0,
+      "interference_risk": false,
+      "passed": true
+    },
+    {
+      "outer_material": "OFHC Cu",
+      "inner_material": "Al2O3",
+      "t_cold_k": 100.0,
+      "t_ref_k": 293.15,
+      "warm_outer_id_mm": 32.0,
+      "warm_inner_od_mm": 30.0,
+      "cold_outer_id_mm": 31.90944,
+      "cold_inner_od_mm": 29.979599999999998,
+      "outer_strain": -0.002829999999999999,
+      "inner_strain": -0.0006800000000000139,
+      "warm_radial_clearance_mm": 1.0,
+      "cold_nominal_radial_clearance_mm": 0.9649200000000011,
+      "cold_worst_case_radial_clearance_mm": 0.9149200000000011,
+      "delta_radial_clearance_mm": -0.03507999999999889,
+      "min_required_radial_clearance_mm": 0.8,
+      "interference_risk": false,
+      "passed": true
+    }
+  ],
+  "tolerance_stack_checks": []
+}

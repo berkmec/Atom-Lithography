@@ -1,0 +1,281 @@
+{
+  "part_id": "S1.3-02",
+  "subsystem": "S1",
+  "design": {
+    "part_id": "S1.3-02",
+    "parent_bom_id": "S1.3",
+    "subsystem": "S1",
+    "part_name": "10->5 keV elektrostatik yavaslatma daldirma lensi (Exp124 Arch-B delta)",
+    "design_tier": "CUSTOM_FULL",
+    "material": "Ti-6Al-4V",
+    "temp_stage": "300 K",
+    "temp_k": 300.0,
+    "vacuum_grade": "UHV 1e-9 mbar",
+    "tolerance_spec": "±2 um es-merkezlilik",
+    "surface_finish_ra_um": 0.2,
+    "qty": 1,
+    "procurement_class": "CUS",
+    "world_origin_mm": [
+      0.0,
+      0.0,
+      72.16
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "decel_outlet_to_s2",
+        "kind": "vacuum",
+        "position_mm": [
+          0.0,
+          0.0,
+          39.66
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "standard": "Ø28.0 mm Clear Bore",
+        "mating_part_id": "S2.5-02",
+        "bore_mm": 28.0,
+        "od_mm": 84.0,
+        "pcd_mm": 77.0,
+        "bolt_count": 12,
+        "bolt_hole_mm": 4.3,
+        "bolt_spec": "",
+        "frame": "global",
+        "notes": ""
+      },
+      {
+        "name": "transfer_inlet_from_hda",
+        "kind": "vacuum",
+        "position_mm": [
+          0.0,
+          0.0,
+          104.66
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "Ø28.0 mm Clear Bore",
+        "mating_part_id": "S1.5-02",
+        "bore_mm": 28.0,
+        "od_mm": 84.0,
+        "pcd_mm": 77.0,
+        "bolt_count": 12,
+        "bolt_hole_mm": 4.3,
+        "bolt_spec": "",
+        "frame": "global",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "OD",
+        "nominal_mm": 84.0,
+        "tol_plus_mm": 0.01,
+        "tol_minus_mm": -0.01,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø84.00 ±0.01"
+      },
+      {
+        "label": "CLEAR_BORE",
+        "nominal_mm": 28.0,
+        "tol_plus_mm": 0.005,
+        "tol_minus_mm": -0.005,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø28.00 ±0.005"
+      },
+      {
+        "label": "HEIGHT",
+        "nominal_mm": 65.0,
+        "tol_plus_mm": 0.01,
+        "tol_minus_mm": -0.01,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "65.00 ±0.01"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "concentricity",
+        "tolerance_mm": 0.002,
+        "diameter_zone": true,
+        "material_condition": "",
+        "datum_primary": "B",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "3-ELEMENT OPTIC BORE",
+        "glyph": "◎",
+        "tolerance_text": "Ø0.002"
+      },
+      {
+        "symbol": "perpendicularity",
+        "tolerance_mm": 0.005,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "MOUNT FACES",
+        "glyph": "⊥",
+        "tolerance_text": "0.005"
+      },
+      {
+        "symbol": "cylindricity",
+        "tolerance_mm": 0.002,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "Ø28 BEAM BORE",
+        "glyph": "⌭",
+        "tolerance_text": "0.002"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "Arch-B 10->5 keV, WD=0.250 mm, Cc=2.660 mm, E_gap=10.60 MV/m, sigma_spot=1.428 nm (Exp124)",
+      "Exp124 Arch-B 10->5 keV telecentric deceleration & transfer lens (Ø28 mm bore -> 2.686 mm margin to 22.63 mm diag)",
+      "Replaces legacy v6 S1.6 transfer-lens alias"
+    ],
+    "scad_params": {
+      "od": 84.0,
+      "bore": 28.0,
+      "height": 65.0,
+      "e_land_keV": 5.0
+    },
+    "target_mass_kg": 2.6,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S1.3-02",
+    "subsystem": "S1",
+    "design_tier": "CUSTOM_FULL",
+    "stl_path": "hardware/cad_parts/out/S1/S1.3-02.stl",
+    "step_path": "hardware/cad_parts/out/S1/S1.3-02.step",
+    "scad_path": "hardware/cad_parts/out/S1/S1.3-02.scad",
+    "dxf_path": "hardware/cad_parts/out/S1/S1.3-02.dxf",
+    "svg_path": "hardware/cad_parts/out/S1/S1.3-02.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 226471.41427835528,
+    "surface_area_mm2": 73535.27646809476,
+    "mass_kg": 1.0032683652531138,
+    "cg_mm": [
+      1.6910071066876426e-15,
+      3.947335639264265e-15,
+      72.07071378447925
+    ],
+    "bbox_min_mm": [
+      -42.0,
+      -42.0,
+      39.66
+    ],
+    "bbox_max_mm": [
+      42.0,
+      42.0,
+      104.66
+    ],
+    "inertia_kg_mm2": [
+      843.0123108446651,
+      843.0123108446634,
+      991.4444925703137,
+      -9.683506284829945e-14,
+      -2.9688884948938157e-13,
+      -2.2150153713450423e-13
+    ],
+    "triangle_count": 3720,
+    "vertex_count": 1848,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "engineering_checks": {
+    "coax_stack": {
+      "nominal_mm": 0.0,
+      "mean_mm": 0.0,
+      "wc_half_band_mm": 0.041999999999999996,
+      "wc_min_mm": -0.041999999999999996,
+      "wc_max_mm": 0.041999999999999996,
+      "rss_half_band_mm": 0.02353720459187964,
+      "rss_min_mm": -0.02353720459187964,
+      "rss_max_mm": 0.02353720459187964,
+      "modified_rss_half_band_mm": 0.035305806887819466,
+      "modified_rss_min_mm": -0.035305806887819466,
+      "modified_rss_max_mm": 0.035305806887819466,
+      "target_min_mm": -0.05,
+      "target_max_mm": 0.05,
+      "wc_pass": true,
+      "rss_pass": true,
+      "modified_rss_pass": true,
+      "variance_shares_pct": {
+        "S1.1-03_extraction_coax": 4.512635379061372,
+        "S1.2-01_wien_axis": 18.050541516245488,
+        "S1.5-01_hda_axis": 4.512635379061372,
+        "S1.3-02_archB_decel_coax": 0.7220216606498194,
+        "S1.3-01_cf100_column_runout": 72.20216606498195
+      }
+    }
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

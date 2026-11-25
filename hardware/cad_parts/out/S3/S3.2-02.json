@@ -1,0 +1,249 @@
+{
+  "part_id": "S3.2-02",
+  "subsystem": "S3",
+  "part_design": {
+    "part_id": "S3.2-02",
+    "parent_bom_id": "S3.2",
+    "subsystem": "S3",
+    "part_name": "Kilitli CR-RC2 sekillendirici (1.2 us, CS=CP=600 pF) + karsilastirici + trim DAC (Exp127)",
+    "design_tier": "CUSTOM_FULL",
+    "material": "Al 6061",
+    "temp_stage": "300 K (vakum-disi)",
+    "temp_k": 300.0,
+    "vacuum_grade": "Atmosfer",
+    "tolerance_spec": "±0.5 mV esik",
+    "surface_finish_ra_um": 1.6,
+    "qty": 16,
+    "procurement_class": "CUS",
+    "world_origin_mm": [
+      1480.0,
+      -220.0,
+      479.00000000000006
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "rack_front_2u",
+        "kind": "mechanical",
+        "position_mm": [
+          0.0,
+          -190.0,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "standard": "EIA-310 19-inch 2U (Bay 1 U20-U21, X=1480 mm)",
+        "mating_part_id": "S7.4-03",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      },
+      {
+        "name": "coax_from_cf63",
+        "kind": "rf",
+        "position_mm": [
+          0.0,
+          190.0,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "standard": "128-ch 50 Ohm SMA/SMB Rear Backplane",
+        "mating_part_id": "S3.2-05",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "WIDTH_19IN",
+        "nominal_mm": 482.6,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "482.60 ±0.50"
+      },
+      {
+        "label": "HEIGHT_2U",
+        "nominal_mm": 86.9,
+        "tol_plus_mm": 0.3,
+        "tol_minus_mm": -0.3,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "86.90 ±0.30"
+      },
+      {
+        "label": "DEPTH",
+        "nominal_mm": 380.0,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "380.00 ±0.50"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "perpendicularity",
+        "tolerance_mm": 0.25,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "19-INCH FRONT FLANGE",
+        "glyph": "⊥",
+        "tolerance_text": "0.25"
+      },
+      {
+        "symbol": "flatness",
+        "tolerance_mm": 0.2,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "CARD GUIDE RAIL PLANE",
+        "glyph": "⏥",
+        "tolerance_text": "0.20"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "tau=1.2 us (100 K / 1 GOhm / 342 e- kilitli profil), kanal-basi esik DAC, P_false=2.59e-4, 0 ERC",
+      "Houses all 16x 185x135 mm ibic_warm_shaper_300k boards (2x8 horizontal EMI cassettes, 1.2 us CR-RC2, TLV3501, DAC8568).",
+      "Rack Bay 1 (X=+1480 mm, 482.6 mm along X, front -Y), U20-U21 (2U, Master #309 table)."
+    ],
+    "scad_params": {
+      "n_shaper_cards": 16,
+      "card_length_mm": 185.0,
+      "card_width_mm": 135.0,
+      "rack_u_height": 2
+    },
+    "target_mass_kg": null,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S3.2-02",
+    "subsystem": "S3",
+    "design_tier": "CUSTOM_FULL",
+    "stl_path": "hardware/cad_parts/out/S3/S3.2-02.stl",
+    "step_path": "hardware/cad_parts/out/S3/S3.2-02.step",
+    "scad_path": "hardware/cad_parts/out/S3/S3.2-02.scad",
+    "dxf_path": "hardware/cad_parts/out/S3/S3.2-02.dxf",
+    "svg_path": "hardware/cad_parts/out/S3/S3.2-02.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 3351225.5051715313,
+    "surface_area_mm2": 1861811.8160754924,
+    "mass_kg": 7.707818661894517,
+    "cg_mm": [
+      -8.892962392923158e-15,
+      -41.051990639587345,
+      5.002291346019276e-15
+    ],
+    "bbox_min_mm": [
+      -241.3,
+      -214.2,
+      -43.45
+    ],
+    "bbox_max_mm": [
+      241.3,
+      186.7,
+      43.45
+    ],
+    "inertia_kg_mm2": [
+      75652.55278367703,
+      116087.9572957569,
+      180034.009153985,
+      -4.1055095837382946e-11,
+      8.7738037109375e-12,
+      3.2838877174268323e-12
+    ],
+    "triangle_count": 1404,
+    "vertex_count": 776,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "world_bbox_min_mm": [
+    1238.7,
+    -434.2,
+    435.55000000000007
+  ],
+  "world_bbox_max_mm": [
+    1721.3,
+    -33.30000000000001,
+    522.45
+  ],
+  "reconciliation": null,
+  "thermal_contraction_checks": [],
+  "tolerance_stack_checks": []
+}

@@ -1,0 +1,76 @@
+{
+  "schema_version": "1.0",
+  "part_id": "S1.2-01",
+  "parent_bom_id": "S1.2",
+  "subsystem": "S1",
+  "part_name": "Wien ExB kutle filtresi manyetik kutup ve boyunduruk",
+  "qty": 2,
+  "unit": "adet",
+  "temp_stage": "300 K",
+  "vacuum_grade": "HV 1e-7 mbar",
+  "bom_key_spec": "B=0.45 T, L=150 mm, OD=110 mm (Exp124), m/dm >= 60 (28Si/29Si/31P)",
+  "usd_nom": 36000.0,
+  "bom_epistemic_tag": "{Model-Kalibrasyon-Exp114}",
+  "electrical_class": "E4",
+  "grounding_domain": "FACILITY_PE",
+  "grounding_notes": "2x Wien ExB 0.45 T SmCo/electromagnet pole yokes (L=150 mm, m/dm>=60); trim coil grounded via PE.",
+  "supply_rails": [
+    {
+      "rail_name": "WIEN_B_TRIM_DC",
+      "voltage_v": 24.0,
+      "current_type": "DC",
+      "max_current_a": 2.0,
+      "steady_power_w": 30.0,
+      "peak_power_w": 48.0,
+      "source_part_id": "S1.2-03"
+    }
+  ],
+  "connectors_and_pinout": [
+    {
+      "connector_ref": "J_BTRIM",
+      "connector_type": "Binder M12 4-Pin (2x)",
+      "location_side": "column_side",
+      "mating_part_id": "S1.2-03",
+      "pins": [
+        {
+          "pin": "1-2",
+          "signal": "B_TRIM_COIL_PN",
+          "direction": "IN",
+          "nominal_level": "\u00b10.1% B fine trim"
+        },
+        {
+          "pin": "3-4",
+          "signal": "HALL_PROBE_SENSE",
+          "direction": "OUT",
+          "nominal_level": "0.45 T closed-loop B feedback"
+        }
+      ]
+    }
+  ],
+  "mating_part_ids": [
+    "S1.2-02",
+    "S1.2-03",
+    "S1.1-03"
+  ],
+  "interlock_hooks": [],
+  "ups_tier": "NONE",
+  "ups_budget_group": "PASSIVE_ZERO_MAINS",
+  "exp150_ups_allocation_w": 0.0,
+  "supply_rails_steady_sum_w": 30.0,
+  "incremental_mains_w": 0.0,
+  "secondary_or_parent_derived_w": 30.0,
+  "non_exp150_aux_shed_w": 0.0,
+  "reconciliation_note": "Passive or downstream sub-assembly (30.00 W sub-rail power drawn from upstream source S1.2-03); incremental_mains_w = 0.0 W (zero double-counting).",
+  "timing_sync": {
+    "rb_10mhz_port": null,
+    "white_rabbit_port": null,
+    "sync_role": "Static ExB mass-filter magnet"
+  },
+  "epistemic_flags": {
+    "design_maturity": "M0_M1_ELECTRICAL_ICD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

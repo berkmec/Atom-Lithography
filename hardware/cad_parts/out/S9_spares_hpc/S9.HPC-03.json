@@ -1,0 +1,466 @@
+{
+  "part_design": {
+    "part_id": "S9.HPC-03",
+    "parent_bom_id": "S9.HPC",
+    "subsystem": "S9",
+    "part_name": "Yedekli 2.6 kW Titanium PSU Paketi, Surgulu Raf Raylari & ZU48DR 100G CMAC RDMA Entegrasyon Kiti (Exp143, 3.80 kg)",
+    "design_tier": "COTS_ENV_ICD",
+    "material": "Steel",
+    "temp_stage": "300 K (HPC rafi)",
+    "temp_k": 300.0,
+    "vacuum_grade": "Atmosfer",
+    "tolerance_spec": "99.99% yedekli PSU",
+    "surface_finish_ra_um": 1.6,
+    "qty": 1,
+    "procurement_class": "COTS/CUS",
+    "world_origin_mm": [
+      2750.0,
+      -700.0,
+      182.5
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "psu_2p6kw_dual_in",
+        "kind": "electrical",
+        "position_mm": [
+          2750.0,
+          -310.0,
+          40.0
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "standard": "2x IEC C20 2.6 kW 80+ Titanium Redundant PSU",
+        "mating_part_id": "S7.SAFETY-04",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "world",
+        "notes": ""
+      },
+      {
+        "name": "om4_fiber_duct_entry",
+        "kind": "optical",
+        "position_mm": [
+          3028.0,
+          -1070.0,
+          290.0
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "standard": "OM4 MPO-12 Bend-Radius Fiber Duct (R>=45 mm)",
+        "mating_part_id": "S9.HPC-02",
+        "bore_mm": 18.0,
+        "od_mm": 28.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "world",
+        "notes": ""
+      },
+      {
+        "name": "hpc_4u_rail_bay",
+        "kind": "mechanical",
+        "position_mm": [
+          2750.0,
+          -1090.0,
+          175.0
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "standard": "EIA-310 Heavy-Duty Ball-Bearing Sliding Rails (5U Open Stack)",
+        "mating_part_id": "S9.HPC-01",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "world",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "FRAME_W",
+        "nominal_mm": 528.0,
+        "tol_plus_mm": 1.0,
+        "tol_minus_mm": -1.0,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "528.00 ±1.00"
+      },
+      {
+        "label": "RAIL_DEPTH",
+        "nominal_mm": 780.0,
+        "tol_plus_mm": 1.0,
+        "tol_minus_mm": -1.0,
+        "view": "right",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "780.00 ±1.00"
+      },
+      {
+        "label": "PSU_BASE_H",
+        "nominal_mm": 80.0,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "80.00 ±0.50"
+      },
+      {
+        "label": "OM4_R_BEND",
+        "nominal_mm": 45.0,
+        "tol_plus_mm": 1.0,
+        "tol_minus_mm": -1.0,
+        "view": "right",
+        "unit": "mm",
+        "prefix": "R",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "R45.00 ±1.00"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "parallelism",
+        "tolerance_mm": 0.3,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "SLIDING RACK RAILS",
+        "glyph": "∥",
+        "tolerance_text": "0.30"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "4U raf montaj + ZU48DR 100G CMAC RoCEv2 donanim arayuzu, 0 W ek yuk, kutle=3.80 kg (Option-HPC toplam 64.00 kg & 2195 W)",
+      "Exp143 S9.HPC-03 (3.80 kg, 0 W extra load): redundant 2.6 kW 80+ Titanium PSU pack + sliding rails + OM4 bend-radius duct.",
+      "Option-HPC stack centered at X=+2750 mm, Y=-700 mm (90 mm clear of Bay 2, 100 mm clear of S7.SAFETY-04 UPS)."
+    ],
+    "scad_params": {
+      "psu_kw": 2.6,
+      "rail_depth_mm": 780.0,
+      "om4_bend_r_mm": 45.0
+    },
+    "target_mass_kg": 3.8,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S9.HPC-03",
+    "subsystem": "S9",
+    "design_tier": "COTS_ENV_ICD",
+    "stl_path": "hardware/cad_parts/out/S9_spares_hpc/S9.HPC-03.stl",
+    "step_path": "hardware/cad_parts/out/S9_spares_hpc/S9.HPC-03.step",
+    "scad_path": "hardware/cad_parts/out/S9_spares_hpc/S9.HPC-03.scad",
+    "dxf_path": "hardware/cad_parts/out/S9_spares_hpc/S9.HPC-03.dxf",
+    "svg_path": "hardware/cad_parts/out/S9_spares_hpc/S9.HPC-03.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 7490542.178931419,
+    "surface_area_mm2": 1051980.8095721207,
+    "mass_kg": 3.7999999999999883,
+    "cg_mm": [
+      2760.3936037583226,
+      -780.707254207361,
+      86.59446864060727
+    ],
+    "bbox_min_mm": [
+      2486.0,
+      -1090.0,
+      0.0
+    ],
+    "bbox_max_mm": [
+      3042.0,
+      -310.0,
+      365.2
+    ],
+    "inertia_kg_mm2": [
+      255785.24026341422,
+      166723.08191998012,
+      360678.99462636706,
+      -1772.2991507533557,
+      -2685.469621297886,
+      -8996.945777999888
+    ],
+    "triangle_count": 584,
+    "vertex_count": 324,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "shell_bboxes_mm": [
+    [
+      [
+        2490.0,
+        -1090.0,
+        0.0
+      ],
+      [
+        3010.0,
+        -1042.0,
+        26.0
+      ]
+    ],
+    [
+      [
+        2490.0,
+        -358.0,
+        0.0
+      ],
+      [
+        3010.0,
+        -310.0,
+        26.0
+      ]
+    ],
+    [
+      [
+        2490.0,
+        -1041.6,
+        0.0
+      ],
+      [
+        2518.0,
+        -358.4,
+        26.0
+      ]
+    ],
+    [
+      [
+        2982.0,
+        -1041.6,
+        0.0
+      ],
+      [
+        3010.0,
+        -358.4,
+        26.0
+      ]
+    ],
+    [
+      [
+        2600.0,
+        -1030.0,
+        26.4
+      ],
+      [
+        2710.0,
+        -770.0,
+        78.4
+      ]
+    ],
+    [
+      [
+        2790.0,
+        -1030.0,
+        26.4
+      ],
+      [
+        2900.0,
+        -770.0,
+        78.4
+      ]
+    ],
+    [
+      [
+        2486.0,
+        -1084.0,
+        80.2
+      ],
+      [
+        2502.0,
+        -1056.0,
+        365.2
+      ]
+    ],
+    [
+      [
+        2486.0,
+        -344.0,
+        80.2
+      ],
+      [
+        2502.0,
+        -316.0,
+        365.2
+      ]
+    ],
+    [
+      [
+        2487.0,
+        -1055.8,
+        118.0
+      ],
+      [
+        2501.0,
+        -344.2,
+        142.0
+      ]
+    ],
+    [
+      [
+        2487.0,
+        -1055.8,
+        208.0
+      ],
+      [
+        2501.0,
+        -344.2,
+        232.0
+      ]
+    ],
+    [
+      [
+        2487.0,
+        -1055.8,
+        278.0
+      ],
+      [
+        2501.0,
+        -344.2,
+        302.0
+      ]
+    ],
+    [
+      [
+        2998.0,
+        -1084.0,
+        80.2
+      ],
+      [
+        3014.0,
+        -1056.0,
+        365.2
+      ]
+    ],
+    [
+      [
+        2998.0,
+        -344.0,
+        80.2
+      ],
+      [
+        3014.0,
+        -316.0,
+        365.2
+      ]
+    ],
+    [
+      [
+        2999.0,
+        -1055.8,
+        118.0
+      ],
+      [
+        3013.0,
+        -344.2,
+        142.0
+      ]
+    ],
+    [
+      [
+        2999.0,
+        -1055.8,
+        208.0
+      ],
+      [
+        3013.0,
+        -344.2,
+        232.0
+      ]
+    ],
+    [
+      [
+        2999.0,
+        -1055.8,
+        278.0
+      ],
+      [
+        3013.0,
+        -344.2,
+        302.0
+      ]
+    ],
+    [
+      [
+        3014.0,
+        -1070.0,
+        116.2127
+      ],
+      [
+        3042.0,
+        -350.0,
+        303.7873
+      ]
+    ]
+  ],
+  "reconciliation_notes": []
+}

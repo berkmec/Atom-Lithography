@@ -1,0 +1,90 @@
+* FPGA Brain Carrier (XC7K325T-2FFG900) — 1.0 V VCCINT PDN AC Impedance & 5 A Load-Step
+* Native ngspice-47 deck (zero PSpice syntax) — M0/M1 DESIGN_ONLY
+* Stackup: 8-layer Isola FR408HR (In3.Cu 2oz PWR / 0.100 mm core / In4.Cu 2oz GND2)
+* Targets: |Z_PDN(f)| < 10 mOhm (100 Hz .. 20 MHz), 5 A load-step droop < 30 mV (+/-3%)
+
+.temp 26.85
+
+* 1.0 V Dual-Phase PMBus Buck VRM (TPS546D24A 15 A class closed-loop small-signal output model)
+Vvrm vrm_src 0 DC 1.0
+Rvrm vrm_src vrm_r 1.000000e-03
+Lvrm vrm_r n_bulk 1.400000e-08
+
+* Tier 1: 4x 470 uF Polymer/POSCAP Bulk Bank (1880 uF, ESR=2.25 mOhm, ESL=450 pH)
+Cbulk n_bulk n_bulk_r 1.880000e-03
+Rbulk n_bulk_r n_bulk_l 2.250000e-03
+Lbulk n_bulk_l 0 4.500000e-10
+
+* PCB 2oz PWR/GND Plane Spreading: VRM -> Mid-Bulk MLCC Bank
+Rpl1 n_bulk n_pl1 3.500000e-04
+Lpl1 n_pl1 n_mid 1.800000e-10
+
+* Tier 2: 8x 47 uF 1206 MLCC Bank (376 uF, ESR=1.50 mOhm, ESL=100 pH)
+C47u n_mid n_47u_r 3.760000e-04
+R47u n_47u_r n_47u_l 1.500000e-03
+L47u n_47u_l 0 1.000000e-10
+
+* PCB Spreading: Mid-Bulk -> FPGA Perimeter Bank
+Rpl2 n_mid n_pl2 2.500000e-04
+Lpl2 n_pl2 n_perim 6.500000e-11
+
+* Tier 3: 12x 4.7 uF 0805 MLCC Bank (56.4 uF, ESR=2.00 mOhm, ESL=45.8 pH)
+C4u7 n_perim n_4u7_r 5.640000e-05
+R4u7 n_4u7_r n_4u7_l 2.000000e-03
+L4u7 n_4u7_l 0 4.583333e-11
+
+* Tier 4: 16x 470 nF 0603 MLCC Bank (7.52 uF, ESR=2.00 mOhm, ESL=25.0 pH)
+C470n n_perim n_470n_r 7.520000e-06
+R470n n_470n_r n_470n_l 2.000000e-03
+L470n n_470n_l 0 2.500000e-11
+
+* PCB Spreading + BGA Via Array: Perimeter -> Under-BGA Cavity
+Rpl3 n_perim n_pl3 1.500000e-04
+Lpl3 n_pl3 n_bga 1.400000e-11
+
+* Tier 5: 24x 100 nF 0402 Under-BGA Low-ESL MLCC Bank (2.40 uF, ESR=1.50 mOhm, ESL=10.4 pH)
+C100n n_bga n_100n_r 2.400000e-06
+R100n n_100n_r n_100n_l 1.500000e-03
+L100n n_100n_l 0 1.041667e-11
+
+* Planar 2oz PWR/GND Cavity Capacitance (0.100 mm FR408HR core)
+Cplane n_bga n_cpl 4.000000e-09
+Rplane_c n_cpl 0 2.000000e-03
+
+* XC7K325T FFG900 Package Inductance & On-Die Decoupling
+Rpkg n_bga n_pkg_r 2.500000e-04
+Lpkg n_pkg_r vccint_die 1.200000e-11
+Cdie vccint_die n_die_r 6.000000e-07
+Rdie n_die_r 0 6.000000e-03
+
+* Load Current Stimulus at FPGA Die:
+*   AC = 1 A (so vm(vccint_die) directly equals |Z_PDN(f)| in Ohms!)
+*   TRAN = 1 A baseline -> 6 A (+5 A step, t_rise=50 ns, di/dt=100 A/us) -> 1 A release
+Iload vccint_die 0 DC 1.0 AC 1.0 PULSE(1.0 6.0 10u 50n 50n 60u 200u)
+
+.control
+set noaskquit
+
+* 1) AC PDN Impedance Sweep: 100 Hz to 30 MHz (100 pts/dec; evaluated over 100 Hz .. 20 MHz)
+ac dec 100 100 30Meg
+meas ac z_pdn_max_ohm MAX vm(vccint_die) FROM=100 TO=20Meg
+meas ac z_pdn_max_freq_hz MAX_AT vm(vccint_die) FROM=100 TO=20Meg
+meas ac z_pdn_100hz_ohm FIND vm(vccint_die) AT=100
+meas ac z_pdn_10khz_ohm FIND vm(vccint_die) AT=10k
+meas ac z_pdn_1mhz_ohm  FIND vm(vccint_die) AT=1Meg
+meas ac z_pdn_10mhz_ohm FIND vm(vccint_die) AT=10Meg
+meas ac z_pdn_20mhz_ohm FIND vm(vccint_die) AT=20Meg
+
+* 2) Transient 5 A Load-Step (1 A -> 6 A in 50 ns) Droop & Overshoot
+tran 20n 140u
+meas tran v_init_v FIND v(vccint_die) AT=5u
+meas tran v_min_step_v MIN v(vccint_die) FROM=9.5u TO=40u
+meas tran v_max_rel_v  MAX v(vccint_die) FROM=69.5u TO=120u
+let v_droop_v = v_init_v - v_min_step_v
+let v_overshoot_v = v_max_rel_v - v_init_v
+print v_droop_v
+print v_overshoot_v
+
+quit 0
+.endc
+.end

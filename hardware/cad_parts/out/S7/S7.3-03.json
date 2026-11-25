@@ -1,0 +1,392 @@
+{
+  "part_design": {
+    "part_id": "S7.3-03",
+    "parent_bom_id": "S7.3",
+    "subsystem": "S7",
+    "part_name": "Kriyojenik cip tarama (screening) test soketi ve karakterizasyon duzenegi",
+    "design_tier": "CUSTOM_FULL",
+    "material": "OFHC Cu",
+    "temp_stage": "4 K / 300 K",
+    "temp_k": 4.0,
+    "vacuum_grade": "Kriyo-test",
+    "tolerance_spec": "ISO 2768-mK",
+    "surface_finish_ra_um": 0.4,
+    "qty": 1,
+    "procurement_class": "CUS",
+    "world_origin_mm": [
+      1120.0,
+      780.0,
+      880.0
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "cryo_dipstick_cf63",
+        "kind": "flange",
+        "position_mm": [
+          1120.0,
+          780.0,
+          960.75
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "CF63",
+        "mating_part_id": "S6.8-01",
+        "bore_mm": 63.5,
+        "od_mm": 113.5,
+        "pcd_mm": 92.1,
+        "bolt_count": 8,
+        "bolt_hole_mm": 8.4,
+        "bolt_spec": "M8",
+        "frame": "world",
+        "notes": "ISO 3669 CF63 Cu-gasket knife-edge"
+      },
+      {
+        "name": "screening_socket_seat",
+        "kind": "thermal",
+        "position_mm": [
+          1120.0,
+          780.0,
+          824.0
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "4K OFHC Cu Seat for S7.3-01/S7.3-02",
+        "mating_part_id": "S7.3-01",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "world",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "CF63_OD",
+        "nominal_mm": 113.5,
+        "tol_plus_mm": 0.1,
+        "tol_minus_mm": -0.1,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø113.50 ±0.10"
+      },
+      {
+        "label": "CHUCK_OD",
+        "nominal_mm": 92.0,
+        "tol_plus_mm": 0.05,
+        "tol_minus_mm": -0.05,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø92.00 ±0.05"
+      },
+      {
+        "label": "PROBE_H",
+        "nominal_mm": 165.0,
+        "tol_plus_mm": 0.2,
+        "tol_minus_mm": -0.2,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "165.00 ±0.20"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "perpendicularity",
+        "tolerance_mm": 0.02,
+        "diameter_zone": true,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "PROBE AXIS TO CF63 FACE",
+        "glyph": "⊥",
+        "tolerance_text": "Ø0.020"
+      },
+      {
+        "symbol": "flatness",
+        "tolerance_mm": 0.01,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "4K OFHC THERMAL SEAT",
+        "glyph": "⏥",
+        "tolerance_text": "0.010"
+      },
+      {
+        "symbol": "concentricity",
+        "tolerance_mm": 0.03,
+        "diameter_zone": true,
+        "material_condition": "",
+        "datum_primary": "B",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "CF63 TO CHUCK",
+        "glyph": "◎",
+        "tolerance_text": "Ø0.030"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "4 K islevsel/kink karakterizasyon testi (Exp33 protokol)",
+      "CF63 hermetic 4 K screening probe block; vertical stackup RSS=0.0616 mm (PASS=True).",
+      "Positioned at 4K cryo-test station (Y=+780 mm, 198 mm clear of Bay 1 rear HX)."
+    ],
+    "scad_params": {
+      "cf_size": "CF63",
+      "chuck_od_mm": 92.0,
+      "strut_len_mm": 114.0
+    },
+    "target_mass_kg": 2.8258,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S7.3-03",
+    "subsystem": "S7",
+    "design_tier": "CUSTOM_FULL",
+    "stl_path": "hardware/cad_parts/out/S7/S7.3-03.stl",
+    "step_path": "hardware/cad_parts/out/S7/S7.3-03.step",
+    "scad_path": "hardware/cad_parts/out/S7/S7.3-03.scad",
+    "dxf_path": "hardware/cad_parts/out/S7/S7.3-03.dxf",
+    "svg_path": "hardware/cad_parts/out/S7/S7.3-03.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 315383.5137027625,
+    "surface_area_mm2": 73362.95455724825,
+    "mass_kg": 2.8258362827767494,
+    "cg_mm": [
+      1120.0000000002544,
+      780.0000000002141,
+      886.7991853651628
+    ],
+    "bbox_min_mm": [
+      1063.25,
+      723.25,
+      806.0
+    ],
+    "bbox_max_mm": [
+      1176.75,
+      836.75,
+      989.1
+    ],
+    "inertia_kg_mm2": [
+      14592.35489176336,
+      14630.086900582344,
+      3825.9480727196096,
+      2.51015625e-07,
+      2.3625000000000001e-07,
+      1.8128906250000002e-07
+    ],
+    "triangle_count": 1948,
+    "vertex_count": 966,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "shell_bboxes_mm": [
+    [
+      [
+        1063.25,
+        723.25,
+        943.25
+      ],
+      [
+        1176.75,
+        836.75,
+        960.75
+      ]
+    ],
+    [
+      [
+        1096.0,
+        756.0,
+        961.0
+      ],
+      [
+        1144.0,
+        804.0,
+        971.0
+      ]
+    ],
+    [
+      [
+        1102.9,
+        762.9777,
+        971.1
+      ],
+      [
+        1109.1,
+        769.0223,
+        989.1
+      ]
+    ],
+    [
+      [
+        1130.9,
+        762.9777,
+        971.1
+      ],
+      [
+        1137.1,
+        769.0223,
+        989.1
+      ]
+    ],
+    [
+      [
+        1130.9,
+        790.9777,
+        971.1
+      ],
+      [
+        1137.1,
+        797.0223,
+        989.1
+      ]
+    ],
+    [
+      [
+        1102.9,
+        790.9777,
+        971.1
+      ],
+      [
+        1109.1,
+        797.0223,
+        989.1
+      ]
+    ],
+    [
+      [
+        1139.1274,
+        799.1274,
+        830.2
+      ],
+      [
+        1146.1274,
+        806.1274,
+        943.05
+      ]
+    ],
+    [
+      [
+        1093.8726,
+        799.1274,
+        830.2
+      ],
+      [
+        1100.8726,
+        806.1274,
+        943.05
+      ]
+    ],
+    [
+      [
+        1093.8726,
+        753.8726,
+        830.2
+      ],
+      [
+        1100.8726,
+        760.8726,
+        943.05
+      ]
+    ],
+    [
+      [
+        1139.1274,
+        753.8726,
+        830.2
+      ],
+      [
+        1146.1274,
+        760.8726,
+        943.05
+      ]
+    ],
+    [
+      [
+        1074.0,
+        734.0,
+        806.0
+      ],
+      [
+        1166.0,
+        826.0,
+        830.0
+      ]
+    ],
+    [
+      [
+        1086.0,
+        768.0,
+        830.2
+      ],
+      [
+        1154.0,
+        792.0,
+        838.2
+      ]
+    ]
+  ],
+  "reconciliation_notes": []
+}

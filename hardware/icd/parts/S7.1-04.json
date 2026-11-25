@@ -1,0 +1,72 @@
+{
+  "schema_version": "part_icd_v1.0",
+  "part_id": "S7.1-04",
+  "parent_bom_id": "S7.1",
+  "subsystem": "S7",
+  "part_name": "S8 BOED GPU dugumu [v5.0'da S6.11-01 ZU48DR Q16.16 BOED-FPGA ile degistirildi — $0]",
+  "part_category": "SUPERSEDED_ZERO_DOLLAR_POINTER",
+  "bom_metadata": {
+    "qty": "1",
+    "unit": "adet",
+    "material": "ZU48DR Q16.16 BOED-FPGA'ya tasindi (S6.11-01)",
+    "key_spec": "v4.0 ayrik BOED cikarim GPU dugumu v5.0'da S6.11-01 (Exp140 S6.5-01, 2.336 us/adim) ile yer degistirdi; cift-sayim kredisi -$7k/-$12k/-$22k",
+    "tolerance": "2.336 us/adim (S6.11-01)",
+    "temp_stage": "300 K (kabin)",
+    "vacuum_grade": "Atmosfer",
+    "procurement_class": "COTS",
+    "parent_cost_class": "B(v4.0)",
+    "usd_low": 0.0,
+    "usd_nom": 0.0,
+    "usd_high": 0.0,
+    "legacy_cad_module": "s7_electronics_rack_interconnect",
+    "bom_epistemic_tag": "{Varsayım}",
+    "notes": "SUPERSEDED-BY-V5.0 (DELTA-V4.0-EXP134 S8 BOED GPU dugumu S6.11-01 / Exp140 S6.5-01 ZU48DR Q16.16 BOED-FPGA ile degistirildi; cift-sayim kredisi -$7k/-$12k/-$22k)"
+  },
+  "artifact_links": {
+    "cad": null,
+    "pcb_bundles": [],
+    "legacy_board_files": [],
+    "electrical_icd": null,
+    "rtl_modules": [],
+    "rtl_audit_json": null,
+    "software_and_eda_files": [],
+    "verification_tests": []
+  },
+  "specialized_specification": {
+    "kind": "SUPERSEDED_ZERO_DOLLAR_POINTER",
+    "superseded_in_version": "v5.0",
+    "active_replacement_part_ids": [
+      "S6.11-01"
+    ],
+    "anti_double_count_credit_usd": {
+      "low": -7000.0,
+      "nom": -12000.0,
+      "high": -22000.0
+    },
+    "rationale": "v4.0 standalone discrete BOED inference GPU node was replaced in v5.0+ by the S6.11-01 ZU48DR Q16.16 BOED-FPGA real-time inference chassis (2.336 us/step, verified bit-exact in rtl/boed_fpga/ and rtl/machine_ctrl/); retained at $0 in BOM_DETAILED.csv for strict cross-version audit continuity.",
+    "reference_artifacts": [
+      "hardware/cad_parts/out/S6/S6.11-01.json",
+      "hardware/pcb/fpga_brain_carrier/fpga_brain_carrier_verification.json",
+      "rtl/boed_fpga/boed_q16_core.v",
+      "rtl/machine_ctrl/fpga_top_machine_ctrl.v",
+      "results/exp149_boed_verilog_rtl_and_interactive_twin/exp149.json"
+    ]
+  },
+  "verification_status": {
+    "cad_verified": false,
+    "pcb_verified": false,
+    "electrical_icd_verified": false,
+    "rtl_verified": false,
+    "software_or_eda_verified": false,
+    "specialized_icd_present": true,
+    "traceable": true
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "tapeout_done": false
+  }
+}

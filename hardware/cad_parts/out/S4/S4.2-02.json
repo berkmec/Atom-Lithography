@@ -1,0 +1,251 @@
+{
+  "part_id": "S4.2-02",
+  "subsystem": "S4",
+  "part_design": {
+    "part_id": "S4.2-02",
+    "parent_bom_id": "S4.2",
+    "subsystem": "S4",
+    "part_name": "Cok-eksenli dusuk gurultulu jeofon / ivmeolcer sensor paketi",
+    "design_tier": "COTS_ENV_ICD",
+    "material": "Al 6061",
+    "temp_stage": "300 K",
+    "temp_k": 300.0,
+    "vacuum_grade": "Atmosfer",
+    "tolerance_spec": "±2% hassasiyet",
+    "surface_finish_ra_um": 1.6,
+    "qty": 1,
+    "procurement_class": "COTS",
+    "world_origin_mm": [
+      0.0,
+      0.0,
+      -216.0
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "table_sensor_mount",
+        "kind": "mechanical",
+        "position_mm": [
+          -340.0,
+          -245.0,
+          -23.0
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "standard": "3x Triaxial Geophone Kinematic Bases on S4.2-01",
+        "mating_part_id": "S4.2-01",
+        "bore_mm": 0.0,
+        "od_mm": 60.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      },
+      {
+        "name": "lemo_dsp_link",
+        "kind": "electrical",
+        "position_mm": [
+          -345.0,
+          0.0,
+          3.5
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "Shielded 9-ch Differential LEMO to S4.2-03 DSP",
+        "mating_part_id": "S4.2-03",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "POD_FLANGE_OD",
+        "nominal_mm": 60.0,
+        "tol_plus_mm": 0.2,
+        "tol_minus_mm": -0.2,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø60.00 ±0.20"
+      },
+      {
+        "label": "POD_HEIGHT",
+        "nominal_mm": 46.0,
+        "tol_plus_mm": 0.2,
+        "tol_minus_mm": -0.2,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "46.00 ±0.20"
+      },
+      {
+        "label": "ARRAY_SPAN_X",
+        "nominal_mm": 680.0,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "680.00 ±0.50"
+      },
+      {
+        "label": "ARRAY_SPAN_Y",
+        "nominal_mm": 490.0,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "490.00 ±0.50"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "perpendicularity",
+        "tolerance_mm": 0.05,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "ORTHOGONAL 3-AXIS GEOPHONE AXES",
+        "glyph": "⊥",
+        "tolerance_text": "0.050"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "Gurultu tabani <1 ng/sqrt(Hz) @ 10 Hz",
+      "3x triaxial 4.5 Hz seismic geophone pods (<1 ng/sqrt(Hz) @ 10 Hz) spanning full 6-DOF active table modes.",
+      "Mounted on 3 corners of S4.2-01 leaving (+330,+245) free for S4.4-01 stabilized He-Ne laser unit."
+    ],
+    "scad_params": {
+      "n_geophone_pods": 3,
+      "pod_od_mm": 60.0,
+      "pod_h_mm": 46.0,
+      "resonant_freq_hz": 4.5
+    },
+    "target_mass_kg": null,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S4.2-02",
+    "subsystem": "S4",
+    "design_tier": "COTS_ENV_ICD",
+    "stl_path": "hardware/cad_parts/out/S4/S4.2-02.stl",
+    "step_path": "hardware/cad_parts/out/S4/S4.2-02.step",
+    "scad_path": "hardware/cad_parts/out/S4/S4.2-02.scad",
+    "dxf_path": "hardware/cad_parts/out/S4/S4.2-02.dxf",
+    "svg_path": "hardware/cad_parts/out/S4/S4.2-02.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 369543.3698697954,
+    "surface_area_mm2": 53097.09331637231,
+    "mass_kg": 1.2564474575573048,
+    "cg_mm": [
+      -187.13699362615128,
+      -55.64954900948683,
+      -5.6091310400354875
+    ],
+    "bbox_min_mm": [
+      -372.0,
+      -275.0,
+      -23.0
+    ],
+    "bbox_max_mm": [
+      370.0,
+      275.0,
+      23.0
+    ],
+    "inertia_kg_mm2": [
+      48035.38159253269,
+      103012.23711714988,
+      150733.40516730666,
+      36857.805706447696,
+      -360.8019180103054,
+      127.18916534175575
+    ],
+    "triangle_count": 1036,
+    "vertex_count": 526,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "world_bbox_min_mm": [
+    -372.0,
+    -275.0,
+    -239.0
+  ],
+  "world_bbox_max_mm": [
+    370.0,
+    275.0,
+    -193.0
+  ],
+  "reconciliation": null,
+  "thermal_contraction_checks": [],
+  "tolerance_stack_checks": []
+}

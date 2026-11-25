@@ -1,0 +1,98 @@
+{
+  "schema_version": "1.0",
+  "part_id": "S5.3-01",
+  "parent_bom_id": "S5.3",
+  "subsystem": "S5",
+  "part_name": "Yerinde hizli termal / flas optik tavlama modulu (Exp66/91)",
+  "qty": 1,
+  "unit": "set",
+  "temp_stage": "300 K -> 1000 C (ms)",
+  "vacuum_grade": "UHV (optik giris)",
+  "bom_key_spec": "Tavlama difuzyonu sigma_anneal <= 0.5 nm (P91 hedefi, Exp91)",
+  "usd_nom": 40000.0,
+  "bom_epistemic_tag": "{Model-Kalibrasyon-Exp114}",
+  "electrical_class": "E3",
+  "grounding_domain": "FACILITY_PE",
+  "grounding_notes": "In-situ rapid flash optical annealing lamp/capacitor bank; interlocked via S5.5-04/S7.SAFETY-03.",
+  "supply_rails": [
+    {
+      "rail_name": "AC_3PH_FACILITY",
+      "voltage_v": 400.0,
+      "current_type": "AC_3PH",
+      "max_current_a": 16.0,
+      "steady_power_w": 1200.0,
+      "peak_power_w": 4500.0,
+      "source_part_id": "S7.4-03"
+    }
+  ],
+  "connectors_and_pinout": [
+    {
+      "connector_ref": "J_PWR",
+      "connector_type": "IEC 60309 3P+N+PE 16A",
+      "location_side": "facility_feed",
+      "mating_part_id": "S7.4-03",
+      "pins": [
+        {
+          "pin": "L1-L3",
+          "signal": "AC_400V_3PH",
+          "direction": "IN",
+          "nominal_level": "Flash capacitor charger"
+        },
+        {
+          "pin": "PE",
+          "signal": "FACILITY_PE",
+          "direction": "PWR",
+          "nominal_level": "Safety earth"
+        }
+      ]
+    },
+    {
+      "connector_ref": "J_ILK",
+      "connector_type": "Dual-Channel Interlock Phoenix",
+      "location_side": "rack_rear",
+      "mating_part_id": "S7.SAFETY-03",
+      "pins": [
+        {
+          "pin": "1-4",
+          "signal": "FLASH_ENABLE_1OO2D",
+          "direction": "IN",
+          "nominal_level": "Cut within 3.2 ms on fault"
+        }
+      ]
+    }
+  ],
+  "mating_part_ids": [
+    "S5.3-02",
+    "S5.3-03",
+    "S5.5-04",
+    "S7.SAFETY-03"
+  ],
+  "interlock_hooks": [
+    {
+      "signal_name": "FLASH_ANNEAL_CUT",
+      "target_part_id": "S7.SAFETY-03",
+      "action_on_trip": "Dump flash bank & close shutter",
+      "response_time_ms": 3.2
+    }
+  ],
+  "ups_tier": "TIER2_SHED",
+  "ups_budget_group": "AUX_PROCESS_SHED_ON_OUTAGE",
+  "exp150_ups_allocation_w": 0.0,
+  "supply_rails_steady_sum_w": 1200.0,
+  "incremental_mains_w": 1200.0,
+  "secondary_or_parent_derived_w": 0.0,
+  "non_exp150_aux_shed_w": 1200.0,
+  "reconciliation_note": "Non-Exp150 auxiliary sheddable rack/facility load (TIER2_SHED): incremental_mains_w = 1200.0 W AC mains (mutually exclusive process/experiment mode, shed immediately on outage; exp150_ups_allocation_w = 0.0 W).",
+  "timing_sync": {
+    "rb_10mhz_port": null,
+    "white_rabbit_port": "WR_COAX_6",
+    "sync_role": "ms-pulse anneal trigger"
+  },
+  "epistemic_flags": {
+    "design_maturity": "M0_M1_ELECTRICAL_ICD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

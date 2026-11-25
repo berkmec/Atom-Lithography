@@ -1,0 +1,241 @@
+{
+  "part_id": "S1.5-02",
+  "subsystem": "S1",
+  "design": {
+    "part_id": "S1.5-02",
+    "parent_bom_id": "S1.5",
+    "subsystem": "S1",
+    "part_name": "Piezo-tahrikli hassas enerji suzgeci giris/cikis yariklari",
+    "design_tier": "CUSTOM_FULL",
+    "material": "Mo",
+    "temp_stage": "300 K",
+    "temp_k": 300.0,
+    "vacuum_grade": "UHV 1e-9 mbar",
+    "tolerance_spec": "±0.5 um adim",
+    "surface_finish_ra_um": 0.1,
+    "qty": 1,
+    "procurement_class": "CUS",
+    "world_origin_mm": [
+      0.0,
+      0.0,
+      161.66
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "exit_slit_plane",
+        "kind": "vacuum",
+        "position_mm": [
+          0.0,
+          0.0,
+          109.66
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "standard": "5-50 um Piezo Slit",
+        "mating_part_id": "S1.3-02",
+        "bore_mm": 0.35,
+        "od_mm": 86.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "global",
+        "notes": ""
+      },
+      {
+        "name": "entrance_slit_plane",
+        "kind": "vacuum",
+        "position_mm": [
+          0.0,
+          0.0,
+          213.66
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "5-50 um Piezo Slit",
+        "mating_part_id": "S1.2-04",
+        "bore_mm": 0.35,
+        "od_mm": 86.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "global",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "CASSETTE_OD",
+        "nominal_mm": 86.0,
+        "tol_plus_mm": 0.02,
+        "tol_minus_mm": -0.02,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø86.00 ±0.02"
+      },
+      {
+        "label": "SLIT_W_NOM",
+        "nominal_mm": 0.35,
+        "tol_plus_mm": 0.0005,
+        "tol_minus_mm": -0.0005,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 3,
+        "formatted": "0.350 ±0.001"
+      },
+      {
+        "label": "STEP_RES",
+        "nominal_mm": 0.0005,
+        "tol_plus_mm": 0.0001,
+        "tol_minus_mm": -0.0001,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 4,
+        "formatted": "0.0005 ±0.0001"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "parallelism",
+        "tolerance_mm": 0.0005,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "MO KNIFE EDGES",
+        "glyph": "∥",
+        "tolerance_text": "0.0005"
+      },
+      {
+        "symbol": "flatness",
+        "tolerance_mm": 0.002,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "FLEXURE CARRIER",
+        "glyph": "⏥",
+        "tolerance_text": "0.002"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "5-50 um yarik genisligi (dE ayari)",
+      "Dual HDA entrance/exit UHV piezo flexure slit cassettes (5-50 um adjustable, 0.35 mm Exp124 HDA-HiRes nominal)"
+    ],
+    "scad_params": {
+      "cassette_od": 86.0,
+      "slit_nom_mm": 0.35,
+      "step_um": 0.5
+    },
+    "target_mass_kg": 0.72,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S1.5-02",
+    "subsystem": "S1",
+    "design_tier": "CUSTOM_FULL",
+    "stl_path": "hardware/cad_parts/out/S1/S1.5-02.stl",
+    "step_path": "hardware/cad_parts/out/S1/S1.5-02.step",
+    "scad_path": "hardware/cad_parts/out/S1/S1.5-02.scad",
+    "dxf_path": "hardware/cad_parts/out/S1/S1.5-02.dxf",
+    "svg_path": "hardware/cad_parts/out/S1/S1.5-02.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 61988.571022868855,
+    "surface_area_mm2": 27546.302531651298,
+    "mass_kg": 0.6372425101150916,
+    "cg_mm": [
+      -3.0407666095884127e-15,
+      -1.6353749009469166e-14,
+      157.5106666656901
+    ],
+    "bbox_min_mm": [
+      -43.0,
+      -43.0,
+      106.16
+    ],
+    "bbox_max_mm": [
+      43.0,
+      43.0,
+      216.66
+    ],
+    "inertia_kg_mm2": [
+      2036.5813010418851,
+      2037.679063654877,
+      645.6222345220859,
+      -2.307903378095943e-13,
+      7.171700411606682e-13,
+      8.817307404071746e-14
+    ],
+    "triangle_count": 1312,
+    "vertex_count": 640,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "engineering_checks": {},
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

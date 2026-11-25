@@ -1,0 +1,85 @@
+{
+  "schema_version": "1.0",
+  "part_id": "S5.1-03",
+  "parent_bom_id": "S5.1",
+  "subsystem": "S5",
+  "part_name": "Hizli giris yuk kilidi (load-lock) odasi ve CF100 tam-metal surgu vana",
+  "qty": 1,
+  "unit": "set",
+  "temp_stage": "300 K",
+  "vacuum_grade": "UHV 1e-8 mbar",
+  "bom_key_spec": "Yonga degisimi <15 dk, ana oda vakumunu bozmadan transfer",
+  "usd_nom": 17000.0,
+  "bom_epistemic_tag": "{Model-Kalibrasyon-Exp114}",
+  "electrical_class": "E4",
+  "grounding_domain": "FACILITY_PE",
+  "grounding_notes": "Load-lock chamber & VAT all-metal CF100 gate valve actuator on Tier-1 UPS (65 W hold/control).",
+  "supply_rails": [
+    {
+      "rail_name": "DC_24V_UPS_T1",
+      "voltage_v": 24.0,
+      "current_type": "DC",
+      "max_current_a": 3.0,
+      "steady_power_w": 65.0,
+      "peak_power_w": 90.0,
+      "source_part_id": "S7.SAFETY-04"
+    }
+  ],
+  "connectors_and_pinout": [
+    {
+      "connector_ref": "J_VALVE",
+      "connector_type": "DB15 Valve Controller",
+      "location_side": "loadlock",
+      "mating_part_id": "S7.SAFETY-03",
+      "pins": [
+        {
+          "pin": "1-2",
+          "signal": "SOL_24V_OPEN",
+          "direction": "IN",
+          "nominal_level": "De-energize-to-close fail-safe"
+        },
+        {
+          "pin": "3-6",
+          "signal": "OPEN_CLOSED_LIM",
+          "direction": "OUT",
+          "nominal_level": "Dual reed-switch verification"
+        }
+      ]
+    }
+  ],
+  "mating_part_ids": [
+    "S5.1-01",
+    "S5.1-04",
+    "S7.SAFETY-03",
+    "S7.SAFETY-04",
+    "S7.SAFETY-06"
+  ],
+  "interlock_hooks": [
+    {
+      "signal_name": "LL_VALVE_FAIL_CLOSE",
+      "target_part_id": "S7.SAFETY-03",
+      "action_on_trip": "Spring-return seal in <=80 ms on EPO/outage",
+      "response_time_ms": 80.0
+    }
+  ],
+  "ups_tier": "TIER1_CRITICAL",
+  "ups_budget_group": "EXP150_TIER1_CRITICAL",
+  "exp150_ups_allocation_w": 65.0,
+  "supply_rails_steady_sum_w": 65.0,
+  "incremental_mains_w": 65.0,
+  "secondary_or_parent_derived_w": 0.0,
+  "non_exp150_aux_shed_w": 0.0,
+  "reconciliation_note": "Exp150 Tier-1 critical UPS load: incremental_mains_w = exp150_ups_allocation_w = 65.0 W.",
+  "timing_sync": {
+    "rb_10mhz_port": null,
+    "white_rabbit_port": null,
+    "sync_role": "UHV load-lock isolation"
+  },
+  "epistemic_flags": {
+    "design_maturity": "M0_M1_ELECTRICAL_ICD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

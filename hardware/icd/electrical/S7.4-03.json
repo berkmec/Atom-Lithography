@@ -1,0 +1,92 @@
+{
+  "schema_version": "1.0",
+  "part_id": "S7.4-03",
+  "parent_bom_id": "S7.4",
+  "subsystem": "S7",
+  "part_name": "19 inc EMI-kalkanli kontrol/RF kabini ve su/hava isi esanjoru",
+  "qty": 2,
+  "unit": "kabin",
+  "temp_stage": "300 K (oda)",
+  "vacuum_grade": "Atmosfer",
+  "bom_key_spec": "Guc dagitimi, kablo yonetimi, sicaklik kontrolu (\u00b11 C)",
+  "usd_nom": 7000.0,
+  "bom_epistemic_tag": "{Model-Kalibrasyon-Exp114}",
+  "electrical_class": "E3",
+  "grounding_domain": "FACILITY_PE",
+  "grounding_notes": "2x 42U EMI-shielded (>60 dB @ 1 GHz) RF & control cabinets + water/air HX; bonded to FACILITY_PE.",
+  "supply_rails": [
+    {
+      "rail_name": "AC_UPS_TIER1",
+      "voltage_v": 230.0,
+      "current_type": "AC_1PH",
+      "max_current_a": 0.4,
+      "steady_power_w": 35.0,
+      "peak_power_w": 120.0,
+      "source_part_id": "S7.SAFETY-04"
+    }
+  ],
+  "connectors_and_pinout": [
+    {
+      "connector_ref": "J_GND_BAR",
+      "connector_type": "Copper PE Grounding Busbar (2x)",
+      "location_side": "cabinet_base",
+      "mating_part_id": "S7.SAFETY-04",
+      "pins": [
+        {
+          "pin": "PE",
+          "signal": "FACILITY_PE_STAR",
+          "direction": "PWR",
+          "nominal_level": "<0.1 Ohm to facility earth"
+        }
+      ]
+    },
+    {
+      "connector_ref": "J_ENV",
+      "connector_type": "RJ45 Thermal/Fan Telemetry",
+      "location_side": "cabinet_top",
+      "mating_part_id": "S7.1-01",
+      "pins": [
+        {
+          "pin": "1-8",
+          "signal": "CAB_TEMP_FLOW_MON",
+          "direction": "OUT",
+          "nominal_level": "\u00b11 C thermal control loop"
+        }
+      ]
+    }
+  ],
+  "mating_part_ids": [
+    "S7.SAFETY-04",
+    "S7.1-03",
+    "S7.1-01",
+    "S6.11-01"
+  ],
+  "interlock_hooks": [
+    {
+      "signal_name": "CABINET_OVERTEMP_45C",
+      "target_part_id": "S7.4-04",
+      "action_on_trip": "Alarm & shed non-critical rack power",
+      "response_time_ms": 500.0
+    }
+  ],
+  "ups_tier": "TIER1_CRITICAL",
+  "ups_budget_group": "EXP150_TIER1_CRITICAL",
+  "exp150_ups_allocation_w": 35.0,
+  "supply_rails_steady_sum_w": 35.0,
+  "incremental_mains_w": 35.0,
+  "secondary_or_parent_derived_w": 0.0,
+  "non_exp150_aux_shed_w": 0.0,
+  "reconciliation_note": "Exp150 Tier-1 critical UPS load: incremental_mains_w = exp150_ups_allocation_w = 35.0 W.",
+  "timing_sync": {
+    "rb_10mhz_port": null,
+    "white_rabbit_port": null,
+    "sync_role": "EMI shielded enclosure & cooling"
+  },
+  "epistemic_flags": {
+    "design_maturity": "M0_M1_ELECTRICAL_ICD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

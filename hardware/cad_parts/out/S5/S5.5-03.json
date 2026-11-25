@@ -1,0 +1,241 @@
+{
+  "part_id": "S5.5-03",
+  "subsystem": "S5",
+  "design": {
+    "part_id": "S5.5-03",
+    "parent_bom_id": "S5.5",
+    "subsystem": "S5",
+    "part_name": "Dikroik ustu 10 us iki-renkli InGaAs/Si pirometre ve ±1.5% kapali-cevrim enerji integratori (Exp130)",
+    "design_tier": "COTS_ENV_ICD",
+    "material": "Al 6061",
+    "temp_stage": "300 K",
+    "temp_k": 300.0,
+    "vacuum_grade": "Atmosfer (optik)",
+    "tolerance_spec": "±1.5% enerji / 10 us",
+    "surface_finish_ra_um": 0.8,
+    "qty": 1,
+    "procurement_class": "COTS/CUS",
+    "world_origin_mm": [
+      0.0,
+      385.0,
+      568.5
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "optical_tap_in",
+        "kind": "optical",
+        "position_mm": [
+          0.0,
+          0.0,
+          -23.0
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "standard": "Dia 28 mm Thermal IR Tap",
+        "mating_part_id": "S5.5-01",
+        "bore_mm": 28.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      },
+      {
+        "name": "integrator_fpga_bus",
+        "kind": "electrical",
+        "position_mm": [
+          0.0,
+          0.0,
+          33.2
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "LVDS / 10 us Pyrometer Telemetry",
+        "mating_part_id": "S7.3-01",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "TURRET_W",
+        "nominal_mm": 56.0,
+        "tol_plus_mm": 0.15,
+        "tol_minus_mm": -0.15,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "56.00 ±0.15"
+      },
+      {
+        "label": "DET_SPAN",
+        "nominal_mm": 100.4,
+        "tol_plus_mm": 0.3,
+        "tol_minus_mm": -0.3,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "100.40 ±0.30"
+      },
+      {
+        "label": "TURRET_H",
+        "nominal_mm": 56.2,
+        "tol_plus_mm": 0.2,
+        "tol_minus_mm": -0.2,
+        "view": "right",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "56.20 ±0.20"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "perpendicularity",
+        "tolerance_mm": 0.05,
+        "diameter_zone": true,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "InGaAs/Si detector barrels to optical cube datum A",
+        "glyph": "⊥",
+        "tolerance_text": "Ø0.050"
+      },
+      {
+        "symbol": "angularity",
+        "tolerance_mm": 0.05,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "45.0 deg dichroic mirror carrier seat",
+        "glyph": "∠",
+        "tolerance_text": "0.050"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "900-1700 K (10 us tepki), ±1.5% kapali-cevrim darbe enerjisi, T_back=592.9 K < 700 K dogrulama",
+      "Exp130 45 deg dichroic + 10 us two-color InGaAs/Si pyrometer (900-1700 K, +/-1.5% closed-loop energy).",
+      "Mounts on top diagnostic port of S5.5-01; fits well inside S7.SAFETY-02 (280x260x220 mm) shroud."
+    ],
+    "scad_params": {
+      "dt_us": 10.0,
+      "dichroic_deg": 45.0,
+      "energy_tol_pct": 1.5
+    },
+    "target_mass_kg": 0.38,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifacts": {
+    "part_id": "S5.5-03",
+    "subsystem": "S5",
+    "design_tier": "COTS_ENV_ICD",
+    "stl_path": "hardware/cad_parts/out/S5/S5.5-03.stl",
+    "step_path": "hardware/cad_parts/out/S5/S5.5-03.step",
+    "scad_path": "hardware/cad_parts/out/S5/S5.5-03.scad",
+    "dxf_path": "hardware/cad_parts/out/S5/S5.5-03.dxf",
+    "svg_path": "hardware/cad_parts/out/S5/S5.5-03.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 102309.13104585261,
+    "surface_area_mm2": 41538.67852844493,
+    "mass_kg": 0.32738921934672843,
+    "cg_mm": [
+      -1.0223123746111287e-16,
+      5.244906965396225e-16,
+      9.0840924740478
+    ],
+    "bbox_min_mm": [
+      -50.2,
+      -29.0,
+      -23.0
+    ],
+    "bbox_max_mm": [
+      50.2,
+      29.0,
+      33.2
+    ],
+    "inertia_kg_mm2": [
+      177.55798914387734,
+      254.306103352183,
+      270.3326309622385,
+      -2.048909664154053e-15,
+      0.18402033480141725,
+      5.586813668744293e-16
+    ],
+    "triangle_count": 344,
+    "vertex_count": 190,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

@@ -1,0 +1,476 @@
+{
+  "part_design": {
+    "part_id": "S7.4-01",
+    "parent_bom_id": "S7.4",
+    "subsystem": "S7",
+    "part_name": "10 MHz Rubidyum atomik saat referansi ve dusuk-jitter saat dagiticisi",
+    "design_tier": "COTS_ENV_ICD",
+    "material": "Steel",
+    "temp_stage": "300 K (kabin)",
+    "temp_k": 300.0,
+    "vacuum_grade": "Atmosfer",
+    "tolerance_spec": "±5e-11",
+    "surface_finish_ra_um": 0.8,
+    "qty": 1,
+    "procurement_class": "COTS",
+    "world_origin_mm": [
+      1480.0,
+      -213.0,
+      1667.975
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "bnc_10mhz_16ch",
+        "kind": "rf",
+        "position_mm": [
+          1595.0,
+          -449.0,
+          1667.975
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "standard": "16x BNC 10 MHz (<-140 dBc/Hz, <5e-11)",
+        "mating_part_id": "S7.2-03",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "world",
+        "notes": ""
+      },
+      {
+        "name": "pps_out_wr",
+        "kind": "rf",
+        "position_mm": [
+          1535.0,
+          -449.0,
+          1667.975
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "standard": "BNC 1 PPS Reference",
+        "mating_part_id": "S7.4-02",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "world",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "WIDTH_19IN",
+        "nominal_mm": 482.6,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "482.60 ±0.50"
+      },
+      {
+        "label": "HEIGHT_1U",
+        "nominal_mm": 42.45,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "42.45 ±0.50"
+      },
+      {
+        "label": "DEPTH",
+        "nominal_mm": 450.0,
+        "tol_plus_mm": 1.0,
+        "tol_minus_mm": -1.0,
+        "view": "right",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "450.00 ±1.00"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "flatness",
+        "tolerance_mm": 0.5,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "19-INCH FRONT PANEL",
+        "glyph": "⏥",
+        "tolerance_text": "0.50"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "Frekans kararligi <5e-11, faz gurultusu <-140 dBc/Hz",
+      "Bay 1 U36; master 10 MHz Rubidium reference locking RFSoC, AWG, ESR, and FPGA."
+    ],
+    "scad_params": {
+      "u_start": 36,
+      "u_count": 1,
+      "bnc_outputs": 16,
+      "depth_mm": 450.0
+    },
+    "target_mass_kg": 11.5,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S7.4-01",
+    "subsystem": "S7",
+    "design_tier": "COTS_ENV_ICD",
+    "stl_path": "hardware/cad_parts/out/S7/S7.4-01.stl",
+    "step_path": "hardware/cad_parts/out/S7/S7.4-01.step",
+    "scad_path": "hardware/cad_parts/out/S7/S7.4-01.scad",
+    "dxf_path": "hardware/cad_parts/out/S7/S7.4-01.dxf",
+    "svg_path": "hardware/cad_parts/out/S7/S7.4-01.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 8032128.666758685,
+    "surface_area_mm2": 519144.5935478981,
+    "mass_kg": 11.500000000000034,
+    "cg_mm": [
+      1480.249931147896,
+      -212.78760740226195,
+      1667.9750000001754
+    ],
+    "bbox_min_mm": [
+      1238.7,
+      -449.1,
+      1646.75
+    ],
+    "bbox_max_mm": [
+      1721.3,
+      24.2,
+      1689.1999999999998
+    ],
+    "inertia_kg_mm2": [
+      196821.36000428256,
+      187477.07058889582,
+      381162.7804699326,
+      -28.855945402814168,
+      9.172148263124104e-07,
+      8.24934066348052e-08
+    ],
+    "triangle_count": 2004,
+    "vertex_count": 1024,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "shell_bboxes_mm": [
+    [
+      [
+        1238.7,
+        -438.0,
+        1646.75
+      ],
+      [
+        1721.3,
+        -434.0,
+        1689.2
+      ]
+    ],
+    [
+      [
+        1260.0,
+        -433.9,
+        1647.75
+      ],
+      [
+        1700.0,
+        12.0,
+        1688.2
+      ]
+    ],
+    [
+      [
+        1535.55,
+        -449.1,
+        1664.775
+      ],
+      [
+        1541.95,
+        -438.1,
+        1671.175
+      ]
+    ],
+    [
+      [
+        1543.05,
+        -449.1,
+        1664.775
+      ],
+      [
+        1549.45,
+        -438.1,
+        1671.175
+      ]
+    ],
+    [
+      [
+        1550.55,
+        -449.1,
+        1664.775
+      ],
+      [
+        1556.95,
+        -438.1,
+        1671.175
+      ]
+    ],
+    [
+      [
+        1558.05,
+        -449.1,
+        1664.775
+      ],
+      [
+        1564.45,
+        -438.1,
+        1671.175
+      ]
+    ],
+    [
+      [
+        1565.55,
+        -449.1,
+        1664.775
+      ],
+      [
+        1571.95,
+        -438.1,
+        1671.175
+      ]
+    ],
+    [
+      [
+        1573.05,
+        -449.1,
+        1664.775
+      ],
+      [
+        1579.45,
+        -438.1,
+        1671.175
+      ]
+    ],
+    [
+      [
+        1580.55,
+        -449.1,
+        1664.775
+      ],
+      [
+        1586.95,
+        -438.1,
+        1671.175
+      ]
+    ],
+    [
+      [
+        1588.05,
+        -449.1,
+        1664.775
+      ],
+      [
+        1594.45,
+        -438.1,
+        1671.175
+      ]
+    ],
+    [
+      [
+        1595.55,
+        -449.1,
+        1664.775
+      ],
+      [
+        1601.95,
+        -438.1,
+        1671.175
+      ]
+    ],
+    [
+      [
+        1603.05,
+        -449.1,
+        1664.775
+      ],
+      [
+        1609.45,
+        -438.1,
+        1671.175
+      ]
+    ],
+    [
+      [
+        1610.55,
+        -449.1,
+        1664.775
+      ],
+      [
+        1616.95,
+        -438.1,
+        1671.175
+      ]
+    ],
+    [
+      [
+        1618.05,
+        -449.1,
+        1664.775
+      ],
+      [
+        1624.45,
+        -438.1,
+        1671.175
+      ]
+    ],
+    [
+      [
+        1625.55,
+        -449.1,
+        1664.775
+      ],
+      [
+        1631.95,
+        -438.1,
+        1671.175
+      ]
+    ],
+    [
+      [
+        1633.05,
+        -449.1,
+        1664.775
+      ],
+      [
+        1639.45,
+        -438.1,
+        1671.175
+      ]
+    ],
+    [
+      [
+        1640.55,
+        -449.1,
+        1664.775
+      ],
+      [
+        1646.95,
+        -438.1,
+        1671.175
+      ]
+    ],
+    [
+      [
+        1648.05,
+        -449.1,
+        1664.775
+      ],
+      [
+        1654.45,
+        -438.1,
+        1671.175
+      ]
+    ],
+    [
+      [
+        1355.438,
+        12.2,
+        1653.413
+      ],
+      [
+        1384.562,
+        22.2,
+        1682.537
+      ]
+    ],
+    [
+      [
+        1465.438,
+        12.2,
+        1653.413
+      ],
+      [
+        1494.562,
+        22.2,
+        1682.537
+      ]
+    ],
+    [
+      [
+        1614.0,
+        12.2,
+        1655.975
+      ],
+      [
+        1646.0,
+        24.2,
+        1679.975
+      ]
+    ]
+  ],
+  "reconciliation_notes": []
+}

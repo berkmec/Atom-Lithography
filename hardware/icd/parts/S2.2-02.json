@@ -1,0 +1,85 @@
+{
+  "schema_version": "part_icd_v1.0",
+  "part_id": "S2.2-02",
+  "parent_bom_id": "S2.2",
+  "subsystem": "S2",
+  "part_name": "Blanker MEMS + TSV/RDL ara-baglanti dokumhane NRE ve maske seti",
+  "part_category": "NON_SOLID_PROCESS_SERVICE_GAS",
+  "bom_metadata": {
+    "qty": "1",
+    "unit": "lot",
+    "material": "CMOS-uyumlu MEMS + TSV sureci",
+    "key_spec": "Cok-katmanli elektrot + yalitim + TSV gelistirme lotu",
+    "tolerance": "±0.1 um",
+    "temp_stage": "300 K (fab)",
+    "vacuum_grade": "Temizoda",
+    "procurement_class": "R&D",
+    "parent_cost_class": "D",
+    "usd_low": 70000.0,
+    "usd_nom": 145000.0,
+    "usd_high": 310000.0,
+    "legacy_cad_module": "s2_mems_write_head",
+    "bom_epistemic_tag": "{Varsayım}",
+    "notes": "DELTA-MEMS-NRE: S2.2 R&D gelistirme sinifi D cekirdek fab bedeli"
+  },
+  "artifact_links": {
+    "cad": null,
+    "pcb_bundles": [],
+    "legacy_board_files": [],
+    "electrical_icd": null,
+    "rtl_modules": [],
+    "rtl_audit_json": null,
+    "software_and_eda_files": [],
+    "verification_tests": []
+  },
+  "specialized_specification": {
+    "kind": "MEMS_TSV_RDL_FOUNDRY_NRE",
+    "mating_physical_part_ids": [
+      "S2.2-01",
+      "S2.2-03",
+      "S2.2-04",
+      "S2.4-01",
+      "S2.4-02"
+    ],
+    "process_stack": "Multi-layer Si MEMS deflector electrodes + high-voltage SiO2/SiN dielectric isolation + Cu TSV + multi-layer RDL redistribution",
+    "critical_dimension_spec": "1024 individually addressable deflector plate pairs; >= 60 V DC / 53.3 V pulse breakdown margin; plate capacitance <= 5 pF/ch",
+    "mask_layers": [
+      "L1_TSV_VIA_ETCH",
+      "L2_TSV_LINER_AND_CU_FILL",
+      "L3_DEFLECTOR_TRENCH_DRIE",
+      "L4_HV_ISOLATION_OXIDE",
+      "L5_ELECTRODE_METAL_SEED",
+      "L6_RDL_FANOUT_1024CH",
+      "L7_UBM_MICROBUMP_PAD",
+      "L8_PASSIVATION_OPEN"
+    ],
+    "acceptance_criteria": [
+      "DC leakage < 1 nA @ 60 V between adjacent deflector electrodes",
+      "Continuity >= 99.5% of 1024 channels before step-and-stitch remapping",
+      "Die shear & thermal cycle survivability (-20 C to +150 C bakeout)"
+    ],
+    "reference_artifacts": [
+      "hardware/cad_parts/out/S2/S2.2-01.json",
+      "hardware/cad_parts/out/S2/S2.2-03.json",
+      "hardware/pcb/blanker_asic_mezzanine/blanker_asic_mezzanine_verification.json",
+      "research/atom_lithography_machine/RFQ_SPECIFICATIONS.md"
+    ]
+  },
+  "verification_status": {
+    "cad_verified": false,
+    "pcb_verified": false,
+    "electrical_icd_verified": false,
+    "rtl_verified": false,
+    "software_or_eda_verified": false,
+    "specialized_icd_present": true,
+    "traceable": true
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "tapeout_done": false
+  }
+}

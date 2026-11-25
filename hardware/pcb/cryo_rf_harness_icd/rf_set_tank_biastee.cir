@@ -1,0 +1,77 @@
+* S6.7-01: 20 mK rf-SET LC Matching Tank (R_SET = 50 kOhm <-> 200 kOhm) & Cryogenic Bias-Tee
+* L_tank = 820 nH (NbTiN spiral, R_ser = 4.0 Ohm), C_par = 0.30 pF -> f0 ~ 321 MHz
+* Cryogenic bias-tee: C_bt = 100 pF + 2-stage choke/RC filter -> RF-to-DC isolation >> 40 dB
+* Epistemic: DESIGN_ONLY, no_lab_measurement=true
+
+.temp -273.13
+
+* Subcircuit: Cryogenic Bias-Tee + rf-SET LC Matching Tank
+* Ports: rf_in (50 Ohm coax), dc_port (50 Ohm DC bias line), gnd
+.subckt RFSET_TANK_BT rf_in dc_port gnd
+* RF coupling capacitor
+C_BT     rf_in   rf_node 100p
+* 2-stage cryogenic DC bias choke & RC filter (realistic 0.15 pF choke C_self, 0.5 nH cap ESL, 0.15 Ohm ESR)
+L_CHK1   rf_node bt_mid  10u
+C_SELF1  rf_node bt_mid  0.15p
+R_CHK1   bt_mid  bt_n1   10.0
+C_SH1    bt_n1   sh1_esl 100p
+L_SH1    sh1_esl sh1_esr 0.5n
+R_SH1    sh1_esr gnd     0.15
+R_BT2    bt_n1   bt_n2   100.0
+L_CHK2   bt_n2   dc_port 1.0u
+C_SELF2  bt_n2   dc_port 0.10p
+C_SH2    dc_port sh2_esl 1.0n
+L_SH2    sh2_esl sh2_esr 0.5n
+R_SH2    sh2_esr gnd     0.15
+* Board-level stray cavity coupling across bias-tee (2 fF)
+C_STRAY  rf_node dc_port 2.0f
+* LC Matching Tank (L_tank + NbTiN ESR + parasitic C_par to ground)
+L_TANK   rf_node l_mid   8.200000e-07
+R_LSER   l_mid   set_drn 4.0000
+C_PAR    set_drn gnd     3.000000e-13
+.ends RFSET_TANK_BT
+
+* --- Instance A: Coulomb Peak (R_SET = 50 kOhm) ---
+VSRC_50  src50 0 DC 0 AC 2.0
+RS_50    src50 p50 50.0
+X_50K    p50 dc50 0 RFSET_TANK_BT
+R_SET50  X_50K.set_drn 0 50000.00
+R_DC50   dc50 0 50.0
+
+* --- Instance B: Coulomb Blockade (R_SET = 200 kOhm) ---
+VSRC_200 src200 0 DC 0 AC 2.0
+RS_200   src200 p200 50.0
+X_200K   p200 dc200 0 RFSET_TANK_BT
+R_SET200 X_200K.set_drn 0 200000.00
+R_DC200  dc200 0 50.0
+
+.control
+set noaskquit
+ac lin 501 200.0e6 450.0e6
+
+* Complex reflection coefficients Gamma = V(port) - 1 (since V_src = 2 V behind 50 Ohm)
+let g50_c  = v(p50) - 1.0
+let g200_c = v(p200) - 1.0
+let g50_mag  = mag(g50_c)
+let g200_mag = mag(g200_c)
+let dg_mag   = abs(g200_mag - g50_mag)
+let dg_vec   = mag(g200_c - g50_c)
+let rl50_db  = 20.0 * log10(g50_mag + 1e-12)
+let rl200_db = 20.0 * log10(g200_mag + 1e-12)
+* Bias-tee RF-to-DC port isolation |S31| (referenced to 1 V incident wave at 50 Ohm)
+let dc_iso_db = 20.0 * log10(mag(v(dc50)) + 1e-15)
+
+meas ac min_rl50_db MIN rl50_db FROM=250.0e6 TO=400.0e6
+meas ac f_res_hz MIN_AT rl50_db FROM=250.0e6 TO=400.0e6
+meas ac gamma_50k_res FIND g50_mag AT=f_res_hz
+meas ac gamma_200k_res FIND g200_mag AT=f_res_hz
+meas ac delta_gamma_mag FIND dg_mag AT=f_res_hz
+meas ac delta_gamma_vec FIND dg_vec AT=f_res_hz
+meas ac rl_200k_res_db FIND rl200_db AT=f_res_hz
+meas ac dc_iso_at_fres_db FIND dc_iso_db AT=f_res_hz
+meas ac dc_iso_worst_db MAX dc_iso_db FROM=200.0e6 TO=450.0e6
+let f_res_mhz = f_res_hz / 1.0e6
+echo "f_res_mhz = $&f_res_mhz"
+quit
+.endc
+.end

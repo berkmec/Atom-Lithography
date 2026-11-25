@@ -1,0 +1,266 @@
+{
+  "part_id": "S1.1-02",
+  "subsystem": "S1",
+  "design": {
+    "part_id": "S1.1-02",
+    "parent_bom_id": "S1.1",
+    "subsystem": "S1",
+    "part_name": "Duoplasmatron plazma odasi (29Si+/28Si+ izotop hatti)",
+    "design_tier": "CUSTOM_FULL",
+    "material": "316LN",
+    "temp_stage": "300 K (su sogutmali)",
+    "temp_k": 300.0,
+    "vacuum_grade": "HV 1e-6 mbar (kaynak)",
+    "tolerance_spec": "±0.05 mm eksen",
+    "surface_finish_ra_um": 0.4,
+    "qty": 1,
+    "procurement_class": "R&D",
+    "world_origin_mm": [
+      165.0,
+      0.0,
+      492.66
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "top_cathode_cf63",
+        "kind": "flange",
+        "position_mm": [
+          165.0,
+          0.0,
+          562.66
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "CF63",
+        "mating_part_id": "",
+        "bore_mm": 40.0,
+        "od_mm": 113.5,
+        "pcd_mm": 92.1,
+        "bolt_count": 8,
+        "bolt_hole_mm": 8.4,
+        "bolt_spec": "M8",
+        "frame": "global",
+        "notes": "ISO 3669 CF63 Cu-gasket knife-edge"
+      },
+      {
+        "name": "switchover_cf40_neg_x",
+        "kind": "flange",
+        "position_mm": [
+          82.65,
+          0.0,
+          492.66
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "standard": "CF40",
+        "mating_part_id": "S1.1-01",
+        "bore_mm": 38.0,
+        "od_mm": 69.5,
+        "pcd_mm": 58.7,
+        "bolt_count": 6,
+        "bolt_hole_mm": 6.6,
+        "bolt_spec": "M6",
+        "frame": "global",
+        "notes": "ISO 3669 CF40 Cu-gasket knife-edge"
+      },
+      {
+        "name": "sif4_vcr_inlet",
+        "kind": "gas",
+        "position_mm": [
+          165.0,
+          -45.0,
+          492.66
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "standard": "1/4 VCR Male",
+        "mating_part_id": "S1.1-04",
+        "bore_mm": 4.6,
+        "od_mm": 14.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "global",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "OD_BODY",
+        "nominal_mm": 90.0,
+        "tol_plus_mm": 0.05,
+        "tol_minus_mm": -0.05,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø90.00 ±0.05"
+      },
+      {
+        "label": "HEIGHT",
+        "nominal_mm": 140.0,
+        "tol_plus_mm": 0.05,
+        "tol_minus_mm": -0.05,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "140.00 ±0.05"
+      },
+      {
+        "label": "OFFSET_X",
+        "nominal_mm": 165.0,
+        "tol_plus_mm": 0.1,
+        "tol_minus_mm": -0.1,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "165.00 ±0.10"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "concentricity",
+        "tolerance_mm": 0.05,
+        "diameter_zone": true,
+        "material_condition": "",
+        "datum_primary": "B",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "ISOTOPE LINE AXIS",
+        "glyph": "◎",
+        "tolerance_text": "Ø0.050"
+      },
+      {
+        "symbol": "perpendicularity",
+        "tolerance_mm": 0.025,
+        "diameter_zone": true,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "CF40 SWITCH PORT",
+        "glyph": "⊥",
+        "tolerance_text": "Ø0.025"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "29Si+/28Si+ Mod A/onarim uyumlu (SiF4 besleme)",
+      "Dedicated 2nd SiF4 isotope duoplasmatron line parallel at X=+165 mm (resolves v6 under-instantiation)"
+    ],
+    "scad_params": {
+      "body_od": 90.0,
+      "height": 140.0,
+      "x_offset": 165.0,
+      "species": "29Si+/28Si+"
+    },
+    "target_mass_kg": 7.8,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S1.1-02",
+    "subsystem": "S1",
+    "design_tier": "CUSTOM_FULL",
+    "stl_path": "hardware/cad_parts/out/S1/S1.1-02.stl",
+    "step_path": "hardware/cad_parts/out/S1/S1.1-02.step",
+    "scad_path": "hardware/cad_parts/out/S1/S1.1-02.scad",
+    "dxf_path": "hardware/cad_parts/out/S1/S1.1-02.dxf",
+    "svg_path": "hardware/cad_parts/out/S1/S1.1-02.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 752170.1411648222,
+    "surface_area_mm2": 133784.9688143921,
+    "mass_kg": 6.0173611293185765,
+    "cg_mm": [
+      161.0846862250507,
+      -1.524026359700186e-14,
+      501.9987820983936
+    ],
+    "bbox_min_mm": [
+      82.65,
+      -56.75,
+      422.66
+    ],
+    "bbox_max_mm": [
+      221.75,
+      56.75,
+      562.6600000000001
+    ],
+    "inertia_kg_mm2": [
+      12292.623276775523,
+      13827.35518677576,
+      8537.06395703663,
+      -2.959814823446431e-13,
+      -220.02037003234867,
+      -1.3469897745876754e-11
+    ],
+    "triangle_count": 4552,
+    "vertex_count": 2248,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "engineering_checks": {},
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

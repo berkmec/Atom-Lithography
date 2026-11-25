@@ -1,0 +1,254 @@
+{
+  "part_design": {
+    "part_id": "S6.6-07",
+    "parent_bom_id": "S6.6",
+    "subsystem": "S6",
+    "part_name": "NbTiN superiletken spiral cogullamali rezonator yongalari ve paketleme (9000 kanal)",
+    "design_tier": "CUSTOM_FULL",
+    "material": "OFHC Cu",
+    "temp_stage": "20 mK (MXC)",
+    "temp_k": 0.02,
+    "vacuum_grade": "UHV / Kriyo-vakum",
+    "tolerance_spec": "sigma_f <= 0.27%",
+    "surface_finish_ra_um": 0.8,
+    "qty": 1,
+    "procurement_class": "R&D",
+    "world_origin_mm": [
+      0.0,
+      0.0,
+      345.0
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "smp_4port_top",
+        "kind": "rf",
+        "position_mm": [
+          0.0,
+          0.0,
+          8.5
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "4x Cryo SMP Feedthrough Launch",
+        "mating_part_id": "S6.3-03",
+        "bore_mm": 0.0,
+        "od_mm": 36.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      },
+      {
+        "name": "thermal_20mk_stem",
+        "kind": "thermal",
+        "position_mm": [
+          0.0,
+          0.0,
+          -14.5
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "standard": "Ø16 mm Au-OFHC 20 mK Stem",
+        "mating_part_id": "S6.3-03",
+        "bore_mm": 0.0,
+        "od_mm": 16.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "PKG_OD",
+        "nominal_mm": 50.0,
+        "tol_plus_mm": 0.03,
+        "tol_minus_mm": -0.03,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø50.00 ±0.03"
+      },
+      {
+        "label": "DIE_SIZE",
+        "nominal_mm": 16.0,
+        "tol_plus_mm": 0.02,
+        "tol_minus_mm": -0.02,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "16.00 ±0.02"
+      },
+      {
+        "label": "TOTAL_H",
+        "nominal_mm": 23.0,
+        "tol_plus_mm": 0.05,
+        "tol_minus_mm": -0.05,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "23.00 ±0.05"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "flatness",
+        "tolerance_mm": 0.005,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "Si/NbTiN die seating floor",
+        "glyph": "⏥",
+        "tolerance_text": "0.005"
+      },
+      {
+        "symbol": "concentricity",
+        "tolerance_mm": 0.02,
+        "diameter_zone": true,
+        "material_condition": "",
+        "datum_primary": "B",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "Quiet-zone centering OD",
+        "glyph": "◎",
+        "tolerance_text": "Ø0.020"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "NL=110-160/hat, Ql=800-1200, Qi~2e5 @ <=0.4 T, alan 8.4 mm2 (Exp109/112)"
+    ],
+    "scad_params": {
+      "pkg_od": 50.0,
+      "n_resonators": 9000,
+      "b_max_ut": 22.3,
+      "ql_nom": 1000
+    },
+    "target_mass_kg": 0.14,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact_result": {
+    "part_id": "S6.6-07",
+    "subsystem": "S6",
+    "design_tier": "CUSTOM_FULL",
+    "stl_path": "hardware/cad_parts/out/S6/S6.6-07.stl",
+    "step_path": "hardware/cad_parts/out/S6/S6.6-07.step",
+    "scad_path": "hardware/cad_parts/out/S6/S6.6-07.scad",
+    "dxf_path": "hardware/cad_parts/out/S6/S6.6-07.dxf",
+    "svg_path": "hardware/cad_parts/out/S6/S6.6-07.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 14398.389224833847,
+    "surface_area_mm2": 10307.138768093237,
+    "mass_kg": 0.12900956745451128,
+    "cg_mm": [
+      -9.889492638574454e-16,
+      -7.197517471736946e-16,
+      -2.2249996714291562
+    ],
+    "bbox_min_mm": [
+      -25.0,
+      -25.0,
+      -14.5
+    ],
+    "bbox_max_mm": [
+      25.0,
+      25.0,
+      8.5
+    ],
+    "inertia_kg_mm2": [
+      20.51011186212601,
+      20.510111862126003,
+      37.05227291373559,
+      -8.925781003199517e-16,
+      2.2632134815292563e-16,
+      -3.0296965500878316e-16
+    ],
+    "triangle_count": 732,
+    "vertex_count": 372,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "json_path": "hardware/cad_parts/out/S6/S6.6-07.json",
+  "world_bbox_min_mm": [
+    -25.0,
+    -25.0,
+    330.5
+  ],
+  "world_bbox_max_mm": [
+    25.0,
+    25.0,
+    353.5
+  ],
+  "world_cg_mm": [
+    -0.0,
+    -0.0,
+    342.775
+  ],
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

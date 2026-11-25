@@ -1,0 +1,83 @@
+{
+  "schema_version": "1.0",
+  "part_id": "S2.5-01",
+  "parent_bom_id": "S2.5",
+  "subsystem": "S2",
+  "part_name": "Kafa-kademe goreli kapasitif konum sensorleri (3 eksen)",
+  "qty": 1,
+  "unit": "set",
+  "temp_stage": "300 K",
+  "vacuum_grade": "UHV 1e-9 mbar",
+  "bom_key_spec": "Cozunurluk <=0.1 nm RMS, 10 kHz bant genisligi",
+  "usd_nom": 14000.0,
+  "bom_epistemic_tag": "{Model-Kalibrasyon-Exp114}",
+  "electrical_class": "E4",
+  "grounding_domain": "AGND",
+  "grounding_notes": "3-axis head-to-stage relative capacitive sensors (<=0.1 nm RMS, 10 kHz BW); Kapton coax.",
+  "supply_rails": [
+    {
+      "rail_name": "CAP_SENSOR_EXC",
+      "voltage_v": 15.0,
+      "current_type": "DC",
+      "max_current_a": 0.05,
+      "steady_power_w": 1.0,
+      "peak_power_w": 2.0,
+      "source_part_id": "S4.5-03"
+    }
+  ],
+  "connectors_and_pinout": [
+    {
+      "connector_ref": "J_CAP3",
+      "connector_type": "3x UHV Triax Coax",
+      "location_side": "write_head_uhv",
+      "mating_part_id": "S4.5-03",
+      "pins": [
+        {
+          "pin": "1-3",
+          "signal": "HEAD_STAGE_CAP_XYZ",
+          "direction": "OUT",
+          "nominal_level": "<=0.1 nm RMS relative gap"
+        },
+        {
+          "pin": "SHD",
+          "signal": "AGND_GUARD",
+          "direction": "PWR",
+          "nominal_level": "Driven guard"
+        }
+      ]
+    }
+  ],
+  "mating_part_ids": [
+    "S2.5-02",
+    "S4.5-01",
+    "S4.5-03"
+  ],
+  "interlock_hooks": [
+    {
+      "signal_name": "WD_COLLISION_GUARD",
+      "target_part_id": "S4.3-04",
+      "action_on_trip": "Halt Z approach if WD < 0.200 mm",
+      "response_time_ms": 0.5
+    }
+  ],
+  "ups_tier": "NONE",
+  "ups_budget_group": "PASSIVE_ZERO_MAINS",
+  "exp150_ups_allocation_w": 0.0,
+  "supply_rails_steady_sum_w": 1.0,
+  "incremental_mains_w": 0.0,
+  "secondary_or_parent_derived_w": 1.0,
+  "non_exp150_aux_shed_w": 0.0,
+  "reconciliation_note": "Passive or downstream sub-assembly (1.00 W sub-rail power drawn from upstream source S4.5-03); incremental_mains_w = 0.0 W (zero double-counting).",
+  "timing_sync": {
+    "rb_10mhz_port": null,
+    "white_rabbit_port": null,
+    "sync_role": "10 kHz head-stage metrology"
+  },
+  "epistemic_flags": {
+    "design_maturity": "M0_M1_ELECTRICAL_ICD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

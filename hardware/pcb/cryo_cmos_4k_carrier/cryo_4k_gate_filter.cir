@@ -1,0 +1,145 @@
+* Cryo-CMOS 4 K Carrier — 4 K / 20 mK 2-Stage RC + Eccosorb CR-124 Filter & 968-Gate Crossbar Power
+* Native ngspice-47 deck (zero PSpice syntax) — M0/M1 DESIGN_ONLY
+* BOM: S6.10-03 (968-gate 4 K SKY130 mux, <=15.4 mW), S6.7-02 (RC/Eccosorb <0.5 uV/rtHz), S7.3-01/02
+* Global simulation temperature: 4.00 K (-269.15 C); MXC stage: 20 mK (-273.13 C); 300 K DAC ref: +26.85 C
+
+.temp -269.15
+
+* ===========================================================================
+* SUBCIRCUIT A: 4 K / MXC (20 mK) 2-Stage RC + Eccosorb CR-124 DC Gate Filter
+* ===========================================================================
+* Stimulus: AC=1 V for RF attenuation sweep; TRAN 0 -> 1.0 V Stark gate step at t=10 us
+Vgate_in n_in_src 0 DC 0 AC 1 PULSE(0 1.0 10u 100n 100n 5m 10m)
+
+* Upstream 300 K DAC noise floor (AD5791 class: 7.50 nV/rtHz via 3.4 kOhm @ 300 K, noiseless unity buffer)
+Rdac_n n_in_src n_dac_n 3400.0 temp=26.85
+Edac_buf n_mux_in 0 n_dac_n 0 1.0
+
+* 4 K SKY130 Crossbar Mux Switch On-Resistance (4.00 K global temp)
+Rmux_on n_mux_in n_r1_in 250.0
+
+* Stage 1 (4 K): R1 = 1.0 kOhm (w/ 0.05 pF body stray) + C1 = 100 nF C0G || 100 pF HF bypass
+R1_4k   n_r1_in n_s1 1000.0
+Cpar_r1 n_r1_in n_s1 5.000000e-14
+C1_4k   n_s1    n_c1r 1.000000e-07
+Resr1   n_c1r   n_c1l 0.05
+Lesl1   n_c1l   0     6.000000e-10
+C1_hf   n_s1    n_c1hfr 1.000000e-10
+Resr1h  n_c1hfr n_c1hfl 0.08
+Lesl1h  n_c1hfl 0       2.500000e-10
+
+* Mid-Stage: 3-Section Eccosorb CR-124 Magnetically-Loaded RF Absorber Ladder (4 K -> MXC)
+Re_dc1 n_s1   ne1_a 5.0
+Le_1   ne1_a  ne1   6.000000e-08
+Re_ls1 ne1_a  ne1   350.0
+Ce_1   ne1    ne1_l 4.000000e-12
+Lce_1  ne1_l  0     2.000000e-10
+
+Re_dc2 ne1    ne2_a 5.0
+Le_2   ne2_a  ne2   6.000000e-08
+Re_ls2 ne2_a  ne2   350.0
+Ce_2   ne2    ne2_l 4.000000e-12
+Lce_2  ne2_l  0     2.000000e-10
+
+Re_dc3 ne2    ne3_a 5.0
+Le_3   ne3_a  n_ecco 6.000000e-08
+Re_ls3 ne3_a  n_ecco 350.0
+Ce_3   n_ecco ne3_l  4.000000e-12
+Lce_3  ne3_l  0      2.000000e-10
+
+* Stage 2 (MXC 20 mK, temp=-273.13 C): R2 = 2.0 kOhm (w/ 0.05 pF stray) + C2 = 47 nF C0G || 100 pF HF
+R2_mxc  n_ecco  n_gate_mxc 2000.0 temp=-273.13
+Cpar_r2 n_ecco  n_gate_mxc 5.000000e-14
+C2_mxc  n_gate_mxc n_c2r   4.700000e-08
+Resr2   n_c2r   n_c2l      0.05 temp=-273.13
+Lesl2   n_c2l   0          6.000000e-10
+C2_hf   n_gate_mxc n_c2hfr 1.000000e-10
+Resr2h  n_c2hfr n_c2hfl    0.08 temp=-273.13
+Lesl2h  n_c2hfl 0          2.500000e-10
+
+* Stark / M4 / SET Cryogenic Gate Electrode Load (20 mK)
+Cgate_mxc n_gate_mxc 0 2.000000e-12
+Rgate_mxc n_gate_mxc 0 1.000000e+08 temp=-273.13
+
+* Parallel Intrinsic-Only Filter Copy (0 Ohm noiseless input, isolating pure 4 K + 20 mK thermal noise!)
+Vin_intr  ni_in  0 DC 0 AC 1
+Rmux_i    ni_in  ni_r1 250.0
+R1_i      ni_r1  ni_s1 1000.0
+C1_i      ni_s1  0     1.000000e-07
+R2_i      ni_s1  ni_out 2000.0 temp=-273.13
+C2_i      ni_out 0     4.700000e-08
+
+* ===========================================================================
+* SUBCIRCUIT B: 968-Gate SKY130 4 K Crossbar Mux Static + Dynamic Power Model
+*   L=11 Surface Code: 121 nodes x 8 gates = 968 gates across 8 SKY130 dies
+*   4 K Core Supply VDD_4K = 1.2 V; Analog Gate-Hold Bias VBIAS = 2.0 V
+*   Budget: P_total_4K <= 15.4 mW (Exp131 / BOM S6.10-03)
+* ===========================================================================
+Vvdd_4k  vdd_4k  0 DC 1.2
+Vbias_4k vbias_4k 0 DC 2.0
+
+* Static 4 K core + SPI/bandgap overhead across 8 dies: 1.12 mW @ 1.2 V (0.9333 mA)
+Rstat_spi vdd_4k 0 1.2857k
+* Static 968-gate sample-and-hold bias buffers: 968 x 11.2 uW = 10.8416 mW @ 2.0 V (5.4208 mA)
+Rstat_968 vbias_4k 0 368.95
+
+* Dynamic 968-gate SKY130 CMOS crossbar refresh bank (4 K threshold-shifted |Vto|=0.60 V)
+* Scaled 968-gate total switched capacitance: 968 x 45 pF = 43.56 nF refreshed at f_ref = 25 kHz
+* Analytical P_dyn = C_tot * V^2 * f = 43.56e-9 * 1.44 * 25e3 = 1.568 mW
+.model NMOS_SKY4K NMOS(LEVEL=1 VTO=0.60 KP=4.5m LAMBDA=0.01)
+.model PMOS_SKY4K PMOS(LEVEL=1 VTO=-0.60 KP=2.2m LAMBDA=0.01)
+Vref_clk clk_ref 0 PULSE(0 1.2 1u 50n 50n 19.95u 40u)
+Mdyn_p dyn_out clk_ref vdd_4k vdd_4k PMOS_SKY4K W=2000u L=1u
+Mdyn_n dyn_out clk_ref 0      0      NMOS_SKY4K W=1000u L=1u
+Cdyn_968 dyn_out 0 43.56n
+
+.control
+set noaskquit
+
+* 1) AC Transfer Function: 1 Hz .. 2 GHz (verify >60 dB RF attenuation @ 1 GHz & -3 dB BW)
+ac dec 80 1 2G
+meas ac f_3db_hz WHEN vm(n_gate_mxc)=0.707107 FALL=1
+meas ac atten_100khz_db FIND vdb(n_gate_mxc) AT=100k
+meas ac atten_10mhz_db  FIND vdb(n_gate_mxc) AT=10Meg
+meas ac atten_100mhz_db FIND vdb(n_gate_mxc) AT=100Meg
+meas ac atten_1ghz_db   FIND vdb(n_gate_mxc) AT=1G
+
+* 2) Noise Analysis (Total: 300 K DAC + 4 K stage + 20 mK MXC stage, 1 Hz .. 1 MHz)
+noise v(n_gate_mxc) Vgate_in dec 40 1 1Meg
+setplot noise1
+let noise_10hz_v_rthz = onoise_spectrum[40]
+let noise_peak_v_rthz = vecmax(onoise_spectrum)
+print noise_10hz_v_rthz
+print noise_peak_v_rthz
+setplot noise2
+let noise_rms_total_v = onoise_total
+print noise_rms_total_v
+
+* 3) Noise Analysis (Intrinsic 4 K + 20 mK filter thermal noise only, 1 Hz .. 1 MHz)
+noise v(ni_out) Vin_intr dec 40 1 1Meg
+setplot noise3
+let noise_intr_10hz_v_rthz = onoise_spectrum[40]
+print noise_intr_10hz_v_rthz
+setplot noise4
+let noise_intr_rms_v = onoise_total
+print noise_intr_rms_v
+
+* 4) Transient Analysis A: 968-Gate Crossbar 4 K Power Dissipation (5 full refresh cycles = 200 us)
+tran 200n 240u
+let p_4k_core_w = -1.2 * i(Vvdd_4k)
+let p_4k_bias_w = -2.0 * i(Vbias_4k)
+let p_4k_tot_w  = p_4k_core_w + p_4k_bias_w
+meas tran p_4k_core_avg_w AVG p_4k_core_w FROM=40u TO=240u
+meas tran p_4k_bias_avg_w AVG p_4k_bias_w FROM=40u TO=240u
+meas tran p_4k_total_avg_w AVG p_4k_tot_w FROM=40u TO=240u
+
+* 5) Transient Analysis B: DC Stark Gate Step Response & 0.1% Settling Time (0 -> 1.0 V)
+tran 2u 3.0m
+meas tran t_rise_10_90_s TRIG v(n_gate_mxc) VAL=0.10 RISE=1 TARG v(n_gate_mxc) VAL=0.90 RISE=1
+meas tran t_settle_0p1pct_abs WHEN v(n_gate_mxc)=0.999 RISE=1
+let t_settle_0p1pct_s = t_settle_0p1pct_abs - 10u
+print t_settle_0p1pct_s
+
+quit 0
+.endc
+.end

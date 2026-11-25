@@ -1,0 +1,253 @@
+{
+  "part_id": "S5.6-03",
+  "subsystem": "S5",
+  "design": {
+    "part_id": "S5.6-03",
+    "parent_bom_id": "S5.6",
+    "subsystem": "S5",
+    "part_name": "Yuk-kilidi 345 C pirolitik-BN radyatif isitici + 350 C %5 H2/N2 FG/atomik-H pasivasyon manifoldu (Exp139, 4.2 kg)",
+    "design_tier": "CUSTOM_FULL",
+    "material": "316L",
+    "temp_stage": "300-723 K (yuk-kilidi)",
+    "temp_k": 618.15,
+    "vacuum_grade": "UHV / FG-H",
+    "tolerance_spec": "±2 C PID",
+    "surface_finish_ra_um": 0.4,
+    "qty": 1,
+    "procurement_class": "CUS",
+    "world_origin_mm": [
+      420.0,
+      88.5,
+      675.0
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "mbe_pbn_cf40_mate",
+        "kind": "flange",
+        "position_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "standard": "CF40",
+        "mating_part_id": "S5.6-01",
+        "bore_mm": 38.0,
+        "od_mm": 69.5,
+        "pcd_mm": 58.7,
+        "bolt_count": 6,
+        "bolt_hole_mm": 6.6,
+        "bolt_spec": "M6",
+        "frame": "local",
+        "notes": "ISO 3669 CF40 Cu-gasket knife-edge"
+      },
+      {
+        "name": "forming_gas_5pct_in",
+        "kind": "gas",
+        "position_mm": [
+          59.2,
+          38.0,
+          -10.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "standard": "1/4 in VCR 5% H2/N2 ISO 10156",
+        "mating_part_id": "S7.SAFETY-06",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      },
+      {
+        "name": "pbn_150w_power_tc",
+        "kind": "electrical",
+        "position_mm": [
+          0.0,
+          38.0,
+          69.0
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "150 W PBN + Type-K PID (+/-2 C)",
+        "mating_part_id": "S7.4-01",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "ASSY_Y",
+        "nominal_mm": 120.0,
+        "tol_plus_mm": 0.4,
+        "tol_minus_mm": -0.4,
+        "view": "right",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "120.00 ±0.40"
+      },
+      {
+        "label": "ASSY_Z",
+        "nominal_mm": 103.0,
+        "tol_plus_mm": 0.4,
+        "tol_minus_mm": -0.4,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "103.00 ±0.40"
+      },
+      {
+        "label": "CF40_OD",
+        "nominal_mm": 69.5,
+        "tol_plus_mm": 0.1,
+        "tol_minus_mm": -0.1,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø69.50 ±0.10"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "flatness",
+        "tolerance_mm": 0.03,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "CF40 VAR vacuum manifold knife-edge",
+        "glyph": "⏥",
+        "tolerance_text": "0.030"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "RT-450 C (T_epi*=345 C ±2 C, 150 W), Rota C 350 C/15 dk FG/H pasivasyon (S_eps=0.390 ueV/rtHz, F_ff=%97.70), kutle=4.2 kg",
+      "Exp139 S5.6-03: 345 C +/-2 C (150 W) pyrolytic-BN radiative substrate heater + 350 C / 15 min 5% H2/N2 FG/H manifold.",
+      "Route C passivation achieves S_eps=0.390 ueV/rtHz (F_ff=97.70%); ISO 10156 non-flammable gas orifice; target mass 4.2 kg."
+    ],
+    "scad_params": {
+      "t_epi_C": 345.0,
+      "t_fg_C": 350.0,
+      "heater_power_W": 150.0
+    },
+    "target_mass_kg": 4.2,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifacts": {
+    "part_id": "S5.6-03",
+    "subsystem": "S5",
+    "design_tier": "CUSTOM_FULL",
+    "stl_path": "hardware/cad_parts/out/S5/S5.6-03.stl",
+    "step_path": "hardware/cad_parts/out/S5/S5.6-03.step",
+    "scad_path": "hardware/cad_parts/out/S5/S5.6-03.scad",
+    "dxf_path": "hardware/cad_parts/out/S5/S5.6-03.dxf",
+    "svg_path": "hardware/cad_parts/out/S5/S5.6-03.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 350968.66726157983,
+    "surface_area_mm2": 60168.42936506344,
+    "mass_kg": 2.7375556046403235,
+    "cg_mm": [
+      1.0882839813110996,
+      50.29140999829959,
+      4.079565569188723
+    ],
+    "bbox_min_mm": [
+      -34.75,
+      0.0,
+      -34.75
+    ],
+    "bbox_max_mm": [
+      59.2,
+      120.0,
+      69.0
+    ],
+    "inertia_kg_mm2": [
+      3895.483027621713,
+      1981.568480435468,
+      3420.793068101787,
+      36.61903466475127,
+      41.94637553495397,
+      137.27092887581702
+    ],
+    "triangle_count": 1516,
+    "vertex_count": 746,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

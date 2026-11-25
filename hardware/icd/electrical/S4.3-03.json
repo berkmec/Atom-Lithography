@@ -1,0 +1,69 @@
+{
+  "schema_version": "1.0",
+  "part_id": "S4.3-03",
+  "parent_bom_id": "S4.3",
+  "subsystem": "S4",
+  "part_name": "Kademe ici kapasitif konum geri-besleme sensorleri ve UHV kablolari",
+  "qty": 1,
+  "unit": "set",
+  "temp_stage": "300 K (UHV)",
+  "vacuum_grade": "UHV 1e-9 mbar",
+  "bom_key_spec": "Sub-nm dogrusallik (<0.02%), UHV uyumlu",
+  "usd_nom": 8500.0,
+  "bom_epistemic_tag": "{Model-Kalibrasyon-Exp114}",
+  "electrical_class": "E4",
+  "grounding_domain": "AGND",
+  "grounding_notes": "In-stage capacitive position sensors & Kapton coax (<0.02% nonlinearity, \u00b10.2 nm).",
+  "supply_rails": [
+    {
+      "rail_name": "CAP_FB_EXC",
+      "voltage_v": 10.0,
+      "current_type": "DC",
+      "max_current_a": 0.02,
+      "steady_power_w": 0.2,
+      "peak_power_w": 0.2,
+      "source_part_id": "S4.3-04"
+    }
+  ],
+  "connectors_and_pinout": [
+    {
+      "connector_ref": "J_CAP_UHV",
+      "connector_type": "CF40 6x Coax UHV Feedthrough",
+      "location_side": "uhv_stage",
+      "mating_part_id": "S4.3-04",
+      "pins": [
+        {
+          "pin": "1-6",
+          "signal": "STAGE_CAP_FB[0:5]",
+          "direction": "OUT",
+          "nominal_level": "Sub-nm servo feedback"
+        }
+      ]
+    }
+  ],
+  "mating_part_ids": [
+    "S4.3-01",
+    "S4.3-04"
+  ],
+  "interlock_hooks": [],
+  "ups_tier": "NONE",
+  "ups_budget_group": "PASSIVE_ZERO_MAINS",
+  "exp150_ups_allocation_w": 0.0,
+  "supply_rails_steady_sum_w": 0.2,
+  "incremental_mains_w": 0.0,
+  "secondary_or_parent_derived_w": 0.2,
+  "non_exp150_aux_shed_w": 0.0,
+  "reconciliation_note": "Passive or downstream sub-assembly (0.20 W sub-rail power drawn from upstream source S4.3-04); incremental_mains_w = 0.0 W (zero double-counting).",
+  "timing_sync": {
+    "rb_10mhz_port": null,
+    "white_rabbit_port": null,
+    "sync_role": "Fine piezo closed-loop metrology"
+  },
+  "epistemic_flags": {
+    "design_maturity": "M0_M1_ELECTRICAL_ICD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

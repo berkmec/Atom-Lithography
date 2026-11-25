@@ -1,0 +1,80 @@
+{
+  "schema_version": "part_icd_v1.0",
+  "part_id": "S6.8-03",
+  "parent_bom_id": "S6.8",
+  "subsystem": "S6",
+  "part_name": "Yuksek saflikta 3He izotop gaz sarji (~20 L STP)",
+  "part_category": "NON_SOLID_PROCESS_SERVICE_GAS",
+  "bom_metadata": {
+    "qty": "20",
+    "unit": "L_STP",
+    "material": "3He (%99.99 saflik, izotopik)",
+    "key_spec": "20 L STP (piyasa dalgalanmasina acik kritik sarj)",
+    "tolerance": ">99.99%",
+    "temp_stage": "300 K -> 20 mK",
+    "vacuum_grade": "Kapali dongu",
+    "procurement_class": "COTS",
+    "parent_cost_class": "D",
+    "usd_low": 40000.0,
+    "usd_nom": 70000.0,
+    "usd_high": 130000.0,
+    "legacy_cad_module": "s6_cryo_dr_magnet_readout",
+    "bom_epistemic_tag": "{Varsayım}",
+    "notes": "~$3,500/L STP nominal ($2k-$6.5k/L); 3He tedarik riski yuksek"
+  },
+  "artifact_links": {
+    "cad": null,
+    "pcb_bundles": [],
+    "legacy_board_files": [],
+    "electrical_icd": null,
+    "rtl_modules": [],
+    "rtl_audit_json": null,
+    "software_and_eda_files": [],
+    "verification_tests": []
+  },
+  "specialized_specification": {
+    "kind": "ISOTOPE_GAS_CHARGE_SPECIFICATION",
+    "mating_physical_part_ids": [
+      "S6.8-01",
+      "S6.8-02",
+      "S6.8-04",
+      "S7.SAFETY-05"
+    ],
+    "gas_specification": {
+      "species": "Helium-3 (3He) isotopic mixture charge for closed-cycle DR",
+      "nominal_quantity_L_stp": 20.0,
+      "chemical_purity_min_pct": 99.99,
+      "isotopic_purity_3he_min_pct": 99.95,
+      "tritium_activity_limit_bq_per_L": "< 1.0e-3 (certified low-tritium cryo grade)",
+      "storage_container": "DOT/TPED certified lecture/dump tanks integrated into S6.8-02 closed-cycle GHS"
+    },
+    "safety_and_recovery_controls": [
+      "Zero-loss closed-cycle circulation with LN2/4K cold traps and oil-free turbo/scroll backing",
+      "ASME DN50 0.5 barg OVC rupture disk + ODH O2 < 19.5% monitoring via S7.SAFETY-05",
+      "Backup dump tank sized for 100% 3He/4He inventory warm-up recovery on mains outage"
+    ],
+    "reference_artifacts": [
+      "hardware/cad_parts/out/S6/S6.8-01.json",
+      "hardware/cad_parts/out/S6/S6.8-02.json",
+      "hardware/icd/electrical/S6.8-02.json",
+      "results/exp125_cryo_magnet_readout/exp125.json"
+    ]
+  },
+  "verification_status": {
+    "cad_verified": false,
+    "pcb_verified": false,
+    "electrical_icd_verified": false,
+    "rtl_verified": false,
+    "software_or_eda_verified": false,
+    "specialized_icd_present": true,
+    "traceable": true
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "tapeout_done": false
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "schema_version": "1.0",
+  "part_id": "S6.5-02",
+  "parent_bom_id": "S6.5",
+  "subsystem": "S6",
+  "part_name": "Genis-bantli RF guc yukselticileri ve yonlu kuplorler",
+  "qty": 4,
+  "unit": "set",
+  "temp_stage": "300 K (kabin)",
+  "vacuum_grade": "Atmosfer",
+  "bom_key_spec": "Harmonik <-30 dBc, hizli darbe modulu",
+  "usd_nom": 7000.0,
+  "bom_epistemic_tag": "{Model-Kalibrasyon-Exp114}",
+  "electrical_class": "E3",
+  "grounding_domain": "AGND",
+  "grounding_notes": "4x 1-200 MHz 10 W Class-A linear RF power amps & directional couplers (harmonics <-30 dBc).",
+  "supply_rails": [
+    {
+      "rail_name": "AC_MAINS_230V",
+      "voltage_v": 230.0,
+      "current_type": "AC_1PH",
+      "max_current_a": 2.0,
+      "steady_power_w": 240.0,
+      "peak_power_w": 360.0,
+      "source_part_id": "S7.4-03"
+    }
+  ],
+  "connectors_and_pinout": [
+    {
+      "connector_ref": "J_RF_IN",
+      "connector_type": "SMA-F 50R (4x)",
+      "location_side": "front_panel",
+      "mating_part_id": "S6.5-01",
+      "pins": [
+        {
+          "pin": "1",
+          "signal": "RFPA_IN[0:3]",
+          "direction": "IN",
+          "nominal_level": "0 dBm 1-200 MHz"
+        }
+      ]
+    },
+    {
+      "connector_ref": "J_RF_OUT",
+      "connector_type": "N-Type / SMA-F 50R (4x)",
+      "location_side": "front_panel",
+      "mating_part_id": "S6.5-03",
+      "pins": [
+        {
+          "pin": "1",
+          "signal": "RFPA_OUT[0:3]",
+          "direction": "OUT",
+          "nominal_level": "Up to +40 dBm pulsed ENDOR"
+        }
+      ]
+    }
+  ],
+  "mating_part_ids": [
+    "S6.5-01",
+    "S6.5-03",
+    "S7.2-02"
+  ],
+  "interlock_hooks": [],
+  "ups_tier": "TIER2_SHED",
+  "ups_budget_group": "AUX_PROCESS_SHED_ON_OUTAGE",
+  "exp150_ups_allocation_w": 0.0,
+  "supply_rails_steady_sum_w": 240.0,
+  "incremental_mains_w": 240.0,
+  "secondary_or_parent_derived_w": 0.0,
+  "non_exp150_aux_shed_w": 240.0,
+  "reconciliation_note": "Non-Exp150 auxiliary sheddable rack/facility load (TIER2_SHED): incremental_mains_w = 240.0 W AC mains (mutually exclusive process/experiment mode, shed immediately on outage; exp150_ups_allocation_w = 0.0 W).",
+  "timing_sync": {
+    "rb_10mhz_port": null,
+    "white_rabbit_port": null,
+    "sync_role": "Gated RF power stage"
+  },
+  "epistemic_flags": {
+    "design_maturity": "M0_M1_ELECTRICAL_ICD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

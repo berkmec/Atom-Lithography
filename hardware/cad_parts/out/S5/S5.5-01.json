@@ -1,0 +1,319 @@
+{
+  "part_id": "S5.5-01",
+  "subsystem": "S5",
+  "design": {
+    "part_id": "S5.5-01",
+    "parent_bom_id": "S5.5",
+    "subsystem": "S5",
+    "part_name": "808 nm qCW diyot-lazer bar istifi ve 84x88x84 mm duz-tepe homojenlestirici kafa (Exp130/139)",
+    "design_tier": "CUSTOM_FULL",
+    "material": "Al 6061",
+    "temp_stage": "300 K (su sogutmali)",
+    "temp_k": 300.0,
+    "vacuum_grade": "Atmosfer (optik giris)",
+    "tolerance_spec": "±2% akı duzgunlugu",
+    "surface_finish_ra_um": 0.4,
+    "qty": 1,
+    "procurement_class": "CUS",
+    "world_origin_mm": [
+      0.0,
+      385.0,
+      500.0
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "homogenized_808nm_out",
+        "kind": "optical",
+        "position_mm": [
+          0.0,
+          -44.0,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "standard": "Dia 36 mm Flat-Top 808 nm",
+        "mating_part_id": "S5.5-04",
+        "bore_mm": 44.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      },
+      {
+        "name": "dichroic_diag_top",
+        "kind": "optical",
+        "position_mm": [
+          0.0,
+          0.0,
+          44.55
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "Dia 28 mm Pyrometer Tap",
+        "mating_part_id": "S5.5-03",
+        "bore_mm": 28.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      },
+      {
+        "name": "fiber_bundle_in",
+        "kind": "optical",
+        "position_mm": [
+          0.0,
+          82.0,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "standard": "808 nm qCW Diode Fiber Bundle",
+        "mating_part_id": "",
+        "bore_mm": 22.0,
+        "od_mm": 36.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      },
+      {
+        "name": "microchannel_water",
+        "kind": "cooling",
+        "position_mm": [
+          -47.2,
+          18.0,
+          -44.2
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "standard": "DI Water 1.5 L/min",
+        "mating_part_id": "",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "CORE_X",
+        "nominal_mm": 84.0,
+        "tol_plus_mm": 0.1,
+        "tol_minus_mm": -0.1,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "84.00 ±0.10"
+      },
+      {
+        "label": "CORE_Y",
+        "nominal_mm": 88.0,
+        "tol_plus_mm": 0.1,
+        "tol_minus_mm": -0.1,
+        "view": "right",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "88.00 ±0.10"
+      },
+      {
+        "label": "CORE_Z",
+        "nominal_mm": 84.0,
+        "tol_plus_mm": 0.1,
+        "tol_minus_mm": -0.1,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "84.00 ±0.10"
+      },
+      {
+        "label": "TOTAL_Y",
+        "nominal_mm": 126.0,
+        "tol_plus_mm": 0.3,
+        "tol_minus_mm": -0.3,
+        "view": "right",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "126.00 ±0.30"
+      },
+      {
+        "label": "OUT_BORE",
+        "nominal_mm": 44.0,
+        "tol_plus_mm": 0.05,
+        "tol_minus_mm": -0.05,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø44.00 ±0.05"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "perpendicularity",
+        "tolerance_mm": 0.05,
+        "diameter_zone": true,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "808 nm optical exit bore to front face",
+        "glyph": "⊥",
+        "tolerance_text": "Ø0.050"
+      },
+      {
+        "symbol": "concentricity",
+        "tolerance_mm": 0.08,
+        "diameter_zone": true,
+        "material_condition": "",
+        "datum_primary": "B",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "Fiber collimator to homogenizer axis",
+        "glyph": "◎",
+        "tolerance_text": "Ø0.080"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "1.0 ms darbe, v4: 41.15 J/cm2 (1440.3 K) / v5 Exp139 kume-temizleyici: 43.49 J/cm2 (1530.1 K=0.907 T_melt, F_win=11.16 J/cm2, 8.96x LIDT, %99.99 {311} cozunme, sigma_anneal=0.430 nm)",
+      "Exp130/139 808 nm qCW diode bar-stack + micro-channel water-cooled flat-top homogenizer (+/-2% uniformity).",
+      "Delivers 43.49 J/cm^2 in 1.0 ms (T_peak=1530.1 K, 99.99% {311} dissolution, sigma_anneal=0.430 nm).",
+      "Entire +Y assembly fits cleanly inside S7.SAFETY-02 (280x260x220 mm) OD8 + 3 mm steel interlock shroud."
+    ],
+    "scad_params": {
+      "core_x": 84.0,
+      "core_y": 88.0,
+      "core_z": 84.0,
+      "wavelength_nm": 808.0
+    },
+    "target_mass_kg": 2.07,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifacts": {
+    "part_id": "S5.5-01",
+    "subsystem": "S5",
+    "design_tier": "CUSTOM_FULL",
+    "stl_path": "hardware/cad_parts/out/S5/S5.5-01.stl",
+    "step_path": "hardware/cad_parts/out/S5/S5.5-01.step",
+    "scad_path": "hardware/cad_parts/out/S5/S5.5-01.scad",
+    "dxf_path": "hardware/cad_parts/out/S5/S5.5-01.dxf",
+    "svg_path": "hardware/cad_parts/out/S5/S5.5-01.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 409252.11293904023,
+    "surface_area_mm2": 132508.93248142616,
+    "mass_kg": 1.6779336630500652,
+    "cg_mm": [
+      1.4884078963891667e-15,
+      4.317326571838585,
+      -0.036404992172076905
+    ],
+    "bbox_min_mm": [
+      -52.2,
+      -44.0,
+      -44.2
+    ],
+    "bbox_max_mm": [
+      52.2,
+      82.0,
+      44.55
+    ],
+    "inertia_kg_mm2": [
+      2582.6066882378123,
+      2817.1474843947326,
+      3193.100478376757,
+      1.8419151122638557e-14,
+      -2.7297180348232108e-14,
+      4.929788047519689
+    ],
+    "triangle_count": 1016,
+    "vertex_count": 524,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

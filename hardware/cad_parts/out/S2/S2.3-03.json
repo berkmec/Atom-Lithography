@@ -1,0 +1,317 @@
+{
+  "part_id": "S2.3-03",
+  "subsystem": "S2",
+  "design": {
+    "part_id": "S2.3-03",
+    "parent_bom_id": "S2.3",
+    "subsystem": "S2",
+    "part_name": "Hassas yalitkan ara halkalar ve optik eksen pim seti",
+    "design_tier": "CUSTOM_FULL",
+    "material": "Sapphire",
+    "temp_stage": "300 K",
+    "temp_k": 300.0,
+    "vacuum_grade": "UHV 1e-9 mbar",
+    "tolerance_spec": "±0.5 um paralellik",
+    "surface_finish_ra_um": 0.05,
+    "qty": 1,
+    "procurement_class": "CUS",
+    "world_origin_mm": [
+      0.0,
+      0.0,
+      2.51
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "spacer_bot_to_lens",
+        "kind": "mechanical",
+        "position_mm": [
+          0.0,
+          0.0,
+          2.26
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "standard": "3 kV Lapped Sapphire",
+        "mating_part_id": "S2.3-01",
+        "bore_mm": 48.0,
+        "od_mm": 59.0,
+        "pcd_mm": 53.5,
+        "bolt_count": 6,
+        "bolt_hole_mm": 2.2,
+        "bolt_spec": "",
+        "frame": "global",
+        "notes": ""
+      },
+      {
+        "name": "spacer_top_to_stop",
+        "kind": "mechanical",
+        "position_mm": [
+          0.0,
+          0.0,
+          2.76
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "3 kV Lapped Sapphire",
+        "mating_part_id": "S2.2-04",
+        "bore_mm": 48.0,
+        "od_mm": 59.0,
+        "pcd_mm": 53.5,
+        "bolt_count": 6,
+        "bolt_hole_mm": 2.2,
+        "bolt_spec": "",
+        "frame": "global",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "OD",
+        "nominal_mm": 59.0,
+        "tol_plus_mm": 0.01,
+        "tol_minus_mm": -0.01,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø59.00 ±0.01"
+      },
+      {
+        "label": "ID",
+        "nominal_mm": 48.0,
+        "tol_plus_mm": 0.01,
+        "tol_minus_mm": -0.01,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø48.00 ±0.01"
+      },
+      {
+        "label": "THICK",
+        "nominal_mm": 0.5,
+        "tol_plus_mm": 0.0005,
+        "tol_minus_mm": -0.0005,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 4,
+        "formatted": "0.5000 ±0.0005"
+      },
+      {
+        "label": "DOWEL_PCD",
+        "nominal_mm": 53.5,
+        "tol_plus_mm": 0.002,
+        "tol_minus_mm": -0.002,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 3,
+        "formatted": "Ø53.500 ±0.002"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "parallelism",
+        "tolerance_mm": 0.0005,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "LAPPED SPACER FACES",
+        "glyph": "∥",
+        "tolerance_text": "0.0005"
+      },
+      {
+        "symbol": "flatness",
+        "tolerance_mm": 0.0003,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "SAPPHIRE DATUM A",
+        "glyph": "⏥",
+        "tolerance_text": "0.0003"
+      },
+      {
+        "symbol": "position",
+        "tolerance_mm": 0.0005,
+        "diameter_zone": true,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "B",
+        "datum_tertiary": "",
+        "feature_note": "OPTICAL DOWEL PINS",
+        "glyph": "⌖",
+        "tolerance_text": "Ø0.0005"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "Elektrot araligi 100-500 um, 3 kV dayanimi",
+      "Precision-lapped sapphire 3 kV HV spacer ring (±0.5 um parallelism) + 3x Zerodur optical-axis dowel alignment pins"
+    ],
+    "scad_params": {
+      "od": 59.0,
+      "id": 48.0,
+      "thickness": 0.5,
+      "hv_standoff_kV": 3.0
+    },
+    "target_mass_kg": 0.002,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S2.3-03",
+    "subsystem": "S2",
+    "design_tier": "CUSTOM_FULL",
+    "stl_path": "hardware/cad_parts/out/S2/S2.3-03.stl",
+    "step_path": "hardware/cad_parts/out/S2/S2.3-03.step",
+    "scad_path": "hardware/cad_parts/out/S2/S2.3-03.scad",
+    "dxf_path": "hardware/cad_parts/out/S2/S2.3-03.dxf",
+    "svg_path": "hardware/cad_parts/out/S2/S2.3-03.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 453.4325305200218,
+    "surface_area_mm2": 2010.559344552582,
+    "mass_kg": 0.0018046614714696866,
+    "cg_mm": [
+      -5.113907038325546e-15,
+      -6.784263919272442e-15,
+      2.510000000000001
+    ],
+    "bbox_min_mm": [
+      -29.5,
+      -29.5,
+      2.26
+    ],
+    "bbox_max_mm": [
+      29.5,
+      29.5,
+      2.76
+    ],
+    "inertia_kg_mm2": [
+      0.6515794447278676,
+      0.6515794447278666,
+      1.3030837366389627,
+      -2.692218004085589e-16,
+      -7.8457599084203e-18,
+      1.5347392423592495e-17
+    ],
+    "triangle_count": 1208,
+    "vertex_count": 598,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "engineering_checks": {
+    "wd_stack": {
+      "nominal_mm": 0.24999999999999978,
+      "mean_mm": 0.24999999999999978,
+      "wc_half_band_mm": 0.0125,
+      "wc_min_mm": 0.23749999999999977,
+      "wc_max_mm": 0.2624999999999998,
+      "rss_half_band_mm": 0.007365459931328118,
+      "rss_min_mm": 0.24263454006867166,
+      "rss_max_mm": 0.2573654599313279,
+      "modified_rss_half_band_mm": 0.011048189896992178,
+      "modified_rss_min_mm": 0.2389518101030076,
+      "modified_rss_max_mm": 0.26104818989699197,
+      "target_min_mm": 0.22,
+      "target_max_mm": 0.28,
+      "wc_pass": true,
+      "rss_pass": true,
+      "modified_rss_pass": true,
+      "variance_shares_pct": {
+        "S2.5-02_piezo_mount_datum": 46.08294930875576,
+        "S2.1-04_aln_cassette_seat": 46.08294930875576,
+        "S2.3-03_sapphire_spacer_ring": 0.46082949308755755,
+        "S2.3-01_archB_minilens_h": 7.373271889400921
+      }
+    },
+    "lateral_registration": {
+      "nominal_mm": 0.0,
+      "mean_mm": 0.0,
+      "wc_half_band_mm": 0.0008,
+      "wc_min_mm": -0.0008,
+      "wc_max_mm": 0.0008,
+      "rss_half_band_mm": 0.0005431390245600108,
+      "rss_min_mm": -0.0005431390245600108,
+      "rss_max_mm": 0.0005431390245600108,
+      "modified_rss_half_band_mm": 0.0008147085368400162,
+      "modified_rss_min_mm": -0.0008147085368400162,
+      "modified_rss_max_mm": 0.0008147085368400162,
+      "target_min_mm": -0.005,
+      "target_max_mm": 0.005,
+      "wc_pass": true,
+      "rss_pass": true,
+      "modified_rss_pass": true,
+      "variance_shares_pct": {
+        "S2.1-01_soi_cd_error": 0.847457627118644,
+        "S2.2-01_blanker_elec_pitch": 13.559322033898304,
+        "S2.3-01_minilens_roundness": 0.847457627118644,
+        "S2.3-03_dowel_pin_reg": 84.7457627118644
+      }
+    }
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

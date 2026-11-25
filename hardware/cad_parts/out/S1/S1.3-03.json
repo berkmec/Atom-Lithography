@@ -1,0 +1,206 @@
+{
+  "part_id": "S1.3-03",
+  "subsystem": "S1",
+  "design": {
+    "part_id": "S1.3-03",
+    "parent_bom_id": "S1.3",
+    "subsystem": "S1",
+    "part_name": "Hassas kolon HV gerilim bolucu ve aktif dalgalilik filtresi",
+    "design_tier": "COTS_ENV_ICD",
+    "material": "Al 6061",
+    "temp_stage": "300 K (kabin)",
+    "temp_k": 300.0,
+    "vacuum_grade": "Atmosfer",
+    "tolerance_spec": "±0.01% gerilim",
+    "surface_finish_ra_um": 1.6,
+    "qty": 1,
+    "procurement_class": "COTS/CUS",
+    "world_origin_mm": [
+      1480.0,
+      -223.0,
+      1079.075
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "hv_divider_out",
+        "kind": "electrical",
+        "position_mm": [
+          1480.0,
+          4.5,
+          1079.075
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "standard": "SHV-10 5.000 kV",
+        "mating_part_id": "S1.3-02",
+        "bore_mm": 0.0,
+        "od_mm": 14.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "global",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "RACK_W_X",
+        "nominal_mm": 482.6,
+        "tol_plus_mm": 0.3,
+        "tol_minus_mm": -0.3,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "482.60 ±0.30"
+      },
+      {
+        "label": "HEIGHT_1U",
+        "nominal_mm": 42.45,
+        "tol_plus_mm": 0.3,
+        "tol_minus_mm": -0.3,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "42.45 ±0.30"
+      },
+      {
+        "label": "V_LAND",
+        "nominal_mm": 5.0,
+        "tol_plus_mm": 0.0005,
+        "tol_minus_mm": -0.0005,
+        "view": "front",
+        "unit": "kV",
+        "prefix": "",
+        "suffix": " kV",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 3,
+        "formatted": "5.000 ±0.001 kV"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "perpendicularity",
+        "tolerance_mm": 0.25,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "19-IN EARS",
+        "glyph": "⊥",
+        "tolerance_text": "0.25"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "V_land=5.000 kV ±0.5 V, dE/E <= 1e-4 (Exp66/124)",
+      "19-in Rack Bay 1 slot U34 (X=1480.0, front -Y @ -438.0, Z_nat=[1057.85, 1100.30]); oil-free Caddock/Vishay HV divider + active ripple filter"
+    ],
+    "scad_params": {
+      "rack_u": 1,
+      "u_slot": "U34",
+      "v_land_kV": 5.0,
+      "dE_over_E": 0.0001
+    },
+    "target_mass_kg": 5.6,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S1.3-03",
+    "subsystem": "S1",
+    "design_tier": "COTS_ENV_ICD",
+    "stl_path": "hardware/cad_parts/out/S1/S1.3-03.stl",
+    "step_path": "hardware/cad_parts/out/S1/S1.3-03.step",
+    "scad_path": "hardware/cad_parts/out/S1/S1.3-03.scad",
+    "dxf_path": "hardware/cad_parts/out/S1/S1.3-03.dxf",
+    "svg_path": "hardware/cad_parts/out/S1/S1.3-03.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 1981485.4909590094,
+    "surface_area_mm2": 967126.7882934142,
+    "mass_kg": 5.350010825589294,
+    "cg_mm": [
+      1479.89835582555,
+      -219.47244164017593,
+      1079.0750000000057
+    ],
+    "bbox_min_mm": [
+      1238.7,
+      -438.0,
+      1057.8500000000001
+    ],
+    "bbox_max_mm": [
+      1721.3,
+      4.5,
+      1100.3
+    ],
+    "inertia_kg_mm2": [
+      67084.54805134103,
+      83936.66242657544,
+      148463.7184395403,
+      -109.59016906351319,
+      6.591796875e-09,
+      -3.75732421875e-08
+    ],
+    "triangle_count": 788,
+    "vertex_count": 412,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "engineering_checks": {},
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

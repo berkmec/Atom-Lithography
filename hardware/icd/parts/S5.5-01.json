@@ -1,0 +1,104 @@
+{
+  "schema_version": "part_icd_v1.0",
+  "part_id": "S5.5-01",
+  "parent_bom_id": "S5.5",
+  "subsystem": "S5",
+  "part_name": "808 nm qCW diyot-lazer bar istifi ve 84x88x84 mm duz-tepe homojenlestirici kafa (Exp130/139)",
+  "part_category": "PHYSICAL_SOLID",
+  "bom_metadata": {
+    "qty": "1",
+    "unit": "set",
+    "material": "AlGaAs 808 nm qCW bar + fiber demeti + fused silica homojenlestirici",
+    "key_spec": "1.0 ms darbe, v4: 41.15 J/cm2 (1440.3 K) / v5 Exp139 kume-temizleyici: 43.49 J/cm2 (1530.1 K=0.907 T_melt, F_win=11.16 J/cm2, 8.96x LIDT, %99.99 {311} cozunme, sigma_anneal=0.430 nm)",
+    "tolerance": "±2% akı duzgunlugu",
+    "temp_stage": "300 K (su sogutmali)",
+    "vacuum_grade": "Atmosfer (optik giris)",
+    "procurement_class": "CUS",
+    "parent_cost_class": "C(v4.0)",
+    "usd_low": 33000.0,
+    "usd_nom": 57000.0,
+    "usd_high": 105000.0,
+    "legacy_cad_module": "s5_uhv_chamber_loadlock",
+    "bom_epistemic_tag": "{Varsayım}",
+    "notes": "DELTA-V4.0-EXP130 (S5.5 1/4): Risk R6 kapanis + Exp139 v5.0 $0 HW recete yukseltmesi (43.49 J/cm2; RFQ-07)"
+  },
+  "artifact_links": {
+    "cad": {
+      "work_package": "WP-M3",
+      "design_tier": "CUSTOM_FULL",
+      "stl": "hardware/cad_parts/out/S5/S5.5-01.stl",
+      "step": "hardware/cad_parts/out/S5/S5.5-01.step",
+      "scad": "hardware/cad_parts/out/S5/S5.5-01.scad",
+      "dxf": "hardware/cad_parts/out/S5/S5.5-01.dxf",
+      "svg": "hardware/cad_parts/out/S5/S5.5-01.svg",
+      "cad_json": "hardware/cad_parts/out/S5/S5.5-01.json",
+      "watertight": true,
+      "all_6_files_valid": true,
+      "mass_kg": 1.677934,
+      "triangle_count": 1016,
+      "temp_k": 300.0,
+      "canonical_bbox_min_mm": [
+        -52.2,
+        341.0,
+        455.8
+      ],
+      "canonical_bbox_max_mm": [
+        52.2,
+        467.0,
+        544.55
+      ],
+      "datum_shift_mm": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "port_count": 4,
+      "gdt_frame_count": 2
+    },
+    "pcb_bundles": [
+      {
+        "bundle_slug": "laser_aom_pyrometer_afe",
+        "verification_json": "hardware/pcb/laser_aom_pyrometer_afe/laser_aom_pyrometer_afe_verification.json",
+        "boards": [
+          "laser_aom_pyrometer_afe"
+        ],
+        "kicad_sch_files": [
+          "hardware/pcb/laser_aom_pyrometer_afe/laser_aom_pyrometer_afe.kicad_sch"
+        ],
+        "kicad_pcb_files": [
+          "hardware/pcb/laser_aom_pyrometer_afe/laser_aom_pyrometer_afe.kicad_pcb"
+        ],
+        "spice_decks": [
+          "hardware/pcb/laser_aom_pyrometer_afe/laser_pyro_tia_aom.cir"
+        ],
+        "all_passed": true
+      }
+    ],
+    "legacy_board_files": [],
+    "electrical_icd": null,
+    "rtl_modules": [
+      "rtl/machine_ctrl/aom_pid_ctrl.v"
+    ],
+    "rtl_audit_json": "results/stage2_rtl_verification/rtl_machine_ctrl_audit.json",
+    "software_and_eda_files": [],
+    "verification_tests": []
+  },
+  "specialized_specification": null,
+  "verification_status": {
+    "cad_verified": true,
+    "pcb_verified": true,
+    "electrical_icd_verified": false,
+    "rtl_verified": true,
+    "software_or_eda_verified": false,
+    "specialized_icd_present": false,
+    "traceable": true
+  },
+  "epistemic": {
+    "design_maturity": "M0_M1_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "tapeout_done": false
+  }
+}

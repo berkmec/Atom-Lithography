@@ -1,0 +1,434 @@
+{
+  "part_design": {
+    "part_id": "S7.SAFETY-05",
+    "parent_bom_id": "S7.SAFETY",
+    "subsystem": "S7",
+    "part_name": "Temizoda O2 Eksikligi Izleyici (%19.5 Alarm), ASME DN50 0.5 barg OVC Patlama Diski & 1.563 Ohm Quench Bosaltma Bankasi (Exp150, 24.0 kg)",
+    "design_tier": "COTS_ENV_ICD",
+    "material": "316L",
+    "temp_stage": "300 K (OVC / duvar / raf)",
+    "temp_k": 300.0,
+    "vacuum_grade": "Kriyo OVC / Atmosfer",
+    "tolerance_spec": "O2>=19.5%, 0.5 barg ASME",
+    "surface_finish_ra_um": 1.6,
+    "qty": 1,
+    "procurement_class": "COTS",
+    "world_origin_mm": [
+      -650.0,
+      204.5,
+      820.0
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "ovc_dn50_rupture_inlet",
+        "kind": "flange",
+        "position_mm": [
+          -650.0,
+          198.5,
+          820.0
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "standard": "ISO-K DN50 / ASME Sec VIII 0.5 barg Burst Disk",
+        "mating_part_id": "S6.8-04",
+        "bore_mm": 50.0,
+        "od_mm": 75.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "world",
+        "notes": "Mates S6.8-04 DR OVC +Y port at (-650, +198, +820) with 0.5 mm gasket gap; 16.37x He / 25.72x N2 relief margin"
+      },
+      {
+        "name": "o2_odh_alarm_out",
+        "kind": "electrical",
+        "position_mm": [
+          -820.0,
+          1302.5,
+          1350.0
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "standard": "4-20 mA + Dual Relay O2 <19.5% Alarm",
+        "mating_part_id": "S7.SAFETY-03",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "world",
+        "notes": ""
+      },
+      {
+        "name": "quench_dump_1p563ohm",
+        "kind": "electrical",
+        "position_mm": [
+          880.0,
+          310.0,
+          388.0
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "1.563 Ohm / 400 V / 18.94 kJ Quench Terminals",
+        "mating_part_id": "S6.3-04",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "world",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "DN50_BORE",
+        "nominal_mm": 50.0,
+        "tol_plus_mm": 0.2,
+        "tol_minus_mm": -0.2,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø50.00 ±0.20"
+      },
+      {
+        "label": "DN50_OD",
+        "nominal_mm": 75.0,
+        "tol_plus_mm": 0.2,
+        "tol_minus_mm": -0.2,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø75.00 ±0.20"
+      },
+      {
+        "label": "QUENCH_BANK_W",
+        "nominal_mm": 260.0,
+        "tol_plus_mm": 1.0,
+        "tol_minus_mm": -1.0,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "260.00 ±1.00"
+      },
+      {
+        "label": "O2_MON_H",
+        "nominal_mm": 220.0,
+        "tol_plus_mm": 1.0,
+        "tol_minus_mm": -1.0,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "220.00 ±1.00"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "perpendicularity",
+        "tolerance_mm": 0.15,
+        "diameter_zone": true,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "DN50 RUPTURE NOZZLE AXIS",
+        "glyph": "⊥",
+        "tolerance_text": "Ø0.15"
+      },
+      {
+        "symbol": "flatness",
+        "tolerance_mm": 0.05,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "ISO-K DN50 SEALING FACE",
+        "glyph": "⏥",
+        "tolerance_text": "0.050"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "380x260x240 mm, kuru LD400+PT420 (1.098 m3 STP) O2=%20.57 >> %19.5, ASME DN50 16.37x He marji, 18.94 kJ quench 38.15 C < 55 C, 35 W / 0 W kriyo, kutle=24.0 kg",
+      "Exp150 S7.SAFETY-05 (24.0 kg canonical BOM_DETAILED.csv & s_safety_spec.json; 35 W, 0 W cryo).",
+      "ASME DN50 0.5 barg burst disk mated to S6.8-04 DR OVC +Y port (X=-650, Y=+198.5..+373.5, Z=820 mm) + wall O2 ODH monitor + floor 1.563 Ohm quench bank (X=[750,1010], Y=[180,440], Z=[0,390]).",
+      "PRELIMINARY DESIGN ONLY: iec61508_certified=False, semi_s2_certified=False."
+    ],
+    "scad_params": {
+      "dn_size": "DN50",
+      "burst_barg": 0.5,
+      "r_dump_ohm": 1.563,
+      "o2_alarm_pct": 19.5
+    },
+    "target_mass_kg": 24.0,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S7.SAFETY-05",
+    "subsystem": "S7",
+    "design_tier": "COTS_ENV_ICD",
+    "stl_path": "hardware/cad_parts/out/S7/S7.SAFETY-05.stl",
+    "step_path": "hardware/cad_parts/out/S7/S7.SAFETY-05.step",
+    "scad_path": "hardware/cad_parts/out/S7/S7.SAFETY-05.scad",
+    "dxf_path": "hardware/cad_parts/out/S7/S7.SAFETY-05.dxf",
+    "svg_path": "hardware/cad_parts/out/S7/S7.SAFETY-05.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 26379104.36516582,
+    "surface_area_mm2": 965531.0625639354,
+    "mass_kg": 24.000000000000004,
+    "cg_mm": [
+      636.7634910056372,
+      444.0998321298956,
+      338.3169273267652
+    ],
+    "bbox_min_mm": [
+      -900.0,
+      180.0,
+      0.0
+    ],
+    "bbox_max_mm": [
+      1010.0,
+      1397.5,
+      1512.2
+    ],
+    "inertia_kg_mm2": [
+      7108093.832425734,
+      12588391.242944792,
+      11550566.81288599,
+      4690520.240857405,
+      5633992.332839227,
+      -3273124.2736331034
+    ],
+    "triangle_count": 2096,
+    "vertex_count": 1068,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "shell_bboxes_mm": [
+    [
+      [
+        -687.5,
+        198.5,
+        782.5
+      ],
+      [
+        -612.5,
+        238.5,
+        857.5
+      ]
+    ],
+    [
+      [
+        -704.0,
+        238.7,
+        766.0
+      ],
+      [
+        -596.0,
+        262.7,
+        874.0
+      ]
+    ],
+    [
+      [
+        -678.5,
+        262.9,
+        791.5
+      ],
+      [
+        -621.5,
+        373.5,
+        945.0
+      ]
+    ],
+    [
+      [
+        -620.0,
+        273.0,
+        798.0
+      ],
+      [
+        -524.0,
+        317.0,
+        842.0
+      ]
+    ],
+    [
+      [
+        -900.0,
+        1302.5,
+        1240.0
+      ],
+      [
+        -740.0,
+        1397.5,
+        1460.0
+      ]
+    ],
+    [
+      [
+        -846.0,
+        1324.0,
+        1460.2
+      ],
+      [
+        -794.0,
+        1376.0,
+        1512.2
+      ]
+    ],
+    [
+      [
+        750.0,
+        180.0,
+        0.0
+      ],
+      [
+        1010.0,
+        440.0,
+        120.0
+      ]
+    ],
+    [
+      [
+        755.0,
+        190.0,
+        120.2
+      ],
+      [
+        1005.0,
+        430.0,
+        358.2
+      ]
+    ],
+    [
+      [
+        770.0,
+        227.0,
+        360.0
+      ],
+      [
+        990.0,
+        233.0,
+        388.0
+      ]
+    ],
+    [
+      [
+        770.0,
+        267.0,
+        360.0
+      ],
+      [
+        990.0,
+        273.0,
+        388.0
+      ]
+    ],
+    [
+      [
+        770.0,
+        307.0,
+        360.0
+      ],
+      [
+        990.0,
+        313.0,
+        388.0
+      ]
+    ],
+    [
+      [
+        770.0,
+        347.0,
+        360.0
+      ],
+      [
+        990.0,
+        353.0,
+        388.0
+      ]
+    ],
+    [
+      [
+        770.0,
+        387.0,
+        360.0
+      ],
+      [
+        990.0,
+        393.0,
+        388.0
+      ]
+    ]
+  ],
+  "reconciliation_notes": [
+    "Canonical BOM_DETAILED.csv & s_safety_spec.json specify S7.SAFETY-05 = 24.0 kg and S7.SAFETY-03 = 18.0 kg (total S7.SAFETY-01..06 = 355.0 kg)."
+  ]
+}

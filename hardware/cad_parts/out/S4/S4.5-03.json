@@ -1,0 +1,260 @@
+{
+  "part_id": "S4.5-03",
+  "subsystem": "S4",
+  "part_design": {
+    "part_id": "S4.5-03",
+    "parent_bom_id": "S4.5",
+    "subsystem": "S4",
+    "part_name": "Atis-ani sapma telafi arayuzu (interferometre -> demet saptirici DSP)",
+    "design_tier": "CUSTOM_FULL",
+    "material": "Al 6061",
+    "temp_stage": "300 K (kabin)",
+    "temp_k": 300.0,
+    "vacuum_grade": "Atmosfer",
+    "tolerance_spec": "±0.1 nm",
+    "surface_finish_ra_um": 1.6,
+    "qty": 1,
+    "procurement_class": "CUS",
+    "world_origin_mm": [
+      1480.0,
+      -240.0,
+      323.42500000000007
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "rack_front_1u",
+        "kind": "mechanical",
+        "position_mm": [
+          0.0,
+          -170.0,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "standard": "EIA-310 19-inch 1U (Bay 1 U17, X=1480 mm)",
+        "mating_part_id": "S7.4-03",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      },
+      {
+        "name": "interf_quadrature_in",
+        "kind": "optical",
+        "position_mm": [
+          -130.0,
+          -170.0,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "standard": "3-Axis He-Ne Interferometer Quadrature Rx (<=0.05 nm)",
+        "mating_part_id": "S4.4-01",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      },
+      {
+        "name": "beam_deflector_comp_out",
+        "kind": "electrical",
+        "position_mm": [
+          100.0,
+          -170.0,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "standard": "Real-Time <5 us Beam Deflector Offset Correction (±0.1 nm)",
+        "mating_part_id": "S2.4-03",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "WIDTH_19IN",
+        "nominal_mm": 482.6,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "482.60 ±0.50"
+      },
+      {
+        "label": "HEIGHT_1U",
+        "nominal_mm": 42.45,
+        "tol_plus_mm": 0.3,
+        "tol_minus_mm": -0.3,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "42.45 ±0.30"
+      },
+      {
+        "label": "DEPTH",
+        "nominal_mm": 340.0,
+        "tol_plus_mm": 0.5,
+        "tol_minus_mm": -0.5,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "340.00 ±0.50"
+      }
+    ],
+    "gdt_frames": [
+      {
+        "symbol": "perpendicularity",
+        "tolerance_mm": 0.25,
+        "diameter_zone": false,
+        "material_condition": "",
+        "datum_primary": "A",
+        "datum_secondary": "",
+        "datum_tertiary": "",
+        "feature_note": "19-INCH FRONT FLANGE",
+        "glyph": "⊥",
+        "tolerance_text": "0.25"
+      }
+    ],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "Gecikme <5 us, kafa-kademe sapmasini elektriksel telafi eder",
+      "DESIGN §5.4 real-time <5 us interferometer-to-beam-deflector closed-loop compensation FPGA/DSP unit (±0.1 nm).",
+      "Rack Bay 1 (X=+1480 mm, 482.6 mm along X, front -Y), U17 (1U, Master #309 table)."
+    ],
+    "scad_params": {
+      "rack_u_height": 1,
+      "depth_mm": 340.0,
+      "max_latency_us": 5.0
+    },
+    "target_mass_kg": null,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact": {
+    "part_id": "S4.5-03",
+    "subsystem": "S4",
+    "design_tier": "CUSTOM_FULL",
+    "stl_path": "hardware/cad_parts/out/S4/S4.5-03.stl",
+    "step_path": "hardware/cad_parts/out/S4/S4.5-03.step",
+    "scad_path": "hardware/cad_parts/out/S4/S4.5-03.scad",
+    "dxf_path": "hardware/cad_parts/out/S4/S4.5-03.dxf",
+    "svg_path": "hardware/cad_parts/out/S4/S4.5-03.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 1223078.04717153,
+    "surface_area_mm2": 891758.2344226378,
+    "mass_kg": 2.935387313211673,
+    "cg_mm": [
+      4.100431703109981,
+      -5.900169882539818,
+      -1.5793660956201354
+    ],
+    "bbox_min_mm": [
+      -241.3,
+      -194.2,
+      -21.225
+    ],
+    "bbox_max_mm": [
+      241.3,
+      178.79999999999998,
+      21.225
+    ],
+    "inertia_kg_mm2": [
+      29657.894366672528,
+      47388.43581090973,
+      75550.39101113474,
+      -1304.2208001265622,
+      -6.840659317721069,
+      -8.062446335847032
+    ],
+    "triangle_count": 996,
+    "vertex_count": 534,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "world_bbox_min_mm": [
+    1238.7,
+    -434.2,
+    302.20000000000005
+  ],
+  "world_bbox_max_mm": [
+    1721.3,
+    -61.20000000000002,
+    344.6500000000001
+  ],
+  "reconciliation": null,
+  "thermal_contraction_checks": [],
+  "tolerance_stack_checks": []
+}

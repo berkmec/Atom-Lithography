@@ -1,0 +1,77 @@
+{
+  "schema_version": "1.0",
+  "part_id": "S4.3-01",
+  "parent_bom_id": "S4.3",
+  "subsystem": "S4",
+  "part_name": "6-DOF UHV ince piezo flekstur kademesi (PI PIMars P-562/563 UHV sinifi)",
+  "qty": 1,
+  "unit": "adet",
+  "temp_stage": "300 K (UHV)",
+  "vacuum_grade": "UHV 1e-9 mbar",
+  "bom_key_spec": "200 um strok, 0.2 nm tipik cozunurluk (Exp79), sigma_kademe<=0.5 nm",
+  "usd_nom": 52000.0,
+  "bom_epistemic_tag": "{Model-Kalibrasyon-Exp114}",
+  "electrical_class": "E4",
+  "grounding_domain": "AGND",
+  "grounding_notes": "6-DOF UHV non-magnetic Ti/Invar fine piezo flexure stage (200 um stroke, 0.2 nm res).",
+  "supply_rails": [
+    {
+      "rail_name": "PIEZO_FINE_120V",
+      "voltage_v": 120.0,
+      "current_type": "DC",
+      "max_current_a": 0.2,
+      "steady_power_w": 5.0,
+      "peak_power_w": 24.0,
+      "source_part_id": "S4.3-04"
+    }
+  ],
+  "connectors_and_pinout": [
+    {
+      "connector_ref": "J_STAGE_UHV",
+      "connector_type": "CF40 15-Pin Kapton UHV Feedthrough",
+      "location_side": "uhv_stage",
+      "mating_part_id": "S4.3-04",
+      "pins": [
+        {
+          "pin": "1-12",
+          "signal": "FINE_PZT_6AXIS",
+          "direction": "IN",
+          "nominal_level": "-20..+120 V closed-loop piezo"
+        },
+        {
+          "pin": "13",
+          "signal": "STAGE_AGND",
+          "direction": "PWR",
+          "nominal_level": "0 V AGND"
+        }
+      ]
+    }
+  ],
+  "mating_part_ids": [
+    "S4.3-02",
+    "S4.3-03",
+    "S4.3-04",
+    "S4.4-03"
+  ],
+  "interlock_hooks": [],
+  "ups_tier": "NONE",
+  "ups_budget_group": "PASSIVE_ZERO_MAINS",
+  "exp150_ups_allocation_w": 0.0,
+  "supply_rails_steady_sum_w": 5.0,
+  "incremental_mains_w": 0.0,
+  "secondary_or_parent_derived_w": 5.0,
+  "non_exp150_aux_shed_w": 0.0,
+  "reconciliation_note": "Passive or downstream sub-assembly (5.00 W sub-rail power drawn from upstream source S4.3-04); incremental_mains_w = 0.0 W (zero double-counting).",
+  "timing_sync": {
+    "rb_10mhz_port": null,
+    "white_rabbit_port": null,
+    "sync_role": "Sub-nm wafer fine positioning"
+  },
+  "epistemic_flags": {
+    "design_maturity": "M0_M1_ELECTRICAL_ICD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "no_supplier_quotes": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}

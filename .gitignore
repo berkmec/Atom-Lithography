@@ -15,18 +15,25 @@
 !research/hypotheses/
 !research/hypotheses/hypotheses.md
 
-# Zero-CDN Interactive HTML5 Digital Twin (Exp149/Exp151) & Synthesizable Q16.16 BOED-FPGA Verilog RTL (Exp149)
+# Zero-CDN Interactive HTML5 Digital Twin (Exp149/Exp151) & Synthesizable Verilog RTL (Exp149 + Stage-2)
 !docs/
 !docs/digital_twin_interactive.html
 !rtl/
 !rtl/boed_fpga/
 !rtl/boed_fpga/**
+!rtl/machine_ctrl/
+!rtl/machine_ctrl/**
 
-# Software control stack (BOED + Q16.16 FPGA + CellISA v4.0 + IBM QPU + auto_recal), 0-ERC IBIC board & verified RTL
+# Stage-2 Full 180/180 Engineering Blueprint (CAD, KiCad 8 PCBs, Electrical & Unified ICDs, EDA Manifest, Registry)
+!hardware/
+!hardware/**
+
+# Software control stack (BOED + Q16.16 FPGA + CellISA v4.0 + IBM QPU + auto_recal + S8.4-02 SCADA), 0-ERC IBIC board & verified RTL
 !src/
 !src/README.md
 !src/machine_control/
 !src/machine_control/**
+!src/machine_control/scada_telemetry.py
 !src/board/
 !src/board/**
 !src/rtl/
@@ -167,6 +174,8 @@
 !results/exp150_industrial_safety_fmea_hazop/**
 !results/exp151_v7_digital_twin/
 !results/exp151_v7_digital_twin/**
+!results/stage2_rtl_verification/
+!results/stage2_rtl_verification/**
 !results/boed_real_bath_benchmark.json
 
 # Minimal legacy JSON anchors required by Atom Lithography pytest & audit gates
@@ -244,10 +253,29 @@
 !tests/test_boed_real_bath.py
 !tests/test_control_physics_upgrades.py
 
-# Hard re-exclusions (caches, bytecode, superseded v1 & local disk forensics)
+# Stage-2 Full 180/180 Engineering Blueprint verification test suite (14 new test files)
+!tests/test_cad_kernel.py
+!tests/test_cad_s1_s2.py
+!tests/test_cad_s3_s4.py
+!tests/test_cad_s5.py
+!tests/test_cad_s6_optq.py
+!tests/test_cad_s7_s9.py
+!tests/test_cad_parts.py
+!tests/test_pcb_kernel_and_ibic.py
+!tests/test_pcb_fpga_blanker_cryo.py
+!tests/test_pcb_hv_laser_safety.py
+!tests/test_pcb_cryo_and_elec_icds.py
+!tests/test_rtl_machine_ctrl.py
+!tests/test_scada_telemetry.py
+!tests/test_full_180_traceability.py
+
+# Hard re-exclusions (caches, bytecode, RTL simulation dumps, logs, superseded v1 & local disk forensics)
 **/__pycache__/
 **/__pycache__/**
 *.py[cod]
+*.vvp
+*.vcd
+*.log
 .pytest_cache/
 research/atom_lithography_machine/DESIGN_v1.md
 research/atom_lithography_machine/NOTES_RECOVERY.md

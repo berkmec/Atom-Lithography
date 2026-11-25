@@ -1,0 +1,230 @@
+{
+  "part_design": {
+    "part_id": "S6.11-03",
+    "parent_bom_id": "S6.11",
+    "subsystem": "S6",
+    "part_name": "4 K Ultra-Dusuk-Gurultulu HEMT Bankasi (LNF-LNC4_8C sinifi, 32 adet, 7.8 mW/hat, Exp140 S6.5-03, 1.02 kg)",
+    "design_tier": "COTS_ENV_ICD",
+    "material": "OFHC Cu",
+    "temp_stage": "4 K",
+    "temp_k": 4.0,
+    "vacuum_grade": "Kriyo-vakum",
+    "tolerance_spec": "T_n<=2.0 K",
+    "surface_finish_ra_um": 0.8,
+    "qty": 32,
+    "procurement_class": "COTS/CUS",
+    "world_origin_mm": [
+      -650.0,
+      0.0,
+      654.0
+    ],
+    "world_rotation_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "ports": [
+      {
+        "name": "hemt32_4k_thermal",
+        "kind": "thermal",
+        "position_mm": [
+          0.0,
+          0.0,
+          19.75
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "12x M3 Au-OFHC 4K Mount (0.250 W)",
+        "mating_part_id": "S6.8-01",
+        "bore_mm": 196.0,
+        "od_mm": 252.0,
+        "pcd_mm": 224.0,
+        "bolt_count": 12,
+        "bolt_hole_mm": 3.2,
+        "bolt_spec": "M3",
+        "frame": "local",
+        "notes": ""
+      },
+      {
+        "name": "hemt32_sma",
+        "kind": "rf",
+        "position_mm": [
+          0.0,
+          0.0,
+          -18.5
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "standard": "32x LNF-LNC4_8C 4-8 GHz SMA",
+        "mating_part_id": "S6.11-04",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      }
+    ],
+    "dimensions": [
+      {
+        "label": "RING_OD",
+        "nominal_mm": 252.0,
+        "tol_plus_mm": 0.1,
+        "tol_minus_mm": -0.1,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø252.00 ±0.10"
+      },
+      {
+        "label": "RING_ID",
+        "nominal_mm": 196.0,
+        "tol_plus_mm": 0.1,
+        "tol_minus_mm": -0.1,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø196.00 ±0.10"
+      },
+      {
+        "label": "ASSY_H",
+        "nominal_mm": 40.0,
+        "tol_plus_mm": 0.1,
+        "tol_minus_mm": -0.1,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "40.00 ±0.10"
+      }
+    ],
+    "gdt_frames": [],
+    "datums": [
+      [
+        "A",
+        "PRIMARY MOUNTING PLANE"
+      ],
+      [
+        "B",
+        "DATUM AXIS / BORE CENTERLINE"
+      ],
+      [
+        "C",
+        "ANGULAR INDEX / BOLT ORIENTATION"
+      ]
+    ],
+    "notes": [
+      "T_n=2.0 K -> T_sys=0.672 K (eta_meas=%21.43), 7.8 mW/hat (4K=0.2496 W), 220x120x40 mm, kutle=1.02 kg",
+      "Exact BOM part_id S6.11-03 (resolves legacy cad/params.py S6.5 aliasing bug). 32x 4 K InP HEMT bank, 7.8 mW/ch = 0.2496 W @ 4 K, 1.02 kg (Exp140)."
+    ],
+    "scad_params": {
+      "n_hemt": 32,
+      "p_4k_w": 0.2496,
+      "tn_k": 2.0,
+      "mass_kg": 1.02
+    },
+    "target_mass_kg": 1.02,
+    "epistemic": {
+      "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+      "no_lab_measurement": true,
+      "iec61508_certified": false,
+      "semi_s2_certified": false,
+      "general_tolerance_std": "ISO 2768-mK",
+      "drawing_standard": "ISO 128 / ASME Y14.5-2018",
+      "step_protocol": "ISO 10303-21 AP214 (AUTOMOTIVE_DESIGN)",
+      "source_bom_version": "v7.0"
+    }
+  },
+  "artifact_result": {
+    "part_id": "S6.11-03",
+    "subsystem": "S6",
+    "design_tier": "COTS_ENV_ICD",
+    "stl_path": "hardware/cad_parts/out/S6/S6.11-03.stl",
+    "step_path": "hardware/cad_parts/out/S6/S6.11-03.step",
+    "scad_path": "hardware/cad_parts/out/S6/S6.11-03.scad",
+    "dxf_path": "hardware/cad_parts/out/S6/S6.11-03.dxf",
+    "svg_path": "hardware/cad_parts/out/S6/S6.11-03.svg",
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "signed_volume_mm3": 205047.6963356921,
+    "surface_area_mm2": 94256.42752146964,
+    "mass_kg": 0.7381717068084919,
+    "cg_mm": [
+      -2.611638608839543e-14,
+      -2.9097060587614474e-15,
+      7.6513068215030415
+    ],
+    "bbox_min_mm": [
+      -126.0,
+      -126.0,
+      -18.5
+    ],
+    "bbox_max_mm": [
+      126.0,
+      126.0,
+      19.75
+    ],
+    "inertia_kg_mm2": [
+      4744.0043527586695,
+      4744.004352758671,
+      9285.566194993191,
+      8.256174623966223e-14,
+      -9.407014698266326e-14,
+      -1.8001203551617582e-13
+    ],
+    "triangle_count": 1248,
+    "vertex_count": 664,
+    "step_valid": true,
+    "dxf_valid": true,
+    "svg_valid": true,
+    "scad_valid": true,
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false,
+    "warnings": [],
+    "all_valid": true
+  },
+  "json_path": "hardware/cad_parts/out/S6/S6.11-03.json",
+  "world_bbox_min_mm": [
+    -776.0,
+    -126.0,
+    635.5
+  ],
+  "world_bbox_max_mm": [
+    -524.0,
+    126.0,
+    673.75
+  ],
+  "world_cg_mm": [
+    -650.0,
+    -0.0,
+    661.6513
+  ],
+  "epistemic": {
+    "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
+    "no_lab_measurement": true,
+    "iec61508_certified": false,
+    "semi_s2_certified": false
+  }
+}
