@@ -325,3 +325,19 @@ Aşağıdaki `SHA-256` özetleri yalnızca depodaki çıktı dosyalarının sonr
 6. [`BOM_ENGINEERING.md`](research/atom_lithography_machine/BOM_ENGINEERING.md) ve [`RFQ_SPECIFICATIONS.md`](research/atom_lithography_machine/RFQ_SPECIFICATIONS.md) — `180` parçalık parametrik malzeme listesi ve `10` tedarikçi ön RFQ taslağı (`no_supplier_quotes = true`).
 7. [`PROJECT_DOSSIER.md`](research/atom_lithography_machine/PROJECT_DOSSIER.md) — `Exp0`–`Exp151` uçtan uca proje arşivi, bulut `ibm_marrakesh` kontrol proxy kıyaslaması ve nicel sicil.
 8. [`LITERATURE.md`](research/atom_lithography_machine/LITERATURE.md) ve [`hypotheses.md`](research/hypotheses/hypotheses.md) — Birincil literatür/patent referansları ve `H1`–`H169` tam hipotez günlüğü.
+
+---
+
+## 10. Lisans (Güçlü Karşılıklı Açık Kaynak / Copyleft)
+
+**Copyright (C) 2026 berkmec (https://counfield.com/)**
+
+Bu depo, tasarımın tüm insanlık için açık kalması ve türev çalışmalarla kapatılıp tekelleştirilememesi amacıyla **güçlü karşılıklı (*strongly reciprocal / copyleft*) üçlü lisans** yapısını kullanır (ayrıntılı kapsam: [`NOTICE`](NOTICE)):
+
+| Kapsam | Lisans (SPDX) | Tam Metin |
+|---|---|---|
+| **Yazılım, Simülasyon Kodu, Testler ve Verilog RTL** (`src/`, `rtl/`, `experiments/`, `tests/`, `docs/digital_twin_interactive.html`) | **GNU GPLv3 veya üstü** (`GPL-3.0-or-later`) | [`LICENSE`](LICENSE) |
+| **Donanım Tasarımları** (`hardware/`, 3B CAD, 2B GD&T, KiCad 8 PCB, SPICE, BOM ve ICD'ler) | **CERN Open Hardware Licence v2 — Strongly Reciprocal** (`CERN-OHL-S-2.0`) | [`LICENSE-HARDWARE`](LICENSE-HARDWARE) |
+| **Dokümantasyon, Bilimsel Raporlar ve Şekiller** (`*.md`, teknik paftalar ve görseller) | **Creative Commons Attribution-ShareAlike 4.0** (`CC-BY-SA-4.0`) | [`LICENSE-DOCS`](LICENSE-DOCS) |
+
+Tüm materyaller ilgili lisans metinlerinde belirtildiği biçimde **"OLDUĞU GİBİ" (*AS IS*)** sunulur; donanım tasarımları `M0/M1 DESIGN_ONLY` aşamasındadır ve fonksiyonel emniyet sertifikası taşımaz.

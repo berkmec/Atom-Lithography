@@ -1,0 +1,35 @@
+Atom Lithography Machine
+Copyright (C) 2026 berkmec (https://counfield.com/)
+
+This repository uses a strongly reciprocal (copyleft) tri-license structure so
+that all software, HDL/RTL, physical hardware blueprints, and documentation
+remain open to humanity and cannot be closed or monopolized in derivative works:
+
+1. Software, Simulation Code, Tests & Verilog RTL
+   Scope: `src/`, `rtl/`, `experiments/`, `tests/`, `docs/digital_twin_interactive.html`,
+          and all `.py`, `.v`, `.sv`, `.ys`, `.sh`, `.html`, `.js` source files
+   License: GNU General Public License v3.0 or later (`SPDX-License-Identifier: GPL-3.0-or-later`)
+   Full text: `LICENSE`
+
+2. Hardware Designs (3D CAD, 2D GD&T Drawings, KiCad 8 PCBs, SPICE, BOM & ICDs)
+   Scope: `hardware/`, `research/atom_lithography_machine/cad/`, `src/board/`,
+          `research/atom_lithography_machine/BOM*.csv`, and all `.stl`, `.step`,
+          `.scad`, `.dxf`, `.svg`, `.kicad_sch`, `.kicad_pcb`, `.kicad_pro`,
+          `.cir`, `.json` hardware design files
+   License: CERN Open Hardware Licence Version 2 - Strongly Reciprocal
+            (`SPDX-License-Identifier: CERN-OHL-S-2.0`)
+   Full text: `LICENSE-HARDWARE`
+
+3. Documentation, Scientific Reports & Figures
+   Scope: `README.md`, `research/atom_lithography_machine/*.md`,
+          `research/hypotheses/hypotheses.md`, `results/**/summary_*.md`,
+          and rendered figures/plates (`.png`)
+   License: Creative Commons Attribution-ShareAlike 4.0 International
+            (`SPDX-License-Identifier: CC-BY-SA-4.0`)
+   Full text: `LICENSE-DOCS`
+
+Warranty & Safety Disclaimer:
+All materials are provided "AS IS" without warranty of any kind, as set forth
+in `LICENSE`, `LICENSE-HARDWARE`, and `LICENSE-DOCS`. Hardware artifacts are
+`TRL 1-2` (`M0/M1 DESIGN_ONLY`) and are not safety-certified (`iec61508_certified = false`,
+`semi_s2_certified = false`).

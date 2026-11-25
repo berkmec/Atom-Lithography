@@ -5,6 +5,10 @@
 
 # Root metadata & showcase
 !.gitignore
+!LICENSE
+!LICENSE-HARDWARE
+!LICENSE-DOCS
+!NOTICE
 !README.md
 !requirements.txt
 
