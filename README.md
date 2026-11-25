@@ -2,7 +2,7 @@
 
 TRL 1–2 (`M0`) Kavramsal Sistem Tasarımı, İndirgenmiş-Mertebe Çok-Fizikli Fizibilite Çalışması, Gerçek-EDA Doğrulamalı Verilog RTL ve Bulut Süperiletken-QPU Kontrol/Dekoder Kıyaslaması
 
-Doğrudan Artefaktlar: [Etkileşimli HTML5 Model Gezgini (`docs/digital_twin_interactive.html`)](docs/digital_twin_interactive.html) · [Verilog RTL Paketi (`rtl/boed_fpga/README.md`)](rtl/boed_fpga/README.md) · [Ana Tasarım (`DESIGN.md`)](research/atom_lithography_machine/DESIGN.md) · [Teknik El Kitabı (`TECHNICAL_MANUAL.md`)](research/atom_lithography_machine/TECHNICAL_MANUAL.md)
+Doğrudan Artefaktlar: [**180/180 Parça Mühendislik Planı (`hardware/DESIGN_BLUEPRINT_180_SUMMARY.md`)**](hardware/DESIGN_BLUEPRINT_180_SUMMARY.md) · [**164-Parça Ana Montaj Paftası (`hardware/cad_parts/master_164_assembly_views.png`)**](hardware/cad_parts/master_164_assembly_views.png) · [Makine-Kontrol RTL (`rtl/machine_ctrl/README.md`)](rtl/machine_ctrl/README.md) · [Etkileşimli HTML5 Model Gezgini (`docs/digital_twin_interactive.html`)](docs/digital_twin_interactive.html) · [BOED Verilog RTL (`rtl/boed_fpga/README.md`)](rtl/boed_fpga/README.md) · [Ana Tasarım (`DESIGN.md`)](research/atom_lithography_machine/DESIGN.md) · [Teknik El Kitabı (`TECHNICAL_MANUAL.md`)](research/atom_lithography_machine/TECHNICAL_MANUAL.md)
 
 ---
 
@@ -36,6 +36,14 @@ Atom Lithography Machine (`v7.2`) is a **`TRL 1–2` (`M0`) conceptual systems-a
 ---
 
 ## Genel Görünüm
+
+### 164-Parça Bütünleşik Mühendislik Ana Montaj Paftası (`v8.0-blueprint`, `0 / 13.366` 3B Çakışma, `M0/M1 DESIGN_ONLY`)
+
+![Atom Litografi Makinesi 164-Parça Bütünleşik Mühendislik Ana Montaj Paftası (Front XZ, Side YZ, Plan XY, İzometrik, Hassas Çekirdek Kesiti ve Kütle Bütçesi)](hardware/cad_parts/master_164_assembly_views.png)
+
+> **180 / 180 Parça Mühendislik Planı (`hardware/parts_registry.json`, `M0/M1_DESIGN_ONLY`):** `164/164` su-sızdırmaz 6-formatlı CAD (`.stl`, ISO 10303-21 `.step`, `.dxf`, `librsvg` doğrulamalı GD&T `.svg`, `.scad`, `.json`; `718.532` üçgen, `0/13.366` küresel çakışma, `2.996,77 kg`, `30/30` NIST kriyo termal, `10/10` GD&T) · `%100` pad'den pad'e fiziksel rotalı `10/10` KiCad 8 PCB (`762/762` ağ, `9.895` segment, `2.538` via, `0` ERC/DRC/HV) + `10/10` canlı `ngspice-47` + `95/95` elektrik ICD · `7` makine-kontrol Verilog RTL modülü (`3.212` LOC, `Verilator 0` uyarı, `Icarus 6/6`, `Yosys xcup/xc7/ecp5`) · `S8.4-02` SCADA & `S8.2-02` OpenROAD manifestosu. Detay: [`hardware/DESIGN_BLUEPRINT_180_SUMMARY.md`](hardware/DESIGN_BLUEPRINT_180_SUMMARY.md).
+
+### Kavramsal Sistem Özet Panosu (`v7.2`)
 
 ![Atom Litografi Makinesi v7.2 M0 Kavramsal Tasarım Özet Panosu](research/atom_lithography_machine/cad/drawings/00_v7_overview_dashboard.png)
 
