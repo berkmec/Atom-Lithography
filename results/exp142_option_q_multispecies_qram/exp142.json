@@ -25,7 +25,8 @@
     "failed": 1,
     "total": 7
   },
-  "success_rule_met": true,
+  "success_rule_met": false,
+  "partial_framework_validation_only": true,
   "part1_qram_bridge": {
     "impedance_transformers": {
       "single_qw_N1": {

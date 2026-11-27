@@ -536,3 +536,68 @@ class TestZeroHostPathLeaks:
                     leaks.append((stl_p.name, m.group(0)))
 
         assert leaks == [], f"Host-path leaks found: {leaks}"
+
+
+# ===========================================================================
+# 6. Canonical Cross-Subsystem 13-Ray OBS-002 Moller-Trumbore Optical LOS (VC1-001 / VC1-004)
+# ===========================================================================
+def _segment_hits(p0: np.ndarray, p1: np.ndarray, mesh: SolidMesh, eps: float = 1e-4) -> list[float]:
+    """Exact vectorized Moller-Trumbore segment [p0, p1] intersection; returns hit fractions in (eps, 1-eps)."""
+    d = p1 - p0
+    v0 = mesh.vertices[mesh.faces[:, 0]]
+    e1 = mesh.vertices[mesh.faces[:, 1]] - v0
+    e2 = mesh.vertices[mesh.faces[:, 2]] - v0
+    h = np.cross(d, e2)
+    a = np.einsum("ij,ij->i", e1, h)
+    valid = np.abs(a) > 1e-12
+    if not np.any(valid):
+        return []
+    inv_a = np.where(valid, 1.0 / np.where(valid, a, 1.0), 0.0)
+    s = p0 - v0
+    u = np.einsum("ij,ij->i", s, h) * inv_a
+    valid &= (u >= -1e-9) & (u <= 1.0 + 1e-9)
+    q = np.cross(s, e1)
+    vv = np.einsum("j,ij->i", d, q) * inv_a
+    valid &= (vv >= -1e-9) & (u + vv <= 1.0 + 1e-9)
+    t = np.einsum("ij,ij->i", e2, q) * inv_a
+    return sorted(float(x) for x in t[valid & (t > eps) & (t < 1.0 - eps)])
+
+
+@pytest.fixture(scope="module")
+def canonical_records():
+    from hardware.cad_parts.build_all import assemble_canonical_parts
+
+    records, _datums = assemble_canonical_parts()
+    return records
+
+
+class TestCanonicalOpticalLOS:
+    def test_obs002_13_ray_los_on_real_canonical_assembly_zero_occluding_hits(self, canonical_records) -> None:
+        z0 = 500.0  # canonical Z = natural Z_wafer-frame + 500 mm
+        rays: list[tuple[str, np.ndarray, np.ndarray, set[str]]] = []
+        for label, deg in (("X", 0.0), ("Y", 90.0), ("Z", 270.0)):
+            ca, sa = math.cos(math.radians(deg)), math.sin(math.radians(deg))
+            rays.append((f"Interf_{label}_entry_Z367", np.array([239.0 * ca, 239.0 * sa, z0 - 133.0]), np.array([128.0 * ca, 128.0 * sa, z0 - 133.0]), {"S4.4-04"}))
+            rays.append((f"Interf_{label}_periscope_R128", np.array([128.0 * ca, 128.0 * sa, z0 - 133.0]), np.array([128.0 * ca, 128.0 * sa, z0 + 14.3]), set()))
+            rays.append((f"Interf_{label}_meas_to_S4.4-03_Z491", np.array([128.0 * ca, 128.0 * sa, z0 - 9.0]), np.array([65.5 * ca, 65.5 * sa, z0 - 9.0]), set()))
+            rays.append((f"Interf_{label}_ref_Z514.3", np.array([128.0 * ca, 128.0 * sa, z0 + 14.3]), np.array([62.5 * ca, 62.5 * sa, z0 + 14.3]), set()))
+        ca50, sa50 = math.cos(math.radians(50.0)), math.sin(math.radians(50.0))
+        rays.append(("Fiducial_S4.5-02_to_S3.1-01", np.array([239.0 * ca50, 239.0 * sa50, z0 + 9.0]), np.array([24.5 * ca50, 24.5 * sa50, z0 + 0.01]), {"S4.5-02"}))
+        assert len(rays) == 13
+
+        # Real canonical meshes of ALL 164 parts incl. S6.2-02 nested 50 K / 4 K shields and S6.3-01/S6.3-02 coils
+        assert {"S6.2-02", "S6.3-01", "S6.3-02"} <= set(canonical_records.keys())
+        occluded: dict[str, dict[str, list[float]]] = {}
+        for rname, p0, p1, ignore in rays:
+            blockers: dict[str, list[float]] = {}
+            for pid, rec in canonical_records.items():
+                if pid in ignore:
+                    continue
+                hits = _segment_hits(p0, p1, rec.canonical_mesh)
+                if hits:
+                    blockers[pid] = [round(x, 4) for x in hits[:4]]
+            if blockers:
+                occluded[rname] = blockers
+        assert occluded == {}, f"OBS-002 optical LOS occluded in canonical assembly: {occluded}"
+        for key in ("Interf_X_ref_Z514.3", "Interf_Y_ref_Z514.3"):
+            assert key not in occluded

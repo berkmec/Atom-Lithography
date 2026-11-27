@@ -14,11 +14,11 @@
 ## 1. Dosya Bütünlüğü ve İzlenebilirlik Manifestosu (Tam 64-Hex `SHA-256` — Bilimsel Kanıt Değil)
 
 - **`v7_digital_twin_cert.json` Kanonik JSON `SHA-256` (Tam 64-Hex — Dosya Bütünlüğü Özeti):**
-  `1f046684d8e633d3f964ec7325d1ada0a8765acc500012b09b8ade75350e1c62`
+  `694cfe8420d73e22b66dbfb12a4a405894cc7bf3aaad6e95457ac660f2e4cd5b`
 - **Bulut QPU Proxy Ham Sayım Defteri (`results/exp145_cloud_qpu_ibm_validation/ibm_qpu_live_results.json`) `SHA-256`:**
   `02b7a19d1704662c6424e76f4971e21b04a98d48230a917c9682853b3ca1fc5a`
 - **Çevrimdışı HTML5 Model Gezgini (`docs/digital_twin_interactive.html`, `80,339` bayt, `0` CDN) `SHA-256`:**
-  `a7f067a217eee774c9abda6b9603d85e37c54f8c2ae37a9f022607f64859a821`
+  `fcfbd62687233712a95ac5f7f388917df8a488427855e5b9cd0ff5df98b4c7ef`
 - **Gerçek `1% ²⁹Si` Örgü Banyosu BOED Kıyaslama Defteri (`results/boed_real_bath_benchmark.json`) `SHA-256`:**
   `5ef83da01ffe635c362ec887a07f82ed043eaa03799403e3645e505551f055a8`
 - **İzlenen Artefakt Sayısı:** **`39 / 39`** (`27` deney JSON'u `Exp124..Exp150` + `1` IBM QPU proxy JSON + `1` gerçek `1% ²⁹Si` banyo BOED JSON + nominal `CAD v6.0` + parametrik `BOM_DETAILED.csv v7.0` + `7` `rtl/boed_fpga/` dosyası + `docs/digital_twin_interactive.html`).

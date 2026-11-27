@@ -2,7 +2,7 @@
   "subsystem": "S6",
   "work_package": "WP-M4",
   "part_count": 40,
-  "total_computed_mass_kg": 754.2746,
+  "total_computed_mass_kg": 754.2688,
   "all_parts_valid": true,
   "clash_report": {
     "parts_checked": 43,
@@ -512,13 +512,13 @@
       "watertight": true,
       "boundary_edges": 0,
       "non_manifold_edges": 0,
-      "signed_volume_mm3": 7271532.007950634,
-      "surface_area_mm2": 4452196.027986044,
-      "mass_kg": 26.177515228622298,
+      "signed_volume_mm3": 7269943.995107221,
+      "surface_area_mm2": 4453051.2719753375,
+      "mass_kg": 26.17179838238601,
       "cg_mm": [
-        82.59127016485955,
-        1.9993850356297345,
-        -62.34001885431209
+        82.46203565179647,
+        1.9938259728850811,
+        -62.34915819394898
       ],
       "bbox_min_mm": [
         -158.0,
@@ -531,15 +531,15 @@
         304.0
       ],
       "inertia_kg_mm2": [
-        1008852.91423514,
-        2140213.3197795176,
-        1642175.6159872592,
-        -26956.59593697538,
-        -85860.07415430246,
-        94.82206956149169
+        1008831.2339589489,
+        2138191.6536723417,
+        1640152.5332823494,
+        -26874.615330750905,
+        -85718.5277624494,
+        100.91073159875465
       ],
-      "triangle_count": 9536,
-      "vertex_count": 4806,
+      "triangle_count": 10192,
+      "vertex_count": 5146,
       "step_valid": true,
       "dxf_valid": true,
       "svg_valid": true,

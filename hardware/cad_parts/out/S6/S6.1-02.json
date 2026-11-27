@@ -3,13 +3,13 @@
     "part_id": "S6.1-02",
     "parent_bom_id": "S6.1",
     "subsystem": "S6",
-    "part_name": "Uzak doner valf, su sogutmali He kompresoru ve esnek hatlar",
+    "part_name": "Uzak doner valf, su sogutmali He kompresoru (CPA1110, 11.4-12.5 kW) ve esnek hatlar",
     "design_tier": "COTS_ENV_ICD",
     "material": "Steel",
     "temp_stage": "300 K (tesis)",
     "temp_k": 300.0,
     "vacuum_grade": "20 bar He",
-    "tolerance_spec": "He 99.999%",
+    "tolerance_spec": "He 99.999%, 12.5 kW maks",
     "surface_finish_ra_um": 0.8,
     "qty": 1,
     "procurement_class": "COTS",
@@ -194,7 +194,7 @@
       ]
     ],
     "notes": [
-      "Titresimi yongadan izole eden ayrik motor/valf paketi"
+      "Titresimi yongadan izole eden ayrik motor/valf paketi; duvar gucu 11.4 kW nom / 12.5 kW maks @ 60 Hz (3-faz sebeke-tarafi hizli kontaktor UPS onunde)"
     ],
     "scad_params": {
       "cpa_w": 480.0,

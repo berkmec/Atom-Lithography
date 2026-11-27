@@ -721,7 +721,7 @@
   "s55_optical_hardware_spec": {
     "cad_v3_anchor": {
       "port_id": "S5.5",
-      "location": "Equatorial +Y viewport at Z_WAFER = 500.0 mm (CAD v3.0 params.py L437-444)",
+      "location": "36-deg inclined +Y CF63 sapphire viewport on relocated S5.1-03 load-lock station at X=420 mm (OBS-001 unified 164-part CAD); legacy CAD v3.0 equatorial +Y viewport at Z_WAFER = 500.0 mm is superseded (zero line-of-sight)",
       "duct_clear_aperture_mm": 44.0,
       "viewport_flange": "CF63 UHV bakeable sapphire viewport (Al2O3 single crystal)",
       "sapphire_disc_od_mm": 50.0,

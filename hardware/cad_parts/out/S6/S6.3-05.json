@@ -3,13 +3,13 @@
     "part_id": "S6.3-05",
     "parent_bom_id": "S6.3",
     "subsystem": "S6",
-    "part_name": "Cift-kutuplu superiletken miknatis guc kaynagi (±100 A) ve HTS akim uclari",
+    "part_name": "Cift-kutuplu superiletken miknatis guc kaynagi (±300 A) ve >=300 A HTS akim uclari",
     "design_tier": "COTS_ENV_ICD",
     "material": "Steel",
     "temp_stage": "300 K -> 4 K",
     "temp_k": 4.0,
     "vacuum_grade": "Atmosfer/Kriyo",
-    "tolerance_spec": "±10 ppm",
+    "tolerance_spec": "±10 ppm, >=300 A",
     "surface_finish_ra_um": 0.8,
     "qty": 1,
     "procurement_class": "COTS",
@@ -133,8 +133,9 @@
       ]
     ],
     "notes": [
-      "±100 A, 10 ppm kararlik, 4K isi kacagi <50 mW/cift",
-      "OBS-072 fix: 4-channel bipolar magnet PSU rated >=300 A (320 A peak) with 4-pair Bi-2223 HTS leads (50K->4K heat load <=0.15 W total across all 4 pairs in persistent-retracted mode)."
+      "±300 A (>=255.9 A S_upper bobin akimina %17 marj), 10 ppm kararlik, 4K isi kacagi <50 mW/cift; ozel 650 W Tier-1B UPS kontrollu 120 s rampa-indirme kolu + 1.563 Ohm pasif quench yedegi",
+      "OBS-072 fix: 4-channel bipolar magnet PSU rated >=300 A (320 A peak) with 4-pair Bi-2223 HTS leads (50K->4K heat load <=0.15 W total across all 4 pairs in persistent-retracted mode).",
+      "VC1-002 reconciliation with Exp125: only the series-main channel 1 (1 main 320 A pair) carries I_series; channels 2-4 are 10 A trim/shim provisions; Exp125 persistent 4 K lead heat leak 45 mW <= 150 mW CAD budget."
     ],
     "scad_params": {
       "rack_u": 3,

@@ -4,11 +4,11 @@
 // part_id           : S6.3-05
 // parent_bom_id     : S6.3
 // subsystem         : S6
-// part_name         : Cift-kutuplu superiletken miknatis guc kaynagi (±100 A) ve HTS akim uclari
+// part_name         : Cift-kutuplu superiletken miknatis guc kaynagi (±300 A) ve >=300 A HTS akim uclari
 // material          : Steel
 // temp_stage        : 300 K -> 4 K
 // vacuum_grade      : Atmosfer/Kriyo
-// tolerance         : ±10 ppm
+// tolerance         : ±10 ppm, >=300 A
 // computed_mass_kg  : 22.60495
 // envelope_mm       : 482.600 x 574.550 x 131.350
 // design_maturity   : M0_M1_DETAILED_CAD_DESIGN_ONLY

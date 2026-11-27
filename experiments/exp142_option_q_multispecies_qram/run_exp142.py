@@ -349,14 +349,15 @@ def main() -> None:
     }
     n_pass = sum(1 for v in verdicts.values() if v)
     n_total = len(verdicts)
-    success_rule_met = all(verdicts[k] for k in [
+    # VC1-003: success requires ALL pre-registered gates (incl. OQ6 strain wall); otherwise partial framework validation only
+    success_rule_met = all(verdicts.values())
+    partial_framework_validation_only = bool(not success_rule_met and all(verdicts[k] for k in [
         "OQ1_IMPEDANCE_TRANSFORMER_50_TO_3K",
         "OQ2_LINDBLAD_QRAM_SWAP_AND_LIFETIME",
         "OQ3_QRAM_CRYO_HEAT_BUDGET",
         "OQ4_ER167_PURCELL_AND_TELECOM_LINK",
-        "OQ5_SB121_HEAVY_ION_STRAGGLE_ADVANTAGE",
         "OQ7_S9Q_SPEC_PORTABILITY_AND_TESTS",
-    ])
+    ]))
     elapsed = time.time() - t0
     print(f"\n=== VERDICTS ({n_pass}/{n_total} PASS | elapsed={elapsed:.2f} s) ===", flush=True)
     for k, v in verdicts.items():
@@ -378,6 +379,7 @@ def main() -> None:
         "verdicts": verdicts,
         "verdict_counts": {"passed": n_pass, "failed": n_total - n_pass, "total": n_total},
         "success_rule_met": bool(success_rule_met),
+        "partial_framework_validation_only": partial_framework_validation_only,
         "part1_qram_bridge": {
             "impedance_transformers": xfmr_compact,
             "lindblad_18x18_swap": {k: v for k, v in qram.items() if k not in ("t_store_s", "F_curves")},

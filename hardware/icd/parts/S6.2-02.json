@@ -34,8 +34,8 @@
       "cad_json": "hardware/cad_parts/out/S6/S6.2-02.json",
       "watertight": true,
       "all_6_files_valid": true,
-      "mass_kg": 26.177515,
-      "triangle_count": 9536,
+      "mass_kg": 26.171798,
+      "triangle_count": 10192,
       "temp_k": 0.8,
       "canonical_bbox_min_mm": [
         -808.0,

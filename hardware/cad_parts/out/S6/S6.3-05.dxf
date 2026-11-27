@@ -54199,7 +54199,7 @@ TITLEBLOCK
  40
 14.4787
   1
-Cift-kutuplu superiletken miknatis guc kaynagi (%%p100 A) ve HTS a
+Cift-kutuplu superiletken miknatis guc kaynagi (%%p300 A) ve >=300
   0
 TEXT
   8
@@ -54227,7 +54227,7 @@ TITLEBLOCK
  40
 13.6743
   1
-TOL: %%p10 ppm | MASS: 22.6049 kg | UNITS: mm
+TOL: %%p10 ppm, >=300 A | MASS: 22.6049 kg | UNITS: mm
   0
 TEXT
   8

@@ -195,30 +195,30 @@
     "svg_failures": [],
     "scad_failures": [],
     "epistemic_failures": [],
-    "total_triangles": 756540,
-    "total_vertices": 368625,
+    "total_triangles": 757196,
+    "total_vertices": 368965,
     "design_tier_counts": {
       "CUSTOM_FULL": 74,
       "COTS_ENV_ICD": 83,
       "KIT_OR_ALIAS": 7
     },
     "passed": true,
-    "elapsed_s": 10.591
+    "elapsed_s": 9.852
   },
   "global_clash_audit": {
     "parts_checked": 164,
     "total_pairs_checked": 13366,
     "broadphase_aabb_pairs": 704,
-    "shell_aabb_pairs_tested": 8085,
+    "shell_aabb_pairs_tested": 8091,
     "clash_count": 0,
     "intra_subsystem_clashes": 0,
     "cross_subsystem_clashes": 0,
     "clashes": [],
     "passed": true,
-    "elapsed_s": 92.313
+    "elapsed_s": 82.468
   },
   "mass_budget": {
-    "total_machine_mass_kg": 2957.9511,
+    "total_machine_mass_kg": 2957.9454,
     "by_subsystem": {
       "S1": {
         "part_count": 23,
@@ -265,7 +265,7 @@
         "custom_full": 18,
         "cots_env_icd": 22,
         "kit_or_alias": 0,
-        "mass_kg": 754.2746,
+        "mass_kg": 754.2688,
         "mass_share_pct": 25.5
       },
       "S7": {
@@ -314,7 +314,7 @@
       "S6": {
         "work_package": "WP-M4",
         "part_count": 40,
-        "mass_kg": 754.2746
+        "mass_kg": 754.2688
       },
       "S7": {
         "work_package": "WP-M5",
@@ -1278,7 +1278,7 @@
     "source_bom_version": "v7.0"
   },
   "all_gates_passed": true,
-  "total_elapsed_s": 114.063,
+  "total_elapsed_s": 103.334,
   "parts": {
     "S1.1-01": {
       "part_id": "S1.1-01",
@@ -5100,8 +5100,8 @@
       "design_tier": "CUSTOM_FULL",
       "material": "OFHC Cu",
       "temp_k": 0.8,
-      "mass_kg": 26.177515,
-      "triangle_count": 9536,
+      "mass_kg": 26.171798,
+      "triangle_count": 10192,
       "watertight": true,
       "all_6_files_valid": true,
       "canonical_bbox_min_mm": [

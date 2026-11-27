@@ -945,8 +945,14 @@ def _build_s6_2_02() -> BuiltPart:
     # B) Inner 4 K Au-OFHC Cu wafer/head radiation & cryopumping shroud (OBS-010 & OBS-046!)
     # Upper 4 K cryo-shroud around S2 write head (R=66.0..68.0, Z=[505.5, 579.5] -> >2.1 mm outside S2, >2.5 mm above S3.2-04!)
     # Open at 36..64 deg for 50 deg fiducial optical cone AND 240..300 deg for -Y CF150 pump throat (OBS-107)!
-    parts.append(make_arc_tube(66.0, 68.0, 74.0, 64.0, 240.0, center=(cx_ch, 0.0, 542.5 - z0), name="ch_4k_upper_cryoshroud_nw", material="OFHC Cu"))
-    parts.append(make_arc_tube(66.0, 68.0, 74.0, 300.0, 396.0, center=(cx_ch, 0.0, 542.5 - z0), name="ch_4k_upper_cryoshroud_e", material="OFHC Cu"))
+    # VC1-001 fix: S4.4-02 -> S2.5-03 632.8 nm reference beams at Z_canon=514.3 mm run radially along 0 deg (+X) and
+    # 90 deg (+Y); open interferometer reference-beam windows at 350..10 deg and 80..100 deg across Z_canon=[507.7, 521.3] mm
+    # (superset of [508, 521], matching ch_4k_eq_baffle / ch_50k_lo cutouts) via 3 axial bands with 0.3 mm anti-clash seams.
+    for tag, d0, d1 in (("nw", 64.0, 240.0), ("e", 300.0, 396.0)):
+        parts.append(make_arc_tube(66.0, 68.0, 2.2, d0, d1, center=(cx_ch, 0.0, 506.6 - z0), name=f"ch_4k_upper_cryoshroud_{tag}_lo", material="OFHC Cu"))
+        parts.append(make_arc_tube(66.0, 68.0, 58.2, d0, d1, center=(cx_ch, 0.0, 550.4 - z0), name=f"ch_4k_upper_cryoshroud_{tag}_hi", material="OFHC Cu"))
+    for tag, d0, d1 in (("nw_a", 64.0, 80.0), ("nw_b", 100.0, 240.0), ("e_a", 300.0, 350.0), ("e_b", 370.0, 396.0)):
+        parts.append(make_arc_tube(66.0, 68.0, 13.0, d0, d1, center=(cx_ch, 0.0, 514.5 - z0), name=f"ch_4k_upper_cryoshroud_{tag}_mid", material="OFHC Cu"))
     # Top 4 K cold-shutter ion-beam trap collar (Z=[580.0, 582.5], R=[56.0, 68.0] -> seals annulus around S1.3-04 R<=54 with 2.0 mm clearance!)
     parts.append(make_tube(56.0, 68.0, 2.5, segments=48, center=(cx_ch, 0.0, 581.25 - z0), name="ch_4k_top_cold_trap_lid", material="OFHC Cu"))
     # Lower 4 K cryo-shroud below S3.2-01 (R=72.5..74.5, Z=[452.0, 480.5] -> 3.0 mm outside S4.3-03 R=69.5, >2.2 mm below S3.2-01!)
@@ -1330,7 +1336,7 @@ def _build_s6_3_04() -> BuiltPart:
             DimensionCallout("BOX_Y", dy, 0.1, -0.1),
             DimensionCallout("BOX_Z", dz, 0.1, -0.1),
         ),
-        notes=("OBS-072 fix: 4-channel matched persistent switch bank (Helmholtz pair, Shim pair, A-shield pair, B-bucking pair) matching 4-pair S6.3-05 HTS leads.",),
+        notes=("OBS-072 fix: 4-channel matched persistent switch bank (Helmholtz pair, Shim pair, A-shield pair, B-bucking pair) matching 4-pair S6.3-05 HTS leads.", "VC1-002 reconciliation with Exp125 series_winding_topology: channel 1 = the single series-main loop (1 main PSU + 1 persistent switch carrying I_series); channels 2-4 = independent per-pair trim/shim/shield-trim provisions (10 A trim leads), unenergized at the series operating point."),
         scad_params=(("n_switches", 4), ("r_dump_ohm", 1.563), ("e_mag_kj", 18.9), ("t_quench_peak_k", 64.6)),
         target_mass_kg=0.52,
     )
@@ -1365,7 +1371,7 @@ def _build_s6_3_05() -> BuiltPart:
             DimensionCallout("DEPTH", 562.5, 1.0, -1.0),
             DimensionCallout("HEIGHT_3U", dz, 0.3, -0.3),
         ),
-        notes=("OBS-072 fix: 4-channel bipolar magnet PSU rated >=300 A (320 A peak) with 4-pair Bi-2223 HTS leads (50K->4K heat load <=0.15 W total across all 4 pairs in persistent-retracted mode).",),
+        notes=("OBS-072 fix: 4-channel bipolar magnet PSU rated >=300 A (320 A peak) with 4-pair Bi-2223 HTS leads (50K->4K heat load <=0.15 W total across all 4 pairs in persistent-retracted mode).", "VC1-002 reconciliation with Exp125: only the series-main channel 1 (1 main 320 A pair) carries I_series; channels 2-4 are 10 A trim/shim provisions; Exp125 persistent 4 K lead heat leak 45 mW <= 150 mW CAD budget."),
         scad_params=(("rack_u", 3), ("bay", 2), ("u_start", 1), ("n_hts_pairs", 4), ("i_max_a", 320.0)),
         target_mass_kg=24.0,
     )

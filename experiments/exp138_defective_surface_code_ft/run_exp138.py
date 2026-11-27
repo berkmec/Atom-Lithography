@@ -1449,7 +1449,8 @@ def run_exp138() -> Dict[str, Any]:
         "n_workers": n_workers,
         "n_passed": int(n_passed),
         "n_total": int(n_total),
-        "success_rule_met": bool(n_passed >= 5 and all_algebra_exact and all_superstab_commute and len(portability_hits) == 0),
+        "success_rule_met": bool(n_passed == n_total and all_algebra_exact and all_superstab_commute and len(portability_hits) == 0),
+        "partial_framework_validation_only": bool(n_passed < n_total and all_algebra_exact and all_superstab_commute and len(portability_hits) == 0),
         # Top-level Exp141-compatible keys (directly readable by wafer_econ141.evaluate_logical_qubit_economics!)
         "primary_scaling_scenario": primary_scaling_key,
         "N_cand": int(primary_scaling.get("N_cand", 6)),
@@ -1747,7 +1748,8 @@ def reanalyze_existing_exp138() -> Dict[str, Any]:
     data["verdicts"] = verdicts
     data["n_passed"] = int(n_passed)
     data["n_total"] = len(verdicts)
-    data["success_rule_met"] = bool(n_passed >= 5 and all_algebra_exact and all_superstab_commute and len(portability_hits) == 0)
+    data["success_rule_met"] = bool(n_passed == len(verdicts) and all_algebra_exact and all_superstab_commute and len(portability_hits) == 0)
+    data["partial_framework_validation_only"] = bool(n_passed < len(verdicts) and all_algebra_exact and all_superstab_commute and len(portability_hits) == 0)
     data["portability_hardcoded_hits"] = portability_hits
 
     out_path.write_text(json.dumps(data, indent=2))

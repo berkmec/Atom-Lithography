@@ -4,11 +4,11 @@
 // part_id           : S6.1-02
 // parent_bom_id     : S6.1
 // subsystem         : S6
-// part_name         : Uzak doner valf, su sogutmali He kompresoru ve esnek hatlar
+// part_name         : Uzak doner valf, su sogutmali He kompresoru (CPA1110, 11.4-12.5 kW) ve esnek hatlar
 // material          : Steel
 // temp_stage        : 300 K (tesis)
 // vacuum_grade      : 20 bar He
-// tolerance         : He 99.999%
+// tolerance         : He 99.999%, 12.5 kW maks
 // computed_mass_kg  : 150.17445
 // envelope_mm       : 480.000 x 520.000 x 680.000
 // design_maturity   : M0_M1_DETAILED_CAD_DESIGN_ONLY

@@ -174,7 +174,9 @@ def test_06_exp138_json_schema_verdicts_and_physics_consistency() -> None:
     assert data["no_lab_measurement"] is True
     assert data["n_total"] == 7
     assert data["n_passed"] >= 5
-    assert data["success_rule_met"] is True
+    # VC1-003: success_rule_met requires ALL 7 pre-registered gates; FT3/FT5 honest FAILs => partial framework validation only
+    assert data["success_rule_met"] is (data["n_passed"] == data["n_total"])
+    assert data["partial_framework_validation_only"] is (data["n_passed"] < data["n_total"])
     assert data["part1_algebra_and_threshold"]["all_algebra_exact"] is True
     assert data["part3_defective_superstabilizers"]["all_superstab_commute"] is True
 

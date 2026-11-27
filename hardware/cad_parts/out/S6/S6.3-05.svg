@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="1680" height="1188" viewBox="0 0 1680 1188">
-  <title>S6.3-05 — Cift-kutuplu superiletken miknatis guc kaynagi (±100 A) ve HTS akim uclari (ISO 128 / ASME Y14.5)</title>
+  <title>S6.3-05 — Cift-kutuplu superiletken miknatis guc kaynagi (±300 A) ve &gt;=300 A HTS akim uclari (ISO 128 / ASME Y14.5)</title>
   <defs>
     <marker id="arrow-end" viewBox="0 0 10 6" refX="9" refY="3" markerWidth="8" markerHeight="5" orient="auto"><path d="M0,0 L10,3 L0,6 Z" fill="#1B365D"/></marker>
     <marker id="arrow-start" viewBox="0 0 10 6" refX="1" refY="3" markerWidth="8" markerHeight="5" orient="auto"><path d="M10,0 L0,3 L10,6 Z" fill="#1B365D"/></marker>
@@ -187,7 +187,7 @@
     <text x="1608.0" y="883.0" text-anchor="end" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" font-weight="600" fill="#334155">QTY: 1 | PARENT: S6.3</text>
     <line x1="1105.0" y1="925.0" x2="1620.0" y2="925.0" stroke="#111827" stroke-width="1.0"/>
     <text x="1117.0" y="904.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="8.5" fill="#64748B">DESCRIPTION</text>
-    <text x="1117.0" y="919.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" font-weight="600" fill="#111827">Cift-kutuplu superiletken miknatis guc kaynagi (±100 A) ve HTS…</text>
+    <text x="1117.0" y="919.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11" font-weight="600" fill="#111827">Cift-kutuplu superiletken miknatis guc kaynagi (±300 A) ve &gt;=300…</text>
     <line x1="1105.0" y1="969.0" x2="1620.0" y2="969.0" stroke="#111827" stroke-width="1.0"/>
     <line x1="1300.0" y1="925.0" x2="1300.0" y2="969.0" stroke="#CBD5E1" stroke-width="1.0"/>
     <line x1="1450.0" y1="925.0" x2="1450.0" y2="969.0" stroke="#CBD5E1" stroke-width="1.0"/>
@@ -201,7 +201,7 @@
     <line x1="1300.0" y1="969.0" x2="1300.0" y2="1017.0" stroke="#CBD5E1" stroke-width="1.0"/>
     <line x1="1450.0" y1="969.0" x2="1450.0" y2="1017.0" stroke="#CBD5E1" stroke-width="1.0"/>
     <text x="1115.0" y="982.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="8.5" fill="#64748B">TOLERANCE / FINISH</text>
-    <text x="1115.0" y="998.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="600" fill="#111827">±10 ppm</text>
+    <text x="1115.0" y="998.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="600" fill="#111827">±10 ppm, &gt;=300 A</text>
     <text x="1115.0" y="1011.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="9.5" fill="#334155">Ra 0.8 µm | ISO 2768-mK</text>
     <text x="1310.0" y="982.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="8.5" fill="#64748B">MASS / VOLUME</text>
     <text x="1310.0" y="998.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="600" fill="#111827">22.6049 kg</text>

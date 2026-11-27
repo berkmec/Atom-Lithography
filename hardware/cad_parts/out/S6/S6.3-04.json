@@ -134,7 +134,8 @@
     ],
     "notes": [
       "Suruklenme <0.1 ppm/saat, adyabatik quench tepe 64.6 K, E_mag=18.9 kJ (Exp125)",
-      "OBS-072 fix: 4-channel matched persistent switch bank (Helmholtz pair, Shim pair, A-shield pair, B-bucking pair) matching 4-pair S6.3-05 HTS leads."
+      "OBS-072 fix: 4-channel matched persistent switch bank (Helmholtz pair, Shim pair, A-shield pair, B-bucking pair) matching 4-pair S6.3-05 HTS leads.",
+      "VC1-002 reconciliation with Exp125 series_winding_topology: channel 1 = the single series-main loop (1 main PSU + 1 persistent switch carrying I_series); channels 2-4 = independent per-pair trim/shim/shield-trim provisions (10 A trim leads), unenergized at the series operating point."
     ],
     "scad_params": {
       "n_switches": 4,
