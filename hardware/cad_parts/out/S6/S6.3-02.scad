@@ -9,8 +9,8 @@
 // temp_stage        : 4.2 K
 // vacuum_grade      : Kriyo-vakum
 // tolerance         : ±0.1 mm eksen
-// computed_mass_kg  : 29.79728
-// envelope_mm       : 335.000 x 335.000 x 317.400
+// computed_mass_kg  : 11.75596
+// envelope_mm       : 334.677 x 306.233 x 321.900
 // design_maturity   : M0_M1_DETAILED_CAD_DESIGN_ONLY
 // no_lab_measurement: true
 // iec61508_certified: false
@@ -21,16 +21,17 @@
 $fn = 64;
 
 // Nominal bounding envelope parameters (mm)
-bbox_x = 335.0000;
-bbox_y = 335.0000;
-bbox_z = 317.4000;
+bbox_x = 334.6768;
+bbox_y = 306.2334;
+bbox_z = 321.9000;
 
 // Part-specific parametric dimensions
 a_r_in = 144.0;
 a_r_out = 167.5;
 b_r_in = 56.0;
 b_r_out = 82.0;
-b_res_ut = 22.3;
+n_lorentz_ties = 8;
+lorentz_rating_kn = 200.0;
 
 // Interface / port parameters (mm)
 port_a_former_fit_od = 335.000;
@@ -40,18 +41,18 @@ port_b_resonator_bore_bore = 112.000;
 
 module part_S6_3_02() {
   union() {
-    // A_upper active shield coil
-    translate([0.000, 0.000, 62.000]) {
+    // Anchored A_upper active shield coil
+    translate([0.000, 0.000, 93.500]) {
       difference() {
-        cylinder(d=335.000, h=83.000, center=true);
-        cylinder(d=288.000, h=85.000, center=true);
+        cylinder(d=335.000, h=29.000, center=true);
+        cylinder(d=288.000, h=31.000, center=true);
       }
     }
-    // A_lower active shield coil
-    translate([0.000, 0.000, -62.000]) {
+    // Anchored A_lower active shield coil
+    translate([0.000, 0.000, -93.500]) {
       difference() {
-        cylinder(d=335.000, h=83.000, center=true);
-        cylinder(d=288.000, h=85.000, center=true);
+        cylinder(d=335.000, h=29.000, center=true);
+        cylinder(d=288.000, h=31.000, center=true);
       }
     }
     // B_upper bucking coil

@@ -18,7 +18,7 @@
     "world_origin_mm": [
       -121.0,
       0.0,
-      482.0
+      492.66
     ],
     "world_rotation_deg": [
       0.0,
@@ -32,7 +32,7 @@
         "position_mm": [
           -184.75,
           0.0,
-          482.0
+          492.66
         ],
         "normal": [
           -1.0,
@@ -48,7 +48,7 @@
         "bolt_hole_mm": 8.4,
         "bolt_spec": "M8",
         "frame": "global",
-        "notes": "ISO 3669 CF63 Cu-gasket knife-edge"
+        "notes": "Unchoked Ø63.5 mm radial differential pump port (C_PH3~142 L/s)"
       },
       {
         "name": "source_mate_cf40_pos_x",
@@ -56,7 +56,7 @@
         "position_mm": [
           -58.3,
           0.0,
-          482.0
+          492.66
         ],
         "normal": [
           1.0,
@@ -75,12 +75,36 @@
         "notes": "ISO 3669 CF40 Cu-gasket knife-edge"
       },
       {
+        "name": "inline_beam_orifice_z",
+        "kind": "vacuum",
+        "position_mm": [
+          0.0,
+          0.0,
+          370.66
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "standard": "Mo Ø2.0 mm Inline Differential Orifice",
+        "mating_part_id": "S1.1-03",
+        "bore_mm": 2.0,
+        "od_mm": 83.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "global",
+        "notes": ""
+      },
+      {
         "name": "gauge_port_cf16_top",
         "kind": "flange",
         "position_mm": [
           -119.0,
           0.0,
-          533.75
+          544.4100000000001
         ],
         "normal": [
           0.0,
@@ -152,7 +176,7 @@
         "datum_primary": "B",
         "datum_secondary": "",
         "datum_tertiary": "",
-        "feature_note": "MO APERTURE ORIFICE",
+        "feature_note": "INLINE Z-AXIS MO ORIFICE",
         "glyph": "◎",
         "tolerance_text": "Ø0.050"
       },
@@ -185,12 +209,18 @@
     ],
     "notes": [
       "1e-6 mbar kaynak -> 1e-9 mbar ana oda basinic dusumu",
-      "1000x differential pumping stage (1e-6 mbar source -> 1e-9 mbar UHV column); Mo conductance diaphragm + CF63 pump port"
+      "Differential pumping stage with inline Z-axis Mo Ø2.0 mm conductance aperture (Z=370.66 mm, C_PH3=0.339 L/s) below S1.1-03 extraction",
+      "Radial -X CF63 differential pump duct at Z=492.66 mm (exact S1.1-01 midplane) is 100% unchoked (Ø63.5 mm bore, C_PH3~142 L/s)"
     ],
     "scad_params": {
       "chamber_od": 86.0,
       "diaph_bore": 2.0,
-      "pressure_ratio": 1000.0
+      "diaph_axis": "Z",
+      "diaph_z_mm": 370.66,
+      "pump_duct_unchoked": true,
+      "c_orifice_ph3_Ls": 0.339,
+      "c_pump_duct_ph3_Ls": 142.0,
+      "pressure_ratio": 418.9
     },
     "target_mass_kg": 3.4,
     "epistemic": {
@@ -216,31 +246,31 @@
     "watertight": true,
     "boundary_edges": 0,
     "non_manifold_edges": 0,
-    "signed_volume_mm3": 277053.45810563804,
-    "surface_area_mm2": 99534.65451936089,
-    "mass_kg": 2.216427664845104,
+    "signed_volume_mm3": 274330.97696571995,
+    "surface_area_mm2": 101534.90657175027,
+    "mass_kg": 2.194647815725758,
     "cg_mm": [
-      -135.4091364072682,
-      -7.67898737281251e-14,
-      482.79548565574754
+      -131.1109477562236,
+      9.514965546214928e-15,
+      488.5283682756153
     ],
     "bbox_min_mm": [
       -184.75,
       -56.75,
-      425.25
+      369.16
     ],
     "bbox_max_mm": [
-      -58.300000000000004,
+      41.5,
       56.75,
-      538.75
+      549.4100000000001
     ],
     "inertia_kg_mm2": [
-      3724.6641356464743,
-      5570.952479308991,
-      5490.784363233542,
-      -5.8319236352776526e-12,
-      -28.931545929168706,
-      -1.8605845983687676e-11
+      4976.450604695394,
+      8384.540347534006,
+      7056.116739359891,
+      -5.777695478612163e-12,
+      1398.658676136719,
+      -7.800551124448132e-12
     ],
     "triangle_count": 2864,
     "vertex_count": 1392,
@@ -256,6 +286,11 @@
     "all_valid": true
   },
   "engineering_checks": {},
+  "shell_mate_metadata": {
+    "n_shells": 5,
+    "fea_bonding_mode": "TIED_SUBASSEMBLY_CONTACTS",
+    "watertight": true
+  },
   "epistemic": {
     "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
     "no_lab_measurement": true,

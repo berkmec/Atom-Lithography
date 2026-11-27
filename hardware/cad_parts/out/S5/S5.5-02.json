@@ -16,12 +16,12 @@
     "qty": 1,
     "procurement_class": "COTS/CUS",
     "world_origin_mm": [
-      0.0,
-      295.5,
-      500.0
+      420.0,
+      150.0727,
+      609.0342
     ],
     "world_rotation_deg": [
-      0.0,
+      36.0,
       0.0,
       0.0
     ],
@@ -40,7 +40,7 @@
           0.0
         ],
         "standard": "CF63",
-        "mating_part_id": "S5.1-01",
+        "mating_part_id": "S5.1-03",
         "bore_mm": 44.0,
         "od_mm": 113.5,
         "pcd_mm": 92.1,
@@ -201,15 +201,16 @@
     ],
     "notes": [
       "Temiz aciklik Ø44 mm, demet Ø36 mm (4 mm radyal pay), n(808nm)=1.760, T_AR=98.0%, F_win=10.56-11.16 J/cm2 (8.96-9.47x LIDT @ 100 J/cm2)",
-      "Exp130/139 S5.5 +Y Z=500 mm CF63 AR sapphire viewport: Dia 50x8 mm, Dia 44 mm CA (4.0 mm radial margin to Dia 36 mm beam).",
-      "n(808nm)=1.760, T_AR=98.0%, F_win=11.16 J/cm^2 (8.96x LIDT @ 100 J/cm^2); He leak <= 1e-10 mbar*L/s.",
-      "Leaves full +Y wrap-around clearance for S7.SAFETY-02 (280x260x220 mm) OD8 + 3 mm steel shroud."
+      "OBS-001 fix: Relocated to S5.1-03 load-lock 36-deg inclined +Y CF63 AR sapphire viewport aimed at wafer S5.4-01 (420, 0, 500) with unobstructed LOS (sin 36 deg = 0.588 normal flux coupling).",
+      "Dia 50x8 mm window, Dia 44 mm CA (4.0 mm radial margin to Dia 36 mm beam), n(808nm)=1.760, T_AR=98.0%, He leak <= 1e-10 mbar*L/s.",
+      "Enclosed cleanly inside relocated S7.SAFETY-02 OD8 + 3 mm 316L interlock shroud."
     ],
     "scad_params": {
       "cf63_od": 113.5,
       "clear_aperture_mm": 44.0,
       "sapphire_d": 50.0,
-      "sapphire_t": 8.0
+      "sapphire_t": 8.0,
+      "elev_deg": 36.0
     },
     "target_mass_kg": 1.1,
     "epistemic": {
@@ -274,6 +275,36 @@
     "warnings": [],
     "all_valid": true
   },
+  "shell_tie_manifest": [
+    {
+      "shell_index": 0,
+      "bbox_min_mm": [
+        -56.75,
+        0.0,
+        -56.75
+      ],
+      "bbox_max_mm": [
+        56.75,
+        17.5,
+        56.75
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    },
+    {
+      "shell_index": 1,
+      "bbox_min_mm": [
+        -25.0,
+        9.58,
+        -25.0
+      ],
+      "bbox_max_mm": [
+        25.0,
+        17.5,
+        25.0
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    }
+  ],
   "epistemic": {
     "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
     "no_lab_measurement": true,

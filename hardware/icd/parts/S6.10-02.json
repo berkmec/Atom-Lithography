@@ -30,7 +30,13 @@
     "rtl_modules": [],
     "rtl_audit_json": null,
     "software_and_eda_files": [],
-    "verification_tests": []
+    "verification_tests": [
+      "tests/test_bom_detailed.py",
+      "tests/test_full_180_traceability.py",
+      "tests/test_exp131.py",
+      "tests/test_exp137.py",
+      "tests/test_exp138.py"
+    ]
   },
   "specialized_specification": {
     "kind": "SUPERSEDED_ZERO_DOLLAR_POINTER",
@@ -62,6 +68,7 @@
     "rtl_verified": false,
     "software_or_eda_verified": false,
     "specialized_icd_present": true,
+    "verification_tests_mapped": true,
     "traceable": true
   },
   "epistemic": {

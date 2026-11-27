@@ -1,0 +1,67 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "atom-lithography-machine"
+version = "7.2.0"
+description = "Atom Lithography Machine v7.2 engineering blueprint, physics simulations, RTL, PCB/SPICE, and CAD verification suite (M0/M1 design-only; no_lab_measurement=true)"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "numpy>=1.26",
+    "scipy>=1.11",
+    "pandas>=2.0",
+    "torch>=2.2",
+    "requests>=2.31",
+    "networkx>=3.0",
+]
+
+[project.optional-dependencies]
+test = [
+    "pytest>=8.0",
+]
+fem = [
+    "scikit-fem>=9.0",
+    "gmsh>=4.12",
+]
+cad = [
+    "trimesh>=4.0",
+    "pycairo>=1.25",
+    "pillow>=10.0",
+]
+all = [
+    "pytest>=8.0",
+    "scikit-fem>=9.0",
+    "gmsh>=4.12",
+    "trimesh>=4.0",
+    "pycairo>=1.25",
+    "pillow>=10.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+testpaths = ["tests"]
+pythonpath = [".", "src"]
+norecursedirs = [
+    ".git",
+    ".github",
+    ".pytest_cache",
+    "__pycache__",
+    "data",
+    "docs",
+    "env",
+    "experiments",
+    "hardware",
+    "research",
+    "results",
+    "rtl",
+]
+markers = [
+    "fem: optional 3D FEM tests requiring scikit-fem and/or gmsh",
+    "multiphysics: full 3D EM/thermal/FEA or post-P&R timing closure gates (tracked separately from analytic unit tests)",
+    "legacy: unit tests for legacy qcell simulation modules",
+]

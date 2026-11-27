@@ -50,29 +50,37 @@ def _phi_zbl(x: np.ndarray) -> np.ndarray:
     return np.sum(_C_PHI[:, None] * np.exp(-_D_PHI[:, None] * x_arr[None, :]), axis=0)
 
 
-def _get_zbl_deflection_table(n_eps: int = 64, n_rho: int = 64, n_quad: int = 200) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
-    """Build & cache exact universal ZBL classical CM deflection integral table chi(eps, rho) (rad).
+def _get_zbl_deflection_table(n_eps: int = 64, n_rho: int = 64, n_quad: int = 64) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """Build & cache exact infinite-domain ZBL classical CM deflection integral table chi(eps, rho) (rad).
 
-    Identical formulation to Exp92 (_bca92.py) with extended (eps, rho) domain covering heavy ions
-    (121Sb, 167Er) down to E = 25 eV (eps ~ 1e-4, rho up to 25).
+    OBS-039 FIX: Replaces legacy finite rmax=r0+80 truncation with exact infinite-domain
+    Gauss-Mehler substitution r = r0 / cos(theta) on theta in (0, pi/2), matching 3D iradina
+    across light (31P) and heavy (121Sb, 167Er) ions down to E = 25 eV.
     """
     global _ZBL_TABLE_CACHE
     if _ZBL_TABLE_CACHE is not None:
         return _ZBL_TABLE_CACHE
 
-    eps_g = np.logspace(-4.0, 2.0, n_eps)
-    rho_g = np.logspace(-2.0, 1.4, n_rho)
+    eps_g = np.logspace(-4.2, 2.0, n_eps)
+    rho_g = np.logspace(-2.0, 1.5, n_rho)
     chi = np.zeros((n_eps, n_rho), dtype=np.float64)
-    u = np.linspace(0.0, 1.0, n_quad)
+    xg, wg = np.polynomial.legendre.leggauss(n_quad)
+    theta = 0.25 * math.pi * (xg + 1.0)
+    w_th = 0.25 * math.pi * wg
+    cos_th = np.cos(theta)
+    sin_th = np.sin(theta)
 
     for i, eps in enumerate(eps_g):
         for j, rho in enumerate(rho_g):
-            lo, hi = rho * 1.0000001 + 1e-9, rho + 65.0
+            lo = rho * 1.0000001 + 1e-12
+            hi = max(rho + 65.0, 2.0 * lo)
+            while (1.0 - float(_phi_zbl(np.array([hi]))[0]) / (eps * hi) - (rho / hi) ** 2) < 0.0 and hi < 1e6:
+                hi *= 2.0
             f_hi = 1.0 - float(_phi_zbl(np.array([hi]))[0]) / (eps * hi) - (rho / hi) ** 2
             if f_hi < 0.0:
                 chi[i, j] = math.pi
                 continue
-            for _ in range(72):
+            for _ in range(76):
                 mid = 0.5 * (lo + hi)
                 f_mid = 1.0 - float(_phi_zbl(np.array([mid]))[0]) / (eps * mid) - (rho / mid) ** 2
                 if f_mid > 0.0:
@@ -80,11 +88,10 @@ def _get_zbl_deflection_table(n_eps: int = 64, n_rho: int = 64, n_quad: int = 20
                 else:
                     lo = mid
             r0 = 0.5 * (lo + hi)
-            rmax = r0 + 80.0
-            r = r0 + (rmax - r0) * (u ** 2)
-            fv = np.maximum(1.0 - _phi_zbl(r) / (eps * r) - (rho / r) ** 2, 1e-14)
-            integrand = (2.0 * (rmax - r0) * u) / ((r ** 2) * np.sqrt(fv))
-            chi[i, j] = math.pi - 2.0 * rho * float(np.trapezoid(integrand, u))
+            r = r0 / cos_th
+            fv = np.maximum(1.0 - _phi_zbl(r) / (eps * r) - (rho / r) ** 2, 1e-15)
+            integ = float(np.sum(w_th * sin_th / np.sqrt(fv)))
+            chi[i, j] = math.pi - 2.0 * (rho / r0) * integ
 
     _ZBL_TABLE_CACHE = (eps_g, rho_g, np.clip(chi, 0.0, math.pi))
     return _ZBL_TABLE_CACHE
@@ -488,5 +495,93 @@ def analyze_sb121_qudit(
             "spin_cat_pm7_2": f1ms_cat77,
             "edge_7_2_5_2": f1ms_edge75,
             "gross_binomial_0L": f1ms_gross,
+        },
+    }
+
+
+# ---------------------------------------------------------------------------
+# 4. OBS-154: Preliminary Arrhenius Activation, Segregation & Precipitation Model
+#    for 121Sb and 167Er Multi-Species Implants under S5.5 Flash & S5.6 MBE
+# ---------------------------------------------------------------------------
+def analyze_multispecies_anneal_kinetics() -> dict[str, Any]:
+    """Preliminary Arrhenius sensitivity model for 121Sb and 167Er thermal processing (OBS-154).
+
+    Epistemic status: {Model} / {Literatür}, no_lab_measurement=True.
+    Literature anchors:
+      - 121Sb in Si: vacancy-mediated D_Sb = 12.9 cm^2/s * exp(-4.08 eV/kT) (Fahey 1989 / Larsen 1993),
+        f_V ~ 0.98 (negligible interstitial TED), strong surface segregation E_seg ~ 0.85 eV during SPE/MBE
+        (Jorke 1988; Barnett & Greene 1985), solid solubility C_sol ~ 4e19 cm^-3 @ 1000 C.
+      - 167Er in Si: optical Er3+ (1536 nm) activation window 650-900 C (often O-co-doped; Polman JAP 82,
+        1997; Gritsch et al. PRX 12, 041009, 2022), low equilibrium solubility (~1e18 cm^-3), rapid ErSi2 precipitation &
+        Er-O dissociation above 1000 C (D_Er ~ 1e-3 cm^2/s * exp(-2.5 eV/kT)).
+    """
+    kb_ev = 8.617333262e-5
+    a_ml_nm = 0.13577
+
+    recipes = [
+        ("s55_flash_1530K_1ms", 1530.0, 1.0e-3),
+        ("s55_flash_1440K_1ms", 1440.0, 1.0e-3),
+        ("rta_900C_10s", 900.0 + 273.15, 10.0),
+        ("furnace_750C_30min_ErO", 750.0 + 273.15, 1800.0),
+        ("s56_mbe_345C_80s", 345.0 + 273.15, 80.0),
+        ("s56_mbe_275C_80s_lowT", 275.0 + 273.15, 80.0),
+    ]
+
+    sb_rows = {}
+    er_rows = {}
+    for name, T_K, t_s in recipes:
+        kT = kb_ev * T_K
+        # 121Sb: vacancy-mediated bulk diffusion + SPE pocket activation (Ea=2.70 eV) + MBE segregation L_seg
+        D_sb_nm2_s = 12.9e14 * math.exp(-4.08 / kT)
+        sig_sb_nm = math.sqrt(2.0 * D_sb_nm2_s * t_s)
+        f_act_sb = 1.0 - math.exp(-min(1.84e15 * math.exp(-2.70 / kT) * t_s, 500.0))
+        # Sb kinetic MBE segregation length (E_seg=0.85 eV vs P 0.30 eV -> strong surface push-out at 345 C!)
+        r_eq_sb = math.exp(min(0.85 / kT, 40.0))
+        k_ex_sb = 9.0e5 * math.exp(-1.05 / kT)
+        r_s_sb = r_eq_sb / (1.0 + 0.10 / max(a_ml_nm * k_ex_sb, 1e-30))
+        L_seg_sb_nm = a_ml_nm / math.log1p(1.0 / max(r_s_sb, 1e-12)) if T_K < 800.0 else 0.0
+        sb_compat = bool(f_act_sb >= 0.90 and sig_sb_nm <= 0.50) if T_K >= 900.0 else bool(L_seg_sb_nm <= 4.0)
+        sb_rows[name] = {
+            "T_K": round(T_K, 2),
+            "t_s": t_s,
+            "sigma_diff_nm": round(sig_sb_nm, 5),
+            "f_act_pocket_spe": round(f_act_sb, 5),
+            "mbe_L_seg_nm_if_capping": round(L_seg_sb_nm, 3),
+            "compatible_preliminary": sb_compat,
+        }
+
+        # 167Er: optical center activation (Ea=2.0 eV, peak 650-900 C) vs high-T Er-O dissociation / ErSi2 precipitation (Ea=2.5 eV)
+        D_er_nm2_s = 1.0e-3 * 1e14 * math.exp(-2.50 / kT)
+        sig_er_nm = math.sqrt(2.0 * D_er_nm2_s * t_s)
+        f_opt_form = 1.0 - math.exp(-min(1.0e8 * math.exp(-2.00 / kT) * t_s, 500.0))
+        # Optical quenching / ErSi2 precipitation probability above ~1000 C (1273 K)
+        k_precip = 5.0e11 * math.exp(-2.50 / kT)
+        f_surv_nonprecip = math.exp(-min(k_precip * t_s, 500.0)) if T_K > 1100.0 else 1.0
+        f_opt_yield = f_opt_form * f_surv_nonprecip
+        er_rows[name] = {
+            "T_K": round(T_K, 2),
+            "t_s": t_s,
+            "sigma_diff_nm": round(sig_er_nm, 4),
+            "f_optical_activation_raw": round(f_opt_form, 5),
+            "f_non_precipitated_ErSi2": round(f_surv_nonprecip, 5),
+            "net_optical_center_yield": round(f_opt_yield, 5),
+            "compatible_with_1536nm_optical_center": bool(f_opt_yield >= 0.50 and sig_er_nm <= 15.0),
+        }
+
+    return {
+        "obstacle_id": "OBS-154",
+        "epistemic_status": "Preliminary Arrhenius sensitivity model ({Model}/{Literatur}); lab SIMS/DLTS/PL verification required.",
+        "sb121_kinetics": sb_rows,
+        "er167_kinetics": er_rows,
+        "s55_1530K_flash_compatibility": {
+            "31P": True,
+            "121Sb": sb_rows["s55_flash_1530K_1ms"]["compatible_preliminary"],
+            "167Er": er_rows["s55_flash_1530K_1ms"]["compatible_with_1536nm_optical_center"],
+            "process_note": (
+                "121Sb is preliminarily compatible with 1530 K / 1 ms flash (vacancy-mediated -> negligible TED, "
+                "high pocket SPE activation), but requires lower-T MBE capping (<=275-300 C) to suppress strong "
+                "Sb surface segregation. 167Er is INCOMPATIBLE with 1530 K S5.5 flash due to rapid ErSi2 "
+                "precipitation / Er-O dissociation and requires a dedicated 700-850 C O-co-doped RTA/furnace step."
+            ),
         },
     }

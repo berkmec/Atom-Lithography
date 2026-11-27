@@ -3,41 +3,41 @@
   "part_id": "S6.3-05",
   "parent_bom_id": "S6.3",
   "subsystem": "S6",
-  "part_name": "Cift-kutuplu superiletken miknatis guc kaynagi (\u00b1100 A) ve HTS akim uclari",
+  "part_name": "Cift-kutuplu superiletken miknatis guc kaynagi (\u00b1300 A) ve >=300 A HTS akim uclari",
   "qty": 1,
   "unit": "set",
   "temp_stage": "300 K -> 4 K",
   "vacuum_grade": "Atmosfer/Kriyo",
-  "bom_key_spec": "\u00b1100 A, 10 ppm kararlik, 4K isi kacagi <50 mW/cift",
+  "bom_key_spec": "\u00b1300 A (>=255.9 A S_upper bobin akimina %17 marj), 10 ppm kararlik, 4K isi kacagi <50 mW/cift; ozel 650 W Tier-1B UPS kontrollu 120 s rampa-indirme kolu + 1.563 Ohm pasif quench yedegi",
   "usd_nom": 22500.0,
   "bom_epistemic_tag": "{Model-Kalibrasyon-Exp114}",
   "electrical_class": "E3",
   "grounding_domain": "CRYO_OVC",
-  "grounding_notes": "Bipolar \u00b1100 A (10 ppm) magnet ramp PSU + Bi-2223 HTS current leads; off/zeroed in persistent mode.",
+  "grounding_notes": "Bipolar \u00b1300 A (10 ppm) magnet ramp PSU + >=300 A Bi-2223 HTS current leads (17% margin over 255.9 A S_upper coil, <50 mW/pair 4 K leak); dedicated 650 W Tier-1B UPS ramp-down branch.",
   "supply_rails": [
     {
-      "rail_name": "AC_MAINS_230V",
+      "rail_name": "AC_UPS_TIER1B_MAGNET_RAMPDOWN",
       "voltage_v": 230.0,
       "current_type": "AC_1PH",
-      "max_current_a": 8.0,
+      "max_current_a": 10.0,
       "steady_power_w": 120.0,
-      "peak_power_w": 1600.0,
-      "source_part_id": "S7.4-03"
+      "peak_power_w": 650.0,
+      "source_part_id": "S7.SAFETY-04"
     },
     {
       "rail_name": "MAGNET_RAMP_DC",
       "voltage_v": 10.0,
       "current_type": "DC",
-      "max_current_a": 100.0,
+      "max_current_a": 300.0,
       "steady_power_w": 0.0,
-      "peak_power_w": 1000.0,
+      "peak_power_w": 3000.0,
       "source_part_id": "S6.3-05"
     }
   ],
   "connectors_and_pinout": [
     {
       "connector_ref": "J_HIGH_I",
-      "connector_type": "M10 Copper Busbar + HTS Lead Pair",
+      "connector_type": "M12 Copper Busbar + >=300 A Bi-2223 HTS Lead Pair",
       "location_side": "rack_rear",
       "mating_part_id": "S6.3-04",
       "pins": [
@@ -45,13 +45,13 @@
           "pin": "1",
           "signal": "MAG_I_POS",
           "direction": "OUT",
-          "nominal_level": "\u00b1100 A ramp (\u00b1255.9 A bank eq.)"
+          "nominal_level": "\u00b1300 A rated HTS lead (255.9 A S_upper peak, 17% margin)"
         },
         {
           "pin": "2",
           "signal": "MAG_I_NEG",
           "direction": "OUT",
-          "nominal_level": "Return lead"
+          "nominal_level": "\u00b1300 A return HTS lead (<50 mW/pair @ 4 K)"
         }
       ]
     },
@@ -80,13 +80,20 @@
     "S6.3-01",
     "S6.3-02",
     "S6.3-04",
+    "S7.SAFETY-04",
     "S7.SAFETY-05"
   ],
   "interlock_hooks": [
     {
+      "signal_name": "OUTAGE_CONTROLLED_RAMPDOWN",
+      "target_part_id": "S7.SAFETY-04",
+      "action_on_trip": "Dedicated 650 W Tier-1B UPS branch executes 120 s controlled ramp-down at t=1.0 s",
+      "response_time_ms": 1000.0
+    },
+    {
       "signal_name": "QUENCH_DETECT_DUMP",
       "target_part_id": "S7.SAFETY-05",
-      "action_on_trip": "Open breaker & dump 18.94 kJ into 1.563 Ohm",
+      "action_on_trip": "Open breaker & dump 18.94 kJ into 1.563 Ohm passive backup if faulted",
       "response_time_ms": 30.0
     }
   ],
@@ -101,7 +108,7 @@
   "timing_sync": {
     "rb_10mhz_port": null,
     "white_rabbit_port": null,
-    "sync_role": "DC/persistent magnet charger"
+    "sync_role": "DC/persistent magnet charger with dedicated 650 W UPS Tier-1B ramp-down"
   },
   "epistemic_flags": {
     "design_maturity": "M0_M1_ELECTRICAL_ICD_DESIGN_ONLY",

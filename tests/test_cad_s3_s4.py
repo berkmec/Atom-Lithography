@@ -189,10 +189,14 @@ def s4_parts():
 
 
 @pytest.fixture(scope="module")
-def exported_results():
-    r3 = export_all_s3(DEFAULT_S3_OUT_DIR)
-    r4 = export_all_s4(DEFAULT_S4_OUT_DIR)
-    return {"S3": r3, "S4": r4}
+def exported_results(tmp_path_factory: pytest.TempPathFactory):
+    """Export S3 & S4 artifacts strictly into pytest tmp_path (NEVER mutating tracked repo files!)."""
+    tmp_root = tmp_path_factory.mktemp("cad_s3_s4_export")
+    s3_tmp = tmp_root / "S3"
+    s4_tmp = tmp_root / "S4"
+    r3 = export_all_s3(s3_tmp)
+    r4 = export_all_s4(s4_tmp)
+    return {"S3": r3, "S4": r4, "S3_dir": s3_tmp, "S4_dir": s4_tmp}
 
 
 # ===========================================================================
@@ -251,11 +255,14 @@ class TestWatertightAndFeatures:
         assert math.isclose(w_max[0] - w_min[0], 50.0, abs_tol=0.1)
         assert math.isclose(w_max[2] - w_min[2], 0.525, abs_tol=1e-4)
 
-        # S3.1-03 AlN carrier: 80x80 mm Exp80 BC1, thermal contraction 300K->100K & 20mK PASS
+        # S3.1-03 AlN carrier: 80x80 mm Exp80 BC1, PCD=96.0 mm radial-slot kinematic clamps & thermal boss @ Z=-6.38
         c_min, c_max = s3_parts["S3.1-03"].world_mesh().bbox()
         assert math.isclose(c_max[0] - c_min[0], 80.0, abs_tol=0.1)
         assert math.isclose(c_max[1] - c_min[1], 80.0, abs_tol=0.1)
-        assert len(s3_parts["S3.1-03"].thermal_checks) >= 2
+        assert math.isclose(c_min[2], -6.38, abs_tol=0.05)
+        s3103_p = dict(s3_parts["S3.1-03"].design.scad_params)
+        assert math.isclose(float(s3103_p["chuck_bolt_pcd_mm"]), 96.0, abs_tol=1e-4)
+        assert len(s3_parts["S3.1-03"].thermal_checks) >= 3
         for tc in s3_parts["S3.1-03"].thermal_checks:
             assert tc["passed"] is True
             assert tc["interference_risk"] is False
@@ -299,17 +306,25 @@ class TestWatertightAndFeatures:
         assert g_bp.reconciliation["selected_cad_dims_mm"] == [900.0, 700.0, 120.0]
         assert any("600x450x150" in n and "900x700x120" in n for n in g_bp.design.notes)
 
-        # S4.3-01 Ti/Invar 6-DOF flexure fine stage: real machined flexure cutouts (genus >= 13)
+        # S4.3-01 Ti/Invar 6-DOF monolithic serpentine EDM flexure stage: 0.000 mm deck gap, embedded PZT stacks, genus=13
         f_bp = s4_parts["S4.3-01"]
         f_min, f_max = f_bp.world_mesh().bbox()
         assert math.isclose(f_max[0] - f_min[0], 90.0, abs_tol=0.1)
         assert math.isclose(f_max[1] - f_min[1], 90.0, abs_tol=0.1)
-        assert math.isclose(f_max[2] - f_min[2], 24.0, abs_tol=0.1)
-        flex_body_shell = split_shells(f_bp.mesh)[0]
-        # 1 central bore + 8 flexure slots + 4 M4 corner holes = 13 holes -> chi = 2 - 26 = -24
+        assert math.isclose(f_max[2] - f_min[2], 24.5, abs_tol=0.1)
+        f_shells = split_shells(f_bp.mesh)
+        flex_body_shell = f_shells[0]
+        top_deck_shell = f_shells[1]
+        # 1 central bore + 8 serpentine EDM flexure slots + 4 M4 corner holes = 13 holes -> chi = 2 - 26 = -24
         assert verify_watertight(flex_body_shell).euler_characteristic == 2 - 2 * 13
+        # OBS-003: legacy 0.200 mm top-deck air gap eliminated (<=0.01 mm precision seam) and S4.3-02 -> S4.3-01 Z-gap closed (0.000 mm)
+        assert 0.0 <= (top_deck_shell.bbox()[0][2] - flex_body_shell.bbox()[1][2]) <= 0.01
+        c_min_302, c_max_302 = s4_parts["S4.3-02"].world_mesh().bbox()
+        assert math.isclose(f_min[2] - c_max_302[2], 0.0, abs_tol=1e-4)
+        assert math.isclose(f_max[2], -28.5, abs_tol=0.05)  # Flush with S6.2-01 Vespel struts @ Z_canon=471.5
+        assert int(dict(f_bp.design.scad_params)["n_pzt_stacks"]) >= 6
 
-        # S4.4-04 (3x) and S4.5-02 (1x) real ISO 3669 CF40 optical viewports
+        # S4.4-04 (3x) and S4.5-02 (1x) real ISO 3669 CF40 optical viewports; S4.5-02 in Z=[-18,+18] split gap
         assert len(s4_parts["S4.4-04"].design.ports) == 3
         for p in s4_parts["S4.4-04"].design.ports:
             assert p.standard == "CF40"
@@ -317,6 +332,7 @@ class TestWatertightAndFeatures:
             assert math.isclose(p.pcd_mm, 58.7, abs_tol=1e-6)
         fid_cf = s4_parts["S4.5-02"].design.ports[0]
         assert fid_cf.standard == "CF40" and fid_cf.bolt_count == 6
+        assert -18.0 <= s4_parts["S4.5-02"].design.world_origin_mm[2] <= 18.0
 
 
 # ===========================================================================
@@ -327,7 +343,8 @@ class TestArtifactExports:
         assert len(exported_results["S3"]) == 14
         assert len(exported_results["S4"]) == 17
 
-        for sub, out_dir in (("S3", DEFAULT_S3_OUT_DIR), ("S4", DEFAULT_S4_OUT_DIR)):
+        # Validate fresh exports written strictly into tmp_path (OBS-057: zero tracked repo mutation!)
+        for sub, out_dir in (("S3", exported_results["S3_dir"]), ("S4", exported_results["S4_dir"])):
             manifest_p = out_dir / f"{sub}_manifest.json"
             assert manifest_p.is_file()
             manifest = json.loads(manifest_p.read_text(encoding="utf-8"))
@@ -342,11 +359,11 @@ class TestArtifactExports:
                 assert res.watertight is True
                 assert res.mass_kg > 0.0
 
-                stl_p = REPO_ROOT / res.stl_path
-                step_p = REPO_ROOT / res.step_path
-                dxf_p = REPO_ROOT / res.dxf_path
-                svg_p = REPO_ROOT / res.svg_path
-                scad_p = REPO_ROOT / res.scad_path
+                stl_p = out_dir / f"{pid}.stl"
+                step_p = out_dir / f"{pid}.step"
+                dxf_p = out_dir / f"{pid}.dxf"
+                svg_p = out_dir / f"{pid}.svg"
+                scad_p = out_dir / f"{pid}.scad"
                 json_p = out_dir / f"{pid}.json"
 
                 for fp in (stl_p, step_p, dxf_p, svg_p, scad_p, json_p):
@@ -366,12 +383,24 @@ class TestArtifactExports:
                 assert pj["part_id"] == pid
                 assert pj["artifact"]["all_valid"] is True
 
-        # Binary STL full watertight round-trip on representative custom & CF flange parts
+        # Read-only verification of tracked disk artifacts in DEFAULT_S3_OUT_DIR / DEFAULT_S4_OUT_DIR
+        for sub, disk_dir in (("S3", DEFAULT_S3_OUT_DIR), ("S4", DEFAULT_S4_OUT_DIR)):
+            assert (disk_dir / f"{sub}_manifest.json").is_file()
+            for pid in list_physical_part_ids(sub):
+                for ext in (".stl", ".step", ".dxf", ".svg", ".scad", ".json"):
+                    fp = disk_dir / f"{pid}{ext}"
+                    assert fp.is_file() and fp.stat().st_size > 0, f"Missing tracked artifact {fp}"
+                assert validate_step_file(disk_dir / f"{pid}.step").valid
+                assert validate_dxf_file(disk_dir / f"{pid}.dxf").valid
+                assert validate_svg_file(disk_dir / f"{pid}.svg").valid
+                assert validate_scad_file(disk_dir / f"{pid}.scad").valid
+
+        # Binary STL full watertight round-trip on representative custom & CF flange parts (read-only)
         for sub, pid in (("S3", "S3.1-03"), ("S3", "S3.2-05"), ("S4", "S4.1-01"), ("S4", "S4.3-01")):
             stl_mesh = read_binary_stl(REPO_ROOT / "hardware" / "cad_parts" / "out" / sub / f"{pid}.stl")
             assert verify_watertight(stl_mesh).watertight
 
-        # Verify S4.1-01 JSON carries explicit reconciliation record
+        # Verify S4.1-01 JSON carries explicit reconciliation record (read-only)
         g_json = json.loads((DEFAULT_S4_OUT_DIR / "S4.1-01.json").read_text(encoding="utf-8"))
         assert g_json["reconciliation"]["selected_cad_dims_mm"] == [900.0, 700.0, 120.0]
 
@@ -418,7 +447,7 @@ class TestZeroClashesAndCoordinateHygiene:
             "S6_coil_b_upper": make_tube(56.0, 82.0, 24.0, segments=32, center=(0.0, 0.0, -133.0)),
             "S6_coil_b_lower": make_tube(56.0, 82.0, 24.0, segments=32, center=(0.0, 0.0, -172.0)),
             "S6_cryoperm": make_tube(39.0, 41.0, 56.0, segments=32, center=(0.0, 0.0, -152.0)),
-            "S6_mxc_chuck": make_cylinder(58.0, 8.0, segments=32, center=(0.0, 0.0, -10.0)),
+            "S6_mxc_chuck": make_cylinder(58.0, 7.6, segments=32, center=(0.0, 0.0, -10.2)),  # Real S6.2-01 Z_nat=[-14.0, -6.4]
             "S6_dr_ovc_tower": make_cylinder(175.0, 800.0, segments=32, center=(-650.0, 0.0, 60.0)),
             "DR_lower_clear_bore_R209": make_cylinder(DR_CLEAR_BORE_R_MM - 1.0, 418.0, segments=32, center=(0.0, 0.0, -450.0)),
             "S2_mini_lens": make_cylinder(30.0, 1.76, segments=32, center=(0.0, 0.0, 1.13)),

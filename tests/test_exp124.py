@@ -70,6 +70,28 @@ def test_wien_hda_and_boersch_subsystems():
     assert math.isclose(c5["dr_sc_laminar_um"] / c10["dr_sc_laminar_um"], 2.0 ** 1.5, rel_tol=1e-9)
     assert math.isclose(c5["dr_sc_laminar_um"] / c15["dr_sc_laminar_um"], 3.0 ** 1.5, rel_tol=1e-9)
     assert c10["single_beamlet_Nbar_col"] < 0.01
+    # OBS-103: f_img fixed to ~0.820 mm (not 0.5 mm) and 100 eV HDA space-charge guard enforced
+    assert math.isclose(c10["f_img_mm"], 0.8202, rel_tol=1e-3)
+    assert c10["sigma_coul_wafer_nm"] > 1.0  # 50 nA unguarded flood at f=0.820 mm
+    hda_50nA = cp.evaluate_hda_space_charge(50e-9, E_pass_eV=100.0)
+    hda_guard = cp.evaluate_hda_space_charge(0.25e-9, E_pass_eV=100.0)
+    assert hda_50nA["dr_sc_laminar_um"] > 5000.0 and not hda_50nA["passes_hda_space_charge_guard"]
+    assert hda_guard["passes_hda_space_charge_guard"] is True
+
+    # OBS-076 & OBS-150: PSU ripple enters spot budget & 1D RMS 0.5 factor applied
+    sp_tight = cp.evaluate_spot_budget(5.0, 2.66, 3.0, 6.4, dE_fwhm_eV=0.453, Ti_eV=0.5, tau_filter=0.075, tau_shot_ms=15.0, psu_stability_ppm=46.8)
+    sp_legacy = cp.evaluate_spot_budget(5.0, 2.66, 3.0, 6.4, dE_fwhm_eV=0.453, Ti_eV=0.5, tau_filter=0.075, tau_shot_ms=15.0, dv_psu_rms_V=0.50)
+    assert math.isclose(sp_tight["sigma_geom_nm"], 0.5 * sp_tight["r_geom_tophat_nm"], rel_tol=1e-12)
+    assert math.isclose(sp_tight["sigma_c_nm"], 0.5 * sp_tight["sigma_c_edge_nm"], rel_tol=1e-12)
+    assert sp_legacy["sigma_psu_nm"] > 0.7 and sp_tight["sigma_psu_nm"] < 0.45
+    assert sp_tight["sigma_straggle_nm"] > 4.2  # OBS-039 true ZBL/iradina straggle
+
+    # OBS-098 & OBS-071: synchronized Exp127 Lindhard + dead-layer IBIC (no Exp72 heuristic)
+    ib5 = cp.ibic_efficiency(5.0, 0.5)
+    ib2 = cp.ibic_efficiency(2.0, 0.5)
+    assert ib5["model"] == "Exp127_Lindhard_COLD100K_RamoShockley"
+    assert ib5["eta"] >= 0.99
+    assert ib2["eta"] < 0.50  # 2 keV IBIC collapse honestly exposed
 
 
 def test_portable_yield_engine_exact_exp57_audit_slice():
@@ -94,14 +116,26 @@ def test_exp124_artifacts_verdicts_and_anisotropic_ordering():
     v = d["verdicts"]
     assert v["CD1_audit_and_liouville_deficit"] is True
     assert v["CD2_laplace_raytrace_verification"] is True
-    assert v["CD4_liouville_closed_5keV_window"] is True
+    # OBS-039 honest ceiling: 5 keV true ZBL/iradina straggle (4.385 nm) breaches 3.80 nm total ceiling!
+    assert v["CD4_liouville_closed_5keV_window"] is False
+    assert v["CD4a_optical_spot_breakdown_ibic_pass"] is True
     assert v["CD5_boersch_coulomb_suppression"] is True
     assert v["CD6_yield_engine_exact_audit"] is True
 
-    # Exact Exp57 & Exp105 bit-for-bit reproducibility
+    # OBS-132: Per-energy Laplace Cc/Cs variation and 10 keV E_gap > 12 MV/m breakdown exposed
+    es = d["energy_sweep"]
+    assert es["E3"]["lens_trace_Vin10kV"]["Cc_scherzer_mm"] < es["E5"]["lens_trace_Vin10kV"]["Cc_scherzer_mm"] < es["E10"]["lens_trace_Vin10kV"]["Cc_scherzer_mm"]
+    assert es["E10"]["lens_trace_Vin10kV"]["E_gap_nom_MV_m"] > 15.0
+    assert es["E10"]["lens_trace_Vin10kV"]["breakdown_safe_12MVm"] is False
+    # OBS-102: Pilot 2 blanker limitation metadata present
+    assert d["pilot2_blanker_limitation_note"]["obstacle_id"] == "OBS-102"
+
+    # Exact Exp57 & Exp105 bit-for-bit reproducibility + true iradina 5 keV yield cell
     yc = d["anisotropic_yield_cells"]
     assert yc["AUDIT_EXP57_S5_N1024"]["successes"] == 49
     assert yc["AUDIT_EXP105_ISO3p8_N1024"]["successes"] == 277
+    assert "ANISO_IRADINA_5KEV_DONOR_N1024" in yc
+    assert yc["ANISO_IRADINA_5KEV_DONOR_N1024"]["yield_frac"] < yc["ANISO_P91_BCA_DONOR_N1024"]["yield_frac"]
 
     # Physical anisotropic yield ordering & spectral-crowding surface-truncation effect
     y_bca_pure = yc["ANISO_BCA_PURE_N1024"]["yield_frac"]

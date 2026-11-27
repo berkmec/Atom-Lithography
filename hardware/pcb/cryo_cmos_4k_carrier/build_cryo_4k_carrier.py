@@ -40,6 +40,7 @@ from hardware.pcb.kicad_eda_verify import (
     ComponentSpec,
     DEFAULT_EPISTEMIC_META,
     DesignRules,
+    KeepoutSpec,
     MnaCircuit,
     NetSpec,
     PinSpec,
@@ -77,6 +78,31 @@ def _grid_pins(
         dy = (r - (rows - 1) / 2.0) * pitch_mm
         res.append(PinSpec(pnum, pname, ptype, round(dx, 4), round(dy, 4), pad_mm, pad_mm, 0.0))
     return tuple(res)
+
+
+def _omnetics_nanod_2x4_pins(pin_names: dict[str, str]) -> tuple[PinSpec, ...]:
+    """Real Omnetics Bi-Lobe Nano-D 0.635 mm (0.025 in) pitch 2x4 SMT cryogenic connector."""
+    pitch_x = 0.635
+    row_pitch_y = 1.80  # dual-row gull-wing SMT pad row separation
+    pw, ph = 0.32, 0.65
+    res: list[PinSpec] = []
+    for idx in range(8):
+        pnum = str(idx + 1)
+        row = idx // 4
+        col = idx % 4
+        dx = (col - 1.5) * pitch_x
+        dy = (row - 0.5) * row_pitch_y
+        res.append(PinSpec(pnum, pin_names.get(pnum, pnum), "passive", round(dx, 4), round(dy, 4), pw, ph, 0.0))
+    return tuple(res)
+
+
+def _pad_xy(comp: ComponentSpec, pin_num: str) -> tuple[float, float]:
+    rad = math.radians(comp.rotation_deg)
+    c, s = math.cos(rad), math.sin(rad)
+    for p in comp.pins:
+        if p.number == str(pin_num):
+            return (round(comp.x_mm + p.dx_mm * c + p.dy_mm * s, 4), round(comp.y_mm - p.dx_mm * s + p.dy_mm * c, 4))
+    raise KeyError(f"Pin {pin_num} not found on {comp.ref}")
 
 
 # ---------------------------------------------------------------------------
@@ -127,36 +153,40 @@ def build_cryo_4k_carrier() -> BoardSpec:
             "target_z0_ohm": target_z0_ohm,
         }
 
-    # Cryogenic 4 K Power & Bias Rails
+    # Cryogenic 4 K Power & Bias Rails + Thermally Isolated 20 mK MXC Ground Island (OBS-019)
     set_net("GND_4K", net_class="Cryo_PWR", is_power=True, has_pwr_flag=True, voltage_v=0.0)
+    set_net("GND_MXC", net_class="Cryo_MXC_20mK", is_power=True, has_pwr_flag=True, voltage_v=0.0)
     set_net("VDD_4K_1V2", net_class="Cryo_PWR", is_power=True, has_pwr_flag=True, voltage_v=1.2)
     set_net("VBIAS_POS_2V", net_class="Cryo_BIAS", is_power=True, has_pwr_flag=True, voltage_v=2.0)
     set_net("VBIAS_NEG_2V", net_class="Cryo_BIAS", is_power=True, has_pwr_flag=True, voltage_v=-2.0)
 
     # -----------------------------------------------------------------------
-    # A. 300 K -> 4 K Input Loom Connectors & Thermalization Anchors (Left edge x = 10..24 mm)
+    # A. 300 K -> 4 K Input Loom Connectors (Real 0.635 mm Omnetics Nano-D) & 4 K Thermal Anchors
     # -----------------------------------------------------------------------
-    add_c(ComponentSpec(
-        "J_300K_SPI", "OMNETICS_NANO_SPI_4K_IN", "Connector_PinHeader:HDR_2x4_2.54mm",
+    # G-S-G-S Nano-D pinout keeps 50 Ohm SPI pins >= 1.27 mm apart for clean microstrip breakout!
+    j_spi = add_c(ComponentSpec(
+        "J_300K_SPI", "OMNETICS_NANO_SPI_4K_IN", "Connector_Omnetics:NanoD_2x4_P0.635mm",
         12.0, 28.0,
-        pins=auto_footprint_pads("HDR_2x4_2.54mm", [str(k) for k in range(1, 9)], {
-            "1": "VDD_1V2", "2": "GND1", "3": "SPI_CLK", "4": "SPI_CS_N",
-            "5": "SPI_MOSI", "6": "SPI_MISO", "7": "RST_N", "8": "GND2",
+        pins=_omnetics_nanod_2x4_pins({
+            "1": "SPI_MOSI", "2": "GND1", "3": "SPI_CS_N", "4": "VDD_1V2",
+            "5": "SPI_CLK", "6": "RST_N", "7": "SPI_MISO", "8": "GND2",
         }),
-        bom_id="S6.10-03", epistemic_tag="{Aday-COTS}",
+        mpn="A79040-001", bom_id="S6.10-03", epistemic_tag="{Aday-COTS}",
     ))
     add_c(ComponentSpec(
-        "J_300K_BIAS", "OMNETICS_NANO_DAC_BIAS_IN", "Connector_PinHeader:HDR_2x4_2.54mm",
+        "J_300K_BIAS", "OMNETICS_NANO_DAC_BIAS_IN", "Connector_Omnetics:NanoD_2x4_P0.635mm",
         12.0, 68.0,
-        pins=auto_footprint_pads("HDR_2x4_2.54mm", [str(k) for k in range(1, 9)], {
+        pins=_omnetics_nanod_2x4_pins({
             "1": "VBIAS_P", "2": "VBIAS_N", "3": "DAC_BUS0", "4": "DAC_BUS1",
             "5": "DAC_BUS2", "6": "DAC_BUS3", "7": "GND1", "8": "GND2",
         }),
-        bom_id="S6.7-02", epistemic_tag="{Aday-COTS}",
+        mpn="A79040-001", bom_id="S6.7-02", epistemic_tag="{Aday-COTS}",
     ))
-    # 4 K OFHC Copper Cold-Stage Thermalization Anchors (S7.3-02)
+    # 4 K OFHC Copper Cold-Stage Thermalization Anchors strictly on 4 K copper island (x <= 112 mm)!
     add_c(ComponentSpec("J_THERM_4K_A", "OFHC_4K_THERMAL_ANCHOR_A", "Connector_PinHeader:HDR_1x2_2.54mm", 12.0, 108.0, pins=auto_footprint_pads("HDR_1x2_2.54mm", ("1", "2")), bom_id="S7.3-02", epistemic_tag="{Pasif-COTS}"))
-    add_c(ComponentSpec("J_THERM_4K_B", "OFHC_4K_THERMAL_ANCHOR_B", "Connector_PinHeader:HDR_1x2_2.54mm", 152.0, 108.0, pins=auto_footprint_pads("HDR_1x2_2.54mm", ("1", "2")), bom_id="S7.3-02", epistemic_tag="{Pasif-COTS}"))
+    add_c(ComponentSpec("J_THERM_4K_B", "OFHC_4K_THERMAL_ANCHOR_B", "Connector_PinHeader:HDR_1x2_2.54mm", 104.0, 114.0, pins=auto_footprint_pads("HDR_1x2_2.54mm", ("1", "2")), bom_id="S7.3-02", epistemic_tag="{Pasif-COTS}"))
+    # Separate 20 mK MXC OFHC Thermal Anchor strictly on isolated GND_MXC copper island (x >= 118 mm)!
+    add_c(ComponentSpec("J_THERM_MXC", "OFHC_20MK_MXC_THERMAL_ANCHOR", "Connector_PinHeader:HDR_1x2_2.54mm", 152.0, 112.0, pins=auto_footprint_pads("HDR_1x2_2.54mm", ("1", "2")), bom_id="S6.7-02", epistemic_tag="{Pasif-COTS}"))
 
     # Bulk C0G/NP0 Cryo Power Decoupling (zero X7R capacitance freeze-out at 4 K!)
     for idx_b, (cref, rnet, y_b) in enumerate((
@@ -171,10 +201,11 @@ def build_cryo_4k_carrier() -> BoardSpec:
     add_c(ComponentSpec("R_SPI_CLK", "49.9R_NICR_CRYO", "Resistor_SMD:R_0603_1608Metric", 26.0, 28.0, pins=auto_footprint_pads("0603", ("1", "2")), bom_id="S6.10-03", epistemic_tag="{Pasif-COTS}"))
     add_c(ComponentSpec("R_SPI_RST", "10k_NICR_CRYO", "Resistor_SMD:R_0603_1608Metric", 26.0, 36.0, pins=auto_footprint_pads("0603", ("1", "2")), bom_id="S6.10-03", epistemic_tag="{Pasif-COTS}"))
 
-    conn("VDD_4K_1V2", "J_300K_SPI", 1); conn("GND_4K", "J_300K_SPI", 2); conn("GND_4K", "J_300K_SPI", 8)
-    conn("SPI_CLK_IN", "J_300K_SPI", 3); conn("SPI_CLK_IN", "R_SPI_CLK", 1); conn("SPI_CLK_4K", "R_SPI_CLK", 2)
-    conn("SPI_CS_N_4K", "J_300K_SPI", 4); conn("SPI_MOSI_4K", "J_300K_SPI", 5); conn("SPI_MISO_4K", "J_300K_SPI", 6)
-    conn("RST_N_4K", "J_300K_SPI", 7); conn("VDD_4K_1V2", "R_SPI_RST", 1); conn("RST_N_4K", "R_SPI_RST", 2)
+    conn("SPI_MOSI_4K", "J_300K_SPI", 1); conn("GND_4K", "J_300K_SPI", 2)
+    conn("SPI_CS_N_4K", "J_300K_SPI", 3); conn("VDD_4K_1V2", "J_300K_SPI", 4)
+    conn("SPI_CLK_IN", "J_300K_SPI", 5); conn("SPI_CLK_IN", "R_SPI_CLK", 1); conn("SPI_CLK_4K", "R_SPI_CLK", 2)
+    conn("RST_N_4K", "J_300K_SPI", 6); conn("VDD_4K_1V2", "R_SPI_RST", 1); conn("RST_N_4K", "R_SPI_RST", 2)
+    conn("SPI_MISO_4K", "J_300K_SPI", 7); conn("GND_4K", "J_300K_SPI", 8)
 
     conn("VBIAS_POS_2V", "J_300K_BIAS", 1); conn("VBIAS_NEG_2V", "J_300K_BIAS", 2)
     conn("DAC_BUS0", "J_300K_BIAS", 3); conn("DAC_BUS1", "J_300K_BIAS", 4)
@@ -182,74 +213,111 @@ def build_cryo_4k_carrier() -> BoardSpec:
     conn("GND_4K", "J_300K_BIAS", 7); conn("GND_4K", "J_300K_BIAS", 8)
     conn("GND_4K", "J_THERM_4K_A", 1); conn("GND_4K", "J_THERM_4K_A", 2)
     conn("GND_4K", "J_THERM_4K_B", 1); conn("GND_4K", "J_THERM_4K_B", 2)
+    conn("GND_MXC", "J_THERM_MXC", 1); conn("GND_MXC", "J_THERM_MXC", 2)
 
-    for n50 in ("SPI_CLK_4K", "SPI_MOSI_4K", "SPI_CS_N_4K", "SPI_MISO_4K"):
+    # All SPI bus nets INCLUDING daisy-chain hops SPI_CHAIN_0_1..6_7 are controlled 50 Ohm (OBS-135)
+    spi50_nets = ["SPI_CLK_4K", "SPI_MOSI_4K", "SPI_CS_N_4K", "SPI_MISO_4K"] + [f"SPI_CHAIN_{m}_{m+1}" for m in range(7)]
+    for n50 in spi50_nets:
         set_net(n50, net_class="Cryo_SPI_50", target_z0_ohm=50.0)
 
     # -----------------------------------------------------------------------
     # B. 8x SKY130 4 K Crossbar Mux Chip Carriers (8 x 121 = 968 DC Gates, S7.3-01 / S6.10-03)
-    #    Arranged in a clean 2x4 cryogenic grid (x = 46 & 68 mm, y = 20, 46, 72, 98 mm)
+    #    Arranged in a clean 2x4 cryogenic grid (x = 46 & 70 mm, y = 20, 46, 72, 98 mm)
+    #    Each die has per-chip C0G decoupling on VDD_4K_1V2, VBIAS_POS_2V, AND VBIAS_NEG_2V (OBS-091)!
     # -----------------------------------------------------------------------
+    # Perimeter high-speed SPI I/O (pins 2,3,5,8) & central power/ground balls (6,7) -> clean 100% F.Cu escape!
     mux_pdefs = [
-        ("1", "VDD_1V2", "power_in"), ("2", "GND_4K", "power_in"),
-        ("3", "VBIAS_P", "power_in"), ("4", "VBIAS_N", "power_in"),
-        ("5", "SPI_CLK", "input"), ("6", "SPI_CS_N", "input"),
-        ("7", "SPI_DIN", "input"), ("8", "SPI_DOUT", "output"),
+        ("1", "VBIAS_P", "power_in"), ("2", "SPI_CS_N", "input"),
+        ("3", "SPI_DIN", "input"), ("4", "VBIAS_N", "power_in"),
+        ("5", "SPI_CLK", "input"), ("6", "VDD_1V2", "power_in"),
+        ("7", "GND_4K", "power_in"), ("8", "SPI_DOUT", "output"),
         ("9", "RST_N", "input"), ("10", "DAC_IN", "input"),
         ("11", "GATE_BANK_OUT", "output"), ("12", "GND2", "power_in"),
     ]
+    mux_comps: list[ComponentSpec] = []
     for m in range(8):
         col = m // 4
         row = m % 4
         xm = 46.0 + col * 24.0
         ym = 20.0 + row * 26.0
         mref = f"U_MUX{m}"
-        add_c(ComponentSpec(
+        mc = add_c(ComponentSpec(
             mref, f"SKY130_4K_CROSSBAR_121G_M{m}", "Package_BGA:SKY130_CRYO_CARRIER_12P",
             xm, ym, pins=_grid_pins(mux_pdefs, cols=4, pitch_mm=1.60, pad_mm=0.55),
             mpn="SKY130-CRYO-MUX121-4K", bom_id="S7.3-01", epistemic_tag="{Ozel-Uretim}",
         ))
-        # Per-chip cryo C0G/NP0 100 nF local decoupling (no X7R freeze-out!)
-        cref = f"C_MUX{m}_1V2"
-        add_c(ComponentSpec(cref, "100nF_C0G_NP0_0603", "Capacitor_SMD:C_0603_1608Metric", xm, ym + 9.0, pins=auto_footprint_pads("0603", ("1", "2")), bom_id="S7.3-02", epistemic_tag="{Pasif-COTS}"))
-        conn("VDD_4K_1V2", cref, 1); conn("GND_4K", cref, 2)
+        mux_comps.append(mc)
+        # Per-chip cryo C0G/NP0 100 nF local decoupling on ALL 3 rails (VDD_1V2, +2V, -2V)
+        c1v2 = add_c(ComponentSpec(f"C_MUX{m}_1V2", "100nF_C0G_NP0_0603", "Capacitor_SMD:C_0603_1608Metric", xm, ym + 9.0, pins=auto_footprint_pads("0603", ("1", "2")), bom_id="S7.3-02", epistemic_tag="{Pasif-COTS}"))
+        cvp = add_c(ComponentSpec(f"C_MUX{m}_VP", "100nF_C0G_NP0_0402", "Capacitor_SMD:C_0402_1005Metric", xm - 5.5, ym + 9.0, pins=auto_footprint_pads("0402", ("1", "2")), bom_id="S7.3-02", epistemic_tag="{Pasif-COTS}"))
+        cvn = add_c(ComponentSpec(f"C_MUX{m}_VN", "100nF_C0G_NP0_0402", "Capacitor_SMD:C_0402_1005Metric", xm + 5.5, ym + 9.0, pins=auto_footprint_pads("0402", ("1", "2")), bom_id="S7.3-02", epistemic_tag="{Pasif-COTS}"))
+        conn("VDD_4K_1V2", c1v2.ref, 1); conn("GND_4K", c1v2.ref, 2)
+        conn("VBIAS_POS_2V", cvp.ref, 1); conn("GND_4K", cvp.ref, 2)
+        conn("VBIAS_NEG_2V", cvn.ref, 1); conn("GND_4K", cvn.ref, 2)
 
-        conn("VDD_4K_1V2", mref, 1); conn("GND_4K", mref, 2); conn("GND_4K", mref, 12)
-        conn("VBIAS_POS_2V", mref, 3); conn("VBIAS_NEG_2V", mref, 4)
-        conn("SPI_CLK_4K", mref, 5); conn("SPI_CS_N_4K", mref, 6); conn("RST_N_4K", mref, 9)
+        conn("VBIAS_POS_2V", mref, 1); conn("VBIAS_NEG_2V", mref, 4)
+        conn("VDD_4K_1V2", mref, 6); conn("GND_4K", mref, 7); conn("GND_4K", mref, 12)
+        conn("SPI_CLK_4K", mref, 5); conn("SPI_CS_N_4K", mref, 2); conn("RST_N_4K", mref, 9)
         conn(f"DAC_BUS{m % 4}", mref, 10)
         # Daisy-chain SPI across all 8 SKY130 chips
         din_net = "SPI_MOSI_4K" if m == 0 else f"SPI_CHAIN_{m-1}_{m}"
         dout_net = "SPI_MISO_4K" if m == 7 else f"SPI_CHAIN_{m}_{m+1}"
-        conn(din_net, mref, 7); conn(dout_net, mref, 8)
+        conn(din_net, mref, 3); conn(dout_net, mref, 8)
         conn(f"GATE_RAW_CH{m}", mref, 11)
+        # Adjacent GND_4K return-stitching vias (< 3.5 mm from every U_MUX SPI pin, OBS-135)
+        vias.append(ViaSpec("GND_4K", xm - 6.0, ym - 4.0, diameter_mm=0.60, drill_mm=0.30))
+        vias.append(ViaSpec("GND_4K", xm + 6.0, ym - 4.0, diameter_mm=0.60, drill_mm=0.30))
+
+    # Clean F.Cu 50-Ohm breakout traces from 0.635 mm Nano-D J_300K_SPI into perimeter U_MUX0/7 SPI pins!
+    p_mosi = _pad_xy(j_spi, "1")
+    p_cs = _pad_xy(j_spi, "3")
+    p_miso = _pad_xy(j_spi, "7")
+    p_m0_din = _pad_xy(mux_comps[0], "3")
+    p_m0_cs = _pad_xy(mux_comps[0], "2")
+    p_m7_dout = _pad_xy(mux_comps[7], "8")
+    traces.append(TraceSpec(
+        "SPI_MOSI_4K", "F.Cu",
+        (p_mosi, (p_mosi[0], 11.0), (p_m0_din[0], 11.0), p_m0_din),
+        width_mm=w50_ms,
+    ))
+    traces.append(TraceSpec(
+        "SPI_CS_N_4K", "F.Cu",
+        (p_cs, (p_cs[0], 13.0), (p_m0_cs[0], 13.0), p_m0_cs),
+        width_mm=w50_ms,
+    ))
+    traces.append(TraceSpec(
+        "SPI_MISO_4K", "F.Cu",
+        (p_miso, (p_miso[0], 42.5), (33.5, 42.5), (33.5, 114.0), (77.5, 114.0), (77.5, p_m7_dout[1]), p_m7_dout),
+        width_mm=w50_ms,
+    ))
 
     # -----------------------------------------------------------------------
-    # C. 8-Channel 4 K / MXC 2-Stage RC + Eccosorb CR-124 RF Low-Pass Filter Bank (S6.7-02)
-    #    Each channel: R1(1k 4K) -> C1(100n C0G) || C1HF(100p C0G) -> FB_ECCO(CR-124) ->
-    #                  R2(2k MXC) -> C2(47n C0G) || C2HF(100p C0G) -> J_MXC_GATE
+    # C. 8-Channel Thermally Split 4 K (Stage 1) / 20 mK MXC (Stage 2) RC + Eccosorb Filter Bank (S6.7-02)
+    #    4 K island (x <= 112 mm): R1(1k) -> C1(100n C0G) || C1HF(100p C0G) -> FB_ECCO(CR-124)
+    #    --- 6.0 mm copper-free thermal break moat (x = 112..118 mm; NbTi/manganin harness transition) ---
+    #    20 mK MXC island (x >= 118 mm): R2(2k MXC) -> C2(47n C0G) || C2HF(100p C0G) -> J_MXC_GATE (GND_MXC!)
     # -----------------------------------------------------------------------
     add_c(ComponentSpec(
-        "J_MXC_GATE_A", "OMNETICS_MXC_20MK_GATES_0_3", "Connector_PinHeader:HDR_2x4_2.54mm",
+        "J_MXC_GATE_A", "OMNETICS_MXC_20MK_GATES_0_3", "Connector_Omnetics:NanoD_2x4_P0.635mm",
         152.0, 28.0,
-        pins=auto_footprint_pads("HDR_2x4_2.54mm", [str(k) for k in range(1, 9)], {
-            "1": "G0_MXC", "2": "GND0", "3": "G1_MXC", "4": "GND1",
-            "5": "G2_MXC", "6": "GND2", "7": "G3_MXC", "8": "GND3",
+        pins=_omnetics_nanod_2x4_pins({
+            "1": "G0_MXC", "2": "GND_MXC0", "3": "G1_MXC", "4": "GND_MXC1",
+            "5": "G2_MXC", "6": "GND_MXC2", "7": "G3_MXC", "8": "GND_MXC3",
         }),
-        bom_id="S6.7-02", epistemic_tag="{Aday-COTS}",
+        mpn="A79040-001", bom_id="S6.7-02", epistemic_tag="{Aday-COTS}",
     ))
     add_c(ComponentSpec(
-        "J_MXC_GATE_B", "OMNETICS_MXC_20MK_GATES_4_7", "Connector_PinHeader:HDR_2x4_2.54mm",
+        "J_MXC_GATE_B", "OMNETICS_MXC_20MK_GATES_4_7", "Connector_Omnetics:NanoD_2x4_P0.635mm",
         152.0, 78.0,
-        pins=auto_footprint_pads("HDR_2x4_2.54mm", [str(k) for k in range(1, 9)], {
-            "1": "G4_MXC", "2": "GND4", "3": "G5_MXC", "4": "GND5",
-            "5": "G6_MXC", "6": "GND6", "7": "G7_MXC", "8": "GND7",
+        pins=_omnetics_nanod_2x4_pins({
+            "1": "G4_MXC", "2": "GND_MXC4", "3": "G5_MXC", "4": "GND_MXC5",
+            "5": "G6_MXC", "6": "GND_MXC6", "7": "G7_MXC", "8": "GND_MXC7",
         }),
-        bom_id="S6.7-02", epistemic_tag="{Aday-COTS}",
+        mpn="A79040-001", bom_id="S6.7-02", epistemic_tag="{Aday-COTS}",
     ))
     for p_gnd in (2, 4, 6, 8):
-        conn("GND_4K", "J_MXC_GATE_A", p_gnd)
-        conn("GND_4K", "J_MXC_GATE_B", p_gnd)
+        conn("GND_MXC", "J_MXC_GATE_A", p_gnd)
+        conn("GND_MXC", "J_MXC_GATE_B", p_gnd)
 
     for ch in range(8):
         yc = 14.0 + ch * 12.2
@@ -261,38 +329,52 @@ def build_cryo_4k_carrier() -> BoardSpec:
         c2 = f"C2_MXC_CH{ch}"
         c2hf = f"C2HF_CH{ch}"
 
-        add_c(ComponentSpec(r1, "1.0k_0.1pct_NICR_4K", "Resistor_SMD:R_0603_1608Metric", 90.0, yc, pins=auto_footprint_pads("0603", ("1", "2")), bom_id="S6.7-02", epistemic_tag="{Pasif-COTS}"))
-        add_c(ComponentSpec(c1, "100nF_C0G_NP0_4K", "Capacitor_SMD:C_0805_2012Metric", 98.0, yc - 2.3, pins=auto_footprint_pads("0805", ("1", "2")), bom_id="S6.7-02", epistemic_tag="{Pasif-COTS}"))
-        add_c(ComponentSpec(c1hf, "100pF_C0G_HF_0402", "Capacitor_SMD:C_0402_1005Metric", 98.0, yc + 2.3, pins=auto_footprint_pads("0402", ("1", "2")), bom_id="S6.7-02", epistemic_tag="{Pasif-COTS}"))
-        add_c(ComponentSpec(fb, "ECCOSORB_CR124_RF_LPF", "Inductor_SMD:L_1206_3216Metric", 109.0, yc, pins=auto_footprint_pads("1206", ("1", "2")), bom_id="S6.7-02", epistemic_tag="{Ozel-Uretim}"))
-        add_c(ComponentSpec(r2, "2.0k_0.1pct_NICR_MXC", "Resistor_SMD:R_0603_1608Metric", 120.0, yc, pins=auto_footprint_pads("0603", ("1", "2")), bom_id="S6.7-02", epistemic_tag="{Pasif-COTS}"))
-        add_c(ComponentSpec(c2, "47nF_C0G_NP0_MXC", "Capacitor_SMD:C_0805_2012Metric", 129.0, yc - 2.3, pins=auto_footprint_pads("0805", ("1", "2")), bom_id="S6.7-02", epistemic_tag="{Pasif-COTS}"))
-        add_c(ComponentSpec(c2hf, "100pF_C0G_HF_0402", "Capacitor_SMD:C_0402_1005Metric", 129.0, yc + 2.3, pins=auto_footprint_pads("0402", ("1", "2")), bom_id="S6.7-02", epistemic_tag="{Pasif-COTS}"))
+        # Stage 1 strictly on 4 K GND_4K island (x = 88..110 mm)
+        add_c(ComponentSpec(r1, "1.0k_0.1pct_NICR_4K", "Resistor_SMD:R_0603_1608Metric", 88.0, yc, pins=auto_footprint_pads("0603", ("1", "2")), bom_id="S6.7-02", epistemic_tag="{Pasif-COTS}"))
+        add_c(ComponentSpec(c1, "100nF_C0G_NP0_4K", "Capacitor_SMD:C_0805_2012Metric", 96.0, yc - 2.3, pins=auto_footprint_pads("0805", ("1", "2")), bom_id="S6.7-02", epistemic_tag="{Pasif-COTS}"))
+        add_c(ComponentSpec(c1hf, "100pF_C0G_HF_0402", "Capacitor_SMD:C_0402_1005Metric", 96.0, yc + 2.3, pins=auto_footprint_pads("0402", ("1", "2")), bom_id="S6.7-02", epistemic_tag="{Pasif-COTS}"))
+        add_c(ComponentSpec(fb, "ECCOSORB_CR124_RF_LPF", "Inductor_SMD:L_1206_3216Metric", 107.0, yc, pins=auto_footprint_pads("1206", ("1", "2")), bom_id="S6.7-02", epistemic_tag="{Ozel-Uretim}"))
+        # Stage 2 strictly on thermally isolated 20 mK GND_MXC island (x = 123..136 mm, across 6 mm thermal moat!)
+        add_c(ComponentSpec(r2, "2.0k_0.1pct_NICR_MXC", "Resistor_SMD:R_0603_1608Metric", 123.0, yc, pins=auto_footprint_pads("0603", ("1", "2")), bom_id="S6.7-02", epistemic_tag="{Pasif-COTS}"))
+        add_c(ComponentSpec(c2, "47nF_C0G_NP0_MXC", "Capacitor_SMD:C_0805_2012Metric", 132.0, yc - 2.3, pins=auto_footprint_pads("0805", ("1", "2")), bom_id="S6.7-02", epistemic_tag="{Pasif-COTS}"))
+        add_c(ComponentSpec(c2hf, "100pF_C0G_HF_0402", "Capacitor_SMD:C_0402_1005Metric", 132.0, yc + 2.3, pins=auto_footprint_pads("0402", ("1", "2")), bom_id="S6.7-02", epistemic_tag="{Pasif-COTS}"))
 
         conn(f"GATE_RAW_CH{ch}", r1, 1); conn(f"GATE_S1_CH{ch}", r1, 2)
         conn(f"GATE_S1_CH{ch}", c1, 1); conn("GND_4K", c1, 2)
         conn(f"GATE_S1_CH{ch}", c1hf, 1); conn("GND_4K", c1hf, 2)
         conn(f"GATE_S1_CH{ch}", fb, 1); conn(f"GATE_ECCO_CH{ch}", fb, 2)
         conn(f"GATE_ECCO_CH{ch}", r2, 1); conn(f"GATE_MXC_CH{ch}", r2, 2)
-        conn(f"GATE_MXC_CH{ch}", c2, 1); conn("GND_4K", c2, 2)
-        conn(f"GATE_MXC_CH{ch}", c2hf, 1); conn("GND_4K", c2hf, 2)
+        conn(f"GATE_MXC_CH{ch}", c2, 1); conn("GND_MXC", c2, 2)
+        conn(f"GATE_MXC_CH{ch}", c2hf, 1); conn("GND_MXC", c2hf, 2)
         if ch < 4:
             conn(f"GATE_MXC_CH{ch}", "J_MXC_GATE_A", 1 + ch * 2)
         else:
             conn(f"GATE_MXC_CH{ch}", "J_MXC_GATE_B", 1 + (ch - 4) * 2)
 
     # -----------------------------------------------------------------------
-    # D. Thermal-Stitching Vias, Planes & Full Physical Auto-Routing (100% Pad-to-Pad)
+    # D. Thermal-Stitching Vias, Split 4 K / 20 mK Copper Pour Islands & Full Physical Auto-Routing
     # -----------------------------------------------------------------------
-    # Cryogenic thermalization & GND stitching via fence around filter bay and chip carriers
-    for vx in (8.0, 36.0, 82.0, 140.0, 158.0):
+    # Separate thermalization & GND stitching via fences (strictly isolated across x = 112..118 mm moat!)
+    for vx in (8.0, 36.0, 82.0, 108.0):
         for vy in (6.0, 118.0):
             vias.append(ViaSpec("GND_4K", vx, vy, diameter_mm=0.70, drill_mm=0.35))
+    for vx in (122.0, 140.0, 158.0):
+        for vy in (6.0, 118.0):
+            vias.append(ViaSpec("GND_MXC", vx, vy, diameter_mm=0.70, drill_mm=0.35))
 
-    rect_inner = ((2.0, 2.0), (163.0, 2.0), (163.0, 123.0), (2.0, 123.0))
+    # Split 4 K (x=2..112) vs 20 mK MXC (x=118..163) copper pour islands + 5.0 mm thermal break keepout (OBS-019)
+    # In2.Cu VDD_4K_1V2 covers entire 4 K SPI/MUX domain (x=6..112) so any B.Cu segment has unbroken reference!
     zones = (
-        ZoneSpec("GND_4K", "In1.Cu", rect_inner, clearance_mm=0.20),
-        ZoneSpec("VDD_4K_1V2", "In2.Cu", ((8.0, 8.0), (82.0, 8.0), (82.0, 114.0), (8.0, 114.0)), clearance_mm=0.20),
+        ZoneSpec("GND_4K", "In1.Cu", ((2.0, 2.0), (112.0, 2.0), (112.0, 123.0), (2.0, 123.0)), clearance_mm=0.20),
+        ZoneSpec("GND_MXC", "In1.Cu", ((118.0, 2.0), (163.0, 2.0), (163.0, 123.0), (118.0, 123.0)), clearance_mm=0.20),
+        ZoneSpec("VDD_4K_1V2", "In2.Cu", ((6.0, 4.0), (112.0, 4.0), (112.0, 121.0), (6.0, 121.0)), clearance_mm=0.20),
+        ZoneSpec("GND_MXC", "In2.Cu", ((118.0, 4.0), (163.0, 4.0), (163.0, 121.0), (118.0, 121.0)), clearance_mm=0.20),
+    )
+    keepouts = (
+        KeepoutSpec(
+            "THERMAL_ISOLATION_4K_TO_MXC", "copper_keepout", ("In1.Cu", "In2.Cu", "B.Cu"),
+            x_mm=112.5, y_mm=2.0, width_mm=5.0, height_mm=121.0,
+        ),
     )
 
     nets = tuple(
@@ -321,11 +403,15 @@ def build_cryo_4k_carrier() -> BoardSpec:
         traces=tuple(traces),
         vias=tuple(vias),
         zones=zones,
+        keepouts=keepouts,
         rules=DesignRules(min_trace_width_mm=0.127, min_clearance_mm=0.127, impedance_tol_pct=5.0),
         epistemic_meta={
             **DEFAULT_EPISTEMIC_META,
             "operating_temp_K": 4.0,
             "mxc_filter_stage_temp_K": 0.02,
+            "thermal_isolation_4k_to_mxc_gap_mm": 6.0,
+            "thermal_split_architecture": "separate_GND_4K_and_GND_MXC_copper_islands_5mm_keepout_moat_NbTi_harness_transition",
+            "mosfet_4k_model_bounds": "LEVEL=1 effective-Vth behavioral dynamic switch (|Vto|=0.60V); requires SKY130 5V thick-oxide (g5v0d10v5) triple-well + cryo BSIM4 PDK verification at M2",
             "total_multiplexed_dc_gates": 968,
             "surface_code_nodes_L11": 121,
             "gates_per_node": 8,
@@ -334,9 +420,10 @@ def build_cryo_4k_carrier() -> BoardSpec:
             "stackup_material": "Rogers RO4350B / AlN-Cu-Invar-Cu Core (4-layer)",
         },
         notes=(
-            f"50 Ohm SE SPI microstrip: w={w50_ms:.4f} mm -> Z0={calc_microstrip_z0(w50_ms, 0.254, 0.035, 3.48):.2f} Ohm",
+            f"50 Ohm SE SPI microstrip (incl. SPI_CHAIN_0_1..6_7): w={w50_ms:.4f} mm -> Z0={calc_microstrip_z0(w50_ms, 0.254, 0.035, 3.48):.2f} Ohm",
             "All cryogenic capacitors are C0G/NP0 dielectric to prevent Class-II X7R capacitance freeze-out at 4 K.",
-            "L=11 FT surface code (121 nodes x 8 DC gates = 968 gates), <=15.4 mW @ 4 K budget (Exp131 / S6.10-03).",
+            "OBS-019: 4 K (GND_4K, x<=112 mm) and 20 mK MXC (GND_MXC, x>=118 mm) copper planes are physically split across a 6.0 mm thermal isolation moat (5.0 mm multi-layer keepout); full fridge build separates Stage-2 onto MXC daughterboard via NbTi/manganin harness.",
+            "OBS-091: Real 0.635 mm Omnetics Nano-D footprints, per-chip +/-2 V C0G decoupling, full +/-2 V (4 V span) SPICE power accounting, and SKY130 5 V thick-oxide triple-well requirement.",
         ),
     )
     return auto_route_board(spec, grid_mm=0.50, preserve_existing=True)
@@ -355,7 +442,7 @@ FILTER_PARAMS: dict[str, float] = {
     "esr1_ohm": 0.050,
     "esl1_h": 0.60e-9,
     "c1hf_f": 100.0e-12,
-    "esr1hf_ohm": 0.080,
+    "esr1hf_ohm": 1.000,       # 1.0 Ohm NiCr damping ESR suppresses 548 MHz 100nF||100pF ESL anti-resonance (OBS-135)
     "esl1hf_h": 0.25e-9,
     # 3-section Eccosorb CR-124 magnetically-loaded lossy RF absorber ladder
     "r_ecco_dc_ohm": 5.0,
@@ -370,7 +457,7 @@ FILTER_PARAMS: dict[str, float] = {
     "esr2_ohm": 0.050,
     "esl2_h": 0.60e-9,
     "c2hf_f": 100.0e-12,
-    "esr2hf_ohm": 0.080,
+    "esr2hf_ohm": 1.000,       # 1.0 Ohm NiCr damping ESR suppresses 548 MHz ESL anti-resonance (OBS-135)
     "esl2hf_h": 0.25e-9,
     "c_gate_load_f": 2.0e-12,
     "r_gate_leak_ohm": 100.0e6,
@@ -454,18 +541,22 @@ C2_i      ni_out 0     {p['c2_mxc_f']:.6e}
 * ===========================================================================
 * SUBCIRCUIT B: 968-Gate SKY130 4 K Crossbar Mux Static + Dynamic Power Model
 *   L=11 Surface Code: 121 nodes x 8 gates = 968 gates across 8 SKY130 dies
-*   4 K Core Supply VDD_4K = 1.2 V; Analog Gate-Hold Bias VBIAS = 2.0 V
-*   Budget: P_total_4K <= 15.4 mW (Exp131 / BOM S6.10-03)
+*   4 K Core Supply VDD_4K = 1.2 V; FULL Bipolar Analog Gate-Hold Rails +/-2.0 V (4.0 V span, OBS-091)
+*   Note: +/-2.0 V (4.0 V span) requires SKY130 5 V thick-oxide (g5v0d10v5) triple-well devices tied to -2.0 V.
+*   Model bound: NMOS_SKY4K/PMOS_SKY4K are LEVEL=1 behavioral 4 K effective-Vth switches (not cryo BSIM4 PDK).
+*   Budget: P_total_4K (1.2 V core/dyn + full +2 V AND -2 V rails) <= 15.4 mW (Exp131 / BOM S6.10-03)
 * ===========================================================================
-Vvdd_4k  vdd_4k  0 DC 1.2
-Vbias_4k vbias_4k 0 DC 2.0
+Vvdd_4k      vdd_4k    0 DC 1.2
+Vbias_pos_4k vbias_pos 0 DC 2.0
+Vbias_neg_4k vbias_neg 0 DC -2.0
 
 * Static 4 K core + SPI/bandgap overhead across 8 dies: 1.12 mW @ 1.2 V (0.9333 mA)
 Rstat_spi vdd_4k 0 1.2857k
-* Static 968-gate sample-and-hold bias buffers: 968 x 11.2 uW = 10.8416 mW @ 2.0 V (5.4208 mA)
-Rstat_968 vbias_4k 0 368.95
+* Static 968-gate sample-and-hold bias buffers across FULL +/-2.0 V (4.0 V span):
+*   968 x 2.796 uA = 2.707 mA across 4.0 V = 10.828 mW (5.414 mW from +2 V + 5.414 mW from -2 V!)
+Rstat_968 vbias_pos vbias_neg 1.4776k
 
-* Dynamic 968-gate SKY130 CMOS crossbar refresh bank (4 K threshold-shifted |Vto|=0.60 V)
+* Dynamic 968-gate SKY130 CMOS crossbar refresh bank (4 K effective-Vth LEVEL=1 behavioral switch, |Vto|=0.60 V)
 * Scaled 968-gate total switched capacitance: 968 x 45 pF = 43.56 nF refreshed at f_ref = 25 kHz
 * Analytical P_dyn = C_tot * V^2 * f = 43.56e-9 * 1.44 * 25e3 = 1.568 mW
 .model NMOS_SKY4K NMOS(LEVEL=1 VTO=0.60 KP=4.5m LAMBDA=0.01)
@@ -478,12 +569,13 @@ Cdyn_968 dyn_out 0 43.56n
 .control
 set noaskquit
 
-* 1) AC Transfer Function: 1 Hz .. 2 GHz (verify >60 dB RF attenuation @ 1 GHz & -3 dB BW)
+* 1) AC Transfer Function: 1 Hz .. 2 GHz (verify >60 dB RF attenuation @ 1 GHz & damped 548 MHz ESL resonance)
 ac dec 80 1 2G
 meas ac f_3db_hz WHEN vm(n_gate_mxc)=0.707107 FALL=1
 meas ac atten_100khz_db FIND vdb(n_gate_mxc) AT=100k
 meas ac atten_10mhz_db  FIND vdb(n_gate_mxc) AT=10Meg
 meas ac atten_100mhz_db FIND vdb(n_gate_mxc) AT=100Meg
+meas ac atten_548mhz_pk_db MAX vdb(n_gate_mxc) FROM=400Meg TO=700Meg
 meas ac atten_1ghz_db   FIND vdb(n_gate_mxc) AT=1G
 
 * 2) Noise Analysis (Total: 300 K DAC + 4 K stage + 20 mK MXC stage, 1 Hz .. 1 MHz)
@@ -506,12 +598,16 @@ setplot noise4
 let noise_intr_rms_v = onoise_total
 print noise_intr_rms_v
 
-* 4) Transient Analysis A: 968-Gate Crossbar 4 K Power Dissipation (5 full refresh cycles = 200 us)
+* 4) Transient Analysis A: 968-Gate Crossbar 4 K Power Dissipation incl. BOTH +2 V AND -2 V Rails (OBS-091)
 tran 200n 240u
 let p_4k_core_w = -1.2 * i(Vvdd_4k)
-let p_4k_bias_w = -2.0 * i(Vbias_4k)
+let p_4k_bias_pos_w = -2.0 * i(Vbias_pos_4k)
+let p_4k_bias_neg_w = 2.0 * i(Vbias_neg_4k)
+let p_4k_bias_w = p_4k_bias_pos_w + p_4k_bias_neg_w
 let p_4k_tot_w  = p_4k_core_w + p_4k_bias_w
 meas tran p_4k_core_avg_w AVG p_4k_core_w FROM=40u TO=240u
+meas tran p_4k_bias_pos_avg_w AVG p_4k_bias_pos_w FROM=40u TO=240u
+meas tran p_4k_bias_neg_avg_w AVG p_4k_bias_neg_w FROM=40u TO=240u
 meas tran p_4k_bias_avg_w AVG p_4k_bias_w FROM=40u TO=240u
 meas tran p_4k_total_avg_w AVG p_4k_tot_w FROM=40u TO=240u
 
@@ -663,6 +759,7 @@ def build_and_verify_all(out_dir: Path | None = None) -> dict[str, Any]:
                 "atten_100khz_dB": round(m.get("atten_100khz_db", 0.0), 3),
                 "atten_10mhz_dB": round(m.get("atten_10mhz_db", 0.0), 3),
                 "atten_100mhz_dB": round(atten_100m_db, 3),
+                "atten_548mhz_pk_dB": round(m.get("atten_548mhz_pk_db", 0.0), 3),
                 "atten_1ghz_dB": round(atten_1g_db, 3),
                 "noise_10hz_total_uV_rtHz": round(noise_10hz_uv, 6),
                 "noise_10hz_total_nV_rtHz": round(noise_10hz_uv * 1e3, 4),
@@ -672,6 +769,8 @@ def build_and_verify_all(out_dir: Path | None = None) -> dict[str, Any]:
                 "step_rise_10_90_us": round(t_rise_us, 3),
                 "step_settle_0p1pct_ms": round(t_settle_ms, 4),
                 "p_4k_core_plus_dyn_mW": round(p_4k_core_mw, 4),
+                "p_4k_968g_bias_pos_2v_mW": round(m.get("p_4k_bias_pos_avg_w", 0.0) * 1e3, 4),
+                "p_4k_968g_bias_neg_2v_mW": round(m.get("p_4k_bias_neg_avg_w", 0.0) * 1e3, 4),
                 "p_4k_968g_bias_mW": round(p_4k_bias_mw, 4),
                 "p_4k_968g_total_mW": round(p_4k_tot_mw, 4),
                 "p_4k_budget_max_mW": 15.4,

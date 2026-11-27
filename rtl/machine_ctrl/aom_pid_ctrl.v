@@ -5,11 +5,10 @@
 //
 // Features:
 //   - Bit-exact signed Q16.16 fixed-point arithmetic (1.0 = 32'sd65536 = 32'h0001_0000)
-//   - Filtered derivative-on-measurement: d_filt = (d_filt + (prev_meas - meas)) >>> 1
-//   - Back-calculation anti-windup: integ += ki*err + kaw*(g_cmd - u_raw)
-//   - Programmable output clamp [min_gain_q16, max_gain_q16] (default [0.65, 1.40])
-//   - Programmable pyrometer thermal trim (active when pyro_en=1 and temp_ref_k > 480 K)
-//   - Programmable dead-time delay shift register (0..15 sample taps, default 1 = 10 us @ 100 kHz)
+//   - 6-state pipelined FSM (5 cycles = 50 ns @ 100 MHz, 200x margin vs 10 us sample period):
+//       ST_IDLE -> ST_ERR_PYRO -> ST_MUL_PD -> ST_SUM_CLAMP -> ST_MUL_AW -> ST_UPDATE
+//     Isolates every 32x32 multiply from saturating add/clamp trees for clean timing closure!
+//   - Built-in 2-FF async-assert / sync-deassert reset synchronizer (`rst_sync_n`).
 //   - Hard-wired non-bypassable over-temperature abort (temp_meas_k >= 1687 K Si T_melt)
 //     and hard-wired `interlock_abort` override -> immediate ZERO AOM drive!
 //   - ZERO combinational '/' operators, ZERO latches, ZERO Verilator -Wall warnings.
@@ -45,7 +44,7 @@ module aom_pid_ctrl #(
     input  wire        [15:0] temp_meas_k,    // Unsigned Kelvin (hardwired abort >= 1687 K)
     input  wire        [15:0] temp_ref_k,     // Unsigned reference Kelvin
 
-    // Programmable Q16.16 gains & limits (active immediately when cfg_use_ext=1, else defaults)
+    // Programmable Q16.16 gains & limits
     input  wire               cfg_use_ext,
     input  wire signed [31:0] cfg_kp_q16,
     input  wire signed [31:0] cfg_ki_q16,
@@ -69,17 +68,32 @@ module aom_pid_ctrl #(
     output wire               abort_active,
     output reg         [15:0] last_temp_k
 );
-    // Hardwired crystalline Si melting point (Exp130 / auto_recal.py T_MELT_SI = 1687 K)
-    localparam [15:0] T_MELT_SI_K    = 16'd1687;
-    localparam [15:0] T_PYRO_MIN_K   = 16'd480;
+    localparam [15:0] T_MELT_SI_K        = 16'd1687;
+    localparam [15:0] T_PYRO_MIN_K       = 16'd480;
     localparam signed [31:0] INT32_MAX_V =  32'sd2147483647;
     localparam signed [31:0] INT32_MIN_V = -32'sd2147483647 - 32'sd1;
 
-    // 4-state deterministic pipeline (3 cycles sample_valid -> out_valid)
-    localparam [1:0] ST_IDLE   = 2'd0;
-    localparam [1:0] ST_MUL_PD = 2'd1;
-    localparam [1:0] ST_CLAMP  = 2'd2;
-    localparam [1:0] ST_UPDATE = 2'd3;
+    // 6-state deterministic pipeline (5 cycles sample_valid -> out_valid)
+    localparam [2:0] ST_IDLE      = 3'd0;
+    localparam [2:0] ST_ERR_PYRO  = 3'd1;
+    localparam [2:0] ST_MUL_PD    = 3'd2;
+    localparam [2:0] ST_SUM_CLAMP = 3'd3;
+    localparam [2:0] ST_MUL_AW    = 3'd4;
+    localparam [2:0] ST_UPDATE    = 3'd5;
+
+    // 2-FF async-assert / sync-deassert reset synchronizer
+    (* ASYNC_REG = "TRUE" *) reg rst_sync_s1;
+    (* ASYNC_REG = "TRUE" *) reg rst_sync_s2;
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n) begin
+            rst_sync_s1 <= 1'b0;
+            rst_sync_s2 <= 1'b0;
+        end else begin
+            rst_sync_s1 <= 1'b1;
+            rst_sync_s2 <= rst_sync_s1;
+        end
+    end
+    wire rst_sync_n = rst_sync_s2;
 
     // Effective gains
     wire signed [31:0] kp_eff       = cfg_use_ext ? cfg_kp_q16       : DEFAULT_KP_Q16;
@@ -97,26 +111,29 @@ module aom_pid_ctrl #(
     assign abort_active = interlock_abort | overtemp_hit | overtemp_latched;
     assign aom_rf_en    = enable & (~abort_active);
 
-    // Internal registers
-    reg [1:0]         state;
+    // Pipeline & state registers
+    reg [2:0]         state;
     reg signed [31:0] r_aom_drive_q16;
     reg signed [31:0] prev_meas_q16;
     reg signed [31:0] d_filt_q16;
+    reg signed [31:0] err_p_r;
+    reg signed [31:0] dt_k_r;
+    reg               pyro_active_r;
     reg signed [31:0] err_r;
     reg signed [63:0] p_prod_r;
     reg signed [63:0] i_prod_r;
     reg signed [63:0] d_prod_r;
+    reg signed [31:0] aw_err_r;
     reg signed [63:0] aw_prod_r;
     reg signed [31:0] i_term_r;
     reg signed [31:0] g_cmd_r;
 
-    // 16-tap dead-time delay shift register (delay_sr[0] = 1 step old, delay_sr[14] = 15 steps old)
+    // 16-tap dead-time delay shift register
     reg signed [31:0] delay_sr [0:15];
 
     assign busy          = (state != ST_IDLE);
     assign aom_drive_q16 = abort_active ? 32'sd0 : r_aom_drive_q16;
 
-    // Helper functions for exact 32-bit saturating signed add/sub
     function signed [31:0] sat_add32;
         input signed [31:0] a;
         input signed [31:0] b;
@@ -145,20 +162,22 @@ module aom_pid_ctrl #(
         end
     endfunction
 
-    // Stage 0 combinational error & derivative-on-measurement
+    // Stage 0 combinational (pure add/sub, ZERO multiply)
     wire signed [31:0] err_p_c     = sat_sub32(setpoint_eff, meas_q16);
     wire signed [31:0] dt_k_c      = $signed({16'd0, temp_ref_k}) - $signed({16'd0, temp_meas_k});
-    wire signed [63:0] err_t_p64   = {{32{dt_k_c[31]}}, dt_k_c} * {{32{kt_pyro_eff[31]}}, kt_pyro_eff};
-    wire               err_t_ovf   = (err_t_p64[63:31] != 33'd0) && (err_t_p64[63:31] != {33{1'b1}});
-    wire signed [31:0] err_t_sat   = err_t_ovf ? (err_t_p64[63] ? INT32_MIN_V : INT32_MAX_V) : err_t_p64[31:0];
-    wire signed [31:0] err_t_c     = (pyro_en && (temp_ref_k > T_PYRO_MIN_K)) ? err_t_sat : 32'sd0;
-    wire signed [31:0] err_tot_c   = sat_add32(err_p_c, err_t_c);
-
+    wire               pyro_act_c  = pyro_en && (temp_ref_k > T_PYRO_MIN_K);
     wire signed [31:0] d_raw_c     = sat_sub32(prev_meas_q16, meas_q16);
     wire signed [32:0] d_sum33_c   = {d_filt_q16[31], d_filt_q16} + {d_raw_c[31], d_raw_c};
-    wire signed [31:0] d_filt_next = $signed(d_sum33_c[32:1]); // exact arithmetic /2 (ZERO '/')
+    wire signed [31:0] d_filt_next = $signed(d_sum33_c[32:1]);
 
-    // Stage 2 combinational Q16.16 round-to-nearest + saturation for P, I, D terms
+    // Stage 1 combinational (isolated pyrometer multiply from registered dt_k_r)
+    wire signed [63:0] err_t_p64   = {{32{dt_k_r[31]}}, dt_k_r} * {{32{kt_pyro_eff[31]}}, kt_pyro_eff};
+    wire               err_t_ovf   = (err_t_p64[63:31] != 33'd0) && (err_t_p64[63:31] != {33{1'b1}});
+    wire signed [31:0] err_t_sat   = err_t_ovf ? (err_t_p64[63] ? INT32_MIN_V : INT32_MAX_V) : err_t_p64[31:0];
+    wire signed [31:0] err_t_c     = pyro_active_r ? err_t_sat : 32'sd0;
+    wire signed [31:0] err_tot_c   = sat_add32(err_p_r, err_t_c);
+
+    // Stage 3 combinational Q16.16 round + sum + clamp (NO multiply in this stage!)
     wire signed [63:0] p_rnd64 = p_prod_r + 64'sd32768;
     wire signed [63:0] i_rnd64 = i_prod_r + 64'sd32768;
     wire signed [63:0] d_rnd64 = d_prod_r + 64'sd32768;
@@ -181,19 +200,18 @@ module aom_pid_ctrl #(
                                    ((u_raw_c > max_gain_eff) ? max_gain_eff : u_raw_c);
     wire signed [31:0] aw_err_c  = sat_sub32(g_cmd_c, u_raw_c);
 
-    // Stage 3 combinational integrator update & delay-line tap select
+    // Stage 5 combinational integrator update & delay-line tap select
     wire signed [31:0] di_tot_c    = sat_add32(i_term_r, aw_term_c);
     wire signed [31:0] integ_nxt_c = sat_add32(integ_q16, di_tot_c);
     wire        [3:0]  tap_idx_c   = (dead_time_taps == 4'd0) ? 4'd0 : (dead_time_taps - 4'd1);
     wire signed [31:0] drive_nxt_c = (dead_time_taps == 4'd0) ? g_cmd_r : delay_sr[tap_idx_c];
 
-    // Explicitly sink unused rounding low bits for zero Verilator -Wall warnings
     wire _unused_ok = &{1'b0, d_sum33_c[0], p_rnd64[15:0], i_rnd64[15:0], d_rnd64[15:0], a_rnd64[15:0]};
 
     integer k;
 
     always @(posedge clk) begin
-        if (!rst_n) begin
+        if (!rst_sync_n) begin
             state            <= ST_IDLE;
             out_valid        <= 1'b0;
             r_aom_drive_q16  <= 32'sd0;
@@ -201,10 +219,14 @@ module aom_pid_ctrl #(
             integ_q16        <= 32'sd0;
             prev_meas_q16    <= DEFAULT_SETPOINT_Q16;
             d_filt_q16       <= 32'sd0;
+            err_p_r          <= 32'sd0;
+            dt_k_r           <= 32'sd0;
+            pyro_active_r    <= 1'b0;
             err_r            <= 32'sd0;
             p_prod_r         <= 64'sd0;
             i_prod_r         <= 64'sd0;
             d_prod_r         <= 64'sd0;
+            aw_err_r         <= 32'sd0;
             aw_prod_r        <= 64'sd0;
             i_term_r         <= 32'sd0;
             g_cmd_r          <= DEFAULT_BIAS_Q16;
@@ -218,7 +240,6 @@ module aom_pid_ctrl #(
             out_valid   <= 1'b0;
             last_temp_k <= temp_meas_k;
 
-            // Highest priority: hard-wired interlock or Si melting over-temperature abort (T >= 1687 K)
             if (interlock_abort || overtemp_hit) begin
                 if (overtemp_hit) begin
                     overtemp_latched <= 1'b1;
@@ -260,26 +281,38 @@ module aom_pid_ctrl #(
                 case (state)
                     ST_IDLE: begin
                         if (sample_valid) begin
-                            err_r         <= err_tot_c;
+                            err_p_r       <= err_p_c;
+                            dt_k_r        <= dt_k_c;
+                            pyro_active_r <= pyro_act_c;
                             d_filt_q16    <= d_filt_next;
                             prev_meas_q16 <= meas_q16;
-                            state         <= ST_MUL_PD;
+                            state         <= ST_ERR_PYRO;
                         end
+                    end
+
+                    ST_ERR_PYRO: begin
+                        err_r <= err_tot_c;
+                        state <= ST_MUL_PD;
                     end
 
                     ST_MUL_PD: begin
                         p_prod_r <= {{32{kp_eff[31]}}, kp_eff} * {{32{err_r[31]}}, err_r};
                         i_prod_r <= {{32{ki_eff[31]}}, ki_eff} * {{32{err_r[31]}}, err_r};
                         d_prod_r <= {{32{kd_eff[31]}}, kd_eff} * {{32{d_filt_q16[31]}}, d_filt_q16};
-                        state    <= ST_CLAMP;
+                        state    <= ST_SUM_CLAMP;
                     end
 
-                    ST_CLAMP: begin
+                    ST_SUM_CLAMP: begin
                         u_raw_q16 <= u_raw_c;
                         g_cmd_r   <= g_cmd_c;
                         i_term_r  <= i_term_c;
                         saturated <= (g_cmd_c != u_raw_c);
-                        aw_prod_r <= {{32{kaw_eff[31]}}, kaw_eff} * {{32{aw_err_c[31]}}, aw_err_c};
+                        aw_err_r  <= aw_err_c;
+                        state     <= ST_MUL_AW;
+                    end
+
+                    ST_MUL_AW: begin
+                        aw_prod_r <= {{32{kaw_eff[31]}}, kaw_eff} * {{32{aw_err_r[31]}}, aw_err_r};
                         state     <= ST_UPDATE;
                     end
 

@@ -65,7 +65,51 @@ EXP140_S65_MUX_1024_USD = (456_400.0, 629_200.0, 925_200.0)  # (low, nom, high)
 # Per runtime modular cryostat bay (LD400 20mK DR $720k + PT420 $58.5k + S6.9 $68k
 # + S6.3 B_M4 magnet $185k + S6.10 4K crossbar & DC DAC $83k + inter-fridge link $120k)
 RUNTIME_CRYOSTAT_BAY_HW_USD = (790_000.0, 1_234_500.0, 2_050_000.0)
-W3_300MM_STAGE_LOCK_ADDER_NOM_USD = 350_000.0  # Optional {Varsayım} 300mm S3/S5 chuck+load-lock adder sensitivity
+FAB_200MM_BORE_REDESIGN_ADDER_NOM_USD = 1_850_000.0  # OBS-060: scaled >=Ø300 mm magnet/cryo/LL redesign vs 50 mm FOAK CAD ({Varsayım})
+W3_300MM_STAGE_LOCK_ADDER_NOM_USD = 2_450_000.0  # OBS-060: 300 mm scaled magnet/cryo/stage+load-lock adder vs 50 mm FOAK CAD ({Varsayım})
+
+# OBS-134: Realistic 28Si MBE sublimation rod utilization & iradina BOX depth-tail audit
+MBE_ROD_MASS_G = 5.0
+MBE_ROD_COST_NOM_USD = 18_000.0  # S5.6-02 (<50 ppm 29Si rod)
+MBE_CAPTURE_EFFICIENCY_REALISTIC = 0.05  # 5% off-axis sublimation geometric capture (realistic; 10% optimistic)
+SI_DENSITY_G_CM3 = 2.329
+CAP_THICKNESS_NM = 8.0
+IRADINA_5KEV_PLUS_8NM_MEAN_Z_NM = 18.69
+IRADINA_5KEV_PLUS_8NM_SIGMA_Z_NM = 4.61
+
+
+def compute_mbe_rod_utilization(diameter_mm: float, capture_eff: float = MBE_CAPTURE_EFFICIENCY_REALISTIC) -> dict[str, float]:
+    """Compute realistic S5.6-02 5 g 28Si rod wafers/rod and consumable cost/wafer (OBS-134)."""
+    area_cm2 = math.pi * ((diameter_mm / 10.0) / 2.0) ** 2
+    cap_mass_mg = area_cm2 * (CAP_THICKNESS_NM * 1e-7) * SI_DENSITY_G_CM3 * 1e3
+    wafers_per_rod = (MBE_ROD_MASS_G * 1e3 * capture_eff) / cap_mass_mg
+    rod_cost_per_wafer_usd = MBE_ROD_COST_NOM_USD / wafers_per_rod
+    return {
+        "diameter_mm": float(diameter_mm),
+        "capture_efficiency": float(capture_eff),
+        "cap_28si_mass_mg_per_wafer": round(cap_mass_mg, 4),
+        "wafers_per_5g_rod": round(wafers_per_rod, 1),
+        "rod_consumable_usd_per_wafer": round(rod_cost_per_wafer_usd, 2),
+    }
+
+
+def compute_box_depth_tail_margin(soi_thickness_nm: float) -> dict[str, float]:
+    """Check iradina 5 keV + 8 nm cap depth tail vs SOI buried-oxide (BOX) interface (OBS-134)."""
+    z_3sigma_nm = IRADINA_5KEV_PLUS_8NM_MEAN_Z_NM + 3.0 * IRADINA_5KEV_PLUS_8NM_SIGMA_Z_NM  # 32.52 nm
+    # Normal tail fractions matching Pilot 2B iradina (mean=18.69, sig=4.61)
+    def _erfc_tail(z_thr: float) -> float:
+        return 0.5 * math.erfc((z_thr - IRADINA_5KEV_PLUS_8NM_MEAN_Z_NM) / (IRADINA_5KEV_PLUS_8NM_SIGMA_Z_NM * math.sqrt(2.0)))
+
+    frac_within_6nm_box = _erfc_tail(soi_thickness_nm - 6.0)
+    frac_inside_box = _erfc_tail(soi_thickness_nm)
+    return {
+        "soi_thickness_nm": float(soi_thickness_nm),
+        "iradina_3sigma_depth_nm": round(z_3sigma_nm, 2),
+        "margin_3sigma_to_box_nm": round(soi_thickness_nm - z_3sigma_nm, 2),
+        "donor_frac_within_6nm_of_box": round(frac_within_6nm_box, 6),
+        "donor_frac_inside_box": round(frac_inside_box, 6),
+        "safe_box_isolation_ge_10nm": bool((soi_thickness_nm - z_3sigma_nm) >= 10.0),
+    }
 
 
 @dataclass(frozen=True)
@@ -97,7 +141,7 @@ class WaferTechSpec:
 WAFER_SCENARIOS: dict[str, WaferTechSpec] = {
     "W1": WaferTechSpec(
         code="W1",
-        label="v4.0 Ref: 200 mm Kalın 28Si Epi ($12k)",
+        label="v4.0 Ref: 200 mm Kalın 28Si Epi ($12k; Fab-scale bore redesign req.)",
         diameter_mm=200,
         epi_thickness_nm=500.0,
         area_factor_vs_200mm=1.00,
@@ -107,37 +151,52 @@ WAFER_SCENARIOS: dict[str, WaferTechSpec] = {
         dense_reg_per_wafer=5.0e7,
         standard_reg_per_wafer=2.0e6,
         epistemic_tag="{Varsayım}",
-        notes="Exp134 CX4 çapası: kalın 500-1000 nm 28Si epi ($2,40/çip silikon zemini).",
+        notes="Exp134 CX4 çapası: kalın 500-1000 nm 28Si epi ($2,40/çip silikon zemini; UNQUOTED_ROM_ESTIMATE; 50 mm FOAK CAD yerine Fab-ölçekli >=Ø300 mm bore/LL gerektirir).",
     ),
     "W2": WaferTechSpec(
         code="W2",
-        label="v5.0 İnce 30 nm 28Si-on-SOI 200 mm ($2,2k)",
+        label="v5.1 Güvenli 50 nm 28Si-on-SOI 200 mm ($2,5k incl. %5 MBE çubuk; OBS-134)",
         diameter_mm=200,
-        epi_thickness_nm=30.0,
+        epi_thickness_nm=50.0,
         area_factor_vs_200mm=1.00,
-        price_p10_usd=1_500.0,
-        price_p50_usd=2_200.0,
-        price_p90_usd=3_200.0,
+        price_p10_usd=1_750.0,
+        price_p50_usd=2_500.0,
+        price_p90_usd=3_700.0,
         dense_reg_per_wafer=5.0e7,
         standard_reg_per_wafer=2.0e6,
         epistemic_tag="{Varsayım}",
-        notes="Exp139 aktif bölge <=23 nm -> >%95 daha az 28SiH4 gazı ($0,44/çip zemin, 5,45x düşüş).",
+        notes="OBS-134: 30 nm SOI 5 keV iradina kuyruğunun %13'ünü BOX'a <=6 nm yaklaştırır; >=50 nm aktif 28Si (>17 nm 3-sigma BOX marjı) + %5 MBE yakalama ($42/yonga çubuk sarfı; ~427 yonga/5g çubuk); UNQUOTED_ROM_ESTIMATE; Fab-ölçekli 200 mm bore/LL gerektirir.",
     ),
     "W3": WaferTechSpec(
         code="W3",
-        label="v5.0 İnce 30 nm 28Si-on-SOI 300 mm ($3,6k)",
+        label="v5.1 Güvenli 50 nm 28Si-on-SOI 300 mm ($4,1k incl. %5 MBE çubuk; OBS-134)",
         diameter_mm=300,
-        epi_thickness_nm=30.0,
+        epi_thickness_nm=50.0,
         area_factor_vs_200mm=2.25,
-        price_p10_usd=2_400.0,
-        price_p50_usd=3_600.0,
-        price_p90_usd=5_200.0,
+        price_p10_usd=2_800.0,
+        price_p50_usd=4_100.0,
+        price_p90_usd=6_000.0,
         dense_reg_per_wafer=5.0e7 * 2.25,  # 1.125e8 reg/wafer (11,250 chips/wafer)
         standard_reg_per_wafer=2.0e6 * 2.25,  # 4.5e6 reg/wafer (450 chips/wafer)
         epistemic_tag="{Varsayım}",
-        notes="300 mm 2,25x alan + 30 nm ince 28Si-on-SOI ($0,32/çip zemin, W1'e göre 7,50x düşüş).",
+        notes="OBS-134: 300 mm (2,25x alan) + >=50 nm güvenli 28Si-on-SOI + %5 MBE yakalama ($95/yonga çubuk sarfı; ~190 yonga/5g çubuk, >1000 varsayımından 5,3x düşük); UNQUOTED_ROM_ESTIMATE; 300 mm bore/LL yeniden tasarım gerektirir.",
     ),
 }
+
+FOAK_50MM_WAFER_SPEC = WaferTechSpec(
+    code="W0_FOAK_50mm",
+    label="FOAK R&D Prototip: Ø50 mm 28Si/29Si (cad/params.py & BOM S5.4-01, $2,240/yonga)",
+    diameter_mm=50,
+    epi_thickness_nm=100.0,
+    area_factor_vs_200mm=1.0 / 16.0,
+    price_p10_usd=1_200.0,
+    price_p50_usd=2_240.0,
+    price_p90_usd=4_200.0,
+    dense_reg_per_wafer=5.0e7 / 16.0,      # 3.125e6 reg/wafer (312.5 chips/wafer)
+    standard_reg_per_wafer=2.0e6 / 16.0,   # 1.25e5 reg/wafer (12.5 chips/wafer)
+    epistemic_tag="{Varsayım}",
+    notes="OBS-060 kanonik FOAK prototip kademesi: cad/params.py Ø50 mm yonga (80x80 mm taşıyıcı < Ø150 mm bore) ve BOM_DETAILED.csv S5.4-01 ($56k / 25 yonga = $2,240/yonga) ile birebir tutarlı ($0 mekanik yeniden tasarım; ~6,834 yonga/5g çubuk @ %5 MBE).",
+)
 
 
 def wright_multiplier(n_units: float, learning_rate: float = 0.85) -> float:
@@ -477,12 +536,44 @@ def evaluate_v5_wafer_economics(
     )
     w3_sens350k_chip = w3_sens350k_eval["total_usd_per_chip_10k_nom_wafer_p50"]
 
+    # OBS-060: Evaluate canonical FOAK 50 mm prototype tier (matching cad/params.py & BOM S5.4-01)
+    v5_foak_50mm_dense = _wafer_batch_chip_economics(
+        tco_v5["tco5_samples"], tp_v5_15ms["net_reg_day"], FOAK_50MM_WAFER_SPEC, t_swap_dense_hr, rng_w, use_dense=True
+    )
+    # OBS-060: 200 mm Fab-scale bore/cryostat/LL redesign CAPEX sensitivity (+$1.85M {Varsayım})
+    tco_v5_w2_fab200 = simulate_fab_tco5_no_wafer(
+        bom_hw_nom_usd=bom_v5_m3 + FAB_200MM_BORE_REDESIGN_ADDER_NOM_USD,
+        hw_mc_p50_ratio=HW_MC_P50_RATIO_V5,
+        n_tools_wright=n_tools_wright,
+        wright_b=wright_b,
+        n_mc=n_mc,
+        seed=seed + 4,
+    )
+    w2_fab200_eval = _wafer_batch_chip_economics(
+        tco_v5_w2_fab200["tco5_samples"], tp_v5_15ms["net_reg_day"], WAFER_SCENARIOS["W2"], t_swap_dense_hr, rng_w, use_dense=True
+    )
+
+    mbe_rod_audit = {
+        "rod_mass_g": MBE_ROD_MASS_G,
+        "rod_cost_nom_usd": MBE_ROD_COST_NOM_USD,
+        "realistic_capture_eff": MBE_CAPTURE_EFFICIENCY_REALISTIC,
+        "foak_50mm_at_5pct": compute_mbe_rod_utilization(50.0, 0.05),
+        "fab_200mm_at_5pct": compute_mbe_rod_utilization(200.0, 0.05),
+        "fab_300mm_at_5pct": compute_mbe_rod_utilization(300.0, 0.05),
+        "fab_200mm_at_10pct": compute_mbe_rod_utilization(200.0, 0.10),
+    }
+    box_tail_audit = {
+        "legacy_30nm_soi_unsafe": compute_box_depth_tail_margin(30.0),
+        "upgraded_50nm_soi_safe": compute_box_depth_tail_margin(50.0),
+    }
+
     cx4_summary = {
         "threshold_frac": cx4_reduction_threshold,
         "v3_W1_reference_chip_10k_usd": ref_v3_w1_chip_p50,
         "W1_v5_15ms_chip_10k_usd": scenarios_out["W1"]["v5_0_dense_1h_15ms"]["total_usd_per_chip_10k_nom_wafer_p50"],
         "W1_cx4_pass": scenarios_out["W1"]["reductions"]["cx4_ge_40pct_vs_v3_W1_pass"],
         "W2_v5_15ms_chip_10k_usd": scenarios_out["W2"]["v5_0_dense_1h_15ms"]["total_usd_per_chip_10k_nom_wafer_p50"],
+        "W2_with_1p85M_200mm_bore_redesign_chip_10k_usd": w2_fab200_eval["total_usd_per_chip_10k_nom_wafer_p50"],
         "W2_reduction_vs_v3_W1_frac": scenarios_out["W2"]["reductions"]["vs_v3_W1_baseline_15ms_frac"],
         "W2_reduction_same_wafer_frac": scenarios_out["W2"]["reductions"]["same_wafer_v3_to_v5_15ms_frac"],
         "W2_cx4_pass_vs_v3_W1": scenarios_out["W2"]["reductions"]["cx4_ge_40pct_vs_v3_W1_pass"],
@@ -494,8 +585,15 @@ def evaluate_v5_wafer_economics(
         "W3_cx4_pass_same_wafer": scenarios_out["W3"]["reductions"]["cx4_ge_40pct_same_wafer_pass"],
         "W3_with_350k_300mm_stage_adder_chip_10k_usd": w3_sens350k_chip,
         "W3_with_350k_300mm_stage_adder_red_vs_v3_W1_frac": 1.0 - (w3_sens350k_chip / ref_v3_w1_chip_p50),
-        "W2_zero_hardware_mod_note": "W2 (200 mm thin 30 nm 28Si-on-SOI) fits existing M3 v5.0 200 mm CAD/BOM with $0 tool modification.",
-        "W3_300mm_cad_note": "W3 (300 mm) requires S3 stage & S5 load-lock scaling (~$350k {Varsayim}); impact is <+$0.005/chip.",
+        "W2_zero_hardware_mod_note": (
+            "OBS-060 reconciliation: FOAK CAD/BOM (cad/params.py & S5.4-01) is locked to Ø50 mm; "
+            "Fab-scale 200 mm W2 (50 nm safe 28Si-on-SOI) requires scaled >=Ø300 mm magnet/cryo/LL redesign "
+            "(+$1.85M {Varsayim} sensitivity modeled explicitly above)."
+        ),
+        "W3_300mm_cad_note": (
+            "OBS-060/134 reconciliation: W3 (300 mm, 50 nm safe 28Si-on-SOI, 5% MBE capture = 190 wafers/5g rod) "
+            "requires full 300 mm magnet/cryo/stage/load-lock redesign (+$2.45M {Varsayim})."
+        ),
         "cx4_wall_broken_in_W2_and_W3": bool(
             (not scenarios_out["W1"]["reductions"]["cx4_ge_40pct_vs_v3_W1_pass"])
             and scenarios_out["W2"]["reductions"]["cx4_ge_40pct_vs_v3_W1_pass"]
@@ -506,6 +604,7 @@ def evaluate_v5_wafer_economics(
     return {
         "no_lab_measurement": NO_LAB_MEASUREMENT,
         "no_supplier_quotes": NO_SUPPLIER_QUOTES,
+        "procurement_status": "UNQUOTED_ROM_ESTIMATE",
         "epistemic_tags": list(EPISTEMIC_TAGS),
         "assumptions": {
             "bom_v3_m3_usd": bom_v3_m3,
@@ -533,6 +632,9 @@ def evaluate_v5_wafer_economics(
                 tco_v5["tco5_summary_usd"]["p50"] / tco_v3["tco5_summary_usd"]["p50"] - 1.0
             ),
         },
+        "foak_50mm_prototype_tier_obs060": v5_foak_50mm_dense,
+        "mbe_rod_utilization_obs134": mbe_rod_audit,
+        "box_depth_tail_audit_obs134": box_tail_audit,
         "scenarios": scenarios_out,
         "cx4_closure": cx4_summary,
     }

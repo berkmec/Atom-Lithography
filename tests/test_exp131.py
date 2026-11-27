@@ -169,6 +169,19 @@ def test_exp131_json_schema_and_percolation_monotonicity() -> None:
     assert abs(sq5_6["Y_perfect_mc"] - sq5_6["Y_perfect_exact"]) < 0.03
     assert abs(sq11_6["Y_FT_5pct_mc"] - sq11_6["Y_FT_5pct_exact"]) < 0.03
 
+    # OBS-047 (iradina 5 keV + Si(001) 2-valley interference), OBS-043 (4-level |e> leakage), OBS-140 (meander parasitics)
+    a47 = data["part1_flipflop_straggle"]["iradina_5keV_and_valley_audit_OBS047"]
+    assert 0.45 <= a47["honest_p_ff_iradina_8nm_valley2"] <= 0.65
+    assert a47["regimes"]["iradina5keV_valley2_cap_8nm"]["yield_C_ge_100"] < a47["regimes"]["exp92_smooth_cap_8nm"]["yield_C_ge_100"] - 0.30
+    a43 = data["part2_lindblad_bus"]["four_level_tosi_leakage_audit_OBS043"]
+    assert a43["g_02_charge_dipole_mhz"] > 200.0
+    assert a43["edsr_15ns_rect_P_leak_e"] > 0.15
+    assert a43["edsr_60ns_gauss_P_leak_e"] < 0.05
+    assert a43["cz_48d_250ns_P_leak_e"] > 1e-4
+    a140 = p3["cad_m4_bus_geometry"]["meander_parasitic_loading_OBS140"]
+    assert a140["C_mut_adjacent_leg_pF_per_m"] > 50.0
+    assert a140["Z_r_loaded_range_ohm"][0] < 2200.0 and a140["Z_r_loaded_range_ohm"][1] <= 2500.0
+
 
 def _assert_valid_png(path: Path, min_w: int = 1800, min_h: int = 1200, min_bytes: int = 80_000) -> None:
     assert path.exists(), f"Missing figure: {path.name}"
@@ -214,8 +227,7 @@ def test_summary_gfm_tables_and_portability() -> None:
             expected_cols = 0
 
     # Portability audit: zero hardcoded user paths anywhere in Exp131 code, results, or tests
-    forbidden_a = "/" + "home" + "/" + "berk"
-    forbidden_b = "/" + "run" + "/" + "media" + "/" + "berk"
+    forbidden_pats = (re.compile(r"/home/[a-zA-Z0-9_-]+"), re.compile(r"/run/media/"))
     files_to_scan = (
         list(EXP_DIR.glob("*.py"))
         + list(RES_DIR.glob("*.json"))
@@ -224,5 +236,7 @@ def test_summary_gfm_tables_and_portability() -> None:
     )
     for fp in files_to_scan:
         txt = fp.read_text(encoding="utf-8")
-        assert forbidden_a not in txt, f"Hardcoded home path found in {fp.name}"
-        assert forbidden_b not in txt, f"Hardcoded media path found in {fp.name}"
+        if fp == Path(__file__):
+            txt = "\n".join(ln for ln in txt.splitlines() if "forbidden_pats =" not in ln)
+        for pat in forbidden_pats:
+            assert pat.search(txt) is None, f"Hardcoded path pattern {pat.pattern} found in {fp.name}"

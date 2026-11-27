@@ -1419,6 +1419,108 @@
         14.064948779781728,
         13.90282390424785
       ]
+    },
+    "iradina_5keV_and_valley_audit_OBS047": {
+      "n_donors": 2000,
+      "s_eps_uev": 0.3897,
+      "q_l": 200000.0,
+      "z_r_ohm": 3000.0,
+      "iradina_5keV_params_nm": {
+        "Rp_nm": 10.3107,
+        "sigma_z_nm": 5.098,
+        "sigma_xy_nm": 4.718
+      },
+      "regimes": {
+        "exp92_smooth_cap_4nm": {
+          "delta_z_cap_nm": 4.0,
+          "valley_interference": false,
+          "mean_z_nm": 10.62582396467797,
+          "frac_below_8p5nm_double_well": 0.222,
+          "yield_C_ge_100": 0.778,
+          "median_g_eff_mhz_all": 0.6356160304778777,
+          "median_g_eff_mhz_certified": 0.8553118211094612,
+          "median_C_all": 2673.832645248257
+        },
+        "exp92_valley2_cap_4nm": {
+          "delta_z_cap_nm": 4.0,
+          "valley_interference": true,
+          "mean_z_nm": 10.62582396467797,
+          "frac_below_8p5nm_double_well": 0.222,
+          "yield_C_ge_100": 0.7585,
+          "median_g_eff_mhz_all": 0.5951155515454614,
+          "median_g_eff_mhz_certified": 0.8298952357890447,
+          "median_C_all": 3082.122432009396
+        },
+        "iradina5keV_smooth_cap_4nm": {
+          "delta_z_cap_nm": 4.0,
+          "valley_interference": false,
+          "mean_z_nm": 14.493155222134723,
+          "frac_below_8p5nm_double_well": 0.115,
+          "yield_C_ge_100": 0.7805,
+          "median_g_eff_mhz_all": 0.46820649369370637,
+          "median_g_eff_mhz_certified": 0.6618829011537585,
+          "median_C_all": 2265.6952494154293
+        },
+        "iradina5keV_valley2_cap_4nm": {
+          "delta_z_cap_nm": 4.0,
+          "valley_interference": true,
+          "mean_z_nm": 14.493155222134723,
+          "frac_below_8p5nm_double_well": 0.115,
+          "yield_C_ge_100": 0.674,
+          "median_g_eff_mhz_all": 0.27847504808569645,
+          "median_g_eff_mhz_certified": 0.5491973655094131,
+          "median_C_all": 1042.1612505407102
+        },
+        "exp92_smooth_cap_8nm": {
+          "delta_z_cap_nm": 8.0,
+          "valley_interference": false,
+          "mean_z_nm": 14.62582396467797,
+          "frac_below_8p5nm_double_well": 0.0,
+          "yield_C_ge_100": 0.984,
+          "median_g_eff_mhz_all": 0.823702118203018,
+          "median_g_eff_mhz_certified": 0.836620426195973,
+          "median_C_all": 8574.132753640124
+        },
+        "exp92_valley2_cap_8nm": {
+          "delta_z_cap_nm": 8.0,
+          "valley_interference": true,
+          "mean_z_nm": 14.62582396467797,
+          "frac_below_8p5nm_double_well": 0.0,
+          "yield_C_ge_100": 0.888,
+          "median_g_eff_mhz_all": 0.5437978372222054,
+          "median_g_eff_mhz_certified": 0.6283791413515035,
+          "median_C_all": 3790.1758058783917
+        },
+        "iradina5keV_smooth_cap_8nm": {
+          "delta_z_cap_nm": 8.0,
+          "valley_interference": false,
+          "mean_z_nm": 18.493155222134725,
+          "frac_below_8p5nm_double_well": 0.0,
+          "yield_C_ge_100": 0.6875,
+          "median_g_eff_mhz_all": 0.2512131844178044,
+          "median_g_eff_mhz_certified": 0.4697303465358933,
+          "median_C_all": 839.5892092494048
+        },
+        "iradina5keV_valley2_cap_8nm": {
+          "delta_z_cap_nm": 8.0,
+          "valley_interference": true,
+          "mean_z_nm": 18.493155222134725,
+          "frac_below_8p5nm_double_well": 0.0,
+          "yield_C_ge_100": 0.5625,
+          "median_g_eff_mhz_all": 0.11269952868355106,
+          "median_g_eff_mhz_certified": 0.4004019882500442,
+          "median_C_all": 206.72622183787172
+        }
+      },
+      "honest_p_ff_iradina_8nm_valley2": 0.5625,
+      "downstream_qldpc_impact_at_f1p5_Ez2MVm": {
+        "p_slot_unfiltered_bath_x_honest_pff": 0.4350621375,
+        "bb144_Ncand8_yield_pct_unfiltered_bath": 4.96,
+        "bb288_Ncand9_yield_pct_unfiltered_bath": 3.384,
+        "p_slot_ddrf6893_bath_x_honest_pff": 0.30314007000000004,
+        "bb144_Ncand8_yield_pct_ddrf6893": 1e-05,
+        "bb288_Ncand9_yield_pct_ddrf6893": 0.0
+      }
     }
   },
   "part2_lindblad_bus": {
@@ -3833,6 +3935,25 @@
         "n_pairs": 6,
         "mean_F_avg_cz": 0.4522964714030673
       }
+    },
+    "four_level_tosi_leakage_audit_OBS043": {
+      "z_nm": 13.5,
+      "eps_ghz": 2.0,
+      "t_c_ghz": 5.9334825796138935,
+      "omega_q_ghz": 5.0017545804965895,
+      "charge_gap_02_ghz": 6.2710266648263175,
+      "g_01_flipflop_mhz": 6.72252636139787,
+      "g_02_charge_dipole_mhz": 275.6001104869004,
+      "g_13_charge_dipole_mhz": 275.54864808731764,
+      "g_02_over_omega_r": 0.05512002209738008,
+      "edsr_15ns_rect_P1": 0.2664796749061077,
+      "edsr_15ns_rect_P_leak_e": 0.4112298059984776,
+      "edsr_60ns_gauss_P1": 0.3431006118985968,
+      "edsr_60ns_gauss_P_leak_e": 1.8889253599118837e-08,
+      "dc_ramp_30ns_P_leak_e": 0.0002759408478332866,
+      "cz_48d_250ns_P_leak_e": 0.0030292778541574084,
+      "total_unmodeled_leakage_per_cz_plus_ramp": 0.003305218701990695,
+      "twelve_d_truncation_warning": "12D (2x2x3) solver omits g_02~255 MHz ultrastrong charge-dipole coupling and ~0.2-0.34% per-CZ+ramp |e> leakage (and >30% under unshaped 15 ns EDSR)."
     }
   },
   "part3_percolation_and_cad": {
@@ -5355,6 +5476,32 @@
         15.0,
         20.0
       ],
+      "meander_parasitic_loading_OBS140": {
+        "eps_eff_si": 6.35,
+        "C_ideal_pF_per_m": 111.11111111111111,
+        "C_mut_adjacent_leg_pF_per_m": 59.01,
+        "C_loaded_realistic_range_pF_per_m": [
+          160.0,
+          220.0
+        ],
+        "Z_r_loaded_range_ohm": [
+          2132.0,
+          2500.0
+        ],
+        "lambda_half_5GHz_loaded_range_um": [
+          213.2,
+          250.0
+        ],
+        "f_r_at_300um_loaded_range_ghz": [
+          3.553,
+          4.167
+        ],
+        "g_eff_sqrt_Zr_reduction_pct_range": [
+          8.71,
+          15.7
+        ],
+        "mitigation_note": "Increase meander pitch/ground clearance or use L_sq=150-200 pH/sq (or 3*lambda/2 harmonics) to restore 3 kOhm / >=250 um qLDPC reach."
+      },
       "intra_node_slot_pitch_nm": 200.0,
       "pocket_span_6slots_um": 1.0,
       "antinode_voltage_uniformity_6slots": 0.9999862922474267,

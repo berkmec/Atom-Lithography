@@ -870,27 +870,32 @@ def _build_part_specs() -> dict[str, dict[str, Any]]:
     specs["S6.3-05"] = {
         "electrical_class": "E3",
         "grounding_domain": "CRYO_OVC",
-        "grounding_notes": "Bipolar ±100 A (10 ppm) magnet ramp PSU + Bi-2223 HTS current leads; off/zeroed in persistent mode.",
+        "grounding_notes": "Bipolar ±300 A (10 ppm) magnet ramp PSU + >=300 A Bi-2223 HTS current leads (17% margin over 255.9 A S_upper coil, <50 mW/pair 4 K leak); dedicated 650 W Tier-1B UPS ramp-down branch.",
         "supply_rails": [
-            _rail("AC_MAINS_230V", 230.0, "AC_1PH", 8.0, 120.0, 1600.0, "S7.4-03"),
-            _rail("MAGNET_RAMP_DC", 10.0, "DC", 100.0, 0.0, 1000.0, "S6.3-05"),
+            _rail("AC_UPS_TIER1B_MAGNET_RAMPDOWN", 230.0, "AC_1PH", 10.0, 120.0, 650.0, "S7.SAFETY-04"),
+            _rail("MAGNET_RAMP_DC", 10.0, "DC", 300.0, 0.0, 3000.0, "S6.3-05"),
         ],
         "connectors_and_pinout": [
-            _conn("J_HIGH_I", "M10 Copper Busbar + HTS Lead Pair", "rack_rear", "S6.3-04", [
-                ("1", "MAG_I_POS", "OUT", "±100 A ramp (±255.9 A bank eq.)"),
-                ("2", "MAG_I_NEG", "OUT", "Return lead"),
+            _conn("J_HIGH_I", "M12 Copper Busbar + >=300 A Bi-2223 HTS Lead Pair", "rack_rear", "S6.3-04", [
+                ("1", "MAG_I_POS", "OUT", "±300 A rated HTS lead (255.9 A S_upper peak, 17% margin)"),
+                ("2", "MAG_I_NEG", "OUT", "±300 A return HTS lead (<50 mW/pair @ 4 K)"),
             ]),
             _conn("J_VTAP", "LEMO 1B 4-Pin Voltage Tap", "rack_rear", "S6.3-04", [
                 ("1-2", "VTAP_QUENCH_SENSE", "IN", "400 V isolated quench sense"),
                 ("3-4", "PCS_HEATER_DRV", "OUT", "50 mA persistent switch heater"),
             ]),
         ],
-        "mating_part_ids": ["S6.3-01", "S6.3-02", "S6.3-04", "S7.SAFETY-05"],
-        "interlock_hooks": [_hook("QUENCH_DETECT_DUMP", "S7.SAFETY-05", "Open breaker & dump 18.94 kJ into 1.563 Ohm", 30.0)],
+        "mating_part_ids": ["S6.3-01", "S6.3-02", "S6.3-04", "S7.SAFETY-04", "S7.SAFETY-05"],
+        "interlock_hooks": [
+            _hook("OUTAGE_CONTROLLED_RAMPDOWN", "S7.SAFETY-04", "Dedicated 650 W Tier-1B UPS branch executes 120 s controlled ramp-down at t=1.0 s", 1000.0),
+            _hook("QUENCH_DETECT_DUMP", "S7.SAFETY-05", "Open breaker & dump 18.94 kJ into 1.563 Ohm passive backup if faulted", 30.0),
+        ],
         "ups_tier": "TIER2_SHED",
         "ups_budget_group": "AUX_PROCESS_SHED_ON_OUTAGE",
         "exp150_ups_allocation_w": 0.0,
-        "timing_sync": {"rb_10mhz_port": None, "white_rabbit_port": None, "sync_role": "DC/persistent magnet charger"},
+        "dedicated_magnet_rampdown_ups_branch_w": 650.0,
+        "hts_lead_rating_a": 300.0,
+        "timing_sync": {"rb_10mhz_port": None, "white_rabbit_port": None, "sync_role": "DC/persistent magnet charger with dedicated 650 W UPS Tier-1B ramp-down"},
     }
 
     specs["S6.4-01"] = {
@@ -1273,35 +1278,35 @@ def _build_part_specs() -> dict[str, dict[str, Any]]:
     specs["S7.SAFETY-04"] = {
         "electrical_class": "E3",
         "grounding_domain": "FACILITY_PE",
-        "grounding_notes": "15 kVA / 13.5 kW / 10 kWh Online Double-Conversion LFP UPS (0 ms transfer) + tiered load-shed PDU.",
+        "grounding_notes": "15 kVA / 13.5 kW / 12.0 kWh Online Double-Conversion LFP UPS (10.8 kWh @ 90% DoD, 0 ms transfer) + utility-side fast Tier-2 contactor AHEAD of UPS + Tier-1/Tier-1B PDU.",
         "supply_rails": [
             _rail("AC_FACILITY_IN_3PH", 400.0, "AC_3PH", 32.0, 350.0, 13850.0, "S7.SAFETY-04"),
             _rail("UPS_TIER1_BUS_230V", 230.0, "AC_1PH", 16.0, 2533.0, 3500.0, "S7.SAFETY-04"),
-            _rail("UPS_TIER2_SHED_BUS", 230.0, "AC_1PH", 32.0, 2775.0, 10967.0, "S7.SAFETY-04"),
+            _rail("UPS_TIER1B_RAMPDOWN_BUS", 230.0, "AC_1PH", 16.0, 2845.0, 3500.0, "S7.SAFETY-04"),
         ],
         "connectors_and_pinout": [
             _conn("J_MAINS_IN", "IEC 60309 3P+N+PE 32A", "facility_bay", "S7.4-03", [
-                ("L1-L3", "UTILITY_400V_3PH", "IN", "400 VAC 3-phase input"),
+                ("L1-L3", "UTILITY_400V_3PH", "IN", "400 VAC 3-phase input (PT420 12.5 kW branched on utility-side contactor AHEAD of UPS)"),
                 ("N", "UTILITY_N", "IN", "Neutral"),
                 ("PE", "FACILITY_PE", "PWR", "Main earth bond"),
             ]),
             _conn("J_PDU_T1", "Tier-1 Critical Outlet Bank (IEC C13/C19)", "pdu_tier1", "S7.SAFETY-03", [
-                ("1-16", "UPS_TIER1_230V", "OUT", "2.533 kW critical (213.2 min runtime)"),
+                ("1-16", "UPS_TIER1_230V", "OUT", "2.533 kW critical (202.8 min @ 90% DoD incl. 350 W loss + 120 s Tier-1B)"),
             ]),
-            _conn("J_PDU_T2", "Tier-2 Sheddable Outlet Bank (IEC C19)", "pdu_tier2", "S9.HPC-01", [
-                ("1-8", "UPS_TIER2_SHED_230V", "OUT", "Shed cleanly on outage"),
+            _conn("J_PDU_T1B", "Tier-1B Controlled Ramp-Down / Halt Bank (IEC C19)", "pdu_tier1b", "S9.HPC-01", [
+                ("1-4", "UPS_TIER1B_230V", "OUT", "2.195 kW S9.HPC halt + 0.650 kW S6.3-05 magnet ramp-down (120 s, peak UPS 5.378 kW <= 13.5 kW)"),
             ]),
-            _conn("J_EPO_DRY", "Phoenix 6-Pin EPO & Status", "front_ctrl", "S7.SAFETY-03", [
+            _conn("J_EPO_DRY", "Phoenix 6-Pin EPO & Utility-Contactor Status", "front_ctrl", "S7.SAFETY-03", [
                 ("1-2", "EPO_NC_LOOP", "IN", "Hardwired EPO trip"),
-                ("3-4", "ON_BATTERY_OUT", "OUT", "Triggers Tier-2 shed at t=0.5 s"),
+                ("3-4", "UTILITY_SHED_OUT", "OUT", "Opens utility-side Tier-2 contactor (<5 ms) ahead of UPS; sheds Tier-1B at t=125 s"),
             ]),
         ],
-        "mating_part_ids": ["S7.SAFETY-03", "S7.SAFETY-01", "S7.1-03", "S7.4-03", "S9.HPC-01", "S6.8-02"],
-        "interlock_hooks": [_hook("UTILITY_LOSS_0MS_HOLD", "S7.SAFETY-03", "Zero-ms hold Tier-1; trigger Tier-2 load-shed", 0.0)],
+        "mating_part_ids": ["S7.SAFETY-03", "S7.SAFETY-01", "S7.1-03", "S7.4-03", "S9.HPC-01", "S6.3-05", "S6.8-02"],
+        "interlock_hooks": [_hook("UTILITY_LOSS_0MS_HOLD", "S7.SAFETY-03", "Utility-side contactor sheds 12.5 kW PT420 (<5 ms) ahead of UPS; 0 ms UPS hold on 5.378 kW Tier-1+1B -> 2.533 kW Tier-1", 0.0)],
         "ups_tier": "NONE",
         "ups_budget_group": "UPS_INTERNAL_LOSS",
         "exp150_ups_allocation_w": 0.0,
-        "timing_sync": {"rb_10mhz_port": None, "white_rabbit_port": None, "sync_role": "Master facility UPS & load-shed PDU"},
+        "timing_sync": {"rb_10mhz_port": None, "white_rabbit_port": None, "sync_role": "Master facility 12 kWh LFP UPS & utility-side load-shed controller"},
     }
 
     specs["S7.SAFETY-05"] = {
@@ -2110,24 +2115,26 @@ def _build_part_specs() -> dict[str, dict[str, Any]]:
     specs["S6.1-02"] = {
         "electrical_class": "E4",
         "grounding_domain": "FACILITY_PE",
-        "grounding_notes": "Water-cooled Cryomech CPA He compressor (9.42 kW 3-phase 400 VAC facility breaker; Tier-2 soft-shed 0.5 s).",
-        "supply_rails": [_rail("AC_3PH_FACILITY_400V", 400.0, "AC_3PH", 18.0, 9420.0, 10500.0, "S7.SAFETY-04")],
+        "grounding_notes": "Water-cooled Cryomech CPA1110 He compressor (11.4 kW nom / 12.5 kW max @ 60 Hz; 12.42 kW + 80 W S6.9-01 = 12.50 kW on utility-side 3-ph 400 VAC fast contactor AHEAD of UPS — never on 13.5 kW UPS inverter).",
+        "supply_rails": [_rail("AC_3PH_UTILITY_CONTACTOR_400V", 400.0, "AC_3PH", 24.0, 12420.0, 13200.0, "S7.SAFETY-04")],
         "connectors_and_pinout": [
-            _conn("J_3PH", "IEC 60309 3P+PE 32A", "facility_chiller", "S7.SAFETY-04", [
-                ("L1-L3", "FACILITY_400V_3PH", "IN", "9.42 kW PT420 He compressor"),
+            _conn("J_3PH", "IEC 60309 3P+PE 32A (Utility-Side Fast Contactor Ahead of UPS)", "facility_chiller", "S7.SAFETY-04", [
+                ("L1-L3", "UTILITY_400V_3PH_PRE_UPS", "IN", "12.42 kW Cryomech CPA1110 PT420 He compressor (12.50 kW incl. S6.9-01; shed <5 ms ahead of UPS)"),
                 ("PE", "FACILITY_PE", "PWR", "Main earth bond"),
             ]),
             _conn("J_CTRL", "DB9 Remote Stop/Status", "compressor_panel", "S7.SAFETY-03", [
-                ("1-2", "COMP_SOFT_STOP", "IN", "Controlled stop at t=0.5 s on utility loss"),
+                ("1-2", "COMP_SOFT_STOP", "IN", "Utility-side contactor open (<5 ms) on utility loss"),
                 ("3-4", "WATER_TEMP_OK", "OUT", "Chilled-water flow/temp switch"),
             ]),
         ],
         "mating_part_ids": ["S6.1-01", "S6.9-01", "S7.SAFETY-03", "S7.SAFETY-04"],
-        "interlock_hooks": [_hook("PT420_SOFT_SHED", "S7.SAFETY-04", "Controlled compressor stop on outage (0.5 s)", 500.0)],
+        "interlock_hooks": [_hook("PT420_UTILITY_FAST_SHED", "S7.SAFETY-04", "Open utility-side 3-ph contactor ahead of UPS on outage (<5 ms)", 5.0)],
         "ups_tier": "TIER2_SHED",
         "ups_budget_group": "EXP150_TIER2_SHED",
-        "exp150_ups_allocation_w": 9420.0,
-        "timing_sync": {"rb_10mhz_port": None, "white_rabbit_port": None, "sync_role": "4 K pulse-tube He compressor"},
+        "exp150_ups_allocation_w": 12420.0,
+        "fed_from_ups_inverter": False,
+        "utility_side_contactor_ahead_of_ups": True,
+        "timing_sync": {"rb_10mhz_port": None, "white_rabbit_port": None, "sync_role": "4 K pulse-tube He compressor (utility-side pre-UPS)"},
     }
 
     specs["S6.3-01"] = {
@@ -2480,9 +2487,10 @@ def build_all(out_dir: Path = OUT_DIR) -> dict[str, Any]:
     tier1_total_w = round(tier1_95_w + tier1_e1_w, 2)  # 2533.0 W exact!
     assert round(sum(tier1_buckets.values()), 2) == tier1_total_w == 2533.0
 
-    tier2_total_w = round(sum(x["power_w"] for x in tier2_items_95), 2)  # 12275.0 W exact!
-    assert round(sum(tier2_buckets.values()), 2) == tier2_total_w == 12275.0
-    exp150_combined_w = round(tier1_total_w + tier2_total_w, 2)          # 14808.0 W exact!
+    # OBS-126/079: PT420 Cryomech CPA1110 updated to 12.5 kW (12420 W + 80 W) on utility-side fast contactor ahead of UPS
+    tier2_total_w = round(sum(x["power_w"] for x in tier2_items_95), 2)  # 15275.0 W exact!
+    assert round(sum(tier2_buckets.values()), 2) == tier2_total_w == 15275.0
+    exp150_combined_w = round(tier1_total_w + tier2_total_w, 2)          # 17808.0 W exact!
 
     # Exact 28-part TIER2_SHED watt-for-watt reconciliation (zero discrepancy!)
     t2_28_raw_rails_w = round(sum(x["supply_rails_steady_sum_w"] for x in tier2_all_28_items), 2)
@@ -2492,39 +2500,49 @@ def build_all(out_dir: Path = OUT_DIR) -> dict[str, Any]:
     t2_28_total_incr_w = round(sum(x["incremental_mains_w"] for x in tier2_all_28_items), 2)
     t2_28_discrepancy_w = round(t2_28_raw_rails_w - (t2_28_exp150_w + t2_28_aux_incr_w + t2_28_overlap_w), 4)
     assert len(tier2_all_28_items) == 28
-    assert t2_28_raw_rails_w == 18026.0
-    assert t2_28_exp150_w == 12275.0
+    assert t2_28_raw_rails_w == 21026.0
+    assert t2_28_exp150_w == 15275.0
     assert t2_28_discrepancy_w == 0.0
     assert round(t2_28_total_incr_w - (t2_28_exp150_w + t2_28_aux_incr_w), 4) == 0.0
 
-    # UPS runtime formulas: BOTH Exp150 nominal reference AND conservative incl. 350 W idle loss + LFP DoD
+    # OBS-068/079/126: Upgraded 12.0 kWh LFP UPS + utility-side Tier-2 fast contactor + 650 W Tier-1B magnet ramp-down
     ups_kva = 15.0
     ups_pf = 0.90
     ups_rated_kw = ups_kva * ups_pf      # 13.5 kW
-    ups_batt_kwh = 10.0
+    ups_batt_kwh = 12.0                  # Upgraded from 10.0 kWh (170.6 min shortfall) -> 12.0 kWh LFP
     ups_usable_dod = 0.90
-    ups_usable_kwh = ups_batt_kwh * ups_usable_dod  # 9.0 kWh @ 90% DoD
+    ups_usable_kwh = round(ups_batt_kwh * ups_usable_dod, 3)  # 10.8 kWh @ 90% DoD
     ups_inv_eff = 0.90
     ups_internal_loss_w = 350.0
+    dedicated_magnet_rampdown_w = 650.0
+    tier1b_transient_w = round(tier2_buckets["s9hpc_100g_rdma_graceful_halt"] + dedicated_magnet_rampdown_w, 2)  # 2845.0 W
+    tier1_plus_1b_peak_ups_kw = round((tier1_total_w + tier1b_transient_w) / 1e3, 3)  # 5.378 kW <= 13.5 kW!
+    assert tier1_plus_1b_peak_ups_kw == 5.378
+    assert tier1_plus_1b_peak_ups_kw <= ups_rated_kw
 
-    # (a) Exp150 reference formula (10 kWh * 0.90 / P_load)
-    runtime_rated_min = round((ups_batt_kwh * ups_inv_eff / ups_rated_kw) * 60.0, 1)              # 40.0 min
-    runtime_tier1_exp150_min = round((ups_batt_kwh * ups_inv_eff / (tier1_total_w / 1e3)) * 60.0, 1)  # 213.2 min
+    # (a) Exp150 reference formula (12 kWh * 0.90 / P_load)
+    runtime_rated_min = round((ups_usable_kwh * ups_inv_eff / ups_rated_kw) * 60.0, 1)  # 43.2 min (matches exp150.json)
+    runtime_tier1_exp150_min = round((ups_batt_kwh * ups_inv_eff / (tier1_total_w / 1e3)) * 60.0, 1)  # 255.8 min
 
-    # (b) Conservative battery DC draw INCLUDING 350 W continuous double-conversion idle loss:
+    # (b) Conservative battery DC draw INCLUDING 350 W continuous double-conversion idle loss + 120 s Tier-1B ramp-down:
     #     P_batt_dc = P_load / eta_inv + P_internal_loss
     p_batt_tier1_w = tier1_total_w / ups_inv_eff + ups_internal_loss_w                             # 3164.44 W
-    runtime_tier1_100dod_min = round((ups_batt_kwh * 1e3 / p_batt_tier1_w) * 60.0, 1)              # 189.6 min
-    runtime_tier1_90dod_min = round((ups_usable_kwh * 1e3 / p_batt_tier1_w) * 60.0, 1)             # 170.6 min
+    tier1b_120s_dc_kwh = (tier1b_transient_w / ups_inv_eff) * (120.0 / 3600.0) / 1e3               # 0.1054 kWh
+    runtime_tier1_100dod_min = round(((ups_batt_kwh - tier1b_120s_dc_kwh) * 1e3 / p_batt_tier1_w) * 60.0, 1)   # 225.5 min
+    runtime_tier1_90dod_min = round(((ups_usable_kwh - tier1b_120s_dc_kwh) * 1e3 / p_batt_tier1_w) * 60.0, 1)  # 202.8 min (>= 180 min PASS!)
+    runtime_tier1_90dod_steady_only_min = round((ups_usable_kwh * 1e3 / p_batt_tier1_w) * 60.0, 1)             # 204.8 min
+    assert runtime_tier1_90dod_min >= 180.0
 
     p_batt_rated_w = (ups_rated_kw * 1e3) / ups_inv_eff + ups_internal_loss_w                      # 15350.0 W
-    runtime_rated_100dod_min = round((ups_batt_kwh * 1e3 / p_batt_rated_w) * 60.0, 1)              # 39.1 min
-    runtime_rated_90dod_min = round((ups_usable_kwh * 1e3 / p_batt_rated_w) * 60.0, 1)             # 35.2 min
+    runtime_rated_100dod_min = round((ups_batt_kwh * 1e3 / p_batt_rated_w) * 60.0, 1)              # 46.9 min
+    runtime_rated_90dod_min = round((ups_usable_kwh * 1e3 / p_batt_rated_w) * 60.0, 1)             # 42.2 min
 
-    req_lfp_kwh_180min_90dod = round((p_batt_tier1_w * 3.0 / ups_usable_dod) / 1e3, 2)             # 10.55 kWh
-    max_tier1_kw_180min_90dod = round((((ups_usable_kwh * 1e3 / 3.0) - ups_internal_loss_w) * ups_inv_eff) / 1e3, 3)  # 2.385 kW
+    req_lfp_kwh_180min_90dod = round(((p_batt_tier1_w * 3.0 / 1e3) + tier1b_120s_dc_kwh) / ups_usable_dod, 2)  # 10.67 kWh
+    max_tier1_kw_180min_90dod = round((((ups_usable_kwh * 1e3 / 3.0) - ups_internal_loss_w) * ups_inv_eff) / 1e3, 3)
 
-    ups_bus_pre_shed_kw = round((exp150_combined_w - tier2_buckets["pt420_compressor_controlled_stop"]) / 1e3, 3)
+    # Peak UPS bus load: Tier-1 (2.533 kW) + Tier-1B (2.195 kW S9.HPC + 0.650 kW S6.3-05 ramp-down) = 5.378 kW <= 13.5 kW
+    # Heavy Tier-2 mains (12.5 kW PT420, aux heaters/HV/flash) are on utility-side fast contactor AHEAD of UPS!
+    ups_bus_pre_shed_kw = tier1_plus_1b_peak_ups_kw
 
     aux_steady_total_w = round(sum(x["incremental_mains_w"] for x in aux_shed_items), 2)
     cryo_ro_aux_ids = ("S6.3-05", "S6.4-01", "S6.4-02", "S6.5-01", "S6.5-02", "S6.6-05", "S6.6-06", "S7.2-03")
@@ -2532,10 +2550,11 @@ def build_all(out_dir: Path = OUT_DIR) -> dict[str, Any]:
     cryo_readout_mode_kw = round((tier1_total_w + tier2_buckets["s9hpc_100g_rdma_graceful_halt"] + sum(aux_by_id[p] for p in cryo_ro_aux_ids)) / 1e3, 3)
     ion_write_mode_kw = round((tier1_total_w + tier2_buckets["s56_mbe_pbn_and_option_q_cut"] + sum(aux_by_id[p] for p in ion_write_aux_ids)) / 1e3, 3)
     flash_anneal_ups_kw = round((tier1_total_w + aux_by_id["S5.3-03"] + aux_by_id["S5.2-03"]) / 1e3, 3)
+    all_machine_loads_incl_pt420_kw = round((tier1_total_w + t2_28_total_incr_w + ups_internal_loss_w) / 1e3, 3)
 
     master = {
-        "schema_version": "1.0",
-        "title": "Master Electrical Power, 15 kVA LFP UPS Load-Shed, Grounding & 10 MHz Rb / White Rabbit Timing ICD",
+        "schema_version": "1.1",
+        "title": "Master Electrical Power, 15 kVA / 12 kWh LFP UPS Load-Shed, Grounding & 10 MHz Rb / White Rabbit Timing ICD",
         "epistemic_flags": {
             "design_maturity": "M0_M1_ELECTRICAL_ICD_DESIGN_ONLY",
             "no_lab_measurement": True,
@@ -2551,7 +2570,7 @@ def build_all(out_dir: Path = OUT_DIR) -> dict[str, Any]:
         },
         "ups_s7_safety_04": {
             "part_id": "S7.SAFETY-04",
-            "topology": "Online Double-Conversion LFP UPS + Tiered Load-Shed PDU",
+            "topology": "Online Double-Conversion 15 kVA / 12 kWh LFP UPS + Utility-Side Fast Tier-2 Contactor Ahead of UPS + Tier-1/1B PDU",
             "rating_kVA": ups_kva,
             "power_factor": ups_pf,
             "rated_real_power_kW": ups_rated_kw,
@@ -2561,30 +2580,43 @@ def build_all(out_dir: Path = OUT_DIR) -> dict[str, Any]:
             "inverter_efficiency": ups_inv_eff,
             "internal_loss_W": ups_internal_loss_w,
             "transfer_time_ms": 0.0,
+            "utility_side_tier2_contactor_ahead_of_ups": True,
+            "pt420_wall_power_utility_side_kW": round(tier2_buckets["pt420_compressor_controlled_stop"] / 1e3, 3),
+            "dedicated_magnet_rampdown_ups_branch_W": dedicated_magnet_rampdown_w,
+            "tier1_plus_tier1b_peak_ups_load_kW": tier1_plus_1b_peak_ups_kw,
+            "ups_peak_load_within_13p5kW_rating": bool(tier1_plus_1b_peak_ups_kw <= ups_rated_kw),
             "tier1_critical": {
                 "total_W": tier1_total_w,
                 "total_kW": round(tier1_total_w / 1e3, 3),
                 "from_95_icds_W": tier1_95_w,
                 "from_e1_boards_W": tier1_e1_w,
                 "exp150_buckets_W": tier1_buckets,
-                "runtime_min": runtime_tier1_exp150_min,
+                "runtime_min": runtime_tier1_90dod_min,
                 "runtime_tier1_min_exp150_nominal_eta090": runtime_tier1_exp150_min,
                 "battery_dc_draw_incl_350w_loss_W": round(p_batt_tier1_w, 2),
+                "tier1b_120s_rampdown_dc_energy_kWh": round(tier1b_120s_dc_kwh, 4),
                 "runtime_tier1_min_conservative_100pct_dod_incl_350w_loss": runtime_tier1_100dod_min,
                 "runtime_tier1_min_conservative_90pct_dod_incl_350w_loss": runtime_tier1_90dod_min,
-                "meets_180min_requirement": runtime_tier1_exp150_min >= 180.0,
+                "runtime_tier1_min_conservative_90pct_dod_steady_only": runtime_tier1_90dod_steady_only_min,
+                "meets_180min_requirement": runtime_tier1_90dod_min >= 180.0,
                 "tier1_conservative_100pct_dod_meets_180min": runtime_tier1_100dod_min >= 180.0,
                 "tier1_conservative_90pct_dod_meets_180min": runtime_tier1_90dod_min >= 180.0,
+                "legacy_10kwh_audit_record": {
+                    "legacy_battery_kWh": 10.0,
+                    "legacy_runtime_90pct_dod_incl_350w_min": 170.6,
+                    "legacy_meets_180min": False,
+                    "remediation": "Upgraded LFP bank from 10.0 kWh to 12.0 kWh (10.8 kWh @ 90% DoD) -> 202.8 min >= 180 min PASS (OBS-068/079).",
+                },
                 "conservative_sizing_requirements_for_180min_at_90pct_dod": {
                     "min_lfp_pack_kWh_at_2p533kW": req_lfp_kwh_180min_90dod,
-                    "recommended_nominal_lfp_pack_kWh": 11.0,
-                    "max_tier1_load_kW_at_10kWh": max_tier1_kw_180min_90dod,
+                    "installed_nominal_lfp_pack_kWh": ups_batt_kwh,
+                    "recommended_nominal_lfp_pack_kWh": 12.0,
+                    "max_tier1_load_kW_at_12kWh": max_tier1_kw_180min_90dod,
                     "sizing_note": (
-                        "Exp150 reference formula (10 kWh * 0.90 / 2.533 kW) gives 213.2 min. "
-                        "Including continuous 350.0 W online double-conversion internal loss (P_batt_dc = 3164.44 W), "
-                        "runtime is 189.6 min at 100% DoD (PASS >= 180 min) and 170.6 min at conservative 90% usable "
-                        "LFP DoD (9.0 kWh, 9.4 min below 180 min). Meeting >= 180 min under 90% DoD + 350 W idle loss "
-                        "requires either >= 10.6 kWh (11 kWh nominal) LFP pack or trimming Tier-1 outage hold load to <= 2.35 kW."
+                        "OBS-068/079 closure: Upgraded to 12.0 kWh LFP (10.8 kWh usable @ 90% DoD). Including 350.0 W continuous "
+                        "double-conversion loss (P_batt_dc = 3164.44 W) and 120 s Tier-1B magnet ramp-down (650 W) + S9.HPC halt (2195 W) "
+                        "(0.1054 kWh DC), conservative runtime is 202.8 min @ 90% DoD (PASS >= 180 min; steady-only 204.8 min; "
+                        "legacy 10 kWh pack gave only 170.6 min < 180 min)."
                     ),
                 },
                 "items_from_95_icds": tier1_items_95,
@@ -2594,7 +2626,11 @@ def build_all(out_dir: Path = OUT_DIR) -> dict[str, Any]:
                 "total_W": tier2_total_w,
                 "total_kW": round(tier2_total_w / 1e3, 3),
                 "exp150_buckets_W": tier2_buckets,
-                "shed_timeline_note": "PT420 (9.5 kW, 3-ph breaker) soft-shed at t=0.5 s; S5.6/Opt-Q cut at t=45 ms; S9.HPC graceful halt at t=60 s.",
+                "shed_timeline_note": (
+                    "Utility-side fast contactor (<5 ms) sheds 12.5 kW PT420 (Cryomech CPA1110 max @ 60 Hz) & heavy Tier-2 mains AHEAD of UPS "
+                    "(never loading the 13.5 kW inverter); S5.6/Opt-Q cut at t=45 ms; Tier-1B UPS holds S6.3-05 magnet ramp-down (650 W, 120 s) "
+                    "& S9.HPC graceful halt (2.195 kW) at 5.378 kW peak <= 13.5 kW, then sheds at t=125 s leaving 2.533 kW Tier-1."
+                ),
                 "items": tier2_items_95,
                 "tier2_shed_28part_reconciliation": {
                     "tier2_shed_part_count": len(tier2_all_28_items),
@@ -2611,8 +2647,10 @@ def build_all(out_dir: Path = OUT_DIR) -> dict[str, Any]:
             "reconciliation": {
                 "exp150_combined_tier1_plus_tier2_W": exp150_combined_w,
                 "exp150_combined_tier1_plus_tier2_kW": round(exp150_combined_w / 1e3, 3),
+                "all_machine_loads_incl_pt420_kW": all_machine_loads_incl_pt420_kw,
                 "ups_bus_pre_shed_excl_3ph_pt420_kW": ups_bus_pre_shed_kw,
                 "ups_bus_utilization_pre_shed_pct": round(ups_bus_pre_shed_kw / ups_rated_kw * 100.0, 2),
+                "utility_side_tier2_contactor_prevents_overload": True,
                 "runtime_at_rated_13p5kW_min": runtime_rated_min,
                 "runtime_at_rated_13p5kW_conservative_100pct_dod_incl_350w_min": runtime_rated_100dod_min,
                 "runtime_at_rated_13p5kW_conservative_90pct_dod_incl_350w_min": runtime_rated_90dod_min,
@@ -2623,9 +2661,10 @@ def build_all(out_dir: Path = OUT_DIR) -> dict[str, Any]:
                     "cryo_readout_mode_excl_pt420_kW": cryo_readout_mode_kw,
                     "ion_write_mode_excl_pt420_kW": ion_write_mode_kw,
                     "flash_anneal_ups_mode_excl_3ph_flash_kW": flash_anneal_ups_kw,
+                    "outage_tier1_plus_1b_rampdown_kW": tier1_plus_1b_peak_ups_kw,
                     "utility_outage_tier1_hold_kW": round(tier1_total_w / 1e3, 3),
                     "all_modes_within_13p5kW_ups": bool(
-                        max(cryo_readout_mode_kw, ion_write_mode_kw, flash_anneal_ups_kw, tier1_total_w / 1e3) < ups_rated_kw
+                        max(cryo_readout_mode_kw, ion_write_mode_kw, flash_anneal_ups_kw, tier1_plus_1b_peak_ups_kw, tier1_total_w / 1e3) < ups_rated_kw
                     ),
                 },
             },
@@ -2709,14 +2748,15 @@ def build_all(out_dir: Path = OUT_DIR) -> dict[str, Any]:
 - **`E4` (`43` parts):** Electro-mechanical, HV-electrode, vacuum, piezo, heater & sensor electrical interfaces
 - **Total BOM value covered:** `${master['icd_coverage']['total_usd_nom_covered_95']:,.0f}` nominal (`100%` cross-referenced to `BOM_DETAILED.csv`).
 
-## 2. `S7.SAFETY-04` `15 kVA / 13.5 kW / 10 kWh` Online LFP UPS Reconciliation (`Exp150` + Conservative Loss/DoD)
-- **Tier-1 Critical Safety / UHV / Control:** **`{tier1_total_w:.1f} W` (`{tier1_total_w/1e3:.3f} kW`)** (`{tier1_95_w:.1f} W` from 95 ICDs + `{tier1_e1_w:.1f} W` E1 `S7.SAFETY-03`/`S6.11-01`):
-  - **Exp150 Reference Formula (`10 kWh × 0.90 / 2.533 kW`):** **`{runtime_tier1_exp150_min:.1f} min`** (`>= 180 min`)
-  - **Conservative Battery Draw (`P_batt = 2533/0.90 + 350 W idle loss = {p_batt_tier1_w:.2f} W`) @ `100%` DoD (`10 kWh`):** **`{runtime_tier1_100dod_min:.1f} min`** (`>= 180 min` PASS)
-  - **Conservative Battery Draw @ `90%` Usable LFP DoD (`9.0 kWh`):** **`{runtime_tier1_90dod_min:.1f} min`** (`< 180 min` — `tier1_conservative_90pct_dod_meets_180min: false`; requires `>= {req_lfp_kwh_180min_90dod:.2f} kWh` [`11 kWh` nominal] LFP pack or `<= {max_tier1_kw_180min_90dod:.3f} kW` [`<= 2.35 kW`] Tier-1 trim)
+## 2. `S7.SAFETY-04` `15 kVA / 13.5 kW / 12.0 kWh` Online LFP UPS Reconciliation (`Exp150` + Utility-Side Tier-2 Contactor + `90%` DoD)
+- **Utility-Side Fast Contactor Ahead of UPS (`<5 ms`):** Sheds `12.500 kW` PT420 (`S6.1-02` Cryomech CPA1110 `12.42 kW` + `S6.9-01` `80 W`) and heavy Tier-2 mains **ahead of the UPS** so the `13.5 kW` UPS inverter is never overloaded (`peak UPS load = {tier1_plus_1b_peak_ups_kw:.3f} kW <= 13.5 kW`, `{ups_bus_pre_shed_kw/ups_rated_kw*100.0:.2f}%` utilization).
+- **Tier-1 Critical Safety / UHV / Control:** **`{tier1_total_w:.1f} W` (`{tier1_total_w/1e3:.3f} kW`)** (`{tier1_95_w:.1f} W` from 95 ICDs + `{tier1_e1_w:.1f} W` E1 `S7.SAFETY-03`/`S6.11-01`) + **Tier-1B 120 s Controlled Ramp-Down (`{tier1b_transient_w:.1f} W`):** `650.0 W` dedicated `S6.3-05` `±300 A` magnet ramp-down branch + `2,195.0 W` `S9.HPC` graceful halt:
+  - **Conservative Battery Draw (`P_batt = 2533/0.90 + 350 W idle loss = {p_batt_tier1_w:.2f} W`) @ `90%` Usable LFP DoD (`10.8 kWh`, incl. `120 s` Tier-1B):** **`{runtime_tier1_90dod_min:.1f} min`** (`>= 180 min` **PASS**; steady-only `{runtime_tier1_90dod_steady_only_min:.1f} min`; legacy `10 kWh` pack gave `170.6 min < 180 min`)
+  - **Conservative Battery Draw @ `100%` DoD (`12.0 kWh`):** **`{runtime_tier1_100dod_min:.1f} min`** (`>= 180 min` PASS)
+  - **Exp150 Nominal Reference (`12.0 kWh × 0.90 / 2.533 kW`):** **`{runtime_tier1_exp150_min:.1f} min`**
 - **Tier-2 Sheddable (`28` `TIER2_SHED` ICDs, `0.0 W` Discrepancy):**
-  - Raw `supply_rails` steady sum (`28` parts) = **`{t2_28_raw_rails_w:.1f} W`** = **`{t2_28_exp150_w:.1f} W`** (`Exp150` Tier-2: `9.500 kW` PT420 + `2.195 kW` Option-HPC + `0.580 kW` S5.6/Option-Q) + **`{t2_28_aux_incr_w:.1f} W`** (non-Exp150 auxiliary rack/facility incremental mains) + **`{t2_28_overlap_w:.1f} W`** (secondary HV/PXIe backplane rails already inside parent AC input)
-- **Combined `Exp150` Envelope:** **`{exp150_combined_w/1e3:.3f} kW`** (`{ups_bus_pre_shed_kw:.3f} kW` pre-shed UPS bus excl. 3-phase PT420; rated `13.5 kW` runtime `{runtime_rated_min:.1f} min` nominal / `{runtime_rated_100dod_min:.1f} min` @ 100% DoD+350 W / `{runtime_rated_90dod_min:.1f} min` @ 90% DoD+350 W, all `>= 30 min` PASS)
+  - Raw `supply_rails` steady sum (`28` parts) = **`{t2_28_raw_rails_w:.1f} W`** = **`{t2_28_exp150_w:.1f} W`** (`Exp150` Tier-2: `12.500 kW` PT420 utility-side + `2.195 kW` Option-HPC + `0.580 kW` S5.6/Option-Q) + **`{t2_28_aux_incr_w:.1f} W`** (non-Exp150 auxiliary rack/facility incremental mains) + **`{t2_28_overlap_w:.1f} W`** (secondary HV/PXIe backplane rails already inside parent AC input)
+- **Full-Load `13.5 kW` Rated Runtime:** `{runtime_rated_min:.1f} min` Exp150 reference / `{runtime_rated_100dod_min:.1f} min` @ 100% DoD+350 W / `{runtime_rated_90dod_min:.1f} min` @ 90% DoD+350 W (all `>= 30 min` PASS)
 
 ## 3. Grounding Domains & Timing Fan-Out
 - **5 Grounding Domains:** `AGND` ({len(grounding_map['AGND'])}), `DGND` ({len(grounding_map['DGND'])}), `HV_MINUS_5KV_DECK` ({len(grounding_map['HV_MINUS_5KV_DECK'])}), `CRYO_OVC` ({len(grounding_map['CRYO_OVC'])}), `FACILITY_PE` ({len(grounding_map['FACILITY_PE'])}) — total `95/95`.

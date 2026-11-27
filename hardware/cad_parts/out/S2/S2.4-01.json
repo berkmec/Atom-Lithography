@@ -8,10 +8,10 @@
     "part_name": "SKY130 blanker_tile 64-kanalli surucu ASIC yongalari (16 aktif karo + yedek, 1024 ch)",
     "design_tier": "CUSTOM_FULL",
     "material": "Si",
-    "temp_stage": "300 K / 4 K uyumlu",
-    "temp_k": 4.0,
+    "temp_stage": "300 K (aktif sogutmali; 20 mK disinda)",
+    "temp_k": 300.0,
     "vacuum_grade": "UHV 1e-9 mbar",
-    "tolerance_spec": "Anten ECO kapali",
+    "tolerance_spec": "Anten ECO / PDN pre-foundry",
     "surface_finish_ra_um": 0.1,
     "qty": 24,
     "procurement_class": "CUS",
@@ -136,7 +136,7 @@
       ]
     ],
     "notes": [
-      "16x 64-ch aktif karo (1024 demetcik Arch-B baz) + 8 yedek, WNS +7.21 ns @10 ns, DRC=0, LVS=MATCH",
+      "16x 64-ch aktif karo (1024 demetcik Arch-B baz) + 8 yedek; pre-foundry SKY130 MPW prototip (aktif SkyWater/ChipFoundry broker; Efabless 2025 kapanisi sonrasi); 300 K aktif su/isi-borusu sogutmali (20 mK kalkani disinda, 4 K termal yuku 0 W)",
       "16 active 64-ch SKY130 130 nm CMOS blanker_tile ASIC packages (1,024 ch total; +8 spares in BOM); WNS +7.21 ns, DRC=0, LVS=MATCH"
     ],
     "scad_params": {
@@ -210,6 +210,11 @@
     "all_valid": true
   },
   "engineering_checks": {},
+  "shell_mate_metadata": {
+    "n_shells": 16,
+    "fea_bonding_mode": "TIED_SUBASSEMBLY_CONTACTS",
+    "watertight": true
+  },
   "epistemic": {
     "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
     "no_lab_measurement": true,

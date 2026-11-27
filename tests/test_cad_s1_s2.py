@@ -241,27 +241,55 @@ class TestWatertightAndFeatureDetail:
     def test_locked_exp124_and_exp142_feature_dimensions(self, built_s1_s2) -> None:
         s1, s2 = built_s1_s2
 
-        # S2.3-01: 3-wafer anodically bonded Arch-B mini-lens (WD=0.250, h=1.760, OD=60.0)
+        # S2.3-01: 3-wafer anodically bonded Arch-B mini-lens (WD=0.250, h=1.760, OD=60.0, E_gap<10 MV/m)
         m2301 = s2["S2.3-01"].mesh
         b0, b1 = m2301.bbox()
         assert math.isclose(b0[2], 0.250, abs_tol=1e-4)
         assert math.isclose(b1[2], 2.010, abs_tol=1e-4)
         assert math.isclose(b1[0] - b0[0], 60.0, abs_tol=0.1)
-        assert verify_watertight(m2301).n_shells == 5  # 3x 32x32 wafers + 2 SiO2 bond rings
+        assert verify_watertight(m2301).n_shells == 6  # 3x 32x32 wafers + 2 SiO2 bond rings + entrance rim
         assert m2301.n_faces > 150_000
+        s2301_p = dict(s2["S2.3-01"].design.scad_params)
+        assert float(s2301_p["e_gap_MV_m"]) < 10.0
+        assert float(s2301_p["focus_error_um"]) < 1.0
+        assert float(dict(s2["S2.3-04"].design.scad_params)["v_rail_kV"]) >= 5.0
 
-        # S2.1-01: true 30 um SOI 32x32=1,024 aperture plate (exact Euler genus 1024!)
+        # S2.1-01: true 30 um SOI 32x32=1,024 Ø10.5 um aperture plate (exact Euler genus 1024!)
         m2101 = s2["S2.1-01"].mesh
         v2101 = verify_watertight(m2101)
         b0, b1 = m2101.bbox()
         assert math.isclose(b0[2], 7.660, abs_tol=1e-4)
         assert math.isclose(b1[2] - b0[2], 0.030, abs_tol=1e-5)
         assert v2101.euler_characteristic == 2 - 2 * 1024
+        assert math.isclose(float(dict(s2["S2.1-01"].design.scad_params)["hole_d_mm"]), 0.0105, abs_tol=1e-6)
 
-        # S2.2-01 blanker & S2.2-04 separate graphite-Mo beam-stop both have 32x32 grids
+        # S2.2-01 coaxially shielded blanker & S2.2-04 Ø12 um graphite-Mo beam-stop both have 32x32 grids
         assert s2["S2.2-01"].mesh.n_faces > 50_000
         assert s2["S2.2-04"].mesh.n_faces > 50_000
         assert s2["S2.2-01"].mesh.bbox()[0][2] - s2["S2.2-04"].mesh.bbox()[1][2] >= 0.25
+        assert float(dict(s2["S2.2-01"].design.scad_params)["coaxial_shield_septum_um"]) >= 80.0
+        assert math.isclose(float(dict(s2["S2.2-04"].design.scad_params)["stop_hole_mm"]), 0.012, abs_tol=1e-6)
+
+        # S2.5-02 realistic macro mount f1 (no impossible 2.59 MHz claim) & S2.5-03 split-gap mirrors
+        s2502_p = dict(s2["S2.5-02"].design.scad_params)
+        assert "f1_MHz" not in s2502_p and 15.0 <= float(s2502_p["f1_axial_kHz"]) <= 25.0
+        b0_m, b1_m = s2["S2.5-03"].mesh.bbox()
+        assert b0_m[2] >= 10.0 and b1_m[2] <= 18.0  # Strictly inside Z_nat=[-18, +18] split gap
+
+        # S1.2-02 Wien filter 12.0 mm E-gap matching 112.32 kV/m @ 1347.85 V (0 mrad nominal steer)
+        s1202_p = dict(s1["S1.2-02"].design.scad_params)
+        assert math.isclose(float(s1202_p["e_gap"]), 12.0, abs_tol=1e-4)
+        assert abs(float(s1202_p["nominal_steer_mrad"])) < 0.05
+
+        # S1.3-01 extended lower UHV spool & CF100 flange terminating at Z_nat=205.0 (Z_canon=705.0)
+        b0_1301, b1_1301 = s1["S1.3-01"].mesh.bbox()
+        assert math.isclose(b0_1301[2], 205.0, abs_tol=0.05)
+        assert math.isclose(b1_1301[1] - b0_1301[1], 152.0, abs_tol=0.15)  # CF100 OD along Y
+        assert math.isclose(b1_1301[0] - b0_1301[0], 175.0, abs_tol=0.15)  # ±X CF40 Faraday port collar span
+
+        # S1.3-05 inline Z-axis Ø2.0 mm Mo differential pumping orifice & unchoked -X CF63 duct
+        s1305_p = dict(s1["S1.3-05"].design.scad_params)
+        assert s1305_p["diaph_axis"] == "Z" and s1305_p["pump_duct_unchoked"] is True
 
         # S1.5-01 HDA-HiRes: exact Exp124 Z=[114.66, 209.66], OD=110.0, R0=40 concentric hemispheres
         b0, b1 = s1["S1.5-01"].mesh.bbox()
@@ -281,9 +309,9 @@ class TestWatertightAndFeatureDetail:
         assert math.isclose(b1[1], 148.0, abs_tol=0.1)
         assert math.isclose(0.5 * (b0[2] + b1[2]), 492.66, abs_tol=0.1)
 
-        # True ISO 3669 CF100 (152 mm OD) on S1.3-01 & S2.4-03; CF63 (113.5 mm) on S1.3-05
+        # True ISO 3669 CF100 (152 mm OD along Y) on S1.3-01 & S2.4-03; CF63 (113.5 mm) on S1.3-05
         b0, b1 = s1["S1.3-01"].mesh.bbox()
-        assert math.isclose(b1[0] - b0[0], 152.0, abs_tol=0.15)
+        assert math.isclose(b1[1] - b0[1], 152.0, abs_tol=0.15)
         b0, b1 = s1["S1.3-05"].mesh.bbox()
         assert math.isclose(b1[1] - b0[1], 113.5, abs_tol=0.15)
         # True UHV bellows on S1.2-04 & S1.4-01
@@ -403,6 +431,13 @@ class TestThermalAndToleranceStacks:
         for key in ("bakeout_aln_mo_clearance", "cold100k_aln_mo_clearance", "bakeout_pcb_blanker_clearance"):
             assert c2[key]["passed"] is True, f"S2 thermal check {key} failed"
             assert c2[key]["interference_risk"] is False
+        # OBS-063: verify Rogers RO4350B substrate CTE/Tg used instead of Invar-36
+        assert "Rogers" in c2["bakeout_pcb_blanker_clearance"]["outer_material"]
+        assert c2["bakeout_pcb_blanker_clearance"]["tg_margin_c"] >= 100.0
+        # OBS-070: verify UHV AlN/OFHC Cu thermal strap closure on -5 kV blanker deck
+        assert c2["blanker_uhv_thermal_closure"]["passed"] is True
+        # OBS-016: verify Wien filter E-field balance
+        assert c1["wien_efield_balance"]["passed"] is True
         for key in ("archB_wd_tolerance_stack", "mems_32x32_lateral_registration"):
             assert c2[key]["rss_pass"] is True, f"S2 tolerance stack {key} failed"
         assert math.isclose(c2["archB_wd_tolerance_stack"]["nominal_mm"], 0.250, abs_tol=1e-6)

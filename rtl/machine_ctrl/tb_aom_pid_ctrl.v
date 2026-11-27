@@ -233,7 +233,7 @@ module tb_aom_pid_ctrl;
 
         repeat (4) @(posedge clk);
         rst_n = 1'b1;
-        @(posedge clk);
+        repeat (4) @(posedge clk);
 
         for (step_i = 0; step_i < 24; step_i = step_i + 1) begin
             run_step(step_i);

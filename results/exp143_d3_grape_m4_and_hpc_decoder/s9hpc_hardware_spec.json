@@ -41,11 +41,11 @@
     "surface_d37_100L_nodes_required": 13,
     "surface_d37_100L_power_kW": 14.315,
     "surface_d37_100L_hard_bw_v5_Gbps": 19.14464845499328,
-    "surface_d37_100L_hard_bw_d3_Gbps": 25.513903846510882,
+    "surface_d37_100L_hard_bw_d3_Gbps": 25.014005282969915,
     "surface_d37_100L_100g_fibers_redundant": 2,
     "qldpc_108L_modules_required": 1,
     "qldpc_108L_power_kW": 2.195,
-    "qldpc_108L_hard_bw_d3_Gbps": 0.2417106680195768
+    "qldpc_108L_hard_bw_d3_Gbps": 0.2369747868912939
   },
   "items": [
     {

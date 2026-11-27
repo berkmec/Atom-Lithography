@@ -143,6 +143,15 @@ def test_04_deformed_dem_compiles_and_decodes_cleanly() -> None:
     assert 0.0 <= mc["eps_L"] < 0.15
 
 
+def test_04b_final_data_readout_obs133_present_in_dem() -> None:
+    """OBS-133 check: boundary data-qubit prep & final transversal readout p_meas are included by default."""
+    code3 = build_rotated_surface_code(3)
+    p16 = depolarizing_pauli16(0.005)
+    dem_with = compile_ideal_circuit_dem(code3, 3, p16, 0.0008, 0.0038, 0.0003, 0.0, "Z", include_final_data_ro=True)
+    dem_without = compile_ideal_circuit_dem(code3, 3, p16, 0.0008, 0.0038, 0.0003, 0.0, "Z", include_final_data_ro=False)
+    assert sum(m[2] for m in dem_with.mechanisms) > sum(m[2] for m in dem_without.mechanisms)
+
+
 def test_05_pauli16_scaling_preserves_profile_and_normalization() -> None:
     """Verify Exp137 Pauli-16 normalization, symmetrization, and LRU leakage addition."""
     e137 = json.loads((REPO_ROOT / "results/exp137_echoed_m4_bus_gate/exp137.json").read_text())
@@ -184,6 +193,13 @@ def test_06_exp138_json_schema_verdicts_and_physics_consistency() -> None:
 
     # Deep-FT target D3 must show strong exponential suppression
     assert p2["D3_Target_FT_P4_p0p005"]["fit_per_round"]["Lambda"] >= 2.0
+
+    # Honest OBS-022/029/047/110/111/133 closure audit: FT3 fails under unclamped physics & real Stim threshold
+    assert data["verdicts"]["FT3_V5_ROTA_C_THRESHOLD_CROSSING_AND_QR_HEADROOM"]["passed"] is False
+    audit = data["obs_022_029_047_110_111_133_honest_audit"]
+    assert audit["stim_circuit_threshold_p2q_band_OBS022"] == [0.006, 0.0098]
+    assert audit["ft_scaling_status"] == "HORIZON_TARGET_REQUIRED"
+    assert audit["final_data_readout_impact_OBS133"]["p2q_0.0050"]["d3"]["relative_increase_pct"] > 0.0
 
     # Top-level Exp141 targets must exist and be monotonic
     tgts = data["target_logical_error_rates"]
@@ -268,7 +284,7 @@ def test_09_summary_markdown_gfm_tables_zero_errors() -> None:
 
 def test_10_portability_zero_hardcoded_user_paths() -> None:
     """Ensure ZERO hardcoded user home or mount paths anywhere in Exp138 code, results, or tests."""
-    forbidden = ("/" + "home" + "/" + "berk", "/" + "run" + "/" + "media" + "/" + "berk")
+    pat_re = re.compile(r"/(?:home|run/media)/[a-zA-Z0-9_-]+")
     targets = [
         REPO_ROOT / "experiments" / "exp138_defective_surface_code_ft",
         RESULTS_DIR,
@@ -279,7 +295,6 @@ def test_10_portability_zero_hardcoded_user_paths() -> None:
         files = [tgt] if tgt.is_file() else [p for p in tgt.rglob("*") if p.is_file() and p.suffix in (".py", ".json", ".md")]
         for f in files:
             content = f.read_text(errors="ignore")
-            for pat in forbidden:
-                if pat in content:
-                    hits.append(f"{f.relative_to(REPO_ROOT)} contains {pat}")
+            for m in pat_re.finditer(content):
+                hits.append(f"{f.relative_to(REPO_ROOT)} contains {m.group(0)}")
     assert hits == [], f"Hardcoded paths detected: {hits}"

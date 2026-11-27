@@ -5,7 +5,7 @@
   "cots_env_icd_count": 4,
   "all_watertight": true,
   "all_valid": true,
-  "total_computed_mass_kg": 11.05858,
+  "total_computed_mass_kg": 11.05705,
   "engineering_checks": {
     "bakeout_aln_mo_clearance": {
       "outer_material": "AlN",
@@ -46,22 +46,38 @@
       "passed": true
     },
     "bakeout_pcb_blanker_clearance": {
-      "outer_material": "Invar-36",
+      "outer_material": "Rogers RO4350B",
       "inner_material": "Si",
       "t_cold_k": 423.15,
       "t_ref_k": 293.15,
+      "rogers_cte_xy_ppm_k": 12.0,
+      "rogers_tg_c": 280.0,
+      "bakeout_temp_c": 150.0,
+      "tg_margin_c": 130.0,
+      "outer_strain": 0.00156,
+      "inner_strain": 0.00038,
       "warm_outer_id_mm": 67.0,
       "warm_inner_od_mm": 60.0,
-      "cold_outer_id_mm": 67.01742,
-      "cold_inner_od_mm": 60.022800000000004,
-      "outer_strain": 0.00025999999999992696,
-      "inner_strain": 0.00038000000000004697,
-      "warm_radial_clearance_mm": 3.5,
-      "cold_nominal_radial_clearance_mm": 3.497309999999999,
-      "cold_worst_case_radial_clearance_mm": 3.4223099999999986,
-      "delta_radial_clearance_mm": -0.0026900000000011914,
+      "cold_outer_id_mm": 67.10452,
+      "cold_inner_od_mm": 60.0228,
+      "cold_nominal_radial_clearance_mm": 3.54086,
+      "cold_worst_case_radial_clearance_mm": 3.46586,
       "min_required_radial_clearance_mm": 3.0,
+      "outer_radial_expansion_um": 99.84,
+      "cold_bridge_gap_423k_mm": 1.9002,
       "interference_risk": false,
+      "passed": true
+    },
+    "blanker_uhv_thermal_closure": {
+      "r_th_aln_k_per_w": 0.1157,
+      "r_th_cu_k_per_w": 1.8229,
+      "r_th_total_k_per_w": 2.2,
+      "hv_isolation_rating_kV": 15.0,
+      "p_nom_W": 0.5,
+      "p_burst_50khz_W": 4.43,
+      "delta_t_nom_K": 1.1,
+      "delta_t_burst_K": 9.74,
+      "si_pitch_drift_nom_um": 0.00143,
       "passed": true
     },
     "archB_wd_tolerance_stack": {
@@ -123,7 +139,7 @@
     "S2.1-01": {
       "design_tier": "CUSTOM_FULL",
       "material": "Si",
-      "mass_kg": 6.9e-05,
+      "mass_kg": 7.1e-05,
       "watertight": true,
       "all_valid": true,
       "bbox_min_mm": [
@@ -192,7 +208,7 @@
     "S2.2-01": {
       "design_tier": "CUSTOM_FULL",
       "material": "Si",
-      "mass_kg": 0.005695,
+      "mass_kg": 0.005752,
       "watertight": true,
       "all_valid": true,
       "bbox_min_mm": [
@@ -215,7 +231,7 @@
     "S2.2-03": {
       "design_tier": "CUSTOM_FULL",
       "material": "AlN",
-      "mass_kg": 0.016956,
+      "mass_kg": 0.02016,
       "watertight": true,
       "all_valid": true,
       "bbox_min_mm": [
@@ -226,7 +242,7 @@
       "bbox_max_mm": [
         41.0,
         41.0,
-        7.26
+        7.45
       ],
       "json_path": "hardware/cad_parts/out/S2/S2.2-03.json",
       "stl_path": "hardware/cad_parts/out/S2/S2.2-03.stl",
@@ -238,7 +254,7 @@
     "S2.2-04": {
       "design_tier": "CUSTOM_FULL",
       "material": "Mo",
-      "mass_kg": 0.018006,
+      "mass_kg": 0.018126,
       "watertight": true,
       "all_valid": true,
       "bbox_min_mm": [
@@ -261,7 +277,7 @@
     "S2.3-01": {
       "design_tier": "CUSTOM_FULL",
       "material": "Si",
-      "mass_kg": 0.00989,
+      "mass_kg": 0.008899,
       "watertight": true,
       "all_valid": true,
       "bbox_min_mm": [
@@ -284,18 +300,18 @@
     "S2.3-03": {
       "design_tier": "CUSTOM_FULL",
       "material": "Sapphire",
-      "mass_kg": 0.001805,
+      "mass_kg": 0.001914,
       "watertight": true,
       "all_valid": true,
       "bbox_min_mm": [
         -29.5,
         -29.5,
-        2.26
+        0.25
       ],
       "bbox_max_mm": [
+        31.75,
         29.5,
-        29.5,
-        2.76
+        10.18
       ],
       "json_path": "hardware/cad_parts/out/S2/S2.3-03.json",
       "stl_path": "hardware/cad_parts/out/S2/S2.3-03.stl",
@@ -353,7 +369,7 @@
     "S2.4-02": {
       "design_tier": "CUSTOM_FULL",
       "material": "Rogers",
-      "mass_kg": 0.038458,
+      "mass_kg": 0.039811,
       "watertight": true,
       "all_valid": true,
       "bbox_min_mm": [
@@ -364,7 +380,7 @@
       "bbox_max_mm": [
         63.9123,
         63.9123,
-        5.15
+        9.2
       ],
       "json_path": "hardware/cad_parts/out/S2/S2.4-02.json",
       "stl_path": "hardware/cad_parts/out/S2/S2.4-02.stl",
@@ -403,12 +419,12 @@
       "watertight": true,
       "all_valid": true,
       "bbox_min_mm": [
-        -33.75,
+        -62.5,
         -54.7965,
         12.0
       ],
       "bbox_max_mm": [
-        62.5,
+        33.75,
         54.7965,
         28.0
       ],
@@ -422,7 +438,7 @@
     "S2.5-02": {
       "design_tier": "CUSTOM_FULL",
       "material": "Invar-36",
-      "mass_kg": 0.279072,
+      "mass_kg": 0.279617,
       "watertight": true,
       "all_valid": true,
       "bbox_min_mm": [
@@ -445,18 +461,18 @@
     "S2.5-03": {
       "design_tier": "COTS_ENV_ICD",
       "material": "Zerodur",
-      "mass_kg": 0.011528,
+      "mass_kg": 0.005594,
       "watertight": true,
       "all_valid": true,
       "bbox_min_mm": [
-        -61.5,
-        -56.5606,
-        13.2
+        -7.0,
+        -62.0,
+        11.0
       ],
       "bbox_max_mm": [
-        36.6122,
-        56.5606,
-        26.8
+        62.0,
+        62.0,
+        17.6
       ],
       "json_path": "hardware/cad_parts/out/S2/S2.5-03.json",
       "stl_path": "hardware/cad_parts/out/S2/S2.5-03.stl",

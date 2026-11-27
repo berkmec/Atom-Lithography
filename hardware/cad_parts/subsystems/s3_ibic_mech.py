@@ -97,9 +97,10 @@ RACK_U1_BOTTOM_Z_MM: float = -410.0   # Canonical Z_U(1) = +90.0 mm after +500.0
 RACK_U_PITCH_MM: float = 44.45
 RACK_WIDTH_MM: float = 482.6
 
-# 16 circumferential azimuths (4 quadrants x 4 modules, avoiding 0/90/180/270 deg UHV ports)
+# 16 circumferential azimuths (4 quadrants x 4 modules, avoiding 0/90/180/270 deg UHV ports
+# and preserving a clear [36..58 deg] optical sight window for S4.5-02 fiducial microscope @ 50 deg!)
 CSA_AZIMUTHS_DEG: tuple[float, ...] = (
-    24.0, 38.0, 52.0, 66.0,
+    22.0, 35.0, 58.0, 70.0,
     114.0, 128.0, 142.0, 156.0,
     204.0, 218.0, 232.0, 246.0,
     294.0, 308.0, 322.0, 336.0,
@@ -570,12 +571,19 @@ def _build_s3_1_02() -> BuiltPart:
 
 def _build_s3_1_03() -> BuiltPart:
     """S3.1-03: 80x80 mm AlN/Sapphire wafer carrier w/ Ø50.4 pocket, thermal boss & alignment pins."""
+    # Import slot_2d locally for radial kinematic thermal-relief slots
+    from hardware.cad_parts.core import slot_2d
+
     # World origin at (0, 0, -3.000):
-    # - Upper pocket collar (80x80 w/ Ø50.4 wafer pocket + 4x M3 + 3x Ø3.0 pin holes): Z_world [-0.85, -0.15] -> z_loc [+2.15, +2.85]
-    # - Main ceramic floor (80x80 chamfered w/ 4x M3 + 3x Ø3.0 pin holes + Ø10 vent): Z_world [-5.00, -0.88] -> z_loc [-2.00, +2.12]
-    # - Rear central thermal boss (Ø34 / Ø10 bore): Z_world [-5.85, -5.03] -> z_loc [-2.85, -2.03]
-    # - 3x kinematic alignment pin bosses (Ø2.90 @ R=33 mm, 30/150/270 deg): Z_world [-5.85, -5.03]
-    cham = 4.0
+    # - Upper pocket collar (80x80 w/ Ø50.4 wafer pocket + 4x M3 radial slots @ PCD 96.0 mm + 3x Ø3.0 pin holes):
+    #   Z_world [-0.85, -0.15] -> z_loc [+2.15, +2.85]
+    # - Main ceramic floor (80x80 chamfered w/ 4x M3 radial slots @ PCD 96.0 mm + 3x Ø3.0 pin holes + Ø10 vent):
+    #   Z_world [-5.00, -0.86] -> z_loc [-2.00, +2.14]
+    # - Rear central AlN thermal boss (Ø34 / Ø10 bore) extending to Z_world=-6.38 mm (closing 0.55 mm gap into S6.2-01 Ø34.5 pocket!):
+    #   Z_world [-6.38, -5.01] -> z_loc [-3.38, -2.01]
+    # - 4x spring-loaded kinematic Ti-6Al-4V Belleville clamp washers seated atop radial slots @ PCD 96.0 mm (45/135/225/315 deg)
+    # - 3x kinematic alignment pin bosses (Ø2.90 @ R=33 mm, 30/150/270 deg): Z_world [-6.38, -5.01]
+    cham = 2.5
     hx, hy = 40.0, 40.0
     outer_sq = [
         (-hx + cham, -hy), (hx - cham, -hy),
@@ -583,12 +591,19 @@ def _build_s3_1_03() -> BuiltPart:
         (hx - cham, hy), (-hx + cham, hy),
         (-hx, hy - cham), (-hx, -hy + cham),
     ]
-    m3_pts = [(-33.5, -33.5), (33.5, -33.5), (33.5, 33.5), (-33.5, 33.5)]
+    # Exact PCD = 96.0 mm (R = 48.0 mm) mating S6.2-01 OFHC Cu chuck!
+    # 48.0 * cos(45 deg) = 33.941125 mm; radial slots (±0.5 mm radial freedom >> 0.126 mm Cu-AlN cooldown slip!)
+    m3_angles = (45.0, 135.0, 225.0, 315.0)
+    m3_r = 48.0
+    m3_pts = [(m3_r * math.cos(math.radians(a)), m3_r * math.sin(math.radians(a))) for a in m3_angles]
     pin_angles = (30.0, 150.0, 270.0)
     pin_pts = [(33.0 * math.cos(math.radians(a)), 33.0 * math.sin(math.radians(a))) for a in pin_angles]
 
     upper_holes = [circle_2d(25.2, segments=36, ccw=False)]
-    upper_holes.extend(circle_2d(3.0, cx=x, cy=y, segments=12, ccw=False) for x, y in m3_pts)
+    upper_holes.extend(
+        slot_2d(4.4, 3.4, cx=x, cy=y, angle_deg=a, arc_seg=4, ccw=False)
+        for (x, y), a in zip(m3_pts, m3_angles)
+    )
     upper_holes.extend(circle_2d(1.5, cx=x, cy=y, segments=12, ccw=False) for x, y in pin_pts)
     upper_collar = make_plate_with_holes(
         outer_sq, upper_holes, thickness=0.70, center=(0.0, 0.0, 2.50),
@@ -596,39 +611,53 @@ def _build_s3_1_03() -> BuiltPart:
     )
 
     lower_holes = [circle_2d(5.0, segments=20, ccw=False)]
-    lower_holes.extend(circle_2d(1.7, cx=x, cy=y, segments=12, ccw=False) for x, y in m3_pts)
+    lower_holes.extend(
+        slot_2d(4.4, 3.4, cx=x, cy=y, angle_deg=a, arc_seg=4, ccw=False)
+        for (x, y), a in zip(m3_pts, m3_angles)
+    )
     lower_holes.extend(circle_2d(1.5, cx=x, cy=y, segments=12, ccw=False) for x, y in pin_pts)
     main_plate = make_plate_with_holes(
-        outer_sq, lower_holes, thickness=4.12, center=(0.0, 0.0, 0.06),
+        outer_sq, lower_holes, thickness=4.14, center=(0.0, 0.0, 0.07),
         name="S3.1-03_aln_base", material="AlN",
     )
 
     thermal_boss = make_tube(
-        r_in=5.0, r_out=17.0, height=0.82, segments=36,
-        center=(0.0, 0.0, -2.44), name="S3.1-03_thermal_boss", material="AlN",
+        r_in=5.0, r_out=17.0, height=1.37, segments=36,
+        center=(0.0, 0.0, -2.695), name="S3.1-03_thermal_boss", material="AlN",
     )
 
     pins: list[SolidMesh] = []
     for idx, (px, py) in enumerate(pin_pts, start=1):
         pins.append(
             make_cylinder(
-                radius=1.45, height=0.82, segments=16,
-                center=(px, py, -2.44), name=f"S3.1-03_align_pin_{idx}", material="Ti-6Al-4V",
+                radius=1.45, height=1.37, segments=16,
+                center=(px, py, -2.695), name=f"S3.1-03_align_pin_{idx}", material="Ti-6Al-4V",
             )
         )
 
-    mesh = merge_solids([upper_collar, main_plate, thermal_boss, *pins], name="S3.1-03_aln_carrier", material="AlN")
+    # 4x spring-loaded kinematic Ti-6Al-4V Belleville clamp washers @ PCD=96.0 mm (Z_world=[-0.14, +0.16])
+    # Relieves 126.0 um Cu-AlN differential cooldown contraction with zero radial shear!
+    ti_clamps: list[SolidMesh] = []
+    for idx, (cx, cy) in enumerate(m3_pts, start=1):
+        ti_clamps.append(
+            make_tube(
+                r_in=1.75, r_out=4.0, height=0.30, segments=18,
+                center=(cx, cy, 3.01), name=f"S3.1-03_ti_spring_clamp_{idx}", material="Ti-6Al-4V",
+            )
+        )
 
-    # Compact STEP mesh preserving 80x80 chamfered pocket plate + thermal boss
+    mesh = merge_solids([upper_collar, main_plate, thermal_boss, *pins, *ti_clamps], name="S3.1-03_aln_carrier", material="AlN")
+
+    # Compact STEP mesh preserving 80x80 chamfered pocket plate + thermal boss + Ti clamps
     step_collar = make_plate_with_holes(
         outer_sq, [circle_2d(25.2, segments=24, ccw=False)], thickness=0.70,
         center=(0.0, 0.0, 2.50), name="S3.1-03_step_collar", material="AlN",
     )
     step_base = make_plate_with_holes(
-        outer_sq, [circle_2d(5.0, segments=16, ccw=False)], thickness=4.12,
-        center=(0.0, 0.0, 0.06), name="S3.1-03_step_base", material="AlN",
+        outer_sq, [circle_2d(5.0, segments=16, ccw=False)], thickness=4.14,
+        center=(0.0, 0.0, 0.07), name="S3.1-03_step_base", material="AlN",
     )
-    step_boss = make_tube(5.0, 17.0, 0.82, segments=20, center=(0.0, 0.0, -2.44), name="S3.1-03_step_boss", material="AlN")
+    step_boss = make_tube(5.0, 17.0, 1.37, segments=20, center=(0.0, 0.0, -2.695), name="S3.1-03_step_boss", material="AlN")
     step_mesh = merge_solids([step_collar, step_base, step_boss], name="S3.1-03_step", material="AlN")
 
     # Cryogenic differential thermal contraction checks: 300 K -> 100 K and 300 K -> 20 mK
@@ -647,6 +676,11 @@ def _build_s3_1_03() -> BuiltPart:
         t_cold_k=100.0, outer_id_tol_mm=0.03, inner_od_tol_mm=0.02,
         min_required_radial_clearance_mm=0.10,
     )
+    tc_boss_20mk = check_cold_clearance(
+        "OFHC Cu", "AlN", nominal_outer_id_mm=34.50, nominal_inner_od_mm=34.00,
+        t_cold_k=0.02, outer_id_tol_mm=0.03, inner_od_tol_mm=0.02,
+        min_required_radial_clearance_mm=0.10,
+    )
     # Z stackup from carrier bottom datum to wafer active top surface (target Z = 0.000 ± 0.025 mm)
     z_stack = check_tolerance_stack(
         [
@@ -661,13 +695,13 @@ def _build_s3_1_03() -> BuiltPart:
 
     scad_feats = (
         ScadFeature("add_box", {"dx": 80.0, "dy": 80.0, "dz": 4.85}, translate=(0.0, 0.0, 0.425), comment="80x80 mm AlN/Sapphire carrier plate (Exp80 BC1)"),
-        ScadFeature("add_tube", {"od": 34.0, "id": 10.0, "h": 0.82}, translate=(0.0, 0.0, -2.44), comment="Rear central thermal boss Ø34 mm"),
+        ScadFeature("add_tube", {"od": 34.0, "id": 10.0, "h": 1.37}, translate=(0.0, 0.0, -2.695), comment="Rear central thermal boss Ø34 mm mating S6.2-01 Ø34.5 pocket"),
         ScadFeature("cut_hole", {"d": 50.4, "h": 1.0}, translate=(0.0, 0.0, 2.50), comment="Ø50.4 mm stepped wafer pocket"),
         ScadFeature("cut_bolt_circle", {"pcd": 66.0, "bolt_d": 3.0, "count": 3, "h": 7.0}, comment="3x Ø3.0 H7 kinematic alignment pin holes"),
-        ScadFeature("cut_hole", {"d": 3.4, "h": 7.0}, translate=(-33.5, -33.5, 0.0), comment="Corner M3 mount #1"),
-        ScadFeature("cut_hole", {"d": 3.4, "h": 7.0}, translate=(33.5, -33.5, 0.0), comment="Corner M3 mount #2"),
-        ScadFeature("cut_hole", {"d": 3.4, "h": 7.0}, translate=(33.5, 33.5, 0.0), comment="Corner M3 mount #3"),
-        ScadFeature("cut_hole", {"d": 3.4, "h": 7.0}, translate=(-33.5, 33.5, 0.0), comment="Corner M3 mount #4"),
+        ScadFeature("cut_slot", {"length": 4.4, "width": 3.4, "h": 7.0}, translate=(m3_pts[0][0], m3_pts[0][1], 0.0), rotate=(0.0, 0.0, 45.0), comment="Radial M3 kinematic slot #1 @ PCD 96.0 mm"),
+        ScadFeature("cut_slot", {"length": 4.4, "width": 3.4, "h": 7.0}, translate=(m3_pts[1][0], m3_pts[1][1], 0.0), rotate=(0.0, 0.0, 135.0), comment="Radial M3 kinematic slot #2 @ PCD 96.0 mm"),
+        ScadFeature("cut_slot", {"length": 4.4, "width": 3.4, "h": 7.0}, translate=(m3_pts[2][0], m3_pts[2][1], 0.0), rotate=(0.0, 0.0, 225.0), comment="Radial M3 kinematic slot #3 @ PCD 96.0 mm"),
+        ScadFeature("cut_slot", {"length": 4.4, "width": 3.4, "h": 7.0}, translate=(m3_pts[3][0], m3_pts[3][1], 0.0), rotate=(0.0, 0.0, 315.0), comment="Radial M3 kinematic slot #4 @ PCD 96.0 mm"),
     )
 
     design = make_part_design_from_bom(
@@ -689,38 +723,44 @@ def _build_s3_1_03() -> BuiltPart:
             PortInterface(
                 name="rear_thermal_boss",
                 kind="thermal",
-                position_mm=(0.0, 0.0, -2.85),
+                position_mm=(0.0, 0.0, -3.38),
                 normal=(0.0, 0.0, -1.0),
-                standard="Ø34.0 mm Cryo Thermal Boss + 3x Ø3 H7 Pins",
+                standard="Ø34.0 mm Cryo Thermal Boss + 4x M3 Radial-Slot Ti Clamps @ PCD 96.0 mm",
                 mating_part_id="S6.2-01",
                 od_mm=34.0,
-                pcd_mm=66.0,
-                bolt_count=3,
-                bolt_hole_mm=3.0,
+                pcd_mm=96.0,
+                bolt_count=4,
+                bolt_hole_mm=3.4,
+                bolt_spec="M3",
             ),
         ),
         dimensions=(
             DimensionCallout("WIDTH_X", 80.0, 0.02, -0.02, view="top"),
             DimensionCallout("WIDTH_Y", 80.0, 0.02, -0.02, view="top"),
             DimensionCallout("POCKET_ID", 50.40, 0.02, -0.02, view="top", prefix="Ø"),
+            DimensionCallout("CHUCK_PCD", 96.00, 0.02, -0.02, view="top", prefix="Ø"),
             DimensionCallout("THERMAL_BOSS_OD", 34.00, 0.02, -0.02, view="front", prefix="Ø"),
-            DimensionCallout("TOTAL_H", 5.70, 0.02, -0.02, view="front"),
+            DimensionCallout("TOTAL_H", 6.54, 0.02, -0.02, view="front"),
         ),
         gdt_frames=(
             GDTFrame("flatness", 0.005, datum_primary="", feature_note="POCKET FLOOR DATUM A"),
             GDTFrame("parallelism", 0.005, datum_primary="A", feature_note="THERMAL BOSS SEAT"),
-            GDTFrame("position", 0.010, diameter_zone=True, datum_primary="A", datum_secondary="B", feature_note="3x Ø3.0 H7 ALIGNMENT PINS"),
+            GDTFrame("position", 0.010, diameter_zone=True, datum_primary="A", datum_secondary="B", feature_note="4x M3 RADIAL SLOTS @ PCD 96.0 MM"),
         ),
         notes=(
-            "Exp80 BC1 locked 80x80 mm AlN/Sapphire carrier (diag 113.1 mm < Ø150 mm magnet bore).",
+            "Exp80 BC1 80x80 mm AlN/Sapphire carrier aligned to S6.2-01 bolt circle PCD=96.0 mm (45/135/225/315 deg) via 4x radial kinematic slots + Ti-6Al-4V Belleville spring clamps (0 N cooldown radial shear vs 355.6 N/strut rigid).",
+            "Rear Ø34.0 mm central AlN thermal boss seats directly into S6.2-01 Ø34.5 mm pocket at Z_world=-6.38 mm (0.02 mm In foil interface, eliminating 0.55 mm floating Z-gap).",
             f"300K->100K AlN pocket vs Si wafer WC rad clearance: {tc_wafer_100k.cold_worst_case_radial_clearance_mm:.4f} mm (PASS).",
             f"300K->20mK AlN pocket vs Si wafer WC rad clearance: {tc_wafer_20mk.cold_worst_case_radial_clearance_mm:.4f} mm (PASS).",
-            f"300K->100K OFHC Cu chuck vs Ø34 AlN boss WC rad clearance: {tc_boss_100k.cold_worst_case_radial_clearance_mm:.4f} mm (PASS).",
+            f"300K->20mK OFHC Cu chuck Ø34.5 pocket vs Ø34 AlN boss WC rad clearance: {tc_boss_20mk.cold_worst_case_radial_clearance_mm:.4f} mm (PASS).",
         ),
         scad_params=(
             ("carrier_size_mm", 80.0),
             ("wafer_pocket_id_mm", 50.4),
+            ("chuck_bolt_pcd_mm", 96.0),
+            ("radial_slot_length_mm", 4.4),
             ("thermal_boss_od_mm", 34.0),
+            ("thermal_boss_z_bot_mm", -6.38),
             ("align_pin_pcd_mm", 66.0),
         ),
     )
@@ -729,24 +769,32 @@ def _build_s3_1_03() -> BuiltPart:
         mesh=mesh,
         scad_features=scad_feats,
         step_mesh=step_mesh,
-        thermal_checks=(tc_wafer_100k.to_dict(), tc_wafer_20mk.to_dict(), tc_boss_100k.to_dict()),
+        thermal_checks=(tc_wafer_100k.to_dict(), tc_wafer_20mk.to_dict(), tc_boss_100k.to_dict(), tc_boss_20mk.to_dict()),
         tolerance_checks=(z_stack.to_dict(),),
     )
 
 
 def _build_s3_1_04() -> BuiltPart:
-    """S3.1-04: Non-magnetic Au-plated BeCu cantilever spring contact ring + Faraday shield shroud."""
+    """S3.1-04: Non-magnetic Au-plated BeCu cantilever spring contact ring + Faraday shield shroud w/ 50 deg optical sight window."""
     # World origin = (0, 0, +1.000) -> local z = z_world - 1.000
-    # Main ring: R_in=32.0, R_out=39.2, Z_world in [+0.20, +2.00] -> z_loc in [-0.80, +1.00], center z_loc=+0.10
-    main_ring = make_ring_with_bolt_circle(
-        r_in=32.0, r_out=39.2, thickness=1.80, pcd=71.2, n_bolts=6, bolt_diameter=2.7,
-        sub_per_side=2, start_angle_deg=0.0, center=(0.0, 0.0, 0.10),
-        name="S3.1-04_contact_ring", material="BeCu",
+    # Slotted 346-deg arc (56..404 deg) opens a clean 12-deg dark-field optical sight window (44..56 deg)
+    # centered on FIDUCIAL_PORT_AZIMUTH_DEG=50.0 deg for unoccluded S4.5-02 -> S3.1-01 fiducial LOS!
+    ang_out = np.linspace(math.radians(56.0), math.radians(404.0), 65)
+    ang_in = ang_out[::-1]
+    main_poly: list[tuple[float, float]] = [(39.2 * float(math.cos(a)), 39.2 * float(math.sin(a))) for a in ang_out]
+    main_poly.extend((32.0 * float(math.cos(a)), 32.0 * float(math.sin(a))) for a in ang_in)
+    bolt_holes = [
+        circle_2d(1.35, cx=35.6 * math.cos(math.radians(a)), cy=35.6 * math.sin(math.radians(a)), segments=12, ccw=False)
+        for a in (0.0, 60.0, 120.0, 180.0, 240.0, 300.0)
+    ]
+    main_ring = make_plate_with_holes(
+        outer_poly_2d=main_poly, holes_2d=bolt_holes, thickness=1.80,
+        center=(0.0, 0.0, 0.10), name="S3.1-04_contact_ring", material="BeCu",
     )
-    # Outer Faraday bias shield shroud collar: R=39.35..41.0, Z_world in [0.00, +2.40] -> z_loc in [-1.00, +1.40], center z_loc=+0.20
-    shield_collar = make_tube(
-        r_in=39.35, r_out=41.0, height=2.40, segments=48,
-        center=(0.0, 0.0, 0.20), name="S3.1-04_faraday_shield", material="BeCu",
+    # Outer Faraday bias shield shroud collar with matching [44..56 deg] optical window
+    shield_collar = _make_arc_plate(
+        r_in=39.35, r_out=41.0, thickness=2.40, deg_start=56.0, deg_end=404.0,
+        arc_steps=48, center=(0.0, 0.0, 0.20), name="S3.1-04_faraday_shield", material="BeCu",
     )
     # 16 inward BeCu/Au load-lock cantilever spring fingers (R=28.8..31.9, Z_world in [-0.04, +0.18] -> z_loc [-1.04, -0.82])
     fingers: list[SolidMesh] = []
@@ -764,8 +812,8 @@ def _build_s3_1_04() -> BuiltPart:
     mesh = merge_solids([main_ring, shield_collar, *fingers], name="S3.1-04_becu_contact_ring", material="BeCu")
     step_mesh = merge_solids(
         [
-            make_tube(32.0, 39.2, 1.80, segments=32, center=(0.0, 0.0, 0.10), material="BeCu"),
-            make_tube(39.35, 41.0, 2.40, segments=32, center=(0.0, 0.0, 0.20), material="BeCu"),
+            _make_arc_plate(32.0, 39.2, 1.80, 56.0, 404.0, arc_steps=28, center=(0.0, 0.0, 0.10), material="BeCu"),
+            _make_arc_plate(39.35, 41.0, 2.40, 56.0, 404.0, arc_steps=28, center=(0.0, 0.0, 0.20), material="BeCu"),
             *fingers,
         ],
         name="S3.1-04_step",
@@ -904,7 +952,7 @@ def _build_s3_2_01() -> BuiltPart:
         )
 
     # 4 quadrant 100 K OFHC Cu thermal-bus manifold arcs (R=134..142 mm, Z_world [-14.0, -9.0] -> z_loc [-5.5, -0.5])
-    quad_spans = ((20.0, 70.0), (110.0, 160.0), (200.0, 250.0), (290.0, 340.0))
+    quad_spans = ((19.0, 73.0), (110.0, 160.0), (200.0, 250.0), (290.0, 340.0))
     for q_idx, (d0, d1) in enumerate(quad_spans, start=1):
         arc = _make_arc_plate(
             r_in=134.0, r_out=142.0, thickness=5.0, deg_start=d0, deg_end=d1,
@@ -1884,6 +1932,7 @@ def export_s3(out_dir: Path | str | None = None) -> dict[str, PartArtifactResult
         total_mass_kg += art.mass_kg
 
         w_min, w_max = bp.world_mesh().bbox()
+        _vr = verify_watertight(bp.mesh)
         part_json = {
             "part_id": pid,
             "subsystem": "S3",
@@ -1894,6 +1943,11 @@ def export_s3(out_dir: Path | str | None = None) -> dict[str, PartArtifactResult
             "reconciliation": bp.reconciliation,
             "thermal_contraction_checks": list(bp.thermal_checks),
             "tolerance_stack_checks": list(bp.tolerance_checks),
+            "shell_mate_metadata": {
+                "n_shells": _vr.n_shells,
+                "fea_bonding_mode": "SINGLE_MONOLITHIC_SOLID" if _vr.n_shells == 1 else "TIED_SUBASSEMBLY_CONTACTS",
+                "watertight": _vr.watertight,
+            },
         }
         (dest / f"{pid}.json").write_text(
             json.dumps(part_json, indent=2, ensure_ascii=False) + "\n",

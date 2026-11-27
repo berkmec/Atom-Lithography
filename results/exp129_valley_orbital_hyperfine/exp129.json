@@ -1529,6 +1529,20 @@
       "VOKL6_norm_ext_median_gap_Hz": 5711.191108554602,
       "VOKL6_HM5962_ext_median_gap_Hz": 6391.535887988284,
       "VOKL6_abinit_ext_median_gap_Hz": 5955.428850640543
+    },
+    "ab_initio_scale_uncertainty_band_OBS048": {
+      "exp129_vokl6_abinit_a004_MHz": 7.95121965246282,
+      "exp136_sp3d5s_abinit_a004_MHz": 3.648,
+      "hale_mieher_1969_target_a004_MHz": 5.962,
+      "inter_model_spread_ratio": 2.18,
+      "exp129_rel_err_vs_HM5962": 0.3336,
+      "exp136_rel_err_vs_HM5962": -0.3881,
+      "planning_floor_note": "Treat unscaled Exp136 ab-initio Mode B yield (21.75% @ 1%, 38.00% @ 1.5%) as conservative planning floor until ENDOR calibration."
+    },
+    "ddrf_6p89kHz_certified_yields_VOKL6_HM5962": {
+      "F0.5": 0.0375,
+      "F1": 0.14,
+      "F2": 0.2675
     }
   }
 }

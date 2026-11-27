@@ -30,6 +30,7 @@ import hashlib
 import json
 import math
 from pathlib import Path
+import threading
 from typing import Any
 
 
@@ -739,22 +740,24 @@ class SCADATelemetryManager:
         self._channels: dict[str, TelemetryChannelSpec] = {}
         self._history: dict[str, deque[TelemetrySample]] = {}
         self._latest: dict[str, TelemetrySample] = {}
+        self._lock = threading.RLock()
         for spec in specs:
             self.register_channel(spec)
 
         self._global_samples: deque[TelemetrySample] = deque(maxlen=self.frame_capacity)
         self._alarms: dict[int, AlarmRecord] = {}
         self._active_alarm_by_key: dict[tuple[str, str], int] = {}
-        self._event_log: list[dict[str, Any]] = []
+        self._event_log: deque[dict[str, Any]] = deque(maxlen=max(self.frame_capacity * 4, 4096))
         self._csr_snapshots: deque[InterlockCSRSnapshot] = deque(maxlen=256)
         self._sample_seq: int = 0
         self._alarm_seq: int = 0
 
     def register_channel(self, spec: TelemetryChannelSpec) -> None:
-        if spec.channel_id in self._channels:
-            raise ValueError(f"Duplicate telemetry channel_id: {spec.channel_id}")
-        self._channels[spec.channel_id] = spec
-        self._history[spec.channel_id] = deque(maxlen=self.ring_capacity)
+        with self._lock:
+            if spec.channel_id in self._channels:
+                raise ValueError(f"Duplicate telemetry channel_id: {spec.channel_id}")
+            self._channels[spec.channel_id] = spec
+            self._history[spec.channel_id] = deque(maxlen=self.ring_capacity)
 
     @property
     def channel_ids(self) -> list[str]:
@@ -803,48 +806,56 @@ class SCADATelemetryManager:
         source: str = "scada_poll",
     ) -> TelemetrySample:
         """Record one measurement, update ring buffer, and evaluate ISA-18.2 alarms."""
-        spec = self.get_channel_spec(channel_id)
-        fval = float(value)
-        severity, limit_breached, status_code = spec.evaluate_limit(fval)
+        with self._lock:
+            spec = self.get_channel_spec(channel_id)
+            fval = float(value)
+            severity, limit_breached, status_code = spec.evaluate_limit(fval)
 
-        self._sample_seq += 1
-        sample = TelemetrySample(
-            seq=self._sample_seq,
-            timestamp_s=float(timestamp_s),
-            channel_id=spec.channel_id,
-            opcua_node_id=spec.opcua_node_id,
-            value=fval,
-            unit=spec.unit,
-            status_code=status_code,
-            severity=severity,
-            source=source,
-        )
-        self._history[channel_id].append(sample)
-        self._latest[channel_id] = sample
-        self._global_samples.append(sample)
-
-        if limit_breached is not None:
-            self._raise_or_update_alarm(
+            self._sample_seq += 1
+            sample = TelemetrySample(
+                seq=self._sample_seq,
+                timestamp_s=float(timestamp_s),
                 channel_id=spec.channel_id,
                 opcua_node_id=spec.opcua_node_id,
-                bom_part_ids=spec.bom_part_ids,
-                severity=severity,
-                limit_breached=limit_breached,
                 value=fval,
                 unit=spec.unit,
-                timestamp_s=float(timestamp_s),
-                response_target=spec.response_target,
+                status_code=status_code,
+                severity=severity,
                 source=source,
-                message=(
-                    f"{spec.channel_id} ({spec.description}) breached {limit_breached}: "
-                    f"{fval:g} {spec.unit}"
-                ),
             )
-            # Special PH3 dual-level note: if PH3 >= L2 (0.05 ppm), L1 is superseded
-        else:
-            self._clear_channel_alarms(spec.channel_id, float(timestamp_s), fval)
+            self._history[channel_id].append(sample)
+            self._latest[channel_id] = sample
+            self._global_samples.append(sample)
 
-        return sample
+            if limit_breached is not None:
+                # Clear any superseded threshold level on the same channel (e.g., HI_HI -> HI
+                # or HI -> HI_HI or NON_FINITE_SENSOR recovery) per ISA-18.2 state transitions.
+                self._clear_channel_alarms(
+                    spec.channel_id,
+                    float(timestamp_s),
+                    fval,
+                    exclude_limit=limit_breached,
+                )
+                self._raise_or_update_alarm(
+                    channel_id=spec.channel_id,
+                    opcua_node_id=spec.opcua_node_id,
+                    bom_part_ids=spec.bom_part_ids,
+                    severity=severity,
+                    limit_breached=limit_breached,
+                    value=fval,
+                    unit=spec.unit,
+                    timestamp_s=float(timestamp_s),
+                    response_target=spec.response_target,
+                    source=source,
+                    message=(
+                        f"{spec.channel_id} ({spec.description}) breached {limit_breached}: "
+                        f"{fval:g} {spec.unit}"
+                    ),
+                )
+            else:
+                self._clear_channel_alarms(spec.channel_id, float(timestamp_s), fval)
+
+            return sample
 
     def record_frame(
         self,
@@ -853,10 +864,11 @@ class SCADATelemetryManager:
         source: str = "scada_1hz_frame",
     ) -> list[TelemetrySample]:
         """Record a synchronized multi-channel frame at a single 1 Hz timestamp."""
-        return [
-            self.record_sample(cid, val, timestamp_s=timestamp_s, source=source)
-            for cid, val in sorted(values.items())
-        ]
+        with self._lock:
+            return [
+                self.record_sample(cid, val, timestamp_s=timestamp_s, source=source)
+                for cid, val in sorted(values.items())
+            ]
 
     def get_history(
         self,
@@ -864,8 +876,9 @@ class SCADATelemetryManager:
         t_start_s: float | None = None,
         t_end_s: float | None = None,
     ) -> list[TelemetrySample]:
-        self.get_channel_spec(channel_id)
-        samples = list(self._history[channel_id])
+        with self._lock:
+            self.get_channel_spec(channel_id)
+            samples = list(self._history[channel_id])
         if t_start_s is not None:
             samples = [s for s in samples if s.timestamp_s >= t_start_s]
         if t_end_s is not None:
@@ -912,68 +925,79 @@ class SCADATelemetryManager:
         source: str,
         message: str,
     ) -> AlarmRecord:
-        key = (channel_id, limit_breached)
-        existing_id = self._active_alarm_by_key.get(key)
-        if existing_id is not None and existing_id in self._alarms:
-            rec = self._alarms[existing_id]
-            rec.last_value = value
-            rec.active = True
+        with self._lock:
+            key = (channel_id, limit_breached)
+            existing_id = self._active_alarm_by_key.get(key)
+            if existing_id is not None and existing_id in self._alarms:
+                rec = self._alarms[existing_id]
+                rec.last_value = value
+                rec.active = True
+                return rec
+
+            self._alarm_seq += 1
+            rec = AlarmRecord(
+                alarm_id=self._alarm_seq,
+                channel_id=channel_id,
+                opcua_node_id=opcua_node_id,
+                bom_part_ids=bom_part_ids,
+                severity=severity,
+                limit_breached=limit_breached,
+                message=message,
+                trigger_value=value,
+                last_value=value,
+                unit=unit,
+                triggered_at_s=timestamp_s,
+                active=True,
+                latched=True,
+                acknowledged=False,
+                response_target=response_target,
+                source=source,
+            )
+            self._alarms[rec.alarm_id] = rec
+            self._active_alarm_by_key[key] = rec.alarm_id
+            self._event_log.append({
+                "event_type": "ALARM_TRIGGERED",
+                "timestamp_s": timestamp_s,
+                "alarm_id": rec.alarm_id,
+                "channel_id": channel_id,
+                "severity": severity,
+                "limit_breached": limit_breached,
+                "value": value,
+                "isa18_state": rec.isa18_state,
+                "source": source,
+            })
             return rec
 
-        self._alarm_seq += 1
-        rec = AlarmRecord(
-            alarm_id=self._alarm_seq,
-            channel_id=channel_id,
-            opcua_node_id=opcua_node_id,
-            bom_part_ids=bom_part_ids,
-            severity=severity,
-            limit_breached=limit_breached,
-            message=message,
-            trigger_value=value,
-            last_value=value,
-            unit=unit,
-            triggered_at_s=timestamp_s,
-            active=True,
-            latched=True,
-            acknowledged=False,
-            response_target=response_target,
-            source=source,
-        )
-        self._alarms[rec.alarm_id] = rec
-        self._active_alarm_by_key[key] = rec.alarm_id
-        self._event_log.append({
-            "event_type": "ALARM_TRIGGERED",
-            "timestamp_s": timestamp_s,
-            "alarm_id": rec.alarm_id,
-            "channel_id": channel_id,
-            "severity": severity,
-            "limit_breached": limit_breached,
-            "value": value,
-            "isa18_state": rec.isa18_state,
-            "source": source,
-        })
-        return rec
-
-    def _clear_channel_alarms(self, channel_id: str, timestamp_s: float, value: float) -> None:
-        for key, aid in list(self._active_alarm_by_key.items()):
-            if key[0] != channel_id:
-                continue
-            rec = self._alarms[aid]
-            if rec.active:
-                rec.active = False
-                rec.last_value = value
-                rec.cleared_at_s = timestamp_s
-                if rec.acknowledged:
-                    rec.latched = False
-                    del self._active_alarm_by_key[key]
-                self._event_log.append({
-                    "event_type": "ALARM_CLEARED_PHYSICAL",
-                    "timestamp_s": timestamp_s,
-                    "alarm_id": rec.alarm_id,
-                    "channel_id": channel_id,
-                    "isa18_state": rec.isa18_state,
-                    "latched": rec.latched,
-                })
+    def _clear_channel_alarms(
+        self,
+        channel_id: str,
+        timestamp_s: float,
+        value: float,
+        exclude_limit: str | None = None,
+    ) -> None:
+        with self._lock:
+            for key, aid in list(self._active_alarm_by_key.items()):
+                if key[0] != channel_id:
+                    continue
+                if exclude_limit is not None and key[1] == exclude_limit:
+                    continue
+                rec = self._alarms[aid]
+                if rec.active:
+                    rec.active = False
+                    rec.last_value = value
+                    rec.cleared_at_s = timestamp_s
+                    if rec.acknowledged:
+                        rec.latched = False
+                        del self._active_alarm_by_key[key]
+                    self._event_log.append({
+                        "event_type": "ALARM_CLEARED_PHYSICAL",
+                        "timestamp_s": timestamp_s,
+                        "alarm_id": rec.alarm_id,
+                        "channel_id": channel_id,
+                        "limit_breached": rec.limit_breached,
+                        "isa18_state": rec.isa18_state,
+                        "latched": rec.latched,
+                    })
 
     def acknowledge_alarm(
         self,
@@ -982,71 +1006,108 @@ class SCADATelemetryManager:
         timestamp_s: float,
     ) -> AlarmRecord:
         """Acknowledge a latched alarm; releases latch only if physical fault has cleared."""
-        if alarm_id not in self._alarms:
-            raise KeyError(f"Unknown alarm_id: {alarm_id}")
-        if not operator or not operator.strip():
-            raise ValueError("Operator identifier must be non-empty")
-        rec = self._alarms[alarm_id]
-        rec.acknowledged = True
-        rec.acknowledged_by = operator.strip()
-        rec.acknowledged_at_s = float(timestamp_s)
-        if not rec.active:
-            rec.latched = False
-            key = (rec.channel_id, rec.limit_breached)
-            if self._active_alarm_by_key.get(key) == alarm_id:
-                del self._active_alarm_by_key[key]
-        self._event_log.append({
-            "event_type": "ALARM_ACKNOWLEDGED",
-            "timestamp_s": float(timestamp_s),
-            "alarm_id": rec.alarm_id,
-            "channel_id": rec.channel_id,
-            "operator": rec.acknowledged_by,
-            "isa18_state": rec.isa18_state,
-            "still_active": rec.active,
-            "latched": rec.latched,
-        })
-        return rec
+        with self._lock:
+            if alarm_id not in self._alarms:
+                raise KeyError(f"Unknown alarm_id: {alarm_id}")
+            if not operator or not operator.strip():
+                raise ValueError("Operator identifier must be non-empty")
+            rec = self._alarms[alarm_id]
+            rec.acknowledged = True
+            rec.acknowledged_by = operator.strip()
+            rec.acknowledged_at_s = float(timestamp_s)
+            if not rec.active:
+                rec.latched = False
+                key = (rec.channel_id, rec.limit_breached)
+                if self._active_alarm_by_key.get(key) == alarm_id:
+                    del self._active_alarm_by_key[key]
+            self._event_log.append({
+                "event_type": "ALARM_ACKNOWLEDGED",
+                "timestamp_s": float(timestamp_s),
+                "alarm_id": rec.alarm_id,
+                "channel_id": rec.channel_id,
+                "operator": rec.acknowledged_by,
+                "isa18_state": rec.isa18_state,
+                "still_active": rec.active,
+                "latched": rec.latched,
+            })
+            return rec
 
     def get_latched_alarms(self) -> list[AlarmRecord]:
-        return [r for r in self._alarms.values() if r.latched or r.active]
+        with self._lock:
+            return [r for r in self._alarms.values() if r.latched or r.active]
 
     def get_all_alarms(self) -> list[AlarmRecord]:
-        return [self._alarms[k] for k in sorted(self._alarms.keys())]
+        with self._lock:
+            return [self._alarms[k] for k in sorted(self._alarms.keys())]
 
     # ------------------------------------------------------------------
     # Hardware Integration Hook 1: rtl/machine_ctrl/uhv_interlock_fsm.v CSR Map
     # ------------------------------------------------------------------
 
     def build_il_sensor_vectors_from_telemetry(self) -> tuple[int, int]:
-        """Compute 8-bit ``(ch_a_ok, ch_b_ok)`` health bitmasks matching ``uhv_interlock_fsm.v``."""
+        """Compute 8-bit ``(ch_a_ok, ch_b_ok)`` health bitmasks matching ``uhv_interlock_fsm.v``.
+
+        Strictly fail-safe on non-finite (``NaN`` / ``Inf``) telemetry: any non-finite
+        reading on a safety-interlock channel immediately clears its hardware health bit
+        (and any non-finite vacuum/source gauge clears bit 0).
+        """
+        with self._lock:
+            latest = dict(self._latest)
+            channels = dict(self._channels)
+
+        def _bad_hi(cid: str, limit: float) -> bool:
+            if cid not in latest:
+                return False
+            v = latest[cid].value
+            return (not math.isfinite(v)) or (v >= limit)
+
+        def _bad_lo(cid: str, limit: float) -> bool:
+            if cid not in latest:
+                return False
+            v = latest[cid].value
+            return (not math.isfinite(v)) or (v <= limit)
+
+        def _bad_bool(cid: str) -> bool:
+            if cid not in latest:
+                return False
+            v = latest[cid].value
+            return (not math.isfinite(v)) or (v < 0.5)
+
         mask = 0xFF
-        latest = self._latest
-        # bit 0: UHV pressure <= 1e-8 Torr
-        if "S5.P_MAIN_UHV_TORR" in latest and latest["S5.P_MAIN_UHV_TORR"].value >= 1.0e-8:
+        # bit 0: UHV / source vacuum gauges healthy & finite
+        if _bad_hi("S5.P_MAIN_UHV_TORR", 1.0e-8) or _bad_hi("S1.P_SOURCE_HV_MBAR", 2.0e-5) or (
+            "S1.P_CH1_TORR" in latest and (not math.isfinite(latest["S1.P_CH1_TORR"].value) or latest["S1.P_CH1_TORR"].value >= 1.0e-8)
+        ):
             mask &= ~(1 << 0)
         # bit 1: Laser enclosure door switch
-        if "S7.LASER_ENCL_OK" in latest and latest["S7.LASER_ENCL_OK"].value < 0.5:
+        if _bad_bool("S7.LASER_ENCL_OK"):
             mask &= ~(1 << 1)
         # bit 2: ODH O2 >= 19.5%
-        if "S7.O2_ROOM_PCT" in latest and latest["S7.O2_ROOM_PCT"].value <= 19.5:
+        if _bad_lo("S7.O2_ROOM_PCT", 19.5):
             mask &= ~(1 << 2)
         # bit 3: PH3 L1 (< 0.02 ppm)
-        if "S7.PH3_LEVEL_PPM" in latest and latest["S7.PH3_LEVEL_PPM"].value >= 0.02:
+        if _bad_hi("S7.PH3_LEVEL_PPM", 0.02):
             mask &= ~(1 << 3)
         # bit 4: PH3 L2 (< 0.05 ppm)
-        if "S7.PH3_LEVEL_PPM" in latest and latest["S7.PH3_LEVEL_PPM"].value >= 0.05:
+        if _bad_hi("S7.PH3_LEVEL_PPM", 0.05):
             mask &= ~(1 << 4)
         # bit 5: HV within landing/extract limits
-        if ("S1.V_LANDING_KV" in latest and latest["S1.V_LANDING_KV"].value >= 5.5) or (
-            "S1.V_EXTRACT_KV" in latest and latest["S1.V_EXTRACT_KV"].value >= 16.5
-        ):
+        if _bad_hi("S1.V_LANDING_KV", 5.5) or _bad_hi("S1.V_EXTRACT_KV", 16.5):
             mask &= ~(1 << 5)
         # bit 6: Magnet quench voltage < 0.5 V
-        if "S6.QUENCH_VOLT_V" in latest and latest["S6.QUENCH_VOLT_V"].value >= 0.5:
+        if _bad_hi("S6.QUENCH_VOLT_V", 0.5):
             mask &= ~(1 << 6)
         # bit 7: E-Stop loop OK
-        if "S7.ESTOP_LOOP_OK" in latest and latest["S7.ESTOP_LOOP_OK"].value < 0.5:
+        if _bad_bool("S7.ESTOP_LOOP_OK"):
             mask &= ~(1 << 7)
+
+        # Generic fail-safe sweep: any registered channel with an interlock_bit that reports
+        # a non-finite value or INTERLOCK_TRIP clears its bit unconditionally.
+        for cid, sample in latest.items():
+            spec = channels.get(cid)
+            if spec is not None and spec.interlock_bit is not None and 0 <= spec.interlock_bit <= 7:
+                if not math.isfinite(sample.value) or sample.severity == "INTERLOCK_TRIP":
+                    mask &= ~(1 << spec.interlock_bit)
         return (mask, mask)
 
     def ingest_fpga_csr_snapshot(
@@ -1055,6 +1116,14 @@ class SCADATelemetryManager:
         timestamp_s: float,
     ) -> InterlockCSRSnapshot:
         """Decode ``fpga_top_machine_ctrl`` CSRs (``REGMAP.md``) and latch interlock faults."""
+        with self._lock:
+            return self._ingest_fpga_csr_snapshot_unlocked(regs, timestamp_s)
+
+    def _ingest_fpga_csr_snapshot_unlocked(
+        self,
+        regs: dict[int, int],
+        timestamp_s: float,
+    ) -> InterlockCSRSnapshot:
         chip_id = int(regs.get(CSR_CHIP_ID, EXPECTED_CHIP_ID)) & 0xFFFFFFFF
         epi_csr = int(
             regs.get(CSR_IL_EPISTEMIC_CSR, regs.get(CSR_EPISTEMIC_STATUS, EXPECTED_EPISTEMIC_CSR))
@@ -1193,6 +1262,14 @@ class SCADATelemetryManager:
         timestamp_s: float,
     ) -> dict[str, Any]:
         """Ingest output of ``AutoRecalController`` (single-mode or ``run_all_fault_scenarios``)."""
+        with self._lock:
+            return self._ingest_auto_recal_report_unlocked(report, timestamp_s)
+
+    def _ingest_auto_recal_report_unlocked(
+        self,
+        report: dict[str, Any],
+        timestamp_s: float,
+    ) -> dict[str, Any]:
         ingested_channels: list[str] = []
         sub_reports: list[dict[str, Any]] = []
         if "fault_mode" in report:
@@ -1281,6 +1358,10 @@ class SCADATelemetryManager:
 
     def export_jsonl(self, path: str | Path) -> dict[str, Any]:
         """Export metadata header, ring-buffer samples, CSR snapshots & alarms to JSONL."""
+        with self._lock:
+            return self._export_jsonl_unlocked(path)
+
+    def _export_jsonl_unlocked(self, path: str | Path) -> dict[str, Any]:
         out_path = Path(path)
         out_path.parent.mkdir(parents=True, exist_ok=True)
         lines: list[str] = []
@@ -1326,12 +1407,13 @@ class SCADATelemetryManager:
         ]
 
     def summary(self) -> dict[str, Any]:
-        return {
-            "channels_registered": len(self._channels),
-            "samples_in_ring": len(self._global_samples),
-            "total_samples_recorded": self._sample_seq,
-            "total_alarms": len(self._alarms),
-            "latched_alarms": len(self.get_latched_alarms()),
-            "csr_snapshots": len(self._csr_snapshots),
-            "epistemic": dict(EPISTEMIC_METADATA),
-        }
+        with self._lock:
+            return {
+                "channels_registered": len(self._channels),
+                "samples_in_ring": len(self._global_samples),
+                "total_samples_recorded": self._sample_seq,
+                "total_alarms": len(self._alarms),
+                "latched_alarms": len(self.get_latched_alarms()),
+                "csr_snapshots": len(self._csr_snapshots),
+                "epistemic": dict(EPISTEMIC_METADATA),
+            }

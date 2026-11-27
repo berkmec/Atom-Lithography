@@ -20,7 +20,7 @@
     "usd_high": 730000.0,
     "legacy_cad_module": "s6_cryo_dr_magnet_readout",
     "bom_epistemic_tag": "{Model-Kalibrasyon-Exp114}",
-    "notes": "EXP121 BAZ KADEME (S6.8=D): Bluefors/Oxford arastirma sinifi; 1K (Exp117) indirme alternatifi"
+    "notes": "EXP121 BAZ KADEME (S6.8=D): Bluefors LD400 / Oxford Proteox duopoli darbogazi; kritik-yol teslim P10/P50/P90=36/56/84 hf; UNQUOTED_ROM_ESTIMATE"
   },
   "artifact_links": {
     "cad": {
@@ -61,7 +61,14 @@
     "rtl_modules": [],
     "rtl_audit_json": null,
     "software_and_eda_files": [],
-    "verification_tests": []
+    "verification_tests": [
+      "tests/test_bom_detailed.py",
+      "tests/test_full_180_traceability.py",
+      "tests/test_cad_s6_optq.py",
+      "tests/test_exp125.py",
+      "tests/test_exp150.py",
+      "tests/test_cad_parts.py"
+    ]
   },
   "specialized_specification": null,
   "verification_status": {
@@ -71,6 +78,7 @@
     "rtl_verified": false,
     "software_or_eda_verified": false,
     "specialized_icd_present": false,
+    "verification_tests_mapped": true,
     "traceable": true
   },
   "epistemic": {

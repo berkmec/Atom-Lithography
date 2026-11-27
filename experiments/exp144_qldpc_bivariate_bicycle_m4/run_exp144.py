@@ -153,6 +153,7 @@ def _worker_circuit_chunk(task: Dict[str, Any]) -> Tuple[str, Dict[str, Any]]:
         memory_basis=task["basis"],
         p2q_pauli_weights=task.get("p2q_pauli_weights"),
         include_boundary_noise=task.get("include_boundary_noise", True),
+        p_1q_hadamard=task.get("p_1q_hadamard", 0.0),
     )
     mc = run_dem_monte_carlo(
         dem,
@@ -443,15 +444,16 @@ def _estimate_threshold_crossing(p_grid: List[float], r_small: List[float], r_la
 
 
 def _scan_hardcoded_paths(paths: List[Path]) -> List[str]:
-    bad_tokens = ("/home/" + "berk", "/run/media/" + "berk", "/" + "Users/")
+    import re
+    patterns = (re.compile(r"/(?:home|run/media|Users)/[a-zA-Z0-9_-]+"),)
     hits: List[str] = []
     for p in paths:
         if not p.exists():
             continue
         txt = p.read_text(errors="ignore")
-        for tok in bad_tokens:
-            if tok in txt:
-                hits.append(f"{p.name}:{tok}")
+        for pat in patterns:
+            if pat.search(txt):
+                hits.append(f"{p.name}:{pat.pattern}")
     return hits
 
 
@@ -763,6 +765,7 @@ def main() -> None:
                 "p_prep": pp,
                 "p_1q_idle_step": id_step,
                 "p_data_ro_idle": id_ro,
+                "p_1q_hadamard": p_1q,  # OBS-106 FIX: mid-cycle Hadamard CZ->CNOT conversion noise on X-check targets
                 "basis": basis,
                 "p2q_pauli_weights": pw,
                 "include_boundary_noise": True,

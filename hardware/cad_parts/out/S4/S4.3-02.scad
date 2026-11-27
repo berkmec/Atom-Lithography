@@ -9,8 +9,8 @@
 // temp_stage        : 300 K (UHV)
 // vacuum_grade      : UHV 1e-9 mbar
 // tolerance         : ±50 nm kaba
-// computed_mass_kg  : 3.11496
-// envelope_mm       : 110.500 x 110.500 x 159.500
+// computed_mass_kg  : 3.23169
+// envelope_mm       : 110.500 x 110.500 x 161.000
 // design_maturity   : M0_M1_DETAILED_CAD_DESIGN_ONLY
 // no_lab_measurement: true
 // iec61508_certified: false
@@ -23,14 +23,14 @@ $fn = 64;
 // Nominal bounding envelope parameters (mm)
 bbox_x = 110.5000;
 bbox_y = 110.5000;
-bbox_z = 159.5000;
+bbox_z = 161.0000;
 
 // Part-specific parametric dimensions
 coarse_xy_mm = 96.0;
 stroke_xy_mm = 25.0;
 pedestal_id_mm = 90.0;
 pedestal_od_mm = 104.0;
-pedestal_h_mm = 137.0;
+pedestal_h_mm = 138.0;
 
 // Interface / port parameters (mm)
 port_fine_stage_top_mount_bore = 42.000;
@@ -43,12 +43,12 @@ module part_S4_3_02() {
   difference() {
     union() {
       // ±25 mm Ti/ceramic crossed-roller stick-slip XY coarse stage
-      translate([0.000, 0.000, 79.750]) cube([96.000, 96.000, 21.500], center=true);
+      translate([0.000, 0.000, 80.500]) cube([96.000, 96.000, 23.000], center=true);
       // Coaxial Invar-36 pedestal (R=45..52 clearing Cryoperm & B-coils)
       translate([0.000, 0.000, 4.000]) {
         difference() {
-          cylinder(d=104.000, h=129.000, center=true);
-          cylinder(d=90.000, h=131.000, center=true);
+          cylinder(d=104.000, h=130.000, center=true);
+          cylinder(d=90.000, h=132.000, center=true);
         }
       }
       // Bolted chamber-floor pedestal flange
@@ -67,7 +67,7 @@ module part_S4_3_02() {
             cylinder(d=4.500, h=12.000, center=true);
     }
     // Ø42 mm central bore
-    translate([0.000, 0.000, 79.750]) cylinder(d=42.000, h=26.000, center=true);
+    translate([0.000, 0.000, 80.500]) cylinder(d=42.000, h=26.000, center=true);
   }
 }
 

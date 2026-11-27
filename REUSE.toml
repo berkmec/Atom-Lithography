@@ -3,13 +3,16 @@ SPDX-PackageName = "Atom Lithography Machine"
 SPDX-PackageSupplier = "berkmec (https://counfield.com/)"
 SPDX-PackageDownloadLocation = "https://github.com/berkmec/Atom-Lithography"
 
-# Rule 1a — Pure software, control stack, tests, HTML5 twin & repo metadata
+# Rule 1a — Pure software, control stack, tests, HTML5 twin, CI & repo metadata
 [[annotations]]
 path = [
     "src/machine_control/**/*.py",
+    "src/qcell/**/*.py",
     "tests/**/*.py",
     "docs/digital_twin_interactive.html",
+    "pyproject.toml",
     "requirements.txt",
+    ".github/workflows/ci.yml",
     ".gitignore",
     "NOTICE",
 ]

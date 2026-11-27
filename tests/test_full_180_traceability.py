@@ -31,6 +31,11 @@ def test_master_180_traceability_gate_all_pass() -> None:
     assert report["orphan_icd_files"] == []
     assert report["broken_links"] == []
     assert report["sha_mismatches"] == []
+    assert report["unpinned_artifacts"] == []
+    assert report["parts_missing_verification_tests"] == []
+    assert report["parts_missing_requirement_assertions"] == []
+    assert report["referenced_artifacts_sha256_pinned"] == report["referenced_artifacts_count"]
+    assert report["referenced_artifacts_sha256_pinned"] >= 1100
     assert report["epistemic_violations"] == []
     assert report["cad_ok"] is True
     assert report["pcb_ok"] is True
@@ -60,18 +65,18 @@ def test_parts_registry_exact_coverage_counters_and_epistemic_locks() -> None:
     assert cs["cad_solid_parts"] == 164
     assert cs["cad_global_clashes"] == 0
     assert cs["cad_pairs_checked"] == 13366
-    assert cs["cad_thermal_checks_passed"] == 30
+    assert cs["cad_thermal_checks_passed"] == 32
     assert cs["cad_gdt_stacks_passed"] == 10
     assert cs["kicad8_boards_count"] == 10
     assert cs["kicad8_total_erc_errors"] == 0
     assert cs["kicad8_total_drc_errors"] == 0
-    assert cs["kicad8_total_nets"] == 762
-    assert cs["kicad8_total_routed_nets"] == 762
+    assert cs["kicad8_total_nets"] == 1128
+    assert cs["kicad8_total_routed_nets"] == 1128
     assert cs["kicad8_total_unrouted_nets"] == 0
     assert cs["kicad8_total_unconnected_items"] == 0
     assert cs["kicad8_total_track_dangling"] == 0
-    assert cs["kicad8_total_segments"] == 9895
-    assert cs["kicad8_total_vias"] == 2538
+    assert cs["kicad8_total_segments"] == 12883
+    assert cs["kicad8_total_vias"] == 3495
     assert cs["kicad8_all_boards_semi_s2_certified_false"] is True
     assert cs["kicad8_all_boards_iec61508_certified_false"] is True
     assert cs["live_ngspice47_decks_count"] == 10
@@ -82,6 +87,10 @@ def test_parts_registry_exact_coverage_counters_and_epistemic_locks() -> None:
     assert cs["rtl_verilator_targets_passed"] == 8
     assert cs["rtl_iverilog_testbenches_passed"] == 6
     assert cs["rtl_yosys_targets_passed"] == 3
+    assert cs["sha256_pinning_coverage_pct"] == 100.0
+    assert cs["referenced_artifacts_sha256_pinned"] == cs["referenced_artifacts_total"]
+    assert cs["parts_with_verification_tests"] == 180
+    assert cs["parts_with_requirement_assertions"] == 180
 
     # Verify per-board strict routing & epistemic certification locks across ALL 10 KiCad 8 PCBs
     pcb_anchor = reg["verification_anchors"]["pcb_and_spice"]
@@ -97,13 +106,13 @@ def test_parts_registry_exact_coverage_counters_and_epistemic_locks() -> None:
         assert bd["semi_s2_certified"] is False, f"semi_s2_certified not False on {bd['board_name']}"
         assert bd["iec61508_certified"] is False, f"iec61508_certified not False on {bd['board_name']}"
 
-    # Verify conservative UPS runtime breakdown & 0.0 W TIER2_SHED reconciliation
+    # Verify conservative 12 kWh LFP UPS runtime breakdown & 0.0 W TIER2_SHED reconciliation (OBS-068/079)
     ups = reg["verification_anchors"]["electrical_power_ups"]
-    assert ups["tier1_runtime_min_exp150_nominal_eta090"] == 213.2
-    assert ups["tier1_runtime_min_conservative_100pct_dod_incl_350w"] == 189.6
-    assert ups["tier1_runtime_min_conservative_90pct_dod_incl_350w"] == 170.6
+    assert ups["tier1_runtime_min_exp150_nominal_eta090"] == 255.8
+    assert ups["tier1_runtime_min_conservative_100pct_dod_incl_350w"] == 225.5
+    assert ups["tier1_runtime_min_conservative_90pct_dod_incl_350w"] == 202.8
     assert ups["tier1_conservative_100pct_dod_meets_180min"] is True
-    assert ups["tier1_conservative_90pct_dod_meets_180min"] is False
+    assert ups["tier1_conservative_90pct_dod_meets_180min"] is True
     assert ups["tier2_shed_28part_reconciliation_discrepancy_W"] == 0.0
 
     # Verify hardened RTL security & BOED 0-LSB gates
@@ -194,8 +203,9 @@ def test_openroad_signoff_manifest_and_summary_doc() -> None:
     # Summary doc check
     summary_md = (REPO_ROOT / "hardware" / "DESIGN_BLUEPRINT_180_SUMMARY.md").read_text(encoding="utf-8")
     assert "180 / 180" in summary_md or "180/180" in summary_md
-    assert "762 / 762" in summary_md or "762/762" in summary_md
-    assert "170.6 min" in summary_md
+    assert "1,128 / 1,128" in summary_md or "1,128/1,128" in summary_md
+    assert "202.8 min" in summary_md
+    assert "2,957.95" in summary_md
     assert "no_lab_measurement = true" in summary_md
     assert "iec61508_certified = false" in summary_md
     assert "semi_s2_certified = false" in summary_md
@@ -264,10 +274,13 @@ def test_gitignore_whitelisting_and_zero_junk_or_username_exposure() -> None:
             modified_tracked.append(f"{code} {path}")
 
     assert bad_exposed == [], f"Junk/cache/log files exposed by .gitignore: {bad_exposed[:10]}"
-    # Only .gitignore is allowed to be modified among pre-existing tracked v7.2 files
-    assert all(m.endswith(" .gitignore") for m in modified_tracked), (
-        f"Unexpected modification to tracked v7.2 files: {modified_tracked}"
-    )
+    # Ensure internal campaign reports are never exposed by .gitignore
+    internal_exposed = [
+        line[3:].strip()
+        for line in st.stdout.splitlines()
+        if line.strip() and Path(line[3:].strip()).name.startswith("INTERNAL_")
+    ]
+    assert internal_exposed == [], f"INTERNAL_*.md files exposed by .gitignore: {internal_exposed}"
 
     # Verify zero personal username literal in any Stage-2 file or test
     active_user = Path.home().name

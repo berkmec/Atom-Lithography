@@ -32,18 +32,6 @@ cf100_gask_od = 120.5;
 cf63_gask_od = 82.4;
 
 // Interface / port parameters (mm)
-port_gasket_cf100_spec_od = 152.000;
-port_gasket_cf100_spec_bore = 101.600;
-port_gasket_cf100_spec_pcd = 130.200;
-port_gasket_cf100_spec_bolts = 16;
-port_gasket_cf63_spec_od = 113.500;
-port_gasket_cf63_spec_bore = 63.500;
-port_gasket_cf63_spec_pcd = 92.100;
-port_gasket_cf63_spec_bolts = 8;
-port_angle_valve_cf40_od = 69.500;
-port_angle_valve_cf40_bore = 38.000;
-port_angle_valve_cf40_pcd = 58.700;
-port_angle_valve_cf40_bolts = 6;
 
 module part_S5_1_05() {
   difference() {

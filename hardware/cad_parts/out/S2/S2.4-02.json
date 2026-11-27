@@ -73,6 +73,30 @@
         "bolt_spec": "",
         "frame": "global",
         "notes": ""
+      },
+      {
+        "name": "uhv_aln_cu_thermal_strap",
+        "kind": "thermal",
+        "position_mm": [
+          41.36574669941303,
+          41.36574669941302,
+          9.2
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "4x AlN/OFHC Cu 15 kV Thermal Straps (2.2 K/W)",
+        "mating_part_id": "S2.1-04",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "global",
+        "notes": ""
       }
     ],
     "dimensions": [
@@ -142,7 +166,7 @@
         "datum_primary": "",
         "datum_secondary": "",
         "datum_tertiary": "",
-        "feature_note": "UHV ROGERS PCB",
+        "feature_note": "UHV ROGERS RO4350B PCB",
         "glyph": "⏥",
         "tolerance_text": "0.050"
       },
@@ -175,16 +199,21 @@
     ],
     "notes": [
       "SPI cfg + start_all + 64-bit count_hit hatti, dusuk gaz cikisi",
-      "4-quadrant modular UHV Rogers/Polyimide carrier PCB (R=33.5..64.0 mm; +2.0 mm clear of S6.2-02 4K bridge @ X=-66.0, +13.4 mm outside S2.4-01)"
+      "4-quadrant modular UHV Rogers RO4350B carrier PCB (CTE=12 ppm/K, Tg=280 C >> 150 C bakeout; +99.8 um outer exp -> 1.90 mm clear of S6.2-02 bridge)",
+      "Includes 4x HV-isolated AlN (180 W/mK, 15 kV) + OFHC Cu UHV thermal straps (R_th=2.20 K/W -> dT=1.1 K @ 0.5 W nom, 9.7 K @ 4.43 W burst)"
     ],
     "scad_params": {
       "pcb_od": 128.0,
       "pcb_id": 67.0,
       "thickness": 2.4,
       "quadrants": 4,
-      "z0_ohm": 50.0
+      "z0_ohm": 50.0,
+      "rogers_cte_ppm_k": 12.0,
+      "rogers_tg_c": 280.0,
+      "r_th_strap_k_per_w": 2.2,
+      "hv_strap_rating_kV": 15.0
     },
-    "target_mass_kg": 0.039,
+    "target_mass_kg": 0.052,
     "epistemic": {
       "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
       "no_lab_measurement": true,
@@ -208,13 +237,13 @@
     "watertight": true,
     "boundary_edges": 0,
     "non_manifold_edges": 0,
-    "signed_volume_mm3": 20676.321676822485,
-    "surface_area_mm2": 19473.86888486119,
-    "mass_kg": 0.03845795831888983,
+    "signed_volume_mm3": 21404.02167682249,
+    "surface_area_mm2": 20656.564931009263,
+    "mass_kg": 0.039811480318889834,
     "cg_mm": [
-      -1.1326719005782068e-14,
-      1.603060643755224e-14,
-      3.9500000000000064
+      -1.644829742887268e-14,
+      2.274239041449119e-14,
+      4.061478582671402
     ],
     "bbox_min_mm": [
       -63.912290224292725,
@@ -224,18 +253,18 @@
     "bbox_max_mm": [
       63.912290224292725,
       63.912290224292725,
-      5.15
+      9.2
     ],
     "inertia_kg_mm2": [
-      49.938765640425025,
-      49.93876564042501,
-      99.8406116408639,
-      1.3682147255167359e-14,
-      -8.773372428549949e-16,
-      2.0359605628073082e-15
+      52.276309525580245,
+      52.276309525580245,
+      104.48392680473891,
+      1.0439234756631762e-14,
+      -1.9059477687791353e-15,
+      2.170238396242564e-15
     ],
-    "triangle_count": 1152,
-    "vertex_count": 560,
+    "triangle_count": 1376,
+    "vertex_count": 688,
     "step_valid": true,
     "dxf_valid": true,
     "svg_valid": true,
@@ -249,24 +278,45 @@
   },
   "engineering_checks": {
     "bakeout_pcb_clearance": {
-      "outer_material": "Invar-36",
+      "outer_material": "Rogers RO4350B",
       "inner_material": "Si",
       "t_cold_k": 423.15,
       "t_ref_k": 293.15,
+      "rogers_cte_xy_ppm_k": 12.0,
+      "rogers_tg_c": 280.0,
+      "bakeout_temp_c": 150.0,
+      "tg_margin_c": 130.0,
+      "outer_strain": 0.00156,
+      "inner_strain": 0.00038,
       "warm_outer_id_mm": 67.0,
       "warm_inner_od_mm": 60.0,
-      "cold_outer_id_mm": 67.01742,
-      "cold_inner_od_mm": 60.022800000000004,
-      "outer_strain": 0.00025999999999992696,
-      "inner_strain": 0.00038000000000004697,
-      "warm_radial_clearance_mm": 3.5,
-      "cold_nominal_radial_clearance_mm": 3.497309999999999,
-      "cold_worst_case_radial_clearance_mm": 3.4223099999999986,
-      "delta_radial_clearance_mm": -0.0026900000000011914,
+      "cold_outer_id_mm": 67.10452,
+      "cold_inner_od_mm": 60.0228,
+      "cold_nominal_radial_clearance_mm": 3.54086,
+      "cold_worst_case_radial_clearance_mm": 3.46586,
       "min_required_radial_clearance_mm": 3.0,
+      "outer_radial_expansion_um": 99.84,
+      "cold_bridge_gap_423k_mm": 1.9002,
       "interference_risk": false,
       "passed": true
+    },
+    "uhv_thermal_closure": {
+      "r_th_aln_k_per_w": 0.1157,
+      "r_th_cu_k_per_w": 1.8229,
+      "r_th_total_k_per_w": 2.2,
+      "hv_isolation_rating_kV": 15.0,
+      "p_nom_W": 0.5,
+      "p_burst_50khz_W": 4.43,
+      "delta_t_nom_K": 1.1,
+      "delta_t_burst_K": 9.74,
+      "si_pitch_drift_nom_um": 0.00143,
+      "passed": true
     }
+  },
+  "shell_mate_metadata": {
+    "n_shells": 12,
+    "fea_bonding_mode": "TIED_SUBASSEMBLY_CONTACTS",
+    "watertight": true
   },
   "epistemic": {
     "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",

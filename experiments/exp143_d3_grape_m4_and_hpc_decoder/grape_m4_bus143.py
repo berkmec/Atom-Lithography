@@ -130,18 +130,22 @@ def _measure_awg_bandwidth_300mhz(
     d2: np.ndarray,
     t_slice_us: float,
     cutoff_mhz: float = 300.0,
+    dac_rate_gsps: float = 10.0,
 ) -> Tuple[float, float]:
     """
-    Evaluate exact FFT spectral energy fraction below `cutoff_mhz` (300 MHz AWG limit)
-    by smoothly zero-padding the slice pulse on a fine 10 GSa/s grid.
+    Evaluate exact non-aliased AWG spectral energy fraction below `cutoff_mhz` (300 MHz limit)
+    by Zero-Order Hold (ZOH) upsampling to physical DAC sample rate `dac_rate_gsps` (10 GSa/s,
+    f_Nyquist = 5000 MHz >> 300 MHz, OBS-101 fix eliminating 84.73 MHz Nyquist aliasing!).
     Returns (min_energy_frac_below_300mhz, max_f99_mhz).
     """
     n_pts = len(s1_c)
-    # Zero-pad to 1024 points at dt_s = t_slice / n_pts (typically dt ~ 5-8 ns -> Nyquist ~ 60-100 MHz,
-    # well below 300 MHz; also upsample via Fourier interpolation to check continuous-time spectrum!)
-    n_pad = max(1024, 16 * n_pts)
     dt_us = t_slice_us / float(n_pts)
-    freqs_mhz = np.fft.rfftfreq(n_pad, d=dt_us)  # 1/us = MHz!
+    dt_dac_us = 1e-3 / float(dac_rate_gsps)  # 10 GSa/s -> 0.1 ns = 1e-4 us -> f_Nyquist = 5000 MHz
+    upsample = max(16, int(round(dt_us / dt_dac_us)))
+    n_up = n_pts * upsample
+    dt_up_us = dt_us / float(upsample)
+    n_pad = max(4096, 4 * n_up)
+    freqs_mhz = np.fft.rfftfreq(n_pad, d=dt_up_us)  # 1/us = MHz (Nyquist ~ 5000 MHz >> 300 MHz)
 
     channels = [
         np.real(s1_c),
@@ -157,8 +161,10 @@ def _measure_awg_bandwidth_300mhz(
         pwr_tot = float(np.sum(sig * sig))
         if pwr_tot < 1e-12:
             continue
+        # Zero-Order Hold (ZOH) staircase waveform at 10 GSa/s captures step images above 300 MHz!
+        sig_zoh = np.repeat(sig, upsample)
         padded = np.zeros(n_pad, dtype=np.float64)
-        padded[:n_pts] = sig
+        padded[:n_up] = sig_zoh
         spec = np.abs(np.fft.rfft(padded)) ** 2
         s_tot = float(np.sum(spec))
         if s_tot <= 0.0:
@@ -503,14 +509,14 @@ def optimize_grape_slice_multistart_cuda(
 def simulate_grape_cz_cuda(
     pair: FlipFlopPairSpec,
     pulse: GrapeSlicePulse,
-    q_r: float = 1e6,
-    s_eps_uev: float = 0.25,
+    q_r: float = 5e5,
+    s_eps_uev: float = 0.3897,
     alpha: float = 1.0,
     n_traj: int = 512,
-    t_pi_us: float = 0.015,
+    t_pi_us: float = 0.060,
     eps_rot: float = 0.015,
     gamma_phi_nuc_khz: float = GAMMA_PHI_NUC_1PCT_KHZ,
-    sweet_spot_mode: str = "P4_exact",
+    sweet_spot_mode: str = "honest_unclamped_4x4",
     include_dg_jitter: bool = True,
     f_r_ghz: float = 5.0,
     temp_mk: float = 20.0,
@@ -520,13 +526,13 @@ def simulate_grape_cz_cuda(
     seed: int = 14301,
 ) -> Dict[str, Any]:
     """
-    Exact 12x12 CUDA Strang-split Lindblad + M=40 multi-OU 1/f^alpha simulation
+    Exact 12x12 CUDA Strang-split Lindblad + 12-decade multi-OU 1/f^alpha simulation
     of the XY4-embedded K=8 Fourier GRAPE CZ gate.
 
-    sweet_spot_mode:
-      - "P4_exact": identical to Exp137 P4 (|D1|<=4e-6, dg*=0.20, full D2)
-      - "double_sweet_spot": closed-loop clock transition + Bessel flat-g
-        (|D1|<=2e-6, dg*=0.10, full D2)
+    OBS-042 STRICT HONESTY FIX:
+      All synthetic |d1|<=4e-6/2e-6 clamping and dg*0.20/0.10 scaling are PERMANENTLY REMOVED!
+      Every mode evaluates the EXACT unclamped (d1, d2, dg) from the 4x4 Tosi Hamiltonian.
+    OBS-101 FIX: Defaults to 60 ns DRAG/Gaussian pi-pulses instead of 15 ns square pulses.
     """
     rng = np.random.default_rng(seed)
     n_slices, pulse_seq = _build_protocol_ops("P4")  # 4-slice XY4 echo!
@@ -534,23 +540,11 @@ def simulate_grape_cz_cuda(
     dt_k = pulse.dt_us
     dts_slice = [dt_k] * n_pts
 
+    # EXACT unclamped 4x4 Tosi derivatives (OBS-042: NO synthetic d1 clamping or dg rescaling!)
     d1_1, d2_1 = pair.d1_1_ghz_per_ghz, pair.d2_1_inv_ghz
     d1_2, d2_2 = pair.d1_2_ghz_per_ghz, pair.d2_2_inv_ghz
     dg1, dg2 = pair.dg1_mhz_per_ghz, pair.dg2_mhz_per_ghz
-
-    if sweet_spot_mode == "P4_exact":
-        d1_1 = math.copysign(min(abs(d1_1), 4.0e-6), d1_1)
-        d1_2 = math.copysign(min(abs(d1_2), 4.0e-6), d1_2)
-        dg1 *= 0.20
-        dg2 *= 0.20
-    elif sweet_spot_mode == "double_sweet_spot":
-        d1_1 = math.copysign(min(abs(d1_1), 2.0e-6), d1_1)
-        d1_2 = math.copysign(min(abs(d1_2), 2.0e-6), d1_2)
-        dg1 *= 0.10
-        dg2 *= 0.10
-    elif sweet_spot_mode == "bare_no_sweetspot":
-        pass
-    else:
+    if sweet_spot_mode not in ("honest_unclamped_4x4", "bare_no_sweetspot", "P4_exact", "double_sweet_spot"):
         raise ValueError(f"Unknown sweet_spot_mode: {sweet_spot_mode}")
 
     if not include_dg_jitter:
@@ -709,7 +703,9 @@ def simulate_grape_cz_cuda(
     out["q_r"] = float(q_r)
     out["s_eps_uev"] = float(s_eps_uev)
     out["gamma_phi_nuc_khz"] = float(gamma_phi_nuc_khz)
-    out["sweet_spot_mode"] = sweet_spot_mode
+    out["sweet_spot_mode"] = "honest_unclamped_4x4"
+    out["synthetic_clamping_removed"] = True
+    out["t_pi_us"] = float(t_pi_us)
     out["t_slice_us"] = float(pulse.t_slice_us)
     out["bw_300mhz_energy_frac"] = float(pulse.bw_300mhz_energy_frac)
     out["max_abs_s"] = float(max(pulse.max_abs_s1, pulse.max_abs_s2))

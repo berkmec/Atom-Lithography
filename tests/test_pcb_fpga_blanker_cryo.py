@@ -113,7 +113,7 @@ def test_verification_json_epistemic_contract(json_path: Path) -> None:
     "board_dir,builder,expected_layers,min_comps,min_z0,expected_hv,expected_slots",
     [
         (FPGA_DIR, _cached_fpga, 8, 130, 20, 0, 0),
-        (BLANKER_DIR, _cached_blanker, 6, 60, 8, 1, 1),
+        (BLANKER_DIR, _cached_blanker, 6, 50, 8, 1, 1),
         (CRYO_DIR, _cached_cryo, 4, 80, 4, 0, 0),
     ],
 )
@@ -189,18 +189,56 @@ def test_fpga_brain_carrier_yosys_sizing_and_architecture() -> None:
     assert sizing["zu48dr_2u_rack_icd_ref"]["bom_id"] == "S6.11-01"
 
     spec = _cached_fpga()
-    refs = {c.ref for c in spec.components}
+    comp_map = {c.ref: c for c in spec.components}
+    refs = set(comp_map.keys())
     for required_ref in (
-        "U1", "U_SEQ1", "U_VR_1V0", "U_VR_1V8", "U_VR_1V2", "U_VTT_0V6",
+        "U1", "U_LDO_STBY_3V3", "U_SEQ1", "U_VR_1V0", "U_VR_1V8", "U_VR_1V2", "U_VTT_0V6",
         "U_VR_2V5", "U_VR_3V3", "U_LDO_MGT1V0", "U_LDO_MGT1V2",
         "J_RB_10M", "J_WR_TRIG", "U_CLK", "Y_VCXO",
         "U_DDR4_A", "U_DDR4_B", "U_QSPI", "J_FMC_HPC",
         "U_ISO_IBIC", "U_ISO_BLK", "U_ISO_HVDAC", "U_ISO_AOM_IL",
         "U_GBE", "J_ETH", "U_UART", "J_USB", "J_JTAG",
+        "R_TERM_IBIC_HIT", "R_TERM_FMC_CLK", "R_TERM_FMC_D0", "R_TERM_FMC_D1",
     ):
         assert required_ref in refs, f"Missing required FPGA carrier component {required_ref}"
     pdn_caps = [c for c in spec.components if c.ref.startswith("C_PDN_")]
     assert len(pdn_caps) == 64  # 4 + 8 + 12 + 16 + 24 multi-decade bank
+
+    # OBS-136: ALL 24x 100 nF 0402 PDN caps placed strictly INSIDE U1's 31x31 mm FFG900 cavity on B.Cu!
+    u1 = comp_map["U1"]
+    caps_100n = [c for c in spec.components if c.ref.startswith("C_PDN_100N_")]
+    assert len(caps_100n) == 24
+    for cap in caps_100n:
+        assert cap.layer == "B.Cu"
+        assert abs(cap.x_mm - u1.x_mm) <= 15.5 and abs(cap.y_mm - u1.y_mm) <= 15.5
+
+    # OBS-021: ZERO galvanic isolation shorts across all 4 isolated mezzanine ports + GND planes end at x <= 185 mm!
+    net_map = {n.name: set(n.nodes) for n in spec.nets}
+    pri_gnd_vcc = net_map["GND"] | net_map["VCCO_3V3_IO"]
+    for jport in ("J_PORT_IBIC", "J_PORT_BLK", "J_PORT_HVDAC", "J_PORT_AOM_IL", "J_IL_1OO2D_AUX"):
+        assert not any(ref == jport for ref, _ in pri_gnd_vcc), f"Galvanic isolation short on {jport}!"
+    for z in spec.zones:
+        if z.net == "GND":
+            assert max(pt[0] for pt in z.polygon_mm) <= 185.0, "Carrier GND plane leaks under isolated mezzanine ports!"
+    # OBS-021: All 4 TPS54x27 bucks have bottom feedback divider resistors R_FBB_* to GND!
+    for rail in ("1V8", "1V2", "2V5", "3V3"):
+        assert f"R_FBT_{rail}" in refs and f"R_FBB_{rail}" in refs
+
+    # OBS-087: Exact IC package & connector pinouts + always-on standby LDO breaking LM3880 bootstrap deadlock!
+    assert len(comp_map["U_LDO_STBY_3V3"].pins) == 5   # TSOT-23-5 ADP7142AUJZ-3.3
+    assert len(comp_map["U_SEQ1"].pins) == 6           # SOT-23-6 LM3880MF-1AA
+    assert ("U_SEQ1", "1") in net_map["V_3V3_STBY"]    # Powered from always-on standby, NOT VCCO_3V3_IO!
+    assert len(comp_map["U_VR_1V0"].pins) == 41        # QFN-40+EP41 TPS546D24A
+    assert len(comp_map["U_VTT_0V6"].pins) == 11       # VSON-10+EP11 TPS51200
+    assert len(comp_map["U_LDO_MGT1V0"].pins) == 11    # DFN-10+EP11 LT3045EDD
+    assert len(comp_map["U_CLK"].pins) == 65           # WQFN-64+EP65 LMK04828
+    assert len(comp_map["U_GBE"].pins) == 49           # VQFN-48+EP49 DP83867
+    assert len(comp_map["U_UART"].pins) == 48          # LQFP-48 FT232HL
+    assert len(comp_map["U_DDR4_A"].pins) == 96 and len(comp_map["U_DDR4_B"].pins) == 96
+    assert len(comp_map["J_FMC_HPC"].pins) == 400
+    assert len(comp_map["J_JTAG"].pins) == 14
+    for rgmii in ("RGMII_TXD0", "RGMII_TXD1", "RGMII_TXD2", "RGMII_TXD3", "RGMII_RXD0", "RGMII_RXD1", "RGMII_RXD2", "RGMII_RXD3"):
+        assert rgmii in net_map, f"Missing 4-bit RGMII net {rgmii}"
 
 
 def test_fpga_pdn_live_ngspice_and_mna_parity() -> None:
@@ -239,20 +277,30 @@ def test_blanker_mezzanine_rtl_interface_and_5kv_barrier_fault_injection(tmp_pat
         assert base_port in rtl_text, f"Port {base_port} not found in src/rtl/blanker_tile.v"
 
     spec = _cached_blanker()
-    refs = {c.ref for c in spec.components}
+    comp_map = {c.ref: c for c in spec.components}
+    refs = set(comp_map.keys())
+    # OBS-035: 4x SKY130 tiles -> 4x 1.8V->5V level shifters -> 4x REAL 80-PQFP HV507PG-G (256 INDEPENDENT channels!)
     for t in range(4):
         assert f"U_TILE{t}" in refs
-    for b in range(16):
-        assert f"U_HVDRV{b}" in refs
-    for req in ("J_CF100_A", "J_CF100_B", "J_LTCC_A", "J_LTCC_B", "U_DCDC_5KV", "U_ISO_CTRL", "U_ISO_DATA", "U_ISO_OVRD", "U_OVRD_GATE"):
+        assert f"U_LVL{t}" in refs
+        assert f"U_HVDRV{t}" in refs
+        assert len(comp_map[f"U_HVDRV{t}"].pins) == 80  # Real 80-pin PQFP HV507PG-G, NOT fake SOIC-8!
+    net_names = {n.name for n in spec.nets}
+    for ch in range(256):
+        assert f"DECK5K_VDEF_CH{ch:03d}" in net_names, f"Missing independent HV channel {ch} (bank ganging forbidden!)"
+    # OBS-035: 144-TQFP LCMXO3LF-4300C (115 I/Os >> 51), 5-pin SOT-23-5 TPS7A20, SOIC-8-EP LM5164, 20 kVDC OPI1268S!
+    assert len(comp_map["U_SERDES"].pins) == 144
+    assert len(comp_map["U_REG_1V8"].pins) == 5
+    assert "OPI1268S" in comp_map["U_ISO_OVRD"].mpn and "ACPL-M61L" not in comp_map["U_ISO_OVRD"].mpn
+    for req in ("J_CF100_A", "J_CF100_B", "J_LTCC_A", "J_LTCC_B", "U_DCDC_5KV", "U_ISO_CTRL", "U_ISO_DATA", "U_ISO_OVRD", "U_OVRD_GATE", "D_Z_VCLAMP"):
         assert req in refs
 
-    # Verify nominal 5 kV HV clearance (>=12 mm) & creepage (>=15 mm)
+    # OBS-018: Strict IPC-2221B Uncoated 5.08 kV Clearance (>=25.4 mm) & Creepage (>=32.0 mm)!
     drc_ok = run_drc(BLANKER_DIR / "blanker_asic_mezzanine.kicad_pcb", spec)
     assert drc_ok.passed
     hv = drc_ok.hv_checks[0]
-    assert hv["measured_clearance_mm"] >= 12.0
-    assert hv["measured_creepage_mm"] >= 15.0
+    assert hv["measured_clearance_mm"] >= 25.4
+    assert hv["measured_creepage_mm"] >= 32.0
     assert hv["through_board_ok"] is True
 
     # Adversarial HV fault-injection: place an Earth-GND resistor inside the 5 kV moat -> DRC MUST FAIL!
@@ -276,6 +324,9 @@ def test_blanker_mezzanine_rtl_interface_and_5kv_barrier_fault_injection(tmp_pat
 def test_blanker_hv_driver_live_ngspice() -> None:
     cir_path = BLANKER_DIR / "blanker_hv_driver.cir"
     assert cir_path.is_file()
+    cir_text = cir_path.read_text(encoding="utf-8")
+    # OBS-034: Zero fake 48.3 V ideal Vclamp voltage source netlist element!
+    assert not any(ln.strip().lower().startswith("vclamp") for ln in cir_text.splitlines()), "Fake Vclamp source found!"
     res = run_ngspice(cir_path, workdir=BLANKER_DIR)
     assert res.ok and res.returncode == 0
     assert len(res.errors) == 0 and len(res.warnings) == 0
@@ -291,6 +342,10 @@ def test_blanker_hv_driver_live_ngspice() -> None:
     assert m["v_plate_hi_v"] >= 53.0
     assert m["v_plate_lo_v"] <= 0.1
     assert m["v_plate_ovrd_v"] >= 53.0  # Clamped HIGH even while blanker_open is stuck at 1.8 V!
+    # OBS-034 & OBS-069: Gate oxide clamped <= 5.0 V, no negative pulse undershoot, no 208 mA shoot-through!
+    assert m["vgs_hsp_max_v"] <= 5.0 and m["vgs_outp_max_v"] <= 5.0
+    assert m["v_pls_b_min_v"] >= -0.5
+    assert m["i_vdef_peak_ma"] < 60.0
 
     # Bounded 256-ch board dynamic+static power
     e_tot_j = m["e_hv_cycle_j"] + m["e_5v_cycle_j"] + m["e_1v8_cycle_j"]

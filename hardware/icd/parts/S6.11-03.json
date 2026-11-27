@@ -94,7 +94,17 @@
     "rtl_modules": [],
     "rtl_audit_json": null,
     "software_and_eda_files": [],
-    "verification_tests": []
+    "verification_tests": [
+      "tests/test_bom_detailed.py",
+      "tests/test_full_180_traceability.py",
+      "tests/test_cad_s6_optq.py",
+      "tests/test_pcb_cryo_and_elec_icds.py",
+      "tests/test_exp140.py",
+      "tests/test_exp149.py",
+      "tests/test_boed_real_bath.py",
+      "tests/test_cad_parts.py",
+      "tests/test_exp125.py"
+    ]
   },
   "specialized_specification": null,
   "verification_status": {
@@ -104,6 +114,7 @@
     "rtl_verified": false,
     "software_or_eda_verified": false,
     "specialized_icd_present": false,
+    "verification_tests_mapped": true,
     "traceable": true
   },
   "epistemic": {

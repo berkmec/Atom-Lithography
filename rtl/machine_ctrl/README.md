@@ -4,7 +4,7 @@ Synthesizable Verilog-2005 hardware control suite (`3,212` LOC across 7 core mod
 
 > **Epistemic Disclosure:**
 > - **`no_external_eda_sim = false`** — Verified directly with real open-source EDA tools: **Verilator 5.055 `--lint-only -Wall`** (`0` warnings, `0` errors, `0` pragmas), **Icarus Verilog 14.0 `-g2012 -Wall` + `vvp`** (`6/6` testbenches PASS, `0` compile warnings, `0` errors, `0`-LSB Python parity), and **Yosys 0.71+101** (`check -assert` + full pre-P&R technology mapping for `xcup`, `xc7`, and `ecp5`).
-> - **`no_vendor_vivado_pnr = true`** — Yosys cell counts are real pre-P&R technology-mapped primitives; vendor Vivado place-and-route timing closure is pending.
+> - **`no_vendor_vivado_pnr = true`** — Primary target is Xilinx `ZU48DR -2E` (`100 MHz` control clock; vendor Vivado P&R pending). Open-source Lattice `ECP5-85F-CABGA381` proxy `nextpnr-ecp5` post-route measurements confirm major pipelining & pin-budget closure: `boed_q16_core` `14.62 -> 43.58 MHz`, `aom_pid_ctrl` `22.07 -> 34.34 MHz`, `cryo_mux_ddc_ctrl` `40.37 -> 69.76 MHz` (now 100 MSPS parallel streaming), `uhv_interlock_fsm` `80.98 -> 90.43 MHz`, `blanker_array_ctrl` `72.23 -> 80.70 MHz`, and `fpga_top_carrier_wrap.v` reduces bonded package pins from `400/205` (195% overflow) to **`79/205 TRELLIS_IO` (38.5%, `<= 80` carrier PCB pins)**!
 > - **`no_lab_measurement_rtl = true`** — No physical FPGA board or laboratory hardware measurements have been performed.
 > - **`iec61508_certified = false`**, **`semi_s2_certified = false`** — Read-only epistemic CSRs (`0x0008`, `0x011C`) hardwire `CERTIFIED = 0` and `DESIGN_ONLY_NOT_CERTIFIED = 1`.
 

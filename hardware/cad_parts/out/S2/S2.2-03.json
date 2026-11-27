@@ -18,7 +18,7 @@
     "world_origin_mm": [
       0.0,
       0.0,
-      6.685
+      6.78
     ],
     "world_rotation_deg": [
       0.0,
@@ -56,7 +56,7 @@
         "position_mm": [
           41.0,
           0.0,
-          6.685
+          6.78
         ],
         "normal": [
           1.0,
@@ -106,7 +106,7 @@
       },
       {
         "label": "THICK",
-        "nominal_mm": 1.15,
+        "nominal_mm": 1.34,
         "tol_plus_mm": 0.015,
         "tol_minus_mm": -0.015,
         "view": "front",
@@ -116,7 +116,7 @@
         "is_basic": false,
         "datum_ref": "",
         "decimals": 2,
-        "formatted": "1.15 ±0.01"
+        "formatted": "1.34 ±0.01"
       },
       {
         "label": "PAD_PITCH",
@@ -175,15 +175,16 @@
     ],
     "notes": [
       "1024 kanal (16x64 karo) fan-out, 0.50 mm adim uyumlu, UHV dusuk gaz cikisi",
-      "Multilayer UHV LTCC/AlN 1,024-ch fan-out interposer bridging S2.2-01 blanker to 16x S2.4-01 SKY130 tiles"
+      "Multilayer UHV LTCC/AlN 1,024-ch fan-out interposer (t=1.34 mm closing 0.40 mm gap) with 3x Ø2.5 mm tie-rod bores @ R=31.2 mm"
     ],
     "scad_params": {
       "od": 82.0,
       "bore_id": 28.0,
-      "thickness": 1.15,
-      "channels": 1024
+      "thickness": 1.34,
+      "channels": 1024,
+      "tie_rod_pcd_mm": 62.4
     },
-    "target_mass_kg": 0.017,
+    "target_mass_kg": 0.02,
     "epistemic": {
       "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
       "no_lab_measurement": true,
@@ -207,34 +208,34 @@
     "watertight": true,
     "boundary_edges": 0,
     "non_manifold_edges": 0,
-    "signed_volume_mm3": 5201.298753121462,
-    "surface_area_mm2": 9500.182596554898,
-    "mass_kg": 0.01695623393517597,
+    "signed_volume_mm3": 6183.974082949949,
+    "surface_area_mm2": 9797.439838546521,
+    "mass_kg": 0.02015975551041684,
     "cg_mm": [
-      2.18573943004887e-15,
-      3.497183088078192e-15,
-      6.684999999999985
+      9.327061498260964e-16,
+      1.275971887135054e-15,
+      6.779999999999951
     ],
     "bbox_min_mm": [
       -41.0,
       -41.0,
-      6.109999999999999
+      6.11
     ],
     "bbox_max_mm": [
       41.0,
       41.0,
-      7.26
+      7.45
     ],
     "inertia_kg_mm2": [
-      7.7371434135658,
-      7.737143413565797,
-      15.470549390568376,
-      6.152276910142986e-17,
-      -8.338929546881084e-18,
-      5.140857410879099e-16
+      9.417617529656699,
+      9.417617529656692,
+      18.829201916480947,
+      2.438673618598842e-16,
+      1.7216797161267914e-16,
+      3.5489534440102813e-16
     ],
-    "triangle_count": 576,
-    "vertex_count": 272,
+    "triangle_count": 1108,
+    "vertex_count": 532,
     "step_valid": true,
     "dxf_valid": true,
     "svg_valid": true,
@@ -247,6 +248,11 @@
     "all_valid": true
   },
   "engineering_checks": {},
+  "shell_mate_metadata": {
+    "n_shells": 1,
+    "fea_bonding_mode": "SINGLE_MONOLITHIC_SOLID",
+    "watertight": true
+  },
   "epistemic": {
     "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
     "no_lab_measurement": true,

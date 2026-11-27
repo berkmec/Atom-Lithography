@@ -488,14 +488,18 @@ def build_thickness2_m4_layout(
     xings_layer2_flat = _count_proper_crossings(layer2_edges)
 
     pitch_sweep: List[Dict[str, Any]] = []
+    # OBS-140: loaded meander parasitic ceiling at 160-220 pF/m reduces 5 GHz lambda/2 to 213.2-250.0 um
+    l_res_loaded_um = 250.0
     for pitch in pitches_um:
         L_l1_max = float(np.max(e1_grid) * pitch)
         L_l2_max = float(np.max(e2_grid) * pitch)
         L_max = float(np.max(all_e_grid) * pitch)
         L_med_l2 = float(np.median(e2_grid) * pitch)
-        # If L_max <= 300 um, resonator simply meanders to exact 300 um -> f_r = 5.00 GHz (0 shift!).
-        # If L_max > 300 um at fixed L_sq=100 pH/sq, fundamental f_r = 5.0 * (300 / L_max) GHz,
-        # OR adjusting NbTiN L_sq = 100 * (300 / L_max)^2 restores f_r = 5.00 GHz exactly!
+        # OBS-045: Exact orthogonal Manhattan routing distances
+        L_l1_manh_max = float(np.max(m1_grid) * pitch)
+        L_l2_manh_med = float(np.median(m2_grid) * pitch)
+        L_l2_manh_max = float(np.max(m2_grid) * pitch)
+        L_l2_manh_frac_gt_300 = float(np.mean(m2_grid * pitch > l_res_nominal_um))
         f_r_fixed_lsq = f_r_nominal_ghz if L_max <= l_res_nominal_um else f_r_nominal_ghz * (l_res_nominal_um / L_max)
         L_sq_needed_pH = 100.0 if L_max <= l_res_nominal_um else 100.0 * ((l_res_nominal_um / L_max) ** 2)
         pitch_sweep.append({
@@ -506,7 +510,13 @@ def build_thickness2_m4_layout(
             "layer2_median_eucl_um": round(L_med_l2, 1),
             "layer2_max_eucl_um": round(L_l2_max, 1),
             "L_max_um": round(L_max, 1),
+            "layer1_max_manh_um": round(L_l1_manh_max, 1),
+            "layer2_median_manh_um": round(L_l2_manh_med, 1),
+            "layer2_max_manh_um": round(L_l2_manh_max, 1),
+            "layer2_frac_gt_300um_manh": round(L_l2_manh_frac_gt_300, 4),
             "fits_300um_m4_resonator": bool(L_max <= l_res_nominal_um),
+            "fits_300um_m4_manhattan": bool(max(L_l1_manh_max, L_l2_manh_max) <= l_res_nominal_um),
+            "fits_250um_loaded_meander_eucl": bool(L_max <= l_res_loaded_um),
             "fits_500um_extended_m4": bool(L_max <= 500.0),
             "f_r_fixed_100pH_ghz": round(f_r_fixed_lsq, 3),
             "delta_f_r_fixed_100pH_ghz": round(f_r_fixed_lsq - f_r_nominal_ghz, 3),
@@ -524,6 +534,12 @@ def build_thickness2_m4_layout(
         "layer1_torus_crossings": 0,
         "flat_folded_layer1_airbridges": xings_layer1_flat,
         "flat_folded_layer2_airbridges": xings_layer2_flat,
+        "total_flat_airbridge_crossings": int(xings_layer1_flat + xings_layer2_flat),
+        "degree6_coupler_and_meander_note_OBS045_140": (
+            "Folded 2D BB_144 requires 10,372 flat airbridge crossings (220 L1 + 10,152 L2), "
+            "26.4% of L2 edges exceed 300 um Manhattan at 20 um pitch (max 360 um), and 1 um "
+            "meander parasitic capacitance (160-220 pF/m) lowers loaded lambda/2 to 213-250 um."
+        ),
         "pitch_sweep": pitch_sweep,
         "coords_folded": coords_folded,
         "qubit_types": qubit_types,
@@ -537,20 +553,26 @@ def compute_defective_block_yields(
     n_blocks_cryo: int = 10,
 ) -> Dict[str, Any]:
     """Compute exact defect-free 288-cell Gross Code block yield and full 10-block (120L)
-    single-cryostat wafer yield across Exp136/138/139 fabrication regimes.
-
-    Anchors (results/exp138_defective_surface_code_ft/summary_exp138.md):
-      - f=1.0%, E_z=0:          p_slot = 0.5275 * 0.9770 * (1 - 0.002008) = 0.51433
-      - f*=1.5% + 2 MV/m Stark: p_slot = 0.7750 * 0.9770 * (1 - 0.002008) = 0.75565
+    single-cryostat wafer yield across BOTH legacy unfiltered and honest DDRF (OBS-029)
+    + iradina/valley (OBS-047) fabrication regimes.
     """
+    fnr = 0.002008
     regimes = {
-        "f1p0_Ez0_baseline": 0.5275 * 0.9770 * (1.0 - 0.002008),
-        "f1p5_Ez2MVm_v5_star": 0.7750 * 0.9770 * (1.0 - 0.002008),
+        # Legacy unfiltered Exp136/139 baselines (kept for direct contrast)
+        "f1p0_Ez0_baseline": 0.5275 * 0.9770 * (1.0 - fnr),
+        "f1p5_Ez2MVm_v5_star": 0.7750 * 0.9770 * (1.0 - fnr),
+        # OBS-029: DDRF 6.893 kHz filtered bath yield (0.2950 @ 1%, 0.5400 @ 1.5%+2MV/m)
+        "f1p0_Ez0_ddrf6893": 0.2950 * 0.9770 * (1.0 - fnr),
+        "f1p5_Ez2MVm_ddrf6893": 0.5400 * 0.9770 * (1.0 - fnr),
+        # OBS-047: iradina 5 keV + Si(001) 2-valley interference p_ff = 0.5375
+        "f1p5_Ez2MVm_iradina_valley_pff0p5375": 0.7750 * 0.5375 * (1.0 - fnr),
+        # Combined OBS-029 + OBS-047 honest floor: DDRF 6.893 kHz AND iradina+valley p_ff = 0.5375
+        "f1p5_Ez2MVm_ddrf6893_and_iradina_valley": 0.5400 * 0.5375 * (1.0 - fnr),
     }
     out: Dict[str, Any] = {}
     for rname, p_slot in regimes.items():
         rows = []
-        for n_cand in (4, 5, 6, 7, 8, 9, 10):
+        for n_cand in (4, 5, 6, 7, 8, 9, 10, 12, 14, 18, 24, 30):
             p_drop = (1.0 - p_slot) ** n_cand
             y_block = (1.0 - p_drop) ** n_cells_block
             y_10blocks = y_block ** n_blocks_cryo
@@ -564,7 +586,11 @@ def compute_defective_block_yields(
                 "total_phys_candidates_per_block": n_cells_block * n_cand,
                 "phys_candidates_per_logical": round((n_cells_block * n_cand) / 12.0, 2),
             })
-        out[rname] = {"p_slot": round(p_slot, 5), "by_N_cand": rows}
+        # Exact N_cand required for >=99% 288-cell block yield
+        n_req_99 = 1
+        while ((1.0 - (1.0 - p_slot) ** n_req_99) ** n_cells_block) < 0.99 and n_req_99 < 100:
+            n_req_99 += 1
+        out[rname] = {"p_slot": round(p_slot, 5), "N_cand_req_99pct_block": int(n_req_99), "by_N_cand": rows}
     return out
 
 

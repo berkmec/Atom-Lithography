@@ -369,6 +369,32 @@ def test_ibic_v3_cold_stray_capacitance_and_architecture_features() -> None:
     ko_csa = [k for k in cold.keepouts if k.kind == "copper_keepout"]
     assert len(guard_traces) == 32  # 4 closed 3D guard-cage rails per channel x 8 channels
     assert len(ko_csa) == 8         # In1/In2 cutout under every CSA_SUM node
+    # OBS-090: Every KO_CSASUM must enclose both D{ch}.1 (x~35.15) and U{ch}A.6 (x~53.80)
+    for ko in ko_csa:
+        assert ko.x_mm <= 34.5 and (ko.x_mm + ko.width_mm) >= 54.8
+    # OBS-090: Thin-film 0805 cryo RF resistors (zero 0402 thick-film RF)
+    rf_comps = [c for c in cold.components if c.ref.startswith("RF")]
+    assert len(rf_comps) == 8 and all("0805" in c.footprint and "THINFILM" in c.value for c in rf_comps)
+    # OBS-097: Active bootstrap guard buffer present and zero 100nF AC-short cap CGRD_IN on GUARD_DRV
+    assert any(c.ref == "U_GRD_BOOT" and c.mpn == "LTC6268IS8" for c in cold.components)
+    assert not any(c.ref == "CGRD_IN" for c in cold.components)
+    # OBS-031: Exact LTC6268IS8 S8 pinout on all 16 cold op-amps (U0A..U7A & U0D..U7D)
+    cold_pin_net = {node: ns.name for ns in cold.nets for node in ns.nodes}
+    for ch in range(8):
+        assert cold_pin_net[(f"U{ch}A", "1")] == "VCCA"
+        assert cold_pin_net[(f"U{ch}A", "2")] == "VCCA"
+        assert cold_pin_net[(f"U{ch}A", "3")] == f"CH{ch}.CSA_OUT"
+        assert cold_pin_net[(f"U{ch}A", "4")] == "VSSA"
+        assert cold_pin_net[(f"U{ch}A", "5")] == "GUARD_DRV"
+        assert cold_pin_net[(f"U{ch}A", "6")] == f"CH{ch}.CSA_SUM"
+        assert cold_pin_net[(f"U{ch}A", "7")] == "AGND"
+        assert cold_pin_net[(f"U{ch}A", "8")] == "GUARD_DRV"
+        assert cold_pin_net[(f"U{ch}D", "1")] == "VCCA"
+        assert cold_pin_net[(f"U{ch}D", "2")] == "VCCA"
+        assert cold_pin_net[(f"U{ch}D", "3")] == f"CH{ch}.DRV_OUT"
+        assert cold_pin_net[(f"U{ch}D", "4")] == "VSSA"
+        assert cold_pin_net[(f"U{ch}D", "6")] == f"CH{ch}.DRV_FB"
+        assert cold_pin_net[(f"U{ch}D", "7")] == f"CH{ch}.CSA_OUT"
     stray = compute_cold_stray_c_budget_pf()
     assert stray["within_budget"] and stray["c_pcb_stray_total_pF"] < 0.15
 
@@ -379,6 +405,40 @@ def test_ibic_v3_cold_stray_capacitance_and_architecture_features() -> None:
     assert len(adc_bufs) == 8
     assert any(c.ref == "JADC" for c in warm.components)
     assert any(c.ref == "UDAC" and "DAC8568" in c.value for c in warm.components)
+    # OBS-033: All 5 LDOs use 12-lead+EP MSOP-12-1EP with exact LT3045 (EP=GND) vs LT3094 (EP=VIN_N)
+    warm_pin_net = {node: ns.name for ns in warm.nets for node in ns.nodes}
+    for ldo in ldos:
+        assert "MSOP-12-1EP" in ldo.footprint and len(ldo.pins) == 13
+        if ldo.mpn == "LT3045EMSE":
+            assert warm_pin_net[(ldo.ref, "8")] == warm_pin_net[(ldo.ref, "13")]  # EP = GND
+        else:
+            assert ldo.mpn == "LT3094EMSE"
+            assert warm_pin_net[(ldo.ref, "1")] == warm_pin_net[(ldo.ref, "13")]  # EP = VIN_N
+    # OBS-032 & OBS-089: Exact TLV3501AIDBVR & ADA4817-1ARDZ SOIC-8-EP pinouts across all 8 channels
+    for ch in range(8):
+        assert warm_pin_net[(f"U{ch}B", "1")] == f"CH{ch}.SHP_GAIN"
+        assert warm_pin_net[(f"U{ch}B", "8")] == "VCCA"
+        assert warm_pin_net[(f"U{ch}B", "9")] == "VSSA"
+        assert warm_pin_net[(f"U{ch}E", "1")] == f"CH{ch}.SHP_BUF"
+        assert warm_pin_net[(f"U{ch}E", "8")] == "VCCA"
+        assert warm_pin_net[(f"U{ch}E", "9")] == "VSSA"
+        assert warm_pin_net[(f"U{ch}C", "1")] == f"CH{ch}.THRESH"
+        assert warm_pin_net[(f"U{ch}C", "2")] == "DGND"
+        assert warm_pin_net[(f"U{ch}C", "3")] == f"CH{ch}.CMP_INP"
+        assert warm_pin_net[(f"U{ch}C", "4")] == "VCCD"
+        assert warm_pin_net[(f"U{ch}C", "5")] == f"CH{ch}.CMP_OUT"
+        assert warm_pin_net[(f"U{ch}C", "6")] == "DGND"
+    # OBS-135: Zero B.Cu segments on controlled 50-Ohm SHP_ADC / COUNT_HIT / COAX_IN nets
+    z0_bcu = [t for t in warm.traces if t.layer == "B.Cu" and t.net.endswith((".COAX_IN", ".SHP_ADC", ".COUNT_HIT"))]
+    assert z0_bcu == [], f"Unexpected B.Cu 50-Ohm segments on ibic_warm_shaper_300k: {len(z0_bcu)}"
+
+    # OBS-127: RHV_DIV_TOP sits behind extended HV_LV_AIR_SLOT & non-chopper AD8675 guard buffer
+    hv = build_hv_bias_guard_board()
+    slot = [k for k in hv.keepouts if k.name == "HV_LV_AIR_SLOT"][0]
+    rhv_top = [c for c in hv.components if c.ref == "RHV_DIV_TOP"][0]
+    uguard = [c for c in hv.components if c.ref == "UGUARD"][0]
+    assert slot.y_mm <= rhv_top.y_mm <= (slot.y_mm + slot.height_mm)
+    assert uguard.mpn == "AD8675ARZ"
 
 
 # ---------------------------------------------------------------------------

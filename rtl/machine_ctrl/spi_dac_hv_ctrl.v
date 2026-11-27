@@ -9,19 +9,21 @@
 //       frame[23]    = 1'b0 (Write command)
 //       frame[22:20] = channel address [2:0] (0..7)
 //       frame[19:0]  = 20-bit DAC code (20'h00000 = safe zero / crowbar code)
-//   - Programmable SCLK half-period divider `sclk_div[15:0]` (min 1 clock -> max f_sys/2)
-//   - Simultaneous active-LOW `spi_ldac_n` strobe across all 8 channels after frame batch
-//   - Hard-wired `hv_safe_clamp` zero-override:
-//       * Immediately drops hardware `hv_clr_n` LOW (0-cycle comb gate)
-//       * Aborts any non-zero SPI transfer and autonomously shifts 20'h00000 safe zero
-//         frames across ALL 8 channels (0..7) + simultaneous `spi_ldac_n` strobe!
-//       * Blocks non-zero host writes while `hv_safe_clamp` is asserted.
+//   - Hardware-enforced AD5791 timing compliance (OBS-144):
+//       * f_SCLK = f_sys / (2 * eff_div): DEFAULT_SCLK_DIV=4 -> 12.5 MHz @ 100 MHz
+//       * Hardware SCLK divider floor MIN_SCLK_DIV=2 -> max 25.0 MHz (<= 35 MHz 3.3V spec)
+//       * Dedicated minimum pulse timer MIN_PULSE_CYCLES=3 (>= 30 ns >= 20 ns AD5791
+//         minimum t_CS_HIGH and t_LDAC pulse width even if cfg_sclk_div=1!)
+//   - Built-in 2-FF async-assert / sync-deassert reset synchronizer (`rst_sync_n`).
+//   - Hard-wired `hv_safe_clamp` zero-override: immediate `hv_clr_n=0` + 8-ch 20'h00000 burst.
 //
 // Synthesis Hygiene: ZERO latches, ZERO combinational '/', ZERO Verilator -Wall warnings.
 `timescale 1ns/1ps
 
 module spi_dac_hv_ctrl #(
-    parameter [15:0] DEFAULT_SCLK_DIV = 16'd4 // 10 MHz SCLK @ 100 MHz sys_clk
+    parameter [15:0] DEFAULT_SCLK_DIV = 16'd4, // 12.5 MHz SCLK @ 100 MHz sys_clk (100/(2*4))
+    parameter [15:0] MIN_SCLK_DIV     = 16'd2, // Max 25.0 MHz SCLK (<= 35 MHz AD5791 3.3V limit)
+    parameter [15:0] MIN_PULSE_CYCLES = 16'd3  // >= 30 ns t_CS_HIGH / t_LDAC @ 100 MHz (>= 20 ns)
 ) (
     input  wire        clk,
     input  wire        rst_n,
@@ -65,12 +67,29 @@ module spi_dac_hv_ctrl #(
     localparam [2:0] ST_CS_HOLD    = 3'd5;
     localparam [2:0] ST_LDAC_PULSE = 3'd6;
 
+    // 2-FF async-assert / sync-deassert reset synchronizer
+    (* ASYNC_REG = "TRUE" *) reg rst_sync_s1;
+    (* ASYNC_REG = "TRUE" *) reg rst_sync_s2;
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n) begin
+            rst_sync_s1 <= 1'b0;
+            rst_sync_s2 <= 1'b0;
+        end else begin
+            rst_sync_s1 <= 1'b1;
+            rst_sync_s2 <= rst_sync_s1;
+        end
+    end
+    wire rst_sync_n = rst_sync_s2;
+
     // 8 x 20-bit channel code registers
     reg [19:0] dac_code [0:7];
 
-    // Effective divider (minimum 1 clock half-period -> div_limit >= 0)
-    wire [15:0] eff_div   = (cfg_sclk_div == 16'd0) ? DEFAULT_SCLK_DIV : cfg_sclk_div;
-    wire [15:0] div_limit = (eff_div == 16'd0) ? 16'd0 : (eff_div - 16'd1);
+    // Effective SCLK divider with hardware floor + minimum t_CS_HIGH / t_LDAC pulse timer
+    wire [15:0] raw_div       = (cfg_sclk_div == 16'd0) ? DEFAULT_SCLK_DIV : cfg_sclk_div;
+    wire [15:0] eff_div       = (raw_div < MIN_SCLK_DIV) ? MIN_SCLK_DIV : raw_div;
+    wire [15:0] div_limit     = eff_div - 16'd1;
+    wire [15:0] min_pulse_lim = (MIN_PULSE_CYCLES > 16'd1) ? (MIN_PULSE_CYCLES - 16'd1) : 16'd0;
+    wire [15:0] pulse_limit   = (div_limit < min_pulse_lim) ? min_pulse_lim : div_limit;
 
     // Internal FSM registers
     reg [2:0]  state;
@@ -78,7 +97,7 @@ module spi_dac_hv_ctrl #(
     reg [4:0]  bit_cnt;       // 0..23
     reg [23:0] shift_reg;
     reg [15:0] div_cnt;
-    reg        clamp_mode;    // 1 = currently executing mandatory 8-ch zero-override burst
+    reg        clamp_mode;
     reg        hv_clamp_prev;
 
     // Immediate hardware async clear pin (active-LOW = CLEAR DAC OUTPUTS TO 0 V)
@@ -106,7 +125,7 @@ module spi_dac_hv_ctrl #(
     integer k;
 
     always @(posedge clk) begin
-        if (!rst_n) begin
+        if (!rst_sync_n) begin
             state               <= ST_IDLE;
             pending_mask        <= 8'h00;
             bit_cnt             <= 5'd0;
@@ -128,7 +147,6 @@ module spi_dac_hv_ctrl #(
         end else begin
             hv_clamp_prev <= hv_safe_clamp;
 
-            // Shadow register write: blocked to safe zero whenever hv_safe_clamp is asserted
             if (hv_safe_clamp) begin
                 for (k = 0; k < 8; k = k + 1) begin
                     dac_code[k] <= 20'd0;
@@ -137,8 +155,6 @@ module spi_dac_hv_ctrl #(
                 dac_code[ch_wr_addr] <= ch_wr_data;
             end
 
-            // Hardware clamp rising-edge / unzeroed pre-emption:
-            // Abort any non-zero SPI transfer immediately and launch 8-ch 20'h00000 override burst!
             if (hv_safe_clamp && (!hv_clamp_prev || (!clamp_mode && !clamp_zero_seq_done))) begin
                 spi_cs_n            <= 1'b1;
                 spi_sclk            <= 1'b0;
@@ -175,16 +191,14 @@ module spi_dac_hv_ctrl #(
                         spi_sclk   <= 1'b0;
                         spi_ldac_n <= 1'b1;
                         if (found_ch) begin
-                            cur_ch_out   <= {1'b0, next_ch};
-                            pending_mask <= pending_mask & (~(8'h01 << next_ch));
-                            // 24-bit frame: {0 (write), ch[2:0], 20-bit code (forced 0 in clamp_mode)}
+                            cur_ch_out    <= {1'b0, next_ch};
+                            pending_mask  <= pending_mask & (~(8'h01 << next_ch));
                             shift_reg     <= {1'b0, next_ch, (clamp_mode || hv_safe_clamp) ? 20'd0 : dac_code[next_ch]};
                             last_tx_frame <= {1'b0, next_ch, (clamp_mode || hv_safe_clamp) ? 20'd0 : dac_code[next_ch]};
                             bit_cnt       <= 5'd0;
                             div_cnt       <= 16'd0;
                             state         <= ST_CS_SETUP;
                         end else begin
-                            // All pending channels transmitted -> simultaneous LDAC_N strobe!
                             spi_ldac_n <= 1'b0;
                             div_cnt    <= 16'd0;
                             state      <= ST_LDAC_PULSE;
@@ -209,7 +223,7 @@ module spi_dac_hv_ctrl #(
                         spi_mosi <= shift_reg[23];
                         if (div_cnt == div_limit) begin
                             div_cnt  <= 16'd0;
-                            spi_sclk <= 1'b1; // DAC samples MOSI on rising SCLK edge
+                            spi_sclk <= 1'b1;
                             state    <= ST_SHIFT_HIGH;
                         end else begin
                             div_cnt <= div_cnt + 16'd1;
@@ -235,11 +249,12 @@ module spi_dac_hv_ctrl #(
                         end
                     end
 
+                    // Enforces hardware minimum t_CS_HIGH >= MIN_PULSE_CYCLES (30 ns >= 20 ns AD5791)
                     ST_CS_HOLD: begin
                         spi_cs_n <= 1'b1;
                         spi_sclk <= 1'b0;
                         spi_mosi <= 1'b0;
-                        if (div_cnt == div_limit) begin
+                        if (div_cnt >= pulse_limit) begin
                             div_cnt <= 16'd0;
                             state   <= ST_FIND_NEXT;
                         end else begin
@@ -247,13 +262,14 @@ module spi_dac_hv_ctrl #(
                         end
                     end
 
+                    // Enforces hardware minimum t_LDAC >= MIN_PULSE_CYCLES (30 ns >= 20 ns AD5791)
                     ST_LDAC_PULSE: begin
                         spi_cs_n   <= 1'b1;
                         spi_sclk   <= 1'b0;
                         spi_ldac_n <= 1'b0;
-                        if (div_cnt == div_limit) begin
-                            div_cnt    <= 16'd0;
-                            spi_ldac_n <= 1'b1;
+                        if (div_cnt >= pulse_limit) begin
+                            div_cnt     <= 16'd0;
+                            spi_ldac_n  <= 1'b1;
                             done_sticky <= 1'b1;
                             if (clamp_mode) begin
                                 clamp_zero_seq_done <= 1'b1;

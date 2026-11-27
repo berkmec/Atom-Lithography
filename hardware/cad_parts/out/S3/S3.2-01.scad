@@ -9,8 +9,8 @@
 // temp_stage        : 100 K (soguk ada)
 // vacuum_grade      : UHV 1e-9 mbar
 // tolerance         : ±5% kazanc
-// computed_mass_kg  : 0.47602
-// envelope_mm       : 266.873 x 266.873 x 13.982
+// computed_mass_kg  : 0.47802
+// envelope_mm       : 267.700 x 269.232 x 13.982
 // design_maturity   : M0_M1_DETAILED_CAD_DESIGN_ONLY
 // no_lab_measurement: true
 // iec61508_certified: false
@@ -21,8 +21,8 @@
 $fn = 64;
 
 // Nominal bounding envelope parameters (mm)
-bbox_x = 266.8727;
-bbox_y = 266.8727;
+bbox_x = 267.7000;
+bbox_y = 269.2316;
 bbox_z = 13.9817;
 
 // Part-specific parametric dimensions
@@ -40,14 +40,14 @@ port_cold_island_100k_bus_bore = 268.000;
 
 module part_S3_2_01() {
   union() {
-    // 100 K Cold-Island 8-ch LTC6268 CSA Module #1 (24 deg)
-    translate([93.182, 41.487, -0.100]) rotate([0.000, 0.000, 24.000]) cube([32.000, 14.500, 10.800], center=true);
-    // 100 K Cold-Island 8-ch LTC6268 CSA Module #2 (38 deg)
-    translate([80.377, 62.797, -0.100]) rotate([0.000, 0.000, 38.000]) cube([32.000, 14.500, 10.800], center=true);
-    // 100 K Cold-Island 8-ch LTC6268 CSA Module #3 (52 deg)
-    translate([62.797, 80.377, -0.100]) rotate([0.000, 0.000, 52.000]) cube([32.000, 14.500, 10.800], center=true);
-    // 100 K Cold-Island 8-ch LTC6268 CSA Module #4 (66 deg)
-    translate([41.487, 93.182, -0.100]) rotate([0.000, 0.000, 66.000]) cube([32.000, 14.500, 10.800], center=true);
+    // 100 K Cold-Island 8-ch LTC6268 CSA Module #1 (22 deg)
+    translate([94.573, 38.210, -0.100]) rotate([0.000, 0.000, 22.000]) cube([32.000, 14.500, 10.800], center=true);
+    // 100 K Cold-Island 8-ch LTC6268 CSA Module #2 (35 deg)
+    translate([83.554, 58.505, -0.100]) rotate([0.000, 0.000, 35.000]) cube([32.000, 14.500, 10.800], center=true);
+    // 100 K Cold-Island 8-ch LTC6268 CSA Module #3 (58 deg)
+    translate([54.052, 86.501, -0.100]) rotate([0.000, 0.000, 58.000]) cube([32.000, 14.500, 10.800], center=true);
+    // 100 K Cold-Island 8-ch LTC6268 CSA Module #4 (70 deg)
+    translate([34.886, 95.849, -0.100]) rotate([0.000, 0.000, 70.000]) cube([32.000, 14.500, 10.800], center=true);
     // 100 K Cold-Island 8-ch LTC6268 CSA Module #5 (114 deg)
     translate([-41.487, 93.182, -0.100]) rotate([0.000, 0.000, 114.000]) cube([32.000, 14.500, 10.800], center=true);
     // 100 K Cold-Island 8-ch LTC6268 CSA Module #6 (128 deg)

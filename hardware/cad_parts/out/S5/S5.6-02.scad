@@ -9,8 +9,8 @@
 // temp_stage        : 300 K
 // vacuum_grade      : UHV 1.5e-10 Torr
 // tolerance         : <50 ppm 29Si, ±0.3 nm
-// computed_mass_kg  : 1.99922
-// envelope_mm       : 79.750 x 120.200 x 87.250
+// computed_mass_kg  : 2.01225
+// envelope_mm       : 83.750 x 120.200 x 87.250
 // design_maturity   : M0_M1_DETAILED_CAD_DESIGN_ONLY
 // no_lab_measurement: true
 // iec61508_certified: false
@@ -21,7 +21,7 @@
 $fn = 64;
 
 // Nominal bounding envelope parameters (mm)
-bbox_x = 79.7500;
+bbox_x = 83.7500;
 bbox_y = 120.2000;
 bbox_z = 87.2500;
 

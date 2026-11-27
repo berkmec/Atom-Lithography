@@ -1,68 +1,82 @@
 {
-  "schema_version": "openroad_signoff_manifest_v1.0",
+  "schema_version": "openroad_signoff_manifest_v2.0",
   "bom_part_id": "S8.2-02",
   "related_bom_part_ids": [
     "S2.4-01",
     "S2.4-02",
     "S3.3-01",
+    "S6.10-03",
+    "S7.3-01",
     "S8.2-01"
   ],
   "design_top": "blanker_tile",
   "pdk": "sky130A",
   "stdcell_library": "sky130_fd_sc_hd",
-  "corner": "TT_25C_1V8",
+  "corner": "TT_25C_1V8_and_SS_100C_1V6",
   "target_clock_MHz": 100.0,
   "target_clock_ns": 10.0,
   "channels_per_tile": 64,
+  "recommended_hierarchical_subtile_channels": 8,
   "tiles_per_1024ch_write_head": 16,
+  "tapeout_readiness_status": "PRE_FOUNDRY_NCH8_MACRO_PROTOTYPE_NOT_TAPEOUT_READY",
   "epistemic": {
-    "design_maturity": "M0_M1_ASIC_EDA_DESIGN_ONLY",
+    "design_maturity": "PRE_FOUNDRY_NCH8_MACRO_PROTOTYPE",
     "tapeout_done": false,
+    "tapeout_ready": false,
     "no_lab_measurement": true,
     "foundry_signoff_complete": false,
     "iec61508_certified": false,
     "semi_s2_certified": false,
+    "real_io_pad_cells": [],
+    "missing_chip_level_structures": [
+      "sky130_fd_io perimeter IO padframe (0 IO pads in all historical GDS artifacts)",
+      "ESD protection clamps (>2 kV HBM)",
+      "Foundry sealring for wafer dicing",
+      "Full-chip PDN / power-ring / 16-tile power grid integration"
+    ],
     "open_pre_tapeout_items": [
-      "Full IO padring, ESD clamps, sealring, and 16-tile power-grid integration",
-      "Clean single-pass OpenROAD 2024+ DEF/ODB antenna-ECO + detailed-reroute closure without GDS post-patching (Exp123 attempt3/3b unfinished)",
-      "Multi-corner (SS/FF/TT) signoff STA and async-reset synchronizer integration",
-      "Independent foundry/MPW signoff DRC/LVS/antenna deck verification before any tape-out"
+      "Remove all SKY130 drc_exclude.cells (including lpflow_* isolation cells) via Liberty dont_use before synthesis",
+      "Deprecate congested monolithic 64-ch macro (30% OpenROAD DRT timeout / 1,793 violations at 45% util) in favor of hierarchical NCH=8 sub-tiles or <=30-35% utilization full reroute",
+      "Add full sky130_fd_io padframe, ESD clamps, sealring, and verified PDN (SPECIALNETS + check_power_grid -net VPWR/VGND)",
+      "Close antenna repair + detailed_route + KLayout DRC + li1 <=60% density + full-chip LVS in a single clean OpenROAD 2024+ pass without GDS post-patching",
+      "Multi-corner (SS/TT/FF) STA on Path Group: clk with synchronized rst_sync_n recovery/removal checks (zero blind set_false_path on rst_n)",
+      "4 K Cryo-CMOS crossbar (rtl/cryo_crossbar_4k/sky130_4k_crossbar_121g.v) remains TRL 2 pending cryogenic BSIM4/SKY130 PDK models"
     ]
   },
   "whitelisted_rtl_sources": [
     {
       "path": "src/rtl/blanker_tile.v",
-      "role": "64-channel counted-implantation blanker tile RTL top",
-      "size_bytes": 3347,
-      "sha256": "9100789488967e29e76beccd77d83e54a23b40d3172fa023857f5725f89f453b",
+      "role": "Parameterizable counted-implantation blanker tile RTL (NCH=8..64, unified serial+parallel host contract, shared 2-FF reset bridge, 75 ms default watchdog)",
+      "size_bytes": 10378,
+      "sha256": "32fbda3b0a551c8071ec8937f30eec09b56c0b1e70adb4f529420657f2b675ab",
       "git_whitelisted": true
     },
     {
       "path": "src/rtl/blanker_gate.v",
-      "role": "Single-channel BMC-verified ion-counter blanker gate (17-bit saturating watchdog)",
-      "size_bytes": 3152,
-      "sha256": "6fb136679847017b25a28133ba423d0cb6f462992dcbca81863ef99f36b6af9a",
+      "role": "Single-channel counted-ion blanker gate (7.5M-cycle 75 ms saturating watchdog, 2-FF IBIC rising-edge detector, target_count==0 guard, 2-FF reset bridge, timeout_abort)",
+      "size_bytes": 5042,
+      "sha256": "b1d103aaa1043d4f2060fae43261c42f4a0db5f6293fea581bddec8375aed054",
       "git_whitelisted": true
     },
     {
       "path": "src/rtl/blanker_gate_spec.v",
       "role": "Independent behavioral reference specification for BMC equivalence proof",
-      "size_bytes": 2230,
-      "sha256": "023728582f98f17b79dade80c06c1fbd0443219344d9509e4a01bbc53b1f66d8",
+      "size_bytes": 3861,
+      "sha256": "afa2374945d0c705e746c6ae0ebd9c99375c9cb32080a402dd4027634fddac3d",
       "git_whitelisted": true
     },
     {
       "path": "src/rtl/blanker_tile_formal.v",
       "role": "Temporal induction safety property wrapper for blanker_tile",
-      "size_bytes": 1490,
-      "sha256": "394fcf418eb085d0a3644af785b5357cd54fa52ad52082a9b7decd6022f36042",
+      "size_bytes": 2202,
+      "sha256": "08ec29ea6d9306bac540a1e85839762c115634ce3bc89a49cef5a01100710c57",
       "git_whitelisted": true
     },
     {
       "path": "src/rtl/BLANKER_TILE.md",
-      "role": "SKY130 Yosys+ABC synthesis & formal verification specification notes",
-      "size_bytes": 1844,
-      "sha256": "437b52d9a7b2ac08de9f947a991f0e92a30b37c1c309e6d7c5cd80b1f18ccbf7",
+      "role": "SKY130 pre-foundry macro specification and honest verification notes",
+      "size_bytes": 2423,
+      "sha256": "929d86e43c5ed195c573f001a892f38c7326b05c163573c9e0c28bcc8e14d064",
       "git_whitelisted": true
     },
     {
@@ -73,24 +87,87 @@
       "git_whitelisted": true
     }
   ],
+  "drc_exclude_cells_audit": {
+    "status": "FAIL_REQUIRES_DONT_USE_RESYNTHESIS",
+    "historical_blanker_tile_synth_v_excluded_cells": 1154,
+    "historical_blanker_tile_synth_v_lpflow_cells": 150,
+    "historical_flow_r3_final_v_excluded_cells": 1030,
+    "pilot4c_64ch_synth_v_excluded_cells": 1448,
+    "legacy_exp38_seg8_excluded_cells": 167,
+    "remediation": "Apply SKY130 sky130_fd_sc_hd/drc_exclude.cells as Liberty dont_use before any future MPW synthesis."
+  },
+  "pilot4c_sky130_audit_correction": {
+    "status": "PRE_FOUNDRY_PROTOTYPE_INVALID_AS_TAPEOUT_GDS",
+    "regex_bug_documented": "Pilot 4C log parser matched the first 'Path Type: max' (**async_default** rst_n recovery slack 8.90 ns -> bogus 909.09 MHz for NCH=8 and 9.03 ns -> bogus 1030.93 MHz for 1-ch), overstating synchronous Fmax by 3.34x.",
+    "nch8_true_sync_fmax_tt_25c_1v8_MHz": 272.48,
+    "nch8_true_sync_slack_tt_ns_at_10ns": 6.33,
+    "nch8_true_sync_fmax_ss_100c_1v6_MHz": 154.08,
+    "nch8_true_sync_slack_ss_ns_at_10ns": 3.51,
+    "ch1_true_sync_fmax_tt_25c_1v8_MHz": 306.75,
+    "ch1_true_sync_slack_tt_ns_at_10ns": 6.74,
+    "ch64_openroad_drt_outcome": "TIMEOUT_320s_30PCT_1793_VIOLATIONS_AT_45PCT_UTIL",
+    "missing_pdn_verified": true,
+    "pdn_specialnets_count": 0,
+    "check_power_grid_vpwr_error": "PSM-0020 Cannot find net VPWR in the design",
+    "nch8_unchecked_antenna_net_violations": 2,
+    "nch8_unchecked_antenna_pin_violations": 3,
+    "nch8_unchecked_antenna_max_par": 1015.13,
+    "klayout_density_and_lvs_skipped": true
+  },
+  "cryo_4k_crossbar_asic_status": {
+    "bom_part_ids": ["S6.10-03", "S7.3-01"],
+    "rtl_source": "rtl/cryo_crossbar_4k/sky130_4k_crossbar_121g.v",
+    "testbench": "rtl/cryo_crossbar_4k/tb_sky130_4k_crossbar_121g.v",
+    "gates_per_die": 121,
+    "dies_per_array": 8,
+    "total_gates": 968,
+    "trl": 2,
+    "cryo_4k_pdk_characterized": false,
+    "note": "Synthesizable digital crossbar MUX RTL verified via Verilator/iverilog/Yosys; 4 K cryogenic BSIM4/kink characterization (V_th +0.15-0.25 V, kink_ratio up to 3.84) and physical layout remain TRL 2 pending cryo PDK."
+  },
+  "legacy_exp38_exp58_exp64_archive_notice": {
+    "design": "exp36_atom_ctrl (SEG6 / SEG8)",
+    "status": "ARCHIVED_RD_PROTOTYPE_NOT_MPW_CANDIDATE",
+    "superseded_by": "blanker_tile",
+    "measured_defects": {
+      "closed_clock_MHz": 10.0,
+      "klayout_m3_6_drc_items": 130,
+      "unclosed_antenna_nets": 21,
+      "unclosed_antenna_pins": 29,
+      "li1_density_pct": 65.477,
+      "lvs_status": "MISMATCH_VPWR_VGND_MERGED",
+      "drc_exclude_cells_count": 167
+    }
+  },
   "synthesis_netlist_anchor": {
     "artifact_name": "blanker_tile_synth.v",
     "local_archive_relpath": "src/rtl/blanker_tile_synth.v",
     "git_whitelisted": false,
-    "archive_reason": "1.69 MB generated SKY130 gate-level netlist excluded by strict repo allowlist; hash-pinned here for S8.2-02 provenance.",
+    "archive_reason": "Historical 1.69 MB pre-hardening SKY130 gate-level netlist (contains 1,154 drc_exclude.cells; requires resynthesis with dont_use cleanup).",
     "size_bytes": 1693355,
     "sha256": "807a5f81523e73f40df4a0883cfff3238e342c8e2f5a87ccab6ae0b59bf4585b",
     "yosys_abc_cells": 11835,
     "standard_cell_area_um2": 117541.0,
     "standard_cell_area_mm2": 0.117541,
     "area_per_channel_um2": 1837.0,
-    "watchdog_width_bits": 17
+    "watchdog_width_bits_historical": 17,
+    "watchdog_width_bits_hardened_75ms": 23
   },
   "mezzanine_board_interface": {
     "pcb_bundle": "hardware/pcb/blanker_asic_mezzanine/blanker_asic_mezzanine_verification.json",
     "tiles_per_mezzanine_board": 4,
     "boards_per_machine": 4,
-    "exact_rtl_ports_verified": [
+    "unified_serial_ports_matching_blanker_array_ctrl": [
+      "ser_sel",
+      "ser_sclk",
+      "ser_sdata",
+      "ser_tile_latch_n",
+      "ser_frame_latch_n",
+      "ser_beam_en",
+      "tile_done_out",
+      "tile_abort_out"
+    ],
+    "parallel_debug_ports": [
       "clk",
       "rst_n",
       "cfg_we",
@@ -109,7 +186,7 @@
     "hv_level_shifter_v": 53.3
   },
   "historical_sky130_signoff_runs_exp76_to_exp123": {
-    "note": "Historical Exp76-Exp123 OpenROAD/KLayout runs live in local un-tracked archival directories outside the strict git allowlist; exact SHA-256 digests and measured outcomes are recorded here for complete S8.2-02 traceability.",
+    "note": "Historical Exp76-Exp123 runs are fragmented pre-foundry experiments (NO single 64-ch GDS passes DRC + density + antenna + LVS + PDN + padring simultaneously). Recorded here transparently for audit traceability.",
     "exp76_tile_pnr": {
       "local_archive_json": "results/exp76_tile_pnr/exp76.json",
       "sha256": "e4e1550aaa924dc316b5271298f319a2ceb880809037c1de598dd2e3de21625a",
@@ -122,7 +199,7 @@
       "tritonroute_drt_drc_violations": 0,
       "initial_antenna_net_violations": 106,
       "initial_antenna_pin_violations": 189,
-      "reset_recovery_note": "async reset unbuffered in standalone tile; synchronizer required at top-level integration"
+      "reset_recovery_defect": "Historical run masked raw rst_n with set_false_path (-203 ns unbuffered recovery artifact); resolved in hardened RTL via internal 2-FF rst_sync_n bridge."
     },
     "exp88_antenna_closure": {
       "local_archive_json": "results/exp88_antenna_closure/exp88.json",
@@ -132,57 +209,38 @@
       "residual_antenna_pins_after_r3": 58,
       "legacy_openroad_repair_antennas_crashed": true
     },
-    "exp97_klayout_drc_baseline": {
-      "local_archive_json": "results/exp97_klayout_drc/exp97.json",
-      "sha256": "6a94acce661b2a7488ed10ca7b45560a7bd70f1fb5d570d00be5acb3037408e8",
-      "deck": "sky130A.lydrc",
-      "tool": "KLayout headless batch DRC"
-    },
-    "exp100_gds_drc_closure": {
+    "exp100_gds_drc_patch_only": {
       "local_archive_json": "results/exp100_patch_v3/exp100.json",
       "sha256": "2abdc27c555bbcd7a9c2e474620830f090b748210fb93e96d0706466f2528bd4",
-      "deck": "sky130A.lydrc",
-      "drc_total_violations": 0,
-      "m3_6_violations": 0,
-      "sub_area_blobs_closed": 234,
-      "layer_shape_census_equal": true,
-      "success": true
+      "klayout_main_drc_after_gds_patch": 0,
+      "fails_li1_density_pct": 66.157,
+      "li1_density_violations": 102,
+      "retains_antenna_nets": 20,
+      "retains_antenna_pins": 58,
+      "tapeout_valid": false
     },
-    "exp101_density_and_lvs": {
-      "local_archive_json": "results/exp101_density_lvs/exp101.json",
-      "sha256": "9c5a4111392cb6e102175036fae4e2ff845d6774212b5a3f197a31b005d23c7f",
-      "klayout_mr_drc_total": 0,
-      "klayout_mr_met3_items": 0,
-      "lvs_patched_result": "MATCH",
-      "lvs_unpatched_result": "MATCH",
-      "lvs_circuits_matched": 99,
-      "lvs_schematic_instances": 59613,
-      "lvs_patch_neutral": true,
-      "pre_swap_li1_density_violations": 102
-    },
-    "exp102_li1_density_closure": {
+    "exp102_li1_density_gds_swap": {
       "local_archive_json": "results/exp102_li1_density/exp102.json",
       "sha256": "42adf531d67a04bc6deef50732caeb5ca213cc3db5e4e10601bbc9ab08b617ab",
-      "decap_to_fill_swap_fraction": 0.15,
-      "cells_swapped": 6946,
-      "li1_ca_density_after_swap": 0.40514,
-      "main_deck_drc_total_after_swap": 0,
-      "success": true
+      "li1_density_after_gds_swap_pct": 59.486,
+      "breaks_def_lvs_parity": true,
+      "retains_antenna_nets": 20,
+      "tapeout_valid": false
     },
     "exp123_openroad_2024_antenna_eco": {
       "local_archive_json": "results/exp123_or_antenna/exp123.json",
       "sha256": "c3ce5f663c3bce390cbe69be0475820b1f9fb50e1848159af576f4e131d2c7bc",
       "openroad_version": "v2.0-17598-ga008522d8",
-      "registered_attempt1_success": false,
-      "attempt2_remove_fillers_repair_sequence": {
-        "diodes_inserted": 94,
-        "jumpers_inserted": 117,
-        "post_repair_openroad_net_violations": 0,
-        "post_repair_openroad_pin_violations": 0,
-        "fresh_def_read_check_net_violations": 0,
-        "unpatched_klayout_drc_items": 219,
-        "caveat": "Attempt-2 merged metal areas differed from Exp100; clean full detailed-reroute (attempt3/3b) remains open pre-tapeout work."
-      }
+      "attempt2_status": "INVALID_DISCONNECTED_NETS",
+      "attempt2_valid_signoff": false,
+      "attempt2_write_verilog_crashed_sigabrt": true,
+      "attempt2_unrouted_nets_stripped": 101,
+      "attempt2_total_nets": 13393,
+      "attempt2_original_20_antenna_nets_disconnected": true,
+      "attempt2_klayout_drc_items": 219,
+      "attempt2_klayout_drc_breakdown": "218 m3.6 + 1 m1.2",
+      "attempt2_li1_density_pct": 66.144,
+      "audit_explanation": "Previously reported 0 OpenROAD antenna violations on Attempt-2 was a false artifact: repair_antennas with filler removal without subsequent detailed_route stripped + ROUTED from 101 nets (leaving all 20/20 original antenna violators floating/disconnected so check_antennas skipped them) and crashed write_verilog (Signal 6). Attempt-2 DEF is electrically non-functional and NOT tapeout-ready."
     }
   }
 }

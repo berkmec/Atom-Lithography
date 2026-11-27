@@ -473,13 +473,15 @@ def parse_nominal_temp_k(temp_stage: str) -> float:
     s = (temp_stage or "").strip()
     if not s:
         return 300.0
-    mk = re.findall(r"(\d+(?:\.\d+)?)\s*mK", s)
+    # Strip parenthetical exclusion clauses like "(aktif sogutmali; 20 mK disinda)"
+    s_clean = re.sub(r"\([^)]*(?:disinda|dışında|outside)[^)]*\)", "", s, flags=re.IGNORECASE)
+    mk = re.findall(r"(\d+(?:\.\d+)?)\s*mK", s_clean)
     if mk:
         return min(float(x) for x in mk) * 1e-3
-    ks = re.findall(r"(\d+(?:\.\d+)?)\s*K\b", s)
+    ks = re.findall(r"(\d+(?:\.\d+)?)\s*K\b", s_clean)
     if ks:
         return min(float(x) for x in ks)
-    cs = re.findall(r"(\d+(?:\.\d+)?)\s*C\b", s)
+    cs = re.findall(r"(\d+(?:\.\d+)?)\s*C\b", s_clean)
     if cs:
         return min(float(x) for x in cs) + 273.15
     return 300.0

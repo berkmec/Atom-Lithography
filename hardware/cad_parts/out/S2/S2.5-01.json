@@ -30,8 +30,8 @@
         "name": "cap_probe_1",
         "kind": "electrical",
         "position_mm": [
-          57.5,
-          0.0,
+          28.750000000000007,
+          49.79646071760522,
           28.0
         ],
         "normal": [
@@ -54,8 +54,8 @@
         "name": "cap_probe_2",
         "kind": "electrical",
         "position_mm": [
-          -28.75,
-          49.796,
+          -57.5,
+          0.0,
           28.0
         ],
         "normal": [
@@ -78,8 +78,8 @@
         "name": "cap_probe_3",
         "kind": "electrical",
         "position_mm": [
-          -28.75,
-          -49.796,
+          28.750000000000007,
+          -49.79646071760522,
           28.0
         ],
         "normal": [
@@ -185,7 +185,7 @@
     ],
     "notes": [
       "Cozunurluk <=0.1 nm RMS, 10 kHz bant genisligi",
-      "3-axis head-to-stage relative capacitive sensors (PI/Lion class, <=0.1 nm RMS, 10 kHz) at R=57.5 mm (0/120/240 deg); 2.5 mm clear of S2.1-04"
+      "3-axis head-to-stage relative capacitive sensors (PI/Lion class, <=0.1 nm RMS, 10 kHz) at R=57.5 mm (60/180/300 deg); clears 0/90/270 deg interferometer axes"
     ],
     "scad_params": {
       "probe_pcd": 115.0,
@@ -217,31 +217,31 @@
     "watertight": true,
     "boundary_edges": 0,
     "non_manifold_edges": 0,
-    "signed_volume_mm3": 2870.68645895726,
+    "signed_volume_mm3": 2870.6864589572506,
     "surface_area_mm2": 2392.3143657047867,
-    "mass_kg": 0.023109025994605948,
+    "mass_kg": 0.02310902599460587,
     "cg_mm": [
-      -1.7613285811455288e-14,
-      2.2474513092750704e-13,
-      20.159364994704372
+      -2.0662691112145756e-14,
+      -1.2860965862327425e-13,
+      20.15936499470435
     ],
     "bbox_min_mm": [
-      -33.75000000000003,
-      -54.79646071760521,
+      -62.5,
+      -54.79646071760522,
       12.0
     ],
     "bbox_max_mm": [
-      62.5,
-      54.79646071760523,
+      33.75000000000001,
+      54.79646071760522,
       28.0
     ],
     "inertia_kg_mm2": [
-      38.77979806357923,
-      38.77979806357923,
-      76.63661699953114,
-      9.527059603442459e-14,
-      1.1672305557769062e-14,
-      2.0875596712451834e-14
+      38.7797980635791,
+      38.779798063579186,
+      76.6366169995309,
+      6.628733331126575e-14,
+      1.6994738766448415e-14,
+      3.963499699995803e-14
     ],
     "triangle_count": 1056,
     "vertex_count": 540,
@@ -257,6 +257,11 @@
     "all_valid": true
   },
   "engineering_checks": {},
+  "shell_mate_metadata": {
+    "n_shells": 9,
+    "fea_bonding_mode": "TIED_SUBASSEMBLY_CONTACTS",
+    "watertight": true
+  },
   "epistemic": {
     "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
     "no_lab_measurement": true,

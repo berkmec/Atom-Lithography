@@ -28,6 +28,7 @@ from experiments.exp150_industrial_safety_fmea_hazop.safety_physics150 import (
     analyze_hv_and_xray_safety,
     analyze_laser_safety,
     analyze_ph3_and_gas_safety,
+    evaluate_all_sil3_sif_chains,
     load_upstream_anchors,
 )
 
@@ -410,6 +411,7 @@ def main() -> None:
     hvx = analyze_hv_and_xray_safety(anchors)
     cryo = analyze_cryo_odh_and_quench(anchors)
     epo = analyze_epo_ups_shutdown(anchors)
+    iec61508_full = evaluate_all_sil3_sif_chains()
 
     fmea_rows = build_fmea_25_rows()
     hazop_nodes = build_hazop_10_nodes()
@@ -473,6 +475,7 @@ def main() -> None:
         "hazard_3_hv_and_xray": hvx,
         "hazard_4_cryo_odh_and_quench": cryo,
         "hazard_5_epo_ups_shutdown": epo,
+        "iec61508_full_pfh_and_6_sil3_sifs": iec61508_full,
         "fmea_summary": fmea_stats,
         "fmea_25_rows": fmea_rows,
         "hazop_10_nodes": hazop_nodes,

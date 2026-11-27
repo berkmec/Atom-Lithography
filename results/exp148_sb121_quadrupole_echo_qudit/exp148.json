@@ -673,5 +673,50 @@
     }
   },
   "core_sq_passed": "5/6",
-  "exp142_oq6_closure_status": "PARTIAL"
+  "exp142_oq6_closure_status": "PARTIAL_HONEST_WALLS_SQ4_AND_OBS073",
+  "b0_vs_bm4_and_shared_endor_audit_OBS073": {
+    "dual_field_comparison": {
+      "B0_dedicated_option_Q_T": 1.5,
+      "B_M4_cavity_bus_T": 0.1785,
+      "B0_1p5T_mean_electron_spin_mixing": 5.18e-05,
+      "B_M4_0p1785T_mean_electron_spin_mixing": 0.00365365,
+      "electron_spin_mixing_increase_factor_x": 70.54,
+      "B0_1p5T_min_nmr_spacing_kHz": 473.896,
+      "B_M4_0p1785T_min_nmr_spacing_kHz": 2822.976,
+      "B0_1p5T_total_nmr_span_kHz": 2925.96,
+      "B_M4_0p1785T_total_nmr_span_kHz": 22561.97,
+      "compatible_with_B_M4_0p1785T": false
+    },
+    "shared_s65_02_4line_endor_strain_audit": {
+      "endor_lines_s65_02": 4,
+      "cells_per_shared_line": 256,
+      "strain_sweep": [
+        {
+          "static_df_Q_kHz": 0.5,
+          "shared_25kHz_composite_gross_0L_F": 0.99957,
+          "broadband_75kHz_composite_gross_0L_F": 0.396421
+        },
+        {
+          "static_df_Q_kHz": 5.0,
+          "shared_25kHz_composite_gross_0L_F": 0.328825,
+          "broadband_75kHz_composite_gross_0L_F": 0.476828
+        },
+        {
+          "static_df_Q_kHz": 10.0,
+          "shared_25kHz_composite_gross_0L_F": 0.250093,
+          "broadband_75kHz_composite_gross_0L_F": 0.265613
+        },
+        {
+          "static_df_Q_kHz": 20.0,
+          "shared_25kHz_composite_gross_0L_F": 0.075823,
+          "broadband_75kHz_composite_gross_0L_F": 0.077154
+        }
+      ],
+      "shared_25kHz_gross_F_at_5kHz_strain": 0.328825,
+      "shared_25kHz_gross_F_at_20kHz_strain": 0.075823,
+      "broadband_75kHz_gross_F_at_5kHz_strain": 0.476828,
+      "compatible_with_untrimmed_shared_4line_endor": false,
+      "required_remediation": "Option-Q 121Sb memory is INCOMPATIBLE with B_M4=0.1785 T (70.3x electron-spin mixing) and collapses to 5-62% under 5-20 kHz static cooldown strain on 4 shared S6.5-02 ENDOR lines. Requires dedicated 1.50 T magnetic zone + per-cell Stark quadrupole trim (<0.5 kHz residual) or broadband >=75 kHz adiabatic refocusing + mandatory N_cyc>=8 Q-Echo-64 baseline (OBS-141)."
+    }
+  }
 }

@@ -229,15 +229,16 @@ def _fit_power_law(pts: List[Tuple[float, float]]) -> Dict[str, Any]:
 
 
 def _scan_hardcoded_paths(paths: List[Path]) -> List[str]:
-    bad_tokens = ("/home/" + "berk", "/run/media/" + "berk", "/" + "Users/")
+    import re
+    patterns = (re.compile(r"/(?:home|run/media|Users)/[a-zA-Z0-9_-]+"),)
     hits: List[str] = []
     for p in paths:
         if not p.exists():
             continue
         txt = p.read_text(errors="ignore")
-        for tok in bad_tokens:
-            if tok in txt:
-                hits.append(f"{p.name}:{tok}")
+        for pat in patterns:
+            if pat.search(txt):
+                hits.append(f"{p.name}:{pat.pattern}")
     return hits
 
 
@@ -796,13 +797,15 @@ def main() -> None:
         and fem_cult["p_fail_total"] <= 0.02
     )
 
-    # UQ6: RSA-2048 >= 10x cryostat & power compression vs SC, < 10 MW, <= 48h
+    # UQ6 (OBS-030 STRICT HONESTY FIX): RSA-2048 MUST satisfy p_fail_total <= 0.10!
+    # A computation with p_fail_total = 1.0 (d=24 vs d_req=174.1) MUST NEVER PASS!
     uq6_pass = bool(
         rsa_comp["cryostats_x"] >= 10.0
         and rsa_comp["power_x"] >= 10.0
         and rsa_d24["tco_and_power"]["total_facility_power_mw"] < 10.0
         and rsa_sc["tco_and_power"]["total_facility_power_mw"] > 100.0
         and rsa_d24["runtime_hours"] <= 48.0
+        and rsa_d24["p_fail_total"] <= 0.10
     )
 
     port_hits = _scan_hardcoded_paths([

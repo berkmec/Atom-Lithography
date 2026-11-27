@@ -47,7 +47,8 @@
       ],
       "optimal_substrate_T_C": 345.0,
       "substrate_heater": "Load-Lock UHV pyrolytic-BN radiative chuck (RT-450 C, PID +-2 C, 150 W max)",
-      "passivation_manifold_route_C": "Precision leak-valve 5% H2/N2 forming-gas (or UHV atomic-H thermal cracker), 350 C / 15 min, backed by 80 L/s TMP + NEG"
+      "passivation_manifold_route_C": "Dedicated isolated valved ~1 atm forming-gas furnace/RTA bake cell (5% H2/N2, P_H2=38 Torr, 350-400 C / 15 min, post-gate-oxide / post-metallization). OBS-094: UHV TMP+NEG leak valve removed because P_H2~1e-6 Torr fails Henry's-law passivation by 6-8 orders (21.7-2,170 yr).",
+      "gate_oxide_process_spec": "Low-T ALD oxide (200-300 C, 0.0 nm Si consumption, 0 OED) + post-metal 1 atm FGA; if thermal SiO2 (d_ox=8 nm) is used instead, pre-compensate MBE cap by +0.44*d_ox (+3.52 nm). Pre-implant surface must be H-terminated / flash-desorbed oxide-free (<0.3 nm) to prevent 0.69 O/ion recoil."
     },
     "mass_power_cryo": {
       "mass_breakdown_kg": {
@@ -87,12 +88,12 @@
     "alternative_recipe": "808 nm qCW, 4 x 1.0 ms @ 41.15 J/cm^2, T_peak = 1440.3 K (0.854 T_melt)",
     "window_fluence_1530K_AR_J_cm2": 11.16,
     "sapphire_lidt_margin_1530K_vs_100J_AR": 8.96,
-    "exp124_sigma_tot_v5_route_C_nm": 3.6653
+    "exp124_sigma_tot_v5_route_C_nm": 4.6872
   },
   "exp137_charge_noise_bridge_S_eps_ueV_rtHz": {
-    "optimistic_Dit_1e10_dox5": 0.283,
-    "low_Dit_1e10_dox8": 0.3194,
-    "nominal_Dit_1p5e10_dox8": 0.3897,
-    "conservative_Dit_3e10_dox8": 0.5491
+    "optimistic_Dit_1e10_dox5": 0.3274,
+    "low_Dit_1e10_dox8": 0.3734,
+    "nominal_Dit_1p5e10_dox8": 0.443,
+    "conservative_Dit_3e10_dox8": 0.6057
   }
 }

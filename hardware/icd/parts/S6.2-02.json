@@ -34,17 +34,17 @@
       "cad_json": "hardware/cad_parts/out/S6/S6.2-02.json",
       "watertight": true,
       "all_6_files_valid": true,
-      "mass_kg": 22.884052,
-      "triangle_count": 6456,
+      "mass_kg": 26.177515,
+      "triangle_count": 9536,
       "temp_k": 0.8,
       "canonical_bbox_min_mm": [
         -808.0,
-        -158.0,
+        -179.5,
         215.25
       ],
       "canonical_bbox_max_mm": [
-        -66.0,
-        158.0,
+        179.5,
+        179.5,
         839.0
       ],
       "datum_shift_mm": [
@@ -61,7 +61,14 @@
     "rtl_modules": [],
     "rtl_audit_json": null,
     "software_and_eda_files": [],
-    "verification_tests": []
+    "verification_tests": [
+      "tests/test_bom_detailed.py",
+      "tests/test_full_180_traceability.py",
+      "tests/test_cad_s6_optq.py",
+      "tests/test_exp125.py",
+      "tests/test_exp133.py",
+      "tests/test_cad_parts.py"
+    ]
   },
   "specialized_specification": null,
   "verification_status": {
@@ -71,6 +78,7 @@
     "rtl_verified": false,
     "software_or_eda_verified": false,
     "specialized_icd_present": false,
+    "verification_tests_mapped": true,
     "traceable": true
   },
   "epistemic": {

@@ -3,22 +3,17 @@
 //                   S3.3-01/02/04, S5.3-03, S5.5-01/03/04, S6.6-06, S6.7-02,
 //                   S6.10-03/04, S6.11-01, S7.2-02, S7.4-04, S7.SAFETY-01..06, S8.4-02
 // Target Device   : Xilinx Zynq UltraScale+ RFSoC ZU48DR (xczu48dr-ffvg1517-2-e) @ 100 MHz
-//                   (also Yosys-verified across xc7 and Lattice ECP5)
+//                   (pin-constrained physical carrier/ECP5 wrapper in fpga_top_carrier_wrap.v)
 //
-// Integrated Subsystems (Unified 16-bit AXI4-Lite CSR Map via UART 8N1 or External AXI4-Lite):
-//   0x0000 - 0x00FF : Global ID, Version, Epistemic Status (DESIGN_ONLY_NOT_CERTIFIED), Scratch
-//   0x0100 - 0x01FF : uhv_interlock_fsm   (1oo2D dual-channel fail-safe voting FSM + WDT)
-//   0x0200 - 0x02FF : blanker_array_ctrl  (32x32=1024-ch 16x64 blanker serializer + dead mask)
-//   0x0300 - 0x03FF : aom_pid_ctrl        (Q16.16 anti-windup AOM PID + hardwired 1687 K abort)
-//   0x0400 - 0x04FF : spi_dac_hv_ctrl     (8-ch 20-bit SPI DAC HV master + simultaneous LDAC_N)
-//   0x0500 - 0x05FF : cryo_mux_ddc_ctrl   (N_CH=8 parameterizable multi-tone NCO IQ DDC + AXIS)
-//   0x0600 - 0x06FF : boed_q16_core       (read-only instantiation from ../boed_fpga/boed_q16_core.v)
-//
-// Hard-Wired Internal Safety Override Bus (non-bypassable by software):
-//   il_trip_out / ~safe_*_en simultaneously clamps:
-//     1. blanker_array_ctrl.interlock_blank_force (<= 2 clocks = <= 20 ns @ 100 MHz, < 1 us)
-//     2. aom_pid_ctrl.interlock_abort             (immediate zero AOM drive)
-//     3. spi_dac_hv_ctrl.hv_safe_clamp            (immediate hv_clr_n=0 + 8-ch 20'h00000 SPI burst)
+// Hardened Architecture:
+//   - Built-in 2-FF async-assert / sync-deassert reset synchronizer (`rst_sync_n`) (OBS-113/142)
+//   - 2-FF CDC sync on `il_hw_reset_b`, `il_ch_a_ok`, `il_ch_b_ok`, `blk_tile_done/abort_in`
+//   - Hardware-locked safety watchdog (`HARDWIRE_WDT_ALWAYS_ON=1`): unlocked CSR writes CANNOT
+//     disable watchdog! Exposes independent registered `safety_indep_trip_out` (OBS-116)
+//   - Independent AXI4-Lite AWVALID/WVALID skid capture + `wstrb` byte-enable masking (OBS-115)
+//   - 16-byte UART RX FIFO + `uart_rts_n` flow control + inter-byte timeout recovery (OBS-115)
+//   - 100 MSPS parallel streaming Cryo-MUX DDC + arbitrated single-channel BOED SPRT autofeed
+//     selecting `r_boed_ddc_autofeed_ch[4:0]` (CSR 0x0600[20:16]) — zero channel collision (OBS-114)
 //
 // Synthesis Hygiene: ZERO latches, ZERO combinational '/', ZERO Verilator -Wall warnings.
 `timescale 1ns/1ps
@@ -32,11 +27,12 @@ module fpga_top_machine_ctrl #(
     input  wire        clk,
     input  wire        rst_n,
 
-    // 1. Host UART 8N1 SCADA/Control Interface
+    // 1. Host UART 8N1 SCADA/Control Interface (+ hardware RTS flow control)
     input  wire        uart_rx,
     output wire        uart_tx,
+    output wire        uart_rts_n,
 
-    // 2. Optional Direct External AXI4-Lite Slave Interface (Zynq PS / Direct Testbench)
+    // 2. Internal/Direct AXI4-Lite Slave Interface (Zynq PS / Direct Testbench)
     input  wire [15:0] ext_axil_awaddr,
     input  wire        ext_axil_awvalid,
     output wire        ext_axil_awready,
@@ -58,7 +54,7 @@ module fpga_top_machine_ctrl #(
     // 3. 1oo2D Fail-Safe Interlock Physical I/O
     input  wire [7:0]  il_ch_a_ok,
     input  wire [7:0]  il_ch_b_ok,
-    input  wire        il_hw_reset_b,      // Independent hardware reset pushbutton (Channel B)
+    input  wire        il_hw_reset_b,
     output wire        safe_blanker_en,
     output wire        safe_laser_en,
     output wire        safe_hv_en,
@@ -66,6 +62,7 @@ module fpga_top_machine_ctrl #(
     output wire        safe_ph3_valve_en,
     output wire        safe_magnet_en,
     output wire        interlock_trip_out,
+    output wire        safety_indep_trip_out,
 
     // 4. 32x32 Blanker Array Physical I/O
     input  wire [15:0] blk_tile_done_in,
@@ -106,11 +103,52 @@ module fpga_top_machine_ctrl #(
 );
     // Global Constants
     localparam [31:0] CHIP_ID_CONST        = 32'h414C_4D02; // "ALM\x02"
-    localparam [31:0] VERSION_CONST        = 32'h0002_0001; // v2.0.1
+    localparam [31:0] VERSION_CONST        = 32'h0002_0002; // v2.0.2 (hardened)
     localparam [31:0] GLOBAL_EPISTEMIC_CSR = 32'hD001_530E; // CERTIFIED=0, DESIGN_ONLY=1, NO_LAB=1, NO_VIVADO_PNR=1
 
+    // 2-FF async-assert / sync-deassert top-level reset synchronizer
+    (* ASYNC_REG = "TRUE" *) reg rst_sync_s1;
+    (* ASYNC_REG = "TRUE" *) reg rst_sync_s2;
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n) begin
+            rst_sync_s1 <= 1'b0;
+            rst_sync_s2 <= 1'b0;
+        end else begin
+            rst_sync_s1 <= 1'b1;
+            rst_sync_s2 <= rst_sync_s1;
+        end
+    end
+    wire rst_sync_n = rst_sync_s2;
+
+    // 2-FF CDC synchronizer for physical service-unlock pushbutton il_hw_reset_b
+    (* ASYNC_REG = "TRUE" *) reg hw_rst_b_s1;
+    (* ASYNC_REG = "TRUE" *) reg hw_rst_b_s2;
+
+    // Byte-enable merge helper for AXI4-Lite wstrb compliance
+    function [31:0] apply_wstrb;
+        input [31:0] old_val;
+        input [31:0] new_val;
+        input [3:0]  strb;
+        begin
+            apply_wstrb[7:0]   = strb[0] ? new_val[7:0]   : old_val[7:0];
+            apply_wstrb[15:8]  = strb[1] ? new_val[15:8]  : old_val[15:8];
+            apply_wstrb[23:16] = strb[2] ? new_val[23:16] : old_val[23:16];
+            apply_wstrb[31:24] = strb[3] ? new_val[31:24] : old_val[31:24];
+        end
+    endfunction
+
+    function [15:0] apply_wstrb16;
+        input [15:0] old_val;
+        input [15:0] new_val;
+        input [1:0]  strb;
+        begin
+            apply_wstrb16[7:0]  = strb[0] ? new_val[7:0]  : old_val[7:0];
+            apply_wstrb16[15:8] = strb[1] ? new_val[15:8] : old_val[15:8];
+        end
+    endfunction
+
     // -----------------------------------------------------------------------
-    // 1. UART 8N1 -> Internal AXI4-Lite Master Bridge
+    // 1. UART 8N1 -> Internal AXI4-Lite Master Bridge (with 16B RX FIFO + RTS)
     // -----------------------------------------------------------------------
     wire [15:0] uart_awaddr;
     wire        uart_awvalid;
@@ -131,6 +169,7 @@ module fpga_top_machine_ctrl #(
     wire        uart_rready;
     wire        uart_bridge_busy;
     wire [15:0] uart_rx_err_cnt;
+    wire [15:0] uart_rx_ovf_cnt;
 
     uart_axi_regmap #(
         .DEFAULT_BAUD_DIV(UART_BAUD_DIV)
@@ -140,6 +179,7 @@ module fpga_top_machine_ctrl #(
         .cfg_baud_div     (16'd0),
         .uart_rx          (uart_rx),
         .uart_tx          (uart_tx),
+        .uart_rts_n       (uart_rts_n),
         .m_axil_awaddr    (uart_awaddr),
         .m_axil_awvalid   (uart_awvalid),
         .m_axil_awready   (uart_awready),
@@ -158,28 +198,46 @@ module fpga_top_machine_ctrl #(
         .m_axil_rvalid    (uart_rvalid),
         .m_axil_rready    (uart_rready),
         .bridge_busy      (uart_bridge_busy),
-        .rx_frame_err_cnt (uart_rx_err_cnt)
+        .rx_frame_err_cnt (uart_rx_err_cnt),
+        .rx_overrun_cnt   (uart_rx_ovf_cnt)
     );
 
     // -----------------------------------------------------------------------
-    // 2. 2:1 Fixed-Priority AXI4-Lite Slave Arbiter (UART priority over EXT)
+    // 2. 2:1 AXI4-Lite Slave Arbiter with Independent AW / W Channel Capture
+    //    Accepts AWVALID and WVALID in ANY order (AW-first, W-first, or simultaneous)
+    //    so Xilinx AXI Crossbar / SmartConnect masters NEVER deadlock (OBS-115)!
     // -----------------------------------------------------------------------
+    reg        ext_aw_held;
+    reg [15:0] ext_awaddr_q;
+    reg        ext_w_held;
+    reg [31:0] ext_wdata_q;
+    reg [3:0]  ext_wstrb_q;
+
     reg        b_pending;
     reg        b_owner;       // 0 = UART, 1 = EXT
     reg        r_pending;
     reg        r_owner;       // 0 = UART, 1 = EXT
     reg [31:0] r_data_q;
 
+    // Independent AW/W readiness on external AXI4-Lite slave port
+    assign ext_axil_awready = !ext_aw_held && !b_pending;
+    assign ext_axil_wready  = !ext_w_held  && !b_pending;
+
+    wire ext_aw_avail = ext_aw_held || (ext_axil_awvalid && ext_axil_awready);
+    wire ext_w_avail  = ext_w_held  || (ext_axil_wvalid  && ext_axil_wready);
+    wire [15:0] ext_awaddr_eff = ext_aw_held ? ext_awaddr_q : ext_axil_awaddr;
+    wire [31:0] ext_wdata_eff  = ext_w_held  ? ext_wdata_q  : ext_axil_wdata;
+    wire [3:0]  ext_wstrb_eff  = ext_w_held  ? ext_wstrb_q  : ext_axil_wstrb;
+
     wire uart_wr_req = uart_awvalid && uart_wvalid && !b_pending;
-    wire ext_wr_req  = (!uart_wr_req) && ext_axil_awvalid && ext_axil_wvalid && !b_pending;
+    wire ext_wr_req  = (!uart_wr_req) && ext_aw_avail && ext_w_avail && !b_pending;
     wire csr_wr_en   = uart_wr_req || ext_wr_req;
-    wire [15:0] csr_waddr = uart_wr_req ? uart_awaddr : ext_axil_awaddr;
-    wire [31:0] csr_wdata = uart_wr_req ? uart_wdata  : ext_axil_wdata;
+    wire [15:0] csr_waddr = uart_wr_req ? uart_awaddr : ext_awaddr_eff;
+    wire [31:0] csr_wdata = uart_wr_req ? uart_wdata  : ext_wdata_eff;
+    wire [3:0]  csr_wstrb = uart_wr_req ? uart_wstrb  : ext_wstrb_eff;
 
     assign uart_awready     = uart_wr_req;
     assign uart_wready      = uart_wr_req;
-    assign ext_axil_awready = ext_wr_req;
-    assign ext_axil_wready  = ext_wr_req;
     assign uart_bvalid      = b_pending && (b_owner == 1'b0);
     assign ext_axil_bvalid  = b_pending && (b_owner == 1'b1);
     assign uart_bresp       = 2'b00;
@@ -202,13 +260,12 @@ module fpga_top_machine_ctrl #(
     // -----------------------------------------------------------------------
     // 3. CSR Configuration Registers & Single-Cycle Pulses
     // -----------------------------------------------------------------------
-    // Global block (0x0000)
     reg [31:0] r_scratch;
     reg [31:0] r_uptime_cycles;
 
-    // Interlock block (0x0100)
+    // Interlock block (0x0100) — r_il_wdt_en hardware-locked to 1'b1 (OBS-116)
     reg        r_il_run_en;
-    reg        r_il_wdt_en;
+    wire       r_il_wdt_en = 1'b1; // Hardware-locked ON: CSR writes CANNOT disable safety WDT!
     reg        r_il_sw_estop;
     reg [5:0]  r_il_subsys_mask;
     reg        p_il_reset_a;
@@ -285,6 +342,7 @@ module fpga_top_machine_ctrl #(
     reg        p_boed_sprt_reset;
     reg        p_boed_step_start;
     reg        r_boed_ddc_autofeed;
+    reg [4:0]  r_boed_ddc_autofeed_ch; // Dedicated target channel for collision-free SPRT autofeed!
     reg [7:0]  r_boed_step_idx;
     reg signed [31:0] r_boed_sprt_y;
     reg signed [31:0] r_boed_sprt_half;
@@ -306,7 +364,6 @@ module fpga_top_machine_ctrl #(
     // -----------------------------------------------------------------------
     // 4. Subsystem Instantiations & Hard-Wired Safety Override Bus
     // -----------------------------------------------------------------------
-    // 4A. UHV & Facility 1oo2D Safety Interlock FSM
     wire [2:0]  il_fsm_state;
     wire [7:0]  il_sensor_fault_latched;
     wire        il_discrep_fault;
@@ -318,11 +375,14 @@ module fpga_top_machine_ctrl #(
     wire [7:0]  il_ch_a_sync;
     wire [7:0]  il_ch_b_sync;
     wire [7:0]  il_discrep_live;
+    wire        il_wdt_hw_locked_on;
     wire        il_status_certified;
     wire        il_status_design_only;
     wire [31:0] il_epistemic_csr;
 
-    uhv_interlock_fsm u_interlock (
+    uhv_interlock_fsm #(
+        .HARDWIRE_WDT_ALWAYS_ON(1'b1)
+    ) u_interlock (
         .clk                              (clk),
         .rst_n                            (rst_n),
         .ch_a_ok                          (il_ch_a_ok),
@@ -344,6 +404,8 @@ module fpga_top_machine_ctrl #(
         .safe_ph3_valve_en                (safe_ph3_valve_en),
         .safe_magnet_en                   (safe_magnet_en),
         .interlock_trip_out               (interlock_trip_out),
+        .safety_indep_trip_out            (safety_indep_trip_out),
+        .wdt_hw_locked_on                 (il_wdt_hw_locked_on),
         .fsm_state                        (il_fsm_state),
         .sensor_fault_latched             (il_sensor_fault_latched),
         .discrep_fault_latched            (il_discrep_fault),
@@ -365,14 +427,12 @@ module fpga_top_machine_ctrl #(
     wire hw_aom_abort     = interlock_trip_out | (~safe_laser_en);
     wire hw_hv_clamp      = interlock_trip_out | (~safe_hv_en);
 
-    // Hardware safety-config lock: latches once entering ST_SAFE_DWELL/ST_ARMED/ST_RUN
-    // or asserting any safe_*_en; cleared ONLY by rst_n or physical il_hw_reset_b held
-    // while safely de-energized in ST_SAFE_BOOT (0) / ST_FAULT_LATCHED (1).
+    // Hardware safety-config lock (uses 2-FF synced hw_rst_b_s2!)
     wire il_any_safe_en       = safe_blanker_en | safe_laser_en | safe_hv_en |
                                 safe_uhv_valve_en | safe_ph3_valve_en | safe_magnet_en;
     wire il_in_armed_or_dwell = (il_fsm_state == 3'd2) || (il_fsm_state == 3'd3) ||
                                 (il_fsm_state == 3'd4) || il_any_safe_en;
-    wire il_hw_service_unlock = il_hw_reset_b && (!il_in_armed_or_dwell);
+    wire il_hw_service_unlock = hw_rst_b_s2 && (!il_in_armed_or_dwell);
     wire il_cfg_write_en      = (!r_il_cfg_locked) || il_hw_service_unlock;
 
     // 4B. 32x32 (1,024-ch) Blanker Array Controller
@@ -431,7 +491,6 @@ module fpga_top_machine_ctrl #(
     // 4C. Q16.16 Anti-Windup AOM PID Controller
     wire               pid_sample_valid = aom_ext_sample_valid | p_pid_sw_trig;
     wire signed [31:0] pid_meas_mux     = p_pid_sw_trig ? r_pid_sw_meas : aom_ext_meas_q16;
-    // Always enforce worst-case (highest) temperature across external pyrometer & CSR test input
     wire        [15:0] pid_temp_mux     = (aom_ext_temp_meas_k >= r_pid_sw_temp_k) ?
                                           aom_ext_temp_meas_k : r_pid_sw_temp_k;
 
@@ -486,8 +545,6 @@ module fpga_top_machine_ctrl #(
     wire        spi_clamp_zero_done;
     wire [3:0]  spi_cur_ch;
     wire [23:0] spi_last_tx_frame;
-
-    // Channel read index decoded from csr_raddr[4:2] for 0x0410..0x042C (offset 0x10..0x2C)
     wire [2:0]  spi_rd_ch_sel = csr_raddr[4:2] - 3'd4;
 
     spi_dac_hv_ctrl u_spi_dac (
@@ -515,11 +572,18 @@ module fpga_top_machine_ctrl #(
         .last_tx_frame       (spi_last_tx_frame)
     );
 
-    // 4E. Cryo MUX Multi-Tone DDC Controller
+    // 4E. Cryo MUX Multi-Tone 100 MSPS Parallel Streaming DDC Controller
     wire               ddc_adc_valid_mux = ddc_adc_valid | p_ddc_sw_adc_push;
     wire signed [15:0] ddc_adc_mux       = p_ddc_sw_adc_push ? r_ddc_sw_adc_sample : ddc_adc_sample;
     wire signed [15:0] ddc_mf_mux        = p_ddc_sw_adc_push ? r_ddc_sw_mf_weight  : ddc_mf_weight;
-    wire               ddc_axis_tready_i = r_boed_ddc_autofeed ? 1'b1 : ddc_m_axis_tready;
+
+    // Arbitrated collision-free autofeed handshake (OBS-114):
+    // When autofeed is enabled, only the selected channel `r_boed_ddc_autofeed_ch` fires SPRT,
+    // and backpressures 1 cycle if manual CSR `p_boed_sprt_start` collides on the same cycle!
+    wire               ddc_tid_selected  = (ddc_m_axis_tid == r_boed_ddc_autofeed_ch);
+    wire               ddc_axis_tready_i = r_boed_ddc_autofeed ?
+                                           (!(ddc_tid_selected && p_boed_sprt_start)) :
+                                           ddc_m_axis_tready;
 
     wire               ddc_busy;
     wire               ddc_done_pulse;
@@ -568,11 +632,12 @@ module fpga_top_machine_ctrl #(
         .rd_res_proj         (ddc_rd_res_proj)
     );
 
-    // 4F. Read-Only Instantiation of Existing Verified BOED Q16.16 Core (../boed_fpga/boed_q16_core.v)
-    wire               boed_autofeed_fire = r_boed_ddc_autofeed && ddc_m_axis_tvalid;
+    // 4F. Arbitrated Single-Channel BOED Q16 Core Autofeed (ZERO multi-channel LLR mixing!)
+    wire               boed_autofeed_fire = r_boed_ddc_autofeed && ddc_m_axis_tvalid &&
+                                            ddc_axis_tready_i && ddc_tid_selected;
     wire               boed_sprt_start_i  = p_boed_sprt_start | boed_autofeed_fire;
-    wire signed [31:0] boed_sprt_y_i      = boed_autofeed_fire ?
-                                            $signed(ddc_m_axis_tdata[31:0]) : r_boed_sprt_y;
+    wire signed [31:0] boed_sprt_y_i      = p_boed_sprt_start ?
+                                            r_boed_sprt_y : $signed(ddc_m_axis_tdata[31:0]);
 
     wire               boed_sprt_done;
     wire               boed_sprt_dec_valid;
@@ -622,7 +687,7 @@ module fpga_top_machine_ctrl #(
     );
 
     // -----------------------------------------------------------------------
-    // 5. Unified CSR Read Decoder (Combinational, latched into r_data_q)
+    // 5. Unified CSR Read Decoder
     // -----------------------------------------------------------------------
     wire [31:0] ddc_mask_u32;
     generate
@@ -642,15 +707,15 @@ module fpga_top_machine_ctrl #(
             16'h0008: csr_rdata_c = GLOBAL_EPISTEMIC_CSR;
             16'h000C: csr_rdata_c = {
                 uart_rx_err_cnt[7:0],
-                7'd0, uart_bridge_busy,
-                r_il_cfg_locked, 4'd0, boed_busy, ddc_busy, spi_busy,
+                uart_rx_ovf_cnt[6:0], uart_bridge_busy,
+                r_il_cfg_locked, il_wdt_hw_locked_on, 3'd0, boed_busy, ddc_busy, spi_busy,
                 pid_abort_active, blk_safe_blanked, blk_busy, interlock_trip_out, 1'b0, il_fsm_state
             };
             16'h0010: csr_rdata_c = r_scratch;
             16'h0014: csr_rdata_c = r_uptime_cycles;
 
             // 0x0100 Interlock Block
-            16'h0100: csr_rdata_c = {15'd0, r_il_cfg_locked, 2'd0, r_il_subsys_mask, 5'd0, r_il_sw_estop, r_il_wdt_en, r_il_run_en};
+            16'h0100: csr_rdata_c = {14'd0, il_wdt_hw_locked_on, r_il_cfg_locked, 2'd0, r_il_subsys_mask, 5'd0, r_il_sw_estop, r_il_wdt_en, r_il_run_en};
             16'h0104: csr_rdata_c = {
                 il_trip_counter,
                 il_status_design_only, il_status_certified,
@@ -735,7 +800,7 @@ module fpga_top_machine_ctrl #(
             16'h0528: csr_rdata_c = ddc_rd_res_proj;
 
             // 0x0600 BOED Q16 Core Block
-            16'h0600: csr_rdata_c = {16'd0, r_boed_step_idx, 4'd0, r_boed_ddc_autofeed, 3'd0};
+            16'h0600: csr_rdata_c = {11'd0, r_boed_ddc_autofeed_ch, r_boed_step_idx, 4'd0, r_boed_ddc_autofeed, 3'd0};
             16'h0604: csr_rdata_c = {
                 boed_cycle_count,
                 11'd0, boed_sprt_donor, boed_sprt_dec_valid,
@@ -762,15 +827,21 @@ module fpga_top_machine_ctrl #(
         endcase
     end
 
-    // Sink unused AXI byte strobes & pulse telemetry cleanly
-    wire _unused_ok = &{1'b0, uart_wstrb, ext_axil_wstrb, ddc_done_pulse,
-                        ddc_sample_cnt[15:8], uart_rx_err_cnt[15:8]};
+    wire _unused_ok = &{1'b0, ddc_done_pulse, ddc_sample_cnt[15:8],
+                        uart_rx_err_cnt[15:8], uart_rx_ovf_cnt[15:7]};
 
     // -----------------------------------------------------------------------
     // 6. Sequential AXI4-Lite Handshake & CSR Write Logic
     // -----------------------------------------------------------------------
     always @(posedge clk) begin
-        if (!rst_n) begin
+        if (!rst_sync_n) begin
+            hw_rst_b_s1            <= 1'b0;
+            hw_rst_b_s2            <= 1'b0;
+            ext_aw_held            <= 1'b0;
+            ext_awaddr_q           <= 16'd0;
+            ext_w_held             <= 1'b0;
+            ext_wdata_q            <= 32'd0;
+            ext_wstrb_q            <= 4'hF;
             b_pending              <= 1'b0;
             b_owner                <= 1'b0;
             r_pending              <= 1'b0;
@@ -781,7 +852,6 @@ module fpga_top_machine_ctrl #(
             r_uptime_cycles        <= 32'd0;
 
             r_il_run_en            <= 1'b0;
-            r_il_wdt_en            <= 1'b0;
             r_il_sw_estop          <= 1'b0;
             r_il_subsys_mask       <= 6'b111111;
             p_il_reset_a           <= 1'b0;
@@ -810,14 +880,14 @@ module fpga_top_machine_ctrl #(
             p_pid_state_reset      <= 1'b0;
             r_pid_dead_taps        <= 4'd1;
             p_pid_sw_trig          <= 1'b0;
-            r_pid_kp               <= 32'sd27525; // 0.42
-            r_pid_ki               <= 32'sd23593; // 0.36
-            r_pid_kd               <= 32'sd3277;  // 0.05
-            r_pid_kaw              <= 32'sd42598; // 0.65
-            r_pid_min_gain         <= 32'sd42598; // 0.65
-            r_pid_max_gain         <= 32'sd91750; // 1.40
-            r_pid_setpoint         <= 32'sd65536; // 1.00
-            r_pid_bias             <= 32'sd65536; // 1.00
+            r_pid_kp               <= 32'sd27525;
+            r_pid_ki               <= 32'sd23593;
+            r_pid_kd               <= 32'sd3277;
+            r_pid_kaw              <= 32'sd42598;
+            r_pid_min_gain         <= 32'sd42598;
+            r_pid_max_gain         <= 32'sd91750;
+            r_pid_setpoint         <= 32'sd65536;
+            r_pid_bias             <= 32'sd65536;
             r_pid_kt_pyro          <= 32'sd39;
             r_pid_temp_ref_k       <= 16'd300;
             r_pid_sw_temp_k        <= 16'd300;
@@ -853,6 +923,7 @@ module fpga_top_machine_ctrl #(
             p_boed_sprt_reset      <= 1'b0;
             p_boed_step_start      <= 1'b0;
             r_boed_ddc_autofeed    <= 1'b0;
+            r_boed_ddc_autofeed_ch <= 5'd0;
             r_boed_step_idx        <= 8'd0;
             r_boed_sprt_y          <= 32'sd0;
             r_boed_sprt_half       <= 32'sd0;
@@ -871,7 +942,26 @@ module fpga_top_machine_ctrl #(
             r_boed_step_done_sticky <= 1'b0;
             r_boed_sprt_done_sticky <= 1'b0;
         end else begin
+            // 2-FF sync for physical hardware reset pushbutton
+            hw_rst_b_s1     <= il_hw_reset_b;
+            hw_rst_b_s2     <= hw_rst_b_s1;
             r_uptime_cycles <= r_uptime_cycles + 32'd1;
+
+            // Independent external AXI4-Lite AW / W capture registers
+            if (ext_wr_req) begin
+                ext_aw_held <= 1'b0;
+                ext_w_held  <= 1'b0;
+            end else begin
+                if (ext_axil_awvalid && ext_axil_awready) begin
+                    ext_aw_held  <= 1'b1;
+                    ext_awaddr_q <= ext_axil_awaddr;
+                end
+                if (ext_axil_wvalid && ext_axil_wready) begin
+                    ext_w_held  <= 1'b1;
+                    ext_wdata_q <= ext_axil_wdata;
+                    ext_wstrb_q <= ext_axil_wstrb;
+                end
+            end
 
             // Auto-clear all single-cycle W1P command pulses
             p_il_reset_a        <= 1'b0;
@@ -895,7 +985,6 @@ module fpga_top_machine_ctrl #(
             p_boed_step_start   <= 1'b0;
             p_boed_prior_we     <= 1'b0;
 
-            // Sticky status trackers
             if (pid_out_valid)  r_pid_out_valid_sticky  <= 1'b1;
             if (boed_step_done) r_boed_step_done_sticky <= 1'b1;
             if (boed_sprt_done) r_boed_sprt_done_sticky <= 1'b1;
@@ -921,97 +1010,108 @@ module fpga_top_machine_ctrl #(
                 r_data_q  <= csr_rdata_c;
             end
 
-            // Safety-config lock state update (latched once armed/in-dwell; cleared only via rst_n or HW service-unlock)
+            // Safety-config lock state update
             if (il_in_armed_or_dwell) begin
                 r_il_cfg_locked <= 1'b1;
             end else if (il_hw_service_unlock) begin
                 r_il_cfg_locked <= 1'b0;
             end
 
-            // CSR Register Writes
+            // CSR Register Writes (honoring AXI4-Lite csr_wstrb byte enables!)
             if (csr_wr_en) begin
                 case (csr_waddr)
-                    // 0x0000 Global Block
-                    16'h0010: r_scratch <= csr_wdata;
+                    16'h0010: r_scratch <= apply_wstrb(r_scratch, csr_wdata, csr_wstrb);
 
-                    // 0x0100 Interlock Block (Channel B reset is strictly physical il_hw_reset_b;
-                    // safety timers & wdt_en are write-locked once armed/in-dwell)
+                    // 0x0100 Interlock Block (bit 1 wdt_en is hardware-locked ON!)
                     16'h0100: begin
-                        r_il_run_en      <= csr_wdata[0];
-                        if (il_cfg_write_en) begin
-                            r_il_wdt_en  <= csr_wdata[1];
+                        if (csr_wstrb[0]) begin
+                            r_il_run_en   <= csr_wdata[0];
+                            r_il_sw_estop <= csr_wdata[2];
+                            p_il_reset_a  <= csr_wdata[3];
+                            p_il_wdt_kick <= csr_wdata[5];
                         end
-                        r_il_sw_estop    <= csr_wdata[2];
-                        p_il_reset_a     <= csr_wdata[3];
-                        // bit [4] intentionally reserved/ignored: Channel B reset requires physical il_hw_reset_b!
-                        p_il_wdt_kick    <= csr_wdata[5];
-                        r_il_subsys_mask <= csr_wdata[13:8];
+                        if (csr_wstrb[1]) begin
+                            r_il_subsys_mask <= csr_wdata[13:8];
+                        end
                     end
                     16'h0110: begin
-                        if (il_cfg_write_en) r_il_discrep_win  <= csr_wdata[15:0];
+                        if (il_cfg_write_en)
+                            r_il_discrep_win <= apply_wstrb16(r_il_discrep_win, csr_wdata[15:0], csr_wstrb[1:0]);
                     end
                     16'h0114: begin
-                        if (il_cfg_write_en) r_il_wdt_timeout  <= csr_wdata;
+                        if (il_cfg_write_en)
+                            r_il_wdt_timeout <= apply_wstrb(r_il_wdt_timeout, csr_wdata, csr_wstrb);
                     end
                     16'h0118: begin
-                        if (il_cfg_write_en) r_il_dwell_cycles <= csr_wdata;
+                        if (il_cfg_write_en)
+                            r_il_dwell_cycles <= apply_wstrb(r_il_dwell_cycles, csr_wdata, csr_wstrb);
                     end
 
                     // 0x0200 Blanker Array Block
                     16'h0200: begin
-                        p_blk_frame_start    <= csr_wdata[0];
-                        p_blk_sticky_clr     <= csr_wdata[1];
-                        p_blk_interlock_clr  <= csr_wdata[2];
-                        r_blk_auto_offset_en <= csr_wdata[3];
-                        r_blk_sclk_div       <= csr_wdata[19:4];
+                        if (csr_wstrb[0]) begin
+                            p_blk_frame_start    <= csr_wdata[0];
+                            p_blk_sticky_clr     <= csr_wdata[1];
+                            p_blk_interlock_clr  <= csr_wdata[2];
+                            r_blk_auto_offset_en <= csr_wdata[3];
+                        end
+                        if (|csr_wstrb[2:0]) begin
+                            r_blk_sclk_div <= csr_wdata[19:4];
+                        end
                     end
                     16'h0208: begin
-                        r_blk_dx_pitch <= $signed(csr_wdata[15:0]);
-                        r_blk_dy_pitch <= $signed(csr_wdata[31:16]);
+                        if (&csr_wstrb[1:0]) r_blk_dx_pitch <= $signed(csr_wdata[15:0]);
+                        if (&csr_wstrb[3:2]) r_blk_dy_pitch <= $signed(csr_wdata[31:16]);
                     end
-                    16'h020C: r_blk_tile_en_mask <= csr_wdata[15:0];
+                    16'h020C: r_blk_tile_en_mask <= apply_wstrb16(r_blk_tile_en_mask, csr_wdata[15:0], csr_wstrb[1:0]);
                     16'h0218: begin
-                        r_blk_mem_row  <= csr_wdata[4:0];
-                        r_blk_mem_bank <= csr_wdata[8];
+                        if (csr_wstrb[0]) r_blk_mem_row  <= csr_wdata[4:0];
+                        if (csr_wstrb[1]) r_blk_mem_bank <= csr_wdata[8];
                     end
                     16'h021C: begin
                         p_blk_mem_we    <= 1'b1;
-                        r_blk_mem_wdata <= csr_wdata;
+                        r_blk_mem_wdata <= apply_wstrb(r_blk_mem_wdata, csr_wdata, csr_wstrb);
                     end
 
                     // 0x0300 AOM PID Block
                     16'h0300: begin
-                        r_pid_enable           <= csr_wdata[0];
-                        r_pid_pyro_en          <= csr_wdata[1];
-                        p_pid_abort_clr        <= csr_wdata[2];
-                        p_pid_state_reset      <= csr_wdata[3];
-                        r_pid_dead_taps        <= csr_wdata[7:4];
-                        p_pid_sw_trig          <= csr_wdata[8];
-                        if (csr_wdata[8] || csr_wdata[3]) begin
+                        if (csr_wstrb[0]) begin
+                            r_pid_enable      <= csr_wdata[0];
+                            r_pid_pyro_en     <= csr_wdata[1];
+                            p_pid_abort_clr   <= csr_wdata[2];
+                            p_pid_state_reset <= csr_wdata[3];
+                            r_pid_dead_taps   <= csr_wdata[7:4];
+                        end
+                        if (csr_wstrb[1]) begin
+                            p_pid_sw_trig <= csr_wdata[8];
+                        end
+                        if ((csr_wstrb[1] && csr_wdata[8]) || (csr_wstrb[0] && csr_wdata[3])) begin
                             r_pid_out_valid_sticky <= 1'b0;
                         end
                     end
-                    16'h0308: r_pid_kp         <= $signed(csr_wdata);
-                    16'h030C: r_pid_ki         <= $signed(csr_wdata);
-                    16'h0310: r_pid_kd         <= $signed(csr_wdata);
-                    16'h0314: r_pid_kaw        <= $signed(csr_wdata);
-                    16'h0318: r_pid_min_gain   <= $signed(csr_wdata);
-                    16'h031C: r_pid_max_gain   <= $signed(csr_wdata);
-                    16'h0320: r_pid_setpoint   <= $signed(csr_wdata);
-                    16'h0324: r_pid_bias       <= $signed(csr_wdata);
-                    16'h0328: r_pid_kt_pyro    <= $signed(csr_wdata);
+                    16'h0308: r_pid_kp       <= $signed(apply_wstrb(r_pid_kp, csr_wdata, csr_wstrb));
+                    16'h030C: r_pid_ki       <= $signed(apply_wstrb(r_pid_ki, csr_wdata, csr_wstrb));
+                    16'h0310: r_pid_kd       <= $signed(apply_wstrb(r_pid_kd, csr_wdata, csr_wstrb));
+                    16'h0314: r_pid_kaw      <= $signed(apply_wstrb(r_pid_kaw, csr_wdata, csr_wstrb));
+                    16'h0318: r_pid_min_gain <= $signed(apply_wstrb(r_pid_min_gain, csr_wdata, csr_wstrb));
+                    16'h031C: r_pid_max_gain <= $signed(apply_wstrb(r_pid_max_gain, csr_wdata, csr_wstrb));
+                    16'h0320: r_pid_setpoint <= $signed(apply_wstrb(r_pid_setpoint, csr_wdata, csr_wstrb));
+                    16'h0324: r_pid_bias     <= $signed(apply_wstrb(r_pid_bias, csr_wdata, csr_wstrb));
+                    16'h0328: r_pid_kt_pyro  <= $signed(apply_wstrb(r_pid_kt_pyro, csr_wdata, csr_wstrb));
                     16'h032C: begin
-                        r_pid_temp_ref_k <= csr_wdata[15:0];
-                        r_pid_sw_temp_k  <= csr_wdata[31:16];
+                        if (&csr_wstrb[1:0]) r_pid_temp_ref_k <= csr_wdata[15:0];
+                        if (&csr_wstrb[3:2]) r_pid_sw_temp_k  <= csr_wdata[31:16];
                     end
-                    16'h0330: r_pid_sw_meas    <= $signed(csr_wdata);
+                    16'h0330: r_pid_sw_meas <= $signed(apply_wstrb(r_pid_sw_meas, csr_wdata, csr_wstrb));
 
                     // 0x0400 SPI DAC HV Block
                     16'h0400: begin
-                        p_spi_start      <= csr_wdata[0];
-                        r_spi_update_all <= csr_wdata[1];
-                        r_spi_ch_mask    <= csr_wdata[15:8];
-                        r_spi_sclk_div   <= csr_wdata[31:16];
+                        if (csr_wstrb[0]) begin
+                            p_spi_start      <= csr_wdata[0];
+                            r_spi_update_all <= csr_wdata[1];
+                        end
+                        if (csr_wstrb[1])    r_spi_ch_mask  <= csr_wdata[15:8];
+                        if (&csr_wstrb[3:2]) r_spi_sclk_div <= csr_wdata[31:16];
                     end
                     16'h0410, 16'h0414, 16'h0418, 16'h041C,
                     16'h0420, 16'h0424, 16'h0428, 16'h042C: begin
@@ -1022,14 +1122,16 @@ module fpga_top_machine_ctrl #(
 
                     // 0x0500 Cryo MUX DDC Block
                     16'h0500: begin
-                        r_ddc_enable      <= csr_wdata[0];
-                        p_ddc_soft_clear  <= csr_wdata[1];
-                        r_ddc_mf_en       <= csr_wdata[2];
-                        p_ddc_sw_adc_push <= csr_wdata[3];
-                        r_ddc_num_ch_m1   <= csr_wdata[12:8];
-                        r_ddc_win_len     <= csr_wdata[31:16];
+                        if (csr_wstrb[0]) begin
+                            r_ddc_enable      <= csr_wdata[0];
+                            p_ddc_soft_clear  <= csr_wdata[1];
+                            r_ddc_mf_en       <= csr_wdata[2];
+                            p_ddc_sw_adc_push <= csr_wdata[3];
+                        end
+                        if (csr_wstrb[1])    r_ddc_num_ch_m1 <= csr_wdata[12:8];
+                        if (&csr_wstrb[3:2]) r_ddc_win_len   <= csr_wdata[31:16];
                     end
-                    16'h050C: r_ddc_ch_sel <= csr_wdata[4:0];
+                    16'h050C: if (csr_wstrb[0]) r_ddc_ch_sel <= csr_wdata[4:0];
                     16'h0510: begin
                         p_ddc_phase_we  <= 1'b1;
                         r_ddc_phase_inc <= csr_wdata[23:0];
@@ -1041,40 +1143,43 @@ module fpga_top_machine_ctrl #(
                     end
                     16'h0518: begin
                         p_ddc_thresh_we <= 1'b1;
-                        r_ddc_thresh    <= $signed(csr_wdata);
+                        r_ddc_thresh    <= $signed(apply_wstrb(r_ddc_thresh, csr_wdata, csr_wstrb));
                     end
                     16'h051C: begin
-                        r_ddc_sw_adc_sample <= $signed(csr_wdata[15:0]);
-                        r_ddc_sw_mf_weight  <= $signed(csr_wdata[31:16]);
+                        if (&csr_wstrb[1:0]) r_ddc_sw_adc_sample <= $signed(csr_wdata[15:0]);
+                        if (&csr_wstrb[3:2]) r_ddc_sw_mf_weight  <= $signed(csr_wdata[31:16]);
                     end
 
                     // 0x0600 BOED Q16 Core Block
                     16'h0600: begin
-                        p_boed_sprt_start   <= csr_wdata[0];
-                        p_boed_sprt_reset   <= csr_wdata[1];
-                        p_boed_step_start   <= csr_wdata[2];
-                        r_boed_ddc_autofeed <= csr_wdata[3];
-                        r_boed_step_idx     <= csr_wdata[15:8];
-                        if (csr_wdata[0] || csr_wdata[1]) r_boed_sprt_done_sticky <= 1'b0;
-                        if (csr_wdata[2])                 r_boed_step_done_sticky <= 1'b0;
+                        if (csr_wstrb[0]) begin
+                            p_boed_sprt_start   <= csr_wdata[0];
+                            p_boed_sprt_reset   <= csr_wdata[1];
+                            p_boed_step_start   <= csr_wdata[2];
+                            r_boed_ddc_autofeed <= csr_wdata[3];
+                            if (csr_wdata[0] || csr_wdata[1]) r_boed_sprt_done_sticky <= 1'b0;
+                            if (csr_wdata[2])                 r_boed_step_done_sticky <= 1'b0;
+                        end
+                        if (csr_wstrb[1]) r_boed_step_idx        <= csr_wdata[15:8];
+                        if (csr_wstrb[2]) r_boed_ddc_autofeed_ch <= csr_wdata[20:16];
                     end
-                    16'h0608: r_boed_sprt_y      <= $signed(csr_wdata);
-                    16'h060C: r_boed_sprt_half   <= $signed(csr_wdata);
-                    16'h0610: r_boed_sprt_scale  <= $signed(csr_wdata);
-                    16'h0614: r_boed_sprt_thresh <= $signed(csr_wdata);
-                    16'h061C: r_boed_prior_addr  <= csr_wdata[9:0];
+                    16'h0608: r_boed_sprt_y      <= $signed(apply_wstrb(r_boed_sprt_y, csr_wdata, csr_wstrb));
+                    16'h060C: r_boed_sprt_half   <= $signed(apply_wstrb(r_boed_sprt_half, csr_wdata, csr_wstrb));
+                    16'h0610: r_boed_sprt_scale  <= $signed(apply_wstrb(r_boed_sprt_scale, csr_wdata, csr_wstrb));
+                    16'h0614: r_boed_sprt_thresh <= $signed(apply_wstrb(r_boed_sprt_thresh, csr_wdata, csr_wstrb));
+                    16'h061C: if (|csr_wstrb[1:0]) r_boed_prior_addr <= csr_wdata[9:0];
                     16'h0620: begin
                         p_boed_prior_we   <= 1'b1;
-                        r_boed_prior_data <= $signed(csr_wdata);
+                        r_boed_prior_data <= $signed(apply_wstrb(r_boed_prior_data, csr_wdata, csr_wstrb));
                     end
-                    16'h0624: r_boed_f_init      <= $signed(csr_wdata);
-                    16'h0628: r_boed_f_probe     <= $signed(csr_wdata);
-                    16'h062C: r_boed_y_meas      <= $signed(csr_wdata);
-                    16'h0630: r_boed_inv_gamma   <= csr_wdata;
-                    16'h0634: r_boed_inv_2var    <= $signed(csr_wdata);
+                    16'h0624: r_boed_f_init      <= $signed(apply_wstrb(r_boed_f_init, csr_wdata, csr_wstrb));
+                    16'h0628: r_boed_f_probe     <= $signed(apply_wstrb(r_boed_f_probe, csr_wdata, csr_wstrb));
+                    16'h062C: r_boed_y_meas      <= $signed(apply_wstrb(r_boed_y_meas, csr_wdata, csr_wstrb));
+                    16'h0630: r_boed_inv_gamma   <= apply_wstrb(r_boed_inv_gamma, csr_wdata, csr_wstrb);
+                    16'h0634: r_boed_inv_2var    <= $signed(apply_wstrb(r_boed_inv_2var, csr_wdata, csr_wstrb));
                     16'h0638: begin
-                        r_boed_delta_fisher <= csr_wdata[15:0];
-                        r_boed_max_off      <= csr_wdata[31:16];
+                        if (&csr_wstrb[1:0]) r_boed_delta_fisher <= csr_wdata[15:0];
+                        if (&csr_wstrb[3:2]) r_boed_max_off      <= csr_wdata[31:16];
                     end
 
                     default: begin

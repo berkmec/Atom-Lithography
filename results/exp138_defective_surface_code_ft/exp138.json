@@ -6,7 +6,7 @@
   "epistemic_tag": "{Say\u0131sal-Sim\u00fclasyon}",
   "elapsed_sec": 713.8863251209259,
   "n_workers": 8,
-  "n_passed": 6,
+  "n_passed": 5,
   "n_total": 7,
   "success_rule_met": true,
   "primary_scaling_scenario": "D2_v5_RotaC_P4_S0p25_fast_Q5e5",
@@ -207,12 +207,13 @@
       "scenario_B2_fast_above_th": true
     },
     "FT3_V5_ROTA_C_THRESHOLD_CROSSING_AND_QR_HEADROOM": {
-      "passed": true,
+      "passed": false,
       "D2_S0p25_Q5e5_Lambda_round": 1.3991426979256436,
       "D2_S0p25_Q5e5_eps_round_d3": 0.008724029034720027,
       "D2_S0p25_Q5e5_eps_round_d11": 0.002437406872075054,
       "D2_S0p25_Q5e5_Lambda_block": 1.0254921674153878,
-      "D3_target_p0p005_Lambda_round": 2.519806355590378
+      "D3_target_p0p005_Lambda_round": 2.519806355590378,
+      "honest_note": "FAIL / HORIZON_TARGET_REQUIRED: real Stim threshold is 0.60-0.98%, Route C S_eps=0.39-0.55 ueV/rtHz, and unclamped 4x4 Tosi M4 gates sit above threshold."
     },
     "FT4_EXACT_PAULI16_AND_MEMORY_BASIS_CONSISTENCY": {
       "passed": true,
@@ -7134,5 +7135,51 @@
       }
     }
   },
-  "portability_hardcoded_hits": []
+  "portability_hardcoded_hits": [],
+  "obs_022_029_047_110_111_133_honest_audit": {
+    "final_data_readout_impact_OBS133": {
+      "p2q_0.0050": {
+        "d3": {
+          "eps_L_no_finalRO": 0.0036,
+          "eps_L_with_finalRO": 0.0044,
+          "relative_increase_pct": 22.22
+        },
+        "d5": {
+          "eps_L_no_finalRO": 0.0052,
+          "eps_L_with_finalRO": 0.0056,
+          "relative_increase_pct": 7.69
+        }
+      },
+      "p2q_0.0092": {
+        "d3": {
+          "eps_L_no_finalRO": 0.0188,
+          "eps_L_with_finalRO": 0.0256,
+          "relative_increase_pct": 36.17
+        },
+        "d5": {
+          "eps_L_no_finalRO": 0.026,
+          "eps_L_with_finalRO": 0.022,
+          "relative_increase_pct": -15.38
+        }
+      }
+    },
+    "stim_circuit_threshold_p2q_band_OBS022": [
+      0.006,
+      0.0098
+    ],
+    "legacy_custom_per_round_threshold_note": "Exp138 per-round inversion yielded ~1.60%; real Stim d-round circuit threshold is 0.60-0.98% -> Exp137 unclamped gates & Route C S=0.39-0.55 sit ABOVE threshold.",
+    "exp140_T1_p_meas_floor_OBS022": 0.002232,
+    "conservative_alpha1_T2e_f1p5_ms_OBS110": 7.068,
+    "route_C_S_eps_band_ueV_rtHz_OBS111": [
+      0.3897,
+      0.5491
+    ],
+    "ddrf6893_and_iradina_valley_p_slot_OBS029_047": {
+      "f1p0_Ez0_ddrf_only": 0.28764,
+      "f1p5_Ez2_ddrf_only": 0.52652,
+      "f1p5_Ez2_iradina_valley_only": 0.41573,
+      "f1p5_Ez2_ddrf_and_iradina_valley": 0.28967
+    },
+    "ft_scaling_status": "HORIZON_TARGET_REQUIRED"
+  }
 }

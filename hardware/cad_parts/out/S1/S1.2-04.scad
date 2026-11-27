@@ -9,8 +9,8 @@
 // temp_stage        : 300 K
 // vacuum_grade      : UHV 1e-8 mbar
 // tolerance         : ±2 um tekrarlanabilirlik
-// computed_mass_kg  : 1.46578
-// envelope_mm       : 84.000 x 325.000 x 33.800
+// computed_mass_kg  : 1.47838
+// envelope_mm       : 84.000 x 338.000 x 33.800
 // design_maturity   : M0_M1_DETAILED_CAD_DESIGN_ONLY
 // no_lab_measurement: true
 // iec61508_certified: false
@@ -22,7 +22,7 @@ $fn = 64;
 
 // Nominal bounding envelope parameters (mm)
 bbox_x = 84.0000;
-bbox_y = 325.0000;
+bbox_y = 338.0000;
 bbox_z = 33.8000;
 
 // Part-specific parametric dimensions
@@ -49,7 +49,7 @@ module part_S1_2_04() {
       cylinder(d=44.000, h=35.340, center=true);
     }
     // +Y CF16 bellows drive flange
-    translate([0.000, 74.000, 0.000]) rotate([-90.000, 0.000, 0.000]) {
+    translate([0.000, 80.500, 0.000]) rotate([-90.000, 0.000, 0.000]) {
       difference() {
         cylinder(d=33.800, h=7.500, center=true);
         cylinder(d=14.000, h=9.500, center=true);
@@ -61,7 +61,7 @@ module part_S1_2_04() {
       }
     }
     // -Y CF16 bellows drive flange
-    translate([0.000, -74.000, 0.000]) rotate([90.000, 0.000, 0.000]) {
+    translate([0.000, -80.500, 0.000]) rotate([90.000, 0.000, 0.000]) {
       difference() {
         cylinder(d=33.800, h=7.500, center=true);
         cylinder(d=14.000, h=9.500, center=true);

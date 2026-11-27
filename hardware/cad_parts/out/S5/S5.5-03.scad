@@ -49,6 +49,6 @@ module part_S5_5_03() {
 }
 
 // World assembly mounting transform (global machine frame, mm / deg):
-// translate([0.000, 385.000, 568.500]) rotate([0.000, 0.000, 0.000]) part_S5_5_03();
+// translate([420.000, 182.216, 717.059]) rotate([36.000, 0.000, 0.000]) part_S5_5_03();
 
 part_S5_5_03();

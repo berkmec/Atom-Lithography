@@ -2,7 +2,9 @@
 
 Cycle-accurate, bit-exact Verilog-2005 RTL implementation of the **Atom Lithography Machine** `Exp140` 250 MHz Xilinx Zynq UltraScale+ RFSoC (`ZU48DR`) Bayesian Optimal Experimental Design (BOED) spectroscopy accelerator (`src/machine_control/fpga_boed_dsp.py`).
 
-> **Epistemic Disclosure:** **`no_external_eda_sim = false`** (verified directly with real **Verilator 5.055 `--lint-only -Wall`**, **Icarus Verilog 14.0 `-g2012 -Wall` + `vvp`**, and **Yosys 0.71+101** `check -assert` + `synth_xilinx -family xcup` / `synth_xilinx -family xc7` / `synth_ecp5`!). **`no_vendor_vivado_pnr = true`**, **`no_lab_measurement_rtl = true`** (Yosys cell counts are real pre-P&R technology-mapped counts; vendor Vivado place-and-route timing closure and physical RFSoC board measurements are pending).
+> **Epistemic Disclosure:** **`no_external_eda_sim = false`** (verified directly with real **Verilator 5.055 `--lint-only -Wall`**, **Icarus Verilog 14.0 `-g2012 -Wall` + `vvp`**, **Yosys 0.71+101**, and **nextpnr-ecp5** proxy P&R). **`no_vendor_vivado_pnr = true`**, **`no_lab_measurement_rtl = true`** (250 MHz targets Xilinx Zynq UltraScale+ RFSoC `ZU48DR -2E`; Lattice ECP5-85F proxy post-route OOC Fmax improved from `14.62 MHz` to **`43.58 MHz` (+2.98×)** after multi-stage Pass-1/LUT pipelining, while preserving exact `584` cycles and `0` LSB!).
+>
+> **Pin-Constrained Physical Carrier Wrapper (`boed_top_16ch_tdm_io.v`):** `boed_top_16ch.v` is an internal ZU48DR PS-PL AXI4-Stream IP block (`511` internal bus wires); `boed_top_16ch_tdm_io.v` wraps it behind a `48`-pin physical 16-bit TDM I/O interface (`<= 80`-pin XC7K325T carrier & `<= 205`-pin ECP5-CABGA381).
 
 ## Module Hierarchy
 

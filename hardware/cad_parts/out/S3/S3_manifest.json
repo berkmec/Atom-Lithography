@@ -5,7 +5,7 @@
   "cots_env_icd_count": 6,
   "all_watertight": true,
   "all_valid": true,
-  "total_mass_kg": 38.4232,
+  "total_mass_kg": 38.4274,
   "coordinate_frame": {
     "z_wafer_top_mm": 0.0,
     "rack_bay1_x_mm": 1480.0,
@@ -59,18 +59,18 @@
         -0.64
       ],
       "world_bbox_max_mm": [
-        26.2294,
-        26.2294,
+        26.5942,
+        26.9267,
         0.08
       ],
       "json_path": "hardware/cad_parts/out/S3/S3.1-02.json"
     },
     "S3.1-03": {
       "design_tier": "CUSTOM_FULL",
-      "mass_kg": 0.095721,
+      "mass_kg": 0.09809,
       "watertight": true,
       "all_valid": true,
-      "triangle_count": 1496,
+      "triangle_count": 2008,
       "world_origin_mm": [
         0.0,
         0.0,
@@ -79,41 +79,41 @@
       "world_bbox_min_mm": [
         -40.0,
         -40.0,
-        -5.85
+        -6.38
       ],
       "world_bbox_max_mm": [
         40.0,
         40.0,
-        -0.15
+        0.16
       ],
       "json_path": "hardware/cad_parts/out/S3/S3.1-03.json"
     },
     "S3.1-04": {
       "design_tier": "CUSTOM_FULL",
-      "mass_kg": 0.030856,
+      "mass_kg": 0.03069,
       "watertight": true,
       "all_valid": true,
-      "triangle_count": 1008,
+      "triangle_count": 1408,
       "world_origin_mm": [
         0.0,
         0.0,
         1.0
       ],
       "world_bbox_min_mm": [
-        -41.0,
-        -41.0,
+        -40.9965,
+        -40.9235,
         -0.03
       ],
       "world_bbox_max_mm": [
-        41.0,
-        41.0,
+        40.9984,
+        40.9684,
         2.4
       ],
       "json_path": "hardware/cad_parts/out/S3/S3.1-04.json"
     },
     "S3.2-01": {
       "design_tier": "CUSTOM_FULL",
-      "mass_kg": 0.476023,
+      "mass_kg": 0.478021,
       "watertight": true,
       "all_valid": true,
       "triangle_count": 5712,
@@ -128,8 +128,8 @@
         -17.2817
       ],
       "world_bbox_max_mm": [
-        133.4364,
-        133.4364,
+        134.2636,
+        135.7953,
         -3.3
       ],
       "json_path": "hardware/cad_parts/out/S3/S3.2-01.json"
@@ -197,8 +197,8 @@
         -9.2776
       ],
       "world_bbox_max_mm": [
-        77.8731,
-        77.8731,
+        79.0094,
+        80.0494,
         2.1584
       ],
       "json_path": "hardware/cad_parts/out/S3/S3.2-04.json"

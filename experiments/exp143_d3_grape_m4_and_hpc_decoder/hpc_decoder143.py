@@ -92,6 +92,83 @@ def benchmark_local_python_mwpm_ref(p_2q: float = 0.0045, p_meas: float = 0.0038
     return out
 
 
+def benchmark_live_ldpc_bb144_cpu(
+    p_2q: float = 0.0050,
+    p_meas: float = 0.003861,
+    n_shots_r4: int = 12,
+    n_shots_r8: int = 4,
+) -> Dict[str, Any]:
+    """Live empirical C++ `ldpc` BpOsdDecoder CPU timing on real BB_144_12_12 circuit DEM (OBS-023)."""
+    from experiments.exp144_qldpc_bivariate_bicycle_m4.bb_codes_and_layout144 import (
+        BB_CODE_SPECS,
+        build_bb_code,
+        find_verified_commuting_schedule,
+    )
+    from experiments.exp144_qldpc_bivariate_bicycle_m4.bp_osd_decoder144 import (
+        build_bb_circuit_dem,
+    )
+    try:
+        try:
+            from ldpc import BpOsdDecoder
+        except Exception:
+            from ldpc.bposd_decoder import BpOsdDecoder
+        has_ldpc = True
+    except Exception:
+        has_ldpc = False
+
+    c144 = build_bb_code(BB_CODE_SPECS["BB_144_12_12"])
+    sched = find_verified_commuting_schedule(c144)
+    rng = np.random.default_rng(14323)
+    out: Dict[str, Any] = {"ldpc_cpp_available": has_ldpc}
+
+    for tag, n_rnd, n_sh in (("R4", 4, n_shots_r4), ("R8", 8, n_shots_r8)):
+        dem = build_bb_circuit_dem(
+            c144, sched, n_noisy_rounds=n_rnd, p_2q=p_2q, p_meas=p_meas,
+            p_prep=0.00083, p_1q_idle_step=0.00010, p_data_ro_idle=0.00015, memory_basis="Z",
+        )
+        H_dem = dem["H_dem"].astype(np.uint8)
+        p_dem = dem["p_dem"]
+        faults = (rng.random((n_sh, len(p_dem))) < p_dem[None, :]).astype(np.uint8)
+        syns = (faults @ H_dem.T) & 1
+
+        if has_ldpc:
+            from scipy.sparse import csc_matrix
+            dec_bp = BpOsdDecoder(
+                csc_matrix(H_dem), error_channel=p_dem.tolist(),
+                max_iter=50, bp_method="minimum_sum", ms_scaling_factor=0.625,
+                osd_method="osd_cs", osd_order=2,
+            )
+            lat_us = []
+            bp_conv = 0
+            for s in range(n_sh):
+                t0 = time.perf_counter()
+                _ = dec_bp.decode(syns[s])
+                lat_us.append((time.perf_counter() - t0) * 1e6)
+                if getattr(dec_bp, "converge", False):
+                    bp_conv += 1
+            mean_us = float(np.mean(lat_us))
+            p99_us = float(np.percentile(lat_us, 99))
+            bp_frac = float(bp_conv / n_sh)
+        else:
+            # Conservative fallback anchored to OBS-023 live measurements
+            mean_us = 34680.0 if n_rnd == 4 else 181710.0
+            p99_us = mean_us * 1.5
+            bp_frac = 0.390 if n_rnd == 4 else 0.180
+
+        out[tag] = {
+            "n_rounds": n_rnd,
+            "M_detectors": int(dem["M_detectors"]),
+            "N_faults": int(dem["N_fault_mechanisms"]),
+            "n_shots": int(n_sh),
+            "bp_converged_frac": round(bp_frac, 4),
+            "osd_trigger_frac": round(1.0 - bp_frac, 4),
+            "mean_us_per_shot": round(mean_us, 2),
+            "mean_ms_per_shot": round(mean_us / 1e3, 3),
+            "p99_us_per_shot": round(p99_us, 2),
+        }
+    return out
+
+
 def analyze_option_hpc_decoder_wall(
     t_gate_d3_us: float = 0.65,
     t_cyc_fast_us: float = 2.6201,
@@ -110,7 +187,10 @@ def analyze_option_hpc_decoder_wall(
       - T_cyc_4cz_v5 = 8.932 us (v5.0 Exp138 P4 4-CZ cycle)
     """
     t_cyc_4cz_d3_us = 4.0 * t_gate_d3_us + 2.0 + 0.2
-    local_bench = benchmark_local_python_mwpm_ref(p_2q=p_2q_d3, p_meas=p_meas)
+    # Cap decoder benchmark operating point to the sub-threshold D3 target [0.45%, 0.55%]
+    # (above threshold >1%, QEC decoding diverges; even AT 0.50%, live C++ ldpc CPU is >10,000x too slow!)
+    p_2q_bench = min(max(float(p_2q_d3), 0.0045), 0.0055)
+    local_bench = benchmark_local_python_mwpm_ref(p_2q=p_2q_bench, p_meas=p_meas)
     p_det = 0.5 * (
         local_bench["d7"]["empirical_p_det_per_check"]
         + local_bench["d11"]["empirical_p_det_per_check"]
@@ -196,24 +276,22 @@ def analyze_option_hpc_decoder_wall(
             "hpc_power_kw_100L": float(power_kw_100L),
         })
 
-    # 2. qLDPC [[144, 12, 12]] Gross Code (Bravyi et al. Nature 2024) BP-OSD Decoder Model
-    # 1 block = 288 active cells (144 data + 144 checks) encoding 12 logical qubits!
-    # 9 blocks = 108 logical qubits (2,592 active cells -> fits in 1 single LD400/PT420 cryostat!).
+    # 2. qLDPC [[144, 12, 12]] Gross Code (Bravyi et al. Nature 2024) BP-OSD Decoder Model (OBS-023 FIX)
+    # Replace falsified hardcoded constants (3.5% OSD, 6.8 us BP, 42 us CPU / 14.5 us HPC -> 2.32 us)
+    # with LIVE C++ `ldpc` BpOsdDecoder measurements on the actual BB_144_12_12 circuit-level DEM!
     qldpc_checks_per_block = 144
     qldpc_blocks_for_100L = math.ceil(100.0 / 12.0)  # 9 blocks = 108 logical qubits
-    # Min-Sum BP (16 iters @ 65 ns/iter parallel systolic FPGA/GPU = 1.04 us; CPU ~ 6.8 us)
-    # OSD-2 fallback triggered on p_osd = 3.5% of rounds at D3 p_2q=0.45% (GPU/FPGA ~14.5 us, CPU ~42 us)
-    p_osd_trigger = 0.035
-    tau_bp_cpu_us = 6.80
-    tau_osd2_cpu_us = 42.0
-    tau_qldpc_cpu_mean_us = tau_bp_cpu_us + p_osd_trigger * tau_osd2_cpu_us  # 8.27 us
-    tau_qldpc_cpu_p99_us = tau_bp_cpu_us + tau_osd2_cpu_us  # 48.8 us
-
-    tau_bp_hpc_us = 1.04
-    tau_osd2_hpc_us = 14.5
-    tau_qldpc_hpc_mean_us = tau_bp_hpc_us + p_osd_trigger * tau_osd2_hpc_us  # 1.5475 us
-    tau_qldpc_hpc_e2e_mean_us = TAU_INGEST_US + tau_qldpc_hpc_mean_us        # 2.3245 us (< 2.62 us!)
-    tau_qldpc_hpc_p99_us = TAU_INGEST_US + tau_bp_hpc_us + tau_osd2_hpc_us   # 16.32 us (absorbed by 4-window FIFO!)
+    live_ldpc_bench = benchmark_live_ldpc_bb144_cpu(p_2q=max(p_2q_bench, 0.0050), p_meas=p_meas)
+    p_osd_trigger_r4 = live_ldpc_bench["R4"]["osd_trigger_frac"]
+    p_osd_trigger_r8 = live_ldpc_bench["R8"]["osd_trigger_frac"]
+    tau_cpu_mean_r4_us = live_ldpc_bench["R4"]["mean_us_per_shot"]
+    tau_cpu_p99_r4_us = live_ldpc_bench["R4"]["p99_us_per_shot"]
+    tau_cpu_mean_r8_us = live_ldpc_bench["R8"]["mean_us_per_shot"]
+    # Real steady-state R=d=12 requires dedicated FPGA/GPU BP-OSD/LSD hardware core; ZERO QEC decoder RTL exists in repo!
+    qec_decoder_rtl_in_repo = False
+    t_cyc_bb_d3_us = 7.0 * t_gate_d3_us + 2.0 + 0.2
+    required_hw_speedup_r4 = tau_cpu_mean_r4_us / max(t_cyc_bb_d3_us, 1e-6)
+    required_hw_speedup_r8 = tau_cpu_mean_r8_us / max(t_cyc_bb_d3_us, 1e-6)
 
     bw_qldpc_108L_hard_v5_gbps = (qldpc_blocks_for_100L * qldpc_checks_per_block * 1.25) / (t_cyc_4cz_v5_us * 1e3)
     bw_qldpc_108L_hard_d3_gbps = (qldpc_blocks_for_100L * qldpc_checks_per_block * 1.25) / (t_cyc_4cz_d3_us * 1e3)
@@ -227,23 +305,34 @@ def analyze_option_hpc_decoder_wall(
         "n_checks_per_block": qldpc_checks_per_block,
         "blocks_for_100L": qldpc_blocks_for_100L,
         "logical_qubits_delivered": qldpc_blocks_for_100L * 12,
-        "p_osd_fallback": p_osd_trigger,
-        "tau_cpu_mean_us": float(tau_qldpc_cpu_mean_us),
-        "tau_cpu_p99_us": float(tau_qldpc_cpu_p99_us),
-        "tau_hpc_compute_mean_us": float(tau_qldpc_hpc_mean_us),
-        "tau_hpc_e2e_mean_us": float(tau_qldpc_hpc_e2e_mean_us),
-        "tau_hpc_p99_us": float(tau_qldpc_hpc_p99_us),
-        "fifo_buffer_windows_for_p999": 6,
-        "backlog_free_cpu_2p62us": bool(tau_qldpc_cpu_mean_us < t_cyc_fast_us),
-        "backlog_free_cpu_8p93us": bool(tau_qldpc_cpu_mean_us < t_cyc_4cz_v5_us),
-        "backlog_free_hpc_2p62us": bool(tau_qldpc_hpc_e2e_mean_us < t_cyc_fast_us),
-        "backlog_free_hpc_d3_cyc": bool(tau_qldpc_hpc_e2e_mean_us < t_cyc_4cz_d3_us),
-        "backlog_free_hpc_8p93us": bool(tau_qldpc_hpc_e2e_mean_us < t_cyc_4cz_v5_us),
+        "actual_unclamped_p2q_input": float(p_2q_d3),
+        "benchmark_p2q_operating_point": float(max(p_2q_bench, 0.0050)),
+        "unclamped_p2q_above_stim_threshold": bool(p_2q_d3 > 0.0098),
+        "qec_decoder_rtl_exists_in_repo": qec_decoder_rtl_in_repo,
+        "live_ldpc_cpu_benchmark": live_ldpc_bench,
+        "p_osd_fallback_R4": float(p_osd_trigger_r4),
+        "p_osd_fallback_R8": float(p_osd_trigger_r8),
+        "p_osd_fallback": float(p_osd_trigger_r4),
+        "tau_cpu_mean_us": float(tau_cpu_mean_r4_us),
+        "tau_cpu_p99_us": float(tau_cpu_p99_r4_us),
+        "tau_cpu_mean_R8_us": float(tau_cpu_mean_r8_us),
+        # Honest unverified hardware target (no RTL/GPU implementation exists -> cannot claim 2.32 us closure!)
+        "tau_hpc_compute_mean_us": float(tau_cpu_mean_r4_us),
+        "tau_hpc_e2e_mean_us": float(TAU_INGEST_US + tau_cpu_mean_r4_us),
+        "tau_hpc_p99_us": float(TAU_INGEST_US + tau_cpu_p99_r4_us),
+        "required_fpga_gpu_speedup_vs_cpu_R4": float(required_hw_speedup_r4),
+        "required_fpga_gpu_speedup_vs_cpu_R8": float(required_hw_speedup_r8),
+        "hardware_acceleration_status": "HORIZON_TARGET_REQUIRED_NO_QEC_DECODER_RTL",
+        "backlog_free_cpu_2p62us": bool(tau_cpu_mean_r4_us < t_cyc_fast_us),
+        "backlog_free_cpu_8p93us": bool(tau_cpu_mean_r4_us < t_cyc_4cz_v5_us),
+        "backlog_free_hpc_2p62us": False,
+        "backlog_free_hpc_d3_cyc": False,
+        "backlog_free_hpc_8p93us": False,
         "bw_108L_hard_v5_gbps": float(bw_qldpc_108L_hard_v5_gbps),
         "bw_108L_hard_d3_gbps": float(bw_qldpc_108L_hard_d3_gbps),
         "bw_108L_soft12_v5_gbps": float(bw_qldpc_108L_soft12_v5_gbps),
         "fibers_100g_108L_hard": 2,  # 1 active + 1 redundant
-        "hpc_nodes_108L": 2,         # 1 single base 4U Option-HPC module handles ALL 108 logical qubits!
+        "hpc_nodes_108L": 2,
         "option_hpc_4u_modules_108L": 1,
         "hpc_power_kw_108L": 2.195,
     }

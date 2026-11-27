@@ -9,7 +9,7 @@
 // temp_stage        : 300 K -> 20 mK
 // vacuum_grade      : Kriyo-vakum
 // tolerance         : 0.86 mm, <=0.1 dB/m
-// computed_mass_kg  : 0.70712
+// computed_mass_kg  : 0.47509
 // envelope_mm       : 20.000 x 68.000 x 456.000
 // design_maturity   : M0_M1_DETAILED_CAD_DESIGN_ONLY
 // no_lab_measurement: true

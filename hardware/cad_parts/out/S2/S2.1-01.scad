@@ -29,7 +29,9 @@ bbox_z = 0.0300;
 nx = 32;
 ny = 32;
 pitch_mm = 0.5;
-hole_d_mm = 0.22;
+hole_d_mm = 0.0105;
+alpha_land_mrad = 6.4;
+sigma_s_nm = 0.5;
 soi_t_mm = 0.03;
 wafer_od = 36.0;
 
@@ -45,11 +47,11 @@ module part_S2_1_01() {
       // 30 um highly-doped SOI aperture membrane
       cylinder(d=36.000, h=0.030, center=true);
     }
-    // 32x32 = 1,024 Arch-B co-pitched apertures
+    // 32x32 = 1,024 Arch-B Ø10.5 um beam-defining apertures
     for (ix = [0 : 32 - 1])
       for (iy = [0 : 32 - 1])
         translate([(ix - 15.500) * 0.5000, (iy - 15.500) * 0.5000, 0])
-          cylinder(d=0.2200, h=0.100, center=true);
+          cylinder(d=0.0105, h=0.100, center=true);
   }
 }
 

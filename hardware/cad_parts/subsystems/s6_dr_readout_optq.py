@@ -242,7 +242,7 @@ def _build_s6_6_03() -> BuiltPart:
         ("still_cp", 554.0, 602.0),
         ("cp_mxc", 502.0, 540.0),
     )
-    mesh, feats = make_staged_coax_loom(18, 44.0, 22.0, spans, z_orig, attenuator_r=4.2, material="304 SS", name="S6.6-03")
+    mesh, feats = make_staged_coax_loom(56, 44.0, 22.0, spans, z_orig, attenuator_r=0.0, coax_od_mm=2.19, material="304 SS", name="S6.6-03")
     ports = (
         PortInterface("in56_top_50k", "rf", (0.0, 0.0, 836.0 - z_orig), (0.0, 0.0, 1.0), "56x SS304 0.086-in Input Loom", mating_part_id="S6.8-04"),
         PortInterface("in56_bot_mxc", "rf", (0.0, 0.0, 502.0 - z_orig), (0.0, 0.0, -1.0), "56x 3-Stage Attenuated MXC Feed", mating_part_id="S6.8-01"),
@@ -272,7 +272,7 @@ def _build_s6_6_04() -> BuiltPart:
         ("still_cp", 554.0, 602.0),
         ("cp_mxc", 502.0, 540.0),
     )
-    mesh, feats = make_staged_coax_loom(18, 44.0, 22.0, spans, z_orig, attenuator_r=0.0, material="NbTi", name="S6.6-04")
+    mesh, feats = make_staged_coax_loom(56, 44.0, 22.0, spans, z_orig, attenuator_r=0.0, coax_od_mm=2.19, material="NbTi", name="S6.6-04")
     ports = (
         PortInterface("out56_top_50k", "rf", (0.0, 0.0, 836.0 - z_orig), (0.0, 0.0, 1.0), "56x SS304 Output to RT LNA", mating_part_id="S6.6-05"),
         PortInterface("out56_bot_mxc", "rf", (0.0, 0.0, 502.0 - z_orig), (0.0, 0.0, -1.0), "56x NbTi Lossless MXC->4K Loom", mating_part_id="S6.6-02"),
@@ -348,8 +348,9 @@ def _build_s6_6_07() -> BuiltPart:
     # Package OD = 50.0 mm (R=25.0 -> 7.0 mm radial clearance to Nb cup!), local z = [-14.5, +9.0]
     parts: list[SolidMesh] = []
     # Main Ø50 mm gold-plated OFHC Cu resonator carrier housing with 4x M2 clamp bolt holes
+    # OBS-108 fix: Ø24.8 mm pocket (r_in=12.4 mm) gives 1.086 mm radial clearance to 16x16 mm die corner (R=11.314 mm)
     carrier = make_ring_with_bolt_circle(
-        r_in=11.5,
+        r_in=12.4,
         r_out=25.0,
         thickness=6.0,
         pcd=40.0,
@@ -363,7 +364,7 @@ def _build_s6_6_07() -> BuiltPart:
     parts.append(carrier)
     # Recessed OFHC basefloor under chip pocket (z_local = [-5.0, -3.1])
     parts.append(make_cylinder(25.0, 1.9, segments=36, center=(0.0, 0.0, -4.05), name="nbtin_pkg_floor", material="OFHC Cu"))
-    # High-R 28Si / NbTiN 9000-ch spiral resonator die (16x16x0.8 mm seated inside Ø23 mm pocket!)
+    # High-R 28Si / NbTiN 9000-ch spiral resonator die (16x16x0.8 mm seated inside Ø24.8 mm pocket!)
     parts.append(make_box(16.0, 16.0, 0.8, center=(0.0, 0.0, -2.5), name="nbtin_9000ch_die", material="Si"))
     # 4x SMP cryogenic RF launch barrels on top rim (z_local = [+3.1, +8.5])
     for idx, ang_deg in enumerate((45.0, 135.0, 225.0, 315.0), start=1):
@@ -678,10 +679,10 @@ def _build_s6_8_04() -> BuiltPart:
     # OVC bottom cap + ISO-K DN250 flange profile
     parts.append(make_cylinder(178.0, 15.0, segments=48, center=(0.0, 0.0, 167.5 - z0), name="dr_ovc_bottom", material="316LN"))
     parts.append(make_isok_flange("DN250", blank=True, center=(0.0, 0.0, 153.0 - z0), name="dr_ovc_isok_dn250_bot", material="316LN"))
-    # Lower, bridge-port, mid, Option-Q-port, and upper OVC walls (R=167..175 mm)
-    parts.append(make_tube(167.0, 175.0, 279.0, segments=48, center=(0.0, 0.0, 315.0 - z0), name="dr_ovc_lower", material="316LN"))
-    parts.append(make_arc_tube(167.0, 175.0, 79.5, 24.0, 336.0, center=(0.0, 0.0, 495.0 - z0), name="dr_ovc_bridge_arc", material="316LN"))
-    parts.append(make_tube(167.0, 175.0, 104.0, segments=48, center=(0.0, 0.0, 587.5 - z0), name="dr_ovc_mid", material="316LN"))
+    # Lower, CF100 bridge-port (OBS-065 widened z=[436, 551], deg=[26, 334]), mid, Option-Q-port, and upper OVC walls (R=167..175 mm)
+    parts.append(make_tube(167.0, 175.0, 260.0, segments=48, center=(0.0, 0.0, 305.5 - z0), name="dr_ovc_lower", material="316LN"))
+    parts.append(make_arc_tube(167.0, 175.0, 114.5, 26.0, 334.0, center=(0.0, 0.0, Z_CRYO_BRIDGE_MM - z0), name="dr_ovc_bridge_arc", material="316LN"))
+    parts.append(make_tube(167.0, 175.0, 88.0, segments=48, center=(0.0, 0.0, 595.5 - z0), name="dr_ovc_mid", material="316LN"))
     parts.append(make_arc_tube(167.0, 175.0, 99.5, -158.0, 158.0, center=(0.0, 0.0, 690.0 - z0), name="dr_ovc_optq_arc", material="316LN"))
     parts.append(make_tube(167.0, 175.0, 219.0, segments=48, center=(0.0, 0.0, 850.0 - z0), name="dr_ovc_upper", material="316LN"))
     # Top 300 K main vacuum flange with 24x M8 bolt circle & central Ø92 mm PT420 bore
@@ -716,7 +717,7 @@ def _build_s6_8_04() -> BuiltPart:
     mesh = merge_solids(parts, name="S6.8-04", material="316LN")
     ports = (
         make_cf_port_interface("DN50", "asme_rupture_disk_port", (0.0, 198.0, 320.0), (0.0, 1.0, 0.0), mating_part_id="S7.SAFETY-05", notes="ASME Sec VIII Div 1 DN50 0.5 barg rupture-disk clearance"),
-        make_cf_port_interface("CF63", "bridge_bellows_east", (175.0, 0.0, Z_CRYO_BRIDGE_MM - z0), (1.0, 0.0, 0.0), mating_part_id="S6.9-02", bore_override_mm=44.0),
+        make_cf_port_interface("CF100", "bridge_bellows_east", (175.0, 0.0, Z_CRYO_BRIDGE_MM - z0), (1.0, 0.0, 0.0), mating_part_id="S6.9-02", bore_override_mm=76.0),
         make_cf_port_interface("CF63", "option_q_west", (-175.0, 0.0, 190.0), (-1.0, 0.0, 0.0), mating_part_id="S9.4-01"),
         make_cf_port_interface("DN160", "pt420_top_port", (0.0, 0.0, 485.0), (0.0, 0.0, 1.0), mating_part_id="S6.1-01", bore_override_mm=92.0),
     )
@@ -794,7 +795,7 @@ def _build_s6_10_01() -> BuiltPart:
             DimensionCallout("PKG_Z", dz, 0.05, -0.05),
         ),
         gdt_frames=(GDTFrame("flatness", 0.005, datum_primary="A", feature_note="28Si M4 bus seating face"),),
-        scad_params=(("z_bus_ohm", 3000.0), ("f_res_ghz", 5.0), ("l_res_um", 300.0), ("b_m4_t", 0.1785)),
+        scad_params=(("z_bus_ohm", 3000.0), ("f_res_ghz", 5.0), ("l_res_um", 300.0), ("b_m4_t", 0.1785), ("cavity_f1_ghz", 8.842)),
         target_mass_kg=0.21,
     )
     feats = (
@@ -921,32 +922,69 @@ def _build_s6_11_01() -> BuiltPart:
 
 
 def _build_s6_11_02() -> BuiltPart:
-    """S6.11-02: 32x 20 mK Josephson TWPA + bandpass Purcell + dual cryo-isolator magnetic shield box (180x140x55 mm, 2.72 kg)."""
+    """S6.11-02: 32x 20 mK Josephson TWPA + bandpass Purcell + dual cryo-isolator partitioned sub-cutoff shield box (OBS-108)."""
     # World origin: (-650.0, 0.0, 452.0) -> z_global = [424.5, 479.5] (4.5 mm below MXC plate z=484.0!)
     # Exact BOM envelope 180 x 140 x 55 mm with 10 mm corner chamfers so max corner R = 107.0 mm << 116.0 mm Still shield ID!
+    # OBS-108 fix: Hollow partitioned 8x4 = 32 sub-cutoff Nb pockets (14.0x14.0x44.8 mm, >=4 mm Nb septa) +
+    # top/bottom Eccosorb CR-124 RF absorber damping liners. Lowest cavity mode f(TE101) = 11.22 GHz >> 8.0 GHz!
     dx, dy, dz = 180.0, 140.0, 55.0
+    ch = 10.0
+    hx, hy = 0.5 * dx, 0.5 * dy
+    outer_poly = [
+        (-hx + ch, -hy), (hx - ch, -hy),
+        (hx, -hy + ch), (hx, hy - ch),
+        (hx - ch, hy), (-hx + ch, hy),
+        (-hx, hy - ch), (-hx, -hy + ch),
+    ]
+    pocket_holes: list[list[tuple[float, float]]] = []
+    for ix in range(8):
+        cx = -63.0 + ix * 18.0
+        for iy in range(4):
+            cy = -33.0 + iy * 22.0
+            pocket_holes.append(rect_2d(14.0, 14.0, cx=cx, cy=cy, ccw=False))
+
     parts: list[SolidMesh] = []
-    # Chamfered outer Nb/Cryoperm magnetic shield enclosure (180x140x55 mm)
-    outer_box = make_chamfered_box(dx, dy, dz - 8.0, chamfer=10.0, center=(0.0, 0.0, 0.0), name="twpa_shield_shell", material="Nb")
-    parts.append(outer_box)
-    # Bolted top OFHC Cu thermalization cover plate (164x124x3.8 mm, 4x M3 MXC mount holes)
+    # Hollow 32-channel partitioned Nb/Cryoperm magnetic & sub-cutoff RF cavity body (z_local = [-22.4, +22.4])
+    cavity_block = make_plate_with_holes(
+        outer_poly,
+        holes_2d=pocket_holes,
+        thickness=44.8,
+        axis="z",
+        center=(0.0, 0.0, 0.0),
+        name="twpa_32ch_partitioned_nb_block",
+        material="Nb",
+    )
+    parts.append(cavity_block)
+    # Top & bottom Eccosorb CR-124 microwave absorber damping liners (z = +-23.0, thickness 0.9 mm)
+    parts.append(
+        make_rect_plate_with_features(
+            dx - 20.0, dy - 20.0, 0.9,
+            circular_holes=((-72.0, -52.0, 3.6), (72.0, -52.0, 3.6), (72.0, 52.0, 3.6), (-72.0, 52.0, 3.6)),
+            hole_segments=10,
+            center=(0.0, 0.0, 23.05),
+            name="twpa_top_eccosorb_absorber",
+            material="PEEK",
+        )
+    )
+    parts.append(make_box(dx - 20.0, dy - 20.0, 0.9, center=(0.0, 0.0, -23.05), name="twpa_bot_eccosorb_absorber", material="PEEK"))
+    # Bolted top OFHC Cu thermalization cover plate (164x124x3.8 mm, 4x M3 MXC mount holes, z=[+23.7, +27.5])
     parts.append(
         make_rect_plate_with_features(
             dx - 16.0, dy - 16.0, 3.8,
             circular_holes=((-72.0, -52.0, 3.4), (72.0, -52.0, 3.4), (72.0, 52.0, 3.4), (-72.0, 52.0, 3.4)),
             hole_segments=12,
-            center=(0.0, 0.0, 0.5 * dz - 2.0),
+            center=(0.0, 0.0, 0.5 * dz - 1.9),
             name="twpa_top_mxc_plate",
             material="OFHC Cu",
         )
     )
-    # Bottom Cryoperm-10 base closure plate (164x124x3.8 mm)
-    parts.append(make_box(dx - 16.0, dy - 16.0, 3.8, center=(0.0, 0.0, -0.5 * dz + 2.0), name="twpa_bot_shield", material="Cryoperm"))
+    # Bottom Cryoperm-10 base closure plate (164x124x3.8 mm, z=[-27.5, -23.7])
+    parts.append(make_box(dx - 16.0, dy - 16.0, 3.8, center=(0.0, 0.0, -0.5 * dz + 1.9), name="twpa_bot_shield", material="Cryoperm"))
 
     mesh = merge_solids(parts, name="S6.11-02", material="Nb")
     ports = (
         PortInterface("mxc_20mk_mount", "thermal", (0.0, 0.0, 27.5), (0.0, 0.0, 1.0), "4x M3 Au-OFHC MXC Mount (2.144 uW)", mating_part_id="S6.8-01", bolt_count=4, bolt_hole_mm=3.4, bolt_spec="M3"),
-        PortInterface("twpa_32ch_smp", "rf", (-90.0, 0.0, 0.0), (-1.0, 0.0, 0.0), "32x TWPA + 625x Purcell SMP", mating_part_id="S6.11-04"),
+        PortInterface("twpa_32ch_smp", "rf", (-90.0, 0.0, 0.0), (-1.0, 0.0, 0.0), "32x TWPA + 625x Purcell SMP (Sub-Cutoff 11.22 GHz Channels)", mating_part_id="S6.11-04"),
     )
     design = make_part_design_from_bom(
         "S6.11-02",
@@ -957,19 +995,28 @@ def _build_s6_11_02() -> BuiltPart:
             DimensionCallout("BOX_X", dx, 0.10, -0.10),
             DimensionCallout("BOX_Y", dy, 0.10, -0.10),
             DimensionCallout("BOX_Z", dz, 0.10, -0.10),
+            DimensionCallout("POCKET_SQ", 14.0, 0.05, -0.05),
         ),
         gdt_frames=(
             GDTFrame("flatness", 0.015, datum_primary="A", feature_note="20 mK MXC thermal contact face"),
             GDTFrame("parallelism", 0.030, datum_primary="A", feature_note="Bottom clearance face to S9.4-02"),
         ),
-        notes=("Exact BOM part_id S6.11-02 (resolves legacy cad/params.py S6.5 aliasing bug). 32x 20 mK Josephson TWPA + Purcell + dual isolators, 10 mm corner chamfers clear Still shield R_in=116 mm by 9.0 mm (Exp140).",),
-        scad_params=(("n_twpa", 32), ("box_dx", dx), ("box_dy", dy), ("box_dz", dz), ("p_20mk_uw", 2.144)),
+        notes=(
+            "Exact BOM part_id S6.11-02. OBS-108 fix: hollowed into 8x4 = 32 isolated 14x14x44.8 mm Nb sub-cutoff TWPA/isolator cavities (f_c=10.71 GHz, f_TE101=11.22 GHz >> 8 GHz) with Eccosorb CR-124 top/bottom RF absorbers, eliminating all 4-8 GHz box modes.",
+            "10 mm corner chamfers clear Still shield R_in=116 mm by 9.0 mm (Exp140).",
+        ),
+        scad_params=(
+            ("n_twpa", 32), ("box_dx", dx), ("box_dy", dy), ("box_dz", dz),
+            ("pocket_xy_mm", 14.0), ("pocket_z_mm", 44.8), ("f_te101_ghz", 11.22),
+            ("eccosorb_liner_mm", 0.9), ("p_20mk_uw", 2.144),
+        ),
         target_mass_kg=2.72,
     )
     feats = (
-        ScadFeature("add_box", {"dx": dx, "dy": dy, "dz": dz}, comment="32x 20 mK TWPA + Purcell Nb/Cryoperm magnetic shield box"),
+        ScadFeature("add_box", {"dx": dx, "dy": dy, "dz": dz}, comment="32x 20 mK TWPA + Purcell partitioned Nb/Cryoperm magnetic shield box"),
+        ScadFeature("cut_grid_holes", {"nx": 8, "ny": 4, "pitch_x": 18.0, "pitch_y": 22.0, "hole_d": 14.0, "h": 44.8}, comment="32x 14x14 mm sub-cutoff RF pockets (f_TE101=11.22 GHz)"),
     )
-    return BuiltPart(design=design, mesh=mesh, scad_features=feats, density_kg_m3=2150.0)
+    return BuiltPart(design=design, mesh=mesh, scad_features=feats, density_kg_m3=2750.0)
 
 
 def _build_s6_11_03() -> BuiltPart:
@@ -1037,7 +1084,7 @@ def _build_s6_11_04() -> BuiltPart:
     parts: list[SolidMesh] = []
     feats: list[ScadFeature] = []
     for sgn, btag in ((-1.0, "south48"), (1.0, "north48")):
-        sub_mesh, _ = make_staged_coax_loom(12, 20.0, 20.0, spans, z_orig, attenuator_r=3.8, material="CuNi", name=f"S6.11-04_{btag}")
+        sub_mesh, _ = make_staged_coax_loom(48, 20.0, 20.0, spans, z_orig, attenuator_r=0.0, coax_od_mm=0.86, material="CuNi", name=f"S6.11-04_{btag}")
         parts.append(transform_mesh(sub_mesh, translation=(0.0, sgn * 24.0, 0.0)))
         feats.append(
             ScadFeature("add_box", {"dx": 20.0, "dy": 20.0, "dz": 456.0}, translate=(0.0, sgn * 24.0, 0.0), comment=f"48-line CuNi/NbTi cryo coax & Eccosorb bundle ({btag})")

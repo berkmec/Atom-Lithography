@@ -139,6 +139,13 @@ def test_exp129_results_verdicts_figures_and_portability() -> None:
     assert res["verdicts"]["CE7_GAP_RISK_6P89KHZ"] == bool(
         f1_gs["median_Hz"] >= 6893.0 and f1_gs["frac_lt_6893Hz"] <= 0.50
     )
+    # OBS-048 & OBS-029: explicit Exp129 (7.95 MHz) vs Exp136 (3.65 MHz) uncertainty band & DDRF certified yields
+    band = res["machine_impact_R1"]["ab_initio_scale_uncertainty_band_OBS048"]
+    assert band["inter_model_spread_ratio"] > 2.0
+    assert abs(band["exp129_vokl6_abinit_a004_MHz"] - 7.951) < 0.1
+    assert abs(band["exp136_sp3d5s_abinit_a004_MHz"] - 3.648) < 0.05
+    ddrf_y = res["machine_impact_R1"]["ddrf_6p89kHz_certified_yields_VOKL6_HM5962"]
+    assert 0.0 < ddrf_y["F1"] < mb["VOKL6_HM5962_ext"]["F1"]["yield_frac"]
 
     # Portability check: zero hardcoded machine-specific user paths in any newly authored Exp129 file
     forbidden = [re.compile(r"/home/[a-zA-Z0-9_-]+"), re.compile(r"/run/media/"), re.compile(r"[A-Za-z]:\\\\quantum_cell")]

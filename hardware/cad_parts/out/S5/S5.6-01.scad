@@ -9,8 +9,8 @@
 // temp_stage        : 300 K (UHV kaynak)
 // vacuum_grade      : UHV 1.5e-10 Torr
 // tolerance         : ±0.3 nm kalinlik
-// computed_mass_kg  : 12.11494
-// envelope_mm       : 170.000 x 176.000 x 279.500
+// computed_mass_kg  : 10.51709
+// envelope_mm       : 178.143 x 164.141 x 279.500
 // design_maturity   : M0_M1_DETAILED_CAD_DESIGN_ONLY
 // no_lab_measurement: true
 // iec61508_certified: false
@@ -21,8 +21,8 @@
 $fn = 64;
 
 // Nominal bounding envelope parameters (mm)
-bbox_x = 170.0000;
-bbox_y = 176.0000;
+bbox_x = 178.1435;
+bbox_y = 164.1409;
 bbox_z = 279.5000;
 
 // Part-specific parametric dimensions
@@ -63,14 +63,14 @@ module part_S5_6_01() {
               cylinder(d=8.400, h=21.800, center=true);
       }
     }
-    // 316LN MBE source barrel
+    // 316LN MBE source barrel (bored for radial CF ports)
     translate([0.000, 0.000, 114.900]) {
       difference() {
         cylinder(d=136.000, h=190.000, center=true);
         cylinder(d=126.000, h=192.000, center=true);
       }
     }
-    // OFHC Cu water/LN2 cryoshroud
+    // OFHC Cu water/LN2 cryoshroud (bored for radial CF ports)
     translate([0.000, 0.000, 112.000]) {
       difference() {
         cylinder(d=102.000, h=174.000, center=true);
@@ -89,8 +89,8 @@ module part_S5_6_01() {
               cylinder(d=6.600, h=14.700, center=true);
       }
     }
-    // +Y CF40 port for S5.6-03 PBN heater
-    translate([0.000, 81.650, 89.500]) rotate([-90.000, 0.000, 0.000]) {
+    // 310 deg CF40 port for S5.6-03 PBN heater
+    translate([-54.635, -60.678, 148.000]) rotate([0.000, 90.000, 228.000]) {
       difference() {
         cylinder(d=69.500, h=12.700, center=true);
         cylinder(d=38.000, h=14.700, center=true);

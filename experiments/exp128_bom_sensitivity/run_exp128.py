@@ -1291,6 +1291,31 @@ def main() -> None:
             "grid": evpi_table,
         },
         "verdicts": verdicts,
+        "procurement_status": "UNQUOTED_ROM_ESTIMATE",
+        "supply_chain_lead_time_registry_obs061": {
+            "status": "UNQUOTED_ROM_ESTIMATE",
+            "no_supplier_quotes": True,
+            "efabless_migration_note": "Efabless shut down in 2025; S2.4-01/S7.3-01/S6.10-03 SKY130 MPW migrated to active SkyWater/ChipFoundry/TinyTapeout/MOSIS/EUROPRACTICE brokers.",
+            "critical_path_chokepoints": [
+                {"part_id": "S6.8-01", "item": "Bluefors LD400 / Oxford Proteox DR insert", "market": "duopoly", "lead_time_weeks_p10_p50_p90": [36, 56, 84]},
+                {"part_id": "S6.8-03", "item": "20 L STP 3He isotope charge", "market": "strategic_allocation", "lead_time_weeks_p10_p50_p90": [24, 44, 78]},
+                {"part_id": "S5.4-01", "item": "28SiH4 (>99.95% 28Si) FOAK 50 mm epi wafers", "market": "sole_or_duopoly", "lead_time_weeks_p10_p50_p90": [26, 48, 78]},
+                {"part_id": "S6.3-01..05", "item": "8-coil 1.5 T cryo-magnet + >=300 A HTS leads", "market": "specialized_custom", "lead_time_weeks_p10_p50_p90": [28, 46, 72]},
+                {"part_id": "S6.6-01/S6.11-02", "item": "4 K InP HEMT LNA & 20 mK Nb/AlOx/Nb TWPA", "market": "duopoly_custom_foundry", "lead_time_weeks_p10_p50_p90": [24, 40, 68]},
+                {"part_id": "S2.4-01/S7.3-01", "item": "SKY130 MPW ASIC shuttles (SkyWater/ChipFoundry/MOSIS)", "market": "mpw_broker", "lead_time_weeks_p10_p50_p90": [20, 32, 48]},
+                {"part_id": "S2.1..S2.3", "item": "32x32 SOI/TSV MEMS aperture/blanker/mini-lens", "market": "custom_mems_nre", "lead_time_weeks_p10_p50_p90": [16, 30, 52]},
+            ],
+        },
+        "honest_throughput_and_mc_tail_obs068": {
+            "v7_full_P_Program_stoch_gt_100M": float(v7_modular_mc_comparison["M3_v7_0_Safety_Certified_Full"]["P_Program_stoch_gt_100M"]),
+            "v7_full_P_foak_5yr_tco_gt_100M": float(v7_modular_mc_comparison["M3_v7_0_Safety_Certified_Full"]["P_foak_5yr_tco_gt_100M"]),
+            "v7_full_exceeds_5pct_hard_cap": bool(v7_modular_mc_comparison["M3_v7_0_Safety_Certified_Full"]["P_Program_stoch_gt_100M"] >= 0.05),
+            "phase1_base_plus_safety_P_gt_100M": float(v7_modular_mc_comparison["M3_v5_0_Base_Plus_Safety"]["P_Program_stoch_gt_100M"]),
+            "canonical_phased_gate_recommendation": "Phase-1 M3 Base+Safety ($5.393M, P>$100M < 5%) -> RFQ-05 cryogenic price lock -> Phase-2 +Option-Q/+Option-HPC.",
+            "real_1pct_29Si_boed_mean_time_ms": 130.374,
+            "blanker_5pct_dead_step_and_stitch_throughput_pct": 61.51,
+            "wafer_tier_canonical": "FOAK_50mm (cad/params.py & BOM S5.4-01; Fab 200 mm requires scaled bore/LL redesign)",
+        },
         "epistemic_caveat": (
             "No real supplier quotes or laboratory measurements exist. All USD numbers are anchored to "
             "Exp114 public listings ({Liste-Çapası}), Exp114 $720/unit class calibration ({Model-Kalibrasyon-Exp114}), "

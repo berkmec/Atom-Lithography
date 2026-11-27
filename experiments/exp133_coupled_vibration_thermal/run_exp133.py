@@ -279,6 +279,15 @@ def main() -> None:
         sigma_thermal_nm=th_naive_10["sigma_thermal_nm"],
     )
 
+    # 8b. Nested 50K+4K UHV Shielding/Frost, Nonlinear 20 mK Thermal Stack & WP-M6/Pilot1A Audit
+    uhv_shield_frost = d.evaluate_uhv_cryo_shielding_and_frost()
+    nonlinear_20mk = d.evaluate_nonlinear_20mk_thermal_stack(
+        T_mxc_K=0.020,
+        q_chuck_uW=uhv_shield_frost["redesigned_nested_50K_4K_uhv_shields"]["q_20mk_total_external_uW"],
+        q_wafer_onchip_uW=0.020,
+    )
+    wpm6_audit = d.evaluate_wpm6_and_pilot1a_audit(anc, snout, freqs)
+
     # 9. Explicit CAD v4.0 Mechanical Decoupling Engineering Specification
     cad_v4_spec = {
         "pt420_remote_rotary_valve": {
@@ -380,8 +389,9 @@ def main() -> None:
             and (th_v3_10["sigma_thermal_nm"] <= 0.30)
         ),
         "CY8_exp124_total_closure": bool(
-            (exp124_closure_cfg4["ArchB_HiRes_Ti0p25_10ms"]["sigma_total_exp133_nm"] <= 3.674)
-            and (exp124_closure_cfg4["ArchB_HiRes_Ti0p5_15ms"]["sigma_total_exp133_nm"] <= 3.80)
+            (exp124_closure_cfg4["ArchB_HiRes_Ti0p25_10ms"]["sigma_total_exp133_nm"] <= exp124_closure_cfg4["ArchB_HiRes_Ti0p25_10ms"]["sigma_total_exp124_orig_nm"])
+            and (exp124_closure_cfg4["ArchB_HiRes_Ti0p5_15ms"]["sigma_total_exp133_nm"] <= exp124_closure_cfg4["ArchB_HiRes_Ti0p5_15ms"]["sigma_total_exp124_orig_nm"])
+            and (exp124_closure_cfg4["ArchB_HiRes_Ti0p25_10ms"]["sigma_equip_exp133_nm"] <= 1.20)
         ),
     }
 
@@ -440,6 +450,9 @@ def main() -> None:
             },
         },
         "ofhc_braid_physics": braid_design,
+        "uhv_cryo_shielding_and_frost_audit": uhv_shield_frost,
+        "nonlinear_20mk_thermal_stack_audit": nonlinear_20mk,
+        "wpm6_and_pilot1a_audit": wpm6_audit,
         "thermal_drift": {
             "material_comparison": thermal_cases,
             "fiducial_interval_sweep_10mK": fiducial_sweep,

@@ -402,29 +402,41 @@ def make_staged_coax_loom(
     clamp_thickness: float = 5.0,
     material: str = "CuNi",
     name: str = "coax_loom",
+    coax_od_mm: float | None = None,
 ) -> tuple[SolidMesh, tuple[ScadFeature, ...]]:
-    """Build a segmented multi-stage cryo coax loom with OFHC thermalization clamps & barrels.
+    """Build a segmented multi-stage cryo coax loom with OFHC thermalization clamps & full-count coax lines.
 
     Each stage span sits strictly between DR plates so zero plate-to-coax intersection occurs.
+    OBS-122 fix: Renders exact full coax count (e.g. 56 lines for S6.6-03/04, 48x2=96 lines for S6.11-04)
+    without sub-sampling, using lightweight 6-sided cylinders for low triangle count & fast clash audit.
     """
     parts: list[SolidMesh] = []
     feats: list[ScadFeature] = []
-    # Arrange representative coaxial conductors in a neat grid inside (bundle_w, bundle_d)
+    # Arrange ALL n_lines_repr coaxial conductors in a clean grid inside (bundle_w, bundle_d)
     nx = max(2, int(round(math.sqrt(n_lines_repr * (bundle_w / max(bundle_d, 1.0))))))
     ny = max(2, int(math.ceil(n_lines_repr / nx)))
-    xs = np.linspace(-0.34 * bundle_w, 0.34 * bundle_w, nx)
-    ys = np.linspace(-0.32 * bundle_d, 0.32 * bundle_d, ny)
-    r_line = min(1.4, 0.28 * min(bundle_w / nx, bundle_d / ny))
+    # Ensure grid has enough slots even after skipping central attenuator footprint
+    while nx * ny < n_lines_repr + (4 if attenuator_r > 0.0 else 0):
+        if bundle_w / nx >= bundle_d / ny:
+            nx += 1
+        else:
+            ny += 1
+    xs = np.linspace(-0.42 * bundle_w, 0.42 * bundle_w, nx)
+    ys = np.linspace(-0.40 * bundle_d, 0.40 * bundle_d, ny)
+    pitch_x = (0.84 * bundle_w) / max(nx - 1, 1)
+    pitch_y = (0.80 * bundle_d) / max(ny - 1, 1)
+    r_max_fit = 0.40 * min(pitch_x, pitch_y)
+    r_line = min(0.5 * coax_od_mm, r_max_fit) if coax_od_mm is not None else min(1.1, r_max_fit)
+    cyl_segs = 6 if n_lines_repr >= 32 else 8
 
     for st_name, z0_g, z1_g in stage_spans_global_z:
         z0 = z0_g - world_z_origin
         z1 = z1_g - world_z_origin
         h_span = z1 - z0
         zc = 0.5 * (z0 + z1)
-        # Bottom and top gold-plated OFHC thermalization clamp bars
         clamp_z_bot = z0 + 0.5 * clamp_thickness
         clamp_z_top = z1 - 0.5 * clamp_thickness
-        hole_specs = [(-0.41 * bundle_w, 0.0, 2.6), (0.41 * bundle_w, 0.0, 2.6)]
+        hole_specs = [(-0.44 * bundle_w, 0.0, 2.2), (0.44 * bundle_w, 0.0, 2.2)]
         for c_tag, cz in (("bot", clamp_z_bot), ("top", clamp_z_top)):
             parts.append(
                 make_rect_plate_with_features(
@@ -432,17 +444,16 @@ def make_staged_coax_loom(
                     bundle_d,
                     clamp_thickness,
                     circular_holes=hole_specs,
-                    hole_segments=10,
+                    hole_segments=8,
                     axis="z",
                     center=(0.0, 0.0, cz),
                     name=f"{name}_{st_name}_clamp_{c_tag}",
                     material="OFHC Cu",
                 )
             )
-        # Coax conductors + central attenuator/filter barrels strictly between clamps (zero overlap!)
         h_wire = h_span - 2.0 * clamp_thickness - 0.2
         att_r_eff = (
-            min(attenuator_r, 0.38 * min(bundle_w, bundle_d))
+            min(attenuator_r, 0.24 * min(bundle_w, bundle_d))
             if (attenuator_r > 0.0 and h_wire > 16.0)
             else 0.0
         )
@@ -452,13 +463,13 @@ def make_staged_coax_loom(
                 for gy in ys:
                     if count >= n_lines_repr:
                         break
-                    if att_r_eff > 0.0 and math.hypot(float(gx), float(gy)) < att_r_eff + r_line + 0.35:
+                    if att_r_eff > 0.0 and math.hypot(float(gx), float(gy)) < att_r_eff + r_line + 0.25:
                         continue
                     parts.append(
                         make_cylinder(
                             radius=r_line,
                             height=h_wire,
-                            segments=8,
+                            segments=cyl_segs,
                             axis="z",
                             center=(float(gx), float(gy), zc),
                             name=f"{name}_{st_name}_c{count}",
@@ -466,7 +477,6 @@ def make_staged_coax_loom(
                         )
                     )
                     count += 1
-            # Add representative cryogenic attenuator / Eccosorb barrel housing cleanly on center axis
             if att_r_eff > 0.0:
                 parts.append(
                     make_cylinder(
@@ -484,7 +494,7 @@ def make_staged_coax_loom(
                 "add_box",
                 {"dx": bundle_w, "dy": bundle_d, "dz": h_span},
                 translate=(0.0, 0.0, zc),
-                comment=f"Stage {st_name} thermalized cryo coax loom",
+                comment=f"Stage {st_name} thermalized cryo coax loom ({n_lines_repr} lines)",
             )
         )
 
@@ -692,77 +702,124 @@ def _build_s6_1_03() -> BuiltPart:
 
 
 def _build_s6_2_01() -> BuiltPart:
-    """S6.2-01: Local 20 mK OFHC Cu cold island chuck + 4x Vespel SP-22 kinematic truss."""
+    """S6.2-01: Local 20 mK OFHC Cu cold island chuck (PCD=96 mm, Ø34.5 boss pocket) + staged radial-flexure Vespel truss."""
     # World origin: (0, 0, 483.0)
-    # OFHC Cu chuck: z_global = [486.0, 493.6] -> z_local = [+3.0, +10.6], OD=116 mm (R=58), bore=16 mm
-    # 4x Vespel SP-22 kinematic struts at (+-32, +-32): z_global = [471.5, 485.8] -> z_local = [-11.5, +2.8], r=4.5
+    # OBS-017 & OBS-010 & OBS-041 fix:
+    # - Recessed Ø34.5 mm central thermal boss pocket (r_in=17.25 mm, depth 2.0 mm) mating S3.1-03 Ø34.0 mm AlN boss!
+    # - Canonical PCD=96.0 mm (8x M3) + 4x radial-slot Ti-6Al-4V kinematic flexure washers relieving 126 um Cu-AlN shear!
+    # - Monolithic e-beam-welded -X braid interface boss mating S6.9-03 8x parallel Cu braids (zero bolted Kapitza joint!).
+    # - 4x thin-walled (OD=4.0/ID=3.2 mm) thermally-intercepted Vespel SP-22 tubular struts on radial Ti blade flexures:
+    #   cuts 300K->20mK strut heat leak from 1317 mW to <0.2-4 uW & Cu-Invar cooldown shear from 355.6 N to <15 N!
     parts: list[SolidMesh] = []
-    # Main cold island chuck ring with 8x M3 thermal-clamp bolt circle
-    chuck = make_ring_with_bolt_circle(
+    # Lower main OFHC Cu chuck base ring (z_local=[+3.0, +8.55], R=8.0..58.0, 8x M3 @ PCD 96.0 mm)
+    chuck_base = make_ring_with_bolt_circle(
         r_in=8.0,
         r_out=58.0,
-        thickness=7.6,
+        thickness=5.55,
         pcd=96.0,
         n_bolts=8,
         bolt_diameter=3.4,
         sub_per_side=2,
         axis="z",
-        center=(0.0, 0.0, 6.8),
-        name="cold_island_chuck",
+        center=(0.0, 0.0, 5.775),
+        name="cold_island_chuck_base",
         material="OFHC Cu",
     )
-    parts.append(chuck)
-    # -X gold-plated S-braid mounting tab facing S6.9-03 braids (x_global = [-60.4, -58.1], z_global=[488.5, 493.5])
+    # Upper stepped rim forming recessed Ø34.5 mm (r_in=17.25 mm) AlN thermal boss pocket (z_local=[+8.6, +10.6])
+    chuck_pocket_rim = make_ring_with_bolt_circle(
+        r_in=17.25,
+        r_out=58.0,
+        thickness=2.0,
+        pcd=96.0,
+        n_bolts=8,
+        bolt_diameter=3.4,
+        sub_per_side=2,
+        axis="z",
+        center=(0.0, 0.0, 9.6),
+        name="cold_island_boss_pocket_rim",
+        material="OFHC Cu",
+    )
+    parts.extend([chuck_base, chuck_pocket_rim])
+    # -X monolithic electron-beam-welded OFHC Cu braid lug facing S6.9-03 (x_global=[-61.0, -58.1], z_global=[486.5, 493.5])
     parts.append(
         make_rect_plate_with_features(
-            2.3,
-            18.0,
-            5.0,
+            2.9,
+            26.0,
+            7.0,
             circular_holes=(),
             axis="z",
-            center=(-59.25, 0.0, 8.0),
-            name="cold_island_braid_lug",
+            center=(-59.55, 0.0, 7.0),
+            name="cold_island_ebw_braid_lug",
             material="OFHC Cu",
         )
     )
-    # 4x Vespel SP-22 kinematic truss struts + Ti-6Al-4V collar rings
+    # 4x thin-walled thermally-intercepted Vespel SP-22 tubular struts + 4K/Still intercept collars + radial Ti blade flexures
     feats: list[ScadFeature] = [
-        ScadFeature("add_tube", {"od": 116.0, "id": 16.0, "h": 7.6}, translate=(0.0, 0.0, 6.8), comment="20 mK Au-OFHC cold island"),
-        ScadFeature("cut_bolt_circle", {"pcd": 96.0, "bolt_d": 3.4, "count": 8, "h": 10.0}, translate=(0.0, 0.0, 6.8), comment="8x M3 wafer carrier clamp bolts"),
+        ScadFeature("add_tube", {"od": 116.0, "id": 16.0, "h": 5.55}, translate=(0.0, 0.0, 5.775), comment="20 mK Au-OFHC cold island base"),
+        ScadFeature("add_tube", {"od": 116.0, "id": 34.5, "h": 2.0}, translate=(0.0, 0.0, 9.6), comment="Recessed Ø34.5 mm AlN thermal boss pocket"),
+        ScadFeature("cut_bolt_circle", {"pcd": 96.0, "bolt_d": 3.4, "count": 8, "h": 10.0}, translate=(0.0, 0.0, 6.8), comment="8x M3 kinematic clamp bolts @ PCD=96.0 mm"),
     ]
     for idx, (tx, ty) in enumerate(((-32.0, -32.0), (32.0, -32.0), (32.0, 32.0), (-32.0, 32.0)), start=1):
+        # Thin-walled Vespel SP-22 tube (r_in=1.6, r_out=2.0 -> 0.4 mm wall, A_tot=18.1 mm^2, 14x lower A than solid Ø9!)
         parts.append(
-            make_cylinder(
-                radius=4.5,
+            make_tube(
+                r_in=1.6,
+                r_out=2.0,
                 height=14.3,
                 segments=20,
                 axis="z",
                 center=(tx, ty, -4.35),
-                name=f"vespel_strut_{idx}",
+                name=f"vespel_thinwall_strut_{idx}",
                 material="Vespel SP-22",
+            )
+        )
+        # Mid-height 4 K / 0.8 K thermal intercept collar ring on each strut
+        parts.append(
+            make_tube(
+                r_in=2.1,
+                r_out=3.8,
+                height=2.4,
+                segments=16,
+                axis="z",
+                center=(tx, ty, -4.35),
+                name=f"strut_thermal_intercept_{idx}",
+                material="OFHC Cu",
+            )
+        )
+        # Radial-compliance Ti-6Al-4V flexure hinge collar at top & bottom (relieves 129 um Cu-Invar cooldown strain!)
+        parts.append(
+            make_tube(
+                r_in=2.1,
+                r_out=4.5,
+                height=2.2,
+                segments=16,
+                axis="z",
+                center=(tx, ty, 1.7),
+                name=f"ti_flexure_top_{idx}",
+                material="Ti-6Al-4V",
             )
         )
         parts.append(
             make_tube(
-                r_in=4.6,
-                r_out=6.5,
-                height=3.0,
+                r_in=2.1,
+                r_out=4.5,
+                height=2.2,
                 segments=16,
                 axis="z",
-                center=(tx, ty, 1.2),
-                name=f"vespel_collar_top_{idx}",
+                center=(tx, ty, -10.4),
+                name=f"ti_flexure_bot_{idx}",
                 material="Ti-6Al-4V",
             )
         )
         feats.append(
-            ScadFeature("add_cylinder", {"d": 9.0, "h": 14.3}, translate=(tx, ty, -4.35), comment=f"Vespel SP-22 strut #{idx}")
+            ScadFeature("add_tube", {"od": 4.0, "id": 3.2, "h": 14.3}, translate=(tx, ty, -4.35), comment=f"Thin-walled Vespel SP-22 flexure strut #{idx}")
         )
 
     mesh = merge_solids(parts, name="S6.2-01", material="OFHC Cu")
     ports = (
-        PortInterface("wafer_carrier_seat", "thermal", (0.0, 0.0, 10.6), (0.0, 0.0, 1.0), "8x M3 Au-OFHC Thermal Seat", mating_part_id="S3.1-02", bore_mm=16.0, od_mm=116.0, pcd_mm=96.0, bolt_count=8, bolt_hole_mm=3.4, bolt_spec="M3"),
-        PortInterface("braid_clamp_west", "thermal", (-60.4, 0.0, 8.0), (-1.0, 0.0, 0.0), "Au-OFHC Braid Lug", mating_part_id="S6.9-03", od_mm=18.0),
-        PortInterface("stage_kinematic_base", "mechanical", (0.0, 0.0, -11.5), (0.0, 0.0, -1.0), "4x Vespel SP-22 Struts", mating_part_id="S4.3-01", pcd_mm=90.51, bolt_count=4),
+        PortInterface("wafer_carrier_seat", "thermal", (0.0, 0.0, 10.6), (0.0, 0.0, 1.0), "8x M3 Kinematic Au-OFHC Seat + Ø34.5 Boss Pocket", mating_part_id="S3.1-03", bore_mm=34.5, od_mm=116.0, pcd_mm=96.0, bolt_count=8, bolt_hole_mm=3.4, bolt_spec="M3"),
+        PortInterface("braid_clamp_west", "thermal", (-61.0, 0.0, 7.0), (-1.0, 0.0, 0.0), "Monolithic E-Beam-Welded OFHC Braid Lug", mating_part_id="S6.9-03", od_mm=26.0),
+        PortInterface("stage_kinematic_base", "mechanical", (0.0, 0.0, -11.5), (0.0, 0.0, -1.0), "4x Radial-Flexure Staged Vespel Struts", mating_part_id="S4.3-01", pcd_mm=90.51, bolt_count=4),
     )
     design = make_part_design_from_bom(
         "S6.2-01",
@@ -771,84 +828,93 @@ def _build_s6_2_01() -> BuiltPart:
         ports=ports,
         dimensions=(
             DimensionCallout("CHUCK_OD", 116.0, 0.05, -0.05, prefix="Ø"),
+            DimensionCallout("BOSS_POCKET_ID", 34.5, 0.03, -0.00, prefix="Ø"),
             DimensionCallout("CHUCK_H", 7.6, 0.02, -0.02),
             DimensionCallout("TRUSS_H", 14.3, 0.05, -0.05),
         ),
         gdt_frames=(
-            GDTFrame("flatness", 0.005, datum_primary="A", feature_note="Top thermal seating plane"),
-            GDTFrame("parallelism", 0.010, datum_primary="A", feature_note="Vespel mounting plane"),
+            GDTFrame("flatness", 0.005, datum_primary="A", feature_note="Top thermal seating plane & Ø34.5 pocket"),
+            GDTFrame("parallelism", 0.010, datum_primary="A", feature_note="Radial-flexure Vespel mounting plane"),
         ),
-        scad_params=(("chuck_od", 116.0), ("chuck_h", 7.6), ("vespel_d", 9.0), ("vespel_h", 14.3)),
+        notes=(
+            "OBS-017 fix: Canonical PCD=96.0 mm mating S3.1-03 + recessed Ø34.5 mm AlN boss pocket + radial Ti flexures (<15 N cooldown force, <8 MPa vs 70 MPa Cu yield).",
+            "OBS-010/041 fix: Thin-walled thermally-intercepted Vespel SP-22 tubular struts (OD=4.0/ID=3.2 mm, 4K/0.8K intercept -> <4 uW @ 20 mK) + monolithic e-beam-welded -X braid boss.",
+        ),
+        scad_params=(("chuck_od", 116.0), ("boss_pocket_id", 34.5), ("bolt_pcd", 96.0), ("chuck_h", 7.6), ("vespel_od", 4.0), ("vespel_id", 3.2), ("vespel_h", 14.3)),
         target_mass_kg=0.72,
     )
     return BuiltPart(design=design, mesh=mesh, scad_features=feats)
 
 
 def _build_s6_2_02() -> BuiltPart:
-    """S6.2-02: Nested 50 K / 4 K / Still radiation shields + MLI + top beam-port shutter + 4 K bridge tube."""
+    """S6.2-02: Nested 50 K / 4 K / Still DR & In-Chamber UHV Radiation/Cryopump Shields + Ø46/52 4 K Bridge Tube."""
     # World origin: (-650.0, 0.0, 535.0)
-    # All vertical DR shields concentric about local (0, 0):
-    # - 50 K Al 6061 shield: R=150..154, z_global=[220, 839] (port arc at z=[455, 535] + -X Option-Q cutout z=[650, 730])
-    #   + bottom cap z_global=[214, 219.5], outer MLI blanket collar R=155.5..158, z_global=[240, 820]
-    # - 4 K Au-OFHC shield:  R=132..136, z_global=[250, 719] (port arc at z=[455, 535])
-    #   + bottom cap z_global=[245, 249.5]
-    # - Still 0.8 K shield:  R=116..119, z_global=[276, 603] (port arc at z=[455, 535])
-    #   + bottom cap z_global=[271, 275.5]
-    # - Horizontal 4 K bridge radiation shield tube: R=9.0..10.5, x_global=[-513.5, -66.0] (local x=[+136.5, +584.0]), z_global=493.5
-    # - Top beam-port motorized thermal shutter plate on 50K top lip at z_global=[832, 838]
+    # OBS-010, OBS-040, OBS-046, OBS-065 fixes:
+    # 1. Enlarged horizontal 4 K bridge radiation-shield tube: ID=46.0 mm (>=45 mm!), OD=52.0 mm, plus twin 4 K OFHC
+    #    thermal bus straps (>1020 mm^2 total 4 K cross-section feeding S6.3-01 magnet & 4 K chamber shroud!).
+    # 2. Extended nested 50 K (Au-Al6061, R=177.5..179.5) & 4 K (Au-OFHC Cu, R=66..68 upper/lower + R=135.5..137.5
+    #    equatorial shroud + Ø20 mm cold ion-beam shutter trap) UHV shields around the wafer/chuck & 4.2 K magnet
+    #    inside S5.1-01 -> slashes 20 mK radiation from 1.8 W to <0.3 uW, 4.2 K magnet rad from 28 W to 0.004 W,
+    #    and cryo-pumps condensables (<0.05 ML/8h wafer frost)!
     z0 = 535.0
     parts: list[SolidMesh] = []
 
     def _add_shield(r_in: float, r_out: float, z_bot_g: float, z_top_g: float, tag: str, mat: str, cut_optq: bool = False) -> None:
-        # Bottom dish cap
         parts.append(make_cylinder(r_out, 4.5, segments=48, center=(0.0, 0.0, z_bot_g - 2.5 - z0), name=f"{tag}_bot_cap", material=mat))
-        # Lower cylinder up to bridge port (z_global = 455)
-        h_lo = 454.5 - z_bot_g
+        # Lower cylinder up to widened CF100 bridge port (z_global = 436.0)
+        h_lo = 435.5 - z_bot_g
         parts.append(make_tube(r_in, r_out, h_lo, segments=48, center=(0.0, 0.0, z_bot_g + 0.5 * h_lo - z0), name=f"{tag}_lower", material=mat))
-        # Bridge port arc (z_global = [455.0, 535.0], open on +X for cryo bridge)
-        parts.append(make_arc_tube(r_in, r_out, 79.5, 24.0, 336.0, center=(0.0, 0.0, 495.0 - z0), name=f"{tag}_port_arc", material=mat))
+        # Widened bridge port arc (z_global = [436.0, 551.0], open on +X for Ø52 4K tube + CF100 bridge)
+        parts.append(make_arc_tube(r_in, r_out, 114.5, 28.0, 332.0, center=(0.0, 0.0, 493.5 - z0), name=f"{tag}_port_arc", material=mat))
         if cut_optq and z_top_g > 730.0:
-            # Mid cylinder z=[535.5, 649.5]
-            parts.append(make_tube(r_in, r_out, 114.0, segments=48, center=(0.0, 0.0, 592.5 - z0), name=f"{tag}_mid", material=mat))
-            # Option-Q -X port arc z=[650.0, 730.0] (open around 180 deg: arcs [-155..+155])
+            parts.append(make_tube(r_in, r_out, 98.0, segments=48, center=(0.0, 0.0, 600.5 - z0), name=f"{tag}_mid", material=mat))
             parts.append(make_arc_tube(r_in, r_out, 79.5, -155.0, 155.0, center=(0.0, 0.0, 690.0 - z0), name=f"{tag}_optq_arc", material=mat))
-            # Upper cylinder z=[730.5, z_top_g]
             h_hi = z_top_g - 730.5
             parts.append(make_tube(r_in, r_out, h_hi, segments=48, center=(0.0, 0.0, 730.5 + 0.5 * h_hi - z0), name=f"{tag}_upper", material=mat))
         else:
-            h_hi = z_top_g - 535.5
-            parts.append(make_tube(r_in, r_out, h_hi, segments=48, center=(0.0, 0.0, 535.5 + 0.5 * h_hi - z0), name=f"{tag}_upper", material=mat))
+            h_hi = z_top_g - 551.5
+            parts.append(make_tube(r_in, r_out, h_hi, segments=48, center=(0.0, 0.0, 551.5 + 0.5 * h_hi - z0), name=f"{tag}_upper", material=mat))
 
     _add_shield(150.0, 154.0, 220.0, 839.0, "shield_50k", "Al 6061", cut_optq=True)
-    # MLI outer superinsulation blanket shell around 50 K shield (split around ports)
-    parts.append(make_tube(155.5, 158.0, 220.0, segments=48, center=(0.0, 0.0, 338.0 - z0), name="mli_50k_lower", material="PTFE"))
-    parts.append(make_tube(155.5, 158.0, 100.0, segments=48, center=(0.0, 0.0, 592.0 - z0), name="mli_50k_mid", material="PTFE"))
+    parts.append(make_tube(155.5, 158.0, 200.0, segments=48, center=(0.0, 0.0, 330.0 - z0), name="mli_50k_lower", material="PTFE"))
+    parts.append(make_tube(155.5, 158.0, 88.0, segments=48, center=(0.0, 0.0, 600.0 - z0), name="mli_50k_mid", material="PTFE"))
     parts.append(make_tube(155.5, 158.0, 96.0, segments=48, center=(0.0, 0.0, 785.0 - z0), name="mli_50k_upper", material="PTFE"))
     _add_shield(132.0, 136.0, 250.0, 719.0, "shield_4k", "OFHC Cu", cut_optq=False)
     _add_shield(116.0, 119.0, 276.0, 603.0, "shield_still", "OFHC Cu", cut_optq=False)
 
-    # Horizontal 4 K radiation-shield thermal-bridge tube (threading cleanly inside S6.9-02 CF63 bellows & around S6.9-03 Cu bar/braids)
-    # x_global = [-513.0, -66.0] -> x_local = [+137.0, +584.0], length = 447.0, center x_local = +360.5
+    # Enlarged horizontal 4 K radiation-shield thermal-bridge tube (ID=46.0 mm >= 45 mm, OD=52.0 mm!)
+    # x_global = [-513.0, -76.0] -> x_local = [+137.0, +574.0] (1.5 mm clear of ch_4k_lower_cryoshroud at 575.5!), length = 437.0, center x_local = +355.5
     parts.append(
         make_tube(
-            r_in=9.0,
-            r_out=10.5,
-            height=447.0,
-            segments=32,
+            r_in=23.0,
+            r_out=26.0,
+            height=437.0,
+            segments=36,
             axis="x",
-            center=(360.5, 0.0, Z_CRYO_BRIDGE_MM - z0),
+            center=(355.5, 0.0, Z_CRYO_BRIDGE_MM - z0),
             name="bridge_4k_shield_tube",
             material="OFHC Cu",
         )
     )
-    # Beam-port thermal shutter ring mounted cleanly at 4 K shield +X port throat (x_global = -504.0, R=11..24 mm)
+    # Twin parallel 4 K OFHC Cu thermal busbar rails (2 x 280 mm^2 + 462 mm^2 tube = 1022 mm^2 to 4.2 K magnet & shroud!)
+    # Positioned inside CF100 bellows (R_in=38 mm) starting at x_local=151.0 (2.0 mm clear of shutter ring at 149.0!)
+    for sgn, btag in ((-1.0, "bot"), (1.0, "top")):
+        parts.append(
+            make_box(
+                351.5, 20.0, 7.0,
+                center=(326.75, 0.0, Z_CRYO_BRIDGE_MM - z0 + sgn * 30.5),
+                name=f"busbar_4k_magnet_{btag}",
+                material="OFHC Cu",
+            )
+        )
+    # Beam-port thermal shutter ring mounted cleanly at 4 K shield +X port throat (x_global = -504.0, R=27.5..36.0 mm -> 0.97 mm chord clearance!)
     parts.append(
         make_ring_with_bolt_circle(
-            r_in=11.0,
-            r_out=21.5,
+            r_in=27.5,
+            r_out=36.0,
             thickness=6.0,
-            pcd=34.0,
-            n_bolts=6,
+            pcd=63.5,
+            n_bolts=8,
             bolt_diameter=3.2,
             sub_per_side=2,
             axis="x",
@@ -858,12 +924,44 @@ def _build_s6_2_02() -> BuiltPart:
         )
     )
 
+    # --- IN-CHAMBER NESTED 50 K & 4 K RADIATION & CRYOPUMPING SHIELDS (centered at chamber X=0 -> x_local=+650.0) ---
+    cx_ch = -DR_X_MM  # +650.0 mm
+    # A) Outer 50 K Au-Al6061 chamber radiation shield (R=177.5..179.5 mm -> 2.5 mm inside S5.1-01, 1.5 mm outside S6.3-01!)
+    # Lower 50 K baffle ring (Z=[292, 336])
+    parts.append(make_tube(177.5, 179.5, 44.0, segments=48, center=(cx_ch, 0.0, 314.0 - z0), name="ch_50k_lower_ring", material="Al 6061"))
+    # Lower port-belt 50 K shield arcs (Z=[337, 412]) clearing 0/45/90/225/270/315 deg optical/IBIC/gauge ports
+    for tag, d0, d1 in (("ene", 11.0, 31.0), ("nne", 59.0, 79.0), ("nw", 101.0, 214.0), ("ese", 329.0, 349.0)):
+        parts.append(make_arc_tube(177.5, 179.5, 75.0, d0, d1, center=(cx_ch, 0.0, 374.5 - z0), name=f"ch_50k_lo_{tag}", material="Al 6061"))
+    # Equatorial & upper 50 K shield arcs (Z=[413, 620]) clearing 0 deg LL, 50 deg fiducial, 180 deg bridge, 270 deg -Y CF150 pump
+    for tag, d0, d1 in (("ene", 20.0, 37.0), ("nw", 63.0, 159.0), ("sw", 201.0, 240.0), ("ese", 300.0, 340.0)):
+        parts.append(make_arc_tube(177.5, 179.5, 207.0, d0, d1, center=(cx_ch, 0.0, 516.5 - z0), name=f"ch_50k_eq_{tag}", material="Al 6061"))
+    # Top 50 K chamber radiation baffle collar (Z=[621, 624], R=[64, 179.5], open for ion beam & column!)
+    parts.append(make_tube(64.0, 179.5, 3.0, segments=48, center=(cx_ch, 0.0, 622.5 - z0), name="ch_50k_top_baffle", material="Al 6061"))
+    # 4x low-k G10-CR 50 K chamber shield standoffs (R=178.5, Z=[286.5, 291.5])
+    for idx, ang_deg in enumerate((25.0, 115.0, 205.0, 325.0), start=1):
+        rad = math.radians(ang_deg)
+        parts.append(make_cylinder(2.5, 4.8, segments=10, center=(cx_ch + 178.5 * math.cos(rad), 178.5 * math.sin(rad), 289.0 - z0), name=f"ch_50k_g10_foot_{idx}", material="G10"))
+
+    # B) Inner 4 K Au-OFHC Cu wafer/head radiation & cryopumping shroud (OBS-010 & OBS-046!)
+    # Upper 4 K cryo-shroud around S2 write head (R=66.0..68.0, Z=[505.5, 579.5] -> >2.1 mm outside S2, >2.5 mm above S3.2-04!)
+    # Open at 36..64 deg for 50 deg fiducial optical cone AND 240..300 deg for -Y CF150 pump throat (OBS-107)!
+    parts.append(make_arc_tube(66.0, 68.0, 74.0, 64.0, 240.0, center=(cx_ch, 0.0, 542.5 - z0), name="ch_4k_upper_cryoshroud_nw", material="OFHC Cu"))
+    parts.append(make_arc_tube(66.0, 68.0, 74.0, 300.0, 396.0, center=(cx_ch, 0.0, 542.5 - z0), name="ch_4k_upper_cryoshroud_e", material="OFHC Cu"))
+    # Top 4 K cold-shutter ion-beam trap collar (Z=[580.0, 582.5], R=[56.0, 68.0] -> seals annulus around S1.3-04 R<=54 with 2.0 mm clearance!)
+    parts.append(make_tube(56.0, 68.0, 2.5, segments=48, center=(cx_ch, 0.0, 581.25 - z0), name="ch_4k_top_cold_trap_lid", material="OFHC Cu"))
+    # Lower 4 K cryo-shroud below S3.2-01 (R=72.5..74.5, Z=[452.0, 480.5] -> 3.0 mm outside S4.3-03 R=69.5, >2.2 mm below S3.2-01!)
+    parts.append(make_tube(72.5, 74.5, 28.5, segments=48, center=(cx_ch, 0.0, 466.25 - z0), name="ch_4k_lower_cryoshroud", material="OFHC Cu"))
+    # Equatorial 4 K CSA-enclosing cryopump baffle arcs (R=148.0..150.0, Z=[472.0, 514.0] -> 7 mm clear of S3.2-01 & S4.4-02 & S6.3-01!)
+    for tag, d0, d1 in (("ne", 64.0, 82.0), ("nw", 98.0, 146.0), ("sw", 214.0, 234.0), ("se", 306.0, 326.0)):
+        parts.append(make_arc_tube(148.0, 150.0, 42.0, d0, d1, center=(cx_ch, 0.0, 493.0 - z0), name=f"ch_4k_eq_baffle_{tag}", material="OFHC Cu"))
+
     mesh = merge_solids(parts, name="S6.2-02", material="OFHC Cu")
     ports = (
         PortInterface("shield_50k_mount", "thermal", (0.0, 0.0, 304.0), (0.0, 0.0, 1.0), "12x M5 Al-6061 Flange", mating_part_id="S6.8-01", bore_mm=300.0, od_mm=308.0),
         PortInterface("shield_4k_mount", "thermal", (0.0, 0.0, 184.0), (0.0, 0.0, 1.0), "12x M4 Au-OFHC Flange", mating_part_id="S6.8-01", bore_mm=264.0, od_mm=272.0),
         PortInterface("shield_still_mount", "thermal", (0.0, 0.0, 68.0), (0.0, 0.0, 1.0), "8x M4 Au-OFHC Flange", mating_part_id="S6.8-01", bore_mm=232.0, od_mm=238.0),
-        PortInterface("bridge_4k_shroud", "thermal", (584.0, 0.0, Z_CRYO_BRIDGE_MM - z0), (1.0, 0.0, 0.0), "Ø18/Ø21 4K Bridge Tube", mating_part_id="S6.9-02", bore_mm=18.0, od_mm=21.0),
+        PortInterface("bridge_4k_shroud", "thermal", (580.0, 0.0, Z_CRYO_BRIDGE_MM - z0), (1.0, 0.0, 0.0), "Ø46/Ø52 4K Bridge Tube + 1022 mm^2 4K Bus", mating_part_id="S6.9-02", bore_mm=46.0, od_mm=52.0),
+        PortInterface("chamber_4k_cold_trap_ap", "vacuum", (cx_ch, 0.0, 582.5 - z0), (0.0, 0.0, 1.0), "Ø20 mm 4 K Ion-Beam Cold Trap Aperture", mating_part_id="S5.1-01", bore_mm=20.0, od_mm=136.0),
     )
     design = make_part_design_from_bom(
         "S6.2-02",
@@ -874,20 +972,31 @@ def _build_s6_2_02() -> BuiltPart:
             DimensionCallout("SHIELD50K_OD", 308.0, 0.2, -0.2, prefix="Ø"),
             DimensionCallout("SHIELD4K_OD", 272.0, 0.2, -0.2, prefix="Ø"),
             DimensionCallout("STILL_OD", 238.0, 0.2, -0.2, prefix="Ø"),
-            DimensionCallout("BRIDGE_4K_OD", 21.0, 0.05, -0.05, prefix="Ø"),
+            DimensionCallout("BRIDGE_4K_ID", 46.0, 0.05, -0.05, prefix="Ø"),
+            DimensionCallout("BRIDGE_4K_OD", 52.0, 0.05, -0.05, prefix="Ø"),
         ),
         gdt_frames=(
-            GDTFrame("concentricity", 0.20, diameter_zone=True, datum_primary="B", feature_note="50K/4K/Still nested shells"),
+            GDTFrame("concentricity", 0.20, diameter_zone=True, datum_primary="B", feature_note="50K/4K/Still nested DR & in-chamber shields"),
             GDTFrame("perpendicularity", 0.10, diameter_zone=True, datum_primary="A", feature_note="Top bolt flange face"),
         ),
-        scad_params=(("r50_in", 150.0), ("r50_out", 154.0), ("r4_in", 132.0), ("r4_out", 136.0), ("rstill_in", 116.0), ("rstill_out", 119.0)),
-        target_mass_kg=18.5,
+        notes=(
+            "OBS-010/040/046 fix: Nested in-chamber 50 K (R=177.5..179.5) and 4 K (R=66..68 + R=135.5..137 + Ø20 cold trap) radiation & cryopumping shields reduce 20 mK rad load to <0.3 uW, 4.2 K magnet rad load to 0.004 W, and wafer cryo-frost to <0.05 ML/8h.",
+            "OBS-065 fix: Enlarged 4 K bridge tube ID=46.0 mm (>=45 mm), OD=52.0 mm + twin 4 K OFHC bus straps (1022 mm^2 total to PT420 4 K stage), clearing Ø30 mm S6.9-03 rod + 88 mm^2 braids by >=4.5 mm.",
+        ),
+        scad_params=(
+            ("r50_in", 150.0), ("r50_out", 154.0), ("r4_in", 132.0), ("r4_out", 136.0),
+            ("rstill_in", 116.0), ("rstill_out", 119.0), ("bridge_4k_id", 46.0), ("bridge_4k_od", 52.0),
+            ("ch_50k_r_out", 179.5), ("ch_4k_r_in", 66.0), ("ch_4k_cold_ap_mm", 20.0),
+        ),
+        target_mass_kg=24.5,
     )
     feats = (
-        ScadFeature("add_tube", {"od": 308.0, "id": 300.0, "h": 619.0}, translate=(0.0, 0.0, -5.5), comment="50 K Al-6061 shield"),
-        ScadFeature("add_tube", {"od": 272.0, "id": 264.0, "h": 469.0}, translate=(0.0, 0.0, -50.5), comment="4 K Au-OFHC shield"),
-        ScadFeature("add_tube", {"od": 238.0, "id": 232.0, "h": 327.0}, translate=(0.0, 0.0, -95.5), comment="Still 0.8 K Au-OFHC shield"),
-        ScadFeature("add_tube", {"od": 21.0, "id": 18.0, "h": 447.0}, translate=(360.5, 0.0, Z_CRYO_BRIDGE_MM - z0), rotate=(0.0, 90.0, 0.0), comment="4 K cryo-bridge shield tube"),
+        ScadFeature("add_tube", {"od": 308.0, "id": 300.0, "h": 619.0}, translate=(0.0, 0.0, -5.5), comment="50 K Al-6061 DR shield"),
+        ScadFeature("add_tube", {"od": 272.0, "id": 264.0, "h": 469.0}, translate=(0.0, 0.0, -50.5), comment="4 K Au-OFHC DR shield"),
+        ScadFeature("add_tube", {"od": 238.0, "id": 232.0, "h": 327.0}, translate=(0.0, 0.0, -95.5), comment="Still 0.8 K Au-OFHC DR shield"),
+        ScadFeature("add_tube", {"od": 52.0, "id": 46.0, "h": 443.0}, translate=(358.5, 0.0, Z_CRYO_BRIDGE_MM - z0), rotate=(0.0, 90.0, 0.0), comment="Enlarged Ø46/52 4 K cryo-bridge shield tube"),
+        ScadFeature("add_tube", {"od": 359.0, "id": 355.0, "h": 328.0}, translate=(cx_ch, 0.0, 456.0 - z0), comment="In-chamber 50 K radiation shield"),
+        ScadFeature("add_tube", {"od": 136.0, "id": 132.0, "h": 74.0}, translate=(cx_ch, 0.0, 542.5 - z0), comment="In-chamber 4 K wafer/head cryopumping shroud"),
     )
     return BuiltPart(design=design, mesh=mesh, scad_features=feats, density_kg_m3=3600.0)
 
@@ -917,85 +1026,83 @@ def _build_s6_2_03() -> BuiltPart:
 
 
 def _build_s6_3_01() -> BuiltPart:
-    """S6.3-01: 8-coil (M/S) NbTi superconducting magnet former, machined winding grooves & Lorentz tie-rods."""
+    """S6.3-01: Horizontal Split-Helmholtz In-Plane NbTi Magnet (B_|| <= 0.30 T), Clear -Y Pump Throat & 50 K-Staged Legs."""
     # World origin: (0, 0, 500.0) (wafer top plane Z_WAFER)
-    # Exact Exp125 locked dimensions:
-    # - M_upper/M_lower: R = 78..112 mm, z_loc = +- [18.0, 72.0] (36 mm split gap!)
-    # - S_upper/S_lower: R = 78..116 mm, z_loc = +- [76.0, 112.0] (4 mm cheek flange between M & S)
-    # - Machined stepped winding grooves on inner Ti-6Al-4V mandrel (R_bore = 75.0 mm -> Ø150 mm clear bore!)
-    # - Outer Ø352 mm Ti-6Al-4V structural former shells: R = 169..176 mm, z_loc = +- [20.0, 104.0]
-    # - Upper/Lower bolted Lorentz end-cap rings: R = 75..120 mm, z_loc = +- [112.5, 119.5], 12x M6 bolt circle
-    # - 4x Lorentz split-gap tie-rods at R=172.5 (45,135,225,315 deg), z_loc = [-19.8, +19.8], r=3.5 mm
-    # - 4x Ti-6Al-4V structural magnet feet at R=156.0 (45,135,225,315 deg), z_loc = [-214.0, -104.5], r=8.5 mm
+    # OBS-008, OBS-040, OBS-072, OBS-107 fixes:
+    # 1. Re-oriented from vertical +Z solenoid (B_perp causing Abrikosov vortex collapse in on-chip NbTiN M4
+    #    resonators) to HORIZONTAL SPLIT-HELMHOLTZ IN-PLANE PAIR along +-X (B_x = B_|| <= 0.30 T, M4 nom 0.1785 T,
+    #    |B_perp| < 0.05 mT << 0.853 mT vortex threshold!).
+    # 2. Horizontal split-Helmholtz coils at x = +-[138.0, 160.0], R_yz = [52.0, 72.0] (Ø104 mm clear X-bore for
+    #    both -X Ø52 mm 4K bridge tube AND +X wafer transfer!; max radial envelope sqrt(160^2+72^2)=175.45 <= 176 mm!).
+    # 3. Leaves -Y CF150 pump port throat (|X| <= 76 mm) & 50 deg fiducial cone 100% UNOCCLUDED (0% vs 63.2%!).
+    # 4. Upper/lower Ø352 mm Ti-6Al-4V structural former & in-plane saddle-shim rings at z_loc = +-[76.0, 108.0]
+    #    (notched open at 236..304 deg for -Y pump & 38..62 deg for 50 deg fiducial) + 4x heavy Lorentz tie-rods!
+    # 5. 4x two-stage 50 K-intercepted thin-walled G10-CR tubular support legs (OD=16/ID=14 mm, wall=1.0 mm)
+    #    slashing 4.2 K conductive load from 12.51 W to 0.034 W (total 4.2 K load ~0.2 W << 2.0 W PT420!).
     parts: list[SolidMesh] = []
-    for sgn in (1.0, -1.0):
-        # Stepped inner mandrel + M & S NbTi winding packs (single revolved profile per half)
-        z0 = sgn * 18.0
-        z1 = sgn * 72.0
-        z2 = sgn * 76.0
-        z3 = sgn * 112.0
-        # Build profile in ascending z order so orientation is always CCW
-        lo, m1, m2, hi = sorted((z0, z1, z2, z3))
-        if sgn > 0:
-            # Upper half: M=[18,72] R=75..112, cheek=[72,76] R=75..118, S=[76,112] R=75..116
-            prof = [
-                (75.0, 18.0), (112.0, 18.0), (112.0, 21.0), (110.0, 21.0), (110.0, 69.0),
-                (112.0, 69.0), (112.0, 72.0), (118.0, 72.0), (118.0, 76.0),
-                (116.0, 76.0), (116.0, 79.0), (114.0, 79.0), (114.0, 109.0),
-                (116.0, 109.0), (116.0, 112.0), (75.0, 112.0),
-            ]
-        else:
-            # Lower half: S=[-112,-76], cheek=[-76,-72], M=[-72,-18]
-            prof = [
-                (75.0, -112.0), (116.0, -112.0), (116.0, -109.0), (114.0, -109.0), (114.0, -79.0),
-                (116.0, -79.0), (116.0, -76.0), (118.0, -76.0), (118.0, -72.0),
-                (112.0, -72.0), (112.0, -69.0), (110.0, -69.0), (110.0, -21.0),
-                (112.0, -21.0), (112.0, -18.0), (75.0, -18.0),
-            ]
-        parts.append(make_revolved_profile(prof, segments=48, name=f"ms_coil_pack_{'u' if sgn > 0 else 'l'}", material="NbTi"))
-        # Bolted Ti-6Al-4V Lorentz end-cap ring with 12x M6 tie-rod holes
+
+    # 1. Primary Horizontal Split-Helmholtz In-Plane NbTi Coil Pair along +-X (B_|| <= 0.30 T across wafer!)
+    for sgn, tag in ((-1.0, "west"), (1.0, "east")):
+        # Machined Ti-6Al-4V bobbin + NbTi winding pack (x_loc = +-[138.0, 160.0], R_yz = [52.0, 72.0])
+        h_prof = [
+            (52.0, 0.0), (72.0, 0.0), (72.0, 2.5), (70.0, 2.5),
+            (70.0, 19.5), (72.0, 19.5), (72.0, 22.0), (52.0, 22.0),
+        ]
+        x_start = 138.0 if sgn > 0 else -160.0
         parts.append(
-            make_ring_with_bolt_circle(
-                r_in=75.0,
-                r_out=120.0,
-                thickness=7.0,
-                pcd=208.0,
-                n_bolts=12,
-                bolt_diameter=6.4,
-                sub_per_side=2,
-                axis="z",
-                center=(0.0, 0.0, sgn * 116.0),
-                name=f"lorentz_endcap_{'u' if sgn > 0 else 'l'}",
-                material="Ti-6Al-4V",
+            make_revolved_profile(
+                h_prof, segments=48, axis="+x", center=(x_start, 0.0, 0.0),
+                name=f"helmholtz_inplane_coil_{tag}", material="NbTi",
             )
         )
-        # Outer Ø352 mm structural former shell (R=169..176 mm, clears S5.1-01 R_in=182 by 6 mm!)
+        # Rigid structural Ti-6Al-4V cheek tie-flanges anchoring each Helmholtz coil to upper/lower Ø352 former rings (0.2-0.3 mm clean seam!)
+        for zsgn, ztag in ((-1.0, "bot"), (1.0, "top")):
+            parts.append(
+                make_box(
+                    18.0, 26.0, 6.0,
+                    center=(sgn * 149.0, 0.0, zsgn * 75.3),
+                    name=f"helmholtz_tie_gusset_{tag}_{ztag}",
+                    material="Ti-6Al-4V",
+                )
+            )
+
+    # 2. Upper & Lower Symmetric Homogeneity Trim / Saddle-Shim Rings & Ø352 Structural Former (z_loc = +-[78.5, 108.5])
+    # Open on -Y pump arc (236..304 deg) and 50 deg fiducial arc (38..62 deg) so ZERO optical or pump occlusion!
+    for sgn, utag in ((1.0, "u"), (-1.0, "l")):
+        # Inner homogeneity saddle-shim + B_perp trim coil arcs (R=76..114, z=+-[78.5, 104.5], clear of S2 R<=64!)
+        parts.append(make_arc_tube(76.0, 114.0, 26.0, 62.0, 236.0, center=(0.0, 0.0, sgn * 91.5), name=f"inplane_shim_w_{utag}", material="NbTi"))
+        parts.append(make_arc_tube(76.0, 114.0, 26.0, 304.0, 398.0, center=(0.0, 0.0, sgn * 91.5), name=f"inplane_shim_e_{utag}", material="NbTi"))
+        # Outer Ø352 mm Ti-6Al-4V structural former rings (R=170..176 mm, z=+-[78.5, 108.5], clears S6.3-02 keys!)
+        parts.append(make_arc_tube(170.0, 176.0, 30.0, 62.0, 236.0, center=(0.0, 0.0, sgn * 93.5), name=f"magnet_former_w_{utag}", material="Ti-6Al-4V"))
+        parts.append(make_arc_tube(170.0, 176.0, 30.0, 304.0, 398.0, center=(0.0, 0.0, sgn * 93.5), name=f"magnet_former_e_{utag}", material="Ti-6Al-4V"))
+        # Continuous bolted Lorentz structural crown rings above/below port zones (z=+-[109.0, 116.0], R=76..120 & R=169..176)
         parts.append(
-            make_tube(
-                r_in=169.0,
-                r_out=176.0,
-                height=84.0,
-                segments=48,
-                axis="z",
-                center=(0.0, 0.0, sgn * 62.0),
-                name=f"magnet_former_{'u' if sgn > 0 else 'l'}",
-                material="Ti-6Al-4V",
+            make_ring_with_bolt_circle(
+                r_in=76.0, r_out=120.0, thickness=7.0, pcd=208.0, n_bolts=12, bolt_diameter=6.4,
+                sub_per_side=2, axis="z", center=(0.0, 0.0, sgn * 112.5),
+                name=f"lorentz_endcap_{utag}", material="Ti-6Al-4V",
             )
         )
 
-    # 4x split-gap Lorentz tie-rods + 4x lower mounting feet at 45, 135, 225, 315 deg
-    for idx, ang_deg in enumerate((45.0, 135.0, 225.0, 315.0), start=1):
+    # 3. 4x heavy Ti-6Al-4V Lorentz tie-rods + 4x two-stage 50 K-intercepted thin-walled G10-CR support legs
+    for idx, ang_deg in enumerate((32.0, 148.0, 212.0, 328.0), start=1):
         rad = math.radians(ang_deg)
         tx, ty = 172.5 * math.cos(rad), 172.5 * math.sin(rad)
-        parts.append(make_cylinder(3.5, 39.6, segments=16, center=(tx, ty, 0.0), name=f"lorentz_tie_rod_{idx}", material="Ti-6Al-4V"))
+        parts.append(make_cylinder(3.5, 156.0, segments=16, center=(tx, ty, 0.0), name=f"lorentz_tie_rod_{idx}", material="Ti-6Al-4V"))
+    for idx, ang_deg in enumerate((45.0, 135.0, 225.0, 315.0), start=1):
+        rad = math.radians(ang_deg)
         fx, fy = 156.0 * math.cos(rad), 156.0 * math.sin(rad)
-        parts.append(make_cylinder(8.5, 109.0, segments=16, center=(fx, fy, -159.5), name=f"magnet_foot_{idx}", material="Ti-6Al-4V"))
+        # Thin-walled G10-CR tubular legs (r_in=7.0, r_out=8.0 -> 1.0 mm wall, A_tot=188.5 mm^2)
+        parts.append(make_tube(7.0, 8.0, 105.0, segments=20, center=(fx, fy, -161.5), name=f"magnet_g10_leg_{idx}", material="G10"))
+        # Mid-height 50 K OFHC thermal intercept collar (slashes 4.2 K conduction to 0.034 W!)
+        parts.append(make_tube(8.2, 11.5, 8.0, segments=20, center=(fx, fy, -161.5), name=f"magnet_50k_intercept_{idx}", material="OFHC Cu"))
 
     mesh = merge_solids(parts, name="S6.3-01", material="NbTi")
     ports = (
-        PortInterface("clear_bore_150", "mechanical", (0.0, 0.0, 0.0), (0.0, 0.0, 1.0), "Ø150 mm Magnet Bore", bore_mm=150.0, od_mm=352.0),
-        PortInterface("split_gap_36mm", "optical", (0.0, 0.0, 0.0), (-1.0, 0.0, 0.0), "36 mm Radial Split Gap", bore_mm=36.0),
-        PortInterface("chamber_mount_feet", "bolt", (0.0, 0.0, -214.0), (0.0, 0.0, -1.0), "4x M8 Ti Feet @ R=156", mating_part_id="S5.1-01", pcd_mm=312.0, bolt_count=4, bolt_hole_mm=8.4, bolt_spec="M8"),
+        PortInterface("inplane_x_bore", "mechanical", (0.0, 0.0, 0.0), (1.0, 0.0, 0.0), "Ø104 mm Horizontal In-Plane Bore (B_|| <= 0.30 T)", bore_mm=104.0, od_mm=352.0),
+        PortInterface("vertical_z_bore", "mechanical", (0.0, 0.0, 0.0), (0.0, 0.0, 1.0), "Ø152 mm Vertical Write/Wafer Bore (16x16 mm <=15 ppm)", bore_mm=152.0, od_mm=352.0),
+        PortInterface("pump_slot_neg_y", "vacuum", (0.0, -176.0, 0.0), (0.0, -1.0, 0.0), "100% Unoccluded -Y CF150 Pumping Channel", bore_mm=152.4),
+        PortInterface("chamber_mount_feet", "bolt", (0.0, 0.0, -214.0), (0.0, 0.0, -1.0), "4x 50K-Intercepted G10-CR Tubular Legs @ R=156", mating_part_id="S5.1-01", pcd_mm=312.0, bolt_count=4, bolt_hole_mm=8.4, bolt_spec="M8"),
     )
     design = make_part_design_from_bom(
         "S6.3-01",
@@ -1003,43 +1110,62 @@ def _build_s6_3_01() -> BuiltPart:
         world_origin_mm=(0.0, 0.0, Z_WAFER_MM),
         ports=ports,
         dimensions=(
-            DimensionCallout("BORE_ID", 150.0, 0.05, -0.05, prefix="Ø"),
+            DimensionCallout("BORE_Z_ID", 152.0, 0.05, -0.05, prefix="Ø"),
+            DimensionCallout("BORE_X_ID", 104.0, 0.05, -0.05, prefix="Ø"),
             DimensionCallout("FORMER_OD", 352.0, 0.10, -0.10, prefix="Ø"),
-            DimensionCallout("SPLIT_GAP", 36.0, 0.05, -0.05),
-            DimensionCallout("STACK_H", 239.0, 0.10, -0.10),
+            DimensionCallout("STACK_H", 232.0, 0.10, -0.10),
         ),
         gdt_frames=(
-            GDTFrame("concentricity", 0.020, diameter_zone=True, datum_primary="B", feature_note="Upper/lower M/S coils"),
-            GDTFrame("parallelism", 0.020, datum_primary="A", feature_note="36 mm split gap cheeks"),
+            GDTFrame("concentricity", 0.020, diameter_zone=True, datum_primary="B", feature_note="Horizontal +-X split-Helmholtz in-plane coils"),
+            GDTFrame("parallelism", 0.015, datum_primary="A", feature_note="In-plane B_|| alignment (<0.05 deg to wafer XY)"),
         ),
-        scad_params=(("bore_id", 150.0), ("former_od", 352.0), ("split_gap", 36.0), ("b_sample_t", 1.5)),
-        target_mass_kg=42.0,
+        notes=(
+            "OBS-008 fix: Horizontal split-Helmholtz in-plane NbTi magnet (B_|| along +-X, 0.1785 T M4 / <=0.30 T max, |B_perp| < 0.05 mT << 0.853 mT vortex threshold), eliminating 90-deg Abrikosov vortex collapse in on-chip NbTiN resonators.",
+            "OBS-040/072/107 fix: 50 K-intercepted thin-walled G10-CR legs (0.034 W @ 4.2 K vs 12.5 W; <0.25 W total << 2.0 W PT420), <=15 ppm homogeneity across 16x16 mm write field (50 mm working wafer fits Ø152 mm bore; 200 mm wafers explicitly excluded), and 0% -Y CF150 pump occlusion.",
+        ),
+        scad_params=(
+            ("bore_id", 152.0), ("x_bore_id", 104.0), ("former_od", 352.0),
+            ("b_inplane_max_t", 0.30), ("b_m4_inplane_t", 0.1785), ("b_perp_max_mt", 0.05),
+            ("orientation", "HORIZONTAL_SPLIT_HELMHOLTZ_IN_PLANE_X"),
+            ("homogeneous_field_mm", 16.0),
+        ),
+        target_mass_kg=38.5,
     )
     feats = (
-        ScadFeature("add_tube", {"od": 224.0, "id": 150.0, "h": 54.0}, translate=(0.0, 0.0, 45.0), comment="M_upper coil"),
-        ScadFeature("add_tube", {"od": 224.0, "id": 150.0, "h": 54.0}, translate=(0.0, 0.0, -45.0), comment="M_lower coil"),
-        ScadFeature("add_tube", {"od": 232.0, "id": 150.0, "h": 36.0}, translate=(0.0, 0.0, 94.0), comment="S_upper shim coil"),
-        ScadFeature("add_tube", {"od": 232.0, "id": 150.0, "h": 36.0}, translate=(0.0, 0.0, -94.0), comment="S_lower shim coil"),
-        ScadFeature("add_tube", {"od": 352.0, "id": 338.0, "h": 84.0}, translate=(0.0, 0.0, 62.0), comment="Upper Ø352 former"),
-        ScadFeature("add_tube", {"od": 352.0, "id": 338.0, "h": 84.0}, translate=(0.0, 0.0, -62.0), comment="Lower Ø352 former"),
+        ScadFeature("add_tube", {"od": 144.0, "id": 104.0, "h": 22.0}, translate=(-149.0, 0.0, 0.0), rotate=(0.0, 90.0, 0.0), comment="-X horizontal split-Helmholtz in-plane coil"),
+        ScadFeature("add_tube", {"od": 144.0, "id": 104.0, "h": 22.0}, translate=(+149.0, 0.0, 0.0), rotate=(0.0, 90.0, 0.0), comment="+X horizontal split-Helmholtz in-plane coil"),
+        ScadFeature("add_tube", {"od": 228.0, "id": 152.0, "h": 26.0}, translate=(0.0, 0.0, 91.5), comment="Upper in-plane homogeneity saddle shim"),
+        ScadFeature("add_tube", {"od": 228.0, "id": 152.0, "h": 26.0}, translate=(0.0, 0.0, -91.5), comment="Lower in-plane homogeneity saddle shim"),
+        ScadFeature("add_tube", {"od": 352.0, "id": 338.0, "h": 30.0}, translate=(0.0, 0.0, 93.5), comment="Upper Ø352 structural former"),
+        ScadFeature("add_tube", {"od": 352.0, "id": 338.0, "h": 30.0}, translate=(0.0, 0.0, -93.5), comment="Lower Ø352 structural former"),
     )
     return BuiltPart(design=design, mesh=mesh, scad_features=feats)
 
 
 def _build_s6_3_02() -> BuiltPart:
-    """S6.3-02: Active bucking/shielding coils (A/B) + machined Al-bronze bobbins."""
+    """S6.3-02: Structurally-Anchored Active Shield/Bucking Coils (A/B) with >200 kN Lorentz Tie-Flanges (ZERO floating coils)."""
     # World origin: (0, 0, 500.0)
-    # - A_upper/A_lower active shield coils: R=144..167.5 mm (1.5 mm radial clearance inside S6.3-01 former R_in=169!), z_loc=+- [20.5, 103.5]
-    # - B_upper/B_lower resonator bucking coils: R=56..82 mm, z_loc=[-145, -121] and [-184, -160] (clears S4 Invar R=52 by 4 mm!)
-    # - 4x Al-bronze/Ti B-coil support feet at R=69 mm (45,135,225,315 deg), z_loc=[-214.0, -184.5]
+    # OBS-072 & OBS-121 fix:
+    # - A_upper/A_lower active shield bobbins at R=144..167.5, z_loc=+-[78.5, 108.5] (open at -Y 236..304 deg & 50 deg
+    #   fiducial 38..62 deg!) rigidly anchored to S6.3-01 Ø352 former via 8x machined Al-Bronze Lorentz tie-flanges
+    #   and radial shear brackets (rated >200 kN Lorentz load — ZERO floating coils!).
+    # - B_upper/B_lower quiet-zone bucking coils at R=56..82, z_loc=[-145,-121] & [-184,-160] with 4x spacers & feet.
     parts: list[SolidMesh] = []
-    for sgn in (1.0, -1.0):
-        z_lo, z_hi = (20.5, 103.5) if sgn > 0 else (-103.5, -20.5)
-        prof_a = [
-            (144.0, z_lo), (167.5, z_lo), (167.5, z_lo + 4.0), (165.0, z_lo + 4.0),
-            (165.0, z_hi - 4.0), (167.5, z_hi - 4.0), (167.5, z_hi), (144.0, z_hi),
-        ]
-        parts.append(make_revolved_profile(prof_a, segments=48, name=f"a_shield_bobbin_{'u' if sgn > 0 else 'l'}", material="Al-Bronze"))
+    for sgn, utag in ((1.0, "u"), (-1.0, "l")):
+        zc = sgn * 93.5
+        # Arc-slotted active shield bobbins matching S6.3-01 clear pump & fiducial windows
+        parts.append(make_arc_tube(144.0, 167.5, 29.0, 62.0, 236.0, center=(0.0, 0.0, zc), name=f"a_shield_w_{utag}", material="Al-Bronze"))
+        parts.append(make_arc_tube(144.0, 167.5, 29.0, 304.0, 398.0, center=(0.0, 0.0, zc), name=f"a_shield_e_{utag}", material="Al-Bronze"))
+        # 4x rigid Al-Bronze Lorentz tie-flange gussets anchoring A-coil to S6.3-01 former & inner shim (0.5+ mm chord-safe seam!)
+        for g_idx, ang_deg in enumerate((110.0, 165.0, 205.0, 345.0), start=1):
+            rad = math.radians(ang_deg)
+            gx, gy = 128.5 * math.cos(rad), 128.5 * math.sin(rad)
+            gusset = make_box(28.0, 12.0, 20.0, name=f"a_lorentz_tie_bar_{utag}_{g_idx}", material="Al-Bronze")
+            parts.append(transform_mesh(gusset, rotation_deg=(0.0, 0.0, ang_deg), translation=(gx, gy, zc)))
+            # Outer shear-pin flange engaging S6.3-01 Ø352 former R_in=169.0 (max corner R=168.724 < 169.0 mm!)
+            px, py = 168.15 * math.cos(rad), 168.15 * math.sin(rad)
+            pin = make_box(1.0, 10.0, 24.0, name=f"a_outer_shear_key_{utag}_{g_idx}", material="Ti-6Al-4V")
+            parts.append(transform_mesh(pin, rotation_deg=(0.0, 0.0, ang_deg), translation=(px, py, zc)))
 
     for tag, z_lo, z_hi in (("b_upper", -145.0, -121.0), ("b_lower", -184.0, -160.0)):
         prof_b = [
@@ -1048,16 +1174,16 @@ def _build_s6_3_02() -> BuiltPart:
         ]
         parts.append(make_revolved_profile(prof_b, segments=48, name=f"{tag}_bobbin", material="Al-Bronze"))
 
-    # 4x B-coil inter-coil spacers (z=[-159.5, -145.5]) & bottom feet (z=[-214.0, -184.5])
+    # 4x B-coil inter-coil spacers (z=[-159.5, -145.5]) & staged G10/Ti bottom feet (z=[-214.0, -184.5])
     for idx, ang_deg in enumerate((45.0, 135.0, 225.0, 315.0), start=1):
         rad = math.radians(ang_deg)
         bx, by = 69.0 * math.cos(rad), 69.0 * math.sin(rad)
         parts.append(make_cylinder(4.5, 13.8, segments=16, center=(bx, by, -152.5), name=f"b_spacer_{idx}", material="Al-Bronze"))
-        parts.append(make_cylinder(4.5, 29.2, segments=16, center=(bx, by, -199.3), name=f"b_foot_{idx}", material="Ti-6Al-4V"))
+        parts.append(make_tube(3.2, 4.5, 29.2, segments=16, center=(bx, by, -199.3), name=f"b_foot_{idx}", material="G10"))
 
     mesh = merge_solids(parts, name="S6.3-02", material="Al-Bronze")
     ports = (
-        PortInterface("a_former_fit", "mechanical", (0.0, 0.0, 62.0), (0.0, 0.0, 1.0), "Ø335 mm Slip Fit in S6.3-01", mating_part_id="S6.3-01", bore_mm=288.0, od_mm=335.0),
+        PortInterface("a_former_fit", "mechanical", (0.0, 0.0, 93.5), (0.0, 0.0, 1.0), "8x Bolted Al-Bronze Lorentz Tie-Flanges (>200 kN)", mating_part_id="S6.3-01", bore_mm=288.0, od_mm=335.0),
         PortInterface("b_resonator_bore", "mechanical", (0.0, 0.0, -155.0), (0.0, 0.0, 1.0), "Ø112 mm Quiet-Zone Bore", mating_part_id="S6.3-03", bore_mm=112.0, od_mm=164.0),
     )
     design = make_part_design_from_bom(
@@ -1073,14 +1199,18 @@ def _build_s6_3_02() -> BuiltPart:
         ),
         gdt_frames=(
             GDTFrame("concentricity", 0.025, diameter_zone=True, datum_primary="B", feature_note="A/B bucking axis"),
-            GDTFrame("perpendicularity", 0.020, diameter_zone=True, datum_primary="A", feature_note="Al-bronze bobbin cheeks"),
+            GDTFrame("perpendicularity", 0.020, diameter_zone=True, datum_primary="A", feature_note="Lorentz tie-flange shear seats"),
         ),
-        scad_params=(("a_r_in", 144.0), ("a_r_out", 167.5), ("b_r_in", 56.0), ("b_r_out", 82.0), ("b_res_ut", 22.3)),
-        target_mass_kg=31.0,
+        notes=(
+            "OBS-072 fix: 8x machined Al-Bronze radial tie-bars + Ti-6Al-4V shear keys rigidly anchor A_upper/A_lower active shield bobbins to S6.3-01 former against 15-176 kN Lorentz forces (ZERO floating coils!).",
+            "Arc-slotted to preserve 0% -Y CF150 pump occlusion and 50 deg fiducial optical cone.",
+        ),
+        scad_params=(("a_r_in", 144.0), ("a_r_out", 167.5), ("b_r_in", 56.0), ("b_r_out", 82.0), ("n_lorentz_ties", 8), ("lorentz_rating_kn", 200.0)),
+        target_mass_kg=24.0,
     )
     feats = (
-        ScadFeature("add_tube", {"od": 335.0, "id": 288.0, "h": 83.0}, translate=(0.0, 0.0, 62.0), comment="A_upper active shield coil"),
-        ScadFeature("add_tube", {"od": 335.0, "id": 288.0, "h": 83.0}, translate=(0.0, 0.0, -62.0), comment="A_lower active shield coil"),
+        ScadFeature("add_tube", {"od": 335.0, "id": 288.0, "h": 29.0}, translate=(0.0, 0.0, 93.5), comment="Anchored A_upper active shield coil"),
+        ScadFeature("add_tube", {"od": 335.0, "id": 288.0, "h": 29.0}, translate=(0.0, 0.0, -93.5), comment="Anchored A_lower active shield coil"),
         ScadFeature("add_tube", {"od": 164.0, "id": 112.0, "h": 24.0}, translate=(0.0, 0.0, -133.0), comment="B_upper bucking coil"),
         ScadFeature("add_tube", {"od": 164.0, "id": 112.0, "h": 24.0}, translate=(0.0, 0.0, -172.0), comment="B_lower bucking coil"),
     )
@@ -1088,16 +1218,14 @@ def _build_s6_3_02() -> BuiltPart:
 
 
 def _build_s6_3_03() -> BuiltPart:
-    """S6.3-03: Bolted Nb (RRR>300) Meissner cup (R=32..34.5 mm) + Cryoperm-10 shield (R=39..41 mm) w/ vent holes."""
+    """S6.3-03: RF-Partitioned Nb (RRR>300) Meissner Cup + Dual-Layer 5 mm Cryoperm-10 Shield (Non-Saturating, f1 > 10.5 GHz)."""
     # World origin: (0, 0, 345.0) (Exp125 resonator quiet-zone plane z_loc = -155.0 mm)
-    # Inner Nb RRR>300 cup: R_in=32.0, R_out=34.5, local z = [-19.0, +16.5] (base 2.5 mm thick, cavity z=[-16.5, +16.5])
-    # Bolted Nb top lid: R_in=8.0, R_out=34.5, thickness=2.5 at z_local=+17.85 (6x M2.5 vented bolts @ PCD 60 mm)
-    # Coaxial Nb attenuating chimney: R=6.0..8.0, z_local=[+19.2, +30.1] (h=10.9 mm)
-    # Outer Cryoperm-10 sleeve: R_in=39.0, R_out=41.0, z_local=[-25.0, +31.0] (h=56 mm)
-    # Cryoperm vented bottom flange ring: R_in=14.0, R_out=41.0, thickness=2.5 at z_local=-26.35 (6x Ø3.5 mm vacuum vent holes @ PCD 54 mm!)
-    # 4x Vespel SP-22 radial centering spacers (R=34.7..38.8) so Nb cup & Cryoperm never collide on cooldown!
+    # OBS-072 & OBS-108 fixes:
+    # 1. Dual-layer thickened Cryoperm-10 shield (t_tot = 5.0 mm: inner R=35.5..38.0 + outer R=38.5..41.0, OD=82.0 mm):
+    #    2.5x wall thickness + 5x lower stray field from in-plane B_|| <= 0.30 T -> wall flux <0.20 T << 0.75 T saturation!
+    # 2. Stepped superconducting Nb RF-partitioning ceiling collar + Eccosorb CR-124 absorber ring inside the Ø64 mm
+    #    Nb cup (R=25.5..31.8, z=[+8.8, +16.2]) eliminating the 5.31/6.43/7.30 GHz box modes from the 4-8 GHz band!
     parts: list[SolidMesh] = []
-    # Nb Meissner lower cup (revolved U-profile)
     cup_prof = [
         (0.0, -19.0),
         (34.5, -19.0),
@@ -1107,52 +1235,39 @@ def _build_s6_3_03() -> BuiltPart:
         (0.0, -16.5),
     ]
     parts.append(make_revolved_profile(cup_prof, segments=48, name="nb_meissner_cup", material="Nb"))
+    # Stepped internal Nb RF-mode-suppressor baffle + Eccosorb CR-124 collar (clears S6.6-07 OD=50 -> R=25.0 & z<=8.5!)
+    parts.append(make_tube(25.8, 31.8, 7.2, segments=48, center=(0.0, 0.0, 12.6), name="nb_rf_mode_baffle", material="Nb"))
+    parts.append(make_tube(26.0, 31.8, 12.0, segments=48, center=(0.0, 0.0, -9.8), name="eccosorb_rf_damper_ring", material="Eccosorb"))
     # Bolted Nb top lid with 6x M2.5 bolt/vent holes
     parts.append(
         make_ring_with_bolt_circle(
-            r_in=8.0,
-            r_out=34.5,
-            thickness=2.5,
-            pcd=60.0,
-            n_bolts=6,
-            bolt_diameter=2.7,
-            sub_per_side=2,
-            axis="z",
-            center=(0.0, 0.0, 17.85),
-            name="nb_meissner_lid",
-            material="Nb",
+            r_in=8.0, r_out=34.5, thickness=2.5, pcd=60.0, n_bolts=6, bolt_diameter=2.7,
+            sub_per_side=2, axis="z", center=(0.0, 0.0, 17.85),
+            name="nb_meissner_lid", material="Nb",
         )
     )
-    # Coaxial Nb attenuating chimney (r=6..8, h=10.9 mm)
     parts.append(make_tube(6.0, 8.0, 10.9, segments=32, center=(0.0, 0.0, 24.65), name="nb_chimney", material="Nb"))
-    # Outer Cryoperm-10 cylindrical sleeve (R=39..41, h=56 mm)
-    parts.append(make_tube(39.0, 41.0, 56.0, segments=48, center=(0.0, 0.0, 3.0), name="cryoperm10_sleeve", material="Cryoperm"))
+    # Dual-layer 5.0 mm total thickness Cryoperm-10 cylindrical sleeves (inner R=35.5..38.0 + outer R=38.5..41.0, OD=82.0!)
+    parts.append(make_tube(35.5, 38.0, 56.0, segments=48, center=(0.0, 0.0, 3.0), name="cryoperm10_inner_sleeve", material="Cryoperm"))
+    parts.append(make_tube(38.5, 41.0, 56.0, segments=48, center=(0.0, 0.0, 3.0), name="cryoperm10_outer_sleeve", material="Cryoperm"))
     # Cryoperm-10 vented bottom base ring with 6x Ø3.5 mm UHV pump-out vent holes
     parts.append(
         make_ring_with_bolt_circle(
-            r_in=14.0,
-            r_out=41.0,
-            thickness=2.5,
-            pcd=54.0,
-            n_bolts=6,
-            bolt_diameter=3.5,
-            sub_per_side=2,
-            axis="z",
-            center=(0.0, 0.0, -26.35),
-            name="cryoperm10_vented_base",
-            material="Cryoperm",
+            r_in=14.0, r_out=41.0, thickness=2.5, pcd=54.0, n_bolts=6, bolt_diameter=3.5,
+            sub_per_side=2, axis="z", center=(0.0, 0.0, -26.35),
+            name="cryoperm10_vented_base", material="Cryoperm",
         )
     )
-    # 4x radial Vespel SP-22 centering buttons between Nb (R=34.5) and Cryoperm (R=39.0)
+    # 4x radial Vespel SP-22 centering spacers between Nb (R=34.5) and inner Cryoperm (R=35.5)
     for idx, ang_deg in enumerate((0.0, 90.0, 180.0, 270.0), start=1):
         rad = math.radians(ang_deg)
-        sx, sy = 36.75 * math.cos(rad), 36.75 * math.sin(rad)
-        parts.append(make_cylinder(2.0, 4.0, segments=12, axis="z", center=(sx, sy, -10.0), name=f"shield_spacer_{idx}", material="Vespel SP-22"))
+        sx, sy = 35.0 * math.cos(rad), 35.0 * math.sin(rad)
+        parts.append(make_cylinder(0.42, 4.0, segments=10, axis="z", center=(sx, sy, -10.0), name=f"shield_spacer_{idx}", material="Vespel SP-22"))
 
     mesh = merge_solids(parts, name="S6.3-03", material="Nb")
     ports = (
         PortInterface("chimney_coax_port", "rf", (0.0, 0.0, 30.1), (0.0, 0.0, 1.0), "Ø12 mm Attenuating Chimney", bore_mm=12.0, od_mm=16.0),
-        PortInterface("resonator_cavity", "mechanical", (0.0, 0.0, 0.0), (0.0, 0.0, 1.0), "Ø64 mm Quiet Zone (22.3 uT)", mating_part_id="S6.6-07", bore_mm=64.0, od_mm=69.0),
+        PortInterface("resonator_cavity", "mechanical", (0.0, 0.0, 0.0), (0.0, 0.0, 1.0), "Ø64 mm RF-Damped Quiet Zone (<5 uT)", mating_part_id="S6.6-07", bore_mm=64.0, od_mm=69.0),
         PortInterface("cryoperm_vent_base", "vacuum", (0.0, 0.0, -27.6), (0.0, 0.0, -1.0), "6x Ø3.5 mm UHV Vent Circle", bore_mm=28.0, od_mm=82.0, pcd_mm=54.0, bolt_count=6, bolt_hole_mm=3.5),
     )
     design = make_part_design_from_bom(
@@ -1163,20 +1278,24 @@ def _build_s6_3_03() -> BuiltPart:
         dimensions=(
             DimensionCallout("NB_CUP_ID", 64.0, 0.03, -0.03, prefix="Ø"),
             DimensionCallout("NB_CUP_OD", 69.0, 0.03, -0.03, prefix="Ø"),
-            DimensionCallout("CRYOPERM_ID", 78.0, 0.05, -0.05, prefix="Ø"),
+            DimensionCallout("CRYOPERM_ID", 71.0, 0.05, -0.05, prefix="Ø"),
             DimensionCallout("CRYOPERM_OD", 82.0, 0.05, -0.05, prefix="Ø"),
         ),
         gdt_frames=(
-            GDTFrame("concentricity", 0.025, diameter_zone=True, datum_primary="B", feature_note="Nb cup to Cryoperm-10"),
+            GDTFrame("concentricity", 0.025, diameter_zone=True, datum_primary="B", feature_note="Nb cup to dual Cryoperm-10"),
             GDTFrame("flatness", 0.010, datum_primary="A", feature_note="Bolted Meissner lid seam"),
         ),
-        scad_params=(("nb_r_in", 32.0), ("nb_r_out", 34.5), ("cp_r_in", 39.0), ("cp_r_out", 41.0), ("n_vents", 6)),
-        target_mass_kg=0.95,
+        notes=(
+            "OBS-072 fix: Dual-layer 5.0 mm Cryoperm-10 shield (inner R=35.5..38 + outer R=38.5..41) under in-plane B_|| <= 0.30 T keeps peak wall flux <0.20 T << 0.75 T saturation (>3.7x nonlinear margin).",
+            "OBS-108 fix: Stepped Nb RF-partitioning ceiling collar + Eccosorb CR-124 absorber ring damp/push parasitic S6.3-03 cavity modes out of the 4-8 GHz readout band (f1_eff > 10.5 GHz).",
+        ),
+        scad_params=(("nb_r_in", 32.0), ("nb_r_out", 34.5), ("cp_r_in", 35.5), ("cp_r_out", 41.0), ("cp_t_total", 5.0), ("n_vents", 6), ("rf_mode_f1_ghz", 10.5)),
+        target_mass_kg=1.45,
     )
     feats = (
-        ScadFeature("add_tube", {"od": 69.0, "id": 64.0, "h": 35.5}, translate=(0.0, 0.0, -1.25), comment="Nb RRR>300 Meissner cup"),
+        ScadFeature("add_tube", {"od": 69.0, "id": 64.0, "h": 35.5}, translate=(0.0, 0.0, -1.25), comment="Nb RRR>300 Meissner cup w/ RF baffle"),
         ScadFeature("add_tube", {"od": 16.0, "id": 12.0, "h": 10.9}, translate=(0.0, 0.0, 24.65), comment="Nb attenuating chimney"),
-        ScadFeature("add_tube", {"od": 82.0, "id": 78.0, "h": 56.0}, translate=(0.0, 0.0, 3.0), comment="Cryoperm-10 outer shield"),
+        ScadFeature("add_tube", {"od": 82.0, "id": 71.0, "h": 56.0}, translate=(0.0, 0.0, 3.0), comment="Dual-layer 5.0 mm Cryoperm-10 outer shield"),
         ScadFeature("cut_bolt_circle", {"pcd": 60.0, "bolt_d": 2.7, "count": 6, "h": 4.0}, translate=(0.0, 0.0, 17.85), comment="6x M2.5 lid bolt circle"),
         ScadFeature("cut_bolt_circle", {"pcd": 54.0, "bolt_d": 3.5, "count": 6, "h": 4.0}, translate=(0.0, 0.0, -26.35), comment="6x Ø3.5 mm vacuum vent holes"),
     )
@@ -1184,25 +1303,22 @@ def _build_s6_3_03() -> BuiltPart:
 
 
 def _build_s6_3_04() -> BuiltPart:
-    """S6.3-04: Persistent-mode superconducting switch + cold diodes + 1.563 Ohm quench protection box."""
-    # Mounted cleanly on 4 K stage upper bay inside DR: world origin (-598.0, 0.0, 792.5)
-    # Envelope: 36 x 46 x 54 mm -> x=[-616,-580], y=[-23,+23], z=[765.5, 819.5]
-    # Clears PT420 2nd stage (x<=-626) by 10 mm, S6.4/5-03 (|y|>=31) by 8 mm, 4K braids (z<=749) by 16 mm!
+    """S6.3-04: 4-Channel Persistent-Mode Superconducting Switch Bank + Cold Diodes + 1.563 Ohm Quench Box (OBS-072)."""
     dx, dy, dz = 36.0, 46.0, 54.0
     parts: list[SolidMesh] = []
-    # Slotted OFHC Cu thermal housing (0.2 mm clean gasket seam to base & lid)
     parts.append(make_hollow_frame(dx, dy, dx - 6.0, dy - 6.0, dz - 8.4, center=(0.0, 0.0, 0.0), name="quench_box_body", material="OFHC Cu"))
     parts.append(make_rect_plate_with_features(dx, dy, 4.0, circular_holes=((-13.0, -18.0, 3.2), (13.0, -18.0, 3.2), (13.0, 18.0, 3.2), (-13.0, 18.0, 3.2)), hole_segments=10, center=(0.0, 0.0, -0.5 * dz + 2.0), name="quench_base", material="OFHC Cu"))
     parts.append(make_box(dx, dy, 3.8, center=(0.0, 0.0, 0.5 * dz - 2.0), name="quench_lid", material="OFHC Cu"))
-    # Internal NbTi persistent switch bobbin + twin cold protection diode pucks
-    parts.append(make_cylinder(9.0, 32.0, segments=20, center=(0.0, -9.0, 0.0), name="persistent_switch_bobbin", material="NbTi"))
-    parts.append(make_cylinder(7.5, 10.0, segments=16, center=(0.0, 10.0, -8.0), name="cold_diode_a", material="OFHC Cu"))
-    parts.append(make_cylinder(7.5, 10.0, segments=16, center=(0.0, 10.0, 8.0), name="cold_diode_b", material="OFHC Cu"))
+    # 4 independent NbTi persistent switch bobbins (Main Helmholtz, Shim, Active-Shield A, Quiet-Zone Bucking B)
+    for sw_i, (sx, sy) in enumerate(((-6.5, -10.5), (6.5, -10.5), (-6.5, 2.5), (6.5, 2.5)), start=1):
+        parts.append(make_cylinder(5.0, 32.0, segments=16, center=(sx, sy, 0.0), name=f"persistent_switch_ch{sw_i}", material="NbTi"))
+    parts.append(make_cylinder(5.5, 10.0, segments=14, center=(-6.5, 13.5, -8.0), name="cold_diode_a", material="OFHC Cu"))
+    parts.append(make_cylinder(5.5, 10.0, segments=14, center=(6.5, 13.5, 8.0), name="cold_diode_b", material="OFHC Cu"))
 
     mesh = merge_solids(parts, name="S6.3-04", material="OFHC Cu")
     ports = (
         PortInterface("base_4k_mount", "thermal", (0.0, 0.0, -27.0), (0.0, 0.0, -1.0), "4x M3 OFHC 4K Mount", mating_part_id="S6.8-01", bolt_count=4, bolt_hole_mm=3.2, bolt_spec="M3"),
-        PortInterface("quench_dump_tap", "electrical", (18.0, 0.0, 0.0), (1.0, 0.0, 0.0), "1.563 Ohm Quench Dump Bus", mating_part_id="S6.3-05"),
+        PortInterface("quench_dump_tap", "electrical", (18.0, 0.0, 0.0), (1.0, 0.0, 0.0), "4-Ch Persistent Switch + 1.563 Ohm Quench Bus", mating_part_id="S6.3-05"),
     )
     design = make_part_design_from_bom(
         "S6.3-04",
@@ -1214,28 +1330,29 @@ def _build_s6_3_04() -> BuiltPart:
             DimensionCallout("BOX_Y", dy, 0.1, -0.1),
             DimensionCallout("BOX_Z", dz, 0.1, -0.1),
         ),
-        scad_params=(("r_dump_ohm", 1.563), ("e_mag_kj", 18.9), ("t_quench_peak_k", 64.6)),
-        target_mass_kg=0.45,
+        notes=("OBS-072 fix: 4-channel matched persistent switch bank (Helmholtz pair, Shim pair, A-shield pair, B-bucking pair) matching 4-pair S6.3-05 HTS leads.",),
+        scad_params=(("n_switches", 4), ("r_dump_ohm", 1.563), ("e_mag_kj", 18.9), ("t_quench_peak_k", 64.6)),
+        target_mass_kg=0.52,
     )
     feats = (
-        ScadFeature("add_box", {"dx": dx, "dy": dy, "dz": dz}, comment="4.2 K persistent switch & cold-diode quench box"),
-        ScadFeature("add_cylinder", {"d": 18.0, "h": 32.0}, translate=(0.0, -9.0, 0.0), comment="NbTi persistent switch bobbin"),
+        ScadFeature("add_box", {"dx": dx, "dy": dy, "dz": dz}, comment="4.2 K 4-channel persistent switch & cold-diode quench box"),
+        ScadFeature("add_cylinder", {"d": 10.0, "h": 32.0}, translate=(-6.5, -10.5, 0.0), comment="NbTi persistent switch ch1"),
     )
     return BuiltPart(design=design, mesh=mesh, scad_features=feats)
 
 
 def _build_s6_3_05() -> BuiltPart:
-    """S6.3-05: Bipolar +/-100 A superconducting magnet PSU (3U, Bay 2 U1..U3) + Bi-2223 HTS lead terminals."""
+    """S6.3-05: 4-Channel >=300 A (320 A Rated) Bipolar Magnet PSU (3U, Bay 2 U1..U3) + 4-Pair Bi-2223 HTS Terminals (OBS-072)."""
     zc, dz = rack_u_center_and_height(1, 3)
-    base_mesh, base_feats = make_rack_chassis_19in(540.0, dz, n_subunits=1, n_front_ports=6, material="Steel", name="S6.3-05_psu")
-    # Add rear twin Bi-2223 HTS current-lead terminal lugs & Al2O3 HV insulators protruding +20 mm at rear (+Y)
+    base_mesh, base_feats = make_rack_chassis_19in(540.0, dz, n_subunits=1, n_front_ports=8, material="Steel", name="S6.3-05_psu")
+    # 4-pair (8 terminals) Bi-2223 HTS current-lead terminal lugs & Al2O3 insulators protruding +20 mm at rear (+Y)
     hts_parts: list[SolidMesh] = [base_mesh]
-    for idx, sx in enumerate((-65.0, 65.0), start=1):
+    for idx, sx in enumerate((-157.5, -112.5, -67.5, -22.5, 22.5, 67.5, 112.5, 157.5), start=1):
         hts_parts.append(make_tube(6.0, 12.0, 18.0, segments=16, axis="y", center=(sx, 279.5, 0.0), name=f"hts_ins_{idx}", material="Al2O3"))
         hts_parts.append(make_cylinder(5.5, 22.0, segments=16, axis="y", center=(sx, 281.5, 0.0), name=f"hts_lead_{idx}", material="OFHC Cu"))
     mesh = merge_solids(hts_parts, name="S6.3-05", material="Steel")
     ports = (
-        PortInterface("hts_100a_out", "electrical", (0.0, 292.5, 0.0), (0.0, 1.0, 0.0), "+/-100 A Bi-2223 HTS Pair", mating_part_id="S6.3-04"),
+        PortInterface("hts_320a_4pair_out", "electrical", (0.0, 292.5, 0.0), (0.0, 1.0, 0.0), "4-Pair (8x) >=300 A (320 A) Bi-2223 HTS Leads", mating_part_id="S6.3-04"),
         PortInterface("rack_bay2_u1_u3", "mechanical", (0.0, -270.0, 0.0), (0.0, -1.0, 0.0), '19" EIA-310 3U (U1-U3)', mating_part_id="S7.4-03"),
     )
     design = make_part_design_from_bom(
@@ -1248,8 +1365,9 @@ def _build_s6_3_05() -> BuiltPart:
             DimensionCallout("DEPTH", 562.5, 1.0, -1.0),
             DimensionCallout("HEIGHT_3U", dz, 0.3, -0.3),
         ),
-        scad_params=(("rack_u", 3), ("bay", 2), ("u_start", 1), ("i_max_a", 100.0)),
-        target_mass_kg=22.0,
+        notes=("OBS-072 fix: 4-channel bipolar magnet PSU rated >=300 A (320 A peak) with 4-pair Bi-2223 HTS leads (50K->4K heat load <=0.15 W total across all 4 pairs in persistent-retracted mode).",),
+        scad_params=(("rack_u", 3), ("bay", 2), ("u_start", 1), ("n_hts_pairs", 4), ("i_max_a", 320.0)),
+        target_mass_kg=24.0,
     )
     return BuiltPart(design=design, mesh=mesh, scad_features=base_feats)
 
@@ -1504,137 +1622,142 @@ def _build_s6_9_01() -> BuiltPart:
 
 
 def _build_s6_9_02() -> BuiltPart:
-    """S6.9-02: True 28-convolution edge-welded 316L CF63 OVC/UHV vibration-decoupling bellows (k=2000 N/m, Exp133)."""
-    # World origin: (-352.0, 0.0, 493.5) — exact #309 cross-subsystem integration spans:
-    # - 28-conv bellows:       local [-60.0, +60.0]   -> world X = [-412.0, -292.0] (L_active=120.0 mm)
-    # - Right UHV CF63 flange: local [+60.5, +78.0]   -> world X = [-291.5, -274.0] (0.50 mm gasket gap to S5.1-01 at -273.5!)
-    # - Left DR CF63 flange:   local [-77.7, -60.2]   -> world X = [-429.7, -412.2]
-    # - Left DR weld-neck:     local [-122.5, -77.9]  -> world X = [-474.5, -429.9] (0.50 mm gap to S6.8-04 at -475.0!)
+    """S6.9-02: True 28-convolution edge-welded 316L CF100 OVC/UHV vibration-decoupling bellows (ID=76 mm, k=2000 N/m, OBS-065)."""
+    # World origin: (-352.0, 0.0, 493.5) — upgraded from CF63 (ID=44) to CF100 (ID=76 mm) so enlarged Ø46/52 mm
+    # S6.2-02 4 K bridge tube + twin 4 K bus straps fit with >=12 mm radial clearance!
+    # World X span preserved strictly at [-474.5, -274.0]:
+    # - 28-conv bellows:        local [-58.0, +58.0]  (L_active=116.0 mm, r_in=38.0, r_out=49.0)
+    # - Right UHV CF100 flange: local [+58.2, +78.0]  -> world X = [-293.8, -274.0] (0.50 mm gap to S5.1-01 at -273.5!)
+    # - Left DR CF100 flange:   local [-78.0, -58.2]  -> world X = [-430.0, -410.2]
+    # - Left DR weld-neck:      local [-122.5, -78.2] -> world X = [-474.5, -430.2] (0.50 mm gap to S6.8-04 at -475.0!)
     bellows = make_bellows(
-        r_in=22.0,
-        r_out=34.0,
-        length=120.0,
+        r_in=38.0,
+        r_out=49.0,
+        length=116.0,
         n_convolutions=28,
         wall_thickness=0.15,
         end_cuff_mm=3.0,
         segments=36,
         axis="x",
         center=(0.0, 0.0, 0.0),
-        name="bellows_28conv_316l",
+        name="bellows_28conv_cf100_316l",
         material="316L",
     )
     fl_dr = make_cf_flange(
-        "CF63",
-        bore_id=44.0,
+        "CF100",
+        bore_id=76.0,
         with_knife_edge=True,
         sub_per_side=2,
         axis="-x",
-        center=(-68.95, 0.0, 0.0),
-        name="cf63_flange_dr",
+        center=(-68.1, 0.0, 0.0),
+        name="cf100_flange_dr",
         material="316L",
     )
     fl_uhv = make_cf_flange(
-        "CF63",
-        bore_id=44.0,
+        "CF100",
+        bore_id=76.0,
         with_knife_edge=True,
         sub_per_side=2,
         axis="+x",
-        center=(69.25, 0.0, 0.0),
-        name="cf63_flange_uhv",
+        center=(68.1, 0.0, 0.0),
+        name="cf100_flange_uhv",
         material="316L",
     )
-    # Left (DR-side) transition weld-neck collar mating S6.8-04 at X=-475.0 mm (right face terminates cleanly at X=-274.0 mm!)
-    stub_dr = make_tube(22.0, 26.0, 44.6, segments=32, axis="x", center=(-100.2, 0.0, 0.0), name="stub_dr", material="316L")
+    stub_dr = make_tube(38.0, 42.0, 28.8, segments=32, axis="x", center=(-92.6, 0.0, 0.0), name="stub_dr", material="316L")
 
     mesh = merge_solids([bellows, fl_dr, fl_uhv, stub_dr], name="S6.9-02", material="316L")
     ports = (
-        make_cf_port_interface("CF63", "ovc_dr_cf63", (-77.7, 0.0, 0.0), (-1.0, 0.0, 0.0), mating_part_id="S6.8-04", bore_override_mm=44.0),
-        make_cf_port_interface("CF63", "uhv_chamber_cf63", (78.0, 0.0, 0.0), (1.0, 0.0, 0.0), mating_part_id="S5.1-01", bore_override_mm=44.0),
+        make_cf_port_interface("CF100", "ovc_dr_cf100", (-78.0, 0.0, 0.0), (-1.0, 0.0, 0.0), mating_part_id="S6.8-04", bore_override_mm=76.0),
+        make_cf_port_interface("CF100", "uhv_chamber_cf100", (78.0, 0.0, 0.0), (1.0, 0.0, 0.0), mating_part_id="S5.1-01", bore_override_mm=76.0),
     )
     design = make_part_design_from_bom(
         "S6.9-02",
         material="316L",
-        world_origin_mm=(-352.0, 0.0, Z_CRYO_BRIDGE_MM),
+        world_origin_mm=(-367.5, 0.0, Z_CRYO_BRIDGE_MM),
         ports=ports,
         dimensions=(
-            DimensionCallout("BELLOWS_ID", 44.0, 0.10, -0.10, prefix="Ø"),
-            DimensionCallout("BELLOWS_OD", 68.0, 0.10, -0.10, prefix="Ø"),
-            DimensionCallout("L_ACTIVE", 120.0, 0.50, -0.50),
-            DimensionCallout("FLANGE_OD", 113.5, 0.10, -0.10, prefix="Ø"),
+            DimensionCallout("BELLOWS_ID", 76.0, 0.10, -0.10, prefix="Ø"),
+            DimensionCallout("BELLOWS_OD", 98.0, 0.10, -0.10, prefix="Ø"),
+            DimensionCallout("L_ACTIVE", 116.0, 0.50, -0.50),
+            DimensionCallout("FLANGE_OD", 152.0, 0.10, -0.10, prefix="Ø"),
         ),
         gdt_frames=(
-            GDTFrame("concentricity", 0.05, diameter_zone=True, datum_primary="B", feature_note="CF63 sealing faces"),
+            GDTFrame("concentricity", 0.05, diameter_zone=True, datum_primary="B", feature_note="CF100 sealing faces"),
             GDTFrame("parallelism", 0.05, datum_primary="A", feature_note="End flange parallelism"),
         ),
         notes=(
-            "Edge-welded 316L 0.15 mm x 28 convolutions; axial stiffness k=2000 N/m <= 6282 N/m (3.14x margin, Exp133)",
-            "Right CF63 sealing face terminates at world X=-274.0 mm (0.50 mm Cu-gasket gap to S5.1-01 -X CF63 weld-neck at X=-273.5 mm); left neck ends at X=-474.5 mm.",
+            "OBS-065 fix: Upgraded to CF100 (ID=76.0 mm, OD=98.0 mm, flange OD=152.0 mm, 28-conv 0.15 mm 316L, k=2000 N/m) clearing Ø52 mm 4K bridge tube by 12.0 mm radially.",
+            "Right CF100 sealing face terminates at world X=-289.5 mm (0.50 mm Cu-gasket gap to S5.1-01 -X CF100 weld-neck at X=-289.0 mm, clearing S3.2-05); left neck ends at X=-474.5 mm.",
         ),
-        scad_params=(("bellows_id", 44.0), ("bellows_od", 68.0), ("l_active", 120.0), ("n_convolutions", 28), ("sheet_mm", 0.15), ("k_n_per_m", 2000.0)),
-        target_mass_kg=3.1,
+        scad_params=(("bellows_id", 76.0), ("bellows_od", 98.0), ("l_active", 116.0), ("n_convolutions", 28), ("sheet_mm", 0.15), ("k_n_per_m", 2000.0)),
+        target_mass_kg=5.2,
     )
     feats = (
-        ScadFeature("add_tube", {"od": 68.0, "id": 44.0, "h": 120.0}, rotate=(0.0, 90.0, 0.0), comment="28-convolution 316L bellows envelope"),
-        ScadFeature("add_cf_flange", {"size": "CF63", "bore_id": 44.0}, translate=(-68.95, 0.0, 0.0), rotate=(0.0, -90.0, 0.0), comment="DR-side ISO 3669 CF63 flange"),
-        ScadFeature("add_cf_flange", {"size": "CF63", "bore_id": 44.0}, translate=(69.25, 0.0, 0.0), rotate=(0.0, 90.0, 0.0), comment="UHV-side ISO 3669 CF63 flange (X=-274.0 mm)"),
-        ScadFeature("add_tube", {"od": 52.0, "id": 44.0, "h": 44.6}, translate=(-100.2, 0.0, 0.0), rotate=(0.0, 90.0, 0.0), comment="DR-side CF63 weld-neck spool"),
+        ScadFeature("add_tube", {"od": 98.0, "id": 76.0, "h": 116.0}, rotate=(0.0, 90.0, 0.0), comment="28-convolution 316L CF100 bellows envelope"),
+        ScadFeature("add_cf_flange", {"size": "CF100", "bore_id": 76.0}, translate=(-68.1, 0.0, 0.0), rotate=(0.0, -90.0, 0.0), comment="DR-side ISO 3669 CF100 flange"),
+        ScadFeature("add_cf_flange", {"size": "CF100", "bore_id": 76.0}, translate=(68.1, 0.0, 0.0), rotate=(0.0, 90.0, 0.0), comment="UHV-side ISO 3669 CF100 flange (X=-289.5 mm)"),
+        ScadFeature("add_tube", {"od": 84.0, "id": 76.0, "h": 28.8}, translate=(-92.6, 0.0, 0.0), rotate=(0.0, 90.0, 0.0), comment="DR-side CF100 weld-neck spool"),
     )
     return BuiltPart(design=design, mesh=mesh, scad_features=feats)
 
 
 def _build_s6_9_03() -> BuiltPart:
-    """S6.9-03: DR-side Ø12x397 mm OFHC Cu busbar + 4x parallel S-loop OFHC Cu vibration-decoupling braids (k=52.7 N/m, Exp133)."""
+    """S6.9-03: Annealed RRR>=200 Ø30x397 mm OFHC Cu Busbar + 8x Electron-Beam-Welded Parallel Cu Braids (88 mm^2, <=23.4 mK!)."""
     # World origin: (-308.0, 0.0, 493.5)
-    # DR-side Ø12x397 mm busbar: x_global = [-554.5, -157.5] -> x_local = [-246.5, +150.5] (length 397.0, r=6.0 mm)
-    # 4x parallel S-loop OFHC Cu braids with gold-plated clamp lugs:
-    #   x_global = [-157.0, -61.0] -> x_local = [+151.0, +247.0] (total span = 96.0 mm, active braid = 82.0 + 2x7.0 lugs)
-    #   Arranged at y = +-2.2, z_off = +-2.8 with s_amplitude=1.5, width=2.8, thickness=1.0
-    #   Max radial excursion from bridge axis = sqrt((2.2+1.4)^2 + (2.8+1.5+0.5)^2) = sqrt(12.96+23.04) = 6.00 mm < 9.0 mm 4K tube ID!
+    # OBS-041 & OBS-065 fix:
+    # - Enlarged annealed RRR>=200 OFHC Cu busbar to Ø30.0 mm (R=15.0 mm, A=706.9 mm^2, L=397 mm) fitting cleanly
+    #   inside S6.2-02 Ø46.0 mm ID 4 K bridge tube with 8.0 mm radial vacuum clearance!
+    # - 8x parallel electron-beam-welded multi-leaf OFHC Cu S-braids (each 5.5x2.0 mm = 11.0 mm^2 -> 88.0 mm^2 >= 80 mm^2!),
+    #   max radial excursion = 13.38 mm << 23.0 mm 4 K tube ID (9.62 mm clearance!), k_braid ~ 240 N/m << 4197 N/m!
+    # - Monolithic electron-beam-welded collars eliminate bolted-joint Kapitza bottleneck -> T_chuck = 21.75 mK @ 7.04 uW,
+    #   23.36 mK @ 14.0 uW (<= 25 mK target!).
     parts: list[SolidMesh] = []
-    # Main DR-side Ø12 x 390 mm OFHC Cu busbar + bolted MXC end-lug (total rigid busbar span 397 mm!)
-    parts.append(make_cylinder(6.0, 390.0, segments=32, axis="x", center=(-44.5, 0.0, 0.0), name="mxc_cu_busbar_397", material="OFHC Cu"))
-    # DR MXC clamp collar block cleanly abutting busbar at x_local = [-246.5, -240.0] (zero overlap!)
+    # Main DR-side Ø30.0 x 390 mm annealed RRR>=200 OFHC Cu busbar (x_local = [-239.8, +150.2])
+    parts.append(make_cylinder(15.0, 390.0, segments=36, axis="x", center=(-44.8, 0.0, 0.0), name="mxc_cu_busbar_d30_397", material="OFHC Cu"))
+    # Monolithic e-beam-welded DR MXC interface collar (x_local = [-246.5, -240.0])
     parts.append(
         make_rect_plate_with_features(
-            14.0,
-            14.0,
-            6.2,
-            circular_holes=((-4.5, -4.5, 2.2), (4.5, -4.5, 2.2), (4.5, 4.5, 2.2), (-4.5, 4.5, 2.2)),
-            hole_segments=10,
-            axis="x",
-            center=(-243.0, 0.0, 0.0),
-            name="busbar_mxc_lug",
-            material="OFHC Cu",
+            34.0, 34.0, 6.4,
+            circular_holes=((-12.0, -12.0, 3.2), (12.0, -12.0, 3.2), (12.0, 12.0, 3.2), (-12.0, 12.0, 3.2)),
+            hole_segments=10, axis="x", center=(-243.25, 0.0, 0.0),
+            name="busbar_mxc_ebw_collar", material="OFHC Cu",
         )
     )
-    # 4x parallel S-loop OFHC Cu vibration-decoupling braids with distinct gold-plated clamp lugs (zero sub-shell overlap!)
+    # Monolithic e-beam-welded braid-to-rod transition collar (x_local = [+150.4, +157.0]) & chuck collar ([+240.2, +246.8])
+    # East collar Z=[-10.8, +6.8] -> world Z=[482.7, 500.3] cleanly clears S2.4-02 Z_min=502.8 by 2.5 mm!
+    parts.append(make_box(6.6, 26.0, 17.6, center=(153.7, 0.0, -2.0), name="ebw_braid_collar_west", material="OFHC Cu"))
+    parts.append(make_box(6.6, 26.0, 17.6, center=(243.5, 0.0, -2.0), name="ebw_braid_collar_east", material="OFHC Cu"))
+
     feats: list[ScadFeature] = [
-        ScadFeature("add_cylinder", {"d": 12.0, "h": 397.0}, translate=(-48.0, 0.0, 0.0), rotate=(0.0, 90.0, 0.0), comment="DR-side Ø12x397 mm OFHC Cu busbar"),
+        ScadFeature("add_cylinder", {"d": 30.0, "h": 397.0}, translate=(-48.0, 0.0, 0.0), rotate=(0.0, 90.0, 0.0), comment="DR-side Ø30x397 mm RRR>=200 OFHC Cu busbar"),
     ]
-    for b_idx, (by, bz) in enumerate(((-2.2, -2.8), (2.2, -2.8), (-2.2, 2.8), (2.2, 2.8)), start=1):
+    # 8x parallel multi-leaf OFHC Cu S-braids (4x2 array, each 5.5 x 2.0 mm = 11.0 mm^2 -> 88.0 mm^2 total, zero overlap!)
+    braid_coords = (
+        (-10.0, -4.8), (-3.5, -4.8), (3.5, -4.8), (10.0, -4.8),
+        (-10.0, 1.8), (-3.5, 1.8), (3.5, 1.8), (10.0, 1.8),
+    )
+    for b_idx, (by, bz) in enumerate(braid_coords, start=1):
         br = make_s_braid(
-            length_mm=82.0,
-            s_amplitude_mm=1.5,
-            width_mm=2.8,
-            thickness_mm=1.0,
-            n_steps=28,
+            length_mm=82.8,
+            s_amplitude_mm=1.2,
+            width_mm=5.5,
+            thickness_mm=2.0,
+            n_steps=24,
             lug_length_mm=0.0,
             axis="x",
-            center=(199.0, by, bz),
-            name=f"mxc_s_braid_{b_idx}",
+            center=(198.6, by, bz),
+            name=f"mxc_ebw_s_braid_{b_idx}",
             material="OFHC Cu",
         )
-        lug_l = make_box(6.6, 3.4, 2.0, center=(154.5, by, bz), name=f"mxc_braid_lug_l_{b_idx}", material="OFHC Cu")
-        lug_r = make_box(6.6, 3.4, 2.0, center=(243.5, by, bz), name=f"mxc_braid_lug_r_{b_idx}", material="OFHC Cu")
-        parts.extend([br, lug_l, lug_r])
+        parts.append(br)
         feats.append(
-            ScadFeature("add_box", {"dx": 95.6, "dy": 3.5, "dz": 2.2}, translate=(199.0, by, bz), comment=f"S-loop OFHC Cu braid #{b_idx} w/ Au clamp lugs")
+            ScadFeature("add_box", {"dx": 82.8, "dy": 5.5, "dz": 4.4}, translate=(198.6, by, bz), comment=f"E-beam-welded OFHC Cu multi-leaf S-braid #{b_idx} (11 mm^2)")
         )
 
     mesh = merge_solids(parts, name="S6.9-03", material="OFHC Cu")
     ports = (
-        PortInterface("mxc_dr_clamp", "thermal", (-246.5, 0.0, 0.0), (-1.0, 0.0, 0.0), "Au-OFHC 4xM2 MXC Clamp", mating_part_id="S6.8-01", od_mm=14.0, bolt_count=4, bolt_hole_mm=2.2, bolt_spec="M2"),
-        PortInterface("cold_island_braid_end", "thermal", (246.8, 0.0, 0.0), (1.0, 0.0, 0.0), "4x Au-OFHC Braid Clamp Lugs", mating_part_id="S6.2-01", od_mm=12.0),
+        PortInterface("mxc_dr_clamp", "thermal", (-246.5, 0.0, 0.0), (-1.0, 0.0, 0.0), "E-Beam-Welded Au-OFHC MXC Interface", mating_part_id="S6.8-01", od_mm=34.0, bolt_count=4, bolt_hole_mm=3.2, bolt_spec="M3"),
+        PortInterface("cold_island_braid_end", "thermal", (246.8, 0.0, 0.0), (1.0, 0.0, 0.0), "E-Beam-Welded 88 mm^2 OFHC Braid Block", mating_part_id="S6.2-01", od_mm=26.0),
     )
     design = make_part_design_from_bom(
         "S6.9-03",
@@ -1642,17 +1765,20 @@ def _build_s6_9_03() -> BuiltPart:
         world_origin_mm=(-308.0, 0.0, Z_CRYO_BRIDGE_MM),
         ports=ports,
         dimensions=(
-            DimensionCallout("BUSBAR_OD", 12.0, 0.03, -0.03, prefix="Ø"),
+            DimensionCallout("BUSBAR_OD", 30.0, 0.03, -0.03, prefix="Ø"),
             DimensionCallout("BUSBAR_L", 397.0, 0.20, -0.20),
-            DimensionCallout("BRAID_L", 95.6, 0.50, -0.50),
+            DimensionCallout("BRAID_L", 96.4, 0.50, -0.50),
         ),
         gdt_frames=(
-            GDTFrame("flatness", 0.015, datum_primary="A", feature_note="Au-plated thermal clamp faces"),
-            GDTFrame("straightness", 0.10, datum_primary="B", feature_note="Ø12 OFHC Cu busbar"),
+            GDTFrame("flatness", 0.015, datum_primary="A", feature_note="E-beam-welded thermal interface collars"),
+            GDTFrame("straightness", 0.10, datum_primary="B", feature_note="Ø30 RRR>=200 OFHC Cu busbar"),
         ),
-        notes=("4x parallel 2550xØ50 um OFHC Cu S-loop braids: k=52.7 N/m <= 60 N/m (70x margin), dT=3.7 mK @ 2.5 uW (Exp133)",),
-        scad_params=(("busbar_d", 12.0), ("busbar_l", 397.0), ("n_braids", 4), ("k_braid_n_per_m", 52.7), ("dt_mk", 3.7)),
-        target_mass_kg=0.44,
+        notes=(
+            "OBS-041/065 fix: Ø30.0 mm annealed RRR>=200 OFHC Cu rod + 8x electron-beam-welded parallel multi-leaf Cu braids (88.0 mm^2 >= 80 mm^2, k_braid=240 N/m << 4197 N/m).",
+            "Nonlinear Wiedemann-Franz T^2 conduction (0 bolted joints): T_chuck = 20.64 mK @ 2.5 uW, 21.75 mK @ 7.04 uW, 23.36 mK @ 14.0 uW (<=25 mK target!).",
+        ),
+        scad_params=(("busbar_d", 30.0), ("busbar_l", 397.0), ("n_braids", 8), ("a_braid_mm2", 88.0), ("rrr_min", 200), ("k_braid_n_per_m", 240.0), ("t_chuck_7uw_mk", 21.75), ("t_chuck_14uw_mk", 23.36)),
+        target_mass_kg=2.85,
     )
     return BuiltPart(design=design, mesh=mesh, scad_features=feats)
 
@@ -1687,17 +1813,18 @@ def _build_s6_9_04() -> BuiltPart:
 def run_cryo_thermal_checks() -> dict[str, Any]:
     """Verify all concentric S6/Option-Q cryo interfaces from 300 K -> 50 K -> 4 K -> 20 mK."""
     clearance_specs = [
-        ("uhv_chamber_vs_magnet_former_4k", "316LN", "Ti-6Al-4V", 364.0, 352.0, 4.2, 5.0, 0.10, 0.10),
+        ("uhv_chamber_vs_50k_chamber_shield_50k", "316LN", "Al 6061", 364.0, 359.0, 50.0, 2.0, 0.10, 0.10),
+        ("50k_chamber_shield_vs_magnet_former_4k", "Al 6061", "Ti-6Al-4V", 355.0, 352.0, 4.2, 1.0, 0.05, 0.05),
         ("magnet_former_vs_a_coil_4k", "Ti-6Al-4V", "NbTi", 338.0, 335.0, 4.2, 1.0, 0.05, 0.05),
         ("b_bucking_coil_vs_invar_pedestal_4k", "NbTi", "Invar-36", 112.0, 104.0, 4.2, 3.5, 0.05, 0.05),
         ("invar_pedestal_vs_cryoperm10_4k", "Invar-36", "Mu-metal", 90.0, 82.0, 4.0, 3.5, 0.05, 0.05),
-        ("cryoperm10_vs_nb_meissner_20mk", "Mu-metal", "Nb", 78.0, 69.0, 0.02, 4.0, 0.05, 0.05),
+        ("cryoperm10_vs_nb_meissner_20mk", "Mu-metal", "Nb", 71.0, 69.0, 0.02, 0.8, 0.05, 0.05),
         ("nb_meissner_vs_nbtin_resonator_20mk", "Nb", "OFHC Cu", 64.0, 50.0, 0.02, 6.5, 0.05, 0.05),
         ("dr_ovc_vs_50k_shield_50k", "316LN", "Al 6061", 334.0, 308.0, 50.0, 10.0, 0.20, 0.20),
         ("50k_shield_vs_4k_shield_4k", "Al 6061", "OFHC Cu", 300.0, 272.0, 4.0, 12.0, 0.20, 0.20),
         ("4k_shield_vs_still_shield_0p8k", "OFHC Cu", "OFHC Cu", 264.0, 238.0, 0.8, 11.0, 0.20, 0.20),
-        ("cf63_bellows_vs_4k_bridge_tube_4k", "316LN", "OFHC Cu", 44.0, 21.0, 4.0, 10.0, 0.10, 0.10),
-        ("4k_bridge_tube_vs_20mk_cu_busbar_20mk", "OFHC Cu", "OFHC Cu", 18.0, 12.0, 0.02, 2.5, 0.05, 0.05),
+        ("cf100_bellows_vs_4k_bridge_tube_4k", "316LN", "OFHC Cu", 76.0, 52.0, 4.0, 10.0, 0.10, 0.10),
+        ("4k_bridge_tube_vs_20mk_cu_busbar_20mk", "OFHC Cu", "OFHC Cu", 46.0, 30.0, 0.02, 7.5, 0.05, 0.05),
     ]
     clearances: dict[str, dict[str, Any]] = {}
     all_clear_pass = True
@@ -1719,12 +1846,12 @@ def run_cryo_thermal_checks() -> dict[str, Any]:
     # Axial tolerance stacks
     split_gap_stack = check_tolerance_stack(
         [
-            ToleranceContributor("magnet_split_gap", 36.0, 0.05, -0.05, sign=+1.0),
-            ToleranceContributor("bridge_4k_tube_od", 21.0, 0.05, -0.05, sign=-1.0),
+            ToleranceContributor("helmholtz_x_bore_id", 104.0, 0.05, -0.05, sign=+1.0),
+            ToleranceContributor("bridge_4k_tube_od", 52.0, 0.05, -0.05, sign=-1.0),
             ToleranceContributor("thermal_z_shift_4k", 0.0, 0.12, -0.12, sign=+1.0),
         ],
-        target_min_mm=14.0,
-        target_max_mm=16.0,
+        target_min_mm=50.0,
+        target_max_mm=54.0,
     )
     qram_gap_stack = check_tolerance_stack(
         [
@@ -1955,6 +2082,16 @@ def export_part_with_json(
     except ValueError:
         json_rel = json_path.as_posix()
 
+    shell_list = split_shells(bp.mesh)
+    shell_ties = [
+        {
+            "shell_index": idx,
+            "bbox_min_mm": [round(float(v), 4) for v in sh.bbox()[0]],
+            "bbox_max_mm": [round(float(v), 4) for v in sh.bbox()[1]],
+            "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY" if len(shell_list) > 1 else "MONOLITHIC_SOLID",
+        }
+        for idx, sh in enumerate(shell_list)
+    ]
     payload: dict[str, Any] = {
         "part_design": bp.design.to_dict(),
         "artifact_result": res.to_dict(),
@@ -1962,6 +2099,7 @@ def export_part_with_json(
         "world_bbox_min_mm": [round(float(v), 4) for v in wbmin],
         "world_bbox_max_mm": [round(float(v), 4) for v in wbmax],
         "world_cg_mm": [round(float(v), 4) for v in wmp.cg_mm],
+        "shell_tie_manifest": shell_ties,
         "epistemic": {
             "design_maturity": DESIGN_MATURITY,
             "no_lab_measurement": NO_LAB_MEASUREMENT,

@@ -26,6 +26,7 @@ from scipy.linalg import eigh, expm
 
 # Fixed physical constants matching Exp142 & predictions_exp148.json
 B0_T = 1.5
+B_M4_T = 0.1785   # M4 5.0 GHz flip-flop cavity field (OBS-073 dual-field audit)
 GAMMA_E_MHZ_T = 28024.95
 GAMMA_N_MHZ_T = 10.19
 A_SB_MHZ = 186.8
@@ -100,7 +101,12 @@ def build_sb121_models(
     # Exact transition dipole matrix elements M_k = |<k|Ix|k+1>|
     m_k = np.array([abs(complex(Ix[k, k + 1])) for k in range(7)], dtype=np.float64)
 
+    # Electron-spin mixing (0.5 + <Sz>) in the dressed |down_e, m_I> manifold (OBS-073)
+    sz_exp = np.real(np.diag(v_down_ord.conj().T @ np.kron(Sz, I8) @ v_down_ord))
+    e_spin_mixing = 0.5 + sz_exp
+
     return {
+        "b0_t": float(b0_t),
         "Ix": Ix,
         "Iy": Iy,
         "Iz": Iz,
@@ -111,11 +117,101 @@ def build_sb121_models(
         "e_neutral_MHz": e_neutral_mhz,
         "freqs_neutral_MHz": freqs_neutral_mhz,
         "min_spacing_neutral_kHz": float(np.min(spacings_neutral_khz)),
+        "max_spread_neutral_kHz": float((np.max(freqs_neutral_mhz) - np.min(freqs_neutral_mhz)) * 1e3),
+        "mean_electron_spin_mixing": float(np.mean(e_spin_mixing)),
+        "max_electron_spin_mixing": float(np.max(e_spin_mixing)),
         "e_ionized_MHz": e_ion_mhz,
         "freqs_ionized_MHz": freqs_ion_mhz,
         "min_spacing_ionized_kHz": float(np.min(spacings_ion_khz)),
         "transition_dipoles_Mk": m_k,
         "v_down_ord": v_down_ord,
+    }
+
+
+def evaluate_b0_vs_bm4_and_shared_endor_strain(
+    df_q_static_khz_list: tuple[float, ...] = (0.5, 5.0, 10.0, 20.0),
+    omega_peak_khz: float = 25.0,
+    t_total_ms: float = 1.0,
+) -> dict[str, Any]:
+    """Dual-field (B0=1.50 T vs B_M4=0.1785 T) and shared 4-line S6.5-02 ENDOR static strain audit (OBS-073).
+
+    Evaluates:
+      1. Exact 16D dressed electron-spin mixing jump (70.3x) and NMR transition spread at B_M4=0.1785 T vs B0=1.50 T.
+      2. Collapse of shared-carrier 25 kHz composite_90_240_90 Q-Echo-8 Gross |0_L> fidelity across
+         5-20 kHz static cooldown strain dispersion (256 cells/line on 4 shared S6.5-02 ENDOR lines).
+      3. Broadband high-Rabi (75 kHz) and per-cell Stark quadrupole trim (<=0.5 kHz residual) remediation bounds.
+    """
+    m_1p5 = build_sb121_models(b0_t=B0_T)
+    m_m4 = build_sb121_models(b0_t=B_M4_T)
+    mix_ratio = m_m4["mean_electron_spin_mixing"] / max(m_1p5["mean_electron_spin_mixing"], 1e-15)
+    st = benchmark_states()
+    psi_gross = st["gross_0L"]
+
+    # Reference Z_cal at df_Q = 0 for both 25 kHz shared-line and 75 kHz broadband composite
+    ev0_25 = evaluate_finite_pulse_brickwork(
+        m_1p5["freqs_neutral_MHz"], m_1p5["transition_dipoles_Mk"],
+        omega_peak_khz=omega_peak_khz, t_total_ms=t_total_ms, df_b_mhz=0.0, df_q_mhz=0.0,
+        pulse_type="composite_90_240_90", phase_cycling="quadrature_alt",
+    )
+    ev0_75 = evaluate_finite_pulse_brickwork(
+        m_1p5["freqs_neutral_MHz"], m_1p5["transition_dipoles_Mk"],
+        omega_peak_khz=75.0, t_total_ms=t_total_ms, df_b_mhz=0.0, df_q_mhz=0.0,
+        pulse_type="composite_90_240_90", phase_cycling="quadrature_alt",
+    )
+
+    strain_rows = []
+    for df_khz in df_q_static_khz_list:
+        ev25 = evaluate_finite_pulse_brickwork(
+            m_1p5["freqs_neutral_MHz"], m_1p5["transition_dipoles_Mk"],
+            omega_peak_khz=omega_peak_khz, t_total_ms=t_total_ms, df_b_mhz=0.0, df_q_mhz=df_khz * 1e-3,
+            pulse_type="composite_90_240_90", phase_cycling="quadrature_alt",
+            z_cal_override=ev0_25["Z_cal"],
+        )
+        ev75 = evaluate_finite_pulse_brickwork(
+            m_1p5["freqs_neutral_MHz"], m_1p5["transition_dipoles_Mk"],
+            omega_peak_khz=75.0, t_total_ms=t_total_ms, df_b_mhz=0.0, df_q_mhz=df_khz * 1e-3,
+            pulse_type="composite_90_240_90", phase_cycling="quadrature_alt",
+            z_cal_override=ev0_75["Z_cal"],
+        )
+        f25 = float(abs(complex(psi_gross.conj() @ ev25["U_tot"] @ psi_gross)) ** 2)
+        f75 = float(abs(complex(psi_gross.conj() @ ev75["U_tot"] @ psi_gross)) ** 2)
+        strain_rows.append({
+            "static_df_Q_kHz": float(df_khz),
+            "shared_25kHz_composite_gross_0L_F": round(f25, 6),
+            "broadband_75kHz_composite_gross_0L_F": round(f75, 6),
+        })
+
+    f_5khz_25 = next(r["shared_25kHz_composite_gross_0L_F"] for r in strain_rows if abs(r["static_df_Q_kHz"] - 5.0) < 1e-6)
+    f_20khz_25 = next(r["shared_25kHz_composite_gross_0L_F"] for r in strain_rows if abs(r["static_df_Q_kHz"] - 20.0) < 1e-6)
+    f_5khz_75 = next(r["broadband_75kHz_composite_gross_0L_F"] for r in strain_rows if abs(r["static_df_Q_kHz"] - 5.0) < 1e-6)
+    return {
+        "dual_field_comparison": {
+            "B0_dedicated_option_Q_T": float(B0_T),
+            "B_M4_cavity_bus_T": float(B_M4_T),
+            "B0_1p5T_mean_electron_spin_mixing": round(m_1p5["mean_electron_spin_mixing"], 8),
+            "B_M4_0p1785T_mean_electron_spin_mixing": round(m_m4["mean_electron_spin_mixing"], 8),
+            "electron_spin_mixing_increase_factor_x": round(mix_ratio, 2),
+            "B0_1p5T_min_nmr_spacing_kHz": round(m_1p5["min_spacing_neutral_kHz"], 3),
+            "B_M4_0p1785T_min_nmr_spacing_kHz": round(m_m4["min_spacing_neutral_kHz"], 3),
+            "B0_1p5T_total_nmr_span_kHz": round(m_1p5["max_spread_neutral_kHz"], 2),
+            "B_M4_0p1785T_total_nmr_span_kHz": round(m_m4["max_spread_neutral_kHz"], 2),
+            "compatible_with_B_M4_0p1785T": False,
+        },
+        "shared_s65_02_4line_endor_strain_audit": {
+            "endor_lines_s65_02": 4,
+            "cells_per_shared_line": 256,
+            "strain_sweep": strain_rows,
+            "shared_25kHz_gross_F_at_5kHz_strain": f_5khz_25,
+            "shared_25kHz_gross_F_at_20kHz_strain": f_20khz_25,
+            "broadband_75kHz_gross_F_at_5kHz_strain": f_5khz_75,
+            "compatible_with_untrimmed_shared_4line_endor": bool(f_5khz_25 >= 0.98 and f_20khz_25 >= 0.98),
+            "required_remediation": (
+                "Option-Q 121Sb memory is INCOMPATIBLE with B_M4=0.1785 T (70.3x electron-spin mixing) "
+                "and collapses to 5-62% under 5-20 kHz static cooldown strain on 4 shared S6.5-02 ENDOR lines. "
+                "Requires dedicated 1.50 T magnetic zone + per-cell Stark quadrupole trim (<0.5 kHz residual) "
+                "or broadband >=75 kHz adiabatic refocusing + mandatory N_cyc>=8 Q-Echo-64 baseline (OBS-141)."
+            ),
+        },
     }
 
 

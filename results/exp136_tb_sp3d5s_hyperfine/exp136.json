@@ -1787,6 +1787,11 @@
           "T2e_XY8_N64_alpha2_ms": 36.038338658146955,
           "T2e_XY8_N32_alpha1_ms": 12.74147682393651,
           "T2e_XY8_N64_alpha1_ms": 18.01916932907348,
+          "T2e_conservative_planning_alpha1_ms": 18.01916932907348,
+          "overhauser_sigma_KL_MHz": 0.707813887967734,
+          "overhauser_sigma_HM5962_MHz": 1.415627775935468,
+          "overhauser_T2_star_KL_us": 0.3179918942895012,
+          "overhauser_T2_star_HM5962_us": 0.1589959471447506,
           "T2n_star_abragam_ms": 53.006971837054294,
           "gamma_29si_hwhm_Hz": 3.002528489670085
         },
@@ -1936,6 +1941,55 @@
           "Y_FT_Ncand6": 1.6143861022844058e-67,
           "N_cand_star_99pct": 96,
           "N_cand_star_99p5pct": 99
+        },
+        "m4_percolation_ddrf_and_iradina_valley": {
+          "L": 11,
+          "n_nodes": 121,
+          "max_dead_FT": 6,
+          "m4_cap_yield": 0.5375,
+          "p_yield_base": 0.13,
+          "p_M4_single_site": 0.06987499999999999,
+          "by_N_cand": {
+            "3": {
+              "N_cand": 3,
+              "p_node": 0.19531861890429691,
+              "Y_FT_5pct_exact": 2.880346209399959e-73,
+              "expected_dead_nodes": 97.36644711258008
+            },
+            "6": {
+              "N_cand": 6,
+              "p_node": 0.3524878749179119,
+              "Y_FT_5pct_exact": 2.432857403840679e-44,
+              "expected_dead_nodes": 78.34896713493266
+            },
+            "8": {
+              "N_cand": 8,
+              "p_node": 0.4398162063300435,
+              "Y_FT_5pct_exact": 1.1715293261204368e-33,
+              "expected_dead_nodes": 67.78223903406474
+            },
+            "9": {
+              "N_cand": 9,
+              "p_node": 0.47895904891273167,
+              "Y_FT_5pct_exact": 1.3842795049132463e-29,
+              "expected_dead_nodes": 63.04595508155947
+            },
+            "10": {
+              "N_cand": 10,
+              "p_node": 0.5153667853699546,
+              "Y_FT_5pct_exact": 4.1199783939827697e-26,
+              "expected_dead_nodes": 58.640618970235494
+            },
+            "12": {
+              "N_cand": 12,
+              "p_node": 0.5807280478716783,
+              "Y_FT_5pct_exact": 1.615854821298003e-20,
+              "expected_dead_nodes": 50.731906207526926
+            }
+          },
+          "Y_FT_Ncand6": 2.432857403840679e-44,
+          "N_cand_star_99pct": 55,
+          "N_cand_star_99p5pct": 57
         }
       },
       {
@@ -1990,6 +2044,11 @@
           "T2e_XY8_N64_alpha2_ms": 20.306030603060304,
           "T2e_XY8_N32_alpha1_ms": 7.179265969202752,
           "T2e_XY8_N64_alpha1_ms": 10.153015301530154,
+          "T2e_conservative_planning_alpha1_ms": 10.153015301530154,
+          "overhauser_sigma_KL_MHz": 1.001,
+          "overhauser_sigma_HM5962_MHz": 2.002,
+          "overhauser_T2_star_KL_us": 0.22485422481446207,
+          "overhauser_T2_star_HM5962_us": 0.11242711240723104,
           "T2n_star_abragam_ms": 26.503485918527147,
           "gamma_29si_hwhm_Hz": 6.00505697934017
         },
@@ -2139,6 +2198,55 @@
           "Y_FT_Ncand6": 5.88081064476708e-26,
           "N_cand_star_99pct": 33,
           "N_cand_star_99p5pct": 34
+        },
+        "m4_percolation_ddrf_and_iradina_valley": {
+          "L": 11,
+          "n_nodes": 121,
+          "max_dead_FT": 6,
+          "m4_cap_yield": 0.5375,
+          "p_yield_base": 0.295,
+          "p_M4_single_site": 0.1585625,
+          "by_N_cand": {
+            "3": {
+              "N_cand": 3,
+              "p_node": 0.40424788968579084,
+              "Y_FT_5pct_exact": 1.0351685337919397e-37,
+              "expected_dead_nodes": 72.08600534801931
+            },
+            "6": {
+              "N_cand": 6,
+              "p_node": 0.6450794230561664,
+              "Y_FT_5pct_exact": 1.0792124615540455e-15,
+              "expected_dead_nodes": 42.945389810203864
+            },
+            "8": {
+              "N_cand": 8,
+              "p_node": 0.7487101743050132,
+              "Y_FT_5pct_exact": 4.001249736011097e-09,
+              "expected_dead_nodes": 30.406068909093403
+            },
+            "9": {
+              "N_cand": 9,
+              "p_node": 0.7885553172917745,
+              "Y_FT_5pct_exact": 5.764417768507882e-07,
+              "expected_dead_nodes": 25.58480660769528
+            },
+            "10": {
+              "N_cand": 10,
+              "p_node": 0.8220825147936975,
+              "Y_FT_5pct_exact": 2.590575556768697e-05,
+              "expected_dead_nodes": 21.5280157099626
+            },
+            "12": {
+              "N_cand": 12,
+              "p_node": 0.8740313840618563,
+              "Y_FT_5pct_exact": 0.00433113620689104,
+              "expected_dead_nodes": 15.242202528515385
+            }
+          },
+          "Y_FT_Ncand6": 1.0792124615540455e-15,
+          "N_cand_star_99pct": 23,
+          "N_cand_star_99p5pct": 24
         }
       },
       {
@@ -2193,6 +2301,11 @@
           "T2e_XY8_N64_alpha2_ms": 16.667898042113034,
           "T2e_XY8_N32_alpha1_ms": 5.8929918668520545,
           "T2e_XY8_N64_alpha1_ms": 8.333949021056519,
+          "T2e_conservative_planning_alpha1_ms": 8.333949021056519,
+          "overhauser_sigma_KL_MHz": 1.1191520227386447,
+          "overhauser_sigma_HM5962_MHz": 2.2383040454772893,
+          "overhauser_T2_star_KL_us": 0.2011157326852629,
+          "overhauser_T2_star_HM5962_us": 0.10055786634263145,
           "T2n_star_abragam_ms": 21.202788734821713,
           "gamma_29si_hwhm_Hz": 7.506321224175212
         },
@@ -2342,6 +2455,55 @@
           "Y_FT_Ncand6": 2.1448379323595525e-16,
           "N_cand_star_99pct": 24,
           "N_cand_star_99p5pct": 25
+        },
+        "m4_percolation_ddrf_and_iradina_valley": {
+          "L": 11,
+          "n_nodes": 121,
+          "max_dead_FT": 6,
+          "m4_cap_yield": 0.5375,
+          "p_yield_base": 0.3925,
+          "p_M4_single_site": 0.21096875,
+          "by_N_cand": {
+            "3": {
+              "N_cand": 3,
+              "p_node": 0.5087725673446961,
+              "Y_FT_5pct_exact": 1.0146168189397413e-26,
+              "expected_dead_nodes": 59.438519351291774
+            },
+            "6": {
+              "N_cand": 6,
+              "p_node": 0.7586956094068789,
+              "Y_FT_5pct_exact": 1.4531846224431201e-08,
+              "expected_dead_nodes": 29.197831261767657
+            },
+            "8": {
+              "N_cand": 8,
+              "p_node": 0.8497710499051697,
+              "Y_FT_5pct_exact": 0.00045134814658182563,
+              "expected_dead_nodes": 18.177702961474463
+            },
+            "9": {
+              "N_cand": 9,
+              "p_node": 0.8814646637204885,
+              "Y_FT_5pct_exact": 0.0082236979623363,
+              "expected_dead_nodes": 14.342775689820893
+            },
+            "10": {
+              "N_cand": 10,
+              "p_node": 0.9064719154462066,
+              "Y_FT_5pct_exact": 0.057622813918531975,
+              "expected_dead_nodes": 11.316898231008995
+            },
+            "12": {
+              "N_cand": 12,
+              "p_node": 0.9417721910804825,
+              "Y_FT_5pct_exact": 0.4382838408840128,
+              "expected_dead_nodes": 7.045564879261619
+            }
+          },
+          "Y_FT_Ncand6": 1.4531846224431201e-08,
+          "N_cand_star_99pct": 17,
+          "N_cand_star_99p5pct": 18
         }
       },
       {
@@ -2396,6 +2558,11 @@
           "T2e_XY8_N64_alpha2_ms": 14.135338345864659,
           "T2e_XY8_N32_alpha1_ms": 4.997596799363569,
           "T2e_XY8_N64_alpha1_ms": 7.06766917293233,
+          "T2e_conservative_planning_alpha1_ms": 7.06766917293233,
+          "overhauser_sigma_KL_MHz": 1.2259696162629803,
+          "overhauser_sigma_HM5962_MHz": 2.4519392325259606,
+          "overhauser_T2_star_KL_us": 0.18359270576816258,
+          "overhauser_T2_star_HM5962_us": 0.09179635288408129,
           "T2n_star_abragam_ms": 17.66899061235143,
           "gamma_29si_hwhm_Hz": 9.007585469010255
         },
@@ -2545,6 +2712,55 @@
           "Y_FT_Ncand6": 5.70476540480919e-09,
           "N_cand_star_99pct": 17,
           "N_cand_star_99p5pct": 18
+        },
+        "m4_percolation_ddrf_and_iradina_valley": {
+          "L": 11,
+          "n_nodes": 121,
+          "max_dead_FT": 6,
+          "m4_cap_yield": 0.5375,
+          "p_yield_base": 0.435,
+          "p_M4_single_site": 0.23381249999999998,
+          "by_N_cand": {
+            "3": {
+              "N_cand": 3,
+              "p_node": 0.5502147729543456,
+              "Y_FT_5pct_exact": 4.9203715153996485e-23,
+              "expected_dead_nodes": 54.42401247252418
+            },
+            "6": {
+              "N_cand": 6,
+              "p_node": 0.7976932495314892,
+              "Y_FT_5pct_exact": 1.6846458063712298e-06,
+              "expected_dead_nodes": 24.479116806689802
+            },
+            "8": {
+              "N_cand": 8,
+              "p_node": 0.8812371805956797,
+              "Y_FT_5pct_exact": 0.00806705320889137,
+              "expected_dead_nodes": 14.370301147922758
+            },
+            "9": {
+              "N_cand": 9,
+              "p_node": 0.9090054123076523,
+              "Y_FT_5pct_exact": 0.06876849036088442,
+              "expected_dead_nodes": 11.010345110774072
+            },
+            "10": {
+              "N_cand": 10,
+              "p_node": 0.9302810843424694,
+              "Y_FT_5pct_exact": 0.25350706566165293,
+              "expected_dead_nodes": 8.435988794561206
+            },
+            "12": {
+              "N_cand": 12,
+              "p_node": 0.9590719787148717,
+              "Y_FT_5pct_exact": 0.7723493748036191,
+              "expected_dead_nodes": 4.952290575500523
+            }
+          },
+          "Y_FT_Ncand6": 1.6846458063712298e-06,
+          "N_cand_star_99pct": 15,
+          "N_cand_star_99p5pct": 16
         }
       },
       {
@@ -2599,6 +2815,11 @@
           "T2e_XY8_N64_alpha2_ms": 12.27087299428882,
           "T2e_XY8_N32_alpha1_ms": 4.338408752670251,
           "T2e_XY8_N64_alpha1_ms": 6.135436497144411,
+          "T2e_conservative_planning_alpha1_ms": 6.135436497144411,
+          "overhauser_sigma_KL_MHz": 1.3241985311878275,
+          "overhauser_sigma_HM5962_MHz": 2.648397062375655,
+          "overhauser_T2_star_KL_us": 0.16997381717179294,
+          "overhauser_T2_star_HM5962_us": 0.08498690858589647,
           "T2n_star_abragam_ms": 15.144849096301224,
           "gamma_29si_hwhm_Hz": 10.508849713845299
         },
@@ -2748,6 +2969,55 @@
           "Y_FT_Ncand6": 0.00014102857806866484,
           "N_cand_star_99pct": 13,
           "N_cand_star_99p5pct": 14
+        },
+        "m4_percolation_ddrf_and_iradina_valley": {
+          "L": 11,
+          "n_nodes": 121,
+          "max_dead_FT": 6,
+          "m4_cap_yield": 0.5375,
+          "p_yield_base": 0.48,
+          "p_M4_single_site": 0.258,
+          "by_N_cand": {
+            "3": {
+              "N_cand": 3,
+              "p_node": 0.591481512,
+              "Y_FT_5pct_exact": 1.144298516974855e-19,
+              "expected_dead_nodes": 49.430737048000005
+            },
+            "6": {
+              "N_cand": 6,
+              "p_node": 0.8331126449621938,
+              "Y_FT_5pct_exact": 8.356582988393694e-05,
+              "expected_dead_nodes": 20.193369959574547
+            },
+            "8": {
+              "N_cand": 8,
+              "p_node": 0.9081178302609653,
+              "Y_FT_5pct_exact": 0.0646681164032348,
+              "expected_dead_nodes": 11.117742538423203
+            },
+            "9": {
+              "N_cand": 9,
+              "p_node": 0.9318234300536362,
+              "Y_FT_5pct_exact": 0.27477588400042274,
+              "expected_dead_nodes": 8.249364963510018
+            },
+            "10": {
+              "N_cand": 10,
+              "p_node": 0.9494129850997981,
+              "Y_FT_5pct_exact": 0.586395372141524,
+              "expected_dead_nodes": 6.12102880292443
+            },
+            "12": {
+              "N_cand": 12,
+              "p_node": 0.9721486107284852,
+              "Y_FT_5pct_exact": 0.9468610479484688,
+              "expected_dead_nodes": 3.3700181018532858
+            }
+          },
+          "Y_FT_Ncand6": 8.356582988393694e-05,
+          "N_cand_star_99pct": 14,
+          "N_cand_star_99p5pct": 14
         }
       },
       {
@@ -2802,6 +3072,11 @@
           "T2e_XY8_N64_alpha2_ms": 10.84094185487746,
           "T2e_XY8_N32_alpha1_ms": 3.832851750016461,
           "T2e_XY8_N64_alpha1_ms": 5.420470927438731,
+          "T2e_conservative_planning_alpha1_ms": 5.420470927438731,
+          "overhauser_sigma_KL_MHz": 1.415627775935468,
+          "overhauser_sigma_HM5962_MHz": 2.831255551870936,
+          "overhauser_T2_star_KL_us": 0.1589959471447506,
+          "overhauser_T2_star_HM5962_us": 0.0794979735723753,
           "T2n_star_abragam_ms": 13.251742959263574,
           "gamma_29si_hwhm_Hz": 12.01011395868034
         },
@@ -2951,6 +3226,55 @@
           "Y_FT_Ncand6": 0.07465921393216585,
           "N_cand_star_99pct": 10,
           "N_cand_star_99p5pct": 11
+        },
+        "m4_percolation_ddrf_and_iradina_valley": {
+          "L": 11,
+          "n_nodes": 121,
+          "max_dead_FT": 6,
+          "m4_cap_yield": 0.5375,
+          "p_yield_base": 0.5975,
+          "p_M4_single_site": 0.32115625,
+          "by_N_cand": {
+            "3": {
+              "N_cand": 3,
+              "p_node": 0.6871692242411194,
+              "Y_FT_5pct_exact": 7.414631305927997e-13,
+              "expected_dead_nodes": 37.852523866824555
+            },
+            "6": {
+              "N_cand": 6,
+              "p_node": 0.902136905738097,
+              "Y_FT_5pct_exact": 0.04218059282763777,
+              "expected_dead_nodes": 11.841434405690261
+            },
+            "8": {
+              "N_cand": 8,
+              "p_node": 0.954901864094476,
+              "Y_FT_5pct_exact": 0.6948118397725616,
+              "expected_dead_nodes": 5.456874444568408
+            },
+            "9": {
+              "N_cand": 9,
+              "p_node": 0.9693854123038844,
+              "Y_FT_5pct_exact": 0.9209642580128061,
+              "expected_dead_nodes": 3.7043651112299854
+            },
+            "10": {
+              "N_cand": 10,
+              "p_node": 0.979217478483665,
+              "Y_FT_5pct_exact": 0.9864233977199828,
+              "expected_dead_nodes": 2.514685103476532
+            },
+            "12": {
+              "N_cand": 12,
+              "p_node": 0.9904228147814859,
+              "Y_FT_5pct_exact": 0.9998198304943783,
+              "expected_dead_nodes": 1.1588394114402107
+            }
+          },
+          "Y_FT_Ncand6": 0.04218059282763777,
+          "N_cand_star_99pct": 11,
+          "N_cand_star_99p5pct": 11
         }
       },
       {
@@ -3005,6 +3329,11 @@
           "T2e_XY8_N64_alpha2_ms": 8.791893998441152,
           "T2e_XY8_N32_alpha1_ms": 3.108403932885525,
           "T2e_XY8_N64_alpha1_ms": 4.395946999220577,
+          "T2e_conservative_planning_alpha1_ms": 4.395946999220577,
+          "overhauser_sigma_KL_MHz": 1.5827199689142737,
+          "overhauser_sigma_HM5962_MHz": 3.1654399378285474,
+          "overhauser_T2_star_KL_us": 0.1422102983850504,
+          "overhauser_T2_star_HM5962_us": 0.0711051491925252,
           "T2n_star_abragam_ms": 10.601394367410856,
           "gamma_29si_hwhm_Hz": 15.012642448350425
         },
@@ -3154,6 +3483,55 @@
           "Y_FT_Ncand6": 0.8805173612816581,
           "N_cand_star_99pct": 7,
           "N_cand_star_99p5pct": 8
+        },
+        "m4_percolation_ddrf_and_iradina_valley": {
+          "L": 11,
+          "n_nodes": 121,
+          "max_dead_FT": 6,
+          "m4_cap_yield": 0.5375,
+          "p_yield_base": 0.68,
+          "p_M4_single_site": 0.3655,
+          "by_N_cand": {
+            "3": {
+              "N_cand": 3,
+              "p_node": 0.7445564863749999,
+              "Y_FT_5pct_exact": 2.319870914384806e-09,
+              "expected_dead_nodes": 30.90866514862501
+            },
+            "6": {
+              "N_cand": 6,
+              "p_node": 0.9347486113469143,
+              "Y_FT_5pct_exact": 0.3182742449429996,
+              "expected_dead_nodes": 7.895418027023365
+            },
+            "8": {
+              "N_cand": 8,
+              "p_node": 0.9737304271293071,
+              "Y_FT_5pct_exact": 0.95889694875295,
+              "expected_dead_nodes": 3.178618317353837
+            },
+            "9": {
+              "N_cand": 9,
+              "p_node": 0.9833319560135454,
+              "Y_FT_5pct_exact": 0.9956666717198039,
+              "expected_dead_nodes": 2.0168333223610073
+            },
+            "10": {
+              "N_cand": 10,
+              "p_node": 0.9894241260905945,
+              "Y_FT_5pct_exact": 0.9996731509893453,
+              "expected_dead_nodes": 1.2796807430380666
+            },
+            "12": {
+              "N_cand": 12,
+              "p_node": 0.9957422562788439,
+              "Y_FT_5pct_exact": 0.9999989518926783,
+              "expected_dead_nodes": 0.5151869902598832
+            }
+          },
+          "Y_FT_Ncand6": 0.3182742449429996,
+          "N_cand_star_99pct": 9,
+          "N_cand_star_99p5pct": 9
         }
       },
       {
@@ -3208,6 +3586,11 @@
           "T2e_XY8_N64_alpha2_ms": 7.394296951819075,
           "T2e_XY8_N32_alpha1_ms": 2.6142787583691436,
           "T2e_XY8_N64_alpha1_ms": 3.697148475909538,
+          "T2e_conservative_planning_alpha1_ms": 3.697148475909538,
+          "overhauser_sigma_KL_MHz": 1.7337828583764459,
+          "overhauser_sigma_HM5962_MHz": 3.4675657167528917,
+          "overhauser_T2_star_KL_us": 0.12981964722505432,
+          "overhauser_T2_star_HM5962_us": 0.06490982361252716,
           "T2n_star_abragam_ms": 8.834495306175715,
           "gamma_29si_hwhm_Hz": 18.01517093802051
         },
@@ -3357,6 +3740,55 @@
           "Y_FT_Ncand6": 0.9847668592073525,
           "N_cand_star_99pct": 7,
           "N_cand_star_99p5pct": 7
+        },
+        "m4_percolation_ddrf_and_iradina_valley": {
+          "L": 11,
+          "n_nodes": 121,
+          "max_dead_FT": 6,
+          "m4_cap_yield": 0.5375,
+          "p_yield_base": 0.7575,
+          "p_M4_single_site": 0.40715624999999994,
+          "by_N_cand": {
+            "3": {
+              "N_cand": 3,
+              "p_node": 0.7916369350399474,
+              "Y_FT_5pct_exact": 8.299905735470061e-07,
+              "expected_dead_nodes": 25.21193086016637
+            },
+            "6": {
+              "N_cand": 6,
+              "p_node": 0.956584833160453,
+              "Y_FT_5pct_exact": 0.7268825699633146,
+              "expected_dead_nodes": 5.253235187585193
+            },
+            "8": {
+              "N_cand": 8,
+              "p_node": 0.9847411443092045,
+              "Y_FT_5pct_exact": 0.99731859526953,
+              "expected_dead_nodes": 1.8463215385862612
+            },
+            "9": {
+              "N_cand": 9,
+              "p_node": 0.9909538827715599,
+              "Y_FT_5pct_exact": 0.9998726280855076,
+              "expected_dead_nodes": 1.0945801846412477
+            },
+            "10": {
+              "N_cand": 10,
+              "p_node": 0.994637065939352,
+              "Y_FT_5pct_exact": 0.9999952764604152,
+              "expected_dead_nodes": 0.6489150213384114
+            },
+            "12": {
+              "N_cand": 12,
+              "p_node": 0.9981151232882943,
+              "Y_FT_5pct_exact": 0.9999999955772955,
+              "expected_dead_nodes": 0.22807008211638657
+            }
+          },
+          "Y_FT_Ncand6": 0.7268825699633146,
+          "N_cand_star_99pct": 8,
+          "N_cand_star_99p5pct": 8
         }
       }
     ],
@@ -3825,6 +4257,11 @@
           "T2e_XY8_N64_alpha2_ms": 36.038338658146955,
           "T2e_XY8_N32_alpha1_ms": 12.74147682393651,
           "T2e_XY8_N64_alpha1_ms": 18.01916932907348,
+          "T2e_conservative_planning_alpha1_ms": 18.01916932907348,
+          "overhauser_sigma_KL_MHz": 0.707813887967734,
+          "overhauser_sigma_HM5962_MHz": 1.415627775935468,
+          "overhauser_T2_star_KL_us": 0.3179918942895012,
+          "overhauser_T2_star_HM5962_us": 0.1589959471447506,
           "T2n_star_abragam_ms": 53.006971837054294,
           "gamma_29si_hwhm_Hz": 3.002528489670085
         },
@@ -3974,6 +4411,55 @@
           "Y_FT_Ncand6": 1.7595233167320123e-149,
           "N_cand_star_99pct": 200,
           "N_cand_star_99p5pct": 200
+        },
+        "m4_percolation_ddrf_and_iradina_valley": {
+          "L": 11,
+          "n_nodes": 121,
+          "max_dead_FT": 6,
+          "m4_cap_yield": 0.5375,
+          "p_yield_base": 0.0375,
+          "p_M4_single_site": 0.020156249999999997,
+          "by_N_cand": {
+            "3": {
+              "N_cand": 3,
+              "p_node": 0.059258115726470884,
+              "Y_FT_5pct_exact": 1.9631237032615e-132,
+              "expected_dead_nodes": 113.82976799709702
+            },
+            "6": {
+              "N_cand": 6,
+              "p_node": 0.11500470717348998,
+              "Y_FT_5pct_exact": 1.784736605360832e-99,
+              "expected_dead_nodes": 107.08443043200771
+            },
+            "8": {
+              "N_cand": 8,
+              "p_node": 0.15032152897151752,
+              "Y_FT_5pct_exact": 3.323968259924209e-86,
+              "expected_dead_nodes": 102.81109499444638
+            },
+            "9": {
+              "N_cand": 9,
+              "p_node": 0.1674478606531853,
+              "Y_FT_5pct_exact": 7.2088056016952445e-81,
+              "expected_dead_nodes": 100.73880886096458
+            },
+            "10": {
+              "N_cand": 10,
+              "p_node": 0.1842289897118946,
+              "Y_FT_5pct_exact": 3.761625414820053e-76,
+              "expected_dead_nodes": 98.70829224486076
+            },
+            "12": {
+              "N_cand": 12,
+              "p_node": 0.2167833316749198,
+              "Y_FT_5pct_exact": 3.9556886503322245e-68,
+              "expected_dead_nodes": 94.7692168673347
+            }
+          },
+          "Y_FT_Ncand6": 1.784736605360832e-99,
+          "N_cand_star_99pct": 194,
+          "N_cand_star_99p5pct": 200
         }
       },
       {
@@ -4028,6 +4514,11 @@
           "T2e_XY8_N64_alpha2_ms": 20.306030603060304,
           "T2e_XY8_N32_alpha1_ms": 7.179265969202752,
           "T2e_XY8_N64_alpha1_ms": 10.153015301530154,
+          "T2e_conservative_planning_alpha1_ms": 10.153015301530154,
+          "overhauser_sigma_KL_MHz": 1.001,
+          "overhauser_sigma_HM5962_MHz": 2.002,
+          "overhauser_T2_star_KL_us": 0.22485422481446207,
+          "overhauser_T2_star_HM5962_us": 0.11242711240723104,
           "T2n_star_abragam_ms": 26.503485918527147,
           "gamma_29si_hwhm_Hz": 6.00505697934017
         },
@@ -4177,6 +4668,55 @@
           "Y_FT_Ncand6": 2.9282032484536973e-87,
           "N_cand_star_99pct": 149,
           "N_cand_star_99p5pct": 154
+        },
+        "m4_percolation_ddrf_and_iradina_valley": {
+          "L": 11,
+          "n_nodes": 121,
+          "max_dead_FT": 6,
+          "m4_cap_yield": 0.5375,
+          "p_yield_base": 0.0875,
+          "p_M4_single_site": 0.04703125,
+          "by_N_cand": {
+            "3": {
+              "N_cand": 3,
+              "p_node": 0.13456196480178828,
+              "Y_FT_5pct_exact": 1.0906652711076078e-91,
+              "expected_dead_nodes": 104.71800225898362
+            },
+            "6": {
+              "N_cand": 6,
+              "p_node": 0.25101700723225884,
+              "Y_FT_5pct_exact": 6.382220584970847e-61,
+              "expected_dead_nodes": 90.62694212489669
+            },
+            "8": {
+              "N_cand": 8,
+              "p_node": 0.3198115156894805,
+              "Y_FT_5pct_exact": 4.507646147480005e-49,
+              "expected_dead_nodes": 82.30280660157285
+            },
+            "9": {
+              "N_cand": 9,
+              "p_node": 0.35180163034220957,
+              "Y_FT_5pct_exact": 1.9566400171461374e-44,
+              "expected_dead_nodes": 78.43200272859264
+            },
+            "10": {
+              "N_cand": 10,
+              "p_node": 0.3822872099151775,
+              "Y_FT_5pct_exact": 2.081123224955981e-40,
+              "expected_dead_nodes": 74.74324760026352
+            },
+            "12": {
+              "N_cand": 12,
+              "p_node": 0.4390244765446777,
+              "Y_FT_5pct_exact": 9.602591020302295e-34,
+              "expected_dead_nodes": 67.878038338094
+            }
+          },
+          "Y_FT_Ncand6": 6.382220584970847e-61,
+          "N_cand_star_99pct": 82,
+          "N_cand_star_99p5pct": 85
         }
       },
       {
@@ -4231,6 +4771,11 @@
           "T2e_XY8_N64_alpha2_ms": 14.135338345864659,
           "T2e_XY8_N32_alpha1_ms": 4.997596799363569,
           "T2e_XY8_N64_alpha1_ms": 7.06766917293233,
+          "T2e_conservative_planning_alpha1_ms": 7.06766917293233,
+          "overhauser_sigma_KL_MHz": 1.2259696162629803,
+          "overhauser_sigma_HM5962_MHz": 2.4519392325259606,
+          "overhauser_T2_star_KL_us": 0.18359270576816258,
+          "overhauser_T2_star_HM5962_us": 0.09179635288408129,
           "T2n_star_abragam_ms": 17.66899061235143,
           "gamma_29si_hwhm_Hz": 9.007585469010255
         },
@@ -4380,6 +4925,55 @@
           "Y_FT_Ncand6": 7.771723158798664e-45,
           "N_cand_star_99pct": 56,
           "N_cand_star_99p5pct": 57
+        },
+        "m4_percolation_ddrf_and_iradina_valley": {
+          "L": 11,
+          "n_nodes": 121,
+          "max_dead_FT": 6,
+          "m4_cap_yield": 0.5375,
+          "p_yield_base": 0.185,
+          "p_M4_single_site": 0.0994375,
+          "by_N_cand": {
+            "3": {
+              "N_cand": 3,
+              "p_node": 0.2696322705251464,
+              "Y_FT_5pct_exact": 2.0562032545649563e-57,
+              "expected_dead_nodes": 88.37449526645729
+            },
+            "6": {
+              "N_cand": 6,
+              "p_node": 0.466562979741747,
+              "Y_FT_5pct_exact": 7.795191626380372e-31,
+              "expected_dead_nodes": 64.54587945124861
+            },
+            "8": {
+              "N_cand": 8,
+              "p_node": 0.5673757398249963,
+              "Y_FT_5pct_exact": 1.3385302880994747e-21,
+              "expected_dead_nodes": 52.34753548117544
+            },
+            "9": {
+              "N_cand": 9,
+              "p_node": 0.6103948146961483,
+              "Y_FT_5pct_exact": 3.2347128567673656e-18,
+              "expected_dead_nodes": 47.14222742176605
+            },
+            "10": {
+              "N_cand": 10,
+              "p_node": 0.6491361803098,
+              "Y_FT_5pct_exact": 2.07506357705281e-15,
+              "expected_dead_nodes": 42.4545221825142
+            },
+            "12": {
+              "N_cand": 12,
+              "p_node": 0.7154449454179962,
+              "Y_FT_5pct_exact": 4.4145433530182995e-11,
+              "expected_dead_nodes": 34.43116160442246
+            }
+          },
+          "Y_FT_Ncand6": 7.795191626380372e-31,
+          "N_cand_star_99pct": 38,
+          "N_cand_star_99p5pct": 39
         }
       },
       {
@@ -4434,6 +5028,11 @@
           "T2e_XY8_N64_alpha2_ms": 10.84094185487746,
           "T2e_XY8_N32_alpha1_ms": 3.832851750016461,
           "T2e_XY8_N64_alpha1_ms": 5.420470927438731,
+          "T2e_conservative_planning_alpha1_ms": 5.420470927438731,
+          "overhauser_sigma_KL_MHz": 1.415627775935468,
+          "overhauser_sigma_HM5962_MHz": 2.831255551870936,
+          "overhauser_T2_star_KL_us": 0.1589959471447506,
+          "overhauser_T2_star_HM5962_us": 0.0794979735723753,
           "T2n_star_abragam_ms": 13.251742959263574,
           "gamma_29si_hwhm_Hz": 12.01011395868034
         },
@@ -4583,6 +5182,55 @@
           "Y_FT_Ncand6": 1.8389828666281845e-21,
           "N_cand_star_99pct": 29,
           "N_cand_star_99p5pct": 29
+        },
+        "m4_percolation_ddrf_and_iradina_valley": {
+          "L": 11,
+          "n_nodes": 121,
+          "max_dead_FT": 6,
+          "m4_cap_yield": 0.5375,
+          "p_yield_base": 0.3,
+          "p_M4_single_site": 0.16124999999999998,
+          "by_N_cand": {
+            "3": {
+              "N_cand": 3,
+              "p_node": 0.409938064453125,
+              "Y_FT_5pct_exact": 4.88068725932535e-37,
+              "expected_dead_nodes": 71.39749420117188
+            },
+            "6": {
+              "N_cand": 6,
+              "p_node": 0.6518269122186755,
+              "Y_FT_5pct_exact": 3.1922123189317705e-15,
+              "expected_dead_nodes": 42.128943621540266
+            },
+            "8": {
+              "N_cand": 8,
+              "p_node": 0.7550596887253886,
+              "Y_FT_5pct_exact": 9.116685494407477e-09,
+              "expected_dead_nodes": 29.637777664227976
+            },
+            "9": {
+              "N_cand": 9,
+              "p_node": 0.7945563139184197,
+              "Y_FT_5pct_exact": 1.16918996881706e-06,
+              "expected_dead_nodes": 24.85868601587121
+            },
+            "10": {
+              "N_cand": 10,
+              "p_node": 0.8276841082990745,
+              "Y_FT_5pct_exact": 4.7203652956749544e-05,
+              "expected_dead_nodes": 20.85022289581199
+            },
+            "12": {
+              "N_cand": 12,
+              "p_node": 0.8787755009448182,
+              "Y_FT_5pct_exact": 0.006540896615064473,
+              "expected_dead_nodes": 14.668164385677002
+            }
+          },
+          "Y_FT_Ncand6": 3.1922123189317705e-15,
+          "N_cand_star_99pct": 23,
+          "N_cand_star_99p5pct": 24
         }
       },
       {
@@ -4637,6 +5285,11 @@
           "T2e_XY8_N64_alpha2_ms": 8.791893998441152,
           "T2e_XY8_N32_alpha1_ms": 3.108403932885525,
           "T2e_XY8_N64_alpha1_ms": 4.395946999220577,
+          "T2e_conservative_planning_alpha1_ms": 4.395946999220577,
+          "overhauser_sigma_KL_MHz": 1.5827199689142737,
+          "overhauser_sigma_HM5962_MHz": 3.1654399378285474,
+          "overhauser_T2_star_KL_us": 0.1422102983850504,
+          "overhauser_T2_star_HM5962_us": 0.0711051491925252,
           "T2n_star_abragam_ms": 10.601394367410856,
           "gamma_29si_hwhm_Hz": 15.012642448350425
         },
@@ -4786,6 +5439,55 @@
           "Y_FT_Ncand6": 7.515148911897916e-13,
           "N_cand_star_99pct": 21,
           "N_cand_star_99p5pct": 21
+        },
+        "m4_percolation_ddrf_and_iradina_valley": {
+          "L": 11,
+          "n_nodes": 121,
+          "max_dead_FT": 6,
+          "m4_cap_yield": 0.5375,
+          "p_yield_base": 0.4075,
+          "p_M4_single_site": 0.21903124999999998,
+          "by_N_cand": {
+            "3": {
+              "N_cand": 3,
+              "p_node": 0.5236776405556947,
+              "Y_FT_5pct_exact": 2.342259224250703e-25,
+              "expected_dead_nodes": 57.635005492760946
+            },
+            "6": {
+              "N_cand": 6,
+              "p_node": 0.7731170098934099,
+              "Y_FT_5pct_exact": 8.887145061717078e-08,
+              "expected_dead_nodes": 27.4528418028974
+            },
+            "8": {
+              "N_cand": 8,
+              "p_node": 0.8616212989759834,
+              "Y_FT_5pct_exact": 0.0014045692508875148,
+              "expected_dead_nodes": 16.74382282390601
+            },
+            "9": {
+              "N_cand": 9,
+              "p_node": 0.89193055883465,
+              "Y_FT_5pct_exact": 0.019368074110799827,
+              "expected_dead_nodes": 13.07640238100735
+            },
+            "10": {
+              "N_cand": 10,
+              "p_node": 0.9156011436198981,
+              "Y_FT_5pct_exact": 0.10680736613910641,
+              "expected_dead_nodes": 10.212261621992331
+            },
+            "12": {
+              "N_cand": 12,
+              "p_node": 0.9485241088002929,
+              "Y_FT_5pct_exact": 0.568696469827782,
+              "expected_dead_nodes": 6.2285828351645565
+            }
+          },
+          "Y_FT_Ncand6": 8.887145061717078e-08,
+          "N_cand_star_99pct": 16,
+          "N_cand_star_99p5pct": 17
         }
       },
       {
@@ -4840,6 +5542,11 @@
           "T2e_XY8_N64_alpha2_ms": 7.394296951819075,
           "T2e_XY8_N32_alpha1_ms": 2.6142787583691436,
           "T2e_XY8_N64_alpha1_ms": 3.697148475909538,
+          "T2e_conservative_planning_alpha1_ms": 3.697148475909538,
+          "overhauser_sigma_KL_MHz": 1.7337828583764459,
+          "overhauser_sigma_HM5962_MHz": 3.4675657167528917,
+          "overhauser_T2_star_KL_us": 0.12981964722505432,
+          "overhauser_T2_star_HM5962_us": 0.06490982361252716,
           "T2n_star_abragam_ms": 8.834495306175715,
           "gamma_29si_hwhm_Hz": 18.01517093802051
         },
@@ -4989,6 +5696,55 @@
           "Y_FT_Ncand6": 2.5342215989378972e-05,
           "N_cand_star_99pct": 14,
           "N_cand_star_99p5pct": 15
+        },
+        "m4_percolation_ddrf_and_iradina_valley": {
+          "L": 11,
+          "n_nodes": 121,
+          "max_dead_FT": 6,
+          "m4_cap_yield": 0.5375,
+          "p_yield_base": 0.4875,
+          "p_M4_single_site": 0.26203125,
+          "by_N_cand": {
+            "3": {
+              "N_cand": 3,
+              "p_node": 0.598103786212921,
+              "Y_FT_5pct_exact": 3.7408694831415983e-19,
+              "expected_dead_nodes": 48.629441868236555
+            },
+            "6": {
+              "N_cand": 6,
+              "p_node": 0.8384794333436105,
+              "Y_FT_5pct_exact": 0.0001454868086229606,
+              "expected_dead_nodes": 19.543988565423128
+            },
+            "8": {
+              "N_cand": 8,
+              "p_node": 0.9120362424723994,
+              "Y_FT_5pct_exact": 0.08449959483016695,
+              "expected_dead_nodes": 10.643614660839667
+            },
+            "9": {
+              "N_cand": 9,
+              "p_node": 0.9350854958120536,
+              "Y_FT_5pct_exact": 0.32354434614771665,
+              "expected_dead_nodes": 7.854655006741517
+            },
+            "10": {
+              "N_cand": 10,
+              "p_node": 0.9520951244875514,
+              "Y_FT_5pct_exact": 0.6397957424923845,
+              "expected_dead_nodes": 5.79648993700628
+            },
+            "12": {
+              "N_cand": 12,
+              "p_node": 0.9739111065469989,
+              "Y_FT_5pct_exact": 0.9601462488830824,
+              "expected_dead_nodes": 3.1567561078131376
+            }
+          },
+          "Y_FT_Ncand6": 0.0001454868086229606,
+          "N_cand_star_99pct": 13,
+          "N_cand_star_99p5pct": 14
         }
       }
     ],
@@ -5255,6 +6011,11 @@
           "T2e_XY8_N64_alpha2_ms": 36.038338658146955,
           "T2e_XY8_N32_alpha1_ms": 12.74147682393651,
           "T2e_XY8_N64_alpha1_ms": 18.01916932907348,
+          "T2e_conservative_planning_alpha1_ms": 18.01916932907348,
+          "overhauser_sigma_KL_MHz": 0.707813887967734,
+          "overhauser_sigma_HM5962_MHz": 1.415627775935468,
+          "overhauser_T2_star_KL_us": 0.3179918942895012,
+          "overhauser_T2_star_HM5962_us": 0.1589959471447506,
           "T2n_star_abragam_ms": 53.006971837054294,
           "gamma_29si_hwhm_Hz": 3.002528489670085
         },
@@ -5404,6 +6165,55 @@
           "Y_FT_Ncand6": 0.0,
           "N_cand_star_99pct": 200,
           "N_cand_star_99p5pct": 200
+        },
+        "m4_percolation_ddrf_and_iradina_valley": {
+          "L": 11,
+          "n_nodes": 121,
+          "max_dead_FT": 6,
+          "m4_cap_yield": 0.5375,
+          "p_yield_base": 0.01,
+          "p_M4_single_site": 0.005375,
+          "by_N_cand": {
+            "3": {
+              "N_cand": 3,
+              "p_node": 0.01603848341210945,
+              "Y_FT_5pct_exact": 1.3700022886417844e-197,
+              "expected_dead_nodes": 119.05934350713476
+            },
+            "6": {
+              "N_cand": 6,
+              "p_node": 0.03181973387405834,
+              "Y_FT_5pct_exact": 2.04779008816875e-163,
+              "expected_dead_nodes": 117.14981220123894
+            },
+            "8": {
+              "N_cand": 8,
+              "p_node": 0.04219970040191123,
+              "Y_FT_5pct_exact": 2.4206081428214428e-149,
+              "expected_dead_nodes": 115.89383625136874
+            },
+            "9": {
+              "N_cand": 9,
+              "p_node": 0.04734787701225096,
+              "Y_FT_5pct_exact": 1.3151918918814027e-143,
+              "expected_dead_nodes": 115.27090688151763
+            },
+            "10": {
+              "N_cand": 10,
+              "p_node": 0.05246838217331018,
+              "Y_FT_5pct_exact": 1.712957850702502e-138,
+              "expected_dead_nodes": 114.65132575702947
+            },
+            "12": {
+              "N_cand": 12,
+              "p_node": 0.06262697228430081,
+              "Y_FT_5pct_exact": 1.1098058717798616e-129,
+              "expected_dead_nodes": 113.4221363535996
+            }
+          },
+          "Y_FT_Ncand6": 2.04779008816875e-163,
+          "N_cand_star_99pct": 200,
+          "N_cand_star_99p5pct": 200
         }
       },
       {
@@ -5458,6 +6268,11 @@
           "T2e_XY8_N64_alpha2_ms": 20.306030603060304,
           "T2e_XY8_N32_alpha1_ms": 7.179265969202752,
           "T2e_XY8_N64_alpha1_ms": 10.153015301530154,
+          "T2e_conservative_planning_alpha1_ms": 10.153015301530154,
+          "overhauser_sigma_KL_MHz": 1.001,
+          "overhauser_sigma_HM5962_MHz": 2.002,
+          "overhauser_T2_star_KL_us": 0.22485422481446207,
+          "overhauser_T2_star_HM5962_us": 0.11242711240723104,
           "T2n_star_abragam_ms": 26.503485918527147,
           "gamma_29si_hwhm_Hz": 6.00505697934017
         },
@@ -5607,6 +6422,55 @@
           "Y_FT_Ncand6": 1.6877837186433795e-108,
           "N_cand_star_99pct": 200,
           "N_cand_star_99p5pct": 200
+        },
+        "m4_percolation_ddrf_and_iradina_valley": {
+          "L": 11,
+          "n_nodes": 121,
+          "max_dead_FT": 6,
+          "m4_cap_yield": 0.5375,
+          "p_yield_base": 0.0525,
+          "p_M4_single_site": 0.028218749999999997,
+          "by_N_cand": {
+            "3": {
+              "N_cand": 3,
+              "p_node": 0.08228982697531118,
+              "Y_FT_5pct_exact": 4.2438955987836976e-116,
+              "expected_dead_nodes": 111.04293093598734
+            },
+            "6": {
+              "N_cand": 6,
+              "p_node": 0.15780803832699564,
+              "Y_FT_5pct_exact": 8.438104983753531e-84,
+              "expected_dead_nodes": 101.90522736243352
+            },
+            "8": {
+              "N_cand": 8,
+              "p_node": 0.20466861151423232,
+              "Y_FT_5pct_exact": 5.816938959652152e-71,
+              "expected_dead_nodes": 96.23509800677789
+            },
+            "9": {
+              "N_cand": 9,
+              "p_node": 0.22711186913306514,
+              "Y_FT_5pct_exact": 7.720066838693827e-66,
+              "expected_dead_nodes": 93.51946383489911
+            },
+            "10": {
+              "N_cand": 10,
+              "p_node": 0.24892180607596637,
+              "Y_FT_5pct_exact": 2.4748160583280786e-61,
+              "expected_dead_nodes": 90.88046146480806
+            },
+            "12": {
+              "N_cand": 12,
+              "p_node": 0.2907126996933769,
+              "Y_FT_5pct_exact": 9.937369147254357e-54,
+              "expected_dead_nodes": 85.8237633371014
+            }
+          },
+          "Y_FT_Ncand6": 8.438104983753531e-84,
+          "N_cand_star_99pct": 138,
+          "N_cand_star_99p5pct": 143
         }
       },
       {
@@ -5661,6 +6525,11 @@
           "T2e_XY8_N64_alpha2_ms": 10.84094185487746,
           "T2e_XY8_N32_alpha1_ms": 3.832851750016461,
           "T2e_XY8_N64_alpha1_ms": 5.420470927438731,
+          "T2e_conservative_planning_alpha1_ms": 5.420470927438731,
+          "overhauser_sigma_KL_MHz": 1.415627775935468,
+          "overhauser_sigma_HM5962_MHz": 2.831255551870936,
+          "overhauser_T2_star_KL_us": 0.1589959471447506,
+          "overhauser_T2_star_HM5962_us": 0.0794979735723753,
           "T2n_star_abragam_ms": 13.251742959263574,
           "gamma_29si_hwhm_Hz": 12.01011395868034
         },
@@ -5810,6 +6679,55 @@
           "Y_FT_Ncand6": 2.354801300524545e-33,
           "N_cand_star_99pct": 41,
           "N_cand_star_99p5pct": 42
+        },
+        "m4_percolation_ddrf_and_iradina_valley": {
+          "L": 11,
+          "n_nodes": 121,
+          "max_dead_FT": 6,
+          "m4_cap_yield": 0.5375,
+          "p_yield_base": 0.195,
+          "p_M4_single_site": 0.1048125,
+          "by_N_cand": {
+            "3": {
+              "N_cand": 3,
+              "p_node": 0.28263195403637686,
+              "Y_FT_5pct_exact": 4.1544488797602615e-55,
+              "expected_dead_nodes": 86.8015335615984
+            },
+            "6": {
+              "N_cand": 6,
+              "p_node": 0.48538308663033314,
+              "Y_FT_5pct_exact": 5.954862276773292e-29,
+              "expected_dead_nodes": 62.26864651772969
+            },
+            "8": {
+              "N_cand": 8,
+              "p_node": 0.587606250574512,
+              "Y_FT_5pct_exact": 5.67938197986042e-20,
+              "expected_dead_nodes": 49.89964368048405
+            },
+            "9": {
+              "N_cand": 9,
+              "p_node": 0.630830270436171,
+              "Y_FT_5pct_exact": 1.0411399659548818e-16,
+              "expected_dead_nodes": 44.669537277223306
+            },
+            "10": {
+              "N_cand": 10,
+              "p_node": 0.6695238727160797,
+              "Y_FT_5pct_exact": 5.125455062518124e-14,
+              "expected_dead_nodes": 39.98761140135436
+            },
+            "12": {
+              "N_cand": 12,
+              "p_node": 0.7351694324738768,
+              "Y_FT_5pct_exact": 6.643619383631902e-10,
+              "expected_dead_nodes": 32.04449867066091
+            }
+          },
+          "Y_FT_Ncand6": 5.954862276773292e-29,
+          "N_cand_star_99pct": 36,
+          "N_cand_star_99p5pct": 37
         }
       }
     ],
@@ -5989,5 +6907,24 @@
         }
       }
     }
+  },
+  "ab_initio_uncertainty_and_stark_convergence_audit": {
+    "exp129_vokl6_abinit_a004_MHz": 7.95121965246282,
+    "exp136_sp3d5s_abinit_a004_MHz": 3.648380898174013,
+    "hale_mieher_1969_target_a004_MHz": 5.962,
+    "inter_model_spread_ratio": 2.179,
+    "empirical_rescaling_to_HM5962": 1.6341,
+    "tb4_honest_verdict": "FAIL",
+    "tb5_honest_verdict": "FAIL",
+    "stark_finite_box_eta_A_um2_per_V2": {
+      "N16_L6p14nm_um2_per_V2": -0.00013178259751191,
+      "N20_L7p68nm_um2_per_V2": -0.0003659113335555854,
+      "N24_L9p22nm_um2_per_V2": -0.0007231216462001524
+    },
+    "stark_bulk_rahman2007_eta_A_um2_per_V2": -0.00278,
+    "stark_n20_suppression_below_bulk_x": 7.6,
+    "stark_convergence_requirement": "Supercell >=40 nm (N>=90) or hybrid TB-core + continuum 2p/3p variational basis required to converge eta_A to bulk -2.78e-3 um^2/V^2.",
+    "ddrf_6893Hz_mandatory_filter_note": "Downstream QEC N_cand sizing MUST use yield_and_gap_ge_6893Hz (0.2950 @ f=1.0%, 0.5400 @ f=1.5%+2MV/m, 0.6800 @ f=2.0%+3MV/m), not unfiltered GAUSS500 yield.",
+    "conservative_alpha1_T2e_note": "Use alpha=1 (1/f) N^0.5 coherence (7.07 ms @ f=1.5%, 5.42 ms @ f=2.0%) rather than alpha=2 N^(2/3) (14.135 ms) for QEC idle budgets."
   }
 }

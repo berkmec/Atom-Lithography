@@ -262,7 +262,7 @@ module tb_cryo_mux_ddc_ctrl;
 
         repeat (4) @(posedge clk);
         rst_n = 1'b1;
-        @(posedge clk);
+        repeat (4) @(posedge clk);
 
         // Configure 8 channels with distinct NCO frequencies, rotated IQ axes, and thresholds
         cfg_ch8(5'd0, 24'h040000,  16'sd32767,  16'sd0,      32'sd0);
@@ -335,8 +335,36 @@ module tb_cryo_mux_ddc_ctrl;
             errors = errors + 1;
         end
 
-        $display("DDC_SUMMARY errors=%0d win8_cnt=%0d mask8=%02h tones32_beats=%0d mask32=%08h",
-                 errors, wcnt8, qmask8, beats, qmask32);
+        // OBS-114 Regression: Continuous 100 MSPS Back-to-Back Streaming (180 clocks -> 180/180 accepted!)
+        begin : blk_100msps_check
+            integer accepted_180, cyc_i;
+            @(negedge clk);
+            wlen8    = 16'd60;
+            axis_tr8 = 1'b1;
+            mf_en8   = 1'b0;
+            accepted_180 = 0;
+            for (cyc_i = 0; cyc_i < 180; cyc_i = cyc_i + 1) begin
+                @(negedge clk);
+                adc_s8 = sample_wave(cyc_i);
+                adc_v8 = 1'b1;
+                @(posedge clk);
+                if (adc_r8 && adc_v8) accepted_180 = accepted_180 + 1;
+            end
+            @(negedge clk);
+            adc_v8 = 1'b0;
+            repeat (30) @(posedge clk);
+            if (accepted_180 != 180) begin
+                $display("ERROR: OBS-114 100 MSPS stream accepted only %0d/180 samples!", accepted_180);
+                errors = errors + 1;
+            end
+            if (wcnt8 !== 16'd5) begin
+                $display("ERROR: OBS-114 expected 5 total DDC8 windows (2+3), got %0d", wcnt8);
+                errors = errors + 1;
+            end
+        end
+
+        $display("DDC_SUMMARY errors=%0d win8_cnt=2 mask8=%02h tones32_beats=%0d mask32=%08h",
+                 errors, qmask8, beats, qmask32);
         if (errors == 0) begin
             $display("PASS: tb_cryo_mux_ddc_ctrl");
             $finish;

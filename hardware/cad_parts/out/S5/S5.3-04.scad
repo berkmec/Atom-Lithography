@@ -28,7 +28,7 @@ bbox_z = 69.5000;
 // Part-specific parametric dimensions
 blade_l = 42.0;
 blade_w = 26.0;
-stroke_mm = 160.0;
+stroke_mm = 175.0;
 bellows_conv = 16;
 
 // Interface / port parameters (mm)
@@ -73,6 +73,6 @@ module part_S5_3_04() {
 }
 
 // World assembly mounting transform (global machine frame, mm / deg):
-// translate([-212.436, -132.745, 510.000]) rotate([0.000, 0.000, 212.000]) part_S5_3_04();
+// translate([506.954, 128.915, 460.000]) rotate([0.000, 0.000, 56.000]) part_S5_3_04();
 
 part_S5_3_04();

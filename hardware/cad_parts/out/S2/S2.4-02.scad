@@ -9,8 +9,8 @@
 // temp_stage        : 300 K
 // vacuum_grade      : UHV 1e-9 mbar
 // tolerance         : 50 Ohm ±5%
-// computed_mass_kg  : 0.03846
-// envelope_mm       : 127.825 x 127.825 x 2.400
+// computed_mass_kg  : 0.03981
+// envelope_mm       : 127.825 x 127.825 x 6.450
 // design_maturity   : M0_M1_DETAILED_CAD_DESIGN_ONLY
 // no_lab_measurement: true
 // iec61508_certified: false
@@ -23,7 +23,7 @@ $fn = 64;
 // Nominal bounding envelope parameters (mm)
 bbox_x = 127.8246;
 bbox_y = 127.8246;
-bbox_z = 2.4000;
+bbox_z = 6.4500;
 
 // Part-specific parametric dimensions
 pcb_od = 128.0;
@@ -31,6 +31,10 @@ pcb_id = 67.0;
 thickness = 2.4;
 quadrants = 4;
 z0_ohm = 50.0;
+rogers_cte_ppm_k = 12.0;
+rogers_tg_c = 280.0;
+r_th_strap_k_per_w = 2.2;
+hv_strap_rating_kV = 15.0;
 
 // Interface / port parameters (mm)
 port_asic_mount_top_od = 128.000;
@@ -42,11 +46,13 @@ port_kapton_flex_edge_od = 128.000;
 module part_S2_4_02() {
   difference() {
     union() {
-      // 4-quadrant modular UHV Rogers/Polyimide blanker PCB
+      // 4-quadrant modular UHV Rogers RO4350B blanker PCB
       difference() {
         cylinder(d=128.000, h=2.400, center=true);
         cylinder(d=67.000, h=4.400, center=true);
       }
+      // Q1 AlN/OFHC Cu UHV HV-isolated thermal strap
+      translate([41.370, 41.370, 3.250]) rotate([0.000, 0.000, 45.000]) cube([6.000, 8.000, 3.800], center=true);
     }
     // X-axis inter-quadrant thermal split
     hull() {

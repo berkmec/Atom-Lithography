@@ -39,7 +39,7 @@
           0.0,
           1.0
         ],
-        "standard": "32x32 @ 0.50 mm SOI",
+        "standard": "32x32 Ø10.5 um @ 0.50 mm SOI",
         "mating_part_id": "S2.1-03",
         "bore_mm": 22.627,
         "od_mm": 36.0,
@@ -63,7 +63,7 @@
           0.0,
           -1.0
         ],
-        "standard": "32x32 @ 0.50 mm SOI",
+        "standard": "32x32 Ø10.5 um @ 0.50 mm SOI",
         "mating_part_id": "S2.2-03",
         "bore_mm": 22.627,
         "od_mm": 36.0,
@@ -89,6 +89,20 @@
         "datum_ref": "",
         "decimals": 2,
         "formatted": "Ø36.00 ±0.02"
+      },
+      {
+        "label": "APERTURE_D",
+        "nominal_mm": 0.0105,
+        "tol_plus_mm": 0.0002,
+        "tol_minus_mm": -0.0002,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 4,
+        "formatted": "Ø0.0105 ±0.0002"
       },
       {
         "label": "SOI_THICK",
@@ -142,7 +156,7 @@
         "datum_primary": "A",
         "datum_secondary": "B",
         "datum_tertiary": "",
-        "feature_note": "1024 APERTURE ARRAY",
+        "feature_note": "1024 Ø10.5 UM APERTURES",
         "glyph": "⌖",
         "tolerance_text": "Ø0.0001"
       },
@@ -175,13 +189,15 @@
     ],
     "notes": [
       "0.50 mm es-adim, 32x32=1024 demetcik (16.0x16.0 mm, kosegen 22.63 mm < Ø28.0 mm aciklik)",
-      "True 32x32 = 1,024 beamlet 30 um SOI wafer (16.0x16.0 mm, diag 22.627 mm < Ø28.0 mm); Euler genus = 1,024"
+      "True 32x32 = 1,024 beamlet 30 um SOI wafer with optical-spec Ø10.5 um (r=5.25 um) apertures (alpha=6.40 mrad, sigma_s=0.50 nm at f_img=0.82 mm); Euler genus = 1,024"
     ],
     "scad_params": {
       "nx": 32,
       "ny": 32,
       "pitch_mm": 0.5,
-      "hole_d_mm": 0.22,
+      "hole_d_mm": 0.0105,
+      "alpha_land_mrad": 6.4,
+      "sigma_s_nm": 0.5,
       "soi_t_mm": 0.03,
       "wafer_od": 36.0
     },
@@ -209,13 +225,13 @@
     "watertight": true,
     "boundary_edges": 0,
     "non_manifold_edges": 0,
-    "signed_volume_mm3": 29.48147492059161,
-    "surface_area_mm2": 1989.5151074056876,
-    "mass_kg": 6.866235509005892e-05,
+    "signed_volume_mm3": 30.53044033817029,
+    "surface_area_mm2": 2039.7430205134403,
+    "mass_kg": 7.110539554760036e-05,
     "cg_mm": [
-      -2.5259981892903856e-13,
-      1.6987177068994228e-13,
-      7.6749999998671115
+      -2.758661820702681e-13,
+      1.7374612319582642e-13,
+      7.6749999998626155
     ],
     "bbox_min_mm": [
       -18.0,
@@ -228,12 +244,12 @@
       7.6899999999999995
     ],
     "inertia_kg_mm2": [
-      0.0057071512570044435,
-      0.005707151257005007,
-      0.011414292214444819,
-      2.0646404932930624e-17,
-      -1.820103674583645e-16,
-      1.134890422607145e-16
+      0.005759225423906046,
+      0.005759225423906883,
+      0.011518440181696005,
+      1.603804678482988e-17,
+      -1.985007766196563e-16,
+      1.2698756479767888e-16
     ],
     "triangle_count": 50688,
     "vertex_count": 23298,
@@ -273,6 +289,11 @@
         "S2.3-03_dowel_pin_reg": 84.7457627118644
       }
     }
+  },
+  "shell_mate_metadata": {
+    "n_shells": 1,
+    "fea_bonding_mode": "SINGLE_MONOLITHIC_SOLID",
+    "watertight": true
   },
   "epistemic": {
     "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",

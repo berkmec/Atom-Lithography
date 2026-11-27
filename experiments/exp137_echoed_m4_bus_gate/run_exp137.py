@@ -43,8 +43,11 @@ from experiments.exp131_scalable_m4_architecture.flipflop_cell131 import (
     tunnel_coupling_ghz,
 )
 from experiments.exp137_echoed_m4_bus_gate.echo_bus_solver137 import (
+    DEFAULT_T_PI_DRAG_GAUSS_US,
     PAULI_16_NAMES,
     FlipFlopPairSpec,
+    audit_exact_4x4_tosi_clock_impossibility,
+    audit_mw_pi_pulse_crosstalk,
     simulate_echoed_cz_cuda,
 )
 from experiments.exp137_echoed_m4_bus_gate.noise_ou137 import (
@@ -462,6 +465,8 @@ def main() -> dict[str, Any]:
         "ou_psd_audit": ou_audit,
         "cywinski_filter_theory": cywinski,
         "noiseless_unitary": nl_unitary,
+        "mw_pi_pulse_crosstalk_audit_OBS101": audit_mw_pi_pulse_crosstalk(),
+        "tosi_4x4_clock_impossibility_OBS042": audit_exact_4x4_tosi_clock_impossibility(),
         "sampled_pairs": [
             {
                 "label": p.label,
@@ -504,12 +509,12 @@ def main() -> dict[str, Any]:
     for prot in ["P1", "P2", "P3", "P4"]:
         runs_dw = [
             simulate_echoed_cz_cuda(p, q_r=2e5, s_eps_uev=1.0, protocol=prot, alpha=1.0, n_traj=512,
-                                    t_pi_us=0.015, eps_rot=0.015, include_dg_jitter=False, seed=200 + i)
+                                    t_pi_us=DEFAULT_T_PI_DRAG_GAUSS_US, eps_rot=0.015, include_dg_jitter=False, seed=200 + i)
             for i, p in enumerate(pairs)
         ]
         runs_dg = [
             simulate_echoed_cz_cuda(p, q_r=2e5, s_eps_uev=1.0, protocol=prot, alpha=1.0, n_traj=512,
-                                    t_pi_us=0.015, eps_rot=0.015, include_dg_jitter=True, seed=300 + i)
+                                    t_pi_us=DEFAULT_T_PI_DRAG_GAUSS_US, eps_rot=0.015, include_dg_jitter=True, seed=300 + i)
             for i, p in enumerate(pairs)
         ]
         agg_dw = aggregate_channel_results(runs_dw)
@@ -527,7 +532,7 @@ def main() -> dict[str, Any]:
     for prot in ["P1", "P2", "P3", "P4"]:
         runs_s2 = [
             simulate_echoed_cz_cuda(p, q_r=2e5, s_eps_uev=2.0, protocol=prot, alpha=1.0, n_traj=512,
-                                    t_pi_us=0.015, eps_rot=0.015, include_dg_jitter=True, seed=400 + i)
+                                    t_pi_us=DEFAULT_T_PI_DRAG_GAUSS_US, eps_rot=0.015, include_dg_jitter=True, seed=400 + i)
             for i, p in enumerate(rep_pairs)
         ]
         agg_s2 = aggregate_channel_results(runs_s2)
@@ -543,7 +548,7 @@ def main() -> dict[str, Any]:
         for prot in ["P1", "P2", "P3", "P4"]:
             runs_a = [
                 simulate_echoed_cz_cuda(p, q_r=2e5, s_eps_uev=1.0, protocol=prot, alpha=av, n_traj=512,
-                                        t_pi_us=0.015, eps_rot=0.015, include_dg_jitter=True, seed=500 + i)
+                                        t_pi_us=DEFAULT_T_PI_DRAG_GAUSS_US, eps_rot=0.015, include_dg_jitter=True, seed=500 + i)
                 for i, p in enumerate(rep_pairs)
             ]
             agg_a = aggregate_channel_results(runs_a)
@@ -575,7 +580,7 @@ def main() -> dict[str, Any]:
         for sv in s_grid:
             runs_pm = [
                 simulate_echoed_cz_cuda(p, q_r=qr, s_eps_uev=sv, protocol="P4", alpha=1.0, n_traj=512,
-                                        t_pi_us=0.015, eps_rot=0.015, include_dg_jitter=True, seed=700 + i)
+                                        t_pi_us=DEFAULT_T_PI_DRAG_GAUSS_US, eps_rot=0.015, include_dg_jitter=True, seed=700 + i)
                 for i, p in enumerate(rep_pairs)
             ]
             agg_pm = aggregate_channel_results(runs_pm)
@@ -606,17 +611,17 @@ def main() -> dict[str, Any]:
     # Evaluate P4 (best) and P3 at S_eps = 0.5 and 0.25 across ALL 6 pairs (S=1.0 already done in Part 2!)
     runs_p4_s05 = [
         simulate_echoed_cz_cuda(p, q_r=2e5, s_eps_uev=0.5, protocol="P4", alpha=1.0, n_traj=512,
-                                t_pi_us=0.015, eps_rot=0.015, include_dg_jitter=True, seed=900 + i)
+                                t_pi_us=DEFAULT_T_PI_DRAG_GAUSS_US, eps_rot=0.015, include_dg_jitter=True, seed=900 + i)
         for i, p in enumerate(pairs)
     ]
     runs_p3_s05 = [
         simulate_echoed_cz_cuda(p, q_r=2e5, s_eps_uev=0.5, protocol="P3", alpha=1.0, n_traj=512,
-                                t_pi_us=0.015, eps_rot=0.015, include_dg_jitter=True, seed=950 + i)
+                                t_pi_us=DEFAULT_T_PI_DRAG_GAUSS_US, eps_rot=0.015, include_dg_jitter=True, seed=950 + i)
         for i, p in enumerate(pairs)
     ]
     runs_p4_s025 = [
         simulate_echoed_cz_cuda(p, q_r=2e5, s_eps_uev=0.25, protocol="P4", alpha=1.0, n_traj=512,
-                                t_pi_us=0.015, eps_rot=0.015, include_dg_jitter=True, seed=980 + i)
+                                t_pi_us=DEFAULT_T_PI_DRAG_GAUSS_US, eps_rot=0.015, include_dg_jitter=True, seed=980 + i)
         for i, p in enumerate(pairs)
     ]
     agg_p4_s05 = aggregate_channel_results(runs_p4_s05)

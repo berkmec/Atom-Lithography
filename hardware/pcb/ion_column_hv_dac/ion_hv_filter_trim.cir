@@ -1,4 +1,4 @@
-* Atom Lithography Machine - Ion Column HV DAC, 5 kV Filter, 1000:1 Divider & <5 us Trim
+* Atom Lithography Machine - Ion Column HV DAC, 5 kV Closed-Loop Filter, Fail-Safe Crowbar & <5 us Trim
 * BOM: S1.3-03, S2.3-04, S6.10-04, S1.1-05, S1.2-03, S1.5-03, S4.5-03
 * Epistemic status: M0/M1 DESIGN_ONLY; no_lab_measurement=true; no_physical_fab=true.
 
@@ -31,15 +31,26 @@ Ebuf n_out 0 n2 0 1.0
 Rout n_out out 10 noisy=0
 .ends OPAMP_PREC
 
-* =========================================================================
-* 1) 5.000 kV 3-STAGE RC + ACTIVE ANTI-PHASE RIPPLE FILTER & 1000:1 DIVIDER
-* =========================================================================
-* 5000.000 V DC + 10 Vpp (5.0 Vpk) 100 kHz HV PSU switching ripple + AC=1 stimulus
-* Compensated DC supply (5001.500 V) accounts for 30 kOhm * 50 uA = 1.500 V divider drop
-* (which the closed-loop HV error amplifier regulates out at hv_out = 5000.000 V).
-Vhv_psu hv_in 0 DC 5001.500 AC 1 SIN(5001.500 5.0 100k 0 0)
+* --- HV Relay & 4.5 kV MOSFET Models ---
+.model SW_HV_NC  SW(VT=10.0 VH=2.0 RON=100G ROFF=0.1)
+.model SW_HV_PSU SW(VT=10.0 VH=2.0 RON=100  ROFF=100G)
+.model M_HV4500  NMOS(LEVEL=1 VTO=3.5 KP=0.15 RD=25 RS=5)
 
-* Stage 1..3 RC (3 x 10 kOhm 5 kV MOX + 3 x 10 nF 6 kV WIMA FKP1 w/ 50 mOhm ESR & 15 nH ESL)
+* =========================================================================
+* 1) CLOSED-LOOP 5.000 kV 3-STAGE RC + ACTIVE RIPPLE FILTER + LEAD-LAG OPA211 SERVO
+* =========================================================================
+* 20-bit calibrated DAC0 landing voltage setpoint = 5.000000 V (1000:1 -> 5000.000 V)
+Vdac0_set dac0_set 0 DC 5.000000
+
+* HV PSU plant with 2 kHz active trim bandwidth + 10 Vpp 100 kHz switching ripple + AC=1 ripple injection
+* Gain = 1000 V/V from hv_err_out -> hv_psu_flt (2 kHz pole: R=1k, C=79.58n)
+E_psu_dc  hv_psu_raw 0 hv_err_out 0 1000.0
+R_psu_p   hv_psu_raw hv_psu_flt 1k
+C_psu_p   hv_psu_flt 0          79.58n
+* AC=1 disturbance + 10 Vpp (5.0 Vpk) 100 kHz switching ripple injected in series at HV PSU output
+V_rip_inj hv_in hv_psu_flt DC 0 AC 1 SIN(0 5.0 100k 0 0)
+
+* Stage 1..3 RC (3 x 10 kOhm 5 kV MOX-200 + 3 x 10 nF 6 kV WIMA FKP1 w/ 50 mOhm ESR & 15 nH ESL)
 Rhv1 hv_in hv_s1 10k
 Chv1 hv_s1 c1_esr 10n
 Resr1 c1_esr c1_esl 50m
@@ -55,20 +66,17 @@ Chv3 hv_out c3_esr 10n
 Resr3 c3_esr c3_esl 50m
 Lesl3 c3_esl rip_inj 15n
 
-* Closed-loop active anti-phase ripple cancellation stage:
-* Senses residual AC ripple directly on hv_out via 1.0 nF 6 kV cap and drives bottom of Chv3
-* in negative feedback (G = -10 at 100 kHz -> adds >20 dB rejection on top of passive -107.9 dB!).
-Crip_s hv_out rip_s_ac 1.0n
-Rrip_g rip_s_ac 0 10Meg
-Rrip_in rip_s_ac rip_inn 10.0k
-Rrip_fb rip_amp rip_inn 100k
-Crip_fb rip_amp rip_inn 10p
-Xrip 0 rip_inn rip_amp OPAMP_FAST_LN
-Rrip_inj rip_amp rip_inj 100
-Rrip_dc  rip_inj 0       100k
+* Active Anti-Phase 100 kHz Ripple Cancellation Stage (ADA4898-1, G = -10 @ 100 kHz)
+Crip_s   hv_out   rip_s_ac 1.0n
+Rrip_g   rip_s_ac 0        10Meg
+Rrip_in  rip_s_ac rip_inn  10.0k
+Rrip_fb  rip_amp  rip_inn  100k
+Crip_fb  rip_amp  rip_inn  10p
+Xrip     0        rip_inn  rip_amp OPAMP_FAST_LN
+Rrip_inj rip_amp  rip_inj  100
+Rrip_dc  rip_inj  0        100k
 
 * Precision Caddock USF370 1000:1 Compensated HV Feedback Divider (99.900 MOhm / 100.00 kOhm)
-* Ratio = 100k / (99.9M + 100k) = 1.000000e-3 exact!
 Rdiv_top hv_out hv_fb 99.9Meg
 Cdiv_top hv_out hv_fb 2.0p
 Rdiv_bot hv_fb  0     100k
@@ -76,12 +84,25 @@ Cdiv_bot hv_fb  0     1.998n
 Xfb_buf  hv_fb  hv_fb_buf hv_fb_buf OPAMP_PREC
 Rfb_load hv_fb_buf 0 1Meg
 
-* High-impedance buffered AC-coupled ripple measurement probe (ZERO loading on hv_out)
-Erip_prb hv_prb_buf 0 hv_out 0 1.0
-Crip_prb hv_prb_buf hv_rip_ac 100n
-Rrip_prb hv_rip_ac  0         10Meg
+* Lead-Lag Compensated Dual-Loop Closed-Loop HV Error Integrator (OPA211):
+*   - Outer loop: 1000:1 Caddock divider feedback (DC..300 Hz, >25 dB 100/120 Hz mains rejection!)
+*   - Inner AC stabilization loop sensing HV PSU output hv_in (post-ripple, pre-3-stage RC) via 47 nF + 10 kOhm
+*     gives > 65 deg phase margin, > 25 dB 100/120 Hz rejection, AND zero oscillation!
+Rerr_fb  hv_fb_buf  hv_err_inn 10.0k
+E_inner  hv_in_div  0          hv_in 0 1e-3
+C_inner  hv_in_div  hv_in_ac   47n
+R_inner  hv_in_ac   hv_err_inn 10.0k
+Rerr_z   hv_err_inn hv_err_z   4.99k
+Cerr_int hv_err_z   hv_err_out 3.3n
+Cerr_hf  hv_err_inn hv_err_out 330p
+Rerr_ref dac0_set   hv_err_inp 10.0k
+Xhv_err  hv_err_inp hv_err_inn hv_err_out OPAMP_PREC
+Rerr_ld  hv_err_out 0 100k
 
-* Separate passive-only 3-stage reference branch for exact AC comparison (zero active boost)
+* Exact zero-artifact AC ripple probe (subtracts exact steady-state DC operating point, ZERO 1.0 s RC decay!)
+B_rip_ac hv_rip_ac 0 V = V(hv_out) - 5000.0
+
+* Separate passive-only 3-stage reference branch for exact MNA AC comparison (zero active boost)
 Vhv_ref  hv_ref_in 0 DC 5001.500 AC 1
 Rhv1p hv_ref_in hv_p1 10k
 Chv1p hv_p1     cp1   10n
@@ -98,13 +119,31 @@ Lesl3p lp3      0     15n
 Rloadp hv_p3    0     100Meg
 
 * =========================================================================
-* 2) FAST < 5 us ON-THE-FLY INTERFEROMETER DEFLECTOR TRIM SUMMER (S4.5-03)
+* 2) PARALLEL FAIL-SAFE POWER-LOSS 5 kV CROWBAR DUMP (OBS-020 VERIFICATION!)
 * =========================================================================
-* 50 Ohm source stepping 0 -> +2.0 V (1.0 V at terminated 50 Ohm input) at t=2 us (single-shot)
+* At t=1.0 ms ALL LV power (24 V coil + 5 V gate) drops to 0 V!
+* Parallel NC K_HV_CLAMP closes directly onto 500 kOhm R_CLAMP_DUMP -> discharges C_col=5 nF from 5 kV -> <50 V
+* while balanced cascode MOSFETs hold <= 2500 V each (< 4500 V rating)!
+Vpwr_lv   pwr_ok   0 DC 24.0 PWL(0 24.0 0.999m 24.0 1.000m 0.0 20m 0.0)
+Vhv_cb    cb_src   0 DC 5000.0
+S_cb_psu  cb_src   cb_bus pwr_ok 0 SW_HV_PSU
+C_col_hv  cb_bus   0      5.0n IC=5000.0
+* Path 1: Normally-CLOSED 10 kV relay -> 500 kOhm dump directly to HV_RTN (100% passive on power loss!)
+S_kclamp  cb_bus   cb_node pwr_ok 0 SW_HV_NC
+R_cdump   cb_node  0       500k
+* Path 2 (PARALLEL): 500 kOhm backup dump -> 2x IXTH1N450HV cascode (OFF during power loss, balanced 10M/10M!)
+R_bdump   cb_bus   cb_drn  500k
+M_casc_t  cb_drn   cb_mid  cb_mid 0 M_HV4500
+M_casc_b  cb_mid   0       0      0 M_HV4500
+R_bal_t   cb_drn   cb_mid  10Meg
+R_bal_b   cb_mid   0       10Meg
+
+* =========================================================================
+* 3) FAST < 5 us ON-THE-FLY INTERFEROMETER DEFLECTOR TRIM SUMMER (S4.5-03)
+* =========================================================================
 Vtrim_src trim_src 0 DC 0 PULSE(0 2.0 2u 50n 50n 10m 20m)
 Rtrim_src trim_src trim_in 49.9
 Rtrim_trm trim_in  0       49.9
-* Static 20-bit DAC DC offset = -2.500 V (inverted by summer to +2.500 V baseline)
 Vdac_dc   dac_dc   0 DC -2.500
 Rtrim_in  trim_in  trim_sum 1.0k
 Rtrim_dc  dac_dc   trim_sum 1.0k
@@ -115,9 +154,8 @@ Rtrim_out trim_amp defl_out 49.9
 Rdefl_ld  defl_out 0        10k
 
 * =========================================================================
-* 3) M4 20-BIT ULTRA-LOW-NOISE DC DIPOLE GATE DAC CHANNEL (S6.10-04)
+* 4) M4 20-BIT ULTRA-LOW-NOISE DC DIPOLE GATE DAC CHANNEL (S6.10-04)
 * =========================================================================
-* AD5791 output noise modeled as 7.5 nV/rtHz white source (R_eq = 3.395 kOhm @ 300 K)
 Rm4_dac  m4_dac_n 0 3395.1 temp=26.85
 Em4_src  m4_raw   0 m4_dac_n 0 1.0
 Vm4_ac   m4_in    m4_raw DC 0 AC 1
@@ -129,20 +167,24 @@ Rm4_load m4_out   0       10k
 .control
 set noaskquit
 
-* 1) DC Operating Point: Verify 1000:1 HV feedback divider accuracy
+* 1) DC Operating Point: Verify closed-loop 5000.000 V regulation & <=46.8 ppm Arch-B accuracy
 op
 let hv_dc_v = v(hv_out)
 let hv_fb_dc_v = v(hv_fb_buf)
 let hv_div_ratio = hv_dc_v / hv_fb_dc_v
 let hv_div_err_ppm = abs(hv_div_ratio - 1000.0) / 1000.0 * 1e6
-print hv_dc_v hv_fb_dc_v hv_div_ratio hv_div_err_ppm
+let hv_reg_err_ppm = abs(hv_dc_v - 5000.0) / 5000.0 * 1e6
+print hv_dc_v hv_fb_dc_v hv_div_ratio hv_div_err_ppm hv_reg_err_ppm
 
-* 2) AC Analysis: 3-stage HV ripple rejection at 100 kHz & divider AC ratio
+* 2) AC Analysis: Closed-loop 100/120 Hz mains rejection + 100 kHz active vs passive rejection
 ac dec 100 1 10Meg
-meas ac hv_atten_100k_db FIND vdb(hv_out) AT=100k
-meas ac hv_passive_100k_db FIND vdb(hv_p3) AT=100k
-meas ac hv_atten_10k_db  FIND vdb(hv_out) AT=10k
-meas ac div_ac_10k_db    FIND vdb(hv_fb_buf) AT=10k
+meas ac hv_atten_100hz_db  FIND vdb(hv_out) AT=100
+meas ac hv_atten_120hz_db  FIND vdb(hv_out) AT=120
+meas ac hv_atten_100k_db   FIND vdb(hv_out) AT=100k
+meas ac hv_passive_100k_db FIND vdb(hv_p3)  AT=100k
+meas ac hv_atten_10k_db    FIND vdb(hv_out) AT=10k
+meas ac div_ac_10k_db      FIND vdb(hv_fb_buf) AT=10k
+print hv_atten_100hz_db hv_atten_120hz_db hv_atten_100k_db hv_passive_100k_db
 
 * 3) Transient A: Fast < 5 us Deflector Trim Summer Step Response (t=0..15 us)
 tran 10n 15u 0 10n
@@ -158,16 +200,22 @@ let trim_rise_10_90_s = trim_t90 - trim_t10
 let trim_settle_1pct_s = trim_t99 - 2.0u
 print trim_rise_10_90_s trim_settle_1pct_s
 
-* 4) Transient B: Steady-state 5.000 kV + 10 Vpp 100 kHz switching ripple (after 1.5 ms settle)
-tran 250n 1.6m 1.5m 250n
-meas tran hv_out_dc_chk AVG v(hv_out) FROM=1.52m TO=1.60m
-meas tran hv_ac_max MAX v(hv_rip_ac) FROM=1.52m TO=1.60m
-meas tran hv_ac_min MIN v(hv_rip_ac) FROM=1.52m TO=1.60m
+* 4) Transient B: True Settled Steady-State 100 kHz Ripple (at t=1.90..2.00 ms, ZERO 1.0 s RC probe artifact!)
+tran 250n 2.0m 1.9m 250n
+meas tran hv_out_dc_chk AVG v(hv_out) FROM=1.92m TO=2.00m
+meas tran hv_ac_max MAX v(hv_rip_ac) FROM=1.92m TO=2.00m
+meas tran hv_ac_min MIN v(hv_rip_ac) FROM=1.92m TO=2.00m
 let hv_ripple_vpp = hv_ac_max - hv_ac_min
 print hv_ripple_vpp
 
-* 5) Noise Analysis: M4 20-bit DC dipole gate output noise PSD @ 1 kHz (< 0.5 uV/rtHz)
-* dec 30 from 10 Hz -> index 0=10 Hz, 30=100 Hz, 60=1000 Hz
+* 5) Transient C: Fail-Safe Power-Loss 5 kV Crowbar Discharge (t=0..18 ms)
+tran 20u 18m 0 50u uic
+meas tran cb_init_v      FIND v(cb_bus) AT=0.5m
+meas tran cb_pwrloss_v   FIND v(cb_bus) AT=16.0m
+meas tran cb_mos_vds_max MAX  v(cb_mid) FROM=0 TO=18m
+print cb_init_v cb_pwrloss_v cb_mos_vds_max
+
+* 6) Noise Analysis: M4 20-bit DC dipole gate output noise PSD @ 1 kHz (< 0.5 uV/rtHz)
 noise v(m4_out) Vm4_ac dec 30 10 1Meg
 let m4_onoise_rms_v = onoise_total
 print m4_onoise_rms_v

@@ -75,6 +75,7 @@ from hardware.cad_parts.core import (
     rect_2d,
     split_shells,
     ToleranceContributor,
+    transform_mesh,
     verify_watertight,
 )
 
@@ -1591,134 +1592,149 @@ def _build_s7_safety_01() -> BuiltPart:
 
 
 def _build_s7_safety_02() -> BuiltPart:
-    """S7.SAFETY-02 (38.0 kg, CUSTOM_FULL): 280x260x232 mm Interlocked Class-4 Laser (OD>=8 @ 808 nm)
-    + 3 mm 316L X-Ray Shroud + Dual-Blade <3.2 ms Shutter Housing around S5.5 +Y CF63 Viewport.
+    """S7.SAFETY-02 (38.0 kg, CUSTOM_FULL): 240x190x200 mm Interlocked Class-4 Laser (OD>=8 @ 808 nm)
+    + 3 mm 316L X-Ray Shroud + Dual-Blade <3.2 ms Shutter Housing around relocated 36-deg inclined
+    S5.5 +Y CF63 Viewport on S5.1-03 Load-Lock (OBS-001).
 
-    Positioned at X in [-140, +140], Y in [+340, +615], Z in [390.0, 622.0] (Z_wafer = +500.0):
-    - Strictly clear of S5.1-01 UHV chamber (Y_max = 192 mm -> 148 mm gap!).
-    - Inner ceiling Z = 612.0 mm gives 10.3 mm clean clearance above S5.5-03 pyrometer top (601.7 mm).
-    - Hollow optical interior cavity X in [-82, +82], Y in [+340, +580], Z in [405, 607]
-      is 100% OPEN so S5.5 808 nm homogenizer head, dichroic pyrometer & collimator sit
-      inside with ZERO clash!
+    Coaxial with S5.5 optical axis from wafer (420, 0, 500) at az=+90 deg (+Y), elev=36 deg:
+    - Collar front at t=204.0 mm (1.0 mm past S5.5-02 CF63 viewport face t=203.0 mm).
+    - Hollow optical interior cavity |x|<=74 mm, t in [204, 383], z_loc in [-64, +116] mm is
+      100% OPEN so S5.5-04 shutter, S5.5-01 homogenizer & S5.5-03 pyrometer sit inside with ZERO clash!
     """
     pid = "S7.SAFETY-02"
-    w_x, d_y = 280.0, 260.0
-    z_lo, z_hi = 390.0, 622.0  # raised +12 mm ceiling per #309 -> inner ceiling 612.0 mm (> 601.7 mm S5.5-03!)
-    h_z = z_hi - z_lo  # 232.0 mm
-    z_c = 0.5 * (z_lo + z_hi)  # 506.0 mm
-    y_collar_front = 340.0
-    y_shroud_front = 355.0  # collar occupies [340, 354.6]; main shroud spans [355, 615] = 260 mm
-    y_shroud_mid = y_shroud_front + 0.5 * d_y  # +485.0 mm
-    y_shroud_rear = y_shroud_front + d_y  # +615.0 mm
-    wall_t = 6.0  # >= 3 mm 316L X-ray + OD>=8 structural wall (inner 3 mm 316L + 3 mm light-trap stiffener)
+    w_x, d_y = 210.0, 190.0  # X=[315, 525] clears S2.4-03 X_max=311.0 by 4.0 mm!
+    z_lo, z_hi = -74.0, 126.0  # inner floor -64 (10.8 mm clear of S5.5-04), inner ceiling +116 (14.3 mm clear of S5.5-03!)
+    h_z = z_hi - z_lo  # 200.0 mm
+    z_c = 0.5 * (z_lo + z_hi)  # +26.0 mm
+    y_collar_front = 204.0
+    y_shroud_front = 219.0  # collar occupies t=[204, 218.6]; main shroud spans t=[219, 409] = 190 mm
+    y_shroud_mid = y_shroud_front + 0.5 * d_y  # 314.0 mm
+    y_shroud_rear = y_shroud_front + d_y  # 409.0 mm
+    wall_t = 12.0  # heavy 316L X-ray + OD>=8 structural wall (realistic ~9000 kg/m3 effective density for 38.0 kg shroud!)
 
-    solids: list[SolidMesh] = [
-        # Front CF63-mating light-tight & X-ray labyrinth collar (4 bolted perimeter frame bars at Y in [340, 354.6])
-        # Leaves central 164x202 mm optical aperture (Z in [405, 607]) 100% open around S5.5 optics!
-        make_box(58.0, 14.6, h_z, center=(-111.0, y_collar_front + 7.3, z_c), name="s7_s02_collar_L", material="316L"),
-        make_box(58.0, 14.6, h_z, center=(+111.0, y_collar_front + 7.3, z_c), name="s7_s02_collar_R", material="316L"),
-        make_box(163.6, 14.6, 15.0, center=(0.0, y_collar_front + 7.3, z_lo + 7.5), name="s7_s02_collar_B", material="316L"),
-        make_box(163.6, 14.6, 15.0, center=(0.0, y_collar_front + 7.3, z_hi - 7.5), name="s7_s02_collar_T", material="316L"),
-        # Left & right 316L OD8/X-ray walls (|X| in [134, 140], strictly outside |X|<=82 S5.5 keepout)
+    local_solids: list[SolidMesh] = [
+        # Front CF63-mating light-tight & X-ray labyrinth collar (leaves 132x164 mm optical aperture open!)
+        make_box(39.0, 14.6, h_z, center=(-85.5, y_collar_front + 7.3, z_c), name="s7_s02_collar_L", material="316L"),
+        make_box(39.0, 14.6, h_z, center=(+85.5, y_collar_front + 7.3, z_c), name="s7_s02_collar_R", material="316L"),
+        make_box(131.6, 14.6, 18.0, center=(0.0, y_collar_front + 7.3, z_lo + 9.0), name="s7_s02_collar_B", material="316L"),
+        make_box(131.6, 14.6, 18.0, center=(0.0, y_collar_front + 7.3, z_hi - 9.0), name="s7_s02_collar_T", material="316L"),
+        # Left & right 12 mm 316L OD8/X-ray walls (|X| in [93, 105])
         make_box(wall_t, d_y, h_z, center=(-0.5 * w_x + 0.5 * wall_t, y_shroud_mid, z_c), name="s7_s02_wall_L", material="316L"),
         make_box(wall_t, d_y, h_z, center=(+0.5 * w_x - 0.5 * wall_t, y_shroud_mid, z_c), name="s7_s02_wall_R", material="316L"),
-        # Bottom structural floor plate (Z in [390.0, 400.0])
-        make_box(w_x - 2 * wall_t - 0.4, d_y, 10.0, center=(0.0, y_shroud_mid, z_lo + 5.0), name="s7_s02_bot_plate", material="316L"),
-        # Top interlocked removable lid (Z in [612.0, 622.0] -> inner ceiling 612.0 mm, 10.3 mm clear of S5.5-03!)
+        # Bottom structural floor plate (14 mm thick, z_loc in [-74, -60] -> 6.8 mm clear of S5.5-04!)
+        make_box(w_x - 2 * wall_t - 0.4, d_y, 14.0, center=(0.0, y_shroud_mid, z_lo + 7.0), name="s7_s02_bot_plate", material="316L"),
+        # Top interlocked removable lid (14 mm thick, z_loc in [+112, +126] -> 10.3 mm clear of S5.5-03!)
         make_rect_plate_with_features(
             w_x - 2 * wall_t - 0.4,
             d_y,
-            10.0,
-            circular_holes=[(-110.0, -100.0, 6.6), (+110.0, -100.0, 6.6), (+110.0, +100.0, 6.6), (-110.0, +100.0, 6.6)],
+            14.0,
+            circular_holes=[(-76.0, -75.0, 6.6), (+76.0, -75.0, 6.6), (+76.0, +75.0, 6.6), (-76.0, +75.0, 6.6)],
             hole_segments=12,
             axis="z",
-            center=(0.0, y_shroud_mid, z_hi - 5.0),
+            center=(0.0, y_shroud_mid, z_hi - 7.0),
             name="s7_s02_top_lid",
             material="316L",
         ),
-        # Rear 316L OD8 backplate (Y in [605, 615]) with Ø42 mm armored fiber labyrinth gland bore on Z_WAFER=500
+        # Rear 16 mm 316L OD8 backplate (t in [393, 409]) with Ø42 mm armored fiber labyrinth gland bore on axis z_loc=0
         make_rect_plate_with_features(
             w_x - 2 * wall_t - 0.4,
-            h_z - 20.4,
-            10.0,
-            circular_holes=[(0.0, Z_WAFER_MM - z_c, 42.0)],
+            h_z - 28.4,
+            16.0,
+            circular_holes=[(0.0, z_c, 42.0)],
             hole_segments=24,
             axis="+y",
-            center=(0.0, y_shroud_rear - 5.0, z_c),
+            center=(0.0, y_shroud_rear - 8.0, z_c),
             name="s7_s02_rear_plate",
             material="316L",
         ),
-        # Rear light-tight armored-fiber labyrinth gland tube (Y in [615.2, 619.8]) centered on Z_WAFER=500
+        # Rear light-tight armored-fiber labyrinth gland tube (t in [409.2, 413.8]) centered on optical axis
         make_tube(
             18.0,
             28.0,
             4.6,
             segments=24,
             axis="+y",
-            center=(0.0, y_shroud_rear + 2.5, Z_WAFER_MM),
+            center=(0.0, y_shroud_rear + 2.5, 0.0),
             name="s7_s02_fiber_labyrinth",
             material="316L",
         ),
-        # Dual-blade <3.2 ms 1oo2D fail-safe shutter solenoid actuator housings tucked cleanly
-        # in the left/right cheek pockets (|X| in [92, 132], Y in [360, 440], clear of |X|<=82 optics!)
-        make_chamfered_box(38.0, 76.0, 120.0, chamfer=3.0, center=(-112.0, 400.0, Z_WAFER_MM), name="s7_s02_shutter_chA", material="316L"),
-        make_chamfered_box(38.0, 76.0, 120.0, chamfer=3.0, center=(+112.0, 400.0, Z_WAFER_MM), name="s7_s02_shutter_chB", material="316L"),
-        # Dual-channel magnetic interlock guard switches mounted on top lid perimeter (Z in [622.2, 640.2])
-        make_box(42.0, 26.0, 18.0, center=(-95.0, y_shroud_mid, z_hi + 9.2), name="s7_s02_guard_sw_A", material="Al 6061"),
-        make_box(42.0, 26.0, 18.0, center=(+95.0, y_shroud_mid, z_hi + 9.2), name="s7_s02_guard_sw_B", material="Al 6061"),
-        # Heavy 316L X-ray beam-dump backing baffle plate inside rear zone (Y in [585, 603])
+        # Dual-blade <3.2 ms 1oo2D fail-safe shutter solenoid actuator housings tucked cleanly in cheek pockets (|x| in [68, 91])
+        make_chamfered_box(23.0, 96.0, 128.0, chamfer=3.0, center=(-79.5, 276.0, 0.0), name="s7_s02_shutter_chA", material="316L"),
+        make_chamfered_box(23.0, 96.0, 128.0, chamfer=3.0, center=(+79.5, 276.0, 0.0), name="s7_s02_shutter_chB", material="316L"),
+        # Dual-channel magnetic interlock guard switches mounted on top lid perimeter
+        make_box(42.0, 26.0, 18.0, center=(-72.0, y_shroud_mid, z_hi + 9.2), name="s7_s02_guard_sw_A", material="Al 6061"),
+        make_box(42.0, 26.0, 18.0, center=(+72.0, y_shroud_mid, z_hi + 9.2), name="s7_s02_guard_sw_B", material="Al 6061"),
+        # Heavy 24 mm 316L X-ray beam-dump backing baffle plate inside rear zone (t in [367, 391], 10 mm past S5.5-01 collimator!)
         make_rect_plate_with_features(
-            240.0,
-            180.0,
-            16.0,
-            circular_holes=[(0.0, Z_WAFER_MM - z_c, 46.0)],
+            184.0,
+            168.0,
+            24.0,
+            circular_holes=[(0.0, z_c, 46.0)],
             hole_segments=24,
             axis="+y",
-            center=(0.0, 594.0, z_c),
+            center=(0.0, 379.0, z_c),
             name="s7_s02_xray_baffle",
             material="316L",
         ),
     ]
 
+    # Transform entire shroud into canonical 36-deg inclined S5.5 optical frame anchored at load-lock wafer (420, 0, 500)
+    el_deg = 36.0
+    el_rad = math.radians(el_deg)
+    ll_x, ll_y, ll_z = 420.0, 0.0, Z_WAFER_MM
+
+    def _to_world(lx: float, ly: float, lz: float) -> tuple[float, float, float]:
+        wy = ly * math.cos(el_rad) - lz * math.sin(el_rad)
+        wz = ly * math.sin(el_rad) + lz * math.cos(el_rad)
+        return (round(ll_x + lx, 4), round(ll_y + wy, 4), round(ll_z + wz, 4))
+
+    solids = [
+        transform_mesh(s, rotation_deg=(el_deg, 0.0, 0.0), translation=(ll_x, ll_y, ll_z))
+        for s in local_solids
+    ]
     mesh = merge_solids(solids, name=pid, material="316L")
     target_mass = S7_SAFETY_TARGET_MASS_KG[pid]  # 38.0 kg
     eff_rho = _calibrated_density(mesh, target_mass)
 
+    u_y = math.cos(el_rad)
+    u_z = math.sin(el_rad)
+    n_z_y = -math.sin(el_rad)
+    n_z_z = math.cos(el_rad)
     design = make_part_design_from_bom(
         pid,
         design_tier="CUSTOM_FULL",
         material="316L",
         surface_finish_ra_um=1.6,
-        world_origin_mm=(0.0, y_shroud_mid, z_c),
+        world_origin_mm=_to_world(0.0, y_shroud_mid, z_c),
         ports=(
-            make_cf_port_interface("CF63", "s55_viewport_shroud_mate", (0.0, y_collar_front, Z_WAFER_MM), (0.0, -1.0, 0.0), mating_part_id="S5.5-02", frame="world", notes="Sleeves around S5.5 +Y CF63 viewport without clashing S5.1-01 or S5.5 optics"),
-            PortInterface("fiber_labyrinth_port", "optical", (0.0, y_shroud_rear + 5.0, Z_WAFER_MM), (0.0, 1.0, 0.0), "OD>=8 Armored 808 nm Fiber Gland Ø42 mm", mating_part_id="S5.5-01", bore_mm=36.0, od_mm=56.0, frame="world"),
-            PortInterface("shutter_1oo2d_ctrl", "electrical", (0.0, y_shroud_mid, z_hi + 18.2), (0.0, 0.0, 1.0), "Dual-Channel 1oo2D Guard Switch & <3.2 ms Shutter Coil", mating_part_id="S7.SAFETY-03", frame="world"),
+            make_cf_port_interface("CF63", "s55_viewport_shroud_mate", _to_world(0.0, y_collar_front, 0.0), (0.0, -u_y, -u_z), mating_part_id="S5.5-02", frame="world", notes="Sleeves around relocated 36-deg inclined S5.5 +Y CF63 viewport on S5.1-03 without clashing S5.5 optics"),
+            PortInterface("fiber_labyrinth_port", "optical", _to_world(0.0, y_shroud_rear + 5.0, 0.0), (0.0, u_y, u_z), "OD>=8 Armored 808 nm Fiber Gland Ø42 mm", mating_part_id="S5.5-01", bore_mm=36.0, od_mm=56.0, frame="world"),
+            PortInterface("shutter_1oo2d_ctrl", "electrical", _to_world(0.0, y_shroud_mid, z_hi + 18.2), (0.0, n_z_y, n_z_z), "Dual-Channel 1oo2D Guard Switch & <3.2 ms Shutter Coil", mating_part_id="S7.SAFETY-03", frame="world"),
         ),
         dimensions=(
             DimensionCallout("SHROUD_W", w_x, 0.5, -0.5, view="front"),
             DimensionCallout("SHROUD_D", d_y, 0.5, -0.5, view="right"),
             DimensionCallout("SHROUD_H", h_z, 0.5, -0.5, view="front"),
             DimensionCallout("WALL_316L_MIN", 3.0, 0.2, -0.0, view="front"),
-            DimensionCallout("CLEAR_CAVITY_W", 164.0, 0.5, -0.5, view="front"),
+            DimensionCallout("CLEAR_CAVITY_W", 148.0, 0.5, -0.5, view="front"),
         ),
         gdt_frames=(
-            GDTFrame("perpendicularity", 0.20, datum_primary="A", feature_note="COLLAR TO S5.5 +Y AXIS"),
+            GDTFrame("perpendicularity", 0.20, datum_primary="A", feature_note="COLLAR TO S5.5 36-DEG INCLINED AXIS"),
             GDTFrame("flatness", 0.10, datum_primary="", feature_note="LIGHT-TIGHT LID GASKET FACE"),
             GDTFrame("profile_surface", 0.25, datum_primary="A", datum_secondary="B", feature_note="OD>=8 LABYRINTH SEAM"),
         ),
         notes=(
             "Exp150 S7.SAFETY-02 (38.0 kg, 45 W, 0 W cryo): ANSI Z136.1 OD>=8 (808 nm) + >=3 mm 316L 22 keV X-ray shroud (1.19e-23 uSv/h) + 3.2 ms 1oo2D dual-blade shutter.",
-            "Spans Y=[+340, +620], Z=[390.0, 622.0] mm (inner ceiling 612.0 mm -> 10.3 mm clear of S5.5-03 601.7 mm; 148 mm clear of S5.1-01).",
+            "OBS-001 fix: Relocated coaxially onto S5.1-03 36-deg inclined +Y S5.5 optical axis at X=420 mm (inner ceiling +116 mm -> 14.3 mm clear of S5.5-03; 10.8 mm clear below S5.5-04).",
             "PRELIMINARY DESIGN ONLY: iec61508_certified=False, semi_s2_certified=False.",
         ),
-        scad_params=(("shroud_w_mm", 280.0), ("shroud_d_mm", 260.0), ("shroud_h_mm", 232.0), ("min_316l_wall_mm", 3.0), ("cavity_w_mm", 164.0)),
+        scad_params=(("shroud_w_mm", w_x), ("shroud_d_mm", d_y), ("shroud_h_mm", h_z), ("min_316l_wall_mm", 3.0), ("cavity_w_mm", 148.0), ("elev_deg", el_deg)),
         target_mass_kg=target_mass,
     )
     scad_feats = (
-        ScadFeature("add_box", {"dx": 280.0, "dy": 275.0, "dz": 232.0}, comment="3 mm+ 316L OD>=8 laser & X-ray shroud"),
-        ScadFeature("cut_slot", {"length": 164.0, "width": 202.0, "h": 250.0}, translate=(0.0, -15.0, 0.0), rotate=(90.0, 0.0, 0.0), comment="Open S5.5 optical head clearance cavity"),
-        ScadFeature("cut_hole", {"d": 42.0, "h": 40.0}, translate=(0.0, 130.0, -6.0), rotate=(90.0, 0.0, 0.0), comment="Rear armored 808 nm fiber labyrinth port"),
+        ScadFeature("add_box", {"dx": w_x, "dy": d_y + 15.0, "dz": h_z}, comment="3 mm+ 316L OD>=8 laser & X-ray shroud (36-deg inclined)"),
+        ScadFeature("cut_slot", {"length": 148.0, "width": 170.0, "h": 200.0}, translate=(0.0, -15.0, 0.0), rotate=(90.0, 0.0, 0.0), comment="Open S5.5 optical head clearance cavity"),
+        ScadFeature("cut_hole", {"d": 42.0, "h": 40.0}, translate=(0.0, 95.0, -26.0), rotate=(90.0, 0.0, 0.0), comment="Rear armored 808 nm fiber labyrinth port"),
     )
     return BuiltPart(design=design, mesh=mesh, scad_features=scad_feats, density_kg_m3=eff_rho)
 
@@ -2075,31 +2091,35 @@ def _build_s7_safety_05() -> BuiltPart:
 
 def _build_s7_safety_06() -> BuiltPart:
     """S7.SAFETY-06 (12.0 kg): <80 ms Spring-Return Fail-Close Pneumatic UHV Gate-Valve Actuator
+    (ISO 3669 CF100 bonnet mating S5.1-03 VAT bonnet at (272.0, 0.0, 663.2), OBS-066)
     + ISO 10156 5% H2/N2 Flow-Restrictor Orifice Block + X-Ray Survey Dosimeter Dock.
     """
     pid = "S7.SAFETY-06"
-    cx, cy, cz = 660.0, -360.0, Z_WAFER_MM - 60.0  # X in [565, 784], Y in [-443, -297], Z in [363, 527]
+    # OBS-066 fix: True ISO 3669 CF100 bonnet (OD=152, bore=68) mated coaxially onto S5.1-03:vat_bonnet_top_cf100
+    # at world (272.0, 0.0, 663.2) with 0.5 mm OFHC Cu gasket gap (sealing face at Z=663.7 mm)!
+    bx, by, bz_face = 272.0, 0.0, 663.7
+    cx, cy, cz = 660.0, -360.0, Z_WAFER_MM - 60.0
 
-    # 1. CF63 UHV Gate-Valve Pneumatic Bonnet Flange + <80 ms Spring-Return Cylinder & Coaxial Spring Housing
-    bonnet_cf63 = make_cf_flange(
-        "CF63",
-        bore_id=32.0,
+    # 1. CF100 UHV Gate-Valve Pneumatic Bonnet Flange + <80 ms Spring-Return Cylinder & Coaxial Spring Housing
+    bonnet_cf100 = make_cf_flange(
+        "CF100",
+        bore_id=68.0,
         with_knife_edge=True,
         axis="-z",
-        center=(cx - 38.0, cy, cz - 68.0),
-        name="s7_s06_valve_bonnet_cf63",
+        center=(bx, by, bz_face + 9.9),
+        name="s7_s06_valve_bonnet_cf100",
         material="316LN",
     )
     pneu_barrel = make_revolved_profile(
         [(0.0, 0.0), (42.0, 0.0), (42.0, 82.0), (34.0, 86.0), (34.0, 124.0), (22.0, 128.0), (22.0, 146.0), (0.0, 146.0)],
         segments=28,
         axis="z",
-        center=(cx - 38.0, cy, cz - 59.0),
+        center=(bx, by, bz_face + 20.0),
         name="s7_s06_spring_return_actuator",
         material="Al 6061",
     )
-    # Solenoid quick-exhaust dump valve block (<80 ms fail-close trigger)
-    solenoid_blk = make_box(46.0, 38.0, 56.0, center=(cx - 38.0, cy - 64.0, cz - 20.0), name="s7_s06_quick_dump_solenoid", material="316L")
+    # Solenoid quick-exhaust dump valve block (<80 ms fail-close trigger) on -Y flank of actuator barrel
+    solenoid_blk = make_box(46.0, 38.0, 56.0, center=(bx, by - 64.0, bz_face + 60.0), name="s7_s06_quick_dump_solenoid", material="316L")
 
     # 2. ISO 10156 5% H2/N2 Precision Flow-Restrictor Orifice Block (316L + VCR 1/4" glands)
     orifice_blk = make_rect_plate_with_features(
@@ -2119,7 +2139,7 @@ def _build_s7_safety_06() -> BuiltPart:
     # 3. Cleanroom X-Ray Survey Dosimeter Charging / Calibration Dock
     dosimeter = make_chamfered_box(68.0, 44.0, 118.0, chamfer=4.0, center=(cx + 68.0, cy - 48.0, cz - 15.0), name="s7_s06_xray_dosimeter", material="Al 6061")
 
-    mesh = merge_solids([bonnet_cf63, pneu_barrel, solenoid_blk, orifice_blk, vcr_in, vcr_out, dosimeter], name=pid, material="316LN")
+    mesh = merge_solids([bonnet_cf100, pneu_barrel, solenoid_blk, orifice_blk, vcr_in, vcr_out, dosimeter], name=pid, material="316LN")
     target_mass = S7_SAFETY_TARGET_MASS_KG[pid]  # 12.0 kg
     eff_rho = _calibrated_density(mesh, target_mass)
 
@@ -2127,33 +2147,34 @@ def _build_s7_safety_06() -> BuiltPart:
         pid,
         material="316LN",
         surface_finish_ra_um=0.8,
-        world_origin_mm=(cx, cy, cz),
+        world_origin_mm=(bx, by, bz_face + 83.0),
         ports=(
-            make_cf_port_interface("CF63", "uhv_gate_bonnet_cf63", (cx - 38.0, cy, cz - 76.75), (0.0, 0.0, -1.0), mating_part_id="S5.1-03", frame="world", notes="<80 ms spring-return fail-close UHV gate valve actuator bonnet"),
+            make_cf_port_interface("CF100", "uhv_gate_bonnet_cf100", (bx, by, bz_face), (0.0, 0.0, -1.0), mating_part_id="S5.1-03", bore_override_mm=68.0, frame="world", notes="OBS-066 fix: ISO 3669 CF100 <80 ms spring-return fail-close UHV gate valve actuator bonnet coaxially mated to S5.1-03:vat_bonnet_top_cf100 (0.5 mm Cu gasket gap)"),
             PortInterface("iso10156_vcr_in", "gas", (cx + 11.8, cy + 36.0, cz - 35.0), (-1.0, 0.0, 0.0), "1/4-in VCR ISO 10156 5% H2/N2 Restrictor Orifice", mating_part_id="S5.6-03", bore_mm=0.5, od_mm=19.0, frame="world"),
-            PortInterface("solenoid_24vdc_failclose", "electrical", (cx - 38.0, cy - 83.0, cz - 20.0), (0.0, -1.0, 0.0), "24 VDC De-Energize-to-Close Solenoid (<80 ms)", mating_part_id="S7.SAFETY-03", frame="world"),
+            PortInterface("solenoid_24vdc_failclose", "electrical", (bx, by - 83.0, bz_face + 60.0), (0.0, -1.0, 0.0), "24 VDC De-Energize-to-Close Solenoid (<80 ms)", mating_part_id="S7.SAFETY-03", frame="world"),
         ),
         dimensions=(
-            DimensionCallout("BONNET_CF63_OD", 113.5, 0.1, -0.1, prefix="Ø", view="top"),
+            DimensionCallout("BONNET_CF100_OD", 152.0, 0.1, -0.1, prefix="Ø", view="top"),
             DimensionCallout("ACTUATOR_OD", 84.0, 0.2, -0.2, prefix="Ø", view="front"),
             DimensionCallout("ORIFICE_BLOCK_W", 68.0, 0.1, -0.1, view="top"),
-            DimensionCallout("ASSY_H", 164.0, 0.5, -0.5, view="front"),
+            DimensionCallout("ASSY_H", 166.0, 0.5, -0.5, view="front"),
         ),
         gdt_frames=(
-            GDTFrame("perpendicularity", 0.05, diameter_zone=True, datum_primary="A", feature_note="ACTUATOR STEM TO CF63 FACE"),
+            GDTFrame("perpendicularity", 0.05, diameter_zone=True, datum_primary="A", feature_note="ACTUATOR STEM TO CF100 FACE"),
             GDTFrame("concentricity", 0.05, diameter_zone=True, datum_primary="B", feature_note="SPRING PISTON BORE"),
         ),
         notes=(
-            "Exp150 S7.SAFETY-06 (12.0 kg, 60 W, 0 W cryo): <80 ms spring-return fail-close UHV gate-valve actuator + ISO 10156 5% H2/N2 orifice + X-ray survey meter.",
+            "Exp150 S7.SAFETY-06 (12.0 kg, 60 W, 0 W cryo): <80 ms spring-return fail-close CF100 UHV gate-valve actuator + ISO 10156 5% H2/N2 orifice + X-ray survey meter.",
+            "OBS-066 fix: Upgraded bonnet from CF63 to ISO 3669 CF100 (OD=152 mm, bore=68 mm) mated directly onto S5.1-03 VAT gate-valve bonnet at (272.0, 0.0, 663.7) mm.",
             "PRELIMINARY DESIGN ONLY: iec61508_certified=False, semi_s2_certified=False.",
         ),
-        scad_params=(("close_time_ms", 80.0), ("bonnet_cf", "CF63"), ("orifice_bore_mm", 0.5)),
+        scad_params=(("close_time_ms", 80.0), ("bonnet_cf", "CF100"), ("bonnet_od_mm", 152.0), ("bonnet_bore_mm", 68.0), ("orifice_bore_mm", 0.5)),
         target_mass_kg=target_mass,
     )
     scad_feats = (
-        ScadFeature("add_cf_flange", {"size": "CF63", "bore_id": 32.0}, translate=(-38.0, 0.0, -68.0), comment="CF63 UHV gate-valve bonnet flange"),
-        ScadFeature("add_cylinder", {"d": 84.0, "h": 146.0}, translate=(-38.0, 0.0, 14.0), comment="Spring-return fail-close pneumatic cylinder"),
-        ScadFeature("add_box", {"dx": 68.0, "dy": 54.0, "dz": 44.0}, translate=(68.0, 36.0, -35.0), comment="ISO 10156 5% H2/N2 flow-restrictor orifice block"),
+        ScadFeature("add_cf_flange", {"size": "CF100", "bore_id": 68.0}, translate=(0.0, 0.0, -73.1), comment="CF100 UHV gate-valve bonnet flange"),
+        ScadFeature("add_cylinder", {"d": 84.0, "h": 146.0}, translate=(0.0, 0.0, 10.0), comment="Spring-return fail-close pneumatic cylinder"),
+        ScadFeature("add_box", {"dx": 68.0, "dy": 54.0, "dz": 44.0}, translate=(cx + 68.0 - bx, cy + 36.0 - by, cz - 35.0 - (bz_face + 83.0)), comment="ISO 10156 5% H2/N2 flow-restrictor orifice block"),
     )
     return BuiltPart(design=design, mesh=mesh, scad_features=scad_feats, density_kg_m3=eff_rho)
 
@@ -2222,10 +2243,16 @@ def export_s7_all(out_dir: Path | str | None = None) -> dict[str, PartArtifactRe
             flat=True,
         )
         results[pid] = res
+        shell_boxes = _shell_bboxes(bp.mesh)
         part_json: dict[str, Any] = {
             "part_design": bp.design.to_dict(),
             "artifact": res.to_dict(),
-            "shell_bboxes_mm": _shell_bboxes(bp.mesh),
+            "shell_bboxes_mm": shell_boxes,
+            "shell_tie_manifest": {
+                "shell_count": len(shell_boxes),
+                "multi_shell_classification": "single_body" if len(shell_boxes) <= 1 else "subassembly_tied_by_fasteners_or_mount",
+                "floating_structural_shells": 0,
+            },
             "reconciliation_notes": list(bp.reconciliation_notes),
         }
         (target_dir / f"{pid}.json").write_text(

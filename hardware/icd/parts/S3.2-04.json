@@ -43,8 +43,8 @@
         490.722
       ],
       "canonical_bbox_max_mm": [
-        77.873,
-        77.873,
+        79.009,
+        80.049,
         502.158
       ],
       "datum_shift_mm": [
@@ -116,7 +116,15 @@
     "rtl_modules": [],
     "rtl_audit_json": null,
     "software_and_eda_files": [],
-    "verification_tests": []
+    "verification_tests": [
+      "tests/test_bom_detailed.py",
+      "tests/test_full_180_traceability.py",
+      "tests/test_cad_s3_s4.py",
+      "tests/test_pcb_kernel_and_ibic.py",
+      "tests/test_pcb_cryo_and_elec_icds.py",
+      "tests/test_detector_frontend.py",
+      "tests/test_cad_parts.py"
+    ]
   },
   "specialized_specification": null,
   "verification_status": {
@@ -126,6 +134,7 @@
     "rtl_verified": false,
     "software_or_eda_verified": false,
     "specialized_icd_present": false,
+    "verification_tests_mapped": true,
     "traceable": true
   },
   "epistemic": {

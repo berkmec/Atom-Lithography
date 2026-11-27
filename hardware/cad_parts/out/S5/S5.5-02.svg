@@ -165,7 +165,7 @@
     <text x="1173.0" y="595.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="9.5" font-weight="600" fill="#1B365D">[C] ANGULAR INDEX / BOLT ORIENTATION</text>
     <line x1="1105.0" y1="613.5" x2="1620.0" y2="613.5" stroke="#CBD5E1" stroke-width="0.9"/>
     <text x="1117.0" y="627.5" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" font-weight="700" fill="#1B365D">INTERFACES / PORTS (2):</text>
-    <text x="1121.0" y="642.0" font-family="DejaVu Sans Mono, monospace" font-size="9.2" fill="#111827">• chamber_pos_y_cf63 [CF63] PCD 92.1 (8xØ8.4) -&gt; S5.1-01</text>
+    <text x="1121.0" y="642.0" font-family="DejaVu Sans Mono, monospace" font-size="9.2" fill="#111827">• chamber_pos_y_cf63 [CF63] PCD 92.1 (8xØ8.4) -&gt; S5.1-03</text>
     <text x="1121.0" y="655.5" font-family="DejaVu Sans Mono, monospace" font-size="9.2" fill="#111827">• optical_808nm_in [Dia 44 mm CA AR@808nm] -&gt; S5.5-04</text>
     <text x="1117.0" y="672.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" font-weight="700" fill="#1B365D">CRITICAL DIMENSIONS:</text>
     <text x="1121.0" y="686.5" font-family="DejaVu Sans Mono, monospace" font-size="9.2" fill="#111827">CF63_OD: Ø113.50 ±0.10</text>

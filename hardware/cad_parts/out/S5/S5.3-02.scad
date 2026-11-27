@@ -29,6 +29,7 @@ bbox_z = 152.0000;
 clear_aperture_mm = 88.0;
 window_d_mm = 96.0;
 barrel_l_mm = 58.0;
+elev_deg = 36.0;
 
 // Interface / port parameters (mm)
 port_chamber_cf100_mate_od = 152.000;
@@ -65,6 +66,6 @@ module part_S5_3_02() {
 }
 
 // World assembly mounting transform (global machine frame, mm / deg):
-// translate([-211.045, 177.088, 500.000]) rotate([0.000, 0.000, 140.000]) part_S5_3_02();
+// translate([548.322, -123.919, 629.607]) rotate([0.000, -36.000, 316.000]) part_S5_3_02();
 
 part_S5_3_02();

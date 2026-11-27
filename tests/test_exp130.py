@@ -70,13 +70,20 @@ def test_thermal_pde_energy_conservation_and_wavelength_ordering() -> None:
 
 
 def test_ted_mass_conservation_and_exp108_anchor() -> None:
+    from heat_ted_solver import KineticsParams
+    p_bl = KineticsParams(dose_cm2=1.0e15, spe_regime="planar_10nm")
     tw6, Tw6 = build_synthetic_thermal_waveform(600.0 + 273.15, 600.0)
-    r600 = solve_ted_kinetics_1d(tw6, Tw6, C_cl_peak_cm3=1.5e20, r_casc_nm=None)
+    r600 = solve_ted_kinetics_1d(tw6, Tw6, C_cl_peak_cm3=1.5e20, r_casc_nm=None, params=p_bl)
     tw8, Tw8 = build_synthetic_thermal_waveform(800.0 + 273.15, 600.0)
-    r800 = solve_ted_kinetics_1d(tw8, Tw8, C_cl_peak_cm3=1.5e20, r_casc_nm=None)
+    r800 = solve_ted_kinetics_1d(tw8, Tw8, C_cl_peak_cm3=1.5e20, r_casc_nm=None, params=p_bl)
 
     assert r600["mass_conservation_err"] < 1e-12
     assert r800["mass_conservation_err"] < 1e-12
+    # OBS-151: monolayer saturation caps 1e15 cm^-2 blanket pileup <= 1 ML (0.678)
+    assert r600["f_surface_pileup"] <= r600["surface_ML_cap_frac"] + 1e-6
+    # OBS-038: fast monomer Em_I=0.90 eV + explicit I-V recombination active
+    assert math.isclose(r600["Em_I_eV_used"], 0.90, abs_tol=1e-9)
+    assert r600["iv_recombined_mean_cm3"] > 0.0
     # EA1 literature anchor (doi:10.1063/1.331355)
     assert r600["f_surface_pileup"] >= 0.15
     assert r600["f_vacuum_escape"] < 0.05
@@ -85,14 +92,26 @@ def test_ted_mass_conservation_and_exp108_anchor() -> None:
     assert r600["sigma_anneal_nm"] > r800["sigma_anneal_nm"]
 
 
-def test_cryo_cooldown_monotonic_and_within_budget() -> None:
-    c_tile = compute_cryo_cooldown_to_20mK(41.15, 0.16)
-    c_field = compute_cryo_cooldown_to_20mK(41.15, 2.56)
-    c_wafer = compute_cryo_cooldown_to_20mK(41.15, math.pi * 2.5**2)
+def test_cryo_cooldown_sommerfeld_and_4k_switch_requirement() -> None:
+    # OBS-100: 0.725 kg Cu chuck + Cu Sommerfeld electronic term + Kapitza/joint RC + no 4K switch
+    c_tile = compute_cryo_cooldown_to_20mK(41.15, 0.16, has_4k_thermal_switch=False)
+    c_field_nosw = compute_cryo_cooldown_to_20mK(41.15, 2.56, has_4k_thermal_switch=False)
+    c_wafer_nosw = compute_cryo_cooldown_to_20mK(41.15, math.pi * 2.5**2, has_4k_thermal_switch=False)
+    c_field_sw = compute_cryo_cooldown_to_20mK(41.15, 2.56, has_4k_thermal_switch=True)
 
-    assert c_tile["t_cool_total_min"] < c_field["t_cool_total_min"] < c_wafer["t_cool_total_min"]
-    assert c_field["t_cool_total_min"] <= 15.0
-    assert c_wafer["t_cool_total_min"] <= 15.0
+    assert math.isclose(c_field_nosw["cu_carrier_mass_kg"], 0.725, rel_tol=1e-6)
+    # Cu Sommerfeld electronic enthalpy dominates phonon T^3 by >1000x below 100 mK
+    assert c_field_nosw["sommerfeld_to_phonon_ratio_lt100mK"] > 1000.0
+    assert c_field_nosw["H_stage_4K_to_20mK_mJ"] > 80.0
+    # RC joint/Kapitza impedance slows sub-4K recovery well beyond ideal 0.296 s
+    assert c_field_nosw["t_cool_4K_to_20mK_rc_s"] > 5.0
+    assert c_tile["t_cool_total_min"] < c_field_nosw["t_cool_total_min"] < c_wafer_nosw["t_cool_total_min"]
+    # Without 4 K heat switch in CAD, in-situ 20 mK flash is NOT viable (hours for 50 mm wafer)
+    assert c_field_nosw["in_situ_20mK_flash_viable"] is False
+    assert c_wafer_nosw["t_cool_total_min"] > 200.0
+    # Adding a dedicated 1 W 4 K mechanical heat switch brings 16x16 mm recovery <= 15 min
+    assert c_field_sw["in_situ_20mK_flash_viable"] is True
+    assert c_field_sw["t_cool_total_min"] <= 15.0
 
 
 def test_exp130_json_verdicts_and_hardware_specs() -> None:
@@ -120,7 +139,12 @@ def test_exp130_json_verdicts_and_hardware_specs() -> None:
     assert opt["sigma_anneal_nm"] <= 0.50
     assert opt["f_total_surface_loss"] < 0.02
     assert opt["sigma_iso_nm"] <= 0.50
-    assert opt["exp124_sigma_tot_nm"] <= 3.68
+    # OBS-039: true BCA Exp124 sigma_tot reflects 4.385 nm lateral straggle (>4.4 nm)
+    assert opt["exp124_sigma_tot_nm"] > 4.40
+    # OBS-096: Pilot 2C LAMMPS limitation metadata present
+    assert exp["pilot2c_lammps_md_limitations"]["obstacle_id"] == "OBS-096"
+    # OBS-100: Current CAD in-situ 20 mK flash honestly fails without 4 K heat switch
+    assert exp["evaluations"]["EA5"]["pass_insitu_20mK_current_cad_no_4k_switch"] is False
 
     # S5.5 sapphire viewport & LIDT margin
     s55 = exp["s55_optical_hardware_spec"]

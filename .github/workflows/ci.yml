@@ -1,0 +1,101 @@
+name: Atom Lithography Machine CI
+
+on:
+  push:
+    branches: ["main", "master"]
+  pull_request:
+  workflow_dispatch:
+
+# Epistemic & Verification Scope (OBS-118 / OBS-149):
+#   This CI pipeline verifies:
+#     1. Python unit/integration suites (analytic physics, 3D STL/B-rep mesh geometry & clash,
+#        BOM/TCO/digital-twin consistency, and legacy qcell modules).
+#     2. IEEE 1364-2005 Verilog RTL lint via Verilator (pre-P&R).
+#     3. Schematic/circuit SPICE smoke simulations via ngspice -b.
+#     4. Full 180/180 BOM-to-artifact traceability & zero-leak hygiene.
+#   Scope boundary: Green CI here does NOT certify 3D EM/FEM multiphysics (openEMS / DOLFINx),
+#   post-P&R FPGA/ASIC timing closure (nextpnr / Vivado / OpenROAD detailed_route), or lab
+#   safety compliance (M0_M1_DESIGN_ONLY; no_lab_measurement=true; see INTERNAL_PILOT_REPORT.md).
+
+env:
+  LC_ALL: C
+  OMP_NUM_THREADS: "1"
+  PYTHONDONTWRITEBYTECODE: "1"
+  PYTHONUTF8: "1"
+
+jobs:
+  verify:
+    name: Pytest, Verilator, ngspice & 180/180 Traceability
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install open-source EDA & SPICE tools (Verilator, ngspice, Icarus Verilog)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends verilator ngspice iverilog libglu1-mesa
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install --extra-index-url https://download.pytorch.org/whl/cpu -r requirements.txt
+
+      - name: Verify zero pytest collection errors
+        run: |
+          pytest --collect-only -q -p no:cacheprovider
+
+      - name: Run pytest suite (Stage-2 + v7.2 + legacy qcell)
+        run: |
+          pytest -q -p no:cacheprovider
+
+      - name: Verilator RTL lint-only checks
+        run: |
+          verilator --lint-only -Wall \
+            rtl/boed_fpga/boed_isqrt_cordic.v \
+            rtl/boed_fpga/boed_lut_rom.v \
+            rtl/boed_fpga/boed_q16_core.v \
+            rtl/boed_fpga/boed_top_16ch.v
+          verilator --lint-only -Wall -Irtl/boed_fpga \
+            rtl/machine_ctrl/aom_pid_ctrl.v \
+            rtl/machine_ctrl/blanker_array_ctrl.v \
+            rtl/machine_ctrl/cryo_mux_ddc_ctrl.v \
+            rtl/machine_ctrl/spi_dac_hv_ctrl.v \
+            rtl/machine_ctrl/uart_axi_regmap.v \
+            rtl/machine_ctrl/uhv_interlock_fsm.v \
+            rtl/machine_ctrl/fpga_top_machine_ctrl.v
+          verilator --lint-only \
+            src/rtl/blanker_gate.v \
+            src/rtl/blanker_tile.v
+
+      - name: ngspice batch smoke checks (tracked PCB & frontend SPICE decks)
+        run: |
+          set -euo pipefail
+          for deck in \
+            hardware/pcb/blanker_asic_mezzanine/blanker_hv_driver.cir \
+            hardware/pcb/cryo_cmos_4k_carrier/cryo_4k_gate_filter.cir \
+            hardware/pcb/cryo_rf_harness_icd/magnet_quench_dump_1p563ohm.cir \
+            hardware/pcb/cryo_rf_harness_icd/qram_chebyshev_50_to_3k.cir \
+            hardware/pcb/cryo_rf_harness_icd/rf_set_tank_biastee.cir \
+            hardware/pcb/fpga_brain_carrier/fpga_pdn_1v0.cir \
+            hardware/pcb/ibic_cryo_frontend_v3/ibic_cryo_chain_100k.cir \
+            hardware/pcb/ion_column_hv_dac/ion_hv_filter_trim.cir \
+            hardware/pcb/laser_aom_pyrometer_afe/laser_pyro_tia_aom.cir \
+            hardware/pcb/safety_interlock_1oo2d/safety_1oo2d_crowbar.cir \
+            src/board/detector_frontend.cir
+          do
+            echo "=== ngspice -b $deck ==="
+            ngspice -b "$deck"
+          done
+
+      - name: Full 180/180 BOM-to-artifact traceability verification
+        run: |
+          PYTHONPATH=.:src python hardware/verify_full_traceability.py --verify

@@ -3,7 +3,7 @@
 # package and the exact minimal legacy helper/JSON anchors needed for full pytest.
 *
 
-# Root metadata & showcase
+# Root metadata, CI & showcase
 !.gitignore
 !LICENSE
 !LICENSES/
@@ -11,7 +11,11 @@
 !NOTICE
 !REUSE.toml
 !README.md
+!pyproject.toml
 !requirements.txt
+!.github/
+!.github/workflows/
+!.github/workflows/ci.yml
 
 # Master engineering documentation, BOM v7.0 (180p / 10-RFQ), Parametric CAD v6.0 & v3-v7 dashboards
 !research/
@@ -26,6 +30,8 @@
 !rtl/
 !rtl/boed_fpga/
 !rtl/boed_fpga/**
+!rtl/cryo_crossbar_4k/
+!rtl/cryo_crossbar_4k/**
 !rtl/machine_ctrl/
 !rtl/machine_ctrl/**
 
@@ -41,9 +47,15 @@
 !src/machine_control/scada_telemetry.py
 !src/board/
 !src/board/**
+!src/qcell/
+!src/qcell/__init__.py
+!src/qcell/fet4k.py
+!src/qcell/cell6d.py
 !src/rtl/
 !src/rtl/blanker_gate.v
 !src/rtl/blanker_gate_spec.v
+!src/rtl/blanker_gate_tb.v
+!src/rtl/blanker_miter.v
 !src/rtl/blanker_tile.v
 !src/rtl/blanker_tile_formal.v
 !src/rtl/BLANKER_TILE.md
@@ -273,6 +285,7 @@
 !tests/test_rtl_machine_ctrl.py
 !tests/test_scada_telemetry.py
 !tests/test_full_180_traceability.py
+!tests/test_qcell_legacy.py
 
 # Hard re-exclusions (caches, bytecode, RTL simulation dumps, logs, superseded v1 & local disk forensics)
 **/__pycache__/

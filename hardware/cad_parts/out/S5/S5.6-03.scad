@@ -38,7 +38,7 @@ port_mbe_pbn_cf40_mate_bolts = 6;
 
 module part_S5_6_03() {
   union() {
-    // Mating CF40 flange on S5.6-01 +Y port
+    // Mating CF40 flange on S5.6-01 310 deg port
     translate([0.000, 6.350, 0.000]) rotate([90.000, 0.000, 0.000]) {
       difference() {
         cylinder(d=69.500, h=12.700, center=true);
@@ -70,6 +70,6 @@ module part_S5_6_03() {
 }
 
 // World assembly mounting transform (global machine frame, mm / deg):
-// translate([420.000, 88.500, 675.000]) rotate([0.000, 0.000, 0.000]) part_S5_6_03();
+// translate([360.782, -65.768, 733.500]) rotate([0.000, 0.000, 138.000]) part_S5_6_03();
 
 part_S5_6_03();

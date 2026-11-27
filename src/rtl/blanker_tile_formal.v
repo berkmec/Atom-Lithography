@@ -5,26 +5,55 @@
 //  P3: done_sticky and abort_sticky are never set together for a channel
 `timescale 1ns/1ps
 module blanker_tile_formal (
-    input wire clk, input wire rst_n,
-    input wire cfg_we, input wire [6:0] cfg_addr, input wire [7:0] cfg_data,
-    input wire start_all, input wire [1:0] count_hit, input wire [5:0] rd_addr
+    input wire clk,
+    input wire rst_n,
+    input wire cfg_we,
+    input wire [6:0] cfg_addr,
+    input wire [7:0] cfg_data,
+    input wire start_all,
+    input wire [1:0] count_hit,
+    input wire [5:0] rd_addr
 );
     wire [1:0] open_, done_st, abort_st;
-    wire busy_any;
+    wire busy_any, tile_done_out, tile_abort_out;
     wire [7:0] rd_counted;
+
     blanker_tile #(.NCH(2), .WATCHDOG_CYCLES(6), .COUNT_W(8)) dut (
-        .clk(clk), .rst_n(rst_n), .cfg_we(cfg_we), .cfg_addr(cfg_addr),
-        .cfg_data(cfg_data), .start_all(start_all), .count_hit(count_hit),
-        .blanker_open(open_), .busy_any(busy_any),
-        .done_sticky(done_st), .abort_sticky(abort_st),
-        .rd_addr(rd_addr), .rd_counted(rd_counted)
+        .clk               (clk),
+        .rst_n             (rst_n),
+        .cfg_we            (cfg_we),
+        .cfg_addr          (cfg_addr),
+        .cfg_data          (cfg_data),
+        .start_all         (start_all),
+        .count_hit         (count_hit),
+        .blanker_open      (open_),
+        .busy_any          (busy_any),
+        .done_sticky       (done_st),
+        .abort_sticky      (abort_st),
+        .rd_addr           (rd_addr),
+        .rd_counted        (rd_counted),
+        .ser_sel           (1'b0),
+        .ser_sclk          (1'b0),
+        .ser_sdata         (1'b0),
+        .ser_tile_latch_n  (1'b1),
+        .ser_frame_latch_n (1'b1),
+        .ser_beam_en       (1'b1),
+        .tile_done_out     (tile_done_out),
+        .tile_abort_out    (tile_abort_out)
     );
-    reg seen_reset;
-    initial seen_reset = 1'b0;
-    always @(posedge clk) if (!rst_n) seen_reset <= 1'b1;
+
+    reg [2:0] rst_seen_cnt;
+    initial rst_seen_cnt = 3'd0;
+    always @(posedge clk) begin
+        if (!rst_n)
+            rst_seen_cnt <= 3'd1;
+        else if (rst_seen_cnt != 3'd0 && rst_seen_cnt < 3'd4)
+            rst_seen_cnt <= rst_seen_cnt + 3'd1;
+    end
+
     integer i;
     always @(posedge clk) begin
-        if (rst_n && seen_reset) begin
+        if (rst_n && (rst_seen_cnt >= 3'd4)) begin
             for (i = 0; i < 2; i = i + 1) begin
                 assert(!(open_[i] && done_st[i]));
                 assert(!(open_[i] && abort_st[i]));

@@ -25,7 +25,7 @@ C1_4k   n_s1    n_c1r 1.000000e-07
 Resr1   n_c1r   n_c1l 0.05
 Lesl1   n_c1l   0     6.000000e-10
 C1_hf   n_s1    n_c1hfr 1.000000e-10
-Resr1h  n_c1hfr n_c1hfl 0.08
+Resr1h  n_c1hfr n_c1hfl 1.0
 Lesl1h  n_c1hfl 0       2.500000e-10
 
 * Mid-Stage: 3-Section Eccosorb CR-124 Magnetically-Loaded RF Absorber Ladder (4 K -> MXC)
@@ -54,7 +54,7 @@ C2_mxc  n_gate_mxc n_c2r   4.700000e-08
 Resr2   n_c2r   n_c2l      0.05 temp=-273.13
 Lesl2   n_c2l   0          6.000000e-10
 C2_hf   n_gate_mxc n_c2hfr 1.000000e-10
-Resr2h  n_c2hfr n_c2hfl    0.08 temp=-273.13
+Resr2h  n_c2hfr n_c2hfl    1.0 temp=-273.13
 Lesl2h  n_c2hfl 0          2.500000e-10
 
 * Stark / M4 / SET Cryogenic Gate Electrode Load (20 mK)
@@ -72,18 +72,22 @@ C2_i      ni_out 0     4.700000e-08
 * ===========================================================================
 * SUBCIRCUIT B: 968-Gate SKY130 4 K Crossbar Mux Static + Dynamic Power Model
 *   L=11 Surface Code: 121 nodes x 8 gates = 968 gates across 8 SKY130 dies
-*   4 K Core Supply VDD_4K = 1.2 V; Analog Gate-Hold Bias VBIAS = 2.0 V
-*   Budget: P_total_4K <= 15.4 mW (Exp131 / BOM S6.10-03)
+*   4 K Core Supply VDD_4K = 1.2 V; FULL Bipolar Analog Gate-Hold Rails +/-2.0 V (4.0 V span, OBS-091)
+*   Note: +/-2.0 V (4.0 V span) requires SKY130 5 V thick-oxide (g5v0d10v5) triple-well devices tied to -2.0 V.
+*   Model bound: NMOS_SKY4K/PMOS_SKY4K are LEVEL=1 behavioral 4 K effective-Vth switches (not cryo BSIM4 PDK).
+*   Budget: P_total_4K (1.2 V core/dyn + full +2 V AND -2 V rails) <= 15.4 mW (Exp131 / BOM S6.10-03)
 * ===========================================================================
-Vvdd_4k  vdd_4k  0 DC 1.2
-Vbias_4k vbias_4k 0 DC 2.0
+Vvdd_4k      vdd_4k    0 DC 1.2
+Vbias_pos_4k vbias_pos 0 DC 2.0
+Vbias_neg_4k vbias_neg 0 DC -2.0
 
 * Static 4 K core + SPI/bandgap overhead across 8 dies: 1.12 mW @ 1.2 V (0.9333 mA)
 Rstat_spi vdd_4k 0 1.2857k
-* Static 968-gate sample-and-hold bias buffers: 968 x 11.2 uW = 10.8416 mW @ 2.0 V (5.4208 mA)
-Rstat_968 vbias_4k 0 368.95
+* Static 968-gate sample-and-hold bias buffers across FULL +/-2.0 V (4.0 V span):
+*   968 x 2.796 uA = 2.707 mA across 4.0 V = 10.828 mW (5.414 mW from +2 V + 5.414 mW from -2 V!)
+Rstat_968 vbias_pos vbias_neg 1.4776k
 
-* Dynamic 968-gate SKY130 CMOS crossbar refresh bank (4 K threshold-shifted |Vto|=0.60 V)
+* Dynamic 968-gate SKY130 CMOS crossbar refresh bank (4 K effective-Vth LEVEL=1 behavioral switch, |Vto|=0.60 V)
 * Scaled 968-gate total switched capacitance: 968 x 45 pF = 43.56 nF refreshed at f_ref = 25 kHz
 * Analytical P_dyn = C_tot * V^2 * f = 43.56e-9 * 1.44 * 25e3 = 1.568 mW
 .model NMOS_SKY4K NMOS(LEVEL=1 VTO=0.60 KP=4.5m LAMBDA=0.01)
@@ -96,12 +100,13 @@ Cdyn_968 dyn_out 0 43.56n
 .control
 set noaskquit
 
-* 1) AC Transfer Function: 1 Hz .. 2 GHz (verify >60 dB RF attenuation @ 1 GHz & -3 dB BW)
+* 1) AC Transfer Function: 1 Hz .. 2 GHz (verify >60 dB RF attenuation @ 1 GHz & damped 548 MHz ESL resonance)
 ac dec 80 1 2G
 meas ac f_3db_hz WHEN vm(n_gate_mxc)=0.707107 FALL=1
 meas ac atten_100khz_db FIND vdb(n_gate_mxc) AT=100k
 meas ac atten_10mhz_db  FIND vdb(n_gate_mxc) AT=10Meg
 meas ac atten_100mhz_db FIND vdb(n_gate_mxc) AT=100Meg
+meas ac atten_548mhz_pk_db MAX vdb(n_gate_mxc) FROM=400Meg TO=700Meg
 meas ac atten_1ghz_db   FIND vdb(n_gate_mxc) AT=1G
 
 * 2) Noise Analysis (Total: 300 K DAC + 4 K stage + 20 mK MXC stage, 1 Hz .. 1 MHz)
@@ -124,12 +129,16 @@ setplot noise4
 let noise_intr_rms_v = onoise_total
 print noise_intr_rms_v
 
-* 4) Transient Analysis A: 968-Gate Crossbar 4 K Power Dissipation (5 full refresh cycles = 200 us)
+* 4) Transient Analysis A: 968-Gate Crossbar 4 K Power Dissipation incl. BOTH +2 V AND -2 V Rails (OBS-091)
 tran 200n 240u
 let p_4k_core_w = -1.2 * i(Vvdd_4k)
-let p_4k_bias_w = -2.0 * i(Vbias_4k)
+let p_4k_bias_pos_w = -2.0 * i(Vbias_pos_4k)
+let p_4k_bias_neg_w = 2.0 * i(Vbias_neg_4k)
+let p_4k_bias_w = p_4k_bias_pos_w + p_4k_bias_neg_w
 let p_4k_tot_w  = p_4k_core_w + p_4k_bias_w
 meas tran p_4k_core_avg_w AVG p_4k_core_w FROM=40u TO=240u
+meas tran p_4k_bias_pos_avg_w AVG p_4k_bias_pos_w FROM=40u TO=240u
+meas tran p_4k_bias_neg_avg_w AVG p_4k_bias_neg_w FROM=40u TO=240u
 meas tran p_4k_bias_avg_w AVG p_4k_bias_w FROM=40u TO=240u
 meas tran p_4k_total_avg_w AVG p_4k_tot_w FROM=40u TO=240u
 

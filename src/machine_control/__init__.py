@@ -21,5 +21,6 @@ __all__ = [
     "sim",
     "cloud_qpu_bridge",
     "auto_recal",
+    "scada_telemetry",
 ]
 __version__ = "4.0.0"

@@ -3,13 +3,13 @@
   "part_id": "S9.3-01",
   "parent_bom_id": "S9.3",
   "subsystem": "S9",
-  "part_name": "Yedek MEMS apertur ve blanker plaka seti (2 eslesik takim)",
+  "part_name": "Yedek MEMS apertur ve blanker plaka seti (2 eslesik takim; iradina sputtering omur olcekli)",
   "part_category": "PHYSICAL_SOLID",
   "bom_metadata": {
     "qty": "2",
     "unit": "set",
-    "material": "Katkili Si MEMS (S2.1+S2.2 uretiminden)",
-    "key_spec": "Iyon asindirma (sputtering) omru bilinmiyor — yedek plaka",
+    "material": "Katkili Si MEMS + ops. SiC/W/Pt-Ir koruyucu kaplama (S2.1+S2.2 uretiminden)",
+    "key_spec": "iradina Y_sput (E_surf=4.7 eV): 31P+->28Si = 0.913 Si/ion @ 5 keV / 1.067 @ 10 keV; 121Sb+->28Si = 1.711 Si/ion @ 7.5 keV (1.87x); 50 nA 1 mm flood -> 30.54 nm/sa erozyon (16x16 mm genisletilmis demette 0.094 nm/sa; CD +/-50 nm limit ~1.6 sa @ 1 mm / ~530 sa @ 16x16 mm)",
     "tolerance": "±50 nm CD",
     "temp_stage": "300 K",
     "vacuum_grade": "UHV 1e-9 mbar",
@@ -20,7 +20,7 @@
     "usd_high": 128000.0,
     "legacy_cad_module": "consumables_calibration",
     "bom_epistemic_tag": "{Varsayım}",
-    "notes": "DELTA-S9: ayni dokumhane kosusundan eklenen yedek plakalar (NRE tekrarlanmaz)"
+    "notes": "DELTA-S9 (OBS-139): ayni dokumhane kosusundan eklenen yedek plakalar; S1-Multi 121Sb+ agir iyonlari icin dusuk-Y_sput SiC/Pt-Ir/W koruyucu kaplama onerilir; UNQUOTED_ROM_ESTIMATE"
   },
   "artifact_links": {
     "cad": {
@@ -61,7 +61,15 @@
     "rtl_modules": [],
     "rtl_audit_json": null,
     "software_and_eda_files": [],
-    "verification_tests": []
+    "verification_tests": [
+      "tests/test_bom_detailed.py",
+      "tests/test_full_180_traceability.py",
+      "tests/test_cad_s7_s9.py",
+      "tests/test_exp124.py",
+      "tests/test_exp142.py",
+      "tests/test_cad_parts.py",
+      "tests/test_exp143.py"
+    ]
   },
   "specialized_specification": null,
   "verification_status": {
@@ -71,6 +79,7 @@
     "rtl_verified": false,
     "software_or_eda_verified": false,
     "specialized_icd_present": false,
+    "verification_tests_mapped": true,
     "traceable": true
   },
   "epistemic": {

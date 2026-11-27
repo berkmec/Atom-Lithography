@@ -3,13 +3,13 @@
   "part_id": "S5.4-01",
   "parent_bom_id": "S5.4",
   "subsystem": "S5",
-  "part_name": "Izotopik zenginlestirilmis 28Si/29Si (f=1%) epitaksiyel substrat partisi",
+  "part_name": "Izotopik zenginlestirilmis 28Si/29Si (f=1%) epitaksiyel substrat partisi (FOAK 50 mm)",
   "part_category": "PHYSICAL_SOLID",
   "bom_metadata": {
     "qty": "25",
     "unit": "yonga",
     "material": "28Si (>99.95%) + 29Si (f=1.0% ±0.1%) epi",
-    "key_spec": "100 mm yonga, 100 nm epi katman (Mod B banyo, Exp59/62/68)",
+    "key_spec": "50 mm FOAK prototip yonga (cad/params.py Ø50 mm / 80x80 mm tasiyici uyumlu; 100 nm epi; SOI seceneginde >=50 nm aktif 28Si BOX kuyrugu icin; $2,240/yonga nom)",
     "tolerance": "±0.1% 29Si",
     "temp_stage": "300 K",
     "vacuum_grade": "Temizoda/UHV",
@@ -20,7 +20,7 @@
     "usd_high": 105000.0,
     "legacy_cad_module": "s5_uhv_chamber_loadlock",
     "bom_epistemic_tag": "{Varsayım}",
-    "notes": "25 yongalik ilk urun partisi; izotopik silan (28SiH4/29SiH4) CVD buyutme"
+    "notes": "25x Ø50 mm FOAK ilk urun partisi (veya 100 mm ana yongadan 4x dilim; Fab 200 mm = 16x alan & >=Ø300 mm kriyo/LL yeniden tasarim -> Exp134/141); 28SiH4 tek-kaynak izotop darbogazi, lead P10/P50/P90=26/48/78 hf; UNQUOTED_ROM_ESTIMATE"
   },
   "artifact_links": {
     "cad": {
@@ -61,7 +61,17 @@
     "rtl_modules": [],
     "rtl_audit_json": null,
     "software_and_eda_files": [],
-    "verification_tests": []
+    "verification_tests": [
+      "tests/test_bom_detailed.py",
+      "tests/test_full_180_traceability.py",
+      "tests/test_cad_s5.py",
+      "tests/test_exp129.py",
+      "tests/test_exp136.py",
+      "tests/test_exp141.py",
+      "tests/test_cad_parts.py",
+      "tests/test_exp130.py",
+      "tests/test_exp139.py"
+    ]
   },
   "specialized_specification": null,
   "verification_status": {
@@ -71,6 +81,7 @@
     "rtl_verified": false,
     "software_or_eda_verified": false,
     "specialized_icd_present": false,
+    "verification_tests_mapped": true,
     "traceable": true
   },
   "epistemic": {

@@ -51,6 +51,30 @@
         "notes": "ISO 3669 CF100 Cu-gasket knife-edge"
       },
       {
+        "name": "vat_bonnet_top_cf100",
+        "kind": "flange",
+        "position_mm": [
+          -148.0,
+          0.0,
+          163.2
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "CF100",
+        "mating_part_id": "S7.SAFETY-06",
+        "bore_mm": 68.0,
+        "od_mm": 152.0,
+        "pcd_mm": 130.2,
+        "bolt_count": 16,
+        "bolt_hole_mm": 8.4,
+        "bolt_spec": "M8",
+        "frame": "local",
+        "notes": "Top CF100 VAT gate valve bonnet mating S7.SAFETY-06 fail-close actuator at (272, 0, 663.2)"
+      },
+      {
         "name": "mbe_top_cf100",
         "kind": "flange",
         "position_mm": [
@@ -72,7 +96,7 @@
         "bolt_hole_mm": 8.4,
         "bolt_spec": "M8",
         "frame": "local",
-        "notes": "Exp139 S5.6 host port at Z=585.0 mm"
+        "notes": "Exp139 S5.6 host port at Z=585.0 mm (fully perforated Ø101.6 mm bore)"
       },
       {
         "name": "transfer_arm_pos_x",
@@ -147,11 +171,11 @@
         "notes": "Dry N2 purge/vent valve port"
       },
       {
-        "name": "roughing_pos_y",
-        "kind": "flange",
+        "name": "roughing_kf25_pos_y",
+        "kind": "vacuum",
         "position_mm": [
           0.0,
-          116.85,
+          162.0,
           -20.0
         ],
         "normal": [
@@ -159,8 +183,104 @@
           1.0,
           0.0
         ],
-        "standard": "CF40",
+        "standard": "ISO-KF25 (via CF40-to-KF25 adapter)",
         "mating_part_id": "S5.2-03",
+        "bore_mm": 25.0,
+        "od_mm": 40.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": "CF40-to-KF25 conical roughing adapter for valved foreline tee to S5.2-03"
+      },
+      {
+        "name": "port_808nm_flash_inclined_90",
+        "kind": "flange",
+        "position_mm": [
+          0.0,
+          149.6681,
+          108.7403
+        ],
+        "normal": [
+          4.953800363085458e-17,
+          0.8090169943749475,
+          0.5877852522924731
+        ],
+        "standard": "CF63",
+        "mating_part_id": "S5.5-02",
+        "bore_mm": 44.0,
+        "od_mm": 113.5,
+        "pcd_mm": 92.1,
+        "bolt_count": 8,
+        "bolt_hole_mm": 8.4,
+        "bolt_spec": "M8",
+        "frame": "local",
+        "notes": "+Y 36-deg inclined 808 nm flash sapphire viewport"
+      },
+      {
+        "name": "port_rta_flash_inclined_42",
+        "kind": "flange",
+        "position_mm": [
+          128.0308,
+          -123.6379,
+          129.3128
+        ],
+        "normal": [
+          0.5819581232042501,
+          -0.561990426986137,
+          0.5877852522924731
+        ],
+        "standard": "CF100",
+        "mating_part_id": "S5.3-02",
+        "bore_mm": 88.0,
+        "od_mm": 152.0,
+        "pcd_mm": 130.2,
+        "bolt_count": 16,
+        "bolt_hole_mm": 8.4,
+        "bolt_spec": "M8",
+        "frame": "local",
+        "notes": "42-deg 36-deg inclined backup Xe flash/RTA viewport"
+      },
+      {
+        "name": "port_pyro_inclined_238",
+        "kind": "flange",
+        "position_mm": [
+          -81.4556,
+          -130.3562,
+          111.6792
+        ],
+        "normal": [
+          -0.4287136904113311,
+          -0.6860853218378682,
+          0.5877852522924731
+        ],
+        "standard": "CF40",
+        "mating_part_id": "S5.3-03",
+        "bore_mm": 28.0,
+        "od_mm": 69.5,
+        "pcd_mm": 58.7,
+        "bolt_count": 6,
+        "bolt_hole_mm": 6.6,
+        "bolt_spec": "M6",
+        "frame": "local",
+        "notes": "238-deg 36-deg inclined backup dual-band pyrometer port"
+      },
+      {
+        "name": "port_shutter_320",
+        "kind": "flange",
+        "position_mm": [
+          86.6749,
+          128.5008,
+          -40.0
+        ],
+        "normal": [
+          0.5591929034707468,
+          0.8290375725550417,
+          0.0
+        ],
+        "standard": "CF40",
+        "mating_part_id": "S5.3-04",
         "bore_mm": 38.0,
         "od_mm": 69.5,
         "pcd_mm": 58.7,
@@ -168,7 +288,7 @@
         "bolt_hole_mm": 6.6,
         "bolt_spec": "M6",
         "frame": "local",
-        "notes": "ISO 3669 CF40 Cu-gasket knife-edge"
+        "notes": "320 deg Z=545 mm load-lock thermal shutter port (420 mm clear of S2.1-03)"
       }
     ],
     "dimensions": [
@@ -271,17 +391,18 @@
     ],
     "notes": [
       "Yonga degisimi <15 dk, ana oda vakumunu bozmadan transfer",
-      "VAT CF100 all-metal gate valve (He leak <= 1e-10 mbar*L/s) isolates 20 mK DR chamber during MBE/vent.",
-      "Operator quick-access hinged viewport door & dry N2 vent port positioned on -Y front side.",
-      "Decoupled floor pedestal clears S4 granite base (X_max=450 mm) by 15.0 mm."
+      "Fully-perforated 316LN load-lock (OBS-001/064): all CF100 (-X/+X/+Z), CF40, CF16, and 36-deg optical bores open.",
+      "VAT CF100 all-metal gate valve (bored Ø101.6 mm) + top CF100 bonnet at (290, 0, 658.2) mating S7.SAFETY-06 (OBS-066).",
+      "Hosts 36-deg inclined optical anneal/pyrometer ports (S5.5 808 nm, S5.3 RTA, S5.3-03 pyrometer) + clear S5.3-04 shutter + CF40-to-KF25 roughing adapter."
     ],
     "scad_params": {
       "cube_x": 180.0,
       "cube_y": 180.0,
       "cube_z": 170.0,
+      "opt_elev_deg": 36.0,
       "stand_clear_granite": 15.0
     },
-    "target_mass_kg": 52.0,
+    "target_mass_kg": 54.0,
     "epistemic": {
       "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
       "no_lab_measurement": true,
@@ -305,34 +426,34 @@
     "watertight": true,
     "boundary_edges": 0,
     "non_manifold_edges": 0,
-    "signed_volume_mm3": 5124132.5709444,
-    "surface_area_mm2": 854014.2190188579,
-    "mass_kg": 26.645489368910887,
+    "signed_volume_mm3": 4916178.973992473,
+    "surface_area_mm2": 976150.715675798,
+    "mass_kg": 25.564130664760867,
     "cg_mm": [
-      -24.131576631070242,
-      -5.886088038374725,
-      -64.10002729785398
+      -14.811188774689244,
+      -6.344559145896687,
+      -56.69370624867851
     ],
     "bbox_min_mm": [
-      -169.5,
-      -131.0,
+      -224.0,
+      -186.4046289748669,
       -500.0
     ],
     "bbox_max_mm": [
-      90.0,
-      116.85,
-      158.2
+      189.7251877855441,
+      183.02495702696314,
+      190.7886825691229
     ],
     "inertia_kg_mm2": [
-      719231.7192933571,
-      838914.2111029398,
-      296297.3895821299,
-      3960.3256070082257,
-      187254.4979222452,
-      10233.47074054778
+      824820.7236485697,
+      923460.8771126362,
+      344414.0232768227,
+      15113.2485216142,
+      168808.76230351895,
+      20420.59090471991
     ],
-    "triangle_count": 7944,
-    "vertex_count": 3854,
+    "triangle_count": 15172,
+    "vertex_count": 7340,
     "step_valid": true,
     "dxf_valid": true,
     "svg_valid": true,
@@ -344,6 +465,470 @@
     "warnings": [],
     "all_valid": true
   },
+  "shell_tie_manifest": [
+    {
+      "shell_index": 0,
+      "bbox_min_mm": [
+        -169.5,
+        -76.0,
+        -76.0
+      ],
+      "bbox_max_mm": [
+        -149.7,
+        76.0,
+        76.0
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    },
+    {
+      "shell_index": 1,
+      "bbox_min_mm": [
+        -149.5,
+        -86.0,
+        -86.0
+      ],
+      "bbox_max_mm": [
+        -110.5,
+        86.0,
+        86.0
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    },
+    {
+      "shell_index": 2,
+      "bbox_min_mm": [
+        -190.0,
+        -42.0,
+        86.2
+      ],
+      "bbox_max_mm": [
+        -106.0,
+        42.0,
+        143.2
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    },
+    {
+      "shell_index": 3,
+      "bbox_min_mm": [
+        -224.0,
+        -76.0,
+        143.4
+      ],
+      "bbox_max_mm": [
+        -72.0,
+        76.0,
+        163.2
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    },
+    {
+      "shell_index": 4,
+      "bbox_min_mm": [
+        -110.3,
+        -54.0,
+        -54.0
+      ],
+      "bbox_max_mm": [
+        -90.3,
+        54.0,
+        54.0
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    },
+    {
+      "shell_index": 5,
+      "bbox_min_mm": [
+        -79.5,
+        80.0,
+        32.2
+      ],
+      "bbox_max_mm": [
+        -64.5,
+        90.0,
+        54.8
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    },
+    {
+      "shell_index": 6,
+      "bbox_min_mm": [
+        64.5,
+        80.0,
+        32.2
+      ],
+      "bbox_max_mm": [
+        79.5,
+        90.0,
+        54.8
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    },
+    {
+      "shell_index": 7,
+      "bbox_min_mm": [
+        -90.0,
+        -90.0,
+        -84.8
+      ],
+      "bbox_max_mm": [
+        90.0,
+        90.0,
+        -74.8
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    },
+    {
+      "shell_index": 8,
+      "bbox_min_mm": [
+        -75.5,
+        -75.5,
+        55.2
+      ],
+      "bbox_max_mm": [
+        75.5,
+        75.5,
+        65.2
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    },
+    {
+      "shell_index": 9,
+      "bbox_min_mm": [
+        -90.0,
+        -64.8,
+        -99.8
+      ],
+      "bbox_max_mm": [
+        -80.0,
+        64.8,
+        80.2
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    },
+    {
+      "shell_index": 10,
+      "bbox_min_mm": [
+        80.0,
+        -64.8,
+        -99.8
+      ],
+      "bbox_max_mm": [
+        90.0,
+        64.8,
+        80.2
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    },
+    {
+      "shell_index": 11,
+      "bbox_min_mm": [
+        -79.8,
+        -90.0,
+        -74.6
+      ],
+      "bbox_max_mm": [
+        79.8,
+        -80.0,
+        55.0
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    },
+    {
+      "shell_index": 12,
+      "bbox_min_mm": [
+        -79.8,
+        80.0,
+        -74.6
+      ],
+      "bbox_max_mm": [
+        79.8,
+        90.0,
+        32.0
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    },
+    {
+      "shell_index": 13,
+      "bbox_min_mm": [
+        -76.0,
+        -76.0,
+        65.2
+      ],
+      "bbox_max_mm": [
+        76.0,
+        76.0,
+        85.0
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    },
+    {
+      "shell_index": 14,
+      "bbox_min_mm": [
+        70.2,
+        -76.0,
+        -76.0
+      ],
+      "bbox_max_mm": [
+        90.0,
+        76.0,
+        76.0
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    },
+    {
+      "shell_index": 15,
+      "bbox_min_mm": [
+        -56.75,
+        95.515,
+        52.5423
+      ],
+      "bbox_max_mm": [
+        56.75,
+        183.025,
+        154.652
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    },
+    {
+      "shell_index": 16,
+      "bbox_min_mm": [
+        54.8136,
+        -186.4046,
+        56.1987
+      ],
+      "bbox_max_mm": [
+        189.7252,
+        -49.7437,
+        190.7887
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    },
+    {
+      "shell_index": 17,
+      "bbox_min_mm": [
+        -112.1831,
+        -154.8043,
+        76.1181
+      ],
+      "bbox_max_mm": [
+        -45.2835,
+        -92.7943,
+        139.7754
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    },
+    {
+      "shell_index": 18,
+      "bbox_min_mm": [
+        50.193,
+        88.214,
+        -74.6654
+      ],
+      "bbox_max_mm": [
+        115.4138,
+        147.8854,
+        -5.3346
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    },
+    {
+      "shell_index": 19,
+      "bbox_min_mm": [
+        -76.0,
+        -110.1,
+        -76.0
+      ],
+      "bbox_max_mm": [
+        76.0,
+        -90.3,
+        76.0
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    },
+    {
+      "shell_index": 20,
+      "bbox_min_mm": [
+        -44.0,
+        -110.1,
+        -44.0
+      ],
+      "bbox_max_mm": [
+        44.0,
+        -102.18,
+        44.0
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    },
+    {
+      "shell_index": 21,
+      "bbox_min_mm": [
+        -86.0,
+        -110.0,
+        -55.0
+      ],
+      "bbox_max_mm": [
+        -70.0,
+        -94.0,
+        55.0
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    },
+    {
+      "shell_index": 22,
+      "bbox_min_mm": [
+        53.0,
+        -131.0,
+        -36.0
+      ],
+      "bbox_max_mm": [
+        67.0,
+        -105.0,
+        36.0
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    },
+    {
+      "shell_index": 23,
+      "bbox_min_mm": [
+        -64.9,
+        -115.75,
+        -72.9
+      ],
+      "bbox_max_mm": [
+        -31.1,
+        -90.25,
+        -39.1
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    },
+    {
+      "shell_index": 24,
+      "bbox_min_mm": [
+        -34.75,
+        90.15,
+        -54.75
+      ],
+      "bbox_max_mm": [
+        34.75,
+        116.85,
+        14.75
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    },
+    {
+      "shell_index": 25,
+      "bbox_min_mm": [
+        -34.75,
+        117.35,
+        -54.75
+      ],
+      "bbox_max_mm": [
+        34.75,
+        130.05,
+        14.75
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    },
+    {
+      "shell_index": 26,
+      "bbox_min_mm": [
+        -20.0,
+        130.1,
+        -40.0
+      ],
+      "bbox_max_mm": [
+        20.0,
+        162.0,
+        0.0
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    },
+    {
+      "shell_index": 27,
+      "bbox_min_mm": [
+        -55.0,
+        -52.0,
+        -15.0
+      ],
+      "bbox_max_mm": [
+        55.0,
+        -44.0,
+        -9.0
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    },
+    {
+      "shell_index": 28,
+      "bbox_min_mm": [
+        -55.0,
+        44.0,
+        -15.0
+      ],
+      "bbox_max_mm": [
+        55.0,
+        52.0,
+        -9.0
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    },
+    {
+      "shell_index": 29,
+      "bbox_min_mm": [
+        45.0,
+        -68.0,
+        -482.0
+      ],
+      "bbox_max_mm": [
+        85.0,
+        -36.0,
+        -86.0
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    },
+    {
+      "shell_index": 30,
+      "bbox_min_mm": [
+        45.0,
+        36.0,
+        -482.0
+      ],
+      "bbox_max_mm": [
+        85.0,
+        68.0,
+        -86.0
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    },
+    {
+      "shell_index": 31,
+      "bbox_min_mm": [
+        40.0,
+        -75.0,
+        -500.0
+      ],
+      "bbox_max_mm": [
+        90.0,
+        75.0,
+        -482.0
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    },
+    {
+      "shell_index": 32,
+      "bbox_min_mm": [
+        42.0,
+        -70.0,
+        -97.5
+      ],
+      "bbox_max_mm": [
+        88.0,
+        70.0,
+        -85.5
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    }
+  ],
   "epistemic": {
     "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
     "no_lab_measurement": true,

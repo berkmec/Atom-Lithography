@@ -17,6 +17,7 @@ from ancilla_valley_r8 import run_r8_sensitivity_study
 from cryo_rf_solver import (
     CAPACITIES_1K_PT410,
     CAPACITIES_20MK_PT410,
+    CAPACITIES_LD400_PT420_UNIFIED,
     SYSTEM_OVERHEAD_1K,
     SYSTEM_OVERHEAD_20MK,
     replicate_exp110_exp112_gate,
@@ -31,6 +32,7 @@ from magnet_solver import (
     evaluate_2d_field_map,
     run_convergence_study,
     solve_coupled_magnet_system,
+    solve_horizontal_inplane_vector_magnet,
     validate_superconducting_sphere_bem,
     verify_maxwell_identities,
 )
@@ -140,6 +142,13 @@ def main():
     e_rel_diff = abs(e_vol_J - mag_res["E_mag_coils_J"]) / mag_res["E_mag_coils_J"]
     cad_table = build_cad_geometry_table(mag_res)
     field_map = evaluate_2d_field_map(mag_res)
+    inplane_vec_res = solve_horizontal_inplane_vector_magnet(
+        target_B_parallel_T=0.1785,
+        r_writehead_m=0.01131,
+        z_wafer_tol_m=0.0005,
+        target_series_current_A=28.0,
+        hts_lead_rating_A=320.0,
+    )
 
     max_i_over_ic = max(cm["I_over_Ic"] for cm in mag_res["coil_metrics"])
     min_temp_margin = min(cm["temp_margin_K"] for cm in mag_res["coil_metrics"])
@@ -356,10 +365,12 @@ def main():
             "quench_protection": mag_res["quench_protection"],
             "coil_metrics": mag_res["coil_metrics"],
             "cad_geometry_mm": cad_table,
+            "redesigned_inplane_vector_magnet": inplane_vec_res,
         },
         "cryo_rf_throughput": {
             "exp110_112_replication_gate": cryo_gate,
             "capacities_20mK_PT410": CAPACITIES_20MK_PT410,
+            "capacities_LD400_PT420_unified": CAPACITIES_LD400_PT420_UNIFIED,
             "system_overhead_20mK": SYSTEM_OVERHEAD_20MK,
             "capacities_1K_PT410": CAPACITIES_1K_PT410,
             "system_overhead_1K": SYSTEM_OVERHEAD_1K,

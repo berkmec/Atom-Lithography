@@ -162,4 +162,15 @@ Gerçek bir `200 mm` yarı-iletken fabında her yonga (`wafer`), kriyostat yükl
 | Sayısal çıktılar (`N=50,000`) | `results/exp134_fab_economics_tco/exp134.json` | `CX1,2,3,5,6 PASS`, `CX4 FAIL`, `success=true` |
 | Şekil 1 (TCO & Birim Ekonomi) | `results/exp134_fab_economics_tco/fig_exp134_tco_cost_per_qubit.png` | `2200×1260` PNG, görsel olarak incelendi |
 | Şekil 2 (Wright & Bütçe Marjı) | `results/exp134_fab_economics_tco/fig_exp134_v3_vs_v4_scaling.png` | `2200×1260` PNG, görsel olarak incelendi |
-| Regresyon & bütünlük testleri | `tests/test_exp134.py` | `%100` taşınabilir, `pytest` doğrulamalı |
+| Regresyon & bütünlük testleri | `tests/test_exp134.py` | `%100` taşınabilir, canlı `tco_model134` çözücü + `pytest` doğrulamalı |
+
+---
+
+## 7. `v7.0` Yaşam Döngüsü Senkronu (`OBS-060`, `OBS-062`, `OBS-068`, `OBS-148`)
+
+- **BOM `v7.0` Güncellemesi (`UNQUOTED_ROM_ESTIMATE`):** `M3 v3.0 ($4,189,600)` → `M3 v7.0 Full ($5,692,800, +35,9%)` [`Faz-1 Base+Safety = $5,392,800`]; `$76.200` başlangıç emniyet örtüşmesi (`S1.6-01/02`, `S5.5-04`, `S7.1-03`, `S7.4-04`) açıkça mahsup edilmiştir.
+- **Ek Yaşam Döngüsü NRE & Sertifikasyon (`+$890k` nom `{Varsayım}`):** Bağımsız `SEMI S2 / IEC 61508` saha değerlendirmesi (`$80k/$140k/$220k`), `Nb/AlOx/Nb` TWPA dökümhane NRE (`$150k/$300k/$550k`) ve çoklu-lot MEMS verim NRE (`$200k/$450k/$900k`).
+- **Yıllık OPEX Genişlemesi:** `20–30 kW` tesis gücü (`12,5 kW` PT420 dahil), `³He` ikmal/GHS (`$18k/yıl`), `PH₃/SiF₄/HF` scrubber + radyasyon EHS (`$32k/yıl`) ve `PT420` soğuk-kafa revizyon rezervi (`$20k/yıl`).
+- **5-Yıllık `v7.0` TCO (`N=1`, yonga hariç):** `Faz-1` Fab-Tool `P50 = $17,90M` (`FOAK = $44,72M`, `P(Prog > $100M) = %4,33 < %5`); `v7.0 Full Lifecycle` Fab-Tool `P50 = $19,74M` (`FOAK = $47,12M`, `P(Prog > $100M) = %5,02`, `P(FOAK TCO > $100M) = %7,23`).
+- **3-Kademeli Yonga Çapı Tutarlılığı (`OBS-060`):** `FOAK_50mm` (`cad/params.py` + `S5.4-01`, `$2.240/yonga`, `$0` açıklık eki) vs `PILOT_100mm` (`+$0,65M`) vs `FAB_200mm` (`+$1,85M` `≥Ø300 mm` mıknatıs/kriyostat/yük-kilidi yeniden tasarımı).
+- **Gerçek `1% ²⁹Si` Banyo & Stitch Verimi (`OBS-068`):** `130,4 ms` gerçek BOED + `%5` ölü blanker step-and-stitch (`%61,51` verim) doğrudan `exp134.json` içinde raporlanır.

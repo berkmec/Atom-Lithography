@@ -61,7 +61,7 @@
           0.0,
           0.0
         ],
-        "standard": "32x TWPA + 625x Purcell SMP",
+        "standard": "32x TWPA + 625x Purcell SMP (Sub-Cutoff 11.22 GHz Channels)",
         "mating_part_id": "S6.11-04",
         "bore_mm": 0.0,
         "od_mm": 0.0,
@@ -115,6 +115,20 @@
         "datum_ref": "",
         "decimals": 2,
         "formatted": "55.00 ±0.10"
+      },
+      {
+        "label": "POCKET_SQ",
+        "nominal_mm": 14.0,
+        "tol_plus_mm": 0.05,
+        "tol_minus_mm": -0.05,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "14.00 ±0.05"
       }
     ],
     "gdt_frames": [
@@ -159,13 +173,18 @@
     ],
     "notes": [
       "N_mux*=32/hat (1024 hucre), T_N=0.30 K, G=20 dB, P_1dB=-98 dBm, 625x Purcell (T_1=124.3 ms), F_RO=0.9961 @ 2 us, 20 mK=2.144 uW, 180x140x55 mm, kutle=2.72 kg",
-      "Exact BOM part_id S6.11-02 (resolves legacy cad/params.py S6.5 aliasing bug). 32x 20 mK Josephson TWPA + Purcell + dual isolators, 10 mm corner chamfers clear Still shield R_in=116 mm by 9.0 mm (Exp140)."
+      "Exact BOM part_id S6.11-02. OBS-108 fix: hollowed into 8x4 = 32 isolated 14x14x44.8 mm Nb sub-cutoff TWPA/isolator cavities (f_c=10.71 GHz, f_TE101=11.22 GHz >> 8 GHz) with Eccosorb CR-124 top/bottom RF absorbers, eliminating all 4-8 GHz box modes.",
+      "10 mm corner chamfers clear Still shield R_in=116 mm by 9.0 mm (Exp140)."
     ],
     "scad_params": {
       "n_twpa": 32,
       "box_dx": 180.0,
       "box_dy": 140.0,
       "box_dz": 55.0,
+      "pocket_xy_mm": 14.0,
+      "pocket_z_mm": 44.8,
+      "f_te101_ghz": 11.22,
+      "eccosorb_liner_mm": 0.9,
       "p_20mk_uw": 2.144
     },
     "target_mass_kg": 2.72,
@@ -192,34 +211,34 @@
     "watertight": true,
     "boundary_edges": 0,
     "non_manifold_edges": 0,
-    "signed_volume_mm3": 1329421.8160000003,
-    "surface_area_mm2": 164791.4707162722,
-    "mass_kg": 2.8582569043999997,
+    "signed_volume_mm3": 1027961.936364086,
+    "surface_area_mm2": 308944.49155655724,
+    "mass_kg": 2.8268953250012365,
     "cg_mm": [
-      0.0,
-      3.940577339082923e-16,
-      -0.002527784604972459
+      -6.794920183836605e-16,
+      -3.3408357570529975e-15,
+      -0.004050554656273856
     ],
     "bbox_min_mm": [
       -90.0,
       -70.0,
-      -27.4
+      -27.5
     ],
     "bbox_max_mm": [
       90.0,
       70.0,
-      27.4
+      27.5
     ],
     "inertia_kg_mm2": [
-      5175.619232953949,
-      8148.161857732611,
-      11961.126076424549,
-      -1.601874828338623e-13,
-      -8.009374141693116e-15,
-      -4.605674840463944e-14
+      5853.730793621946,
+      8738.486478558329,
+      13161.878623259148,
+      -1.8440186977386476e-13,
+      1.0245326372699679e-13,
+      -8.191813234629924e-14
     ],
-    "triangle_count": 260,
-    "vertex_count": 128,
+    "triangle_count": 1100,
+    "vertex_count": 480,
     "step_valid": true,
     "dxf_valid": true,
     "svg_valid": true,
@@ -235,17 +254,89 @@
   "world_bbox_min_mm": [
     -740.0,
     -70.0,
-    424.6
+    424.5
   ],
   "world_bbox_max_mm": [
     -560.0,
     70.0,
-    479.4
+    479.5
   ],
   "world_cg_mm": [
     -650.0,
     -0.0,
-    451.9975
+    451.9959
+  ],
+  "shell_tie_manifest": [
+    {
+      "shell_index": 0,
+      "bbox_min_mm": [
+        -90.0,
+        -70.0,
+        -22.4
+      ],
+      "bbox_max_mm": [
+        90.0,
+        70.0,
+        22.4
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    },
+    {
+      "shell_index": 1,
+      "bbox_min_mm": [
+        -80.0,
+        -60.0,
+        22.6
+      ],
+      "bbox_max_mm": [
+        80.0,
+        60.0,
+        23.5
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    },
+    {
+      "shell_index": 2,
+      "bbox_min_mm": [
+        -80.0,
+        -60.0,
+        -23.5
+      ],
+      "bbox_max_mm": [
+        80.0,
+        60.0,
+        -22.6
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    },
+    {
+      "shell_index": 3,
+      "bbox_min_mm": [
+        -82.0,
+        -62.0,
+        23.7
+      ],
+      "bbox_max_mm": [
+        82.0,
+        62.0,
+        27.5
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    },
+    {
+      "shell_index": 4,
+      "bbox_min_mm": [
+        -82.0,
+        -62.0,
+        -27.5
+      ],
+      "bbox_max_mm": [
+        82.0,
+        62.0,
+        -23.7
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    }
   ],
   "epistemic": {
     "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",

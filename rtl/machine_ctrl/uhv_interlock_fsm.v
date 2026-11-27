@@ -5,40 +5,28 @@
 //
 // EPISTEMIC NOTICE (HARDWIRED INTO READ-ONLY CSR):
 //   CERTIFIED                  = 1'b0 (NOT IEC 61508 / SEMI S2 certified!)
-//   DESIGN_ONLY_NOT_CERTIFIED  = 1'b1 (Preliminary M0/M1 RTL reference only)
+//   DESIGN_ONLY_NOT_CERTIFIED  = 1'b1 (Preliminary M0/M1 supervisory RTL only;
+//                                      autonomous external 1oo2D hardware safety board
+//                                      remains primary SIL safety layer!)
 //
-// Fail-Safe 1oo2D Sensor Channels (active-HIGH = HEALTHY, 0 = TRIP / OPEN-CIRCUIT FAULT):
-//   Bit 0 : UHV_PRESSURE_OK  (Ion gauge < 1e-8 Torr; closes UHV gate valve & blanks beam)
-//   Bit 1 : LASER_DOOR_OK    (Class-4 808 nm enclosure & OD>=8 shroud guard switches)
-//   Bit 2 : ODH_O2_OK        (Wall O2 monitor >= 19.5% vol; 0 when O2 < 19.5%)
-//   Bit 3 : PH3_L1_OK        (PH3 Level-1 sensor < 0.02 ppm gas cabinet alarm)
-//   Bit 4 : PH3_L2_OK        (PH3 Level-2 sensor < 0.30 ppm emergency isolation)
-//   Bit 5 : HV_FAULT_OK      (HV supply / arc / crowbar feedback healthy)
-//   Bit 6 : QUENCH_OK        (1.5 T magnet quench detector & cryo relief healthy)
-//   Bit 7 : ESTOP_OK         (4x E-Stop mushroom loop healthy)
-//
-// Safety Mechanisms:
-//   1. True 1oo2 Voting: either channel A or channel B dropping LOW trips ALL outputs
-//      to de-energized safe state (0) immediately (<= 2 clocks = <= 20 ns @ 100 MHz,
-//      strictly < 1 us blanker budget).
-//   2. Diagnostic Cross-Channel Discrepancy Fault ('D' in 1oo2D): if ch_a != ch_b
-//      persists beyond programmable `discrep_win_cycles`, latches `discrep_fault` and
-//      exact channel bitmask `discrep_ch_latched[7:0]`.
-//   3. Hardware Watchdog Heartbeat Monitor: trips immediately if `wdt_kick` is not
-//      pulsed within `wdt_timeout_cycles` while `wdt_en` is asserted.
-//   4. De-Energize-To-Trip Active-HIGH Safe Enables: reset to 0, drop LOW immediately on
-//      any fault.
-//   5. Staged Safe-Dwell Unlock: leaving FAULT_LATCHED requires ALL inputs healthy
-//      AND simultaneous dual-channel reset (`reset_cmd_a && reset_cmd_b`), followed by
-//      continuous healthy dwell for `dwell_cycles` before permitting `ST_ARMED -> ST_RUN`.
+// Hardened Safety & CDC Architecture (OBS-113, OBS-116, OBS-142):
+//   1. Internal 2-FF async-assert / sync-deassert reset synchronizer (`rst_sync_n`).
+//   2. True 2-FF CDC synchronizers (`ch_a_s1->ch_a_s2`, `ch_b_s1->ch_b_s2`, `rst_b_s1->rst_b_s2`)
+//      with ZERO unsynchronized raw combinational metastability bypass into FSM or enables.
+//      Trip-to-output latency <= 30 ns (3 clocks @ 100 MHz, 33x below 1 us blanker spec).
+//   3. Hardware-Locked Watchdog Enable (`HARDWIRE_WDT_ALWAYS_ON = 1'b1`):
+//      Unlocked CSR writes CANNOT disable the safety watchdog in hardware!
+//   4. Independent registered safety trip output (`safety_indep_trip_out`) for external
+//      autonomous 1oo2D safety relay interlock chain.
 //
 // Synthesis Hygiene: ZERO latches, ZERO combinational '/', ZERO Verilator -Wall warnings.
 `timescale 1ns/1ps
 
 module uhv_interlock_fsm #(
-    parameter [15:0] DEFAULT_DISCREP_WIN  = 16'd100,        // 1.0 us @ 100 MHz
-    parameter [31:0] DEFAULT_WDT_TIMEOUT  = 32'd10_000_000, // 100 ms @ 100 MHz
-    parameter [31:0] DEFAULT_DWELL_CYCLES = 32'd200_000_000 // 2.0 s  @ 100 MHz
+    parameter [15:0] DEFAULT_DISCREP_WIN    = 16'd100,        // 1.0 us @ 100 MHz
+    parameter [31:0] DEFAULT_WDT_TIMEOUT    = 32'd10_000_000, // 100 ms @ 100 MHz
+    parameter [31:0] DEFAULT_DWELL_CYCLES   = 32'd200_000_000,// 2.0 s  @ 100 MHz
+    parameter        HARDWIRE_WDT_ALWAYS_ON = 1'b1            // Hardware-locked WDT (non-disableable)
 ) (
     input  wire        clk,
     input  wire        rst_n,
@@ -69,8 +57,10 @@ module uhv_interlock_fsm #(
     output wire        safe_ph3_valve_en,
     output wire        safe_magnet_en,
 
-    // Hardwired active-HIGH trip broadcast (1 = TRIPPED / NOT IN RUN)
+    // Hardwired active-HIGH trip broadcasts (1 = TRIPPED / NOT IN RUN)
     output wire        interlock_trip_out,
+    output reg         safety_indep_trip_out, // Independent registered trip for external 1oo2D board
+    output wire        wdt_hw_locked_on,      // 1 = watchdog locked ON in hardware
 
     // Diagnostic & Telemetry outputs
     output reg  [2:0]  fsm_state,
@@ -111,32 +101,50 @@ module uhv_interlock_fsm #(
     localparam [3:0] FC_WATCHDOG     = 4'd10;
     localparam [3:0] FC_SW_ESTOP     = 4'd11;
 
+    // 2-FF async-assert / sync-deassert reset synchronizer
+    (* ASYNC_REG = "TRUE" *) reg rst_sync_s1;
+    (* ASYNC_REG = "TRUE" *) reg rst_sync_s2;
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n) begin
+            rst_sync_s1 <= 1'b0;
+            rst_sync_s2 <= 1'b0;
+        end else begin
+            rst_sync_s1 <= 1'b1;
+            rst_sync_s2 <= rst_sync_s1;
+        end
+    end
+    wire rst_sync_n = rst_sync_s2;
+
     // Hardwired read-only epistemic status bits (never modifiable at runtime)
     assign status_certified                 = 1'b0;
     assign status_design_only_not_certified = 1'b1;
-    // [31:16]=0xD001 (DESIGN_ONLY v0.01), [15:8]=0x53 ('S'), [3]=1oo2D, [2]=no_lab, [1]=DESIGN_ONLY, [0]=CERTIFIED(0)
     assign epistemic_csr_word               = 32'hD001_530E;
+    assign wdt_hw_locked_on                 = HARDWIRE_WDT_ALWAYS_ON;
 
-    // 1-stage synchronous input capture + fast raw trip monitor
-    // Gives clean synchronous voting with 1-cycle FSM reaction + 0-cycle output gate
-    // (total trip-to-output drop <= 1 clock = 10 ns @ 100 MHz, strictly < 1 us!).
-    reg [7:0] ch_a_s1;
-    reg [7:0] ch_b_s1;
+    // Hardware-locked watchdog enable: software/CSR wdt_en=0 CANNOT disable safety watchdog!
+    wire wdt_en_eff = HARDWIRE_WDT_ALWAYS_ON ? 1'b1 : wdt_en;
 
-    assign ch_a_sync_out    = ch_a_s1;
-    assign ch_b_sync_out    = ch_b_s1;
-    assign discrep_live_out = ch_a_s1 ^ ch_b_s1;
+    // True 2-FF CDC synchronizer chains on async external sensors & physical reset button
+    (* ASYNC_REG = "TRUE" *) reg [7:0] ch_a_s1;
+    (* ASYNC_REG = "TRUE" *) reg [7:0] ch_a_s2;
+    (* ASYNC_REG = "TRUE" *) reg [7:0] ch_b_s1;
+    (* ASYNC_REG = "TRUE" *) reg [7:0] ch_b_s2;
+    (* ASYNC_REG = "TRUE" *) reg       rst_b_s1;
+    (* ASYNC_REG = "TRUE" *) reg       rst_b_s2;
+
+    assign ch_a_sync_out    = ch_a_s2;
+    assign ch_b_sync_out    = ch_b_s2;
+    assign discrep_live_out = ch_a_s2 ^ ch_b_s2;
 
     // Effective thresholds
     wire [15:0] eff_discrep_win  = (cfg_discrep_win  == 16'd0) ? DEFAULT_DISCREP_WIN  : cfg_discrep_win;
     wire [31:0] eff_wdt_timeout  = (cfg_wdt_timeout  == 32'd0) ? DEFAULT_WDT_TIMEOUT  : cfg_wdt_timeout;
     wire [31:0] eff_dwell_cycles = (cfg_dwell_cycles == 32'd0) ? DEFAULT_DWELL_CYCLES : cfg_dwell_cycles;
 
-    // 1oo2 channel fault vector (1 = channel tripped on A or B)
-    wire [7:0] ch_fault_sync = (~ch_a_s1) | (~ch_b_s1);
-    wire       any_ch_fault_sync = |ch_fault_sync;
-    wire       any_ch_fault_raw  = (~(&ch_a_ok)) | (~(&ch_b_ok));
-    wire       all_inputs_healthy = (&ch_a_s1) && (&ch_b_s1) && (&ch_a_ok) && (&ch_b_ok) && (~sw_estop);
+    // 1oo2 channel fault vector strictly from 2-FF synchronized registers (zero metastability race!)
+    wire [7:0] ch_fault_sync      = (~ch_a_s2) | (~ch_b_s2);
+    wire       any_ch_fault_sync  = |ch_fault_sync;
+    wire       all_inputs_healthy = (&ch_a_s2) && (&ch_b_s2) && (~sw_estop);
 
     // Discrepancy & Watchdog & Dwell timers
     reg [15:0] discrep_cnt;
@@ -160,13 +168,13 @@ module uhv_interlock_fsm #(
         else                       cur_fault_code = FC_DISCREPANCY;
     end
 
-    // Registered safe-enable mask + hardwired raw fail-safe gate for instantaneous de-energize
+    // Glitch-free synchronized safe-enable outputs (no unsynchronized raw combinational bypass)
     reg [5:0] r_safe_en;
-    wire      live_fault_now = any_ch_fault_raw | any_ch_fault_sync | sw_estop |
-                               wdt_fault_latched | discrep_fault_latched | sw_estop_latched |
-                               (|sensor_fault_latched);
+    wire      live_fault_sync = any_ch_fault_sync | sw_estop |
+                                wdt_fault_latched | discrep_fault_latched | sw_estop_latched |
+                                (|sensor_fault_latched);
 
-    wire [5:0] gated_safe_en = live_fault_now ? 6'b000000 : r_safe_en;
+    wire [5:0] gated_safe_en = live_fault_sync ? 6'b000000 : r_safe_en;
 
     assign safe_blanker_en    = gated_safe_en[0];
     assign safe_laser_en      = gated_safe_en[1];
@@ -174,26 +182,34 @@ module uhv_interlock_fsm #(
     assign safe_uhv_valve_en  = gated_safe_en[3];
     assign safe_ph3_valve_en  = gated_safe_en[4];
     assign safe_magnet_en     = gated_safe_en[5];
-    assign interlock_trip_out = live_fault_now | (fsm_state != ST_RUN);
+    assign interlock_trip_out = live_fault_sync | (fsm_state != ST_RUN);
 
-    // Watchdog expiry evaluation (combinational lookahead for 1-cycle trip)
+    // Watchdog expiry evaluation (active whenever hardware-locked WDT enabled and in DWELL/ARMED/RUN)
+    wire wdt_monitoring = (fsm_state == ST_SAFE_DWELL) || (fsm_state == ST_ARMED) || (fsm_state == ST_RUN);
     always @(*) begin
-        if (wdt_en && !wdt_kick && (wdt_cnt >= (eff_wdt_timeout - 32'd1))) begin
+        if (wdt_en_eff && wdt_monitoring && !wdt_kick && (wdt_cnt >= (eff_wdt_timeout - 32'd1))) begin
             wdt_expired_now = 1'b1;
         end else begin
             wdt_expired_now = 1'b0;
         end
     end
 
-    wire discrep_active      = |(ch_a_s1 ^ ch_b_s1);
-    wire discrep_trip_now    = discrep_active && (discrep_cnt >= (eff_discrep_win - 16'd1));
-    wire dual_reset_valid    = reset_cmd_a && reset_cmd_b && all_inputs_healthy && !discrep_active;
-    wire any_trip_trigger    = any_ch_fault_sync || sw_estop || wdt_expired_now || discrep_trip_now;
+    wire discrep_active   = |(ch_a_s2 ^ ch_b_s2);
+    wire discrep_trip_now = discrep_active && (discrep_cnt >= (eff_discrep_win - 16'd1));
+    wire dual_reset_valid = reset_cmd_a && rst_b_s2 && all_inputs_healthy && !discrep_active;
+    wire any_trip_trigger = any_ch_fault_sync || sw_estop || wdt_expired_now || discrep_trip_now;
+
+    // Sink wdt_en cleanly when HARDWIRE_WDT_ALWAYS_ON=1 (0 Verilator -Wall warnings)
+    wire _unused_ok = &{1'b0, wdt_en};
 
     always @(posedge clk) begin
-        if (!rst_n) begin
+        if (!rst_sync_n) begin
             ch_a_s1               <= 8'h00; // fail-safe reset state = tripped
+            ch_a_s2               <= 8'h00;
             ch_b_s1               <= 8'h00;
+            ch_b_s2               <= 8'h00;
+            rst_b_s1              <= 1'b0;
+            rst_b_s2              <= 1'b0;
             fsm_state             <= ST_SAFE_BOOT;
             sensor_fault_latched  <= 8'h00;
             discrep_fault_latched <= 1'b0;
@@ -206,10 +222,18 @@ module uhv_interlock_fsm #(
             wdt_cnt               <= 32'd0;
             dwell_cnt             <= 32'd0;
             r_safe_en             <= 6'b000000;
+            safety_indep_trip_out <= 1'b1;
         end else begin
-            // Capture redundant sensor channels every cycle
-            ch_a_s1 <= ch_a_ok;
-            ch_b_s1 <= ch_b_ok;
+            // 2-FF CDC capture of dual-channel sensors & hardware reset pushbutton
+            ch_a_s1  <= ch_a_ok;
+            ch_a_s2  <= ch_a_s1;
+            ch_b_s1  <= ch_b_ok;
+            ch_b_s2  <= ch_b_s1;
+            rst_b_s1 <= reset_cmd_b;
+            rst_b_s2 <= rst_b_s1;
+
+            // Independent registered safety trip broadcast for external 1oo2D safety board
+            safety_indep_trip_out <= live_fault_sync || (fsm_state != ST_RUN) || any_trip_trigger;
 
             // Cross-channel 1oo2D discrepancy debounce monitor
             if (discrep_active) begin
@@ -218,14 +242,14 @@ module uhv_interlock_fsm #(
                 end
                 if (discrep_trip_now) begin
                     discrep_fault_latched <= 1'b1;
-                    discrep_ch_latched    <= discrep_ch_latched | (ch_a_s1 ^ ch_b_s1);
+                    discrep_ch_latched    <= discrep_ch_latched | (ch_a_s2 ^ ch_b_s2);
                 end
             end else begin
                 discrep_cnt <= 16'd0;
             end
 
-            // Hardware watchdog counter
-            if (!wdt_en || wdt_kick || (fsm_state == ST_FAULT_LATCHED) || (fsm_state == ST_SAFE_BOOT)) begin
+            // Hardware-locked watchdog counter (cannot be disabled by unlocked CSR writes)
+            if (!wdt_en_eff || wdt_kick || !wdt_monitoring) begin
                 wdt_cnt <= 32'd0;
             end else if (wdt_expired_now) begin
                 wdt_fault_latched <= 1'b1;
@@ -234,7 +258,7 @@ module uhv_interlock_fsm #(
                 wdt_cnt <= wdt_cnt + 32'd1;
             end
 
-            // Latch sensor / sw_estop faults whenever they occur
+            // Latch sensor / sw_estop faults whenever they occur outside boot
             if (any_ch_fault_sync && (fsm_state != ST_SAFE_BOOT)) begin
                 sensor_fault_latched <= sensor_fault_latched | ch_fault_sync;
             end
@@ -252,7 +276,6 @@ module uhv_interlock_fsm #(
                 ST_SAFE_BOOT: begin
                     r_safe_en <= 6'b000000;
                     dwell_cnt <= 32'd0;
-                    // Wait 1+ cycles after reset for ch_a_s1/ch_b_s1 capture; require explicit dual-reset
                     if (dual_reset_valid) begin
                         sensor_fault_latched  <= 8'h00;
                         discrep_fault_latched <= 1'b0;
@@ -261,6 +284,7 @@ module uhv_interlock_fsm #(
                         sw_estop_latched      <= 1'b0;
                         first_fault_code      <= FC_NONE;
                         dwell_cnt             <= 32'd0;
+                        wdt_cnt               <= 32'd0;
                         fsm_state             <= ST_SAFE_DWELL;
                     end else if (any_ch_fault_sync || sw_estop) begin
                         sensor_fault_latched <= ch_fault_sync;
@@ -273,8 +297,6 @@ module uhv_interlock_fsm #(
                 ST_FAULT_LATCHED: begin
                     r_safe_en <= 6'b000000;
                     dwell_cnt <= 32'd0;
-                    // Unlock ONLY when ALL 16 sensor channels healthy, no discrepancy,
-                    // no sw_estop, AND dual-channel reset (A && B) asserted simultaneously.
                     if (dual_reset_valid) begin
                         sensor_fault_latched  <= 8'h00;
                         discrep_fault_latched <= 1'b0;
@@ -283,6 +305,7 @@ module uhv_interlock_fsm #(
                         sw_estop_latched      <= 1'b0;
                         first_fault_code      <= FC_NONE;
                         dwell_cnt             <= 32'd0;
+                        wdt_cnt               <= 32'd0;
                         fsm_state             <= ST_SAFE_DWELL;
                     end
                 end
@@ -310,7 +333,6 @@ module uhv_interlock_fsm #(
                         r_safe_en <= subsys_en_mask;
                         fsm_state <= ST_RUN;
                     end else begin
-                        // In ARMED, keep hazardous actuators disabled (de-energized)
                         r_safe_en <= 6'b000000;
                     end
                 end

@@ -7,8 +7,8 @@
   ],
   "all_watertight": true,
   "all_artifacts_valid": true,
-  "total_mass_kg": 272.9908,
-  "total_triangles": 105008,
+  "total_mass_kg": 266.2283,
+  "total_triangles": 111584,
   "intra_subsystem_clash_audit": {
     "parts_checked": 23,
     "pairs_checked": 253,
@@ -23,19 +23,19 @@
       220.0
     ],
     "s55_external_bbox_min_mm": [
-      -62.3,
-      295.5,
-      443.25
+      357.7,
+      116.716,
+      563.122
     ],
     "s55_external_bbox_max_mm": [
-      62.3,
-      467.0,
-      601.7
+      482.3,
+      299.399,
+      758.613
     ],
     "s55_external_extents_mm": [
       124.6,
-      171.5,
-      158.45
+      182.683,
+      195.491
     ],
     "fits_inside_shroud_with_margin": true
   },
@@ -122,8 +122,8 @@
     "S5.1-04": {
       "field": "Magnetically coupled UHV transfer arm linear stroke",
       "bom_v7_spec": "500 mm linear stroke + 360 deg rotary with Ti-6Al-4V wafer fork",
-      "cad_v8_adopted": "Full 500.0 mm active stroke (540 mm magnetic guide tube, 635 mm total arm envelope along +X from X=510.5 to 1145.5 mm) replacing legacy CAD v6.0 200 mm stub.",
-      "engineering_rationale": "Load-lock center (X=420 mm) to main chamber wafer chuck (X=0 mm) requires 420 mm travel plus 80 mm cassette pickup reserve = 500 mm minimum stroke. In Wave 2B v8 layout, 19-inch Rack Bay 1 moves to X=+1400 mm, leaving >250 mm service clearance behind the 500 mm transfer arm."
+      "cad_v8_adopted": "Full 518.0 mm active stroke (570 mm magnetic guide tube, CF100 fork parking spool ID=98 mm clearing 68 mm Ti-6Al-4V yoke, X=510.5..1158.5 mm reaching X=-11.5 mm past wafer center X=0) replacing legacy CAD v6.0 200 mm stub.",
+      "engineering_rationale": "Load-lock center (X=420 mm) to main chamber wafer chuck (X=0 mm) requires 506.5 mm travel from parked fork center (X=506.5 mm); 518.0 mm unobstructed shuttle stroke reaches X=-11.5 mm (11.5 mm past wafer center) while staying <=1158.5 mm (>=21.5 mm clear of Rack Bay 1 at X=1180 mm)."
     },
     "S5.4-01": {
       "field": "28Si/29Si epitaxial wafer diameter",
@@ -151,34 +151,34 @@
       "watertight": true,
       "boundary_edges": 0,
       "non_manifold_edges": 0,
-      "signed_volume_mm3": 10581008.567704987,
-      "surface_area_mm2": 2088644.6950374702,
-      "mass_kg": 84.64806854163986,
+      "signed_volume_mm3": 10009471.99949533,
+      "surface_area_mm2": 1941448.398295088,
+      "mass_kg": 80.07577599596266,
       "cg_mm": [
-        1.932897954766158,
-        1.4402211349071543,
-        -84.1575323818145
+        -1.5387009070076951,
+        -1.6305677373595413,
+        -84.45518135325717
       ],
       "bbox_min_mm": [
-        -273.5,
-        -270.00000000000006,
+        -289.00000000000006,
+        -260.0,
         -240.0
       ],
       "bbox_max_mm": [
         250.0,
-        295.0,
+        240.0,
         168.5
       ],
       "inertia_kg_mm2": [
-        3271975.2069834783,
-        3231522.8501469702,
-        3035390.129003089,
-        28984.149731701287,
-        22642.641165289846,
-        -15045.569376700681
+        3066850.0927461237,
+        3192314.325467309,
+        2828174.677816114,
+        8204.157183134217,
+        27955.39369976176,
+        28980.040007666088
       ],
-      "triangle_count": 24420,
-      "vertex_count": 11770,
+      "triangle_count": 23476,
+      "vertex_count": 11346,
       "step_valid": true,
       "dxf_valid": true,
       "svg_valid": true,
@@ -202,13 +202,13 @@
       "watertight": true,
       "boundary_edges": 0,
       "non_manifold_edges": 0,
-      "signed_volume_mm3": 3741106.144840338,
-      "surface_area_mm2": 620316.1165231052,
-      "mass_kg": 12.71976089245715,
+      "signed_volume_mm3": 3898489.6480876976,
+      "surface_area_mm2": 649067.0717386944,
+      "mass_kg": 14.034562733115713,
       "cg_mm": [
-        15.406812663065159,
-        -2.0160004507713514,
-        52.30911270959539
+        -11.59649072990709,
+        13.461387136928881,
+        42.819354523299424
       ],
       "bbox_min_mm": [
         -212.8702461550674,
@@ -216,20 +216,20 @@
         -207.0
       ],
       "bbox_max_mm": [
-        212.8702461550674,
+        212.936417323392,
         213.0,
         205.0
       ],
       "inertia_kg_mm2": [
-        476522.39967513137,
-        444421.81548905873,
-        382098.00350893004,
-        -22817.940982451935,
-        13166.328299660472,
-        -6130.2326625109745
+        519417.57038116426,
+        492465.5494239726,
+        438494.8576186656,
+        27849.142893593373,
+        3594.2044450424514,
+        -4011.8447028243836
       ],
-      "triangle_count": 4832,
-      "vertex_count": 2372,
+      "triangle_count": 5068,
+      "vertex_count": 2494,
       "step_valid": true,
       "dxf_valid": true,
       "svg_valid": true,
@@ -253,34 +253,34 @@
       "watertight": true,
       "boundary_edges": 0,
       "non_manifold_edges": 0,
-      "signed_volume_mm3": 5124132.5709444,
-      "surface_area_mm2": 854014.2190188579,
-      "mass_kg": 26.645489368910887,
+      "signed_volume_mm3": 4916178.973992473,
+      "surface_area_mm2": 976150.715675798,
+      "mass_kg": 25.564130664760867,
       "cg_mm": [
-        -24.131576631070242,
-        -5.886088038374725,
-        -64.10002729785398
+        -14.811188774689244,
+        -6.344559145896687,
+        -56.69370624867851
       ],
       "bbox_min_mm": [
-        -169.5,
-        -131.0,
+        -224.0,
+        -186.4046289748669,
         -500.0
       ],
       "bbox_max_mm": [
-        90.0,
-        116.85,
-        158.2
+        189.7251877855441,
+        183.02495702696314,
+        190.7886825691229
       ],
       "inertia_kg_mm2": [
-        719231.7192933571,
-        838914.2111029398,
-        296297.3895821299,
-        3960.3256070082257,
-        187254.4979222452,
-        10233.47074054778
+        824820.7236485697,
+        923460.8771126362,
+        344414.0232768227,
+        15113.2485216142,
+        168808.76230351895,
+        20420.59090471991
       ],
-      "triangle_count": 7944,
-      "vertex_count": 3854,
+      "triangle_count": 15172,
+      "vertex_count": 7340,
       "step_valid": true,
       "dxf_valid": true,
       "svg_valid": true,
@@ -304,34 +304,34 @@
       "watertight": true,
       "boundary_edges": 0,
       "non_manifold_edges": 0,
-      "signed_volume_mm3": 1213835.2641289046,
-      "surface_area_mm2": 367464.02275307,
-      "mass_kg": 8.739613901728113,
+      "signed_volume_mm3": 1029208.5978447311,
+      "surface_area_mm2": 351339.6350020176,
+      "mass_kg": 7.410301904482066,
       "cg_mm": [
-        415.8394758808114,
-        -4.603536915450377e-15,
-        -127.50531973162593
+        404.3832807559751,
+        -1.809783899135246e-15,
+        -131.0376591652072
       ],
       "bbox_min_mm": [
-        0.0,
+        -35.9,
         -76.0,
         -500.0
       ],
       "bbox_max_mm": [
-        650.0,
+        648.0,
         76.0,
         76.0
       ],
       "inertia_kg_mm2": [
-        330555.78893221274,
-        796996.4045811284,
-        477184.94965847884,
-        -1.3297298325273256e-11,
-        199647.0400250371,
-        3.413325000932664e-12
+        273497.1078596599,
+        699569.7386211975,
+        435055.7469354527,
+        -2.2589340100890066e-11,
+        158876.51632267656,
+        -4.679949682225488e-12
       ],
-      "triangle_count": 3496,
-      "vertex_count": 1718,
+      "triangle_count": 3200,
+      "vertex_count": 1582,
       "step_valid": true,
       "dxf_valid": true,
       "svg_valid": true,
@@ -406,34 +406,34 @@
       "watertight": true,
       "boundary_edges": 0,
       "non_manifold_edges": 0,
-      "signed_volume_mm3": 4030281.055690609,
-      "surface_area_mm2": 954518.4107377409,
-      "mass_kg": 14.50901180048619,
+      "signed_volume_mm3": 4166528.8434236846,
+      "surface_area_mm2": 963699.2559388296,
+      "mass_kg": 14.999503836325264,
       "cg_mm": [
-        4.254194623918612,
-        13.016190598733983,
-        -184.54632639398903
+        4.1150801168848465,
+        15.982587537054346,
+        -187.12882231028473
       ],
       "bbox_min_mm": [
-        -76.0,
+        -101.25,
         -92.0,
-        -500.0
+        -508.0
       ],
       "bbox_max_mm": [
-        92.0,
-        179.5,
-        99.80000000000001
+        101.25,
+        164.5,
+        101.25
       ],
       "inertia_kg_mm2": [
-        353567.3122108937,
-        335936.06766834715,
-        72529.46030004132,
-        803.4134311067506,
-        2188.348222245186,
-        -37557.460046695895
+        383473.6561909164,
+        365618.358209957,
+        85874.80378595692,
+        986.5117903511466,
+        2522.739111108404,
+        -47652.63958950521
       ],
-      "triangle_count": 16952,
-      "vertex_count": 8332,
+      "triangle_count": 16060,
+      "vertex_count": 7872,
       "step_valid": true,
       "dxf_valid": true,
       "svg_valid": true,
@@ -1120,34 +1120,34 @@
       "watertight": true,
       "boundary_edges": 0,
       "non_manifold_edges": 0,
-      "signed_volume_mm3": 1553197.8592429403,
-      "surface_area_mm2": 454756.785629558,
-      "mass_kg": 12.11494330209493,
+      "signed_volume_mm3": 1348344.2468854478,
+      "surface_area_mm2": 388397.54904005653,
+      "mass_kg": 10.517085125706494,
       "cg_mm": [
-        6.171993263870949,
-        1.9614153936003066e-15,
-        144.73835326870815
+        3.790916154209365,
+        0.9397832939817689,
+        148.5786343722422
       ],
       "bbox_min_mm": [
-        -76.0,
-        -88.0,
+        -84.14345350891587,
+        -88.14091491927542,
         0.0
       ],
       "bbox_max_mm": [
         94.0,
-        88.0,
+        76.0,
         279.5
       ],
       "inertia_kg_mm2": [
-        104680.84393056402,
-        106718.76657532135,
-        42953.56415587325,
-        -1.6930264510805037e-12,
-        1513.2894410701037,
-        585.9207561017269
+        98254.67322629792,
+        101551.90168346684,
+        37797.27794861248,
+        -43.00615429903275,
+        1409.0420802423205,
+        195.88066841602162
       ],
-      "triangle_count": 6192,
-      "vertex_count": 3002,
+      "triangle_count": 7424,
+      "vertex_count": 3626,
       "step_valid": true,
       "dxf_valid": true,
       "svg_valid": true,
@@ -1171,13 +1171,13 @@
       "watertight": true,
       "boundary_edges": 0,
       "non_manifold_edges": 0,
-      "signed_volume_mm3": 256309.92694915293,
-      "surface_area_mm2": 55716.82815048912,
-      "mass_kg": 1.9992174302033934,
+      "signed_volume_mm3": 257980.3269491529,
+      "surface_area_mm2": 56687.228150489114,
+      "mass_kg": 2.0122465502033933,
       "cg_mm": [
-        2.1796970999924885,
-        -42.5947757239606,
-        2.4166773103859365
+        2.5875017145472547,
+        -42.52617547998621,
+        2.4010295366699808
       ],
       "bbox_min_mm": [
         -34.75,
@@ -1185,20 +1185,20 @@
         -34.75
       ],
       "bbox_max_mm": [
-        45.0,
+        49.0,
         0.0,
         52.5
       ],
       "inertia_kg_mm2": [
-        2573.108912927655,
-        1396.1154614396978,
-        2309.4981167551064,
-        -46.16873164233134,
-        10.53112676627856,
-        -51.188271163779774
+        2575.267294997711,
+        1439.6185801893657,
+        2354.3048418027633,
+        -54.806547333304714,
+        12.501419836707688,
+        -50.856831595642284
       ],
-      "triangle_count": 1512,
-      "vertex_count": 740,
+      "triangle_count": 1524,
+      "vertex_count": 748,
       "step_valid": true,
       "dxf_valid": true,
       "svg_valid": true,
@@ -1226,17 +1226,17 @@
       "surface_area_mm2": 60168.42936506344,
       "mass_kg": 2.7375556046403235,
       "cg_mm": [
-        1.0882839813110996,
+        -1.0882839813111016,
         50.29140999829959,
         4.079565569188723
       ],
       "bbox_min_mm": [
-        -34.75,
+        -59.2,
         0.0,
         -34.75
       ],
       "bbox_max_mm": [
-        59.2,
+        34.75,
         120.0,
         69.0
       ],
@@ -1244,8 +1244,8 @@
         3895.483027621713,
         1981.568480435468,
         3420.793068101787,
-        36.61903466475127,
-        41.94637553495397,
+        -36.619034664751325,
+        -41.946375534953646,
         137.27092887581702
       ],
       "triangle_count": 1516,

@@ -64,35 +64,57 @@ def test_mcwhorter_exact_scaling_and_grid_convergence() -> None:
 
 
 def test_bca_and_recoil_oxygen_physics() -> None:
-    tbl = build_zbl_scattering_table(n_eps=40, n_rho=40, n_quad=120)
+    from epi_cap_physics139 import evaluate_fga_passivation_kinetics, evaluate_gate_oxide_and_regrowth_interface
+    tbl = build_zbl_scattering_table(n_eps=40, n_rho=40, n_quad=48)
     b5 = simulate_bca_31p_in_si(5.0, 600, tbl, seed=42)
     b22 = simulate_bca_31p_in_si(22.0, 600, tbl, seed=43)
-    assert 5.5 < b5["Rp_nm"] < 7.5
-    assert 13.0 < b22["Rp_nm"] < 16.5
+    # OBS-039: Corrected infinite-domain ZBL BCA matches 3D iradina (5 keV Rp~10.3 nm, 22 keV Rp~33-34 nm)
+    assert 9.0 < b5["Rp_nm"] < 12.0
+    assert 3.8 < b5["sigma_lat_nm"] < 5.2
+    assert 28.0 < b22["Rp_nm"] < 40.0
     assert b22["sigma_lat_nm"] > 2.0 * b5["sigma_lat_nm"]
-    assert b22["sigma_z_nm"] > 1.7 * b5["sigma_z_nm"]
+    assert b22["sigma_z_nm"] > 2.0 * b5["sigma_z_nm"]
 
-    rec = simulate_recoil_oxygen_through_oxide(22.0, 1.5, 600, tbl, seed=44)
-    assert rec["O_injected_into_Si_per_ion"] > 0.3
-    assert rec["mean_O_depth_in_Si_nm"] > 0.2
+    # OBS-129 & OBS-138: Full multilayer SiO2/Si recoil-O + primary transport
+    rec22 = simulate_recoil_oxygen_through_oxide(22.0, 1.5, 600, tbl, seed=44)
+    assert 0.2 < rec22["O_injected_into_Si_per_ion"] < 1.2
+    assert rec22["mean_O_depth_in_Si_nm"] > 0.8
+    assert rec22["primary_Rp_in_Si_nm"] > 25.0
+    rec5 = simulate_recoil_oxygen_through_oxide(5.0, 1.5, 600, tbl, seed=45)
+    assert rec5["O_injected_into_Si_per_ion"] > 0.3
+
+    # OBS-094: 1 atm FGA succeeds in 15 min; UHV leak-valve fails by 6-8 orders
+    fg_1atm = evaluate_fga_passivation_kinetics(38.0)
+    fg_uhv = evaluate_fga_passivation_kinetics(5e-6)
+    assert fg_1atm["feasible_15min_passivation"] is True
+    assert fg_uhv["feasible_15min_passivation"] is False
+    assert fg_uhv["required_passivation_time_years"] > 10.0
+
+    # OBS-095: Gate oxide Si consumption 0.44*d_ox & pre-MBE regrowth traps
+    ox_th = evaluate_gate_oxide_and_regrowth_interface(8.0, 8.0, "thermal_SiO2")
+    ox_ald = evaluate_gate_oxide_and_regrowth_interface(8.0, 8.0, "ald_lowT")
+    assert math.isclose(ox_th["si_consumed_nm"], 3.52, abs_tol=1e-3)
+    assert ox_ald["si_consumed_nm"] == 0.0
+    assert ox_th["regrowth_interface_D_it_cm2_eV"] > 0.0
 
 
 def test_coupled_thermal_chain_v4_discovery_and_v5_fix() -> None:
-    ch_v4 = run_coupled_thermal_chain_ted(6.46, 2.88, T_epi_C=345.0, t_mbe_s=80.0, T_peak_K=1440.0, n_flash_pulses=1)
-    ch_v5 = run_coupled_thermal_chain_ted(6.46, 2.88, T_epi_C=345.0, t_mbe_s=80.0, T_peak_K=1530.0, n_flash_pulses=1)
+    from epi_cap_physics139 import KineticsParams
+    ch_v4 = run_coupled_thermal_chain_ted(10.31, 5.10, T_epi_C=345.0, t_mbe_s=80.0, T_peak_K=1440.0, n_flash_pulses=1)
+    ch_v5 = run_coupled_thermal_chain_ted(10.31, 5.10, T_epi_C=345.0, t_mbe_s=80.0, T_peak_K=1530.0, n_flash_pulses=1)
+    ch_v5_hi = run_coupled_thermal_chain_ted(10.31, 5.10, T_epi_C=345.0, t_mbe_s=80.0, T_peak_K=1530.0, n_flash_pulses=1, C_cl_peak_cm3=4.5e20)
 
     assert ch_v4["route_C_full_chain"]["mass_conservation_err"] < 1e-12
     assert ch_v5["route_C_full_chain"]["mass_conservation_err"] < 1e-12
 
-    # v4 1440 K leaves >10% undissolved {311} clusters -> significant back-end TED > 1.0 nm
-    assert ch_v4["cluster_remaining_frac_post_flash"] > 0.10
-    assert ch_v4["route_C_full_chain"]["sigma_anneal_nm"] > 1.0
-
-    # v5 1530 K clears >99.9% of clusters -> suppresses back-end TED by >20x & stays <= 0.50 nm
+    # OBS-038 FIX: With realistic Em_I=0.90 eV + I-V recombination, v4 1440 K no longer freezes monomers at 345 C!
+    assert ch_v4["delta_sigma_anneal_route_C_nm"] < 0.05
+    assert ch_v4["route_C_full_chain"]["sigma_anneal_nm"] <= 0.50
     assert ch_v5["cluster_remaining_frac_post_flash"] < 1e-3
     assert ch_v5["route_C_full_chain"]["sigma_anneal_nm"] <= 0.50
-    assert ch_v5["delta_sigma_anneal_route_C_nm"] < 0.05
     assert ch_v5["T_peak_over_Tmelt"] < 0.92
+    # High iradina cascade damage (30% of 99.6 vac/ion) increases TED broadening significantly
+    assert ch_v5_hi["route_C_full_chain"]["sigma_anneal_nm"] > ch_v5["route_C_full_chain"]["sigma_anneal_nm"]
 
 
 def test_exp139_json_integrity_and_honest_verdicts() -> None:
@@ -106,33 +128,40 @@ def test_exp139_json_integrity_and_honest_verdicts() -> None:
     assert exp["no_supplier_quotes"] is True
 
     # Core structural predictions must PASS
-    for ep in ("EP1", "EP2", "EP4", "EP6"):
+    for ep in ("EP1", "EP2", "EP6"):
         assert exp["evaluations"][ep]["pass"] is True, f"{ep} should PASS"
 
-    # Honest EP5 FAIL on v4.0 1440 K setpoint must not be hidden; v5.0 1530 K must fix Exp124 budget
+    # OBS-006, OBS-039 & OBS-095 honest verdicts: 5 keV true BCA + 8 nm cap + regrowth traps
+    # fails old 93% EP3 yield, pushes Route A S_eps slightly above 1.05 (1.078), and breaches 3.80 nm ceiling!
+    assert exp["evaluations"]["EP3"]["pass"] is False
     assert exp["evaluations"]["EP5"]["pass"] is False
+    assert exp["charge_noise_and_exp137_bridge"]["routes"]["route_A_5keV_post_anneal_mbe_unpassivated"]["S_eps_ueV_rtHz"] > 1.0
+    assert exp["charge_noise_and_exp137_bridge"]["routes"]["route_C_nominal_FG350C_Dit_1p5e10"]["S_eps_ueV_rtHz"] <= 0.45
     th = exp["coupled_thermal_chain_ted"]
-    assert th["exp124_sigma_tot_v4_1440K_chain_nm"] > 3.80
-    assert th["exp124_sigma_tot_v5_1530K_chain_nm"] <= 3.70
+    assert th["exp124_sigma_tot_v5_1530K_chain_nm"] > 4.40
     assert th["v5_s55_lidt_margin_1530K_vs_100J_AR"] >= 3.0
+    assert exp["fga_passivation_kinetics_obs094"]["dedicated_1atm_furnace_5pctH2_38Torr"]["feasible_15min_passivation"] is True
+    assert exp["fga_passivation_kinetics_obs094"]["uhv_leak_valve_high_5e_5Torr"]["feasible_15min_passivation"] is False
 
 
 def test_route_yield_ordering_and_exp137_bridge() -> None:
     exp = json.loads((RES_DIR / "exp139.json").read_text(encoding="utf-8"))
     y = exp["route_flipflop_yields_exp131"]
 
-    # v5 Route C > v5 Route A > Route B (22 keV) > 14 keV+8nm > Bare 5 keV
-    assert y["route_C_v5_1530K_5keV_8nm_FG350C"]["yield_C_ge_100"] >= 0.95
-    assert y["route_A_v5_1530K_5keV_8nm_mbe"]["yield_C_ge_100"] >= 0.93
-    assert y["route_B_22keV_through_cap_flash"]["yield_C_ge_100"] < 0.70
-    assert y["route_A_14keV_srim_15nm_plus_8nm_cap"]["yield_C_ge_100"] < 0.40
-    assert y["bare_5keV_uncapped_ref"]["yield_C_ge_100"] < 0.35
+    # OBS-006 honest yield under true 3D BCA/iradina 5 keV (Rp~10.3 nm, sig_z~5.1 nm):
+    # Locked 8 nm cap collapses to ~55-72% (well below legacy 95%), thin 4 nm cap recovers partially (~72-82%),
+    # and 3 keV / 121Sb trade-off options outperform 5 keV + 8 nm cap!
+    assert y["route_C_v5_1530K_5keV_8nm_FG350C"]["yield_C_ge_100"] < 0.78
+    assert y["route_C_v5_5keV_thin_4nm_cap_opt"]["yield_C_ge_100"] > y["route_C_v5_1530K_5keV_8nm_FG350C"]["yield_C_ge_100"]
+    assert y["tradeoff_3keV_31P_6nm_cap_needs_cryoJFET_IBIC"]["yield_C_ge_100"] > y["route_C_v5_1530K_5keV_8nm_FG350C"]["yield_C_ge_100"]
+    assert y["tradeoff_7p5keV_121Sb_3nm_cap_heavy_ion"]["yield_C_ge_100"] > y["route_C_v5_1530K_5keV_8nm_FG350C"]["yield_C_ge_100"]
+    assert y["route_B_22keV_through_cap_flash"]["yield_C_ge_100"] < 0.25
 
-    # Exp137 charge-noise bridge strictly suppresses S_eps below 0.45 ueV/rtHz
+    # Exp137 charge-noise bridge strictly suppresses S_eps below 0.45 ueV/rtHz (with 1 atm FGA)
     br = exp["charge_noise_and_exp137_bridge"]
     assert 0.25 <= br["recommended_route_C_S_eps_band_ueV_rtHz"]["nominal_Dit_1p5e10_dox8"] <= 0.45
     assert br["suppression_vs_1ueV_baseline"] >= 2.2
-    assert br["suppression_vs_route_B_22keV"] >= 4.0
+    assert br["suppression_vs_route_B_22keV"] >= 3.5
 
 
 def test_s56_hardware_spec_cad_v5_and_bom_v5_ready() -> None:

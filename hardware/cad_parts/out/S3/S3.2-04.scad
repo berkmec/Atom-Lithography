@@ -10,7 +10,7 @@
 // vacuum_grade      : UHV 1e-9 mbar
 // tolerance         : ±2 mm boy
 // computed_mass_kg  : 0.00544
-// envelope_mm       : 155.746 x 155.746 x 11.436
+// envelope_mm       : 156.882 x 157.923 x 11.436
 // design_maturity   : M0_M1_DETAILED_CAD_DESIGN_ONLY
 // no_lab_measurement: true
 // iec61508_certified: false
@@ -21,8 +21,8 @@
 $fn = 64;
 
 // Nominal bounding envelope parameters (mm)
-bbox_x = 155.7462;
-bbox_y = 155.7462;
+bbox_x = 156.8825;
+bbox_y = 157.9225;
 bbox_z = 11.4360;
 
 // Part-specific parametric dimensions
@@ -38,13 +38,13 @@ port_csa_100k_input_od = 169.600;
 module part_S3_2_04() {
   union() {
     // Micro-coax IBIC loom #1 (L=44.76 mm < 50 mm, C_par<0.15 pF)
-    translate([58.010, 25.828, -3.500]) rotate([0.000, 77.000, 24.000]) cylinder(d=1.700, h=44.760, center=true);
+    translate([58.876, 23.788, -3.500]) rotate([0.000, 77.000, 22.000]) cylinder(d=1.700, h=44.760, center=true);
     // Micro-coax IBIC loom #2 (L=44.76 mm < 50 mm, C_par<0.15 pF)
-    translate([50.039, 39.095, -3.500]) rotate([0.000, 77.000, 38.000]) cylinder(d=1.700, h=44.760, center=true);
+    translate([52.016, 36.422, -3.500]) rotate([0.000, 77.000, 35.000]) cylinder(d=1.700, h=44.760, center=true);
     // Micro-coax IBIC loom #3 (L=44.76 mm < 50 mm, C_par<0.15 pF)
-    translate([39.095, 50.039, -3.500]) rotate([0.000, 77.000, 52.000]) cylinder(d=1.700, h=44.760, center=true);
+    translate([33.650, 53.851, -3.500]) rotate([0.000, 77.000, 58.000]) cylinder(d=1.700, h=44.760, center=true);
     // Micro-coax IBIC loom #4 (L=44.76 mm < 50 mm, C_par<0.15 pF)
-    translate([25.828, 58.010, -3.500]) rotate([0.000, 77.000, 66.000]) cylinder(d=1.700, h=44.760, center=true);
+    translate([21.718, 59.670, -3.500]) rotate([0.000, 77.000, 70.000]) cylinder(d=1.700, h=44.760, center=true);
     // Micro-coax IBIC loom #5 (L=44.76 mm < 50 mm, C_par<0.15 pF)
     translate([-25.828, 58.010, -3.500]) rotate([0.000, 77.000, 114.000]) cylinder(d=1.700, h=44.760, center=true);
     // Micro-coax IBIC loom #6 (L=44.76 mm < 50 mm, C_par<0.15 pF)

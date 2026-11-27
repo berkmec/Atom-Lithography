@@ -34,7 +34,7 @@
       "cad_json": "hardware/cad_parts/out/S3/S3.2-01.json",
       "watertight": true,
       "all_6_files_valid": true,
-      "mass_kg": 0.476023,
+      "mass_kg": 0.478021,
       "triangle_count": 5712,
       "temp_k": 100.0,
       "canonical_bbox_min_mm": [
@@ -43,8 +43,8 @@
         482.718
       ],
       "canonical_bbox_max_mm": [
-        133.436,
-        133.436,
+        134.264,
+        135.795,
         496.7
       ],
       "datum_shift_mm": [
@@ -89,7 +89,14 @@
     "rtl_modules": [],
     "rtl_audit_json": null,
     "software_and_eda_files": [],
-    "verification_tests": []
+    "verification_tests": [
+      "tests/test_bom_detailed.py",
+      "tests/test_full_180_traceability.py",
+      "tests/test_cad_s3_s4.py",
+      "tests/test_pcb_kernel_and_ibic.py",
+      "tests/test_detector_frontend.py",
+      "tests/test_cad_parts.py"
+    ]
   },
   "specialized_specification": null,
   "verification_status": {
@@ -99,6 +106,7 @@
     "rtl_verified": false,
     "software_or_eda_verified": false,
     "specialized_icd_present": false,
+    "verification_tests_mapped": true,
     "traceable": true
   },
   "epistemic": {

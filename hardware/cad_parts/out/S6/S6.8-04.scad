@@ -9,7 +9,7 @@
 // temp_stage        : 300 K
 // vacuum_grade      : Kriyo-vakum / UHV
 // tolerance         : ±0.2 mm
-// computed_mass_kg  : 126.53503
+// computed_mass_kg  : 126.12750
 // envelope_mm       : 390.000 x 393.000 x 985.000
 // design_maturity   : M0_M1_DETAILED_CAD_DESIGN_ONLY
 // no_lab_measurement: true
@@ -35,10 +35,10 @@ relief_dn = 50;
 port_asme_rupture_disk_port_od = 75.000;
 port_asme_rupture_disk_port_bore = 50.000;
 port_asme_rupture_disk_port_bolts = 4;
-port_bridge_bellows_east_od = 113.500;
-port_bridge_bellows_east_bore = 44.000;
-port_bridge_bellows_east_pcd = 92.100;
-port_bridge_bellows_east_bolts = 8;
+port_bridge_bellows_east_od = 152.000;
+port_bridge_bellows_east_bore = 76.000;
+port_bridge_bellows_east_pcd = 130.200;
+port_bridge_bellows_east_bolts = 16;
 port_option_q_west_od = 113.500;
 port_option_q_west_bore = 63.500;
 port_option_q_west_pcd = 92.100;

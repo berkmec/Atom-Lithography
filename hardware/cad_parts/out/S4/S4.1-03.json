@@ -275,5 +275,10 @@
   ],
   "reconciliation": null,
   "thermal_contraction_checks": [],
-  "tolerance_stack_checks": []
+  "tolerance_stack_checks": [],
+  "shell_mate_metadata": {
+    "n_shells": 9,
+    "fea_bonding_mode": "TIED_SUBASSEMBLY_CONTACTS",
+    "watertight": true
+  }
 }

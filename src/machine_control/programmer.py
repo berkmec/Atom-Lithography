@@ -168,6 +168,7 @@ class CompiledSchedule:
     n_qubits: int
     pulse_mode: str
     ops: list[ScheduleOp] = field(default_factory=list)
+    active_b_perp_Hz: list[float] | None = None
 
     @property
     def pulse_count(self) -> int:
@@ -231,6 +232,13 @@ class ProgramCertificate:
     certified: bool
     epistemic_tag: str = "Model"
     sha256: str = ""
+
+    def __post_init__(self) -> None:
+        if self.certified and float(self.corner_min_fidelity) < 0.90:
+            raise ValueError(
+                f"Cannot certify ProgramCertificate with corner_min_fidelity="
+                f"{self.corner_min_fidelity:.6f} < 0.90"
+            )
 
     def canonical_payload(self) -> str:
         d = asdict(self)
@@ -341,9 +349,11 @@ def builtin_program(name: str, **kwargs: Any) -> CellProgram:
     if key == "bell":
         return program_bell(**kwargs)
     if key in ("ghz", "ghz4"):
-        return program_ghz(n_qubits=4, **kwargs)
+        n_q = int(kwargs.pop("n_qubits", 4))
+        return program_ghz(n_qubits=n_q, **kwargs)
     if key == "ghz3":
-        return program_ghz(n_qubits=3, **kwargs)
+        n_q = int(kwargs.pop("n_qubits", 3))
+        return program_ghz(n_qubits=n_q, **kwargs)
     if key == "qft3":
         return program_qft3(**kwargs)
     if key == "repcode3":
@@ -424,12 +434,14 @@ class AtomCellProgrammer:
         readout_visibility: float = 0.99,
         pulse_error_eps: float = 1e-3,
         cert_fidelity_threshold: float = 0.95,
+        corner_fidelity_threshold: float = 0.90,
     ):
         self.b_field_T = float(b_field_T)
         self.pulse_mode = str(pulse_mode)
         self.readout_visibility = float(readout_visibility)
         self.pulse_error_eps = float(pulse_error_eps)
         self.cert_fidelity_threshold = float(cert_fidelity_threshold)
+        self.corner_fidelity_threshold = max(0.90, float(corner_fidelity_threshold))
 
     def _emit_pulse(
         self,
@@ -440,14 +452,17 @@ class AtomCellProgrammer:
         theta: float,
         electron_branch: int | None,
         cache: dict[tuple, PulseWaveform],
+        b_perp_active: np.ndarray | None = None,
     ) -> None:
         if abs(theta) < 1e-12:
             return
         if qubit == 0:
-            key = ("MW", axis.upper(), round(theta, 8))
+            # Broadband ESR stripline drive scales above nuclear hyperfine spread sum(|A_k|)/2
+            mw_rabi_MHz = max(45.0, 15.0 * float(np.sum(np.abs(A_active))) * 1e-6)
+            key = ("MW", axis.upper(), round(theta, 8), round(mw_rabi_MHz, 3))
             if key not in cache:
                 cache[key] = synthesize_electron_mw_pulse(
-                    axis=axis, theta_rad=theta, b_field_T=self.b_field_T
+                    axis=axis, theta_rad=theta, rabi_MHz=mw_rabi_MHz, b_field_T=self.b_field_T
                 )
             ops.append(ScheduleOp(kind="PULSE", waveform=cache[key]))
             return
@@ -465,70 +480,77 @@ class AtomCellProgrammer:
                     theta_rad=theta,
                     mode=self.pulse_mode,
                     b_field_T=self.b_field_T,
+                    b_perp_hz=b_perp_active,
                 )
             ops.append(ScheduleOp(kind="PULSE", waveform=cache[key]))
 
-    def _emit_h(self, ops, A_active, q: int, cache) -> None:
+    def _emit_h(self, ops, A_active, q: int, cache, b_perp_active=None) -> None:
         ops.append(ScheduleOp(kind="VIRTUAL_RZ", qubit=q, angle_rad=math.pi))
-        self._emit_pulse(ops, A_active, q, "Y", math.pi / 2.0, None, cache)
+        self._emit_pulse(ops, A_active, q, "Y", math.pi / 2.0, None, cache, b_perp_active)
 
-    def _emit_cnot_e_to_n(self, ops, A_active, nuc_q: int, cache) -> None:
+    def _emit_cnot_e_to_n(self, ops, A_active, nuc_q: int, cache, b_perp_active=None) -> None:
         # Selective RF Rx(pi) on electron branch e=1 gives -i*X on e=1;
         # virtual RZ(e, +pi/2) cancels the -i relative phase exactly.
-        self._emit_pulse(ops, A_active, nuc_q, "X", math.pi, 1, cache)
+        self._emit_pulse(ops, A_active, nuc_q, "X", math.pi, 1, cache, b_perp_active)
         ops.append(ScheduleOp(kind="VIRTUAL_RZ", qubit=0, angle_rad=math.pi / 2.0))
 
-    def _emit_cnot_n_to_e(self, ops, A_active, nuc_q: int, cache) -> None:
-        self._emit_h(ops, A_active, 0, cache)
-        self._emit_h(ops, A_active, nuc_q, cache)
-        self._emit_cnot_e_to_n(ops, A_active, nuc_q, cache)
-        self._emit_h(ops, A_active, 0, cache)
-        self._emit_h(ops, A_active, nuc_q, cache)
+    def _emit_cnot_n_to_e(self, ops, A_active, nuc_q: int, cache, b_perp_active=None) -> None:
+        self._emit_h(ops, A_active, 0, cache, b_perp_active)
+        self._emit_h(ops, A_active, nuc_q, cache, b_perp_active)
+        self._emit_cnot_e_to_n(ops, A_active, nuc_q, cache, b_perp_active)
+        self._emit_h(ops, A_active, 0, cache, b_perp_active)
+        self._emit_h(ops, A_active, nuc_q, cache, b_perp_active)
 
-    def _emit_swap_e_n(self, ops, A_active, nuc_q: int, cache) -> None:
-        self._emit_cnot_e_to_n(ops, A_active, nuc_q, cache)
-        self._emit_cnot_n_to_e(ops, A_active, nuc_q, cache)
-        self._emit_cnot_e_to_n(ops, A_active, nuc_q, cache)
+    def _emit_swap_e_n(self, ops, A_active, nuc_q: int, cache, b_perp_active=None) -> None:
+        self._emit_cnot_e_to_n(ops, A_active, nuc_q, cache, b_perp_active)
+        self._emit_cnot_n_to_e(ops, A_active, nuc_q, cache, b_perp_active)
+        self._emit_cnot_e_to_n(ops, A_active, nuc_q, cache, b_perp_active)
 
-    def _emit_cz(self, ops, A_active, c: int, t: int, cache) -> None:
+    def _emit_cz(self, ops, A_active, c: int, t: int, cache, b_perp_active=None) -> None:
         if c == t:
             raise ValueError("CZ control and target must be distinct")
         if c == 0 or t == 0:
             nuc_q = t if c == 0 else c
-            self._emit_h(ops, A_active, nuc_q, cache)
-            self._emit_cnot_e_to_n(ops, A_active, nuc_q, cache)
-            self._emit_h(ops, A_active, nuc_q, cache)
+            self._emit_h(ops, A_active, nuc_q, cache, b_perp_active)
+            self._emit_cnot_e_to_n(ops, A_active, nuc_q, cache, b_perp_active)
+            self._emit_h(ops, A_active, nuc_q, cache, b_perp_active)
         else:
             # Exact operator identity: CZ(j, k) = SWAP(e, j) . CZ(e, k) . SWAP(e, j)
-            self._emit_swap_e_n(ops, A_active, c, cache)
-            self._emit_cz(ops, A_active, 0, t, cache)
-            self._emit_swap_e_n(ops, A_active, c, cache)
+            self._emit_swap_e_n(ops, A_active, c, cache, b_perp_active)
+            self._emit_cz(ops, A_active, 0, t, cache, b_perp_active)
+            self._emit_swap_e_n(ops, A_active, c, cache, b_perp_active)
 
-    def _emit_cnot(self, ops, A_active, c: int, t: int, cache) -> None:
+    def _emit_cnot(self, ops, A_active, c: int, t: int, cache, b_perp_active=None) -> None:
         if c == t:
             raise ValueError("CNOT control and target must be distinct")
         if c == 0:
-            self._emit_cnot_e_to_n(ops, A_active, t, cache)
+            self._emit_cnot_e_to_n(ops, A_active, t, cache, b_perp_active)
         elif t == 0:
-            self._emit_cnot_n_to_e(ops, A_active, c, cache)
+            self._emit_cnot_n_to_e(ops, A_active, c, cache, b_perp_active)
         else:
             # CNOT(j -> k) = H_k . CZ(j, k) . H_k
-            self._emit_h(ops, A_active, t, cache)
-            self._emit_cz(ops, A_active, c, t, cache)
-            self._emit_h(ops, A_active, t, cache)
+            self._emit_h(ops, A_active, t, cache, b_perp_active)
+            self._emit_cz(ops, A_active, c, t, cache, b_perp_active)
+            self._emit_h(ops, A_active, t, cache, b_perp_active)
 
     def compile(self, cert: Certificate, program: CellProgram) -> CompiledSchedule:
-        """Compile ``program`` into physical RF/MW pulses calibrated to ``cert.lines_Hz``."""
+        """Compile ``program`` into physical RF/MW pulses calibrated to signed ``cert.lines_Hz`` and ``b_perp_Hz``."""
         if not cert.lines_Hz:
             raise ValueError(f"Certificate {cert.register_id} has empty lines_Hz; cannot compile")
         n_nuc_needed = program.used_nuclear_count()
-        lines = np.sort(np.abs(np.asarray(cert.lines_Hz, dtype=float)))[::-1]
+        raw_lines = np.asarray(cert.lines_Hz, dtype=float)
+        # Preserve exact sign of hyperfine coupling A_k (critical for A < 0 electron manifold!)
+        order = np.argsort(np.abs(raw_lines))[::-1]
+        lines = raw_lines[order]
         if n_nuc_needed > len(lines):
             raise ValueError(
                 f"Program {program.name} needs {n_nuc_needed} nuclei, "
                 f"certificate {cert.register_id} only has {len(lines)}"
             )
         A_active = lines[:n_nuc_needed]
+        b_perp_active: np.ndarray | None = None
+        if cert.b_perp_Hz is not None and len(cert.b_perp_Hz) == len(raw_lines):
+            b_perp_active = np.asarray(cert.b_perp_Hz, dtype=float)[order][:n_nuc_needed]
         ops: list[ScheduleOp] = []
         cache: dict[tuple, PulseWaveform] = {}
 
@@ -537,20 +559,20 @@ class AtomCellProgrammer:
             if op == "INIT":
                 ops.append(ScheduleOp(kind="INIT", params=dict(a)))
             elif op == "RX":
-                self._emit_pulse(ops, A_active, parse_qubit(a["target"]), "X", float(a["theta"]), None, cache)
+                self._emit_pulse(ops, A_active, parse_qubit(a["target"]), "X", float(a["theta"]), None, cache, b_perp_active)
             elif op == "RY":
-                self._emit_pulse(ops, A_active, parse_qubit(a["target"]), "Y", float(a["theta"]), None, cache)
+                self._emit_pulse(ops, A_active, parse_qubit(a["target"]), "Y", float(a["theta"]), None, cache, b_perp_active)
             elif op == "RZ":
                 ops.append(ScheduleOp(kind="VIRTUAL_RZ", qubit=parse_qubit(a["target"]), angle_rad=float(a["theta"])))
             elif op == "CNOT":
-                self._emit_cnot(ops, A_active, parse_qubit(a["control"]), parse_qubit(a["target"]), cache)
+                self._emit_cnot(ops, A_active, parse_qubit(a["control"]), parse_qubit(a["target"]), cache, b_perp_active)
             elif op == "CZ":
-                self._emit_cz(ops, A_active, parse_qubit(a["control"]), parse_qubit(a["target"]), cache)
+                self._emit_cz(ops, A_active, parse_qubit(a["control"]), parse_qubit(a["target"]), cache, b_perp_active)
             elif op == "GHZ":
                 qs = [parse_qubit(q) for q in a["qubits"]]
-                self._emit_pulse(ops, A_active, qs[0], "Y", math.pi / 2.0, None, cache)
+                self._emit_pulse(ops, A_active, qs[0], "Y", math.pi / 2.0, None, cache, b_perp_active)
                 for tgt in qs[1:]:
-                    self._emit_cnot(ops, A_active, qs[0], tgt, cache)
+                    self._emit_cnot(ops, A_active, qs[0], tgt, cache, b_perp_active)
             elif op == "DD_HOLD":
                 ops.append(ScheduleOp(kind="DD_HOLD", params={
                     "duration_us": float(a.get("duration_us", 200.0)),
@@ -566,9 +588,9 @@ class AtomCellProgrammer:
             elif op == "QRAM_SWAP":
                 qa = parse_qubit(a.get("qubit_a", "e"))
                 qb = parse_qubit(a.get("qubit_b", "n0"))
-                self._emit_cnot(ops, A_active, qa, qb, cache)
-                self._emit_cnot(ops, A_active, qb, qa, cache)
-                self._emit_cnot(ops, A_active, qa, qb, cache)
+                self._emit_cnot(ops, A_active, qa, qb, cache, b_perp_active)
+                self._emit_cnot(ops, A_active, qb, qa, cache, b_perp_active)
+                self._emit_cnot(ops, A_active, qa, qb, cache, b_perp_active)
             elif op == "ARRAY_EXEC":
                 raise ValueError("Use execute_array() to run ARRAY_EXEC across multiple cells")
 
@@ -580,6 +602,7 @@ class AtomCellProgrammer:
             n_qubits=n_nuc_needed + 1,
             pulse_mode=self.pulse_mode,
             ops=ops,
+            active_b_perp_Hz=[float(x) for x in b_perp_active] if b_perp_active is not None else None,
         )
 
     def _run_schedule(
@@ -590,7 +613,15 @@ class AtomCellProgrammer:
         with_dd_noise: bool = True,
         seed: int = 20261122,
     ) -> tuple[MultiSpinSimulator, DDRobustnessResult | None, dict[str, int]]:
-        sim = MultiSpinSimulator(np.asarray(schedule.active_lines_Hz), b_field_T=schedule.b_field_T)
+        sim = MultiSpinSimulator(
+            np.asarray(schedule.active_lines_Hz),
+            b_field_T=schedule.b_field_T,
+            b_perp_hz=(
+                np.asarray(schedule.active_b_perp_Hz, dtype=float)
+                if schedule.active_b_perp_Hz is not None
+                else None
+            ),
+        )
         dd_res: DDRobustnessResult | None = None
         meas_counts: dict[str, int] = {}
         rng = np.random.default_rng(seed)
@@ -637,11 +668,11 @@ class AtomCellProgrammer:
         schedule = self.compile(cert, program)
         psi_ideal = simulate_ideal(program, schedule.n_qubits)
 
-        # Nominal physical simulation (including XY8 DD & finite visibility readout)
+        # Nominal physical simulation (including non-unitary XY8 DD Kraus channel & finite readout)
         sim_nom, dd_res, meas_counts = self._run_schedule(
             schedule, detuning_offset_Hz=0.0, amp_scale=1.0, with_dd_noise=True, seed=seed
         )
-        nom_fid = float(abs(np.vdot(psi_ideal, sim_nom.state)) ** 2)
+        nom_fid = sim_nom.state_fidelity(psi_ideal)
 
         # Corner verification across +/-400 Hz detuning x +/-2% RF amplitude
         corner_fids = [nom_fid]
@@ -652,11 +683,15 @@ class AtomCellProgrammer:
                     sim_c, _, _ = self._run_schedule(
                         schedule, detuning_offset_Hz=off, amp_scale=sc, with_dd_noise=False, seed=seed
                     )
-                    corner_fids.append(float(abs(np.vdot(psi_ideal, sim_c.state)) ** 2))
+                    corner_fids.append(sim_c.state_fidelity(psi_ideal))
 
         c_min = float(min(corner_fids))
         c_mean = float(np.mean(corner_fids))
-        passed = bool(nom_fid >= self.cert_fidelity_threshold)
+        min_corner_gate = max(0.90, self.corner_fidelity_threshold)
+        passed = bool(
+            nom_fid >= self.cert_fidelity_threshold
+            and c_min >= min_corner_gate
+        )
 
         pcert = ProgramCertificate(
             program_name=program.name,
@@ -707,15 +742,16 @@ class AtomCellProgrammer:
 
 @dataclass(frozen=True)
 class BusLinkSpec:
-    """High-impedance NbTiN cavity-QED dispersive spin-photon bus parameters."""
+    """High-impedance 3 kOhm NbTiN M4 cavity-QED flip-flop bus parameters (Exp131/Exp137)."""
     cell_a: str
     cell_b: str
-    g_MHz: float = 15.0             # spin-photon vacuum Rabi coupling (high-Z NbTiN)
-    detuning_MHz: float = 150.0     # dispersive detuning Delta = 10 * g
-    kappa_MHz: float = 0.50         # cavity linewidth (Q ~ 1.4e4 @ 7 GHz)
+    g_MHz: float = 1.5              # Exp131/137 physical transverse flip-flop coupling (0.6-1.9 MHz)
+    detuning_MHz: float = 18.0      # Dispersive detuning Delta = 12 * g (t_CZ ~ 2.0 us matching Exp137)
+    kappa_MHz: float = 0.025        # NbTiN cavity linewidth Q_R = 2e5 @ 5 GHz (5000 / 2e5)
     t2_electron_us: float = 500.0   # DD-protected electron coherence time (us)
-    z_resonator_kOhm: float = 2.5   # NbTiN kinetic-inductance resonator impedance
+    z_resonator_kOhm: float = 3.0   # Exp131/137 NbTiN kinetic-inductance resonator impedance
     hop_distance: int = 1           # number of bus hops on wafer grid
+    b_m4_T: float = 0.1785          # Exp131 M4 flip-flop resonance field (T)
 
     @property
     def j_bus_MHz(self) -> float:
@@ -1271,7 +1307,8 @@ def _sb_simulate_echo_bus_choi(
     dc_pi = _scipy_expm(l_c_diss * (0.5 * pi_pulse_us))
 
     # Colored multi-OU 1/f^alpha charge noise (Exp131/137 hybridized spin-charge slope D1)
-    d1_ghz_per_ghz = 7.5e-4
+    # Physical M4 flip-flop coupling calibrated to Exp137 P2 (~2.02 us, F_Bell ~ 0.85 @ S_eps=1 ueV).
+    d1_ghz_per_ghz = 2.2e-4
     de1 = _sb_generate_ou_1f_ghz(n_traj, dts_all, max(0.0, float(s_eps_uev)), alpha=alpha_1f, rng=rng)
     de2 = _sb_generate_ou_1f_ghz(n_traj, dts_all, max(0.0, float(s_eps_uev)), alpha=alpha_1f, rng=rng)
     n_eff = de1.shape[0]
@@ -1812,9 +1849,9 @@ class MultiCellProgrammer:
         self,
         b_field_T: float = 1.5,
         pulse_mode: str = "shaped",
-        bus_g_MHz: float = 15.0,
-        bus_detuning_MHz: float = 150.0,
-        bus_kappa_MHz: float = 0.50,
+        bus_g_MHz: float = 1.5,
+        bus_detuning_MHz: float = 18.0,
+        bus_kappa_MHz: float = 0.025,
         t2_electron_us: float = 500.0,
     ):
         self.local_programmer = AtomCellProgrammer(b_field_T=b_field_T, pulse_mode=pulse_mode)

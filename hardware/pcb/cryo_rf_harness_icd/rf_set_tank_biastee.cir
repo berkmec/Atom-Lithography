@@ -10,16 +10,16 @@
 .subckt RFSET_TANK_BT rf_in dc_port gnd
 * RF coupling capacitor
 C_BT     rf_in   rf_node 100p
-* 2-stage cryogenic DC bias choke & RC filter (realistic 0.15 pF choke C_self, 0.5 nH cap ESL, 0.15 Ohm ESR)
-L_CHK1   rf_node bt_mid  10u
-C_SELF1  rf_node bt_mid  0.15p
-R_CHK1   bt_mid  bt_n1   10.0
+* 2-stage cryogenic DC bias choke & RC filter (Stage 1: 1.2 uH conical choke w/ 0.015 pF C_self; Stage 2: 10 uH choke)
+L_CHK1   rf_node bt_mid  1.2u
+C_SELF1  rf_node bt_mid  0.015p
+R_CHK1   bt_mid  bt_n1   2.0
 C_SH1    bt_n1   sh1_esl 100p
 L_SH1    sh1_esl sh1_esr 0.5n
 R_SH1    sh1_esr gnd     0.15
 R_BT2    bt_n1   bt_n2   100.0
-L_CHK2   bt_n2   dc_port 1.0u
-C_SELF2  bt_n2   dc_port 0.10p
+L_CHK2   bt_n2   dc_port 10.0u
+C_SELF2  bt_n2   dc_port 0.15p
 C_SH2    dc_port sh2_esl 1.0n
 L_SH2    sh2_esl sh2_esr 0.5n
 R_SH2    sh2_esr gnd     0.15
@@ -31,22 +31,54 @@ R_LSER   l_mid   set_drn 4.0000
 C_PAR    set_drn gnd     3.000000e-13
 .ends RFSET_TANK_BT
 
-* --- Instance A: Coulomb Peak (R_SET = 50 kOhm) ---
+* --- Instance A: Coulomb Peak (R_SET = 50 kOhm) with +3.3 V -> 1.095 mV Kelvin Divider (OBS-036) ---
+VBIAS_P3V3 vbias_3v3 0 DC 3.3
 VSRC_50  src50 0 DC 0 AC 2.0
 RS_50    src50 p50 50.0
 X_50K    p50 dc50 0 RFSET_TANK_BT
 R_SET50  X_50K.set_drn 0 50000.00
-R_DC50   dc50 0 50.0
+R_BT50   vbias_3v3 dc50 100.0k
+R_DIV50  dc50 0 33.2
 
-* --- Instance B: Coulomb Blockade (R_SET = 200 kOhm) ---
+* --- Instance B: Coulomb Blockade (R_SET = 200 kOhm) with +3.3 V -> 1.095 mV Kelvin Divider (OBS-036) ---
 VSRC_200 src200 0 DC 0 AC 2.0
 RS_200   src200 p200 50.0
 X_200K   p200 dc200 0 RFSET_TANK_BT
 R_SET200 X_200K.set_drn 0 200000.00
-R_DC200  dc200 0 50.0
+R_BT200  vbias_3v3 dc200 100.0k
+R_DIV200 dc200 0 33.2
+
+* --- Instance C: 4-8 GHz Zero-Stub Inline Conical Bias-Tee Through-Line Check (OBS-028) ---
+* Verifies eliminating the 6.0 mm stub (-21.8 dB notch @ 8 GHz) via direct pad-on-trace 1.2 uH conical choke (C_self=0.015 pF)
+VSRC_BT  src_bt 0 DC 0 AC 2.0
+RS_BT    src_bt bt_in 50.0
+C_BT_TH  bt_in  bt_junc 100p
+L_TAP1   bt_junc bt_tm1 1.2u
+C_TS1    bt_junc bt_tm1 0.015p
+R_TAP1   bt_tm1 bt_tn1 2.0
+C_TSH1   bt_tn1 bt_sh1l 100p
+L_TSH1   bt_sh1l bt_sh1r 0.5n
+R_TSH1   bt_sh1r 0 0.15
+R_TBT2   bt_tn1 bt_tn2 100.0
+L_TAP2   bt_tn2 bt_tdc 10.0u
+C_TS2    bt_tn2 bt_tdc 0.15p
+C_TSH2   bt_tdc bt_sh2l 1.0n
+L_TSH2   bt_sh2l bt_sh2r 0.5n
+R_TSH2   bt_sh2r 0 0.15
+R_TDC    bt_tdc 0 33.2
+RL_BT    bt_junc 0 50.0
 
 .control
 set noaskquit
+
+* 1) DC Operating Point: Verify safe mV-scale rf-SET bias (~1.095 mV, zero +3.3 V DC leak!)
+op
+let v_set_dc_50k_v = v(X_50K.set_drn)
+let v_set_dc_200k_v = v(X_200K.set_drn)
+print v_set_dc_50k_v
+print v_set_dc_200k_v
+
+* 2) 200-450 MHz rf-SET LC Tank Reflection & 2-Stage Bias-Tee RF-to-DC Isolation
 ac lin 501 200.0e6 450.0e6
 
 * Complex reflection coefficients Gamma = V(port) - 1 (since V_src = 2 V behind 50 Ohm)
@@ -72,6 +104,13 @@ meas ac dc_iso_at_fres_db FIND dc_iso_db AT=f_res_hz
 meas ac dc_iso_worst_db MAX dc_iso_db FROM=200.0e6 TO=450.0e6
 let f_res_mhz = f_res_hz / 1.0e6
 echo "f_res_mhz = $&f_res_mhz"
+
+* 3) 4-8 GHz Inline Zero-Stub Bias-Tee Through-Line S11/S21 Verification (OBS-028)
+ac lin 401 4.0e9 8.0e9
+let bt_s11_db = 20.0 * log10(mag(v(bt_in) - 1.0) + 1e-12)
+let bt_s21_db = 20.0 * log10(mag(v(bt_junc)) + 1e-12)
+meas ac bt_max_s11_4_8_db MAX bt_s11_db FROM=4.0e9 TO=8.0e9
+meas ac bt_min_s21_4_8_db MIN bt_s21_db FROM=4.0e9 TO=8.0e9
 quit
 .endc
 .end

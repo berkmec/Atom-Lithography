@@ -93,7 +93,16 @@ CHAMBER_WALL_MM: float = 10.0
 MAGNET_FORMER_OD_MM: float = 352.0
 MAGNET_BORE_ID_MM: float = 150.0
 LOADLOCK_CENTER_X_MM: float = 420.0
-PUMP_STATION_Y_MM: float = -450.0
+PUMP_STATION_Y_MM: float = -425.0
+LOADLOCK_OPT_ELEV_DEG: float = 36.0
+LOADLOCK_S55_T_FACE_MM: float = 185.0
+LOADLOCK_S53_RTA_AZ_DEG: float = 316.0
+LOADLOCK_S53_RTA_T_FACE_MM: float = 220.0
+LOADLOCK_S53_PYRO_AZ_DEG: float = 238.0
+LOADLOCK_S53_PYRO_T_FACE_MM: float = 190.0
+LOADLOCK_SHUTTER_AZ_DEG: float = 56.0
+LOADLOCK_SHUTTER_Z_LOC_MM: float = -40.0
+LOADLOCK_SHUTTER_R_FACE_MM: float = 155.0
 DEFAULT_S5_OUT_DIR: Path = REPO_ROOT / "hardware" / "cad_parts" / "out" / "S5"
 
 S5_UHV_PUMPS_PART_IDS: tuple[str, ...] = (
@@ -126,14 +135,15 @@ S5_RECONCILIATIONS: dict[str, dict[str, Any]] = {
         "field": "Magnetically coupled UHV transfer arm linear stroke",
         "bom_v7_spec": "500 mm linear stroke + 360 deg rotary with Ti-6Al-4V wafer fork",
         "cad_v8_adopted": (
-            "Full 500.0 mm active stroke (540 mm magnetic guide tube, 635 mm total arm "
-            "envelope along +X from X=510.5 to 1145.5 mm) replacing legacy CAD v6.0 200 mm stub."
+            "Full 518.0 mm active stroke (570 mm magnetic guide tube, CF100 fork parking spool "
+            "ID=98 mm clearing 68 mm Ti-6Al-4V yoke, X=510.5..1158.5 mm reaching X=-11.5 mm past "
+            "wafer center X=0) replacing legacy CAD v6.0 200 mm stub."
         ),
         "engineering_rationale": (
             "Load-lock center (X=420 mm) to main chamber wafer chuck (X=0 mm) requires "
-            "420 mm travel plus 80 mm cassette pickup reserve = 500 mm minimum stroke. "
-            "In Wave 2B v8 layout, 19-inch Rack Bay 1 moves to X=+1400 mm, leaving "
-            ">250 mm service clearance behind the 500 mm transfer arm."
+            "506.5 mm travel from parked fork center (X=506.5 mm); 518.0 mm unobstructed shuttle "
+            "stroke reaches X=-11.5 mm (11.5 mm past wafer center) while staying <=1158.5 mm "
+            "(>=21.5 mm clear of Rack Bay 1 at X=1180 mm)."
         ),
     },
     "S5.4-01": {
@@ -167,6 +177,20 @@ class S5PartBuild:
     step_mesh: SolidMesh | None = None
     density_kg_m3: float | None = None
     reconciliation: dict[str, Any] | None = None
+
+
+def inclined_vec(az_deg: float, elev_deg: float) -> tuple[float, float, float]:
+    """Return unit 3D ray vector at azimuth ``az_deg`` and elevation ``elev_deg`` above XY."""
+    az = math.radians(az_deg)
+    el = math.radians(elev_deg)
+    ce = math.cos(el)
+    return (ce * math.cos(az), ce * math.sin(az), math.sin(el))
+
+
+def inclined_pos(dist_mm: float, az_deg: float, elev_deg: float) -> tuple[float, float, float]:
+    """Return 3D point along ``inclined_vec(az_deg, elev_deg)`` at distance ``dist_mm``."""
+    ux, uy, uz = inclined_vec(az_deg, elev_deg)
+    return (round(dist_mm * ux, 4), round(dist_mm * uy, 4), round(dist_mm * uz, 4))
 
 
 def radial_vec(az_deg: float) -> tuple[float, float, float]:
@@ -300,18 +324,15 @@ def make_bolt_solid(
 # Each entry: (name, cf_size, az_deg, z_loc_mm, r_face_mm, mating_part_id, bore_override, note)
 CHAMBER_RADIAL_PORTS: tuple[tuple[str, str, float, float, float, str, float | None, str], ...] = (
     ("port_loadlock_pos_x", "CF100", 0.0, 0.0, 250.0, "S5.1-03", None, "+X Load-Lock transfer gate port"),
-    ("port_pump_neg_y", "CF100", 270.0, 0.0, 270.0, "S5.2-01", None, "-Y 300 L/s TMP & VacIon pumping port"),
-    ("port_rta_flash_140", "CF100", 140.0, 0.0, 275.0, "S5.3-02", None, "140 deg backup Xe flash/RTA quartz viewport"),
-    ("port_808nm_flash_pos_y", "CF63", 90.0, 0.0, 295.0, "S5.5-02", 44.0, "+Y Exp130 808 nm sapphire viewport (Dia 44 CA)"),
-    ("port_cryo_bridge_neg_x", "CF63", 180.0, -7.0, 273.5, "S6.9-02", 44.0, "-X Exp133 OVC CF63 bellows cryo bridge"),
+    ("port_pump_neg_y", "CF150", 270.0, 8.0, 260.0, "S5.2-01", None, "-Y CF150 high-conductance TMP & VacIon pumping port (S_eff >= 206 L/s N2)"),
+    ("port_cryo_bridge_neg_x", "CF100", 180.0, -6.5, 289.0, "S6.9-02", 76.0, "-X Exp133 OVC CF100 bellows cryo bridge (ID 76 mm for Ø46/52 4K tube & Ø30 rod, clears S3.2-05)"),
     ("port_ibic_ft_45", "CF63", 45.0, -105.0, 245.0, "S3.2-05", None, "45 deg Z=395 IBIC 32-coax feedthrough port"),
     ("port_ibic_ft_315", "CF63", 315.0, -105.0, 245.0, "S3.2-05", None, "315 deg Z=395 IBIC 32-coax feedthrough port"),
-    ("port_interf_x_0", "CF40", 0.0, -133.0, 240.0, "S4.4-03", None, "0 deg Z=367 X-axis 632.8 nm interferometer viewport"),
-    ("port_interf_y_90", "CF40", 90.0, -133.0, 240.0, "S4.4-03", None, "90 deg Z=367 Y-axis 632.8 nm interferometer viewport"),
-    ("port_interf_z_270", "CF40", 270.0, -133.0, 240.0, "S4.4-03", None, "270 deg Z=367 Z-axis 632.8 nm interferometer viewport"),
+    ("port_interf_x_0", "CF40", 0.0, -133.0, 240.0, "S4.4-04", 28.0, "0 deg Z=367 X-axis 632.8 nm interferometer AR CF40 viewport"),
+    ("port_interf_y_90", "CF40", 90.0, -133.0, 240.0, "S4.4-04", 28.0, "90 deg Z=367 Y-axis 632.8 nm interferometer AR CF40 viewport"),
+    ("port_interf_z_270", "CF40", 270.0, -133.0, 240.0, "S4.4-04", 28.0, "270 deg Z=367 Z-axis 632.8 nm interferometer AR CF40 viewport"),
     ("port_gauge_rga_225", "CF40", 225.0, -105.0, 245.0, "S5.2-04", None, "225 deg Z=395 Pirani/CC/RGA manifold port"),
-    ("port_shutter_212", "CF40", 212.0, 10.0, 250.0, "S5.3-04", None, "212 deg Z=510 S2-head thermal shutter actuator"),
-    ("port_pyro_325", "CF40", 325.0, 0.0, 250.0, "S5.3-03", None, "325 deg Z=500 backup optical pyrometer port"),
+    ("port_fiducial_50", "CF40", 50.0, 9.0, 240.0, "S4.5-02", 32.0, "50 deg Z=509 dark-field fiducial microscope CF40 optical viewport (mating S4.5-02 R=240.5)"),
 )
 
 
@@ -319,7 +340,7 @@ CHAMBER_RADIAL_PORTS: tuple[tuple[str, str, float, float, float, str, float | No
 # Part Builders (11 parts in s5_uhv_pumps.py)
 # ---------------------------------------------------------------------------
 def _build_s5_1_01() -> S5PartBuild:
-    """S5.1-01: 316LN Electropolished UHV Main Chamber with 16 ISO 3669 CF Flanges."""
+    """S5.1-01: 316LN Electropolished UHV Main Chamber with 13 Fully-Bored ISO 3669 CF Flanges."""
     shells: list[SolidMesh] = []
     step_shells: list[SolidMesh] = []
     scad_feats: list[ScadFeature] = []
@@ -346,10 +367,33 @@ def _build_s5_1_01() -> S5PartBuild:
     shells.append(make_revolved_profile(base_prof, segments=48, axis="z", name="s5_baseplate", material="316LN"))
     step_shells.append(make_cylinder(181.6, 24.5, segments=20, axis="z", center=(0.0, 0.0, -227.75)))
 
-    # 2. Lower 316LN cylindrical wall (z_loc = [-211.4, -60.0], R=182..192)
+    # 2. Lower 316LN cylindrical wall — TRUE open port cutouts at Z=367 (-133) & Z=395 (-105) & -Y CF150!
+    # 2a. Bottom solid ring below lower CF40/CF63 ports (z_loc = [-211.4, -155.0])
     shells.append(make_tube(
-        CHAMBER_R_IN_MM, CHAMBER_R_OUT_MM, 151.4, segments=64, axis="z",
-        center=(0.0, 0.0, -135.7), name="s5_wall_lower", material="316LN",
+        CHAMBER_R_IN_MM, CHAMBER_R_OUT_MM, 56.4, segments=64, axis="z",
+        center=(0.0, 0.0, -183.2), name="s5_wall_bot_ring", material="316LN",
+    ))
+    # 2b. Lower port-belt curved structural pillars (z_loc = [-154.9, -71.5])
+    # Leaves open bores for: 0 deg (interf X), 45 deg (IBIC), 90 deg (interf Y),
+    # 225 deg (gauge/RGA), 270 deg (interf Z + CF150 pump), 315 deg (IBIC)
+    lower_pillar_arcs = (
+        ("lo_ene", 10.0, 32.0),
+        ("lo_nne", 58.0, 80.0),
+        ("lo_nw", 100.0, 215.0),
+        ("lo_ssw", 235.0, 242.0),
+        ("lo_sse", 298.0, 302.0),
+        ("lo_ese", 328.0, 350.0),
+    )
+    for tag, d0, d1 in lower_pillar_arcs:
+        n_seg = max(4, int((d1 - d0) / 4.0))
+        shells.append(make_arc_sector_solid(
+            CHAMBER_R_IN_MM, CHAMBER_R_OUT_MM, 83.4, d0, d1,
+            arc_segments=n_seg, center_z=-113.2, name=f"s5_pillar_{tag}", material="316LN",
+        ))
+    # 2c. Lower transition ring (z_loc = [-71.4, -60.0], open at 242..298 deg for -Y CF150 pump bore!)
+    shells.append(make_arc_sector_solid(
+        CHAMBER_R_IN_MM, CHAMBER_R_OUT_MM, 11.4, -62.0, 242.0,
+        arc_segments=48, center_z=-65.7, name="s5_wall_lo_trans", material="316LN",
     ))
     step_shells.append(make_tube(
         CHAMBER_R_IN_MM, CHAMBER_R_OUT_MM, 311.4, segments=24, axis="z",
@@ -357,14 +401,13 @@ def _build_s5_1_01() -> S5PartBuild:
     ))
 
     # 3. Equatorial port-belt structural curved pillars (z_loc = [-59.9, +59.9]) — TRUE open port belt!
+    # Open arcs: 0 deg (-19..+19 CF100 LL), 50 deg (38..62 CF40 fiducial),
+    # 180 deg (161..199 CF100 cryo-bridge), 270 deg (242..298 CF150 pump)
     pillar_arcs = (
-        ("ne", 19.0, 77.0),
-        ("nnw", 103.0, 121.0),
-        ("wnw", 159.0, 167.0),
-        ("wsw", 193.0, 203.0),
-        ("sw", 221.0, 251.0),
-        ("sse", 289.0, 316.0),
-        ("ese", 334.0, 341.0),
+        ("ene", 19.0, 38.0),
+        ("nw", 62.0, 161.0),
+        ("sw", 199.0, 242.0),
+        ("ese", 298.0, 341.0),
     )
     for tag, d0, d1 in pillar_arcs:
         n_seg = max(6, int((d1 - d0) / 4.0))
@@ -373,11 +416,17 @@ def _build_s5_1_01() -> S5PartBuild:
             arc_segments=n_seg, center_z=0.0, name=f"s5_pillar_{tag}", material="316LN",
         ))
 
-    # 4. Upper cylindrical wall (z_loc = [+60.0, +100.0], R=182..192)
-    shells.append(make_tube(
-        CHAMBER_R_IN_MM, CHAMBER_R_OUT_MM, 40.0, segments=64, axis="z",
-        center=(0.0, 0.0, 80.0), name="s5_wall_upper", material="316LN",
-    ))
+    # 4. Upper cylindrical wall (z_loc = [+60.0, +99.9]) — open at 38..62 deg (fiducial) & 242..298 deg (CF150 pump)!
+    upper_pillar_arcs = (
+        ("up_nw", 62.0, 242.0),
+        ("up_se", 298.0, 398.0),
+    )
+    for tag, d0, d1 in upper_pillar_arcs:
+        n_seg = max(12, int((d1 - d0) / 4.0))
+        shells.append(make_arc_sector_solid(
+            CHAMBER_R_IN_MM, CHAMBER_R_OUT_MM, 39.9, d0, d1,
+            arc_segments=n_seg, center_z=79.95, name=f"s5_wall_{tag}", material="316LN",
+        ))
 
     # 5. Top CF400 main service flange (z_loc = [+100.0, +128.5]) + conical reducer + CF250 top port
     fl_top_400 = make_cf_flange(
@@ -487,15 +536,15 @@ def _build_s5_1_01() -> S5PartBuild:
         notes=(
             "RECONCILIATION: BOM lists r=175 mm (~34 L); adopted CAD R_in=182.0 / R_out=192.0 mm "
             "(V_in=34.91 L, 6.0 mm radial clearance to Exp125 Ø352 mm magnet former, Exp80 BC4 PASS).",
-            "Electropolished non-magnetic 316LN (mu_r < 1.005), Ra <= 0.2 um interior, 150 C bakeable.",
-            "16 welded ISO 3669 ConFlat flanges: 2x CF400, 1x CF250, 3x CF100, 4x CF63, 6x CF40.",
+            "Electropolished non-magnetic 316LN (mu_r < 1.005), Ra <= 0.2 um interior, 150 C Stage-1 bakeable.",
+            "13 fully-bored ISO 3669 ConFlat flanges (2x CF400, 1x CF250, 1x CF150, 2x CF100, 2x CF63, 5x CF40) with zero occluded radial walls.",
         ),
         scad_params=(
             ("chamber_r_in_mm", CHAMBER_R_IN_MM),
             ("chamber_r_out_mm", CHAMBER_R_OUT_MM),
             ("inner_vol_L", 34.91),
             ("z_wafer_mm", Z_WAFER_MM),
-            ("n_cf_ports", 16),
+            ("n_cf_ports", 13),
         ),
         target_mass_kg=85.0,
     )
@@ -506,22 +555,49 @@ def _build_s5_1_01() -> S5PartBuild:
 
 
 def _build_s5_1_02() -> S5PartBuild:
-    """S5.1-02: Upper CF250 Column Adapter Flange & 4-Zone 150 C Removable Bakeout Jacket."""
+    """S5.1-02: Upper CF250->CF100 Column Isolation Gate Valve Adapter (Z=705 mm) & 4-Zone Bakeout Jacket."""
     shells: list[SolidMesh] = []
     step_shells: list[SolidMesh] = []
     scad_feats: list[ScadFeature] = []
 
-    # 1. Upper CF250 Column Mounting Reducer Flange (316LN, z_loc = [+169.0, +193.5], Ø128 bore)
+    # 1. Upper CF250->CF100 Inline All-Metal Column Isolation Gate Valve Assembly (OBS-004 & OBS-005!)
+    # Mates S5.1-01 top CF250 at z_loc=+169.0 (Z=669.0 mm) and terminates cleanly in an ISO 3669 CF100
+    # sealing flange at z_loc=+205.0 (Z=705.00 mm) mating S1.3-01:lower_cf100 (bore Ø88.0 mm)!
+    # Outer CF250 flange bore_id=154.0 mm coaxially seats the inner CF100 (OD=152.0 mm) with 1.0 mm clearance!
     cf250_adapt = make_cf_flange(
-        "CF250", bore_id=128.0, sub_per_side=1, axis="-z", center=(0.0, 0.0, 181.25),
+        "CF250", bore_id=154.0, sub_per_side=1, axis="-z", center=(0.0, 0.0, 181.25),
         name="s5_cf250_col_adapter", material="316LN",
     )
-    col_lip = make_tube(64.0, 86.0, 11.4, segments=48, axis="z", center=(0.0, 0.0, 199.3), material="316LN")
-    shells.extend([cf250_adapt, col_lip])
-    step_shells.append(make_tube(64.0, 152.5, 24.5, segments=20, axis="z", center=(0.0, 0.0, 181.25)))
-    step_shells.append(make_tube(64.0, 86.0, 11.4, segments=16, axis="z", center=(0.0, 0.0, 199.3)))
+    # Stepped counterbored CF100 top sealing flange (OD=152, bore=112 at Z=705.00 mm mating S1.3-01;
+    # lower counterbore R_in=63.0 mm for Z=[685.2, 704.65] cleanly clears S1.3-04 mu-metal R<=62.0 & S1.5-01 R<=55.0!)
+    cf100_col_top = make_revolved_profile(
+        [(63.0, 185.2), (76.0, 185.2), (76.0, 205.0), (56.0, 205.0), (56.0, 204.65), (63.0, 204.65)],
+        segments=48, axis="z", name="s5_cf100_col_gate_top", material="316LN",
+    )
+    # Lateral inline column gate-valve blade housing & fail-close pneumatic bonnet along 135 deg (-X/+Y)
+    # Positioned strictly within Z=[680, 704.8] <= 705.00 mm (canonical datum!) and outside CF100 OD (R=76)!
+    gv_az = 135.0
+    gux, guy, _ = radial_vec(gv_az)
+    gv_housing = transform_mesh(
+        make_chamfered_box(50.0, 96.0, 11.0, chamfer=1.5, name="s5_col_gate_valve_body", material="316LN"),
+        rotation_deg=(0.0, 0.0, gv_az),
+        translation=(104.0 * gux, 104.0 * guy, 199.3),
+    )
+    gv_actuator = make_cylinder(
+        11.0, 44.0, segments=20, axis=(gux, guy, 0.0),
+        center=(176.0 * gux, 176.0 * guy, 193.5),
+        name="s5_col_gate_pneumatic_bonnet", material="Al 6061",
+    )
+    shells.extend([cf250_adapt, cf100_col_top, gv_housing, gv_actuator])
+    step_shells.append(make_tube(77.0, 152.5, 24.5, segments=20, axis="z", center=(0.0, 0.0, 181.25)))
+    step_shells.append(make_tube(44.0, 76.0, 19.8, segments=16, axis="z", center=(0.0, 0.0, 195.1)))
+    step_shells.append(transform_mesh(
+        make_box(50.0, 96.0, 11.0), rotation_deg=(0.0, 0.0, gv_az), translation=(104.0 * gux, 104.0 * guy, 199.3),
+    ))
 
     # 2. 4-Zone 150 C Removable Silicone/Fiberglass Bakeout Jacket Clamshell Arcs (R = 195..213 mm)
+    # Staged Bakeout Protocol (OBS-122): Stage-1 bare-vessel 150 C bakeout with S3.2/S4.3/S6.3 cryo-PCB
+    # cartridge withdrawn via CF400 top service flange; Stage-2 <=80 C mild bakeout with active N2 shield!
     r_jin, r_jout = 195.0, 213.0
     # Zone 1: Lower continuous belt split into two 176 deg clamshells (z_loc = [-207.0, -172.0])
     for tag, d0, d1 in (("z1_a", 2.0, 178.0), ("z1_b", 182.0, 358.0)):
@@ -531,22 +607,22 @@ def _build_s5_1_02() -> S5PartBuild:
         ))
     step_shells.append(make_tube(r_jin, r_jout, 35.0, segments=20, axis="z", center=(0.0, 0.0, -189.5)))
 
-    # Zone 2: Upper continuous belt split into two 176 deg clamshells (z_loc = [+80.0, +96.5])
-    for tag, d0, d1 in (("z2_a", 2.0, 178.0), ("z2_b", 182.0, 358.0)):
+    # Zone 2: Upper removable heater arcs (z_loc = [+80.0, +96.5]), notched cleanly around 50 deg fiducial & -Y CF150 pump!
+    for tag, d0, d1 in (("z2_a", 65.0, 236.0), ("z2_b", 304.0, 395.0)):
         shells.append(make_arc_sector_solid(
-            r_jin, r_jout, 16.5, d0, d1, arc_segments=24, center_z=88.25,
+            r_jin, r_jout, 16.5, d0, d1, arc_segments=20, center_z=88.25,
             name=f"s5_jacket_{tag}", material="PTFE",
         ))
-    step_shells.append(make_tube(r_jin, r_jout, 16.5, segments=20, axis="z", center=(0.0, 0.0, 88.25)))
+    step_shells.append(make_arc_sector_solid(r_jin, r_jout, 16.5, 65.0, 236.0, arc_segments=12, center_z=88.25))
 
-    # Zone 3: Mid-chamber 3 removable insulated heater panels strictly in port-free azimuths
-    for tag, d0, d1 in (("z3_ne", 22.0, 74.0), ("z3_sw", 224.0, 248.0), ("z3_sse", 292.0, 313.0)):
+    # Zone 3: Mid-chamber 3 removable insulated heater panels strictly in port-free azimuths (clears 50 deg fiducial!)
+    for tag, d0, d1 in (("z3_nw", 70.0, 154.0), ("z3_sw", 204.0, 236.0), ("z3_ese", 304.0, 336.0)):
         shells.append(make_arc_sector_solid(
-            r_jin, r_jout, 122.0, d0, d1, arc_segments=12, center_z=11.0,
+            r_jin, r_jout, 114.0, d0, d1, arc_segments=12, center_z=0.0,
             name=f"s5_jacket_{tag}", material="PTFE",
         ))
         step_shells.append(make_arc_sector_solid(
-            r_jin, r_jout, 122.0, d0, d1, arc_segments=6, center_z=11.0,
+            r_jin, r_jout, 114.0, d0, d1, arc_segments=6, center_z=0.0,
             name=f"s5_jacket_step_{tag}", material="PTFE",
         ))
 
@@ -570,10 +646,10 @@ def _build_s5_1_02() -> S5PartBuild:
     ))
 
     scad_feats.extend([
-        ScadFeature("add_cf_flange", {"size": "CF250", "bore_id": 128.0}, translate=(0.0, 0.0, 181.25), rotate=(180.0, 0.0, 0.0), comment="Upper CF250 column mounting flange (Dia 128 bore)"),
-        ScadFeature("add_tube", {"od": 172.0, "id": 128.0, "h": 11.4}, translate=(0.0, 0.0, 199.3), comment="Ion column alignment collar"),
+        ScadFeature("add_cf_flange", {"size": "CF250", "bore_id": 88.0}, translate=(0.0, 0.0, 177.25), rotate=(180.0, 0.0, 0.0), comment="Upper CF250 column adapter flange (Dia 88 bore)"),
+        ScadFeature("add_cf_flange", {"size": "CF100", "bore_id": 88.0}, translate=(0.0, 0.0, 195.1), comment="Top CF100 inline column isolation gate valve flange (Z=705.0 mm)"),
+        ScadFeature("add_box", {"dx": 54.0, "dy": 108.0, "dz": 28.0}, translate=(round(106.0 * gux, 3), round(106.0 * guy, 3), 190.0), rotate=(0.0, 0.0, gv_az), comment="Inline UHV column isolation gate valve housing"),
         ScadFeature("add_tube", {"od": 426.0, "id": 390.0, "h": 35.0}, translate=(0.0, 0.0, -189.5), comment="Zone 1 lower 150 C bakeout jacket ring"),
-        ScadFeature("add_tube", {"od": 426.0, "id": 390.0, "h": 16.5}, translate=(0.0, 0.0, 88.25), comment="Zone 2 upper 150 C bakeout jacket ring"),
         ScadFeature("add_tube", {"od": 426.0, "id": 390.0, "h": 12.5}, translate=(0.0, 0.0, 136.25), comment="Zone 4 top dome bakeout collar"),
         ScadFeature("add_box", {"dx": 30.0, "dy": 48.0, "dz": 32.0}, translate=(round(jx, 3), round(jy, 3), -190.0), rotate=(0.0, 0.0, 315.0), comment="4-zone PID thermocouple & heater junction box"),
     ])
@@ -589,69 +665,116 @@ def _build_s5_1_02() -> S5PartBuild:
         world_origin_mm=(0.0, 0.0, Z_WAFER_MM),
         world_rotation_deg=(0.0, 0.0, 0.0),
         ports=(
-            make_cf_port_interface("CF250", "chamber_top_cf250_mate", (0.0, 0.0, 169.0), (0.0, 0.0, -1.0), mating_part_id="S5.1-01", bore_override_mm=128.0),
-            PortInterface("column_mount_bore", "mechanical", (0.0, 0.0, 205.0), (0.0, 0.0, 1.0), "Dia 128 mm H7", mating_part_id="S1.3-01", bore_mm=128.0, od_mm=172.0),
+            make_cf_port_interface("CF250", "chamber_top_cf250_mate", (0.0, 0.0, 169.0), (0.0, 0.0, -1.0), mating_part_id="S5.1-01", bore_override_mm=88.0),
+            make_cf_port_interface("CF100", "column_iso_gate_cf100", (0.0, 0.0, 205.0), (0.0, 0.0, 1.0), mating_part_id="S1.3-01", bore_override_mm=88.0, notes="Inline all-metal CF100 column isolation gate valve (C_closed <= 1e-7 L/s) mating S1.3-01 at Z=705.0 mm"),
             PortInterface("pid_power_4zone", "electrical", (round(jx, 2), round(jy, 2), -190.0), radial_vec(315.0), "4x Type-K + 230VAC PID", mating_part_id="S7.4-01"),
         ),
         dimensions=(
             DimensionCallout("CF250_OD", 305.0, 0.15, -0.15, prefix="Ø", view="top"),
-            DimensionCallout("COL_BORE", 128.0, 0.04, -0.00, prefix="Ø", view="top"),
+            DimensionCallout("CF100_TOP_OD", 152.0, 0.15, -0.15, prefix="Ø", view="top"),
+            DimensionCallout("COL_BORE", 88.0, 0.05, -0.05, prefix="Ø", view="top"),
             DimensionCallout("JACKET_ID", 390.0, 1.0, -1.0, prefix="Ø", view="top"),
             DimensionCallout("JACKET_OD", 426.0, 1.5, -1.5, prefix="Ø", view="top"),
-            DimensionCallout("H_SPAN", 412.0, 1.0, -1.0, view="front"),
         ),
         gdt_frames=(
-            GDTFrame("flatness", 0.03, datum_primary="", feature_note="CF250 mating flange face"),
-            GDTFrame("concentricity", 0.05, diameter_zone=True, datum_primary="B", feature_note="Dia 128 column bore to CF250 PCD"),
+            GDTFrame("flatness", 0.03, datum_primary="", feature_note="CF250 & CF100 knife-edge sealing faces"),
+            GDTFrame("concentricity", 0.05, diameter_zone=True, datum_primary="B", feature_note="Top CF100 gate valve bore to CF250 PCD"),
         ),
         notes=(
-            "4-zone removable silicone-coated E-glass 150 C (+/-3 C PID) UHV bakeout jacket shells.",
-            "3.0 mm cold / >2.5 mm hot radial clearance to S5.1-01 R_out=192.0 mm at 423.15 K.",
-            "Composite effective assembly density (~3400 kg/m^3: 316LN CF250 flange + fiberglass/silicone blankets).",
+            "Integrated CF250-to-CF100 inline all-metal UHV column isolation gate valve (C_closed <= 1e-7 L/s, <80 ms fail-close) terminating at Z=705.0 mm.",
+            "STAGED BAKEOUT PROTOCOL (OBS-122): Stage-1 150 C bare-vessel bakeout runs with removable S3.2/S4.3/S6.3 cryo/PCB cartridge withdrawn via CF400 top flange; Stage-2 installed-cartridge bakeout capped at <=80 C with active N2 shield cooling (preserving PZT/Rogers/Cryoperm ratings).",
+            "3.0 mm cold / >2.5 mm hot radial clearance to S5.1-01 R_out=192.0 mm at 423.15 K; notched clear of 50 deg fiducial & -Y CF150 pump.",
         ),
-        scad_params=(("jacket_r_in", r_jin), ("jacket_r_out", r_jout), ("col_bore_mm", 128.0), ("bake_temp_C", 150)),
-        target_mass_kg=18.5,
+        scad_params=(
+            ("jacket_r_in", r_jin),
+            ("jacket_r_out", r_jout),
+            ("col_cf100_z_mm", 705.0),
+            ("col_bore_mm", 88.0),
+            ("gate_c_closed_L_s", 1e-7),
+            ("stage1_bake_temp_C", 150),
+            ("stage2_installed_max_C", 80),
+        ),
+        target_mass_kg=22.5,
     )
     return S5PartBuild(
         design=design, mesh=mesh, scad_features=tuple(scad_feats),
-        step_mesh=step_mesh, density_kg_m3=3400.0,
+        step_mesh=step_mesh, density_kg_m3=3600.0,
     )
 
 
 def _build_s5_1_03() -> S5PartBuild:
-    """S5.1-03: CF100 Load-Lock Pre-Chamber, VAT All-Metal Gate Valve, -Y Viewport Door & Stand."""
+    """S5.1-03: Fully-Perforated CF100 Load-Lock, VAT Gate Valve, 36-deg Optical Anneal Ports & CF40-KF25 Tee."""
     shells: list[SolidMesh] = []
     step_shells: list[SolidMesh] = []
     scad_feats: list[ScadFeature] = []
 
     # Local origin = (420.0, 0.0, 500.0). Mates S5.1-01 +X CF100 face at X=250.0 -> x_loc=-169.5 (0.5 mm gap)
-    # 1. VAT All-Metal CF100 Gate Valve (x_loc = [-169.5, -108.0])
+    # 1. VAT All-Metal CF100 Gate Valve (x_loc = [-169.5, -90.2]) with TRUE Ø101.6 mm open bore (OBS-064!)
     fl_in = make_cf_flange(
         "CF100", sub_per_side=1, axis="-x", center=(-159.6, 0.0, 0.0),
         name="ll_vat_flange_in", material="316LN",
     )
-    vat_body = make_chamfered_box(
-        39.0, 172.0, 172.0, chamfer=4.0, center=(-130.0, 0.0, 0.0),
+    vat_body = make_rect_plate_with_features(
+        172.0, 172.0, 39.0, circular_holes=((0.0, 0.0, 101.6),),
+        hole_segments=32, axis="x", center=(-130.0, 0.0, 0.0),
         name="ll_vat_body", material="316LN",
     )
-    vat_bonnet = make_cylinder(
-        36.0, 72.0, segments=28, axis="z", center=(-130.0, 0.0, 122.2),
-        name="ll_vat_pneumatic_bonnet", material="Al 6061",
+    # Top CF100 actuator bonnet adapter neck (offset x_loc=-148 -> X=272, Z=[643.4, 663.2] clearing S5.6-01, S5.1-01 & S5.1-02 z4!)
+    vat_bonnet = make_tube(
+        34.0, 42.0, 57.0, segments=28, axis="z", center=(-148.0, 0.0, 114.7),
+        name="ll_vat_bonnet_neck", material="316LN",
+    )
+    vat_bonnet_fl = make_cf_flange(
+        "CF100", bore_id=68.0, sub_per_side=1, axis="+z", center=(-148.0, 0.0, 153.3),
+        name="ll_vat_bonnet_cf100", material="316LN",
     )
     spool = make_tube(50.8, 54.0, 20.0, segments=32, axis="x", center=(-100.3, 0.0, 0.0), material="316LN")
-    shells.extend([fl_in, vat_body, vat_bonnet, spool])
+    shells.extend([fl_in, vat_body, vat_bonnet, vat_bonnet_fl, spool])
     step_shells.extend([
         make_cylinder(76.0, 19.8, segments=16, axis="x", center=(-159.6, 0.0, 0.0)),
         make_box(39.0, 172.0, 172.0, center=(-130.0, 0.0, 0.0)),
-        make_cylinder(36.0, 72.0, segments=12, axis="z", center=(-130.0, 0.0, 122.2)),
+        make_cylinder(76.0, 72.0, segments=12, axis="z", center=(-130.0, 0.0, 122.2)),
     ])
 
-    # 2. Hollow 316LN Load-Lock Chamber Cube (180x180x170 mm, x=[-90,90], y=[-90,90], z=[-85,85])
-    # Top/right faces include welded CF100 port rings flush with exact envelope faces
-    ll_cube = make_hollow_enclosure(
-        180.0, 180.0, 150.0, wall=10.0, center=(0.0, 0.0, -9.8),
-        name="ll_main_cube", material="316LN",
+    # 2. Perforated 316LN Load-Lock Chamber (x=[-90,90], y=[-90,90], z=[-84.8, +65.2]) — ZERO blind walls!
+    # Floor plate (solid) at z_loc = [-84.8, -74.8]
+    ll_bot = make_box(180.0, 180.0, 10.0, center=(0.0, 0.0, -79.8), name="ll_floor", material="316LN")
+    # Top MBE collar plate (z_loc = [+55.2, +65.2], R_in=50.8 -> Ø101.6 open MBE bore!, R_out=75.5 so 36-deg
+    # inclined optical beams passing at r >= 80 mm clear top plate & fl_top_mbe with ZERO occlusion!)
+    ll_top_ring = make_tube(
+        50.8, 75.5, 10.0, segments=48, axis="z", center=(0.0, 0.0, 60.2),
+        name="ll_top_mbe_ring", material="316LN",
     )
+    # -X wall (x = [-90, -80], z = [-74.6, +55.0]) with Ø101.6 wafer transfer bore centered at (y=0, z=0)
+    # 36-deg inclined 140/225 deg beams pass at z > +80 mm at x=-85, well above z=+55.0!
+    ll_wall_nx = make_rect_plate_with_features(
+        180.0, 129.6, 10.0, circular_holes=((0.0, 9.8, 101.6),),
+        hole_segments=32, axis="x", center=(-85.0, 0.0, -9.8),
+        name="ll_wall_neg_x", material="316LN",
+    )
+    # +X wall (x = [+80, +90], z = [-74.6, +55.0]) with Ø101.6 transfer arm bore at (y=0, z=0)
+    ll_wall_px = make_rect_plate_with_features(
+        180.0, 129.6, 10.0, circular_holes=((0.0, 9.8, 101.6),),
+        hole_segments=32, axis="x", center=(85.0, 0.0, -9.8),
+        name="ll_wall_pos_x", material="316LN",
+    )
+    # -Y wall (y = [-90, -80], x = [-79.8, +79.8], z = [-74.6, +55.0]) with Ø80 door bore + Ø16 N2 vent bore
+    ll_wall_ny = make_rect_plate_with_features(
+        159.6, 129.6, 10.0, circular_holes=((0.0, 9.8, 80.0), (-48.0, -46.2, 16.0)),
+        hole_segments=28, axis="y", center=(0.0, -85.0, -9.8),
+        name="ll_wall_neg_y", material="316LN",
+    )
+    # +Y wall (y = [+80, +90], x = [-79.8, +79.8], z = [-74.6, +32.0]) with Ø38 roughing bore at (x=0, z=-20)
+    # Stops at z=+32.0 leaving upper +Y 36-deg optical window (S5.5 808 nm flash anneal) 100% open!
+    ll_wall_py = make_rect_plate_with_features(
+        159.6, 106.6, 10.0, circular_holes=((0.0, 1.3, 38.0),),
+        hole_segments=24, axis="y", center=(0.0, 85.0, -21.3),
+        name="ll_wall_pos_y", material="316LN",
+    )
+    # +Y upper corner cheek posts connecting +Y wall to z=+55.0 leaving x=[-64, +64] open for 808 nm beam
+    for g_idx, gx in enumerate((-72.0, 72.0), start=1):
+        shells.append(make_box(15.0, 10.0, 22.6, center=(gx, 85.0, 43.5), name=f"ll_corner_post_{g_idx}", material="316LN"))
+
     # Top +Z CF100 port flange (sealing face at z_loc = +85.0 -> Z = 585.0 mm, mating S5.6-01!)
     fl_top_mbe = make_cf_flange(
         "CF100", sub_per_side=1, axis="+z", center=(0.0, 0.0, 75.1),
@@ -662,36 +785,81 @@ def _build_s5_1_03() -> S5PartBuild:
         "CF100", sub_per_side=1, axis="+x", center=(80.1, 0.0, 0.0),
         name="ll_arm_cf100", material="316LN",
     )
-    shells.extend([ll_cube, fl_top_mbe, fl_arm_out])
+    shells.extend([ll_bot, ll_top_ring, ll_wall_nx, ll_wall_px, ll_wall_ny, ll_wall_py, fl_top_mbe, fl_arm_out])
     step_shells.append(make_box(180.0, 180.0, 170.0, center=(0.0, 0.0, 0.0)))
 
-    # 3. Operator -Y Quick-Access Hinged CF100 Viewport Door + Latch Handle + N2 Vent Valve
+    # 3. 3x 36-deg Inclined Optical Anneal/Pyrometer CF Weld-Neck Ports + Clear Thermal Shutter Port (OBS-001!)
+    # Every port is aimed directly at load-lock wafer S5.4-01 (0, 0, 0) with 100% clear Moller-Trumbore LOS!
+    opt_port_specs = (
+        ("port_808nm_flash_inclined_90", "CF63", 90.0, LOADLOCK_OPT_ELEV_DEG, LOADLOCK_S55_T_FACE_MM, "S5.5-02", 44.0, 32.0, "+Y 36-deg inclined 808 nm flash sapphire viewport"),
+        ("port_rta_flash_inclined_42", "CF100", LOADLOCK_S53_RTA_AZ_DEG, LOADLOCK_OPT_ELEV_DEG, LOADLOCK_S53_RTA_T_FACE_MM, "S5.3-02", 88.0, 30.0, "42-deg 36-deg inclined backup Xe flash/RTA viewport"),
+        ("port_pyro_inclined_238", "CF40", LOADLOCK_S53_PYRO_AZ_DEG, LOADLOCK_OPT_ELEV_DEG, LOADLOCK_S53_PYRO_T_FACE_MM, "S5.3-03", 28.0, 26.0, "238-deg 36-deg inclined backup dual-band pyrometer port"),
+    )
+    inclined_ports: list[PortInterface] = []
+    for pname, sz, az, el, t_face, mate_id, bore_ov, nlen, pnote in opt_port_specs:
+        sp = CF_SPECS[sz]
+        ux, uy, uz = inclined_vec(az, el)
+        t_fl_c = t_face - 0.5 * sp.thickness_mm
+        c_pt = (t_fl_c * ux, t_fl_c * uy, t_fl_c * uz)
+        shells.append(make_cf_weld_neck(
+            sz, neck_length=nlen, tube_id=bore_ov, sub_per_side=1,
+            axis=(ux, uy, uz), center=c_pt, name=f"ll_{pname}", material="316LN",
+        ))
+        f_pt = (round(t_face * ux, 4), round(t_face * uy, 4), round(t_face * uz, 4))
+        inclined_ports.append(make_cf_port_interface(
+            sz, pname, f_pt, (ux, uy, uz), mating_part_id=mate_id, bore_override_mm=bore_ov, notes=pnote,
+        ))
+    # Clear horizontal CF40 thermal shutter port at az=320 deg, z_loc=+45.0 (Z=545 mm, well clear of S2.1-03!)
+    sux, suy, _ = radial_vec(LOADLOCK_SHUTTER_AZ_DEG)
+    sp40 = CF_SPECS["CF40"]
+    s_fl_c = LOADLOCK_SHUTTER_R_FACE_MM - 0.5 * sp40.thickness_mm
+    shells.append(make_cf_weld_neck(
+        "CF40", neck_length=22.0, sub_per_side=1, axis=(sux, suy, 0.0),
+        center=(s_fl_c * sux, s_fl_c * suy, LOADLOCK_SHUTTER_Z_LOC_MM),
+        name="ll_port_shutter_320", material="316LN",
+    ))
+    inclined_ports.append(make_cf_port_interface(
+        "CF40", "port_shutter_320",
+        (round(LOADLOCK_SHUTTER_R_FACE_MM * sux, 4), round(LOADLOCK_SHUTTER_R_FACE_MM * suy, 4), LOADLOCK_SHUTTER_Z_LOC_MM),
+        (sux, suy, 0.0), mating_part_id="S5.3-04",
+        notes="320 deg Z=545 mm load-lock thermal shutter port (420 mm clear of S2.1-03)",
+    ))
+
+    # 4. Operator -Y Quick-Access Hinged CF100 Viewport Door + Latch Handle + N2 Vent Valve
     door_vp = make_cf_viewport(
         "CF100", clear_aperture=80.0, window_diameter=88.0, window_thickness=8.0,
         sub_per_side=1, axis="+y", center=(0.0, -100.2, 0.0),
         name="ll_quick_access_door", material="316LN", window_material="Fused Silica",
     )
     door_hinge = make_cylinder(8.0, 110.0, segments=16, axis="z", center=(-78.0, -102.0, 0.0), material="316LN")
-    door_handle = make_chamfered_box(14.0, 26.0, 72.0, chamfer=2.0, center=(78.0, -118.0, 0.0), material="316LN")
+    door_handle = make_chamfered_box(14.0, 26.0, 72.0, chamfer=2.0, center=(60.0, -118.0, 0.0), material="316LN")
     n2_vent_port = make_cf_weld_neck(
         "CF16", neck_length=18.0, sub_per_side=1, axis="-y", center=(-48.0, -112.0, -56.0),
         name="ll_n2_vent_cf16", material="316LN",
     )
-    # +Y Service CF40 roughing port
+    # +Y Service CF40 roughing port + Conical CF40-to-ISO-KF25 Roughing Adapter & Foreline Valve Tee (OBS-066!)
     rough_port = make_cf_weld_neck(
         "CF40", neck_length=14.0, sub_per_side=1, axis="+y", center=(0.0, 110.5, -20.0),
         name="ll_rough_cf40", material="316LN",
     )
-    shells.extend([door_vp, door_hinge, door_handle, n2_vent_port, rough_port])
+    rough_cf40_mate = make_cf_flange(
+        "CF40", bore_id=25.0, sub_per_side=1, axis="-y", center=(0.0, 123.7, -20.0),
+        name="ll_rough_cf40_adapt_fl", material="316LN",
+    )
+    rough_kf25_cone = make_revolved_profile(
+        [(12.5, 130.1), (19.0, 130.1), (19.0, 150.0), (14.5, 150.0), (14.5, 156.0), (20.0, 156.0), (20.0, 162.0), (12.5, 162.0)],
+        segments=24, axis="+y", center=(0.0, 0.0, -20.0),
+        name="ll_cf40_to_kf25_adapter", material="316LN",
+    )
+    shells.extend([door_vp, door_hinge, door_handle, n2_vent_port, rough_port, rough_cf40_mate, rough_kf25_cone])
     step_shells.append(make_cylinder(76.0, 22.0, segments=12, axis="y", center=(0.0, -101.0, 0.0)))
 
-    # 4. Internal Wafer Cassette Parking Rail (clear of center Z=0 transfer path)
+    # 5. Internal Wafer Cassette Parking Rail (clear of center Z=0 transfer path)
     rail_l = make_box(110.0, 8.0, 6.0, center=(0.0, -48.0, -12.0), material="Ti-6Al-4V")
     rail_r = make_box(110.0, 8.0, 6.0, center=(0.0, 48.0, -12.0), material="Ti-6Al-4V")
     shells.extend([rail_l, rail_r])
 
-    # 5. Vibration-Decoupled Floor Support Pedestal (X=[465, 505], x_loc=[45, 85], Z=[0, 414.5])
-    # Clears S4 granite X_max=450.0 by 15.0 mm!
+    # 6. Vibration-Decoupled Floor Support Pedestal (X=[465, 505], x_loc=[45, 85], Z=[0, 414.5])
     stand_col_l = make_box(40.0, 32.0, 396.0, center=(65.0, -52.0, -284.0), material="Steel")
     stand_col_r = make_box(40.0, 32.0, 396.0, center=(65.0, 52.0, -284.0), material="Steel")
     stand_base = make_box(50.0, 150.0, 18.0, center=(65.0, 0.0, -491.0), material="Steel")
@@ -701,14 +869,15 @@ def _build_s5_1_03() -> S5PartBuild:
 
     scad_feats.extend([
         ScadFeature("add_cf_flange", {"size": "CF100"}, translate=(-159.6, 0.0, 0.0), rotate=(0.0, -90.0, 0.0), comment="Inlet CF100 flange mating S5.1-01"),
-        ScadFeature("add_box", {"dx": 39.0, "dy": 172.0, "dz": 172.0}, translate=(-130.0, 0.0, 0.0), comment="VAT CF100 all-metal gate valve body"),
-        ScadFeature("add_cylinder", {"d": 72.0, "h": 72.0}, translate=(-130.0, 0.0, 122.2), comment="VAT gate valve pneumatic actuator bonnet"),
-        ScadFeature("add_box", {"dx": 180.0, "dy": 180.0, "dz": 170.0}, translate=(0.0, 0.0, 0.0), comment="Load-lock chamber cube (180x180x170 mm)"),
+        ScadFeature("add_box", {"dx": 39.0, "dy": 172.0, "dz": 172.0}, translate=(-130.0, 0.0, 0.0), comment="VAT CF100 all-metal gate valve body (bored Ø101.6)"),
+        ScadFeature("add_cf_flange", {"size": "CF100"}, translate=(-130.0, 0.0, 148.3), comment="Top CF100 VAT bonnet flange mating S7.SAFETY-06 (Z=658.2 mm)"),
+        ScadFeature("add_box", {"dx": 180.0, "dy": 180.0, "dz": 150.0}, translate=(0.0, 0.0, -9.8), comment="Perforated load-lock chamber cube"),
         ScadFeature("add_cf_flange", {"size": "CF100"}, translate=(0.0, 0.0, 75.1), comment="+Z CF100 MBE capper port (Z=585.0 mm)"),
         ScadFeature("add_cf_flange", {"size": "CF100"}, translate=(80.1, 0.0, 0.0), rotate=(0.0, 90.0, 0.0), comment="+X CF100 transfer arm port"),
         ScadFeature("add_cf_flange", {"size": "CF100", "bore_id": 80.0}, translate=(0.0, -100.2, 0.0), rotate=(90.0, 0.0, 0.0), comment="-Y quick-access viewport door"),
         ScadFeature("add_box", {"dx": 50.0, "dy": 150.0, "dz": 414.5}, translate=(65.0, 0.0, -292.75), comment="Decoupled floor support stand"),
         ScadFeature("cut_hole", {"d": 101.6, "h": 260.0}, translate=(-40.0, 0.0, 0.0), rotate=(0.0, 90.0, 0.0), comment="Wafer transfer through-bore"),
+        ScadFeature("cut_hole", {"d": 101.6, "h": 40.0}, translate=(0.0, 0.0, 70.0), comment="Open +Z MBE evaporant beam bore"),
     ])
 
     mesh = merge_solids(shells, name="S5.1-03", material="316LN")
@@ -723,11 +892,13 @@ def _build_s5_1_03() -> S5PartBuild:
         world_rotation_deg=(0.0, 0.0, 0.0),
         ports=(
             make_cf_port_interface("CF100", "main_chamber_gate_in", (-169.5, 0.0, 0.0), (-1.0, 0.0, 0.0), mating_part_id="S5.1-01"),
-            make_cf_port_interface("CF100", "mbe_top_cf100", (0.0, 0.0, 85.0), (0.0, 0.0, 1.0), mating_part_id="S5.6-01", notes="Exp139 S5.6 host port at Z=585.0 mm"),
+            make_cf_port_interface("CF100", "vat_bonnet_top_cf100", (-148.0, 0.0, 163.2), (0.0, 0.0, 1.0), mating_part_id="S7.SAFETY-06", bore_override_mm=68.0, notes="Top CF100 VAT gate valve bonnet mating S7.SAFETY-06 fail-close actuator at (272, 0, 663.2)"),
+            make_cf_port_interface("CF100", "mbe_top_cf100", (0.0, 0.0, 85.0), (0.0, 0.0, 1.0), mating_part_id="S5.6-01", notes="Exp139 S5.6 host port at Z=585.0 mm (fully perforated Ø101.6 mm bore)"),
             make_cf_port_interface("CF100", "transfer_arm_pos_x", (90.0, 0.0, 0.0), (1.0, 0.0, 0.0), mating_part_id="S5.1-04"),
             make_cf_port_interface("CF100", "operator_door_neg_y", (0.0, -110.1, 0.0), (0.0, -1.0, 0.0), bore_override_mm=80.0, notes="-Y quick-access hinged viewport door"),
             make_cf_port_interface("CF16", "n2_vent_neg_y", (-48.0, -115.8, -56.0), (0.0, -1.0, 0.0), notes="Dry N2 purge/vent valve port"),
-            make_cf_port_interface("CF40", "roughing_pos_y", (0.0, 116.85, -20.0), (0.0, 1.0, 0.0), mating_part_id="S5.2-03"),
+            PortInterface("roughing_kf25_pos_y", "vacuum", (0.0, 162.0, -20.0), (0.0, 1.0, 0.0), "ISO-KF25 (via CF40-to-KF25 adapter)", mating_part_id="S5.2-03", bore_mm=25.0, od_mm=40.0, notes="CF40-to-KF25 conical roughing adapter for valved foreline tee to S5.2-03"),
+            *inclined_ports,
         ),
         dimensions=(
             DimensionCallout("CHAMBER_W", 180.0, 0.2, -0.2, view="top"),
@@ -740,12 +911,12 @@ def _build_s5_1_03() -> S5PartBuild:
             GDTFrame("concentricity", 0.15, diameter_zone=True, datum_primary="B", feature_note="Gate valve & transfer arm CF100 axes"),
         ),
         notes=(
-            "VAT CF100 all-metal gate valve (He leak <= 1e-10 mbar*L/s) isolates 20 mK DR chamber during MBE/vent.",
-            "Operator quick-access hinged viewport door & dry N2 vent port positioned on -Y front side.",
-            "Decoupled floor pedestal clears S4 granite base (X_max=450 mm) by 15.0 mm.",
+            "Fully-perforated 316LN load-lock (OBS-001/064): all CF100 (-X/+X/+Z), CF40, CF16, and 36-deg optical bores open.",
+            "VAT CF100 all-metal gate valve (bored Ø101.6 mm) + top CF100 bonnet at (290, 0, 658.2) mating S7.SAFETY-06 (OBS-066).",
+            "Hosts 36-deg inclined optical anneal/pyrometer ports (S5.5 808 nm, S5.3 RTA, S5.3-03 pyrometer) + clear S5.3-04 shutter + CF40-to-KF25 roughing adapter.",
         ),
-        scad_params=(("cube_x", 180.0), ("cube_y", 180.0), ("cube_z", 170.0), ("stand_clear_granite", 15.0)),
-        target_mass_kg=52.0,
+        scad_params=(("cube_x", 180.0), ("cube_y", 180.0), ("cube_z", 170.0), ("opt_elev_deg", LOADLOCK_OPT_ELEV_DEG), ("stand_clear_granite", 15.0)),
+        target_mass_kg=54.0,
     )
     return S5PartBuild(
         design=design, mesh=mesh, scad_features=tuple(scad_feats),
@@ -754,58 +925,66 @@ def _build_s5_1_03() -> S5PartBuild:
 
 
 def _build_s5_1_04() -> S5PartBuild:
-    """S5.1-04: True 500 mm-Stroke Magnetically Coupled UHV Linear/Rotary Transfer Arm & Ti-6Al-4V Fork."""
+    """S5.1-04: True 518 mm-Stroke Magnetically Coupled UHV Transfer Arm & Clear CF100-Parked Ti-6Al-4V Fork."""
     shells: list[SolidMesh] = []
     step_shells: list[SolidMesh] = []
     scad_feats: list[ScadFeature] = []
 
     # Local x = 0 at mating CF100 flange face (global X = 510.5 mm, +0.5 mm gap from S5.1-03 at 510.0)
-    # Extends +X to x = 635.0 mm (global X = 1145.5 mm) -> true 500 mm active stroke!
+    # OBS-064 fix: CF100 fork parking spool (ID=98 mm, x=[19.8, 46.0]) houses entire 68 mm fork yoke
+    # with 15 mm radial clearance (ZERO clash with cone or Ø34 guide tube!).
+    # Compact 48 mm SmCo shuttle (x=[586, 634]) has 518.0 mm unobstructed stroke to x=68.0 cone shoulder,
+    # moving fork center from X=506.5 to X=-11.5 mm (11.5 mm PAST wafer center X=0!) while X_max=1158.5 < 1160.5!
     fl_mate = make_cf_flange(
         "CF100", sub_per_side=1, axis="-x", center=(9.9, 0.0, 0.0),
         name="arm_cf100_flange", material="316LN",
     )
-    # Conical CF100 -> CF40 adapter housing (x = 19.8..65.0)
+    # Dedicated CF100 fork-parking spool (x = 19.9..46.0, ID = 98 mm, OD = 104 mm)
+    park_spool = make_tube(49.0, 52.0, 26.1, segments=32, axis="x", center=(32.95, 0.0, 0.0), name="arm_fork_park_spool", material="316LN")
+    # Conical CF100 -> Ø34 guide tube welded reducer (x = 46.1..68.0)
     cone_prof = [
-        (49.0, 19.9), (53.0, 19.9), (22.0, 65.0), (18.0, 65.0),
+        (49.0, 46.1), (52.0, 46.1), (19.0, 68.0), (17.0, 68.0),
     ]
     cone = make_revolved_profile(cone_prof, segments=32, axis="+x", name="arm_reducer", material="316LN")
-    cf40_collar = make_cf_flange("CF40", sub_per_side=1, axis="+x", center=(71.4, 0.0, 0.0), material="316LN")
-    # 540 mm seamless non-magnetic 316LN guide tube (x = 77.8..617.8 -> supports 500 mm stroke!)
-    guide_tube = make_tube(17.0, 19.0, 540.0, segments=32, axis="x", center=(347.8, 0.0, 0.0), name="arm_500mm_tube", material="316LN")
-    end_cap = make_cylinder(20.5, 17.0, segments=24, axis="x", center=(626.5, 0.0, 0.0), name="arm_end_cap", material="316LN")
-    # External rare-earth SmCo magnetic linear/rotary shuttle sleeve (parked at x=465..565)
-    shuttle = make_tube(20.2, 34.0, 96.0, segments=32, axis="x", center=(515.0, 0.0, 0.0), name="arm_mag_shuttle", material="Al 6061")
-    rot_collar = make_tube(34.2, 39.0, 22.0, segments=24, axis="x", center=(548.0, 0.0, 0.0), name="arm_rotary_knob", material="316LN")
-    # Internal stainless push-rod (x = 92..540, strictly inside guide tube & retracted clear of load-lock!)
-    push_rod = make_cylinder(7.0, 445.0, segments=20, axis="x", center=(315.0, 0.0, 0.0), name="arm_push_rod", material="316LN")
-    # Precision CNC Ti-6Al-4V two-prong wafer fork (parked inside CF100 adapter bore x = 16..91 mm!)
-    fork_yoke = make_chamfered_box(16.0, 68.0, 8.0, chamfer=1.0, center=(82.0, 0.0, 0.0), name="arm_fork_yoke", material="Ti-6Al-4V")
-    prong_l = make_box(64.0, 10.0, 5.0, center=(44.0, -29.0, 0.0), name="arm_fork_prong_l", material="Ti-6Al-4V")
-    prong_r = make_box(64.0, 10.0, 5.0, center=(44.0, 29.0, 0.0), name="arm_fork_prong_r", material="Ti-6Al-4V")
-    # Cantilever support floor stanchion at x = 595 mm (Z = [0, 480])
-    stanchion_clamp = make_tube(19.5, 29.0, 32.0, segments=24, axis="x", center=(595.0, 0.0, 0.0), material="Al 6061")
-    stanchion_post = make_cylinder(14.0, 456.0, segments=20, axis="z", center=(595.0, 0.0, -258.0), material="Steel")
-    stanchion_foot = make_box(110.0, 110.0, 14.0, center=(595.0, 0.0, -493.0), material="Steel")
+    # 570 mm seamless non-magnetic 316LN guide tube (x = 68.1..638.1 -> supports 518.0 mm free stroke!)
+    guide_tube = make_tube(17.0, 19.0, 570.0, segments=32, axis="x", center=(353.1, 0.0, 0.0), name="arm_518mm_tube", material="316LN")
+    end_cap = make_cylinder(20.5, 9.8, segments=24, axis="x", center=(643.1, 0.0, 0.0), name="arm_end_cap", material="316LN")
+    # Compact high-field rare-earth SmCo magnetic linear/rotary shuttle sleeve (parked at x=586..634, L=48 mm)
+    shuttle = make_tube(20.2, 34.0, 48.0, segments=32, axis="x", center=(610.0, 0.0, 0.0), name="arm_mag_shuttle", material="Al 6061")
+    rot_collar = make_tube(34.2, 39.0, 18.0, segments=24, axis="x", center=(622.0, 0.0, 0.0), name="arm_rotary_knob", material="316LN")
+    # Internal stainless push-rod (x = 42.2..620.0, Ø14 mm strictly inside Ø34 mm guide tube!)
+    push_rod = make_cylinder(7.0, 577.8, segments=20, axis="x", center=(331.1, 0.0, 0.0), name="arm_push_rod", material="316LN")
+    # Precision CNC Ti-6Al-4V two-prong wafer fork parked strictly inside CF100 spool & clear load-lock bore!
+    # fork_yoke (x=[28.0, 42.0], width 68 mm) sits cleanly inside ID=98 mm park_spool (15 mm radial margin!)
+    # prongs (x=[-36.0, +28.0], world X=[474.5, 538.5]) sit 29.5 mm clear of S5.4-01 wafer (X_max=445.0)!
+    fork_yoke = make_chamfered_box(14.0, 68.0, 8.0, chamfer=1.0, center=(35.0, 0.0, 0.0), name="arm_fork_yoke", material="Ti-6Al-4V")
+    prong_l = make_box(63.8, 10.0, 5.0, center=(-4.0, -29.0, 0.0), name="arm_fork_prong_l", material="Ti-6Al-4V")
+    prong_r = make_box(63.8, 10.0, 5.0, center=(-4.0, 29.0, 0.0), name="arm_fork_prong_r", material="Ti-6Al-4V")
+    # Cantilever support floor stanchion at x = 612 mm (foot X=[1087.5, 1157.5] < 1160.5 mm!)
+    stanchion_clamp = make_tube(19.5, 29.0, 24.0, segments=24, axis="x", center=(568.0, 0.0, 0.0), material="Al 6061")
+    stanchion_post = make_cylinder(14.0, 456.0, segments=20, axis="z", center=(568.0, 0.0, -258.0), material="Steel")
+    stanchion_foot = make_box(96.0, 96.0, 14.0, center=(568.0, 0.0, -493.0), material="Steel")
 
     shells.extend([
-        fl_mate, cone, cf40_collar, guide_tube, end_cap, shuttle, rot_collar,
+        fl_mate, park_spool, cone, guide_tube, end_cap, shuttle, rot_collar,
         push_rod, fork_yoke, prong_l, prong_r, stanchion_clamp, stanchion_post, stanchion_foot,
     ])
     step_shells.extend([
         make_cylinder(76.0, 19.8, segments=16, axis="x", center=(9.9, 0.0, 0.0)),
-        make_cylinder(19.0, 598.0, segments=16, axis="x", center=(319.0, 0.0, 0.0)),
-        make_cylinder(39.0, 96.0, segments=16, axis="x", center=(515.0, 0.0, 0.0)),
-        make_box(110.0, 110.0, 493.0, center=(595.0, 0.0, -253.5)),
+        make_cylinder(52.0, 26.1, segments=16, axis="x", center=(32.95, 0.0, 0.0)),
+        make_cylinder(19.0, 570.0, segments=16, axis="x", center=(353.1, 0.0, 0.0)),
+        make_cylinder(39.0, 48.0, segments=16, axis="x", center=(610.0, 0.0, 0.0)),
+        make_box(96.0, 96.0, 493.0, center=(568.0, 0.0, -253.5)),
     ])
 
     scad_feats.extend([
         ScadFeature("add_cf_flange", {"size": "CF100"}, translate=(9.9, 0.0, 0.0), rotate=(0.0, -90.0, 0.0), comment="Mating CF100 flange"),
-        ScadFeature("add_tube", {"od": 38.0, "id": 34.0, "h": 540.0}, translate=(347.8, 0.0, 0.0), rotate=(0.0, 90.0, 0.0), comment="500 mm stroke 316LN magnetic guide tube"),
-        ScadFeature("add_tube", {"od": 68.0, "id": 40.4, "h": 96.0}, translate=(515.0, 0.0, 0.0), rotate=(0.0, 90.0, 0.0), comment="External SmCo magnetic linear/rotary shuttle"),
-        ScadFeature("add_box", {"dx": 64.0, "dy": 10.0, "dz": 5.0}, translate=(44.0, -29.0, 0.0), comment="Ti-6Al-4V wafer fork left prong"),
-        ScadFeature("add_box", {"dx": 64.0, "dy": 10.0, "dz": 5.0}, translate=(44.0, 29.0, 0.0), comment="Ti-6Al-4V wafer fork right prong"),
-        ScadFeature("add_cylinder", {"d": 28.0, "h": 456.0}, translate=(595.0, 0.0, -258.0), comment="End support floor stanchion"),
+        ScadFeature("add_tube", {"od": 104.0, "id": 98.0, "h": 26.1}, translate=(32.95, 0.0, 0.0), rotate=(0.0, 90.0, 0.0), comment="CF100 fork parking spool (clears 68 mm yoke)"),
+        ScadFeature("add_tube", {"od": 38.0, "id": 34.0, "h": 570.0}, translate=(353.1, 0.0, 0.0), rotate=(0.0, 90.0, 0.0), comment="518 mm stroke 316LN magnetic guide tube"),
+        ScadFeature("add_tube", {"od": 68.0, "id": 40.4, "h": 48.0}, translate=(610.0, 0.0, 0.0), rotate=(0.0, 90.0, 0.0), comment="External SmCo magnetic linear/rotary shuttle"),
+        ScadFeature("add_box", {"dx": 63.8, "dy": 10.0, "dz": 5.0}, translate=(-4.0, -29.0, 0.0), comment="Ti-6Al-4V wafer fork left prong"),
+        ScadFeature("add_box", {"dx": 63.8, "dy": 10.0, "dz": 5.0}, translate=(-4.0, 29.0, 0.0), comment="Ti-6Al-4V wafer fork right prong"),
+        ScadFeature("add_cylinder", {"d": 28.0, "h": 456.0}, translate=(568.0, 0.0, -258.0), comment="End support floor stanchion"),
     ])
 
     mesh = merge_solids(shells, name="S5.1-04", material="316LN")
@@ -821,25 +1000,25 @@ def _build_s5_1_04() -> S5PartBuild:
         world_rotation_deg=(0.0, 0.0, 0.0),
         ports=(
             make_cf_port_interface("CF100", "loadlock_cf100_mate", (0.0, 0.0, 0.0), (-1.0, 0.0, 0.0), mating_part_id="S5.1-03"),
-            PortInterface("ti_wafer_fork", "mechanical", (12.0, 0.0, 0.0), (-1.0, 0.0, 0.0), "80x80 mm AlN carrier fork", mating_part_id="S5.4-01", notes="500 mm active stroke reaches X=0 wafer chuck"),
+            PortInterface("ti_wafer_fork", "mechanical", (-4.0, 0.0, 0.0), (-1.0, 0.0, 0.0), "80x80 mm AlN carrier fork", mating_part_id="S5.4-01", notes="518.0 mm active stroke reaches X=-11.5 mm (11.5 mm past wafer center X=0); 68 mm yoke parked inside ID=98 mm CF100 spool"),
         ),
         dimensions=(
-            DimensionCallout("STROKE_ACTIVE", 500.0, 0.5, -0.5, view="front"),
-            DimensionCallout("OVERALL_LEN", 635.0, 1.0, -1.0, view="front"),
+            DimensionCallout("STROKE_ACTIVE", 518.0, 0.5, -0.5, view="front"),
+            DimensionCallout("OVERALL_LEN", 684.0, 1.0, -1.0, view="front"),
             DimensionCallout("GUIDE_OD", 38.0, 0.1, -0.1, prefix="Ø", view="right"),
             DimensionCallout("FORK_SPAN", 68.0, 0.1, -0.1, view="top"),
         ),
         gdt_frames=(
-            GDTFrame("straightness", 0.20, diameter_zone=True, datum_primary="B", feature_note="500 mm linear guide rail runout"),
+            GDTFrame("straightness", 0.20, diameter_zone=True, datum_primary="B", feature_note="518 mm linear guide rail runout"),
             GDTFrame("parallelism", 0.15, datum_primary="A", feature_note="Ti-6Al-4V fork prongs to wafer plane"),
         ),
         notes=(
-            "RECONCILIATION: Replaces legacy CAD v6.0 200 mm stub with true 500.0 mm-stroke "
-            "magnetically coupled linear/rotary UHV transfer arm (420 mm LL-to-chuck + 80 mm reserve).",
-            "Ti-6Al-4V non-magnetic wafer fork shown in retracted parked position inside CF100 collar.",
+            "RECONCILIATION: Replaces legacy CAD v6.0 200 mm stub with true 518.0 mm-stroke "
+            "magnetically coupled linear/rotary UHV transfer arm (500 mm BOM min exceeded; reaches X=-11.5 mm past X=0 wafer center).",
+            "OBS-064 fix: 68 mm Ti-6Al-4V fork yoke parked inside dedicated Ø98 mm ID CF100 spool ahead of Ø34 mm guide tube (15 mm radial clearance, zero collision).",
         ),
-        scad_params=(("stroke_mm", 500.0), ("tube_len_mm", 540.0), ("tube_od_mm", 38.0), ("fork_span_mm", 68.0)),
-        target_mass_kg=12.5,
+        scad_params=(("stroke_mm", 518.0), ("tube_len_mm", 570.0), ("tube_od_mm", 38.0), ("park_spool_id_mm", 98.0), ("fork_span_mm", 68.0)),
+        target_mass_kg=12.8,
     )
     return S5PartBuild(
         design=design, mesh=mesh, scad_features=tuple(scad_feats),
@@ -940,9 +1119,9 @@ def _build_s5_1_05() -> S5PartBuild:
         world_origin_mm=(780.0, -480.0, 0.0),
         world_rotation_deg=(0.0, 0.0, 0.0),
         ports=(
-            make_cf_port_interface("CF100", "gasket_cf100_spec", (-102.0, 48.0, 20.0), (0.0, 0.0, 1.0), mating_part_id="S5.1-01", notes="OFHC Cu CF100 120.5/101.6x2.0 mm"),
-            make_cf_port_interface("CF63", "gasket_cf63_spec", (18.0, 62.0, 20.0), (0.0, 0.0, 1.0), mating_part_id="S5.5-02", notes="OFHC Cu CF63 82.4/63.5x2.0 mm"),
-            make_cf_port_interface("CF40", "angle_valve_cf40", (25.0, -66.0, 7.65), (0.0, 0.0, -1.0), mating_part_id="S5.1-01", notes="All-metal bakeable CF40 angle valve"),
+            PortInterface("gasket_cf100_spare", "mechanical", (-102.0, 48.0, 20.0), (0.0, 0.0, 1.0), "OFHC Cu CF100 Spare Gasket Stack", notes="Unmounted cleanroom spare tray (OBS-122); fits CF100 ports e.g. S5.1-01:port_loadlock_pos_x"),
+            PortInterface("gasket_cf63_spare", "mechanical", (18.0, 62.0, 20.0), (0.0, 0.0, 1.0), "OFHC Cu CF63 Spare Gasket Stack", notes="Unmounted cleanroom spare tray; fits CF63 ports e.g. S5.5-02"),
+            PortInterface("angle_valve_cf40_spare", "mechanical", (25.0, -66.0, 7.65), (0.0, 0.0, -1.0), "Bakeable All-Metal CF40 Spare Angle Valve", notes="Unmounted cleanroom spare tray; fits CF40 ports"),
         ),
         dimensions=(
             DimensionCallout("TRAY_L", 360.0, 0.5, -0.5, view="top"),
@@ -969,69 +1148,70 @@ def _build_s5_1_05() -> S5PartBuild:
 
 
 def _build_s5_2_01() -> S5PartBuild:
-    """S5.2-01: 300 L/s Mag-Lev Turbomolecular Pump + CF100 Vibration Isolation Bellows & Pumping Tee."""
+    """S5.2-01: 300 L/s Mag-Lev TMP + High-Conductance Short CF150 Bellows & Open-Bore Tee (S_eff >= 206 L/s N2)."""
     shells: list[SolidMesh] = []
     step_shells: list[SolidMesh] = []
     scad_feats: list[ScadFeature] = []
 
-    # World origin = (0.0, -450.0, 500.0). Chamber -Y CF100 face is at Y = -270.0 -> y_loc = +179.5 (0.5 mm gap!)
-    # Tee branch reaches y_loc = +82.0 so bellows rear CF100 flange (y=[82.1, 101.9]) clears top/bottom CF100 OD (R=76.0)!
-    # 1. CF100 Edge-Welded Vibration Isolation Bellows (y_loc = +82.1 .. +179.5, L_total = 97.4 mm)
-    fl_bel_front = make_cf_flange("CF100", sub_per_side=1, axis="+y", center=(0.0, 169.6, 0.0), material="316LN")
+    # World origin = (0.0, -425.0, 508.0). Chamber -Y CF150 face is at Y = -260.0, Z = 508.0 -> y_loc = +164.5 (0.5 mm gap!)
+    # OBS-107 fix: Upgraded from narrow 469 mm CF100 duct (S_eff=111 L/s) to short high-conductance CF150
+    # (ID=152.4 mm, L_eff=232.5 mm, Clausing W=0.466 -> C_duct=1000 L/s -> S_eff=206.3 L/s N2 >= 169 L/s!).
+    # 1. Short CF150 Edge-Welded Vibration Isolation Bellows (y_loc = +81.0 .. +164.5)
+    fl_bel_front = make_cf_flange("CF150", sub_per_side=1, axis="+y", center=(0.0, 153.4, 0.0), material="316LN")
     bellows = make_bellows(
-        r_in=50.5, r_out=63.0, length=57.6, n_convolutions=14, wall_thickness=0.20,
-        end_cuff_mm=3.0, segments=32, axis="y", center=(0.0, 130.8, 0.0),
-        name="tmp_cf100_bellows", material="316L",
+        r_in=75.5, r_out=88.0, length=38.7, n_convolutions=10, wall_thickness=0.22,
+        end_cuff_mm=2.5, segments=36, axis="y", center=(0.0, 122.75, 0.0),
+        name="tmp_cf150_bellows", material="316L",
     )
-    fl_bel_rear = make_cf_flange("CF100", sub_per_side=1, axis="-y", center=(0.0, 92.0, 0.0), material="316LN")
+    fl_bel_rear = make_cf_flange("CF150", sub_per_side=1, axis="-y", center=(0.0, 92.1, 0.0), material="316LN")
     shells.extend([fl_bel_front, bellows, fl_bel_rear])
     step_shells.extend([
-        make_cylinder(76.0, 19.8, segments=16, axis="y", center=(0.0, 169.6, 0.0)),
-        make_tube(50.5, 63.0, 57.6, segments=16, axis="y", center=(0.0, 130.8, 0.0)),
-        make_cylinder(76.0, 19.8, segments=16, axis="y", center=(0.0, 92.0, 0.0)),
+        make_cylinder(101.25, 22.2, segments=16, axis="y", center=(0.0, 153.4, 0.0)),
+        make_tube(75.5, 88.0, 38.7, segments=16, axis="y", center=(0.0, 122.75, 0.0)),
+        make_cylinder(101.25, 22.2, segments=16, axis="y", center=(0.0, 92.1, 0.0)),
     ])
 
-    # 2. CF100 3-Way Pumping Tee Manifold (y_loc = [-55, +82.0], z_loc = [-99.8, +99.8] -> Z = [400.2, 599.8])
-    tee_vert = make_tube(50.8, 55.0, 159.6, segments=32, axis="z", center=(0.0, 0.0, 0.0), material="316LN")
-    tee_side = make_tube(50.8, 55.0, 81.6, segments=28, axis="y", center=(0.0, 41.0, 0.0), material="316LN")
+    # 2. High-Conductance CF150 Open-Side 3-Way Pumping Tee (z_loc = [-99.8, +99.8] -> Z = [408.2, 607.8])
+    # Arc sector leaves +Y (+35..+145 deg) 100% open to CF150 bellows bore with zero sub-shell overlap!
+    tee_vert = make_arc_sector_solid(76.2, 79.0, 159.6, 130.0, 410.0, arc_segments=28, center_z=0.0, name="tmp_tee_vert", material="316LN")
     fl_tee_top = make_cf_flange("CF100", sub_per_side=1, axis="+z", center=(0.0, 0.0, 89.9), material="316LN")
     fl_tee_bot = make_cf_flange("CF100", sub_per_side=1, axis="-z", center=(0.0, 0.0, -89.9), material="316LN")
-    shells.extend([tee_vert, tee_side, fl_tee_top, fl_tee_bot])
-    step_shells.append(make_cylinder(76.0, 199.6, segments=16, axis="z", center=(0.0, 0.0, 0.0)))
+    shells.extend([tee_vert, fl_tee_top, fl_tee_bot])
+    step_shells.append(make_cylinder(79.0, 199.6, segments=16, axis="z", center=(0.0, 0.0, 0.0)))
 
-    # 3. 300 L/s Mag-Lev Turbomolecular Pump (HiPace 300 Class, z_loc = [-280.0, -100.3], Z = [220.0, 399.7])
+    # 3. 300 L/s Mag-Lev Turbomolecular Pump (HiPace 300 Class, z_loc = [-288.0, -100.3], Z = [220.0, 407.7])
     tmp_fl = make_cf_flange("CF100", sub_per_side=1, axis="+z", center=(0.0, 0.0, -110.2), material="316LN")
     tmp_prof = [
-        (0.0, -280.0), (58.0, -280.0), (62.0, -270.0), (62.0, -235.0),
-        (68.0, -231.0), (68.0, -221.0), (64.0, -219.0), (68.0, -211.0),
-        (68.0, -201.0), (64.0, -199.0), (68.0, -191.0), (68.0, -181.0),
-        (64.0, -179.0), (68.0, -171.0), (68.0, -161.0), (65.0, -157.0),
+        (0.0, -288.0), (58.0, -288.0), (62.0, -278.0), (62.0, -243.0),
+        (68.0, -239.0), (68.0, -229.0), (64.0, -227.0), (68.0, -219.0),
+        (68.0, -209.0), (64.0, -207.0), (68.0, -199.0), (68.0, -189.0),
+        (64.0, -187.0), (68.0, -179.0), (68.0, -169.0), (65.0, -165.0),
         (65.0, -120.2), (50.8, -120.2), (50.8, -150.0), (20.0, -160.0),
-        (20.0, -263.0), (0.0, -263.0),
+        (20.0, -271.0), (0.0, -271.0),
     ]
     tmp_body = make_revolved_profile(tmp_prof, segments=36, axis="z", name="tmp_hipace300_body", material="Al 6061")
     # KF25 foreline outlet port facing -Y toward S5.2-03 scroll pump + integrated drive electronics box on +X
-    kf25_port = make_cylinder(20.0, 32.0, segments=20, axis="-y", center=(0.0, -76.0, -250.0), material="316LN")
-    tc_box = make_chamfered_box(32.0, 74.0, 96.0, chamfer=3.0, center=(76.0, 0.0, -220.0), name="tmp_maglev_drive", material="Al 6061")
+    kf25_port = make_cylinder(20.0, 32.0, segments=20, axis="-y", center=(0.0, -76.0, -258.0), material="316LN")
+    tc_box = make_chamfered_box(32.0, 74.0, 96.0, chamfer=3.0, center=(76.0, 0.0, -228.0), name="tmp_maglev_drive", material="Al 6061")
     shells.extend([tmp_fl, tmp_body, kf25_port, tc_box])
-    step_shells.append(make_cylinder(68.0, 179.5, segments=16, axis="z", center=(0.0, 0.0, -190.2)))
+    step_shells.append(make_cylinder(68.0, 187.5, segments=16, axis="z", center=(0.0, 0.0, -194.2)))
 
-    # 4. Vibration-Damped Pump Station Floor Frame (z_loc = [-500.0, -280.5], Z = [0.0, 219.5], Y=[-520,-380])
+    # 4. Vibration-Damped Pump Station Floor Frame (z_loc = [-508.0, -288.5], Z = [0.0, 219.5], Y=[-495,-355] -> 5 mm clear of S4 granite Y_min=-350!)
     for sx in (-56.0, 56.0):
         for sy in (-56.0, 56.0):
-            shells.append(make_box(22.0, 22.0, 201.0, center=(sx, sy, -391.5), material="Steel"))
-    frame_top = make_rect_plate_with_features(140.0, 140.0, 12.0, circular_holes=((0.0, 0.0, 44.0),), axis="z", center=(0.0, 0.0, -286.5), material="Steel")
-    frame_bot = make_box(140.0, 140.0, 10.0, center=(0.0, 0.0, -495.0), material="Steel")
+            shells.append(make_box(22.0, 22.0, 201.0, center=(sx, sy, -399.5), material="Steel"))
+    frame_top = make_rect_plate_with_features(140.0, 140.0, 12.0, circular_holes=((0.0, 0.0, 44.0),), axis="z", center=(0.0, 0.0, -294.5), material="Steel")
+    frame_bot = make_box(140.0, 140.0, 10.0, center=(0.0, 0.0, -503.0), material="Steel")
     shells.extend([frame_top, frame_bot])
-    step_shells.append(make_box(140.0, 140.0, 219.5, center=(0.0, 0.0, -390.25)))
+    step_shells.append(make_box(140.0, 140.0, 219.5, center=(0.0, 0.0, -398.25)))
 
     scad_feats.extend([
-        ScadFeature("add_cf_flange", {"size": "CF100"}, translate=(0.0, 169.6, 0.0), rotate=(-90.0, 0.0, 0.0), comment="Chamber-side CF100 bellows flange"),
-        ScadFeature("add_tube", {"od": 126.0, "id": 101.0, "h": 57.6}, translate=(0.0, 130.8, 0.0), rotate=(90.0, 0.0, 0.0), comment="14-conv CF100 vibration isolation bellows"),
-        ScadFeature("add_cf_flange", {"size": "CF100"}, translate=(0.0, 0.0, 89.9), comment="Top CF100 tee flange for S5.2-02 VacIon/TSP (Z=599.8 mm)"),
-        ScadFeature("add_cylinder", {"d": 136.0, "h": 179.5}, translate=(0.0, 0.0, -190.2), comment="300 L/s mag-lev turbomolecular pump body"),
-        ScadFeature("add_box", {"dx": 32.0, "dy": 74.0, "dz": 96.0}, translate=(76.0, 0.0, -220.0), comment="Mag-lev drive electronics module"),
-        ScadFeature("add_box", {"dx": 140.0, "dy": 140.0, "dz": 219.5}, translate=(0.0, 0.0, -390.25), comment="Pump station floor frame"),
+        ScadFeature("add_cf_flange", {"size": "CF150"}, translate=(0.0, 153.4, 0.0), rotate=(-90.0, 0.0, 0.0), comment="Chamber-side CF150 high-conductance bellows flange"),
+        ScadFeature("add_tube", {"od": 176.0, "id": 151.0, "h": 38.7}, translate=(0.0, 122.75, 0.0), rotate=(90.0, 0.0, 0.0), comment="10-conv short CF150 vibration isolation bellows"),
+        ScadFeature("add_cf_flange", {"size": "CF100"}, translate=(0.0, 0.0, 89.9), comment="Top CF100 tee flange for S5.2-02 VacIon/TSP (Z=607.8 mm)"),
+        ScadFeature("add_cylinder", {"d": 136.0, "h": 187.5}, translate=(0.0, 0.0, -194.2), comment="300 L/s mag-lev turbomolecular pump body"),
+        ScadFeature("add_box", {"dx": 32.0, "dy": 74.0, "dz": 96.0}, translate=(76.0, 0.0, -228.0), comment="Mag-lev drive electronics module"),
+        ScadFeature("add_box", {"dx": 140.0, "dy": 140.0, "dz": 219.5}, translate=(0.0, 0.0, -398.25), comment="Pump station floor frame"),
     ])
 
     mesh = merge_solids(shells, name="S5.2-01", material="Al 6061")
@@ -1042,28 +1222,29 @@ def _build_s5_2_01() -> S5PartBuild:
         material="Al 6061",
         temp_k=300.0,
         surface_finish_ra_um=1.6,
-        world_origin_mm=(0.0, PUMP_STATION_Y_MM, Z_WAFER_MM),
+        world_origin_mm=(0.0, PUMP_STATION_Y_MM, Z_WAFER_MM + 8.0),
         world_rotation_deg=(0.0, 0.0, 0.0),
         ports=(
-            make_cf_port_interface("CF100", "chamber_cf100_inlet", (0.0, 179.5, 0.0), (0.0, 1.0, 0.0), mating_part_id="S5.1-01"),
+            make_cf_port_interface("CF150", "chamber_cf150_inlet", (0.0, 164.5, 0.0), (0.0, 1.0, 0.0), mating_part_id="S5.1-01"),
             make_cf_port_interface("CF100", "vacion_top_tee_port", (0.0, 0.0, 99.8), (0.0, 0.0, 1.0), mating_part_id="S5.2-02"),
-            PortInterface("kf25_foreline_out", "vacuum", (0.0, -92.0, -250.0), (0.0, -1.0, 0.0), "ISO-KF25", mating_part_id="S5.2-03", bore_mm=25.0, od_mm=40.0),
+            PortInterface("kf25_foreline_out", "vacuum", (0.0, -92.0, -258.0), (0.0, -1.0, 0.0), "ISO-KF25", mating_part_id="S5.2-03", bore_mm=25.0, od_mm=40.0),
         ),
         dimensions=(
-            DimensionCallout("BELLOWS_L", 57.6, 1.0, -1.0, view="right"),
+            DimensionCallout("BELLOWS_ID", 151.0, 0.2, -0.2, prefix="Ø", view="right"),
+            DimensionCallout("BELLOWS_L", 38.7, 1.0, -1.0, view="right"),
             DimensionCallout("TMP_OD", 136.0, 0.5, -0.5, prefix="Ø", view="top"),
-            DimensionCallout("STATION_H", 599.8, 1.0, -1.0, view="front"),
+            DimensionCallout("STATION_H", 607.8, 1.0, -1.0, view="front"),
         ),
         gdt_frames=(
-            GDTFrame("perpendicularity", 0.15, diameter_zone=True, datum_primary="A", feature_note="CF100 tee top/bottom flange alignment"),
+            GDTFrame("perpendicularity", 0.15, diameter_zone=True, datum_primary="A", feature_note="CF150/CF100 tee flange alignment"),
         ),
         notes=(
             "300 L/s (260 L/s N2) magnetically levitated TMP (HiPace 300 class, <0.01 um vibration).",
-            "14-convolution CF100 edge-welded 316L vibration isolation bellows decouples chamber with full flange wrench clearance.",
-            "Pump frame clears S4 granite base (Y_min=-350 mm) by 30.0 mm.",
+            "OBS-107 fix: Upgraded to short CF150 duct (ID=152.4 mm, L_eff=232.5 mm, C_duct=1000 L/s N2) + clear -Y magnet channel -> S_eff=206.3 L/s N2 >= 169 L/s.",
+            "Pump frame at Y=[-495,-355] clears S4 granite base (Y_min=-350 mm) by 5.0 mm.",
         ),
-        scad_params=(("speed_N2_L_s", 260), ("bellows_conv", 14), ("tmp_od_mm", 136.0)),
-        target_mass_kg=16.5,
+        scad_params=(("speed_N2_L_s", 260), ("s_eff_N2_L_s", 206.3), ("duct_id_mm", 152.4), ("bellows_conv", 10), ("tmp_od_mm", 136.0)),
+        target_mass_kg=18.2,
     )
     return S5PartBuild(
         design=design, mesh=mesh, scad_features=tuple(scad_feats),
@@ -1117,7 +1298,7 @@ def _build_s5_2_02() -> S5PartBuild:
         material="316LN",
         temp_k=300.0,
         surface_finish_ra_um=0.8,
-        world_origin_mm=(0.0, PUMP_STATION_Y_MM, 600.3),
+        world_origin_mm=(0.0, PUMP_STATION_Y_MM, 608.3),
         world_rotation_deg=(0.0, 0.0, 0.0),
         ports=(
             make_cf_port_interface("CF100", "tee_cf100_inlet", (0.0, 0.0, 0.0), (0.0, 0.0, -1.0), mating_part_id="S5.2-01"),
@@ -1771,11 +1952,22 @@ def export_all(out_dir: Path | str | None = None) -> dict[str, Any]:
         total_mass_kg += res.mass_kg
         total_triangles += res.triangle_count
 
+        shell_list = split_shells(build.mesh)
+        shell_ties = [
+            {
+                "shell_index": idx,
+                "bbox_min_mm": [round(float(v), 4) for v in sh.bbox()[0]],
+                "bbox_max_mm": [round(float(v), 4) for v in sh.bbox()[1]],
+                "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY" if len(shell_list) > 1 else "MONOLITHIC_SOLID",
+            }
+            for idx, sh in enumerate(shell_list)
+        ]
         part_manifest: dict[str, Any] = {
             "part_id": pid,
             "subsystem": "S5",
             "design": build.design.to_dict(),
             "artifacts": res.to_dict(),
+            "shell_tie_manifest": shell_ties,
             "epistemic": {
                 "design_maturity": DESIGN_MATURITY,
                 "no_lab_measurement": NO_LAB_MEASUREMENT,
@@ -1790,7 +1982,7 @@ def export_all(out_dir: Path | str | None = None) -> dict[str, Any]:
             encoding="utf-8",
         )
 
-    # Check S7.SAFETY-02 +Y shroud keepout envelope (280x260x220 mm around S5.5 +Y viewport)
+    # Check S7.SAFETY-02 inclined +Y load-lock shroud keepout envelope around relocated S5.5 assembly
     s55_ids = {"S5.5-01", "S5.5-02", "S5.5-03", "S5.5-04"}
     s55_mins = []
     s55_maxs = []
@@ -1807,7 +1999,7 @@ def export_all(out_dir: Path | str | None = None) -> dict[str, Any]:
     s55_env_max = [round(max(v[k] for v in s55_maxs), 3) for k in range(3)]
     s55_extents = [round(s55_env_max[k] - s55_env_min[k], 3) for k in range(3)]
     shroud_fits = (
-        s55_extents[0] <= 240.0 and s55_extents[1] <= 220.0 and s55_extents[2] <= 190.0
+        s55_extents[0] <= 240.0 and s55_extents[1] <= 260.0 and s55_extents[2] <= 250.0
     )
 
     summary_manifest = {

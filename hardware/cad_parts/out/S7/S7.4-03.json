@@ -575,6 +575,11 @@
       ]
     ]
   ],
+  "shell_tie_manifest": {
+    "shell_count": 22,
+    "multi_shell_classification": "subassembly_tied_by_fasteners_or_mount",
+    "floating_structural_shells": 0
+  },
   "reconciliation_notes": [
     "Resolved BOM v7.0 vs CAD v6.0 single-30U rack conflict: modeled 2x 42U EMI steel cabinets + rear water/air HX at X=+1480 mm and X=+2100 mm."
   ]

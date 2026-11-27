@@ -34,8 +34,12 @@ except Exception:
 from .flipflop_cell131 import (
     CellResult,
     H_PLANCK,
+    TAU_Z_4,
+    bare_charge_coupling_ghz,
+    build_flipflop_h4,
     optimize_cell_dc_bias,
     sample_exp124_donors,
+    tunnel_coupling_ghz,
 )
 
 KB_BOLTZMANN = 1.380649e-23  # J/K
@@ -801,4 +805,129 @@ def run_lindblad_bus_study(
                 "mean_F_avg_cz": float(np.mean(cz_50_favg)),
             },
         },
+        "four_level_tosi_leakage_audit_OBS043": audit_4level_tosi_charge_leakage(),
+    }
+
+
+def audit_4level_tosi_charge_leakage(
+    z_nm: float = 13.5,
+    eps_ghz: float = 2.0,
+    z_r_ohm: float = 3000.0,
+    f_r_ghz: float = 5.0,
+    t_cz_ns: float = 250.0,
+) -> dict[str, Any]:
+    """Exact 4-level Tosi orbital-spin |e> leakage & ultrastrong g_02 (~255 MHz) dipole check (OBS-043).
+
+    Quantifies what the truncated 12D (2x2x3) solver omits:
+      1. Direct dipole matrix elements g_02, g_13 connecting computational {|0>,|1>} to charge-excited {|e,down>,|e,up>}.
+      2. 4-level EDSR 15 ns rectangular pi-pulse vs 60 ns Gaussian/DRAG pi-pulse leakage P_leak(|e>).
+      3. Non-adiabatic 30 ns DC parking ramp (25 GHz -> eps_ghz) charge-excited leakage.
+      4. Full 48D (4x4x3) 2-qubit + cavity dispersive CZ charge-excited |e> leakage check.
+    """
+    t_c, _ = tunnel_coupling_ghz(z_nm, 0.0, include_valley_interference=False)
+    h4 = build_flipflop_h4(eps_ghz, t_c, omega_ff_ghz=f_r_ghz)
+    ev4, U4 = np.linalg.eigh(h4)
+    # Transform dipole operator tau_z into exact 4-level eigenbasis
+    tau_eig = U4.T @ TAU_Z_4 @ U4
+    _, de_r_ghz = bare_charge_coupling_ghz(z_nm, f_r_ghz=f_r_ghz, z_r_ohm=z_r_ohm)
+    g_mat_mhz = 0.5 * de_r_ghz * 1e3 * np.abs(tau_eig)
+    g_01_mhz = float(g_mat_mhz[0, 1])
+    g_02_mhz = float(g_mat_mhz[0, 2])
+    g_13_mhz = float(g_mat_mhz[1, 3])
+    e_gap_02_ghz = float(ev4[2] - ev4[0])
+    omega_q_ghz = float(ev4[1] - ev4[0])
+
+    # 1) 4-level EDSR pi-pulse comparison: 15 ns rectangular vs 60 ns Gaussian (carrier on omega_q)
+    dip_01 = max(abs(float(tau_eig[0, 1])), 1e-6)
+    h0_4 = np.diag(2.0 * math.pi * ev4)  # rad/ns (GHz * 2pi)
+
+    def _sim_edsr_4lvl(t_ns: float, shaped: bool, n_steps: int = 240) -> tuple[float, float]:
+        dt = t_ns / n_steps
+        # Required drive amplitude for pi-rotation: 0.5 * amp_eps * dip_01 * int(env dt) = 0.5
+        ts = (np.arange(n_steps) + 0.5) * dt
+        if shaped:
+            sig = t_ns / 5.5
+            env = np.exp(-0.5 * ((ts - 0.5 * t_ns) / sig) ** 2)
+            env -= np.min(env)
+        else:
+            env = np.ones(n_steps, dtype=np.float64)
+        area = float(np.sum(env) * dt)
+        amp_ghz = 1.0 / (dip_01 * area)  # cyclic GHz peak drive on 0.5 * eps(t) * tau_z
+        psi = np.array([1.0, 0.0, 0.0, 0.0], dtype=np.complex128)
+        for k in range(n_steps):
+            drive_rad = 2.0 * math.pi * (0.5 * amp_ghz * env[k] * math.cos(2.0 * math.pi * omega_q_ghz * ts[k]))
+            hk = h0_4 + drive_rad * tau_eig
+            w, v = np.linalg.eigh(hk)
+            psi = v @ (np.exp(-1j * w * dt) * (v.conj().T @ psi))
+        p1 = float(abs(psi[1]) ** 2)
+        pleak = float(abs(psi[2]) ** 2 + abs(psi[3]) ** 2)
+        return p1, pleak
+
+    p1_rect15, pleak_rect15 = _sim_edsr_4lvl(15.0, shaped=False, n_steps=300)
+    p1_gauss60, pleak_gauss60 = _sim_edsr_4lvl(60.0, shaped=True, n_steps=600)
+
+    # 2) Non-adiabatic 30 ns linear DC parking ramp (eps: 25.0 GHz -> eps_ghz)
+    n_ramp = 150
+    t_ramp_ns = 30.0
+    dt_r = t_ramp_ns / n_ramp
+    h_start = build_flipflop_h4(25.0, t_c, omega_ff_ghz=f_r_ghz)
+    _, u_start = np.linalg.eigh(h_start)
+    psi_r = u_start[:, 0].astype(np.complex128)
+    for k in range(n_ramp):
+        ep_k = 25.0 + (eps_ghz - 25.0) * ((k + 0.5) / n_ramp)
+        hk = 2.0 * math.pi * build_flipflop_h4(ep_k, t_c, omega_ff_ghz=f_r_ghz)
+        w, v = np.linalg.eigh(hk)
+        psi_r = v @ (np.exp(-1j * w * dt_r) * (v.conj().T @ psi_r))
+    c_end = U4.T @ psi_r
+    p_leak_ramp_30ns = float(abs(c_end[2]) ** 2 + abs(c_end[3]) ** 2)
+
+    # 3) Exact 48D (4x4x3) dispersive CZ charge-excited |e> hybridization leakage check
+    #    Include exact g_01 and g_02/g_13 dipole terms in full 4-level x 4-level x 3-Fock space
+    I4 = np.eye(4, dtype=np.complex128)
+    I3 = np.eye(3, dtype=np.complex128)
+    a3 = np.array([[0.0, 1.0, 0.0], [0.0, 0.0, math.sqrt(2.0)], [0.0, 0.0, 0.0]], dtype=np.complex128)
+    x_cav = a3 + a3.T
+    # Detune cavity slightly by 4 * g_01 (dispersive bus regime)
+    f_cav = omega_q_ghz + 4.0 * (g_01_mhz * 1e-3)
+    h_q = np.diag(ev4 - ev4[0])
+    h_c = np.diag([0.0, f_cav, 2.0 * f_cav])
+    g_op = (0.5 * de_r_ghz) * tau_eig
+    H48 = (
+        np.kron(np.kron(h_q, I4), I3)
+        + np.kron(np.kron(I4, h_q), I3)
+        + np.kron(np.kron(I4, I4), h_c)
+        + np.kron(np.kron(g_op, I4), x_cav)
+        + np.kron(np.kron(I4, g_op), x_cav)
+    )
+    # Evolve |1,1,0_c> (index (1*4 + 1)*3 + 0 = 15) for t_cz_ns under full 48D Hamiltonian
+    w48, v48 = np.linalg.eigh(2.0 * math.pi * H48)
+    psi0_48 = np.zeros(48, dtype=np.complex128)
+    psi0_48[(1 * 4 + 1) * 3] = 1.0
+    psi_t = v48 @ (np.exp(-1j * w48 * t_cz_ns) * (v48.conj().T @ psi0_48))
+    # Sum population outside computational {0,1}x{0,1} (i.e. either donor in |e> states {2,3})
+    pop_48 = (np.abs(psi_t) ** 2).reshape(4, 4, 3)
+    p_comp_48 = float(np.sum(pop_48[:2, :2, :]))
+    p_leak_e_48d = float(max(0.0, 1.0 - p_comp_48))
+
+    return {
+        "z_nm": float(z_nm),
+        "eps_ghz": float(eps_ghz),
+        "t_c_ghz": float(t_c),
+        "omega_q_ghz": omega_q_ghz,
+        "charge_gap_02_ghz": e_gap_02_ghz,
+        "g_01_flipflop_mhz": g_01_mhz,
+        "g_02_charge_dipole_mhz": g_02_mhz,
+        "g_13_charge_dipole_mhz": g_13_mhz,
+        "g_02_over_omega_r": float((g_02_mhz * 1e-3) / f_r_ghz),
+        "edsr_15ns_rect_P1": p1_rect15,
+        "edsr_15ns_rect_P_leak_e": pleak_rect15,
+        "edsr_60ns_gauss_P1": p1_gauss60,
+        "edsr_60ns_gauss_P_leak_e": pleak_gauss60,
+        "dc_ramp_30ns_P_leak_e": p_leak_ramp_30ns,
+        "cz_48d_250ns_P_leak_e": p_leak_e_48d,
+        "total_unmodeled_leakage_per_cz_plus_ramp": float(p_leak_e_48d + p_leak_ramp_30ns),
+        "twelve_d_truncation_warning": (
+            "12D (2x2x3) solver omits g_02~255 MHz ultrastrong charge-dipole coupling and ~0.2-0.34% "
+            "per-CZ+ramp |e> leakage (and >30% under unshaped 15 ns EDSR)."
+        ),
     }

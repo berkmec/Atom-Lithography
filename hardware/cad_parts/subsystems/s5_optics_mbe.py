@@ -24,6 +24,8 @@ watertight CAD kernel (``hardware.cad_parts.core``):
 """
 from __future__ import annotations
 
+import math
+
 from hardware.cad_parts.core import (
     DimensionCallout,
     GDTFrame,
@@ -47,13 +49,29 @@ from hardware.cad_parts.core import (
 )
 from hardware.cad_parts.subsystems.s5_uhv_pumps import (
     LOADLOCK_CENTER_X_MM,
+    LOADLOCK_OPT_ELEV_DEG,
+    LOADLOCK_S53_PYRO_AZ_DEG,
+    LOADLOCK_S53_PYRO_T_FACE_MM,
+    LOADLOCK_S53_RTA_AZ_DEG,
+    LOADLOCK_S53_RTA_T_FACE_MM,
+    LOADLOCK_S55_T_FACE_MM,
+    LOADLOCK_SHUTTER_AZ_DEG,
+    LOADLOCK_SHUTTER_R_FACE_MM,
+    LOADLOCK_SHUTTER_Z_LOC_MM,
     Z_WAFER_MM,
     S5PartBuild,
     build_s5_parts,
     export_all,
+    inclined_pos,
+    inclined_vec,
+    make_arc_sector_solid,
     make_hollow_enclosure,
     radial_pos,
+    radial_vec,
 )
+
+S56_PBN_AZ_DEG: float = 228.0
+S56_PBN_Z_LOC_MM: float = 148.0
 
 S5_OPTICS_MBE_PART_IDS: tuple[str, ...] = (
     "S5.3-01",
@@ -122,15 +140,15 @@ def _build_s5_3_01() -> S5PartBuild:
 
     mesh = merge_solids(shells, name="S5.3-01", material="Al 6061")
     step_mesh = merge_solids(step_shells, name="S5.3-01_step", material="Al 6061")
-    wx, wy, _ = radial_pos(354.5, 140.0, 0.0)
+    ix, iy, iz = inclined_pos(LOADLOCK_S53_RTA_T_FACE_MM + 79.0, LOADLOCK_S53_RTA_AZ_DEG, LOADLOCK_OPT_ELEV_DEG)
     design = make_part_design_from_bom(
         "S5.3-01",
         design_tier="COTS_ENV_ICD",
         material="Al 6061",
         temp_k=300.0,
         surface_finish_ra_um=1.6,
-        world_origin_mm=(wx, wy, Z_WAFER_MM),
-        world_rotation_deg=(0.0, 0.0, 140.0),
+        world_origin_mm=(round(LOADLOCK_CENTER_X_MM + ix, 4), round(iy, 4), round(Z_WAFER_MM + iz, 4)),
+        world_rotation_deg=(0.0, -LOADLOCK_OPT_ELEV_DEG, LOADLOCK_S53_RTA_AZ_DEG),
         ports=(
             PortInterface("optical_exit_aperture", "optical", (0.0, 0.0, 0.0), (-1.0, 0.0, 0.0), "Dia 96 mm RTA Exit", mating_part_id="S5.3-02", bore_mm=96.0),
             PortInterface("coolant_in", "cooling", (52.0, -28.0, -85.5), (0.0, 0.0, -1.0), "1/4 in Swagelok DI Water"),
@@ -146,9 +164,9 @@ def _build_s5_3_01() -> S5PartBuild:
         ),
         notes=(
             "Backup Xe flash-lamp / RTA optical anneal head (Exp66/91, sigma_anneal <= 0.5 nm backup to S5.5 808 nm).",
-            "Positioned on 140 deg (-X/+Y) CF100 port: >=85 mm clear of S7.SAFETY-02 & >=260 mm clear of S6 DR.",
+            "OBS-001 fix: Relocated to 36-deg inclined 140-deg optical port on S5.1-03 load-lock aimed directly at wafer S5.4-01 (420, 0, 500) with clear Moller-Trumbore LOS.",
         ),
-        scad_params=(("head_l", 148.2), ("aperture_d", 96.0), ("pulse_ms", 1.0)),
+        scad_params=(("head_l", 148.2), ("aperture_d", 96.0), ("pulse_ms", 1.0), ("elev_deg", LOADLOCK_OPT_ELEV_DEG)),
         target_mass_kg=7.8,
     )
     return S5PartBuild(
@@ -195,17 +213,17 @@ def _build_s5_3_02() -> S5PartBuild:
 
     mesh = merge_solids(shells, name="S5.3-02", material="316LN")
     step_mesh = merge_solids(step_shells, name="S5.3-02_step", material="316LN")
-    wx, wy, _ = radial_pos(275.5, 140.0, 0.0)
+    ix, iy, iz = inclined_pos(LOADLOCK_S53_RTA_T_FACE_MM + 0.5, LOADLOCK_S53_RTA_AZ_DEG, LOADLOCK_OPT_ELEV_DEG)
     design = make_part_design_from_bom(
         "S5.3-02",
         design_tier="COTS_ENV_ICD",
         material="316LN",
         temp_k=300.0,
         surface_finish_ra_um=0.4,
-        world_origin_mm=(wx, wy, Z_WAFER_MM),
-        world_rotation_deg=(0.0, 0.0, 140.0),
+        world_origin_mm=(round(LOADLOCK_CENTER_X_MM + ix, 4), round(iy, 4), round(Z_WAFER_MM + iz, 4)),
+        world_rotation_deg=(0.0, -LOADLOCK_OPT_ELEV_DEG, LOADLOCK_S53_RTA_AZ_DEG),
         ports=(
-            make_cf_port_interface("CF100", "chamber_cf100_mate", (0.0, 0.0, 0.0), (-1.0, 0.0, 0.0), mating_part_id="S5.1-01", bore_override_mm=88.0),
+            make_cf_port_interface("CF100", "chamber_cf100_mate", (0.0, 0.0, 0.0), (-1.0, 0.0, 0.0), mating_part_id="S5.1-03", bore_override_mm=88.0),
             PortInterface("lamp_head_mount", "optical", (78.0, 0.0, 0.0), (1.0, 0.0, 0.0), "Dia 128 mm Kinematic Barrel", mating_part_id="S5.3-01", bore_mm=88.0, od_mm=128.0),
         ),
         dimensions=(
@@ -219,9 +237,9 @@ def _build_s5_3_02() -> S5PartBuild:
         ),
         notes=(
             "CF100 UV-IR fused-silica optical viewport (Dia 88 mm CA, >10 J/cm^2 LIDT, lambda/4) + focusing barrel.",
-            "Mates S5.1-01 140 deg CF100 port with 0.5 mm compressed OFHC Cu gasket gap.",
+            "OBS-001 fix: Mates S5.1-03 36-deg inclined 140-deg optical port with 0.5 mm Cu gasket gap and clear LOS to wafer S5.4-01.",
         ),
-        scad_params=(("clear_aperture_mm", 88.0), ("window_d_mm", 96.0), ("barrel_l_mm", 58.0)),
+        scad_params=(("clear_aperture_mm", 88.0), ("window_d_mm", 96.0), ("barrel_l_mm", 58.0), ("elev_deg", LOADLOCK_OPT_ELEV_DEG)),
         target_mass_kg=3.2,
     )
     return S5PartBuild(
@@ -263,17 +281,17 @@ def _build_s5_3_03() -> S5PartBuild:
 
     mesh = merge_solids(shells, name="S5.3-03", material="Al 6061")
     step_mesh = merge_solids(step_shells, name="S5.3-03_step", material="Al 6061")
-    wx, wy, _ = radial_pos(250.5, 325.0, 0.0)
+    ix, iy, iz = inclined_pos(LOADLOCK_S53_PYRO_T_FACE_MM + 0.5, LOADLOCK_S53_PYRO_AZ_DEG, LOADLOCK_OPT_ELEV_DEG)
     design = make_part_design_from_bom(
         "S5.3-03",
         design_tier="COTS_ENV_ICD",
         material="Al 6061",
         temp_k=300.0,
         surface_finish_ra_um=0.8,
-        world_origin_mm=(wx, wy, Z_WAFER_MM),
-        world_rotation_deg=(0.0, 0.0, -35.0),
+        world_origin_mm=(round(LOADLOCK_CENTER_X_MM + ix, 4), round(iy, 4), round(Z_WAFER_MM + iz, 4)),
+        world_rotation_deg=(0.0, -LOADLOCK_OPT_ELEV_DEG, LOADLOCK_S53_PYRO_AZ_DEG),
         ports=(
-            make_cf_port_interface("CF40", "chamber_cf40_mate", (0.0, 0.0, 0.0), (-1.0, 0.0, 0.0), mating_part_id="S5.1-01", bore_override_mm=28.0),
+            make_cf_port_interface("CF40", "chamber_cf40_mate", (0.0, 0.0, 0.0), (-1.0, 0.0, 0.0), mating_part_id="S5.1-03", bore_override_mm=28.0),
             PortInterface("pyro_daq_out", "electrical", (92.5, 0.0, 40.2), (0.0, 0.0, 1.0), "SMA + 100 us Analog/SPI", mating_part_id="S7.3-01"),
         ),
         dimensions=(
@@ -286,9 +304,9 @@ def _build_s5_3_03() -> S5PartBuild:
         ),
         notes=(
             "High-speed backup dual-wavelength InGaAs/Si optical pyrometer (300-1200 C, +/-3 C, <100 us).",
-            "Mounts on S5.1-01 325 deg Z=500.0 mm CF40 port; >=26 mm clear of VAT gate valve & >=68 mm clear of LL.",
+            "OBS-001 fix: Relocated to S5.1-03 36-deg inclined 225-deg CF40 port with unobstructed top-surface view of wafer S5.4-01.",
         ),
-        scad_params=(("response_us", 100), ("temp_min_C", 300), ("temp_max_C", 1200)),
+        scad_params=(("response_us", 100), ("temp_min_C", 300), ("temp_max_C", 1200), ("elev_deg", LOADLOCK_OPT_ELEV_DEG)),
         target_mass_kg=1.4,
     )
     return S5PartBuild(
@@ -347,17 +365,17 @@ def _build_s5_3_04() -> S5PartBuild:
 
     mesh = merge_solids(shells, name="S5.3-04", material="OFHC Cu")
     step_mesh = merge_solids(step_shells, name="S5.3-04_step", material="OFHC Cu")
-    wx, wy, _ = radial_pos(250.5, 212.0, 0.0)
+    sx, sy, _ = radial_pos(LOADLOCK_SHUTTER_R_FACE_MM + 0.5, LOADLOCK_SHUTTER_AZ_DEG, 0.0)
     design = make_part_design_from_bom(
         "S5.3-04",
         design_tier="CUSTOM_FULL",
         material="OFHC Cu",
         temp_k=300.0,
         surface_finish_ra_um=0.4,
-        world_origin_mm=(wx, wy, 510.0),
-        world_rotation_deg=(0.0, 0.0, 212.0),
+        world_origin_mm=(round(LOADLOCK_CENTER_X_MM + sx, 4), round(sy, 4), Z_WAFER_MM + LOADLOCK_SHUTTER_Z_LOC_MM),
+        world_rotation_deg=(0.0, 0.0, LOADLOCK_SHUTTER_AZ_DEG),
         ports=(
-            make_cf_port_interface("CF40", "chamber_cf40_mate", (0.0, 0.0, 0.0), (-1.0, 0.0, 0.0), mating_part_id="S5.1-01"),
+            make_cf_port_interface("CF40", "chamber_cf40_mate", (0.0, 0.0, 0.0), (-1.0, 0.0, 0.0), mating_part_id="S5.1-03"),
             PortInterface("di_water_loop", "cooling", (208.0, 0.0, 0.0), (1.0, 0.0, 0.0), "Dual 1/8 in VCR Cooling"),
             PortInterface("pneumatic_6bar", "gas", (165.0, 0.0, 31.5), (0.0, 0.0, 1.0), "6 bar Dry N2 Actuator"),
         ),
@@ -369,13 +387,13 @@ def _build_s5_3_04() -> S5PartBuild:
         ),
         gdt_frames=(
             GDTFrame("flatness", 0.05, datum_primary="", feature_note="Mo reflective heat-shield face"),
-            GDTFrame("parallelism", 0.15, datum_primary="A", feature_note="Blade travel plane inside 36 mm magnet split gap"),
+            GDTFrame("parallelism", 0.15, datum_primary="A", feature_note="Blade travel plane inside load-lock Z=545 mm clear gap"),
         ),
         notes=(
-            "Water-cooled OFHC Cu core + Mo reflective thermal shutter protecting S2 MEMS write head during flash anneal.",
-            "Shown retracted inside CF40 bonnet at 212 deg Z=510.0 mm (zero magnetic/solid interference during write mode).",
+            "Water-cooled OFHC Cu core + Mo reflective thermal/MBE shutter protecting load-lock optics/MBE during flash anneal.",
+            "OBS-001 fix: Relocated to S5.1-03 load-lock 320 deg Z=545.0 mm clear gap (45 mm above wafer, 40 mm below MBE flange, >420 mm clear of S2.1-03!).",
         ),
-        scad_params=(("blade_l", 42.0), ("blade_w", 26.0), ("stroke_mm", 160.0), ("bellows_conv", 16)),
+        scad_params=(("blade_l", 42.0), ("blade_w", 26.0), ("stroke_mm", 175.0), ("bellows_conv", 16)),
         target_mass_kg=2.6,
     )
     return S5PartBuild(
@@ -400,16 +418,17 @@ def _build_s5_5_02() -> S5PartBuild:
         ScadFeature("add_cf_flange", {"size": "CF63", "bore_id": 44.0}, translate=(0.0, 8.75, 0.0), rotate=(90.0, 0.0, 0.0), comment="ISO 3669 CF63 316LN optical viewport flange (8xM8 @ PCD 92.1)"),
         ScadFeature("add_cylinder", {"d": 50.0, "h": 8.0}, translate=(0.0, 13.5, 0.0), rotate=(90.0, 0.0, 0.0), comment="Single-crystal AR sapphire window (Dia 50x8 mm, Dia 44 mm CA)"),
     )
+    s55_02_x, s55_02_y, s55_02_z = inclined_pos(LOADLOCK_S55_T_FACE_MM + 0.5, 90.0, LOADLOCK_OPT_ELEV_DEG)
     design = make_part_design_from_bom(
         "S5.5-02",
         design_tier="COTS_ENV_ICD",
         material="316LN",
         temp_k=300.0,
         surface_finish_ra_um=0.1,
-        world_origin_mm=(0.0, 295.5, Z_WAFER_MM),
-        world_rotation_deg=(0.0, 0.0, 0.0),
+        world_origin_mm=(round(LOADLOCK_CENTER_X_MM + s55_02_x, 4), round(s55_02_y, 4), round(Z_WAFER_MM + s55_02_z, 4)),
+        world_rotation_deg=(LOADLOCK_OPT_ELEV_DEG, 0.0, 0.0),
         ports=(
-            make_cf_port_interface("CF63", "chamber_pos_y_cf63", (0.0, 0.0, 0.0), (0.0, -1.0, 0.0), mating_part_id="S5.1-01", bore_override_mm=44.0),
+            make_cf_port_interface("CF63", "chamber_pos_y_cf63", (0.0, 0.0, 0.0), (0.0, -1.0, 0.0), mating_part_id="S5.1-03", bore_override_mm=44.0),
             PortInterface("optical_808nm_in", "optical", (0.0, 17.5, 0.0), (0.0, 1.0, 0.0), "Dia 44 mm CA AR@808nm", mating_part_id="S5.5-04", bore_mm=44.0, od_mm=50.0),
         ),
         dimensions=(
@@ -425,11 +444,11 @@ def _build_s5_5_02() -> S5PartBuild:
             GDTFrame("concentricity", 0.05, diameter_zone=True, datum_primary="B", feature_note="Window counterbore seat to CF63 PCD"),
         ),
         notes=(
-            "Exp130/139 S5.5 +Y Z=500 mm CF63 AR sapphire viewport: Dia 50x8 mm, Dia 44 mm CA (4.0 mm radial margin to Dia 36 mm beam).",
-            "n(808nm)=1.760, T_AR=98.0%, F_win=11.16 J/cm^2 (8.96x LIDT @ 100 J/cm^2); He leak <= 1e-10 mbar*L/s.",
-            "Leaves full +Y wrap-around clearance for S7.SAFETY-02 (280x260x220 mm) OD8 + 3 mm steel shroud.",
+            "OBS-001 fix: Relocated to S5.1-03 load-lock 36-deg inclined +Y CF63 AR sapphire viewport aimed at wafer S5.4-01 (420, 0, 500) with unobstructed LOS (sin 36 deg = 0.588 normal flux coupling).",
+            "Dia 50x8 mm window, Dia 44 mm CA (4.0 mm radial margin to Dia 36 mm beam), n(808nm)=1.760, T_AR=98.0%, He leak <= 1e-10 mbar*L/s.",
+            "Enclosed cleanly inside relocated S7.SAFETY-02 OD8 + 3 mm 316L interlock shroud.",
         ),
-        scad_params=(("cf63_od", 113.5), ("clear_aperture_mm", 44.0), ("sapphire_d", 50.0), ("sapphire_t", 8.0)),
+        scad_params=(("cf63_od", 113.5), ("clear_aperture_mm", 44.0), ("sapphire_d", 50.0), ("sapphire_t", 8.0), ("elev_deg", LOADLOCK_OPT_ELEV_DEG)),
         target_mass_kg=1.1,
     )
     # 760-ish faces with sub_per_side=1 -> exact full-mesh STEP directly!
@@ -479,14 +498,15 @@ def _build_s5_5_04() -> S5PartBuild:
 
     mesh = merge_solids(shells, name="S5.5-04", material="316LN")
     step_mesh = merge_solids(step_shells, name="S5.5-04_step", material="316LN")
+    s55_04_x, s55_04_y, s55_04_z = inclined_pos(LOADLOCK_S55_T_FACE_MM + 32.0, 90.0, LOADLOCK_OPT_ELEV_DEG)
     design = make_part_design_from_bom(
         "S5.5-04",
         design_tier="CUSTOM_FULL",
         material="316LN",
         temp_k=300.0,
         surface_finish_ra_um=0.8,
-        world_origin_mm=(0.0, 327.0, Z_WAFER_MM),
-        world_rotation_deg=(0.0, 0.0, 0.0),
+        world_origin_mm=(round(LOADLOCK_CENTER_X_MM + s55_04_x, 4), round(s55_04_y, 4), round(Z_WAFER_MM + s55_04_z, 4)),
+        world_rotation_deg=(LOADLOCK_OPT_ELEV_DEG, 0.0, 0.0),
         ports=(
             PortInterface("viewport_side_ap", "optical", (0.0, -10.0, 0.0), (0.0, -1.0, 0.0), "Dia 46 mm Beam Aperture", mating_part_id="S5.5-02", bore_mm=46.0),
             PortInterface("laser_side_ap", "optical", (0.0, 10.0, 0.0), (0.0, 1.0, 0.0), "Dia 46 mm Beam Aperture", mating_part_id="S5.5-01", bore_mm=46.0),
@@ -568,14 +588,15 @@ def _build_s5_5_01() -> S5PartBuild:
 
     mesh = merge_solids(shells, name="S5.5-01", material="Al 6061")
     step_mesh = merge_solids(step_shells, name="S5.5-01_step", material="Al 6061")
+    s55_01_x, s55_01_y, s55_01_z = inclined_pos(LOADLOCK_S55_T_FACE_MM + 90.0, 90.0, LOADLOCK_OPT_ELEV_DEG)
     design = make_part_design_from_bom(
         "S5.5-01",
         design_tier="CUSTOM_FULL",
         material="Al 6061",
         temp_k=300.0,
         surface_finish_ra_um=0.4,
-        world_origin_mm=(0.0, 385.0, Z_WAFER_MM),
-        world_rotation_deg=(0.0, 0.0, 0.0),
+        world_origin_mm=(round(LOADLOCK_CENTER_X_MM + s55_01_x, 4), round(s55_01_y, 4), round(Z_WAFER_MM + s55_01_z, 4)),
+        world_rotation_deg=(LOADLOCK_OPT_ELEV_DEG, 0.0, 0.0),
         ports=(
             PortInterface("homogenized_808nm_out", "optical", (0.0, -44.0, 0.0), (0.0, -1.0, 0.0), "Dia 36 mm Flat-Top 808 nm", mating_part_id="S5.5-04", bore_mm=44.0),
             PortInterface("dichroic_diag_top", "optical", (0.0, 0.0, 44.55), (0.0, 0.0, 1.0), "Dia 28 mm Pyrometer Tap", mating_part_id="S5.5-03", bore_mm=28.0),
@@ -647,14 +668,18 @@ def _build_s5_5_03() -> S5PartBuild:
 
     mesh = merge_solids(shells, name="S5.5-03", material="Al 6061")
     step_mesh = merge_solids(step_shells, name="S5.5-03_step", material="Al 6061")
+    s55_01_x, s55_01_y, s55_01_z = inclined_pos(LOADLOCK_S55_T_FACE_MM + 90.0, 90.0, LOADLOCK_OPT_ELEV_DEG)
+    el_rad = math.radians(LOADLOCK_OPT_ELEV_DEG)
+    s55_03_y = s55_01_y - 68.5 * math.sin(el_rad)
+    s55_03_z = s55_01_z + 68.5 * math.cos(el_rad)
     design = make_part_design_from_bom(
         "S5.5-03",
         design_tier="COTS_ENV_ICD",
         material="Al 6061",
         temp_k=300.0,
         surface_finish_ra_um=0.8,
-        world_origin_mm=(0.0, 385.0, 568.5),
-        world_rotation_deg=(0.0, 0.0, 0.0),
+        world_origin_mm=(round(LOADLOCK_CENTER_X_MM + s55_01_x, 4), round(s55_03_y, 4), round(Z_WAFER_MM + s55_03_z, 4)),
+        world_rotation_deg=(LOADLOCK_OPT_ELEV_DEG, 0.0, 0.0),
         ports=(
             PortInterface("optical_tap_in", "optical", (0.0, 0.0, -23.0), (0.0, 0.0, -1.0), "Dia 28 mm Thermal IR Tap", mating_part_id="S5.5-01", bore_mm=28.0),
             PortInterface("integrator_fpga_bus", "electrical", (0.0, 0.0, 33.2), (0.0, 0.0, 1.0), "LVDS / 10 us Pyrometer Telemetry", mating_part_id="S7.3-01"),
@@ -685,7 +710,7 @@ def _build_s5_5_03() -> S5PartBuild:
 # S5.6 In-Situ 28Si UHV LT-MBE Capper & Forming-Gas Passivation (Exp139)
 # ---------------------------------------------------------------------------
 def _build_s5_6_01() -> S5PartBuild:
-    """S5.6-01: CF100 Crucible-Free DC 28Si Rod Sublimation MBE Source + Water/LN2 Cryoshroud."""
+    """S5.6-01: CF100 Crucible-Free DC 28Si Rod Sublimation MBE Source + Fully-Bored Cryoshroud (OBS-001)."""
     shells: list[SolidMesh] = []
     step_shells: list[SolidMesh] = []
     scad_feats: list[ScadFeature] = []
@@ -693,31 +718,42 @@ def _build_s5_6_01() -> S5PartBuild:
     # World origin = (420.0, 0.0, 585.5) -> +0.5 mm Cu gasket clearance above S5.1-03 +Z CF100 (Z=585.0)
     # Total height = 279.5 mm -> exact Exp139 top Z = 865.0 mm!
     fl_bot = make_cf_flange("CF100", sub_per_side=1, axis="-z", center=(0.0, 0.0, 9.9), material="316LN")
-    outer_barrel = make_tube(63.0, 68.0, 190.0, segments=48, axis="z", center=(0.0, 0.0, 114.9), name="mbe_outer_vessel", material="316LN")
-    # Internal double-walled OFHC Cu water/LN2 cryoshroud + Mo crucible-free rod clamp + 28Si rod stub
-    cryoshroud = make_tube(46.0, 51.0, 174.0, segments=36, axis="z", center=(0.0, 0.0, 112.0), name="mbe_ofhc_cryoshroud", material="OFHC Cu")
+    # OBS-001 fix: Perforate BOTH outer_barrel (R=63..68) & cryoshroud (R=46..51) across port belt z=[68, 194]
+    # so S5.6-02 QCM (-Y, 270 deg), S5.6-03 PBN+FGA (228 deg), and S5.6-04 80 L/s TMP+NEG (+X, 0 deg) have
+    # 100% open bores right through to the 28Si rod evaporation axis!
+    barrel_lo = make_tube(63.0, 68.0, 48.0, segments=48, axis="z", center=(0.0, 0.0, 43.9), name="mbe_outer_barrel_lo", material="316LN")
+    barrel_mid_a = make_arc_sector_solid(63.0, 68.0, 126.0, 34.0, 204.0, arc_segments=28, center_z=131.0, name="mbe_outer_barrel_n", material="316LN")
+    barrel_mid_b = make_arc_sector_solid(63.0, 68.0, 126.0, 294.0, 326.0, arc_segments=10, center_z=131.0, name="mbe_outer_barrel_se", material="316LN")
+    barrel_hi = make_tube(63.0, 68.0, 15.8, segments=48, axis="z", center=(0.0, 0.0, 202.0), name="mbe_outer_barrel_hi", material="316LN")
+    # Internal double-walled OFHC Cu water/LN2 cryoshroud (similarly bored open for 0, 228, 270 deg; 0.2 mm seam prevents STL merge!)
+    shroud_lo = make_tube(46.0, 51.0, 42.8, segments=36, axis="z", center=(0.0, 0.0, 46.4), name="mbe_cryoshroud_lo", material="OFHC Cu")
+    shroud_mid_a = make_arc_sector_solid(46.0, 51.0, 126.0, 44.0, 198.0, arc_segments=22, center_z=131.0, name="mbe_cryoshroud_n", material="OFHC Cu")
+    shroud_mid_b = make_arc_sector_solid(46.0, 51.0, 126.0, 300.0, 320.0, arc_segments=8, center_z=131.0, name="mbe_cryoshroud_se", material="OFHC Cu")
+    shroud_hi = make_tube(46.0, 51.0, 10.0, segments=36, axis="z", center=(0.0, 0.0, 199.2), name="mbe_cryoshroud_hi", material="OFHC Cu")
+
     mo_holder = make_tube(8.0, 18.0, 32.0, segments=24, axis="z", center=(0.0, 0.0, 178.0), name="mbe_mo_collet", material="Mo")
     si28_rod = make_cylinder(6.5, 68.0, segments=20, axis="z", center=(0.0, 0.0, 128.0), name="mbe_28si_rod", material="Si")
 
     # 3 Welded Radial Auxiliary CF Ports on MBE barrel (R_out = 68.0 mm):
-    # -Y CF40 at z_loc=119.5 (Z=705.0, face at y=-88.0) -> mates S5.6-02 QCM/Valve
-    # +Y CF40 at z_loc=89.5  (Z=675.0, face at y=+88.0) -> mates S5.6-03 PBN Heater/FG
-    # +X CF63 at z_loc=124.5 (Z=710.0, face at x=+94.0, X=514.0) -> mates S5.6-04 80 L/s TMP+NEG
+    # -Y (270 deg) CF40 at z_loc=119.5 (Z=705.0, face at y=-88.0) -> mates S5.6-02 QCM/Valve
+    # 310 deg (+X/-Y) CF40 at z_loc=105.0 (Z=690.5, face at r=88.0) -> mates S5.6-03 PBN Heater/FG (clears +Y S5.5!)
+    # +X (0 deg) CF63 at z_loc=124.5 (Z=710.0, face at x=+94.0, X=514.0) -> mates S5.6-04 80 L/s TMP+NEG
     p_qcm = make_cf_weld_neck("CF40", neck_length=7.1, sub_per_side=1, axis="-y", center=(0.0, -81.65, 119.5), name="mbe_port_qcm", material="316LN")
-    p_pbn = make_cf_weld_neck("CF40", neck_length=7.1, sub_per_side=1, axis="+y", center=(0.0, 81.65, 89.5), name="mbe_port_pbn", material="316LN")
+    pux, puy, _ = radial_vec(S56_PBN_AZ_DEG)
+    p_pbn = make_cf_weld_neck("CF40", neck_length=7.1, sub_per_side=1, axis=(pux, puy, 0.0), center=(81.65 * pux, 81.65 * puy, S56_PBN_Z_LOC_MM), name="mbe_port_pbn", material="316LN")
     p_tmp = make_cf_weld_neck("CF63", neck_length=8.3, sub_per_side=1, axis="+x", center=(85.25, 0.0, 124.5), name="mbe_port_tmp", material="316LN")
 
     # Top CF100 flange (z=210.0..229.8) + DC power feedthrough turret & pneumatic rotary MBE shutter cap (z=230..279.5)
     fl_top = make_cf_flange("CF100", sub_per_side=1, axis="+z", center=(0.0, 0.0, 219.9), material="316LN")
     top_turret = make_cylinder(52.0, 36.0, segments=32, axis="z", center=(0.0, 0.0, 248.0), name="mbe_dc_shutter_head", material="316LN")
     shutter_act = make_cylinder(24.0, 13.3, segments=20, axis="z", center=(0.0, 0.0, 272.85), name="mbe_pneumatic_shutter_cap", material="Al 6061")
-    # Dual high-current DC feedthrough insulators + LN2/water cryoshroud stub ports on top
     dc_pin_1 = make_cylinder(7.0, 16.0, segments=12, axis="z", center=(-34.0, 0.0, 271.5), material="Al2O3")
     dc_pin_2 = make_cylinder(7.0, 16.0, segments=12, axis="z", center=(34.0, 0.0, 271.5), material="Al2O3")
 
     shells.extend([
-        fl_bot, outer_barrel, cryoshroud, mo_holder, si28_rod,
-        p_qcm, p_pbn, p_tmp, fl_top, top_turret, shutter_act, dc_pin_1, dc_pin_2,
+        fl_bot, barrel_lo, barrel_mid_a, barrel_mid_b, barrel_hi,
+        shroud_lo, shroud_mid_a, shroud_mid_b, shroud_hi,
+        mo_holder, si28_rod, p_qcm, p_pbn, p_tmp, fl_top, top_turret, shutter_act, dc_pin_1, dc_pin_2,
     ])
     step_shells.extend([
         make_cylinder(76.0, 19.8, segments=16, axis="z", center=(0.0, 0.0, 9.9)),
@@ -725,16 +761,16 @@ def _build_s5_6_01() -> S5PartBuild:
         make_cylinder(76.0, 19.8, segments=16, axis="z", center=(0.0, 0.0, 219.9)),
         make_cylinder(52.0, 49.5, segments=16, axis="z", center=(0.0, 0.0, 254.75)),
         make_cylinder(34.75, 12.7, segments=12, axis="y", center=(0.0, -81.65, 119.5)),
-        make_cylinder(34.75, 12.7, segments=12, axis="y", center=(0.0, 81.65, 89.5)),
+        make_cylinder(34.75, 12.7, segments=12, axis=(pux, puy, 0.0), center=(81.65 * pux, 81.65 * puy, S56_PBN_Z_LOC_MM)),
         make_cylinder(56.75, 17.5, segments=12, axis="x", center=(85.25, 0.0, 124.5)),
     ])
 
     scad_feats.extend([
         ScadFeature("add_cf_flange", {"size": "CF100"}, translate=(0.0, 0.0, 9.9), rotate=(180.0, 0.0, 0.0), comment="Bottom CF100 flange mating Load-Lock +Z (Z=585.5 mm)"),
-        ScadFeature("add_tube", {"od": 136.0, "id": 126.0, "h": 190.0}, translate=(0.0, 0.0, 114.9), comment="316LN MBE source barrel"),
-        ScadFeature("add_tube", {"od": 102.0, "id": 92.0, "h": 174.0}, translate=(0.0, 0.0, 112.0), comment="OFHC Cu water/LN2 cryoshroud"),
+        ScadFeature("add_tube", {"od": 136.0, "id": 126.0, "h": 190.0}, translate=(0.0, 0.0, 114.9), comment="316LN MBE source barrel (bored for radial CF ports)"),
+        ScadFeature("add_tube", {"od": 102.0, "id": 92.0, "h": 174.0}, translate=(0.0, 0.0, 112.0), comment="OFHC Cu water/LN2 cryoshroud (bored for radial CF ports)"),
         ScadFeature("add_cf_flange", {"size": "CF40"}, translate=(0.0, -81.65, 119.5), rotate=(90.0, 0.0, 0.0), comment="-Y CF40 port for S5.6-02 QCM"),
-        ScadFeature("add_cf_flange", {"size": "CF40"}, translate=(0.0, 81.65, 89.5), rotate=(-90.0, 0.0, 0.0), comment="+Y CF40 port for S5.6-03 PBN heater"),
+        ScadFeature("add_cf_flange", {"size": "CF40"}, translate=(round(81.65 * pux, 3), round(81.65 * puy, 3), S56_PBN_Z_LOC_MM), rotate=(0.0, 90.0, S56_PBN_AZ_DEG), comment="310 deg CF40 port for S5.6-03 PBN heater"),
         ScadFeature("add_cf_flange", {"size": "CF63"}, translate=(85.25, 0.0, 124.5), rotate=(0.0, 90.0, 0.0), comment="+X CF63 port for S5.6-04 80 L/s TMP+NEG"),
         ScadFeature("add_cf_flange", {"size": "CF100"}, translate=(0.0, 0.0, 219.9), comment="Top CF100 DC sublimation & pneumatic shutter flange"),
     ])
@@ -752,7 +788,7 @@ def _build_s5_6_01() -> S5PartBuild:
         ports=(
             make_cf_port_interface("CF100", "loadlock_cf100_base", (0.0, 0.0, 0.0), (0.0, 0.0, -1.0), mating_part_id="S5.1-03"),
             make_cf_port_interface("CF40", "qcm_neg_y_cf40", (0.0, -88.0, 119.5), (0.0, -1.0, 0.0), mating_part_id="S5.6-02"),
-            make_cf_port_interface("CF40", "pbn_pos_y_cf40", (0.0, 88.0, 89.5), (0.0, 1.0, 0.0), mating_part_id="S5.6-03"),
+            make_cf_port_interface("CF40", "pbn_pos_y_cf40", (round(88.0 * pux, 4), round(88.0 * puy, 4), S56_PBN_Z_LOC_MM), (pux, puy, 0.0), mating_part_id="S5.6-03"),
             make_cf_port_interface("CF63", "mbe_tmp_pos_x_cf63", (94.0, 0.0, 124.5), (1.0, 0.0, 0.0), mating_part_id="S5.6-04"),
             PortInterface("dc_400w_feed", "electrical", (-34.0, 0.0, 279.5), (0.0, 0.0, 1.0), "400 W DC Sublimation PSU", mating_part_id="S7.4-01"),
         ),
@@ -795,10 +831,11 @@ def _build_s5_6_02() -> S5PartBuild:
     fl_qcm = make_cf_flange("CF40", sub_per_side=1, axis="-y", center=(0.0, -57.6, 0.0), material="316LN")
     qcm_tube = make_tube(11.0, 15.0, 34.0, segments=24, axis="y", center=(0.0, -81.0, 0.0), name="qcm_6mhz_barrel", material="316LN")
     qcm_osc = make_chamfered_box(36.0, 22.0, 36.0, chamfer=2.0, center=(0.0, -109.2, 0.0), name="qcm_oscillator_box", material="Al 6061")
-    # Sealed companion <50 ppm 29Si enriched 28Si spare rod storage canister on +X clip bracket
-    rod_can = make_cylinder(9.0, 62.0, segments=20, axis="z", center=(36.0, -32.0, 0.0), name="si28_spare_rod_canister", material="316LN")
+    # Sealed companion <50 ppm 29Si enriched 28Si spare rod storage canister on +X clip bracket (OBS-121 tied!)
+    rod_clip = make_box(5.8, 16.0, 18.0, center=(28.0, -32.0, 0.0), name="si28_rod_clip_bracket", material="316LN")
+    rod_can = make_cylinder(9.0, 62.0, segments=20, axis="z", center=(40.0, -32.0, 0.0), name="si28_spare_rod_canister", material="316LN")
 
-    shells.extend([fl_in, valve_body, valve_wheel, fl_qcm, qcm_tube, qcm_osc, rod_can])
+    shells.extend([fl_in, valve_body, valve_wheel, fl_qcm, qcm_tube, qcm_osc, rod_clip, rod_can])
     step_shells.extend([
         make_cylinder(34.75, 12.7, segments=12, axis="y", center=(0.0, -6.35, 0.0)),
         make_box(50.0, 38.0, 68.0, center=(0.0, -32.0, 0.0)),
@@ -864,8 +901,8 @@ def _build_s5_6_03() -> S5PartBuild:
     # Precision all-metal sapphire-seat UHV leak valve (+Y end, y = 63..122) with vernier micrometer dial
     leak_body = make_cylinder(22.0, 32.0, segments=24, axis="y", center=(0.0, 79.2, 0.0), name="fg_sapphire_leak_valve", material="316L")
     vernier_dial = make_cylinder(25.0, 24.0, segments=24, axis="y", center=(0.0, 108.0, 0.0), name="fg_leak_vernier", material="Al 6061")
-    # 5% H2/N2 Forming-Gas 1/4" VCR inlet stub + ISO 10156 flow-limiting orifice block (+X side)
-    vcr_inlet = make_cylinder(9.5, 32.0, segments=16, axis="+x", center=(43.2, 38.0, -10.0), name="fg_h2_n2_vcr_orifice", material="316L")
+    # 5% H2/N2 Forming-Gas 1/4" VCR inlet stub + ISO 10156 flow-limiting orifice block (-X local -> +X/+Y world)
+    vcr_inlet = make_cylinder(9.5, 32.0, segments=16, axis="-x", center=(-43.2, 38.0, -10.0), name="fg_h2_n2_vcr_orifice", material="316L")
 
     shells.extend([fl_in, mani_body, pbn_collar, pbn_ins_1, pbn_ins_2, leak_body, vernier_dial, vcr_inlet])
     step_shells.extend([
@@ -876,7 +913,7 @@ def _build_s5_6_03() -> S5PartBuild:
     ])
 
     scad_feats.extend([
-        ScadFeature("add_cf_flange", {"size": "CF40"}, translate=(0.0, 6.35, 0.0), rotate=(90.0, 0.0, 0.0), comment="Mating CF40 flange on S5.6-01 +Y port"),
+        ScadFeature("add_cf_flange", {"size": "CF40"}, translate=(0.0, 6.35, 0.0), rotate=(90.0, 0.0, 0.0), comment="Mating CF40 flange on S5.6-01 310 deg port"),
         ScadFeature("add_box", {"dx": 54.0, "dy": 50.0, "dz": 68.0}, translate=(0.0, 38.0, 0.0), comment="316L VAR PBN heater & forming-gas manifold"),
         ScadFeature("add_cf_flange", {"size": "CF40"}, translate=(0.0, 38.0, 40.5), comment="Top CF40 345 C PBN heater power/TC feedthrough"),
         ScadFeature("add_cylinder", {"d": 50.0, "h": 56.0}, translate=(0.0, 92.0, 0.0), rotate=(90.0, 0.0, 0.0), comment="Precision sapphire-seat 5% H2/N2 leak valve"),
@@ -884,17 +921,18 @@ def _build_s5_6_03() -> S5PartBuild:
 
     mesh = merge_solids(shells, name="S5.6-03", material="316L")
     step_mesh = merge_solids(step_shells, name="S5.6-03_step", material="316L")
+    pux, puy, _ = radial_vec(S56_PBN_AZ_DEG)
     design = make_part_design_from_bom(
         "S5.6-03",
         design_tier="CUSTOM_FULL",
         material="316L",
         temp_k=618.15,
         surface_finish_ra_um=0.4,
-        world_origin_mm=(LOADLOCK_CENTER_X_MM, 88.5, 675.0),
-        world_rotation_deg=(0.0, 0.0, 0.0),
+        world_origin_mm=(round(LOADLOCK_CENTER_X_MM + 88.5 * pux, 4), round(88.5 * puy, 4), 585.5 + S56_PBN_Z_LOC_MM),
+        world_rotation_deg=(0.0, 0.0, S56_PBN_AZ_DEG - 90.0),
         ports=(
             make_cf_port_interface("CF40", "mbe_pbn_cf40_mate", (0.0, 0.0, 0.0), (0.0, -1.0, 0.0), mating_part_id="S5.6-01"),
-            PortInterface("forming_gas_5pct_in", "gas", (59.2, 38.0, -10.0), (1.0, 0.0, 0.0), "1/4 in VCR 5% H2/N2 ISO 10156", mating_part_id="S7.SAFETY-06"),
+            PortInterface("forming_gas_5pct_in", "gas", (-59.2, 38.0, -10.0), (-1.0, 0.0, 0.0), "1/4 in VCR 5% H2/N2 ISO 10156", mating_part_id="S7.SAFETY-06"),
             PortInterface("pbn_150w_power_tc", "electrical", (0.0, 38.0, 69.0), (0.0, 0.0, 1.0), "150 W PBN + Type-K PID (+/-2 C)", mating_part_id="S7.4-01"),
         ),
         dimensions=(

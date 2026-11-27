@@ -4,16 +4,20 @@
 // after the programmed number of counted ions. A watchdog aborts a slot
 // whose detector never fires (dead channel / empty beamlet).
 //
-// Cycle contract (verified against blanker_gate_spec.v by bounded model
-// checking, bmc64.ys): start is accepted only in IDLE; blanker_open and busy
-// are high exactly in the RUN cycles; completion enters a one-cycle FIN
-// state (done=1, blanker closed, start ignored), watchdog expiry a
-// one-cycle TO state (abort=1); then back to IDLE. counted holds the last
-// sequence count while idle.
+// Hardened RTL contract:
+//   - Default WATCHDOG_CYCLES = 7,500,000 (75 ms @ 100 MHz >= 5 * tau_shot
+//     for canonical 15 ms Poisson single-ion cycle -> <0.67% truncation).
+//   - Built-in 2-FF async-assert / sync-deassert reset synchronizer
+//     (INTERNAL_RST_SYNC=1 default; set 0 when driven by parent reset bridge).
+//   - Built-in 2-FF CDC synchronizer + rising-edge detector on `count_hit`
+//     so multi-cycle (e.g., 30 ns / 3-clock) IBIC pulses count exactly once.
+//   - `target_count == 0` guard: start is ignored and blanker never opens.
+//   - Port `timeout_abort` avoids SV/C++ reserved keyword `abort` (0 Verilator -Wall warnings).
 `timescale 1ns/1ps
 module blanker_gate #(
-    parameter WATCHDOG_CYCLES = 100000,   // 1 ms at 100 MHz
-    parameter COUNT_W = 8
+    parameter integer WATCHDOG_CYCLES   = 7500000, // 75 ms @ 100 MHz (>= 5 * 15 ms tau_shot)
+    parameter integer COUNT_W           = 8,
+    parameter integer INTERNAL_RST_SYNC = 1
 ) (
     input  wire                  clk,
     input  wire                  rst_n,
@@ -23,50 +27,91 @@ module blanker_gate #(
     output wire                  blanker_open,
     output wire                  busy,
     output wire                  done,
-    output wire                  abort,
+    output wire                  timeout_abort,
     output reg  [COUNT_W-1:0]    counted
 );
-    localparam S_IDLE = 2'd0, S_RUN = 2'd1, S_FIN = 2'd2, S_TO = 2'd3;
-    localparam WD_W = (WATCHDOG_CYCLES > 1) ? $clog2(WATCHDOG_CYCLES) : 1;
+    localparam [1:0] S_IDLE = 2'd0;
+    localparam [1:0] S_RUN  = 2'd1;
+    localparam [1:0] S_FIN  = 2'd2;
+    localparam [1:0] S_TO   = 2'd3;
+
+    localparam integer WD_W      = (WATCHDOG_CYCLES > 1) ? $clog2(WATCHDOG_CYCLES) : 1;
+    localparam integer WD_MAX_I  = (WATCHDOG_CYCLES > 1) ? (WATCHDOG_CYCLES - 1) : 0;
+    localparam [WD_W-1:0] WD_MAX = WD_MAX_I[WD_W-1:0];
+    localparam [WD_W-1:0] WD_ONE = {{(WD_W-1){1'b0}}, 1'b1};
+    localparam [COUNT_W-1:0] CNT_ONE = {{(COUNT_W-1){1'b0}}, 1'b1};
+
+    // 2-FF async-assert / sync-deassert reset synchronizer
+    wire rst_sync_n;
+    generate
+        if (INTERNAL_RST_SYNC != 0) begin : g_rst_sync
+            (* ASYNC_REG = "TRUE" *) reg rst_sync_s1;
+            (* ASYNC_REG = "TRUE" *) reg rst_sync_s2;
+            always @(posedge clk or negedge rst_n) begin
+                if (!rst_n) begin
+                    rst_sync_s1 <= 1'b0;
+                    rst_sync_s2 <= 1'b0;
+                end else begin
+                    rst_sync_s1 <= 1'b1;
+                    rst_sync_s2 <= rst_sync_s1;
+                end
+            end
+            assign rst_sync_n = rst_sync_s2;
+        end else begin : g_rst_ext
+            assign rst_sync_n = rst_n;
+        end
+    endgenerate
+
+    // 2-FF CDC synchronizer + rising-edge detector on async IBIC count_hit input
+    (* ASYNC_REG = "TRUE" *) reg count_hit_s1;
+    (* ASYNC_REG = "TRUE" *) reg count_hit_s2;
+    reg count_hit_prev;
+    wire count_hit_rise = count_hit_s2 & (~count_hit_prev);
+
     reg [1:0]       state;
     reg [WD_W-1:0]  watchdog;
 
-    assign blanker_open = (state == S_RUN);
-    assign busy         = (state == S_RUN);
-    assign done         = (state == S_FIN);
-    assign abort        = (state == S_TO);
+    assign blanker_open  = (state == S_RUN);
+    assign busy          = (state == S_RUN);
+    assign done          = (state == S_FIN);
+    assign timeout_abort = (state == S_TO);
 
-    always @(posedge clk or negedge rst_n) begin
-        if (!rst_n) begin
-            state    <= S_IDLE;
-            counted  <= {COUNT_W{1'b0}};
-            watchdog <= {WD_W{1'b0}};
+    always @(posedge clk or negedge rst_sync_n) begin
+        if (!rst_sync_n) begin
+            count_hit_s1   <= 1'b0;
+            count_hit_s2   <= 1'b0;
+            count_hit_prev <= 1'b0;
+            state          <= S_IDLE;
+            counted        <= {COUNT_W{1'b0}};
+            watchdog       <= {WD_W{1'b0}};
         end else begin
+            count_hit_s1   <= count_hit;
+            count_hit_s2   <= count_hit_s1;
+            count_hit_prev <= count_hit_s2;
+
             case (state)
                 S_IDLE: begin
-                    if (start) begin
+                    // Reject target_count == 0: blanker must never open for 0-ion target
+                    if (start && (target_count != {COUNT_W{1'b0}})) begin
                         counted  <= {COUNT_W{1'b0}};
                         watchdog <= {WD_W{1'b0}};
                         state    <= S_RUN;
                     end
                 end
                 S_RUN: begin
-                    // Saturate at the expiry threshold: only the >= status is
-                    // observable, and saturation keeps the narrow counter
-                    // equivalent to an unbounded one for every input sequence
-                    // (hits can postpone the check past a wrapping point).
-                    if (watchdog < WATCHDOG_CYCLES - 1)
-                        watchdog <= watchdog + 1'b1;
-                    if (count_hit) begin
-                        counted <= counted + 1'b1;
-                        if (counted + 1'b1 >= target_count)
+                    // Saturate watchdog at WD_MAX to prevent wrap-around under continuous hits
+                    if (watchdog < WD_MAX)
+                        watchdog <= watchdog + WD_ONE;
+                    if (count_hit_rise) begin
+                        counted <= counted + CNT_ONE;
+                        if ((counted + CNT_ONE) >= target_count)
                             state <= S_FIN;
-                    end else if (watchdog >= WATCHDOG_CYCLES - 1) begin
+                    end else if (watchdog >= WD_MAX) begin
                         state <= S_TO;
                     end
                 end
-                S_FIN: state <= S_IDLE;
-                S_TO:  state <= S_IDLE;
+                S_FIN:   state <= S_IDLE;
+                S_TO:    state <= S_IDLE;
                 default: state <= S_IDLE;
             endcase
         end

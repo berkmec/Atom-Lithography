@@ -30,16 +30,16 @@
         "name": "mirror_reflective_facets",
         "kind": "optical",
         "position_mm": [
-          52.5,
+          65.0,
           0.0,
-          0.0
+          32.0
         ],
         "normal": [
           1.0,
           0.0,
           0.0
         ],
-        "standard": "3x Zerodur Al+SiO2 lambda/20 @ 632.8 nm (CTE < 0.02 ppm/K)",
+        "standard": "3x Zerodur Al+SiO2 lambda/20 @ 632.8 nm inside Z_canon=[486, 496] mm split gap",
         "mating_part_id": "S4.4-02",
         "bore_mm": 0.0,
         "od_mm": 0.0,
@@ -54,16 +54,16 @@
         "name": "stage_flank_mount",
         "kind": "mechanical",
         "position_mm": [
-          46.5,
+          45.0,
           0.0,
-          0.0
+          -1.0
         ],
         "normal": [
           -1.0,
           0.0,
           0.0
         ],
-        "standard": "3-Point Low-Stress Invar Flexure Clips on S4.3-01",
+        "standard": "3x Rigid Invar-36 Optical Riser Brackets on S4.3-01",
         "mating_part_id": "S4.3-01",
         "bore_mm": 0.0,
         "od_mm": 0.0,
@@ -78,7 +78,7 @@
     "dimensions": [
       {
         "label": "BAR_LEN",
-        "nominal_mm": 52.0,
+        "nominal_mm": 26.0,
         "tol_plus_mm": 0.02,
         "tol_minus_mm": -0.02,
         "view": "top",
@@ -88,11 +88,11 @@
         "is_basic": false,
         "datum_ref": "",
         "decimals": 2,
-        "formatted": "52.00 ±0.02"
+        "formatted": "26.00 ±0.02"
       },
       {
         "label": "BAR_THK",
-        "nominal_mm": 6.0,
+        "nominal_mm": 5.5,
         "tol_plus_mm": 0.02,
         "tol_minus_mm": -0.02,
         "view": "top",
@@ -102,11 +102,11 @@
         "is_basic": false,
         "datum_ref": "",
         "decimals": 2,
-        "formatted": "6.00 ±0.02"
+        "formatted": "5.50 ±0.02"
       },
       {
         "label": "BAR_H",
-        "nominal_mm": 16.0,
+        "nominal_mm": 10.0,
         "tol_plus_mm": 0.02,
         "tol_minus_mm": -0.02,
         "view": "front",
@@ -116,7 +116,21 @@
         "is_basic": false,
         "datum_ref": "",
         "decimals": 2,
-        "formatted": "16.00 ±0.02"
+        "formatted": "10.00 ±0.02"
+      },
+      {
+        "label": "OPTICAL_R",
+        "nominal_mm": 65.0,
+        "tol_plus_mm": 0.02,
+        "tol_minus_mm": -0.02,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "R",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "R65.00 ±0.02"
       }
     ],
     "gdt_frames": [
@@ -161,14 +175,16 @@
     ],
     "notes": [
       "Duzlemlik lambda/20, CTE <0.02 ppm/K",
-      "3x Zerodur/ULE lambda/20 stage bar mirrors (52x6x16 mm) with Al+SiO2 HR coating @ 632.8 nm & Invar clips.",
-      "300K->4K Invar-36 clip vs Zerodur bar WC rad clearance: 0.0735 mm (PASS)."
+      "3x Zerodur/ULE lambda/20 stage bar mirrors (26x5.5x10 mm) raised on Invar-36 riser stalks into Z_nat=[-14, -4] mm (Z_canon=[486, 496] mm) split gap with clear normal-incidence LOS to S4.4-02 and minimized 9 mm Abbe offset.",
+      "300K->4K Invar-36 clip vs Zerodur bar WC rad clearance: 0.0792 mm (PASS)."
     ],
     "scad_params": {
       "n_mirrors": 3,
-      "bar_len_mm": 52.0,
-      "bar_thk_mm": 6.0,
-      "bar_h_mm": 16.0
+      "bar_len_mm": 26.0,
+      "bar_thk_mm": 5.5,
+      "bar_h_mm": 10.0,
+      "mirror_r_face_mm": 65.0,
+      "mirror_z_nat_mm": -9.0
     },
     "target_mass_kg": null,
     "epistemic": {
@@ -194,31 +210,31 @@
     "watertight": true,
     "boundary_edges": 0,
     "non_manifold_edges": 0,
-    "signed_volume_mm3": 16897.920000000002,
-    "surface_area_mm2": 9165.76126958213,
-    "mass_kg": 0.04275173759999999,
+    "signed_volume_mm3": 15148.800000000003,
+    "surface_area_mm2": 9451.072250993908,
+    "mass_kg": 0.03832646400000003,
     "cg_mm": [
-      15.817946824224526,
-      -2.5193633299246225,
-      0.0
+      19.7575571134347,
+      1.128703289589343e-14,
+      13.847789923954366
     ],
     "bbox_min_mm": [
-      -26.0,
-      -55.6,
-      -8.0
+      -13.00000000000001,
+      -65.0,
+      -4.0
     ],
     "bbox_max_mm": [
-      54.6,
-      54.6,
-      8.0
+      65.0,
+      65.0,
+      37.0
     ],
     "inertia_kg_mm2": [
-      77.01739521846972,
-      30.652482145164985,
-      105.84580322603469,
-      -1.7037061294682392,
-      3.3134710974991327e-16,
-      -1.1781230568885805e-15
+      98.2735636174478,
+      38.506304366895655,
+      121.84515633491682,
+      -4.178178047058468e-16,
+      -0.5294806951961694,
+      8.361555950883985e-16
     ],
     "triangle_count": 156,
     "vertex_count": 96,
@@ -234,14 +250,14 @@
     "all_valid": true
   },
   "world_bbox_min_mm": [
-    -26.0,
-    -55.6,
-    -49.0
+    -13.00000000000001,
+    -65.0,
+    -45.0
   ],
   "world_bbox_max_mm": [
-    54.6,
-    54.6,
-    -33.0
+    65.0,
+    65.0,
+    -4.0
   ],
   "reconciliation": null,
   "thermal_contraction_checks": [
@@ -250,20 +266,25 @@
       "inner_material": "Zerodur",
       "t_cold_k": 4.0,
       "t_ref_k": 293.15,
-      "warm_outer_id_mm": 52.2,
-      "warm_inner_od_mm": 52.0,
-      "cold_outer_id_mm": 52.179120000000005,
-      "cold_inner_od_mm": 52.00208,
+      "warm_outer_id_mm": 26.2,
+      "warm_inner_od_mm": 26.0,
+      "cold_outer_id_mm": 26.18952,
+      "cold_inner_od_mm": 26.00104,
       "outer_strain": -0.00039999999999995595,
       "inner_strain": 4.0000000000040004e-05,
-      "warm_radial_clearance_mm": 0.10000000000000142,
-      "cold_nominal_radial_clearance_mm": 0.0885200000000026,
-      "cold_worst_case_radial_clearance_mm": 0.0735200000000026,
-      "delta_radial_clearance_mm": -0.011479999999998824,
+      "warm_radial_clearance_mm": 0.09999999999999964,
+      "cold_nominal_radial_clearance_mm": 0.09424000000000099,
+      "cold_worst_case_radial_clearance_mm": 0.07924000000000099,
+      "delta_radial_clearance_mm": -0.005759999999998655,
       "min_required_radial_clearance_mm": 0.05,
       "interference_risk": false,
       "passed": true
     }
   ],
-  "tolerance_stack_checks": []
+  "tolerance_stack_checks": [],
+  "shell_mate_metadata": {
+    "n_shells": 9,
+    "fea_bonding_mode": "TIED_SUBASSEMBLY_CONTACTS",
+    "watertight": true
+  }
 }

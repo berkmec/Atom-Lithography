@@ -105,10 +105,10 @@ def optical_si_808nm(T_K: np.ndarray | float) -> tuple[float, np.ndarray]:
 @lru_cache(maxsize=8)
 def _stretched_si_grid(
     wafer_thickness_m: float = 500e-6,
-    n_cells: int = 44,
-    dz0_m: float = 120e-9,
+    n_cells: int = 120,
+    dz0_m: float = 50e-9,
 ) -> tuple[np.ndarray, np.ndarray]:
-    """Build geometrically stretched 1D finite-volume grid across a 500 um Si wafer."""
+    """Build geometrically stretched 1D finite-volume grid across a 500 um Si wafer (Exp130)."""
     def _f(r: float) -> float:
         return dz0_m * (r ** n_cells - 1.0) / (r - 1.0) - wafer_thickness_m
 
@@ -131,11 +131,28 @@ def _wafer_enthalpy_j_m2(T_vec: np.ndarray, dz: np.ndarray, T_ref: float) -> flo
     return float(np.sum(RHO_SI * dz * h_cell))
 
 
-def _integrate_ted_and_activation(t_s: np.ndarray, T_surf_K: np.ndarray) -> dict[str, float]:
-    """Integrate Exp130 Arrhenius/TED P diffusion broadening & Olson-Roth activation along T(t)."""
-    c_cl = C_CL_INIT_CM3
+def _integrate_ted_and_activation(
+    t_s: np.ndarray,
+    T_surf_K: np.ndarray,
+    *,
+    z_max_nm: float = 60.0,
+    n_z: int = 80,
+) -> dict[str, float]:
+    """Integrate coupled 1D spatial FVM interstitial/TED PDE & Olson-Roth activation along T(t).
+
+    Matches Exp130 ``heat_ted_solver.solve_ted_kinetics_1d`` physics: spatial Si self-interstitial
+    diffusion I(z, t) with front-surface Robin recombination sink (L_surf=2.0 nm), 3D isolated-
+    cascade radial out-diffusion (4 D_I / r_casc^2), Stolk/Cowern cluster dissolution, and
+    Olson-Roth SPE activation over the 5 keV 31P+ BCA depth profile (Rp=6.46 nm, sigma_z=2.88 nm).
+    """
+    dz_nm = float(z_max_nm) / int(n_z)
+    z_nm = (np.arange(n_z, dtype=np.float64) + 0.5) * dz_nm
+    sigma_z_nm = 2.88
+    g0 = np.exp(-0.5 * ((z_nm - RP_NM) / sigma_z_nm) ** 2)
+    c_cl = C_CL_INIT_CM3 * (g0 / float(np.max(g0)))
     c_i_init = C_I0_CM3 * math.exp(-EF_I_EV / (KB_EV_PER_K * max(float(T_surf_K[0]), 250.0)))
-    c_i = c_i_init
+    c_i = np.full(n_z, c_i_init, dtype=np.float64)
+    idx_rp = int(np.argmin(np.abs(z_nm - RP_NM)))
 
     int_2D_eq = 0.0
     int_2D_ted = 0.0
@@ -148,7 +165,7 @@ def _integrate_ted_and_activation(t_s: np.ndarray, T_surf_K: np.ndarray) -> dict
         if dt <= 0.0:
             continue
         Tm = 0.5 * float(T_surf_K[k] + T_surf_K[k + 1])
-        if Tm < 420.0:
+        if Tm < 450.0:
             continue
 
         boltz_p = math.exp(-EA_P_SI_EV / (KB_EV_PER_K * Tm))
@@ -160,29 +177,38 @@ def _integrate_ted_and_activation(t_s: np.ndarray, T_surf_K: np.ndarray) -> dict
         k_act = NU_ACT_S * math.exp(-EA_ACT_EV / (KB_EV_PER_K * Tm))
         int_k_act += k_act * dt
 
-        # Stolk/Cowern isolated-cascade interstitial cluster release + 3D radial & surface sink
+        # 1. Exact exponential cluster release over dt
         k_diss = NU_CL_S * math.exp(-EA_CL_DISS_EV / (KB_EV_PER_K * Tm))
         d_i = D_I0_NM2_PER_S * math.exp(-EM_I_EV / (KB_EV_PER_K * Tm))
         c_i_star = max(C_I0_CM3 * math.exp(-EF_I_EV / (KB_EV_PER_K * Tm)), 1e-30)
 
         exp_kd = math.exp(-min(k_diss * dt, 500.0))
         d_cl = c_cl * (1.0 - exp_kd)
-        c_cl *= exp_kd
+        c_cl = c_cl * exp_kd
         gen_rate = d_cl / dt
 
-        # Combined 3D radial out-diffusion (4 D_I / r_casc^2) + front surface Robin sink
-        k_sink = (4.0 * d_i / (R_CASC_NM ** 2)) + (d_i / (RP_NM * (L_SURF_NM + RP_NM)))
-        ks_dt = k_sink * dt
-        if ks_dt < 1e-6:
-            c_i_new = c_i + (gen_rate - k_sink * (c_i - c_i_star)) * dt
-        else:
-            exp_ks = math.exp(-min(ks_dt, 500.0))
-            c_i_new = c_i_star + (c_i - c_i_star) * exp_ks + (gen_rate / k_sink) * (1.0 - exp_ks)
-        c_i = max(c_i_new, c_i_star)
-        s_i = c_i / c_i_star
-        max_s_i = max(max_s_i, s_i)
+        # 2. Implicit 1D finite-volume interstitial PDE I(z, t) with Robin surface sink & 3D radial sink
+        alpha_i = d_i * dt / (dz_nm * dz_nm)
+        k_rad_dt = (4.0 * d_i / (R_CASC_NM ** 2)) * dt
+        diag_i = np.full(n_z, 1.0 + 2.0 * alpha_i + k_rad_dt, dtype=np.float64)
+        k_surf_i = (d_i / (L_SURF_NM + 0.5 * dz_nm)) * dt / dz_nm
+        diag_i[0] = 1.0 + alpha_i + k_surf_i + k_rad_dt
+        diag_i[-1] = 1.0 + 3.0 * alpha_i + k_rad_dt
 
-        d_p_eff = d_p_eq * (F_I_P * s_i + (1.0 - F_I_P))
+        rhs_i = c_i + gen_rate * dt + k_rad_dt * c_i_star
+        rhs_i[0] += k_surf_i * c_i_star
+        rhs_i[-1] += 2.0 * alpha_i * c_i_star
+
+        ab_i = np.zeros((3, n_z), dtype=np.float64)
+        ab_i[0, 1:] = -alpha_i
+        ab_i[1, :] = diag_i
+        ab_i[2, :-1] = -alpha_i
+        c_i = np.maximum(solve_banded((1, 1), ab_i, rhs_i, overwrite_ab=True, overwrite_b=True), c_i_star)
+
+        s_i_rp = float(c_i[idx_rp] / c_i_star)
+        max_s_i = max(max_s_i, s_i_rp)
+
+        d_p_eff = d_p_eq * (F_I_P * s_i_rp + (1.0 - F_I_P))
         int_2D_ted += 2.0 * d_p_eff * dt
 
     return {
@@ -218,7 +244,7 @@ class AutoRecalConfig:
     laser_wavelength_nm: float = 808.0
     t_sub_K: float = 300.0
     t_peak_nom_K: float = 1530.0
-    sigma_anneal_nom_nm: float = 0.34
+    sigma_anneal_nom_nm: float = 0.3924  # Exp130 1D spatial TED PDE nominal at 1530 K / 1.0 ms
     sigma_anneal_limit_nm: float = 0.50
     aom_tau_us: float = 15.0             # First-order AOM driver + acoustic bandwidth lag (us)
     aom_dead_time_us: float = 10.0       # AOM acoustic transit + FPGA loop dead-time (us)
@@ -366,18 +392,18 @@ class AutoRecalController:
         aom_tau_us: float,
         aom_dead_time_us: float,
     ) -> dict[str, Any]:
-        """Run coupled 1D nonlinear Si thermal PDE (+ optional AOM/anti-windup PID loop)."""
+        """Run coupled 1D nonlinear Si thermal PDE (+ optional AOM/anti-windup PID + 1687 K melt trip)."""
         c = self.cfg
-        _, dz = _stretched_si_grid(500e-6, n_cells=44, dz0_m=120e-9)
+        _, dz = _stretched_si_grid(500e-6, n_cells=120, dz0_m=50e-9)
         t_pulse_s = c.laser_pulse_nom_ms * 1e-3
         dt_s = c.aom_sample_dt_us * 1e-6
         n_pulse = max(20, int(round(t_pulse_s / dt_s)))
         dt_s = t_pulse_s / n_pulse
         fluence_J_m2 = c.laser_fluence_nom_J_cm2 * 1.0e4
 
-        # Stretched post-pulse cooling grid out to 16 * t_pulse_s
-        n_cool = 56
-        cool_span = 15.0 * t_pulse_s
+        # Stretched post-pulse cooling grid matching Exp130 (51 ms total for 1.0 ms pulse)
+        n_cool = 96
+        cool_span = max(15.0 * t_pulse_s, min(0.050, 50.0 * t_pulse_s))
         s_cool = np.geomspace(dt_s * 0.5, cool_span + dt_s * 0.5, n_cool + 1) - dt_s * 0.5
         s_cool[0] = 0.0
         s_cool[-1] = cool_span
@@ -405,6 +431,8 @@ class AutoRecalController:
         prev_meas = 1.0
         d_filt = 0.0
         saturated = False
+        melt_abort_triggered = False
+        melt_abort_step: int | None = None
 
         p_eff_hist = np.ones(n_pulse, dtype=np.float64)
         g_act_hist = np.ones(n_pulse, dtype=np.float64)
@@ -418,8 +446,13 @@ class AutoRecalController:
             I_nom = self._pulse_shape_irradiance(t_mid, t_pulse_s, fluence_J_m2)
 
             if closed_loop:
-                g_delayed = delay_buf[0]
-                g_act = alpha_aom * g_act + (1.0 - alpha_aom) * g_delayed
+                if melt_abort_triggered:
+                    # Hardwired FPGA aom_pid_ctrl.v:96 Si-melt RF blanking latched -> g = 0.0
+                    g_act = 0.0
+                    g_cmd = 0.0
+                else:
+                    g_delayed = delay_buf[0]
+                    g_act = alpha_aom * g_act + (1.0 - alpha_aom) * g_delayed
             else:
                 g_act = 1.0
 
@@ -435,12 +468,31 @@ class AutoRecalController:
             T_surf[step + 1] = T[0]
 
             if closed_loop:
+                t_meas = T[0] + float(rng.normal(0.0, 1.5))
+                # Hardwired FPGA 1687 K Si-melt RF abort trip (rtl/machine_ctrl/aom_pid_ctrl.v:96)
+                if T[0] >= T_MELT_SI or t_meas >= T_MELT_SI:
+                    melt_abort_triggered = True
+                    if melt_abort_step is None:
+                        melt_abort_step = step
+                    saturated = True
+                    g_cmd = 0.0
+                    g_act = 0.0
+                    delay_buf = deque([0.0] * (n_dead + 1), maxlen=n_dead + 1)
+                    continue
+                if melt_abort_triggered:
+                    g_cmd = 0.0
+                    delay_buf.append(0.0)
+                    continue
+
                 # 100 kHz photodiode power measurement + pyrometer thermal feedback trim
                 p_meas = p_eff * (1.0 + float(rng.normal(0.0, 0.002)))
                 err_p = 1.0 - p_meas
                 err_t = 0.0
-                if T_ref_pulse is not None and T_ref_pulse[step + 1] > 480.0:
-                    t_meas = T[0] + float(rng.normal(0.0, 1.5))
+                if (
+                    T_ref_pulse is not None
+                    and (step + 1) < len(T_ref_pulse)
+                    and T_ref_pulse[step + 1] > 480.0
+                ):
                     err_t = 0.60 * (T_ref_pulse[step + 1] - t_meas) / max(c.t_peak_nom_K - c.t_sub_K, 100.0)
                 err = err_p + err_t
 
@@ -484,6 +536,7 @@ class AutoRecalController:
 
         return {
             "t_s": t_grid,
+            "n_pulse": n_pulse,
             "T_surf_K": T_surf,
             "T_peak_K": T_peak,
             "t_peak_ms": t_peak_ms,
@@ -491,6 +544,8 @@ class AutoRecalController:
             "final_aom_gain": float(g_act_hist[-1]),
             "mean_aom_gain_flat": float(np.mean(g_act_hist[n_pulse // 5 : (9 * n_pulse) // 10])),
             "aom_saturated": saturated,
+            "melt_abort_triggered": melt_abort_triggered,
+            "melt_abort_step": melt_abort_step,
             "measured_settling_us": settling_us,
             "energy_balance_rel_err": energy_rel_err,
             "p_eff_hist": p_eff_hist,
@@ -523,7 +578,7 @@ class AutoRecalController:
             aom_dead_time_us=tau_dead,
         )
         t_ref_peak = ref["T_peak_K"]
-        n_pulse_ref = int(round((c.laser_pulse_nom_ms * 1e-3) / (c.aom_sample_dt_us * 1e-6)))
+        n_pulse_ref = min(int(ref["n_pulse"]), len(ref["T_surf_K"]) - 1)
         T_ref_pulse = ref["T_surf_K"][: n_pulse_ref + 1]
 
         cases: dict[str, Any] = {}
@@ -565,6 +620,7 @@ class AutoRecalController:
                 sig_ctrl <= c.sigma_anneal_limit_nm
                 and abs(delta_t_peak) <= 15.0
                 and t_ctrl < T_MELT_SI
+                and (not ctrl_run["melt_abort_triggered"])
                 and act_ctrl >= 0.99
             )
             all_passed = all_passed and passed
@@ -583,6 +639,8 @@ class AutoRecalController:
                 "servo_aom_gain": round(ctrl_run["final_aom_gain"], 5),
                 "servo_aom_mean_gain_flat": round(ctrl_run["mean_aom_gain_flat"], 5),
                 "aom_saturated": bool(ctrl_run["aom_saturated"]),
+                "melt_abort_triggered": bool(ctrl_run["melt_abort_triggered"]),
+                "melt_abort_step": ctrl_run["melt_abort_step"],
                 "measured_settling_us": round(ctrl_run["measured_settling_us"], 2),
                 "controlled_fluence_J_cm2": round(ctrl_run["fluence_delivered_J_cm2"], 3),
                 "controlled_T_peak_K": round(t_ctrl, 2),
@@ -658,6 +716,7 @@ class AutoRecalController:
         peak_pressure_torr: float = 3.5e-8,
         valve_closure_ms: float | None = None,
         blanker_latency_us: float | None = None,
+        wafer_burst_fraction: float = 0.0,
     ) -> dict[str, Any]:
         """Simulate transient 2-chamber UHV differential-pumping ODE under gas burst + interlock."""
         c = self.cfg
@@ -666,6 +725,7 @@ class AutoRecalController:
         tau_valve_s = tau_valve_ms * 1e-3
         tau_blank_us = c.uhv_blanker_latency_us if blanker_latency_us is None else max(0.005, float(blanker_latency_us))
         t_sense_s = c.uhv_plc_sense_latency_ms * 1e-3
+        w_frac = float(np.clip(wafer_burst_fraction, 0.0, 1.0))
 
         p_base = c.uhv_base_torr
         p_ult = min(5.0e-11, 0.25 * p_base)
@@ -688,7 +748,8 @@ class AutoRecalController:
         tau_r = 0.0015
         tau_d1 = 0.0060
         tau_d2 = 1.50
-        q_tot_torr_L = 1.135 * v1 * max(0.0, target_peak - p_base)
+        v_burst = (1.0 - w_frac) * v1 + w_frac * v2
+        q_tot_torr_L = 1.135 * v_burst * max(0.0, target_peak - p_base)
 
         def _q_burst(t_s: float) -> float:
             if t_s <= 0.0 or q_tot_torr_L <= 0.0:
@@ -697,27 +758,34 @@ class AutoRecalController:
             slow = (math.exp(-t_s / tau_d2) - math.exp(-t_s / tau_r)) / (tau_d2 - tau_r)
             return q_tot_torr_L * (0.90 * fast + 0.10 * slow)
 
-        def _make_rhs(t_trip_s: float | None):
+        def _make_rhs(t_trip_s: float | None, t_blank_s: float | None):
             def _rhs(t_s: float, y: np.ndarray) -> np.ndarray:
                 p1 = max(y[0] * scale_p, p_ult)
                 p2 = max(y[1] * scale_p, p_ult)
                 th_tot = min(max(y[4], 0.0), 1.0)
                 th_exc = min(max(y[5], 0.0), 1.0)
+                th_beam = min(max(y[7], 0.0), 1.0)
 
                 s1 = self._uhv_effective_pumping_L_s(p1, chamber=1)
                 s2 = self._uhv_effective_pumping_L_s(p2, chamber=2)
                 c_v = self._uhv_gate_valve_conductance(t_s, t_trip_s, tau_valve_s)
                 q12 = c_v * (p1 - p2)
                 qb = _q_burst(t_s)
+                qb1 = (1.0 - w_frac) * qb
+                qb2 = w_frac * qb
 
-                dp1_dt = (q_base_1 + qb - s1 * (p1 - p_ult) - q12) / v1
-                dp2_dt = (q_base_2 + q12 - s2 * (p2 - p_ult)) / v2
+                dp1_dt = (q_base_1 + qb1 - s1 * (p1 - p_ult) - q12) / v1
+                dp2_dt = (q_base_2 + qb2 + q12 - s2 * (p2 - p_ult)) / v2
 
                 p2_exc = max(0.0, p2 - p_base)
                 dL_tot_dt = p2 / 1.0e-6
                 dL_exc_dt = p2_exc / 1.0e-6
                 dth_tot_dt = ml_rate_per_langmuir * dL_tot_dt * (1.0 - th_tot)
                 dth_exc_dt = ml_rate_per_langmuir * dL_exc_dt * (1.0 - th_exc)
+                # Beam-on exposure window coupled directly to blanker_latency_us inside Radau ODE
+                beam_active = (t_blank_s is None) or (t_s < t_blank_s)
+                dL_beam_dt = dL_tot_dt if beam_active else 0.0
+                dth_beam_dt = ml_rate_per_langmuir * dL_beam_dt * (1.0 - th_beam)
                 return np.array([
                     dp1_dt / scale_p,
                     dp2_dt / scale_p,
@@ -725,20 +793,22 @@ class AutoRecalController:
                     dL_exc_dt,
                     dth_tot_dt,
                     dth_exc_dt,
+                    dL_beam_dt,
+                    dth_beam_dt,
                 ], dtype=np.float64)
             return _rhs
 
-        y0 = np.array([p_base / scale_p, p_base / scale_p, 0.0, 0.0, 0.0, 0.0], dtype=np.float64)
+        y0 = np.array([p_base / scale_p, p_base / scale_p, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], dtype=np.float64)
         t_max_sim = max(120.0, 20.0 * c.uhv_pump_tau_s)
 
-        # Phase 1: Integrate from burst onset until Chamber 1 crosses uhv_trip_torr
+        # Phase 1: Integrate from burst onset until EITHER chamber crosses uhv_trip_torr
         def _ev_trip(_t: float, y: np.ndarray) -> float:
-            return y[0] * scale_p - c.uhv_trip_torr
+            return max(y[0], y[1]) * scale_p - c.uhv_trip_torr
         _ev_trip.terminal = True  # type: ignore[attr-defined]
         _ev_trip.direction = 1.0  # type: ignore[attr-defined]
 
         sol1 = solve_ivp(
-            _make_rhs(None),
+            _make_rhs(None, None),
             (0.0, min(5.0, t_max_sim)),
             y0,
             method="Radau",
@@ -762,24 +832,37 @@ class AutoRecalController:
         locked_at_midpoint = False
         safe_resumed = False
 
-        if trip_detected and t_cross is not None and t_trip_plc is not None:
+        if trip_detected and t_cross is not None and t_trip_plc is not None and t_blank_complete is not None:
             beam_paused = True
             gate_valve_locked = True
-            t_valve_done = t_trip_plc + tau_valve_s
+            t_valve_done = max(t_trip_plc + tau_valve_s, t_blank_complete + 1e-6)
 
-            # Phase 2: Fine-resolution integration through PLC latency + mechanical gate-valve closure
-            sol2 = solve_ivp(
-                _make_rhs(t_trip_plc),
-                (t_cross, t_valve_done),
+            # Phase 2A: Exact sub-interval from trip crossing to electrostatic blanker completion
+            sol2a = solve_ivp(
+                _make_rhs(t_trip_plc, t_blank_complete),
+                (t_cross, t_blank_complete),
                 sol1.y[:, -1],
+                method="Radau",
+                max_step=max(1e-7, min(0.0005, (t_blank_complete - t_cross) / 4.0)),
+                rtol=1e-7,
+                atol=1e-10,
+            )
+            t_segs.append(sol2a.t[1:])
+            y_segs.append(sol2a.y[:, 1:])
+
+            # Phase 2B: Beam blanked, mechanical gate valve finishes closing
+            sol2b = solve_ivp(
+                _make_rhs(t_trip_plc, t_blank_complete),
+                (t_blank_complete, t_valve_done),
+                sol2a.y[:, -1],
                 method="Radau",
                 max_step=min(0.001, tau_valve_s / 20.0),
                 rtol=1e-7,
                 atol=1e-10,
             )
-            t_segs.append(sol2.t[1:])
-            y_segs.append(sol2.y[:, 1:])
-            exp_valve_window_L = float(sol2.y[2, -1])
+            t_segs.append(sol2b.t[1:])
+            y_segs.append(sol2b.y[:, 1:])
+            exp_valve_window_L = float(sol2b.y[2, -1])
 
             # Phase 3: Sealed-valve pumpdown until both chambers drop below uhv_safe_resume_torr
             def _ev_safe(_t: float, y: np.ndarray) -> float:
@@ -788,9 +871,9 @@ class AutoRecalController:
             _ev_safe.direction = -1.0  # type: ignore[attr-defined]
 
             sol3 = solve_ivp(
-                _make_rhs(t_trip_plc),
+                _make_rhs(t_trip_plc, t_blank_complete),
                 (t_valve_done, t_max_sim),
-                sol2.y[:, -1],
+                sol2b.y[:, -1],
                 method="Radau",
                 events=_ev_safe,
                 max_step=0.5,
@@ -806,7 +889,7 @@ class AutoRecalController:
 
             # Phase 4: 2.0 s safe-dwell confirmation after recovery threshold
             sol4 = solve_ivp(
-                _make_rhs(t_trip_plc),
+                _make_rhs(t_trip_plc, t_blank_complete),
                 (recovery_time_s, recovery_time_s + 2.0),
                 sol3.y[:, -1],
                 method="Radau",
@@ -819,7 +902,7 @@ class AutoRecalController:
         else:
             # Sub-threshold transient: integrate out to 25 s with valve open
             sol_sub = solve_ivp(
-                _make_rhs(None),
+                _make_rhs(None, None),
                 (sol1.t[-1], 25.0),
                 sol1.y[:, -1],
                 method="Radau",
@@ -846,11 +929,15 @@ class AutoRecalController:
         exp_L_excess = float(y_all[3, -1])
         theta_ml_total = float(y_all[4, -1])
         theta_ml_excess = float(y_all[5, -1])
+        exp_L_beam_on = float(y_all[6, -1])
+        theta_ml_beam_on = float(y_all[7, -1])
 
         if trip_detected:
             t_mid = 0.5 * recovery_time_s
             p1_mid = float(np.interp(t_mid, t_all, p1_traj))
-            locked_at_midpoint = bool(p1_mid >= c.uhv_safe_resume_torr)
+            p2_mid = float(np.interp(t_mid, t_all, p2_traj))
+            # Check BOTH source (p1) and wafer (p2) chambers at midpoint!
+            locked_at_midpoint = bool(max(p1_mid, p2_mid) >= c.uhv_safe_resume_torr)
             safe_resumed = bool(p_final < c.uhv_safe_resume_torr)
         else:
             locked_at_midpoint = False
@@ -859,7 +946,7 @@ class AutoRecalController:
         # Unmitigated comparison (same burst with gate valve stuck open) over same horizon
         t_horizon_ref = float(t_all[-1])
         sol_unmit = solve_ivp(
-            _make_rhs(None),
+            _make_rhs(None, None),
             (0.0, t_horizon_ref),
             y0,
             method="Radau",
@@ -896,7 +983,7 @@ class AutoRecalController:
         else:
             passed = bool(
                 (not trip_detected)
-                and (peak_p1 < c.uhv_trip_torr)
+                and (max(peak_p1, peak_p2) < c.uhv_trip_torr)
                 and safe_resumed
                 and theta_ml_total < 0.01
             )
@@ -908,7 +995,7 @@ class AutoRecalController:
             "chamber2_volume_L": c.uhv_wafer_vol_L,
             "s_eff_ch1_base_L_s": round(s1_base, 3),
             "s_eff_ch2_base_L_s": round(s2_base, 3),
-            "peak_pressure_torr": float(f"{peak_p1:.3e}"),
+            "peak_pressure_torr": float(f"{max(peak_p1, peak_p2):.3e}"),
             "peak_ch1_source_torr": float(f"{peak_p1:.3e}"),
             "peak_ch2_wafer_torr": float(f"{peak_p2:.3e}"),
             "trip_threshold_torr": float(f"{c.uhv_trip_torr:.3e}"),
@@ -919,16 +1006,19 @@ class AutoRecalController:
             "blanker_shutdown_time_ms": round(t_blank_complete * 1e3, 6) if t_blank_complete is not None else 0.0,
             "gate_valve_closure_ms": round(tau_valve_ms, 3),
             "gate_valve_locked": gate_valve_locked,
+            "locked_at_midpoint": locked_at_midpoint,
             "beam_paused": beam_paused,
             "exposure_langmuir_total": round(exp_L_total, 6),
             "exposure_langmuir_burst_excess": round(exp_L_excess, 6),
             "exposure_langmuir_valve_window": round(exp_valve_window_L, 6),
+            "exposure_langmuir_beam_on": round(exp_L_beam_on, 9),
             "unmitigated_exposure_langmuir_total": round(unmit_L_total, 6),
             "unmitigated_exposure_langmuir_excess": round(unmit_L_excess, 6),
             "unmitigated_peak_ch2_torr": float(f"{unmit_peak_p2:.3e}"),
             "valve_excess_protection_factor": round(protection_factor, 2),
             "surface_monolayer_coverage_frac": round(theta_ml_total, 6),
             "excess_monolayer_coverage_frac": round(theta_ml_excess, 6),
+            "beam_on_monolayer_coverage_frac": round(theta_ml_beam_on, 9),
             "wafer_exposure_monolayers": round(theta_ml_total, 6),
             "pumpdown_recovery_s": round(recovery_time_s, 3),
             "post_recovery_pressure_torr": float(f"{p_final:.3e}"),

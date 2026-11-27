@@ -16,14 +16,14 @@
     "qty": 1,
     "procurement_class": "CUS",
     "world_origin_mm": [
-      -212.436,
-      -132.7448,
-      510.0
+      506.9545,
+      128.9153,
+      460.0
     ],
     "world_rotation_deg": [
       0.0,
       0.0,
-      212.0
+      56.0
     ],
     "ports": [
       {
@@ -40,7 +40,7 @@
           0.0
         ],
         "standard": "CF40",
-        "mating_part_id": "S5.1-01",
+        "mating_part_id": "S5.1-03",
         "bore_mm": 38.0,
         "od_mm": 69.5,
         "pcd_mm": 58.7,
@@ -178,7 +178,7 @@
         "datum_primary": "A",
         "datum_secondary": "",
         "datum_tertiary": "",
-        "feature_note": "Blade travel plane inside 36 mm magnet split gap",
+        "feature_note": "Blade travel plane inside load-lock Z=545 mm clear gap",
         "glyph": "∥",
         "tolerance_text": "0.15"
       }
@@ -199,13 +199,13 @@
     ],
     "notes": [
       "Tavlama sirasinda S2 MEMS kafasini radyasyon isisindan korur",
-      "Water-cooled OFHC Cu core + Mo reflective thermal shutter protecting S2 MEMS write head during flash anneal.",
-      "Shown retracted inside CF40 bonnet at 212 deg Z=510.0 mm (zero magnetic/solid interference during write mode)."
+      "Water-cooled OFHC Cu core + Mo reflective thermal/MBE shutter protecting load-lock optics/MBE during flash anneal.",
+      "OBS-001 fix: Relocated to S5.1-03 load-lock 320 deg Z=545.0 mm clear gap (45 mm above wafer, 40 mm below MBE flange, >420 mm clear of S2.1-03!)."
     ],
     "scad_params": {
       "blade_l": 42.0,
       "blade_w": 26.0,
-      "stroke_mm": 160.0,
+      "stroke_mm": 175.0,
       "bellows_conv": 16
     },
     "target_mass_kg": 2.6,
@@ -271,6 +271,176 @@
     "warnings": [],
     "all_valid": true
   },
+  "shell_tie_manifest": [
+    {
+      "shell_index": 0,
+      "bbox_min_mm": [
+        0.0,
+        -34.75,
+        -34.75
+      ],
+      "bbox_max_mm": [
+        12.7,
+        34.75,
+        34.75
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    },
+    {
+      "shell_index": 1,
+      "bbox_min_mm": [
+        12.8,
+        -24.5,
+        -24.5
+      ],
+      "bbox_max_mm": [
+        63.8,
+        24.5,
+        24.5
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    },
+    {
+      "shell_index": 2,
+      "bbox_min_mm": [
+        17.0,
+        -13.0,
+        -1.5
+      ],
+      "bbox_max_mm": [
+        59.0,
+        13.0,
+        1.5
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    },
+    {
+      "shell_index": 3,
+      "bbox_min_mm": [
+        18.0,
+        -12.0,
+        -2.8
+      ],
+      "bbox_max_mm": [
+        58.0,
+        12.0,
+        -1.6
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    },
+    {
+      "shell_index": 4,
+      "bbox_min_mm": [
+        59.0,
+        -7.5,
+        -2.5
+      ],
+      "bbox_max_mm": [
+        143.0,
+        -2.5,
+        2.5
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    },
+    {
+      "shell_index": 5,
+      "bbox_min_mm": [
+        59.0,
+        2.5,
+        -2.5
+      ],
+      "bbox_max_mm": [
+        143.0,
+        7.5,
+        2.5
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    },
+    {
+      "shell_index": 6,
+      "bbox_min_mm": [
+        63.95,
+        -34.75,
+        -34.75
+      ],
+      "bbox_max_mm": [
+        76.65,
+        34.75,
+        34.75
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    },
+    {
+      "shell_index": 7,
+      "bbox_min_mm": [
+        77.0,
+        -18.5,
+        -18.5
+      ],
+      "bbox_max_mm": [
+        139.0,
+        18.5,
+        18.5
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    },
+    {
+      "shell_index": 8,
+      "bbox_min_mm": [
+        139.5,
+        -18.0,
+        -18.0
+      ],
+      "bbox_max_mm": [
+        191.5,
+        18.0,
+        18.0
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    },
+    {
+      "shell_index": 9,
+      "bbox_min_mm": [
+        192.0,
+        -13.0,
+        -12.0
+      ],
+      "bbox_max_mm": [
+        208.0,
+        13.0,
+        12.0
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    },
+    {
+      "shell_index": 10,
+      "bbox_min_mm": [
+        145.5,
+        -4.5,
+        17.5
+      ],
+      "bbox_max_mm": [
+        154.5,
+        4.5,
+        31.5
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    },
+    {
+      "shell_index": 11,
+      "bbox_min_mm": [
+        175.5,
+        -4.5,
+        17.5
+      ],
+      "bbox_max_mm": [
+        184.5,
+        4.5,
+        31.5
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    }
+  ],
   "epistemic": {
     "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
     "no_lab_measurement": true,

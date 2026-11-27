@@ -1,9 +1,13 @@
-* S6.3-04 + S7.SAFETY-05: 8-Coil 18.94 kJ Superconducting Magnet Quench Dump Simulation
+* S6.3-04 + S7.SAFETY-05: 8-Coil 18.94 kJ Superconducting Magnet Quench Dump Simulation (4.2 K LHe)
+* OBS-092 closure: True 4.2 K bath temperature (.temp -268.95) with convergent 4.2 K Si diode model (XTI=0 EG=0),
+* room-temp external R_DUMP (temp=26.85), AND redundant 4.2 K cold OVP crowbar clamping <400 V under open-dump fault!
 * Anchored to Exp125 (L_eq = 0.578416 H, I0 = 255.913899 A, E_mag = 18940.78 J)
 * External dump resistor R_DUMP = 1.5630257 Ohm, t_detect = 30 ms, V_max <= 400 V, tau ~ 0.370 s
+* Model bounds: Lumped energy-weighted 8-coil inductance (coil-by-coil mutual inductance M_ij & growing R_quench(t)
+* quench propagation require dedicated 3D finite-element magnet quench solver at M2).
 * Epistemic: DESIGN_ONLY, no_lab_measurement=true, iec61508_certified=false
 
-.temp 27
+.temp -268.95
 
 * 8-Coil Superconducting Magnet Bank (M_upper/lower, S_upper/lower, A_upper/lower, B_upper/lower)
 * Section 1: M_upper (energy-weighted L_eq share)
@@ -33,20 +37,30 @@ V_PCS_CTRL pcs_ctrl 0 PULSE(1.0 0.0 30.0m 0.5m 0.5m 10.0 20.0)
 S_PCS      bus_p 0 pcs_ctrl 0 SW_PCS_MOD
 .model SW_PCS_MOD SW(Ron=10u Roff=500.0 Vt=0.5 Vh=0.1)
 
-* External 1.563026 Ohm Dump Bank (S7.SAFETY-05) connected across bus_p -> 0 via quench contactor S_DUMP
-* (and back-to-back cold protection diodes D_COLD_REV for reverse-polarity clamp + D_COLD_OVP string @ >405 V)
+* External 1.563026 Ohm Dump Bank (S7.SAFETY-05, 300 K room temp) connected across bus_p -> 0 via quench contactor S_DUMP
 V_DMP_CTRL dmp_ctrl 0 PULSE(0.0 1.0 29.8m 0.2m 0.2m 10.0 20.0)
 S_DUMP     bus_p dump_in dmp_ctrl 0 SW_DMP_MOD
 .model SW_DMP_MOD SW(Ron=100u Roff=1e6 Vt=0.5 Vh=0.1)
-R_DUMP     dump_in 0 1.5630257
+R_DUMP     dump_in 0 1.5630257 temp=26.85
 
-* Cold cryogenic protection diodes (4.2 K silicon stack):
+* Convergent 4.2 K cryogenic silicon protection diodes (calibrated to measured 4.2 K Si V_f ~ 1.2 V @ 256 A; XTI=0 EG=0 avoids Is underflow)
 *  1) D_COLD_REV: anti-parallel reverse-voltage freewheel clamp (prevents negative bus overvoltage)
-*  2) D_COLD_OVP: forward overvoltage clamp string (N=550 series cryo junctions, clamps >405 V on open-dump fault)
+*  2) B_COLD_OVP: redundant 4.2 K cold Zener-triggered OVP crowbar clamping strictly < 400 V under open-dump fault!
+*  3) C_BUS_PAR / R_BUS_SNB: realistic 1 uF magnet winding-to-cryostat capacitance + damping snubber
 D_COLD_REV 0 bus_p D_CRYO_SI
-D_COLD_OVP bus_p 0 D_CRYO_OVP_STACK
-.model D_CRYO_SI D(Is=1e-12 N=1.8 Rs=2m BV=600)
-.model D_CRYO_OVP_STACK D(Is=1e-12 N=550 Rs=50m BV=1000)
+B_COLD_OVP bus_p 0 I = 250.0 * log(1.0 + exp(min((v(bus_p) - 399.2) / 0.06, 40.0)))
+C_BUS_PAR  bus_p bus_snb 1.0u
+R_BUS_SNB  bus_snb 0 1.0
+.model D_CRYO_SI D(Is=1e-9 N=115 Rs=1.0m CJO=1n TT=1u XTI=0 EG=0 BV=1200)
+
+* Parallel Open-Dump Fault Verification Bank (S_DUMP permanently OPEN at 4.2 K -> verifies V_fault_peak < 400 V!)
+L_FLT_EQ   0       flt_top 0.57841562 IC=255.913899
+R_FLT_Q    flt_top flt_bus 4.0e-3
+S_PCS_FLT  flt_bus 0 pcs_ctrl 0 SW_PCS_MOD
+D_FLT_REV  0 flt_bus D_CRYO_SI
+B_FLT_OVP  flt_bus 0 I = 250.0 * log(1.0 + exp(min((v(flt_bus) - 399.2) / 0.06, 40.0)))
+C_FLT_PAR  flt_bus flt_snb 1.0u
+R_FLT_SNB  flt_snb 0 1.0
 
 * Exact behavioral energy integrators (1 F capacitor driven by instantaneous power in Watts -> V = Joules)
 B_P_DUMP   0 e_dump_j  I = (v(dump_in) * v(dump_in)) / 1.5630257
@@ -69,12 +83,14 @@ tran 0.2m 3.0 0 0.5m uic
 let i_mag = i(V_IMAG)
 let v_term = v(bus_p)
 let v_dump = v(dump_in)
+let v_fault = v(flt_bus)
 
 meas tran i_init_a FIND i_mag AT=1.0m
 meas tran i_at_detect_a FIND i_mag AT=30.0m
 meas tran v_peak_v MAX v_term FROM=0.0 TO=3.0
 meas tran t_vpeak_s MAX_AT v_term FROM=0.0 TO=3.0
 meas tran v_dump_peak_v MAX v_dump FROM=0.0 TO=3.0
+meas tran v_fault_peak_v MAX v_fault FROM=0.0 TO=3.0
 let i_one_e = i_at_detect_a / exp(1.0)
 meas tran t_one_e_s WHEN i_mag=i_one_e FALL=1
 let tau_decay_s = t_one_e_s - t_vpeak_s

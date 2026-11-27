@@ -76,13 +76,29 @@ class DDRobustnessResult:
     n_realizations: int
 
 
-def transition_frequencies(A_hz: np.ndarray, b_field_T: float = 1.5) -> np.ndarray:
-    """Return 2K nuclear transition frequencies [f_{0,+}, f_{0,-}, f_{1,+}, ...]."""
+def transition_frequencies(
+    A_hz: np.ndarray,
+    b_field_T: float = 1.5,
+    b_perp_hz: np.ndarray | None = None,
+) -> np.ndarray:
+    """Return 2K exact dressed nuclear transition frequencies [f_{0,e=0}, f_{0,e=1}, ...].
+
+    Preserves the sign of secular hyperfine coupling ``A_hz`` and includes non-secular
+    transverse hyperfine ``b_perp_hz`` via exact spin-1/2 diagonalization:
+      f_{k, e=0 (m_s=+1/2)} = sqrt((nu_N + A_k/2)^2 + (B_{perp,k}/2)^2)
+      f_{k, e=1 (m_s=-1/2)} = sqrt((nu_N - A_k/2)^2 + (B_{perp,k}/2)^2)
+    """
     A = np.asarray(A_hz, dtype=float)
     nu_n = GAMMA_N_29SI_HZ_PER_T * float(b_field_T)
+    if b_perp_hz is None:
+        bp = np.zeros_like(A, dtype=float)
+    else:
+        bp = np.asarray(b_perp_hz, dtype=float)
+        if bp.shape != A.shape:
+            raise ValueError(f"b_perp_hz shape {bp.shape} does not match A_hz shape {A.shape}")
     freqs = np.empty(2 * len(A), dtype=float)
-    freqs[0::2] = np.abs(nu_n + A / 2.0)
-    freqs[1::2] = np.abs(nu_n - A / 2.0)
+    freqs[0::2] = np.hypot(nu_n + 0.5 * A, 0.5 * bp)
+    freqs[1::2] = np.hypot(nu_n - 0.5 * A, 0.5 * bp)
     return freqs
 
 
@@ -306,20 +322,22 @@ def synthesize_selective_pulse(
     maxiter: int = 60,
     offsets_hz: tuple[float, ...] = CORNER_OFFSETS_HZ,
     amp_scales: tuple[float, ...] = CORNER_AMP_SCALES,
+    b_perp_hz: np.ndarray | None = None,
 ) -> PulseWaveform:
     """Synthesize a selective RF nuclear rotation on (nucleus_idx, electron_branch).
 
     Parameters
     ----------
-    A_hz : array-like of hyperfine couplings (Hz) for the register.
+    A_hz : array-like of signed hyperfine couplings (Hz) for the register.
     nucleus_idx : 0-based nuclear index within ``A_hz``.
-    electron_branch : 0 (m_s = +1/2, f = |nu_N + A/2|) or 1 (m_s = -1/2, f = |nu_N - A/2|).
+    electron_branch : 0 (m_s = +1/2) or 1 (m_s = -1/2).
     axis : "X" or "Y".
     theta_rad : rotation angle in radians.
     mode : "shaped" (fast Gaussian) or "grape" (9-corner L-BFGS-B optimization).
+    b_perp_hz : optional non-secular transverse hyperfine couplings (Hz).
     """
     A = np.asarray(A_hz, dtype=float)
-    freqs = transition_frequencies(A, b_field_T=b_field_T)
+    freqs = transition_frequencies(A, b_field_T=b_field_T, b_perp_hz=b_perp_hz)
     tr_idx = 2 * int(nucleus_idx) + int(electron_branch)
     duration_s = float(duration_us) * 1e-6
     dt_s = duration_s / int(m_slices)
@@ -497,18 +515,39 @@ class MultiSpinSimulator:
     """Full 2^(N_nuc + 1) Hilbert-space simulator for 1 electron + N_nuc nuclear spins.
 
     Qubit 0 is the 31P electron spin; qubits 1..N_nuc are the active 29Si nuclei.
-    Applies physical RF/MW waveforms with full off-resonant spectator crosstalk
-    and corner perturbations (detuning_offset_Hz, amp_scale).
+    Applies physical RF/MW waveforms with full off-resonant spectator crosstalk,
+    exact nuclear hyperfine detuning ``sum_k A_k I_{z,k}`` during finite MW pulses,
+    non-secular ``B_perp`` dressed nuclear frequencies, corner perturbations, and
+    true non-unitary Kraus Pauli-Z dephasing density-matrix evolution under DD.
     """
 
-    def __init__(self, A_hz: np.ndarray, b_field_T: float = 1.5):
+    def __init__(
+        self,
+        A_hz: np.ndarray,
+        b_field_T: float = 1.5,
+        b_perp_hz: np.ndarray | None = None,
+    ):
         self.A_hz = np.asarray(A_hz, dtype=float)
+        self.b_perp_hz = None if b_perp_hz is None else np.asarray(b_perp_hz, dtype=float)
         self.n_nuc = len(self.A_hz)
         self.n_qubits = self.n_nuc + 1
         self.b_field_T = float(b_field_T)
-        self.freqs_hz = transition_frequencies(self.A_hz, b_field_T=self.b_field_T)
+        self.freqs_hz = transition_frequencies(
+            self.A_hz, b_field_T=self.b_field_T, b_perp_hz=self.b_perp_hz
+        )
         self.dim = 1 << self.n_qubits
         self.state = self._zero_state()
+        self.rho: np.ndarray | None = None
+        # Precompute exact secular hyperfine shift sum_k A_k * m_{I,k} for every nuclear basis state
+        n_nuc_states = 1 << self.n_nuc
+        shifts = np.zeros(n_nuc_states, dtype=float)
+        if self.n_nuc > 0:
+            basis = np.arange(n_nuc_states, dtype=np.int64)
+            for k in range(self.n_nuc):
+                bits_k = (basis >> (self.n_nuc - 1 - k)) & 1
+                m_ik = np.where(bits_k == 0, 0.5, -0.5)
+                shifts += float(self.A_hz[k]) * m_ik
+        self._mw_hyperfine_shifts_hz = shifts
 
     def _zero_state(self) -> np.ndarray:
         psi = np.zeros(self.dim, dtype=complex)
@@ -519,9 +558,25 @@ class MultiSpinSimulator:
         self.state = np.zeros(self.dim, dtype=complex)
         idx = int(bitstring, 2) if bitstring is not None else 0
         self.state[idx] = 1.0 + 0.0j
+        self.rho = None
+
+    def _ensure_rho(self) -> np.ndarray:
+        if self.rho is None:
+            self.rho = np.outer(self.state, np.conj(self.state))
+        return self.rho
 
     def apply_single_qubit_unitary(self, qubit: int, U: np.ndarray) -> None:
         """Apply exact 2x2 unitary U to ``qubit`` (0 = MSB electron)."""
+        if self.rho is not None:
+            n = self.n_qubits
+            shape = [2] * (2 * n)
+            r = self.rho.reshape(shape)
+            r = np.tensordot(U, r, axes=([1], [qubit]))
+            r = np.moveaxis(r, 0, qubit)
+            r = np.tensordot(np.conj(U), r, axes=([1], [n + qubit]))
+            r = np.moveaxis(r, 0, n + qubit)
+            self.rho = r.reshape(self.dim, self.dim)
+            return
         shape = [2] * self.n_qubits
         psi = self.state.reshape(shape)
         psi = np.tensordot(U, psi, axes=([1], [qubit]))
@@ -530,6 +585,28 @@ class MultiSpinSimulator:
 
     def apply_controlled_nuclear_unitary(self, electron_branch: int, nuc_idx: int, U: np.ndarray) -> None:
         """Apply 2x2 unitary U to nuclear qubit ``nuc_idx + 1`` conditioned on e == electron_branch."""
+        if self.rho is not None:
+            # Build block-controlled action on ket and bra separately
+            n = self.n_qubits
+            shape = [2] * (2 * n)
+            r = self.rho.reshape(shape).copy()
+            # Ket action on e_ket == electron_branch
+            slc_k = [slice(None)] * (2 * n)
+            slc_k[0] = electron_branch
+            sub_k = r[tuple(slc_k)]
+            sub_k = np.tensordot(U, sub_k, axes=([1], [nuc_idx]))
+            sub_k = np.moveaxis(sub_k, 0, nuc_idx)
+            r[tuple(slc_k)] = sub_k
+            # Bra action on e_bra == electron_branch
+            slc_b = [slice(None)] * (2 * n)
+            slc_b[n] = electron_branch
+            sub_b = r[tuple(slc_b)]
+            bra_axis = n + nuc_idx  # axis n was removed, so original n+1+nuc_idx shifts to n+nuc_idx
+            sub_b = np.tensordot(np.conj(U), sub_b, axes=([1], [bra_axis]))
+            sub_b = np.moveaxis(sub_b, 0, bra_axis)
+            r[tuple(slc_b)] = sub_b
+            self.rho = r.reshape(self.dim, self.dim)
+            return
         shape = [2] * self.n_qubits
         psi = self.state.reshape(shape)
         sub = psi[electron_branch]  # shape [2] * n_nuc
@@ -551,15 +628,23 @@ class MultiSpinSimulator:
     ) -> None:
         """Execute a physical RF or MW PulseWaveform on the full multi-spin state."""
         if wf.channel == "MW":
-            # Global electron MW drive: fast pulse across all nuclear manifolds
-            U_e = propagate_su2_ensemble(
-                wf.ux_kHz,
-                wf.uy_kHz,
-                wf.dt_s,
-                np.array([detuning_offset_Hz], dtype=float),
-                np.array([amp_scale], dtype=float),
-            )[0]
-            self.apply_single_qubit_unitary(0, U_e)
+            # Global electron MW drive including exact secular hyperfine detuning sum_k A_k I_{z,k}
+            # for every nuclear spin configuration b in {0, ..., 2^n_nuc - 1}.
+            n_nuc_states = 1 << self.n_nuc
+            det_mw = self._mw_hyperfine_shifts_hz + float(detuning_offset_Hz)
+            sc_mw = np.full(n_nuc_states, float(amp_scale), dtype=float)
+            U_e_all = propagate_su2_ensemble(wf.ux_kHz, wf.uy_kHz, wf.dt_s, det_mw, sc_mw)
+            if self.rho is not None:
+                r = self.rho.reshape(2, n_nuc_states, 2, n_nuc_states)
+                # Ket: sum_j U_e_all[b, i, j] * r[j, b, k, c] -> (i, b, k, c)
+                r = np.einsum("bij,jbkc->ibkc", U_e_all, r)
+                # Bra: sum_k conj(U_e_all[c, l, k]) * r[i, b, k, c] -> (i, b, l, c)
+                r = np.einsum("clk,ibkc->iblc", np.conj(U_e_all), r)
+                self.rho = r.reshape(self.dim, self.dim)
+            else:
+                psi_2n = self.state.reshape(2, n_nuc_states)
+                psi_new = np.einsum("bij,jb->ib", U_e_all, psi_2n)
+                self.state = psi_new.reshape(self.dim)
             return
 
         if wf.channel == "RF":
@@ -592,16 +677,17 @@ class MultiSpinSimulator:
         pulse_error_eps: float = 1e-3,
         seed: int = 20261122,
     ) -> DDRobustnessResult:
-        """Apply fast effective XY8 DD coherence model to the electron spin.
+        """Apply exact non-unitary Kraus Pauli-Z dephasing channel from XY8 DD simulation.
 
-        Abstraction boundary (Carbon F7):
-        This fast ``CellISA`` compiler/verifier evaluates real SU(2) XY8 echo
-        refocusing on an Ornstein-Uhlenbeck bath ensemble via ``simulate_xy8_dd()``
-        and projects the resulting residual dephasing onto the multi-spin state
-        as an effective coherence phase operator ``RZ(0, 0.5 * acos(dd_coherence))``.
-        Full 32-dimensional (2^5) Hilbert-space interleaved electron-pi XY8-GRAPE
-        verification against 448 explicit 29Si bath spectators is performed
-        separately in ``experiments/exp126_atom_cell_programming/``.
+        Evaluates real SU(2) XY8 echo refocusing on an Ornstein-Uhlenbeck bath ensemble
+        via ``simulate_xy8_dd()`` and applies the exact stochastic Kraus Pauli-Z channel
+        on the electron spin (qubit 0):
+
+            E_Z(rho) = ((1 + W) / 2) * rho + ((1 - W) / 2) * Z_0 rho Z_0
+
+        where W = dd_coherence in [0, 1]. This preserves exact non-unitary purity decay
+        (Tr(rho^2) < 1) and true ensemble dephasing infidelity (1 - W)/2 on |+> / |Phi+>
+        (and 1 - F_avg = (1 - W)/3), eliminating the ~3.9x coherent-RZ understatement.
         """
         res = simulate_xy8_dd(
             duration_us=duration_us,
@@ -612,14 +698,31 @@ class MultiSpinSimulator:
             n_realizations=64,
             seed=seed,
         )
-        # Fast effective coherence phase operator (0.5 * acos(dd_coherence));
-        # full 32D 448-spectator XY8-GRAPE verification lives in Exp126.
-        rem_angle = math.acos(min(1.0, max(-1.0, res.dd_coherence)))
-        if rem_angle > 1e-9:
-            self.apply_virtual_rz(0, rem_angle * 0.5)
+        w_coh = float(min(1.0, max(0.0, res.dd_coherence)))
+        rho = self._ensure_rho().copy()
+        half = self.dim // 2
+        # E_Z(rho) = ((1+W)/2) rho + ((1-W)/2) Z_0 rho Z_0 multiplies e=0/e=1 off-diagonals by W
+        rho[:half, half:] *= w_coh
+        rho[half:, :half] *= w_coh
+        self.rho = rho
         return res
 
+    def state_fidelity(self, psi_ideal: np.ndarray) -> float:
+        """Exact fidelity <psi_ideal | rho | psi_ideal> (supports both pure and mixed states)."""
+        if self.rho is not None:
+            return float(np.clip(np.real(np.vdot(psi_ideal, self.rho @ psi_ideal)), 0.0, 1.0))
+        return float(abs(np.vdot(psi_ideal, self.state)) ** 2)
+
+    def purity(self) -> float:
+        """Return Tr(rho^2) (1.0 for pure states, < 1.0 after non-unitary dephasing)."""
+        if self.rho is not None:
+            return float(np.real(np.trace(self.rho @ self.rho)))
+        return 1.0
+
     def probabilities(self) -> np.ndarray:
+        if self.rho is not None:
+            probs = np.real(np.diag(self.rho))
+            return np.maximum(probs, 0.0)
         return np.abs(self.state) ** 2
 
     def sample_measurements(

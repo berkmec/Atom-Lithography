@@ -319,5 +319,10 @@
       ]
     ]
   ],
+  "shell_tie_manifest": {
+    "shell_count": 6,
+    "multi_shell_classification": "subassembly_tied_by_fasteners_or_mount",
+    "floating_structural_shells": 0
+  },
   "reconciliation_notes": []
 }

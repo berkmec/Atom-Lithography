@@ -9,7 +9,7 @@
 // temp_stage        : 20 mK -> 300 K
 // vacuum_grade      : Kriyo-vakum
 // tolerance         : <0.1 dB/m
-// computed_mass_kg  : 0.39960
+// computed_mass_kg  : 0.51215
 // envelope_mm       : 44.000 x 22.000 x 334.000
 // design_maturity   : M0_M1_DETAILED_CAD_DESIGN_ONLY
 // no_lab_measurement: true
@@ -34,13 +34,13 @@ superconducting_span = "MXC_to_4K";
 
 module part_S6_6_04() {
   union() {
-    // Stage 50k_4k thermalized cryo coax loom
+    // Stage 50k_4k thermalized cryo coax loom (56 lines)
     translate([0.000, 0.000, 125.000]) cube([44.000, 22.000, 84.000], center=true);
-    // Stage 4k_still thermalized cryo coax loom
+    // Stage 4k_still thermalized cryo coax loom (56 lines)
     translate([0.000, 0.000, -1.000]) cube([44.000, 22.000, 100.000], center=true);
-    // Stage still_cp thermalized cryo coax loom
+    // Stage still_cp thermalized cryo coax loom (56 lines)
     translate([0.000, 0.000, -91.000]) cube([44.000, 22.000, 48.000], center=true);
-    // Stage cp_mxc thermalized cryo coax loom
+    // Stage cp_mxc thermalized cryo coax loom (56 lines)
     translate([0.000, 0.000, -148.000]) cube([44.000, 22.000, 38.000], center=true);
   }
 }

@@ -67,14 +67,14 @@
   },
   "verdicts": {
     "UQ1_EXACT_BB288_ALGEBRA_AND_SCHEDULE": true,
-    "UQ2_THICKNESS2_M4_LAYOUT_AND_576_YIELD": true,
+    "UQ2_THICKNESS2_M4_LAYOUT_AND_576_YIELD": false,
     "UQ3_D6_TO_D18_CIRCUIT_DEM_SCALING": true,
     "UQ4_UNIVERSAL_MAGIC_STATE_FACTORIES": false,
     "UQ5_FEMOCO_CHEMISTRY_RESOURCE_AND_COST": false,
-    "UQ6_RSA2048_SHOR_CRYO_POWER_COMPRESSION": true,
+    "UQ6_RSA2048_SHOR_CRYO_POWER_COMPRESSION": false,
     "UQ7_PORTABILITY_VISUALIZATION_AND_TESTS": true
   },
-  "n_passed": 5,
+  "n_passed": 3,
   "n_total": 7,
   "success_rule_met": false,
   "part1_bb288_algebra_and_family": {
@@ -199,7 +199,13 @@
         "layer2_median_eucl_um": 185.5,
         "layer2_max_eucl_um": 201.2,
         "L_max_um": 201.2,
+        "layer1_max_manh_um": 30.0,
+        "layer2_median_manh_um": 225.0,
+        "layer2_max_manh_um": 270.0,
+        "layer2_frac_gt_300um_manh": 0.0,
         "fits_300um_m4_resonator": true,
+        "fits_300um_m4_manhattan": true,
+        "fits_250um_loaded_meander_eucl": true,
         "fits_500um_extended_m4": true,
         "f_r_fixed_100pH_ghz": 5.0,
         "L_sq_pH_for_5GHz": 100.0
@@ -215,7 +221,13 @@
         "layer2_median_eucl_um": 222.6,
         "layer2_max_eucl_um": 241.5,
         "L_max_um": 241.5,
+        "layer1_max_manh_um": 36.0,
+        "layer2_median_manh_um": 270.0,
+        "layer2_max_manh_um": 324.0,
+        "layer2_frac_gt_300um_manh": 0.4792,
         "fits_300um_m4_resonator": true,
+        "fits_300um_m4_manhattan": false,
+        "fits_250um_loaded_meander_eucl": true,
         "fits_500um_extended_m4": true,
         "f_r_fixed_100pH_ghz": 5.0,
         "L_sq_pH_for_5GHz": 100.0
@@ -231,7 +243,13 @@
         "layer2_median_eucl_um": 247.4,
         "layer2_max_eucl_um": 268.3,
         "L_max_um": 268.3,
+        "layer1_max_manh_um": 40.0,
+        "layer2_median_manh_um": 300.0,
+        "layer2_max_manh_um": 360.0,
+        "layer2_frac_gt_300um_manh": 0.4861,
         "fits_300um_m4_resonator": true,
+        "fits_300um_m4_manhattan": false,
+        "fits_250um_loaded_meander_eucl": false,
         "fits_500um_extended_m4": true,
         "f_r_fixed_100pH_ghz": 5.0,
         "L_sq_pH_for_5GHz": 100.0
@@ -247,7 +265,13 @@
         "layer2_median_eucl_um": 309.2,
         "layer2_max_eucl_um": 335.4,
         "L_max_um": 335.4,
+        "layer1_max_manh_um": 50.0,
+        "layer2_median_manh_um": 375.0,
+        "layer2_max_manh_um": 450.0,
+        "layer2_frac_gt_300um_manh": 0.7083,
         "fits_300um_m4_resonator": false,
+        "fits_300um_m4_manhattan": false,
+        "fits_250um_loaded_meander_eucl": false,
         "fits_500um_extended_m4": true,
         "f_r_fixed_100pH_ghz": 4.472,
         "L_sq_pH_for_5GHz": 80.0
@@ -263,7 +287,13 @@
         "layer2_median_eucl_um": 371.1,
         "layer2_max_eucl_um": 402.5,
         "L_max_um": 402.5,
+        "layer1_max_manh_um": 60.0,
+        "layer2_median_manh_um": 450.0,
+        "layer2_max_manh_um": 540.0,
+        "layer2_frac_gt_300um_manh": 0.7917,
         "fits_300um_m4_resonator": false,
+        "fits_300um_m4_manhattan": false,
+        "fits_250um_loaded_meander_eucl": false,
         "fits_500um_extended_m4": true,
         "f_r_fixed_100pH_ghz": 3.727,
         "L_sq_pH_for_5GHz": 55.6
@@ -273,6 +303,7 @@
     "defect_yields_576cell": {
       "f1p0_Ez0_no_stark": {
         "p_slot": 0.51433,
+        "N_cand_req_99pct_block": 16,
         "by_N_cand": {
           "N6": {
             "N_cand": 6,
@@ -351,11 +382,64 @@
             "femoco_16of18_spared_yield_pct": 32.7315,
             "phys_candidates_per_block": 6336,
             "phys_candidates_per_logical": 528.0
+          },
+          "N14": {
+            "N_cand": 14,
+            "p_drop": 4.062045772166173e-05,
+            "p_drop_pct": 0.004062,
+            "block_576_yield": 0.976874,
+            "block_576_yield_pct": 97.6874,
+            "cryo_5block_60L_yield_pct": 88.9595,
+            "cryo_4of5_spared_yield_pct": 99.4895,
+            "femoco_16block_192L_yield_pct": 68.7725,
+            "femoco_16of18_spared_yield_pct": 99.222,
+            "phys_candidates_per_block": 8064,
+            "phys_candidates_per_logical": 672.0
+          },
+          "N18": {
+            "N_cand": 18,
+            "p_drop": 2.259958549176278e-06,
+            "p_drop_pct": 0.000226,
+            "block_576_yield": 0.998699,
+            "block_576_yield_pct": 99.8699,
+            "cryo_5block_60L_yield_pct": 99.3512,
+            "cryo_4of5_spared_yield_pct": 99.9983,
+            "femoco_16block_192L_yield_pct": 97.9388,
+            "femoco_16of18_spared_yield_pct": 99.9998,
+            "phys_candidates_per_block": 10368,
+            "phys_candidates_per_logical": 864.0
+          },
+          "N24": {
+            "N_cand": 24,
+            "p_drop": 2.9657460787838146e-08,
+            "p_drop_pct": 3e-06,
+            "block_576_yield": 0.999983,
+            "block_576_yield_pct": 99.9983,
+            "cryo_5block_60L_yield_pct": 99.9915,
+            "cryo_4of5_spared_yield_pct": 100.0,
+            "femoco_16block_192L_yield_pct": 99.9727,
+            "femoco_16of18_spared_yield_pct": 100.0,
+            "phys_candidates_per_block": 13824,
+            "phys_candidates_per_logical": 1152.0
+          },
+          "N30": {
+            "N_cand": 30,
+            "p_drop": 3.891951826739238e-10,
+            "p_drop_pct": 0.0,
+            "block_576_yield": 1.0,
+            "block_576_yield_pct": 100.0,
+            "cryo_5block_60L_yield_pct": 99.9999,
+            "cryo_4of5_spared_yield_pct": 100.0,
+            "femoco_16block_192L_yield_pct": 99.9996,
+            "femoco_16of18_spared_yield_pct": 100.0,
+            "phys_candidates_per_block": 17280,
+            "phys_candidates_per_logical": 1440.0
           }
         }
       },
       "f1p5_Ez2MVm_v5_star": {
         "p_slot": 0.75565,
+        "N_cand_req_99pct_block": 8,
         "by_N_cand": {
           "N6": {
             "N_cand": 6,
@@ -434,10 +518,609 @@
             "femoco_16of18_spared_yield_pct": 100.0,
             "phys_candidates_per_block": 6336,
             "phys_candidates_per_logical": 528.0
+          },
+          "N14": {
+            "N_cand": 14,
+            "p_drop": 2.7043227962247982e-09,
+            "p_drop_pct": 0.0,
+            "block_576_yield": 0.999998,
+            "block_576_yield_pct": 99.9998,
+            "cryo_5block_60L_yield_pct": 99.9992,
+            "cryo_4of5_spared_yield_pct": 100.0,
+            "femoco_16block_192L_yield_pct": 99.9975,
+            "femoco_16of18_spared_yield_pct": 100.0,
+            "phys_candidates_per_block": 8064,
+            "phys_candidates_per_logical": 672.0
+          },
+          "N18": {
+            "N_cand": 18,
+            "p_drop": 9.639960440063268e-12,
+            "p_drop_pct": 0.0,
+            "block_576_yield": 1.0,
+            "block_576_yield_pct": 100.0,
+            "cryo_5block_60L_yield_pct": 100.0,
+            "cryo_4of5_spared_yield_pct": 100.0,
+            "femoco_16block_192L_yield_pct": 100.0,
+            "femoco_16of18_spared_yield_pct": 100.0,
+            "phys_candidates_per_block": 10368,
+            "phys_candidates_per_logical": 864.0
+          },
+          "N24": {
+            "N_cand": 24,
+            "p_drop": 2.051636115975501e-15,
+            "p_drop_pct": 0.0,
+            "block_576_yield": 1.0,
+            "block_576_yield_pct": 100.0,
+            "cryo_5block_60L_yield_pct": 100.0,
+            "cryo_4of5_spared_yield_pct": 100.0,
+            "femoco_16block_192L_yield_pct": 100.0,
+            "femoco_16of18_spared_yield_pct": 100.0,
+            "phys_candidates_per_block": 13824,
+            "phys_candidates_per_logical": 1152.0
+          },
+          "N30": {
+            "N_cand": 30,
+            "p_drop": 4.366419114005631e-19,
+            "p_drop_pct": 0.0,
+            "block_576_yield": 1.0,
+            "block_576_yield_pct": 100.0,
+            "cryo_5block_60L_yield_pct": 100.0,
+            "cryo_4of5_spared_yield_pct": 100.0,
+            "femoco_16block_192L_yield_pct": 100.0,
+            "femoco_16of18_spared_yield_pct": 100.0,
+            "phys_candidates_per_block": 17280,
+            "phys_candidates_per_logical": 1440.0
+          }
+        }
+      },
+      "f1p0_Ez0_ddrf6893": {
+        "p_slot": 0.28764,
+        "N_cand_req_99pct_block": 33,
+        "by_N_cand": {
+          "N6": {
+            "N_cand": 6,
+            "p_drop": 0.13068050871184342,
+            "p_drop_pct": 13.068051,
+            "block_576_yield": 0.0,
+            "block_576_yield_pct": 0.0,
+            "cryo_5block_60L_yield_pct": 0.0,
+            "cryo_4of5_spared_yield_pct": 0.0,
+            "femoco_16block_192L_yield_pct": 0.0,
+            "femoco_16of18_spared_yield_pct": 0.0,
+            "phys_candidates_per_block": 3456,
+            "phys_candidates_per_logical": 288.0
+          },
+          "N7": {
+            "N_cand": 7,
+            "p_drop": 0.09309205537175877,
+            "p_drop_pct": 9.309206,
+            "block_576_yield": 0.0,
+            "block_576_yield_pct": 0.0,
+            "cryo_5block_60L_yield_pct": 0.0,
+            "cryo_4of5_spared_yield_pct": 0.0,
+            "femoco_16block_192L_yield_pct": 0.0,
+            "femoco_16of18_spared_yield_pct": 0.0,
+            "phys_candidates_per_block": 4032,
+            "phys_candidates_per_logical": 336.0
+          },
+          "N8": {
+            "N_cand": 8,
+            "p_drop": 0.06631540433047918,
+            "p_drop_pct": 6.63154,
+            "block_576_yield": 0.0,
+            "block_576_yield_pct": 0.0,
+            "cryo_5block_60L_yield_pct": 0.0,
+            "cryo_4of5_spared_yield_pct": 0.0,
+            "femoco_16block_192L_yield_pct": 0.0,
+            "femoco_16of18_spared_yield_pct": 0.0,
+            "phys_candidates_per_block": 4608,
+            "phys_candidates_per_logical": 384.0
+          },
+          "N9": {
+            "N_cand": 9,
+            "p_drop": 0.04724068916464241,
+            "p_drop_pct": 4.724069,
+            "block_576_yield": 0.0,
+            "block_576_yield_pct": 0.0,
+            "cryo_5block_60L_yield_pct": 0.0,
+            "cryo_4of5_spared_yield_pct": 0.0,
+            "femoco_16block_192L_yield_pct": 0.0,
+            "femoco_16of18_spared_yield_pct": 0.0,
+            "phys_candidates_per_block": 5184,
+            "phys_candidates_per_logical": 432.0
+          },
+          "N10": {
+            "N_cand": 10,
+            "p_drop": 0.03365255381131199,
+            "p_drop_pct": 3.365255,
+            "block_576_yield": 0.0,
+            "block_576_yield_pct": 0.0,
+            "cryo_5block_60L_yield_pct": 0.0,
+            "cryo_4of5_spared_yield_pct": 0.0,
+            "femoco_16block_192L_yield_pct": 0.0,
+            "femoco_16of18_spared_yield_pct": 0.0,
+            "phys_candidates_per_block": 5760,
+            "phys_candidates_per_logical": 480.0
+          },
+          "N11": {
+            "N_cand": 11,
+            "p_drop": 0.023972858949544536,
+            "p_drop_pct": 2.397286,
+            "block_576_yield": 1e-06,
+            "block_576_yield_pct": 0.0001,
+            "cryo_5block_60L_yield_pct": 0.0,
+            "cryo_4of5_spared_yield_pct": 0.0,
+            "femoco_16block_192L_yield_pct": 0.0,
+            "femoco_16of18_spared_yield_pct": 0.0,
+            "phys_candidates_per_block": 6336,
+            "phys_candidates_per_logical": 528.0
+          },
+          "N14": {
+            "N_cand": 14,
+            "p_drop": 0.008666130773338603,
+            "p_drop_pct": 0.866613,
+            "block_576_yield": 0.006648,
+            "block_576_yield_pct": 0.6648,
+            "cryo_5block_60L_yield_pct": 0.0,
+            "cryo_4of5_spared_yield_pct": 0.0,
+            "femoco_16block_192L_yield_pct": 0.0,
+            "femoco_16of18_spared_yield_pct": 0.0,
+            "phys_candidates_per_block": 8064,
+            "phys_candidates_per_logical": 672.0
+          },
+          "N18": {
+            "N_cand": 18,
+            "p_drop": 0.0022316827127503627,
+            "p_drop_pct": 0.223168,
+            "block_576_yield": 0.276129,
+            "block_576_yield_pct": 27.6129,
+            "cryo_5block_60L_yield_pct": 0.1605,
+            "cryo_4of5_spared_yield_pct": 2.2647,
+            "femoco_16block_192L_yield_pct": 0.0,
+            "femoco_16of18_spared_yield_pct": 0.0,
+            "phys_candidates_per_block": 10368,
+            "phys_candidates_per_logical": 864.0
+          },
+          "N24": {
+            "N_cand": 24,
+            "p_drop": 0.0002916374321856441,
+            "p_drop_pct": 0.029164,
+            "block_576_yield": 0.845347,
+            "block_576_yield_pct": 84.5347,
+            "cryo_5block_60L_yield_pct": 43.1694,
+            "cryo_4of5_spared_yield_pct": 82.6577,
+            "femoco_16block_192L_yield_pct": 6.8009,
+            "femoco_16of18_spared_yield_pct": 45.7508,
+            "phys_candidates_per_block": 13824,
+            "phys_candidates_per_logical": 1152.0
+          },
+          "N30": {
+            "N_cand": 30,
+            "p_drop": 3.8111327997435705e-05,
+            "p_drop_pct": 0.003811,
+            "block_576_yield": 0.978287,
+            "block_576_yield_pct": 97.8287,
+            "cryo_5block_60L_yield_pct": 89.6047,
+            "cryo_4of5_spared_yield_pct": 99.5487,
+            "femoco_16block_192L_yield_pct": 70.3814,
+            "femoco_16of18_spared_yield_pct": 99.3457,
+            "phys_candidates_per_block": 17280,
+            "phys_candidates_per_logical": 1440.0
+          }
+        }
+      },
+      "f1p5_Ez2MVm_ddrf6893": {
+        "p_slot": 0.52652,
+        "N_cand_req_99pct_block": 15,
+        "by_N_cand": {
+          "N6": {
+            "N_cand": 6,
+            "p_drop": 0.011266951504750785,
+            "p_drop_pct": 1.126695,
+            "block_576_yield": 0.001464,
+            "block_576_yield_pct": 0.1464,
+            "cryo_5block_60L_yield_pct": 0.0,
+            "cryo_4of5_spared_yield_pct": 0.0,
+            "femoco_16block_192L_yield_pct": 0.0,
+            "femoco_16of18_spared_yield_pct": 0.0,
+            "phys_candidates_per_block": 3456,
+            "phys_candidates_per_logical": 288.0
+          },
+          "N7": {
+            "N_cand": 7,
+            "p_drop": 0.005334669220170317,
+            "p_drop_pct": 0.533467,
+            "block_576_yield": 0.045914,
+            "block_576_yield_pct": 4.5914,
+            "cryo_5block_60L_yield_pct": 0.0,
+            "cryo_4of5_spared_yield_pct": 0.0021,
+            "femoco_16block_192L_yield_pct": 0.0,
+            "femoco_16of18_spared_yield_pct": 0.0,
+            "phys_candidates_per_block": 4032,
+            "phys_candidates_per_logical": 336.0
+          },
+          "N8": {
+            "N_cand": 8,
+            "p_drop": 0.0025258558782855134,
+            "p_drop_pct": 0.252586,
+            "block_576_yield": 0.232996,
+            "block_576_yield_pct": 23.2996,
+            "cryo_5block_60L_yield_pct": 0.0687,
+            "cryo_4of5_spared_yield_pct": 1.1989,
+            "femoco_16block_192L_yield_pct": 0.0,
+            "femoco_16of18_spared_yield_pct": 0.0,
+            "phys_candidates_per_block": 4608,
+            "phys_candidates_per_logical": 384.0
+          },
+          "N9": {
+            "N_cand": 9,
+            "p_drop": 0.001195940676836528,
+            "p_drop_pct": 0.119594,
+            "block_576_yield": 0.50194,
+            "block_576_yield_pct": 50.194,
+            "cryo_5block_60L_yield_pct": 3.1861,
+            "cryo_4of5_spared_yield_pct": 18.9935,
+            "femoco_16block_192L_yield_pct": 0.0016,
+            "femoco_16of18_spared_yield_pct": 0.0693,
+            "phys_candidates_per_block": 5184,
+            "phys_candidates_per_logical": 432.0
+          },
+          "N10": {
+            "N_cand": 10,
+            "p_drop": 0.0005662532509507416,
+            "p_drop_pct": 0.056625,
+            "block_576_yield": 0.721622,
+            "block_576_yield_pct": 72.1622,
+            "cryo_5block_60L_yield_pct": 19.5681,
+            "cryo_4of5_spared_yield_pct": 57.3117,
+            "femoco_16block_192L_yield_pct": 0.5407,
+            "femoco_16of18_spared_yield_pct": 8.6475,
+            "phys_candidates_per_block": 5760,
+            "phys_candidates_per_logical": 480.0
+          },
+          "N11": {
+            "N_cand": 11,
+            "p_drop": 0.00026810923854554355,
+            "p_drop_pct": 0.026811,
+            "block_576_yield": 0.856885,
+            "block_576_yield_pct": 85.6885,
+            "cryo_5block_60L_yield_pct": 46.1969,
+            "cryo_4of5_spared_yield_pct": 84.7754,
+            "femoco_16block_192L_yield_pct": 8.4481,
+            "femoco_16of18_spared_yield_pct": 51.3256,
+            "phys_candidates_per_block": 6336,
+            "phys_candidates_per_logical": 528.0
+          },
+          "N14": {
+            "N_cand": 14,
+            "p_drop": 2.8458695688632577e-05,
+            "p_drop_pct": 0.002846,
+            "block_576_yield": 0.983741,
+            "block_576_yield_pct": 98.3741,
+            "cryo_5block_60L_yield_pct": 92.1307,
+            "cryo_4of5_spared_yield_pct": 99.7441,
+            "femoco_16block_192L_yield_pct": 76.9296,
+            "femoco_16of18_spared_yield_pct": 99.7079,
+            "phys_candidates_per_block": 8064,
+            "phys_candidates_per_logical": 672.0
+          },
+          "N18": {
+            "N_cand": 18,
+            "p_drop": 1.4302741025122124e-06,
+            "p_drop_pct": 0.000143,
+            "block_576_yield": 0.999177,
+            "block_576_yield_pct": 99.9177,
+            "cryo_5block_60L_yield_pct": 99.5889,
+            "cryo_4of5_spared_yield_pct": 99.9993,
+            "femoco_16block_192L_yield_pct": 98.6905,
+            "femoco_16of18_spared_yield_pct": 100.0,
+            "phys_candidates_per_block": 10368,
+            "phys_candidates_per_logical": 864.0
+          },
+          "N24": {
+            "N_cand": 24,
+            "p_drop": 1.6114828951506048e-08,
+            "p_drop_pct": 2e-06,
+            "block_576_yield": 0.999991,
+            "block_576_yield_pct": 99.9991,
+            "cryo_5block_60L_yield_pct": 99.9954,
+            "cryo_4of5_spared_yield_pct": 100.0,
+            "femoco_16block_192L_yield_pct": 99.9851,
+            "femoco_16of18_spared_yield_pct": 100.0,
+            "phys_candidates_per_block": 13824,
+            "phys_candidates_per_logical": 1152.0
+          },
+          "N30": {
+            "N_cand": 30,
+            "p_drop": 1.815649963039726e-10,
+            "p_drop_pct": 0.0,
+            "block_576_yield": 1.0,
+            "block_576_yield_pct": 100.0,
+            "cryo_5block_60L_yield_pct": 99.9999,
+            "cryo_4of5_spared_yield_pct": 100.0,
+            "femoco_16block_192L_yield_pct": 99.9998,
+            "femoco_16of18_spared_yield_pct": 100.0,
+            "phys_candidates_per_block": 17280,
+            "phys_candidates_per_logical": 1440.0
+          }
+        }
+      },
+      "f1p5_Ez2MVm_iradina_valley_pff0p5375": {
+        "p_slot": 0.41573,
+        "N_cand_req_99pct_block": 21,
+        "by_N_cand": {
+          "N6": {
+            "N_cand": 6,
+            "p_drop": 0.03978315072102309,
+            "p_drop_pct": 3.978315,
+            "block_576_yield": 0.0,
+            "block_576_yield_pct": 0.0,
+            "cryo_5block_60L_yield_pct": 0.0,
+            "cryo_4of5_spared_yield_pct": 0.0,
+            "femoco_16block_192L_yield_pct": 0.0,
+            "femoco_16of18_spared_yield_pct": 0.0,
+            "phys_candidates_per_block": 3456,
+            "phys_candidates_per_logical": 288.0
+          },
+          "N7": {
+            "N_cand": 7,
+            "p_drop": 0.02324425891359114,
+            "p_drop_pct": 2.324426,
+            "block_576_yield": 1e-06,
+            "block_576_yield_pct": 0.0001,
+            "cryo_5block_60L_yield_pct": 0.0,
+            "cryo_4of5_spared_yield_pct": 0.0,
+            "femoco_16block_192L_yield_pct": 0.0,
+            "femoco_16of18_spared_yield_pct": 0.0,
+            "phys_candidates_per_block": 4032,
+            "phys_candidates_per_logical": 336.0
+          },
+          "N8": {
+            "N_cand": 8,
+            "p_drop": 0.013581015144598547,
+            "p_drop_pct": 1.358102,
+            "block_576_yield": 0.00038,
+            "block_576_yield_pct": 0.038,
+            "cryo_5block_60L_yield_pct": 0.0,
+            "cryo_4of5_spared_yield_pct": 0.0,
+            "femoco_16block_192L_yield_pct": 0.0,
+            "femoco_16of18_spared_yield_pct": 0.0,
+            "phys_candidates_per_block": 4608,
+            "phys_candidates_per_logical": 384.0
+          },
+          "N9": {
+            "N_cand": 9,
+            "p_drop": 0.007935033465402027,
+            "p_drop_pct": 0.793503,
+            "block_576_yield": 0.010165,
+            "block_576_yield_pct": 1.0165,
+            "cryo_5block_60L_yield_pct": 0.0,
+            "cryo_4of5_spared_yield_pct": 0.0,
+            "femoco_16block_192L_yield_pct": 0.0,
+            "femoco_16of18_spared_yield_pct": 0.0,
+            "phys_candidates_per_block": 5184,
+            "phys_candidates_per_logical": 432.0
+          },
+          "N10": {
+            "N_cand": 10,
+            "p_drop": 0.004636233405725382,
+            "p_drop_pct": 0.463623,
+            "block_576_yield": 0.068791,
+            "block_576_yield_pct": 6.8791,
+            "cryo_5block_60L_yield_pct": 0.0002,
+            "cryo_4of5_spared_yield_pct": 0.0106,
+            "femoco_16block_192L_yield_pct": 0.0,
+            "femoco_16of18_spared_yield_pct": 0.0,
+            "phys_candidates_per_block": 5760,
+            "phys_candidates_per_logical": 480.0
+          },
+          "N11": {
+            "N_cand": 11,
+            "p_drop": 0.002708830439856872,
+            "p_drop_pct": 0.270883,
+            "block_576_yield": 0.209632,
+            "block_576_yield_pct": 20.9632,
+            "cryo_5block_60L_yield_pct": 0.0405,
+            "cryo_4of5_spared_yield_pct": 0.8037,
+            "femoco_16block_192L_yield_pct": 0.0,
+            "femoco_16of18_spared_yield_pct": 0.0,
+            "phys_candidates_per_block": 6336,
+            "phys_candidates_per_logical": 528.0
+          },
+          "N14": {
+            "N_cand": 14,
+            "p_drop": 0.0005402955724420613,
+            "p_drop_pct": 0.05403,
+            "block_576_yield": 0.732498,
+            "block_576_yield_pct": 73.2498,
+            "cryo_5block_60L_yield_pct": 21.0879,
+            "cryo_4of5_spared_yield_pct": 59.5934,
+            "femoco_16block_192L_yield_pct": 0.6869,
+            "femoco_16of18_spared_yield_pct": 10.3119,
+            "phys_candidates_per_block": 8064,
+            "phys_candidates_per_logical": 672.0
+          },
+          "N18": {
+            "N_cand": 18,
+            "p_drop": 6.296475609705011e-05,
+            "p_drop_pct": 0.006296,
+            "block_576_yield": 0.964381,
+            "block_576_yield_pct": 96.4381,
+            "cryo_5block_60L_yield_pct": 83.4148,
+            "cryo_4of5_spared_yield_pct": 98.8193,
+            "femoco_16block_192L_yield_pct": 55.973,
+            "femoco_16of18_spared_yield_pct": 97.53,
+            "phys_candidates_per_block": 10368,
+            "phys_candidates_per_logical": 864.0
+          },
+          "N24": {
+            "N_cand": 24,
+            "p_drop": 2.5049363819214025e-06,
+            "p_drop_pct": 0.00025,
+            "block_576_yield": 0.998558,
+            "block_576_yield_pct": 99.8558,
+            "cryo_5block_60L_yield_pct": 99.2812,
+            "cryo_4of5_spared_yield_pct": 99.9979,
+            "femoco_16block_192L_yield_pct": 97.7179,
+            "femoco_16of18_spared_yield_pct": 99.9998,
+            "phys_candidates_per_block": 13824,
+            "phys_candidates_per_logical": 1152.0
+          },
+          "N30": {
+            "N_cand": 30,
+            "p_drop": 9.965426162855343e-08,
+            "p_drop_pct": 1e-05,
+            "block_576_yield": 0.999943,
+            "block_576_yield_pct": 99.9943,
+            "cryo_5block_60L_yield_pct": 99.9713,
+            "cryo_4of5_spared_yield_pct": 100.0,
+            "femoco_16block_192L_yield_pct": 99.9082,
+            "femoco_16of18_spared_yield_pct": 100.0,
+            "phys_candidates_per_block": 17280,
+            "phys_candidates_per_logical": 1440.0
+          }
+        }
+      },
+      "f1p5_Ez2MVm_ddrf6893_and_iradina_valley": {
+        "p_slot": 0.28967,
+        "N_cand_req_99pct_block": 33,
+        "by_N_cand": {
+          "N6": {
+            "N_cand": 6,
+            "p_drop": 0.12846099874725833,
+            "p_drop_pct": 12.8461,
+            "block_576_yield": 0.0,
+            "block_576_yield_pct": 0.0,
+            "cryo_5block_60L_yield_pct": 0.0,
+            "cryo_4of5_spared_yield_pct": 0.0,
+            "femoco_16block_192L_yield_pct": 0.0,
+            "femoco_16of18_spared_yield_pct": 0.0,
+            "phys_candidates_per_block": 3456,
+            "phys_candidates_per_logical": 288.0
+          },
+          "N7": {
+            "N_cand": 7,
+            "p_drop": 0.09125006375707848,
+            "p_drop_pct": 9.125006,
+            "block_576_yield": 0.0,
+            "block_576_yield_pct": 0.0,
+            "cryo_5block_60L_yield_pct": 0.0,
+            "cryo_4of5_spared_yield_pct": 0.0,
+            "femoco_16block_192L_yield_pct": 0.0,
+            "femoco_16of18_spared_yield_pct": 0.0,
+            "phys_candidates_per_block": 4032,
+            "phys_candidates_per_logical": 336.0
+          },
+          "N8": {
+            "N_cand": 8,
+            "p_drop": 0.06481791529624548,
+            "p_drop_pct": 6.481792,
+            "block_576_yield": 0.0,
+            "block_576_yield_pct": 0.0,
+            "cryo_5block_60L_yield_pct": 0.0,
+            "cryo_4of5_spared_yield_pct": 0.0,
+            "femoco_16block_192L_yield_pct": 0.0,
+            "femoco_16of18_spared_yield_pct": 0.0,
+            "phys_candidates_per_block": 4608,
+            "phys_candidates_per_logical": 384.0
+          },
+          "N9": {
+            "N_cand": 9,
+            "p_drop": 0.04604229268853902,
+            "p_drop_pct": 4.604229,
+            "block_576_yield": 0.0,
+            "block_576_yield_pct": 0.0,
+            "cryo_5block_60L_yield_pct": 0.0,
+            "cryo_4of5_spared_yield_pct": 0.0,
+            "femoco_16block_192L_yield_pct": 0.0,
+            "femoco_16of18_spared_yield_pct": 0.0,
+            "phys_candidates_per_block": 5184,
+            "phys_candidates_per_logical": 432.0
+          },
+          "N10": {
+            "N_cand": 10,
+            "p_drop": 0.03270535169679989,
+            "p_drop_pct": 3.270535,
+            "block_576_yield": 0.0,
+            "block_576_yield_pct": 0.0,
+            "cryo_5block_60L_yield_pct": 0.0,
+            "cryo_4of5_spared_yield_pct": 0.0,
+            "femoco_16block_192L_yield_pct": 0.0,
+            "femoco_16of18_spared_yield_pct": 0.0,
+            "phys_candidates_per_block": 5760,
+            "phys_candidates_per_logical": 480.0
+          },
+          "N11": {
+            "N_cand": 11,
+            "p_drop": 0.023231684765290358,
+            "p_drop_pct": 2.323168,
+            "block_576_yield": 1e-06,
+            "block_576_yield_pct": 0.0001,
+            "cryo_5block_60L_yield_pct": 0.0,
+            "cryo_4of5_spared_yield_pct": 0.0,
+            "femoco_16block_192L_yield_pct": 0.0,
+            "femoco_16of18_spared_yield_pct": 0.0,
+            "phys_candidates_per_block": 6336,
+            "phys_candidates_per_logical": 528.0
+          },
+          "N14": {
+            "N_cand": 14,
+            "p_drop": 0.008326574135670887,
+            "p_drop_pct": 0.832657,
+            "block_576_yield": 0.008098,
+            "block_576_yield_pct": 0.8098,
+            "cryo_5block_60L_yield_pct": 0.0,
+            "cryo_4of5_spared_yield_pct": 0.0,
+            "femoco_16block_192L_yield_pct": 0.0,
+            "femoco_16of18_spared_yield_pct": 0.0,
+            "phys_candidates_per_block": 8064,
+            "phys_candidates_per_logical": 672.0
+          },
+          "N18": {
+            "N_cand": 18,
+            "p_drop": 0.0021198927160170937,
+            "p_drop_pct": 0.211989,
+            "block_576_yield": 0.294536,
+            "block_576_yield_pct": 29.4536,
+            "cryo_5block_60L_yield_pct": 0.2217,
+            "cryo_4of5_spared_yield_pct": 2.8763,
+            "femoco_16block_192L_yield_pct": 0.0,
+            "femoco_16of18_spared_yield_pct": 0.0,
+            "phys_candidates_per_block": 10368,
+            "phys_candidates_per_logical": 864.0
+          },
+          "N24": {
+            "N_cand": 24,
+            "p_drop": 0.00027232353553659395,
+            "p_drop_pct": 0.027232,
+            "block_576_yield": 0.854807,
+            "block_576_yield_pct": 85.4807,
+            "cryo_5block_60L_yield_pct": 45.6394,
+            "cryo_4of5_spared_yield_pct": 84.3998,
+            "femoco_16block_192L_yield_pct": 8.1262,
+            "femoco_16of18_spared_yield_pct": 50.3022,
+            "phys_candidates_per_block": 13824,
+            "phys_candidates_per_logical": 1152.0
+          },
+          "N30": {
+            "N_cand": 30,
+            "p_drop": 3.4982953357415356e-05,
+            "p_drop_pct": 0.003498,
+            "block_576_yield": 0.980051,
+            "block_576_yield_pct": 98.0051,
+            "cryo_5block_60L_yield_pct": 90.4157,
+            "cryo_4of5_spared_yield_pct": 99.6177,
+            "femoco_16block_192L_yield_pct": 72.4402,
+            "femoco_16of18_spared_yield_pct": 99.4824,
+            "phys_candidates_per_block": 17280,
+            "phys_candidates_per_logical": 1440.0
           }
         }
       }
-    }
+    },
+    "flat_folded_layer1_airbridges": 484,
+    "flat_folded_layer2_airbridges": 23772,
+    "total_flat_airbridge_crossings": 24256
   },
   "part3_d6_to_d18_circuit_dem": {
     "n_noisy_rounds_primary": 3,
@@ -2487,7 +3170,27 @@
         "d_required_for_1e-14": 174.1
       }
     },
-    "elapsed_3b_s": 355.23
+    "elapsed_3b_s": 355.23,
+    "bb288_round_depth_scaling_OBS086": {
+      "R3": {
+        "n_noisy_rounds": 3,
+        "M_detectors": 576,
+        "N_fault_mechanisms": 4608,
+        "p_L_block": 0.0,
+        "p_L_round": 0.0,
+        "bp_converged_frac": 0.375,
+        "osd_trigger_frac": 0.625
+      },
+      "R6": {
+        "n_noisy_rounds": 6,
+        "M_detectors": 1008,
+        "N_fault_mechanisms": 8928,
+        "p_L_block": 0.0,
+        "p_L_round": 0.0,
+        "bp_converged_frac": 0.25,
+        "osd_trigger_frac": 0.75
+      }
+    }
   },
   "part4_magic_state_factories": {
     "primary_Exp143_D3_0p337pct_Lambda2p825": {
@@ -3226,5 +3929,15 @@
       }
     }
   },
-  "portability_hardcoded_hits": []
+  "portability_hardcoded_hits": [],
+  "honest_obstacle_closure_audit": {
+    "OBS030_rsa2048_d24_p_fail_total": 1.0,
+    "OBS030_rsa2048_d_required_1e14": 174.1,
+    "OBS030_femoco_d18_p_fail_total": 1.0,
+    "OBS030_verdict": "HORIZON_TARGET_REQUIRED: d=24 RSA-2048 & d=18 FeMoco fail with p_fail_total=1.0 under D3; requires physical error well below D3++ (<=0.15-0.20%).",
+    "OBS045_bb288_total_airbridges": 24256,
+    "OBS045_bb288_20um_L2_frac_gt_300um_manh": 0.4861,
+    "OBS047_bb288_N9_iradina_valley_yield_pct": 1.0165,
+    "OBS029_bb288_N9_ddrf6893_yield_pct": 50.194
+  }
 }

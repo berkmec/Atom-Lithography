@@ -1,6 +1,6 @@
 {
-  "schema_version": "1.0",
-  "title": "Master Electrical Power, 15 kVA LFP UPS Load-Shed, Grounding & 10 MHz Rb / White Rabbit Timing ICD",
+  "schema_version": "1.1",
+  "title": "Master Electrical Power, 15 kVA / 12 kWh LFP UPS Load-Shed, Grounding & 10 MHz Rb / White Rabbit Timing ICD",
   "epistemic_flags": {
     "design_maturity": "M0_M1_ELECTRICAL_ICD_DESIGN_ONLY",
     "no_lab_measurement": true,
@@ -20,16 +20,21 @@
   },
   "ups_s7_safety_04": {
     "part_id": "S7.SAFETY-04",
-    "topology": "Online Double-Conversion LFP UPS + Tiered Load-Shed PDU",
+    "topology": "Online Double-Conversion 15 kVA / 12 kWh LFP UPS + Utility-Side Fast Tier-2 Contactor Ahead of UPS + Tier-1/1B PDU",
     "rating_kVA": 15.0,
     "power_factor": 0.9,
     "rated_real_power_kW": 13.5,
-    "battery_energy_kWh": 10.0,
+    "battery_energy_kWh": 12.0,
     "usable_lfp_dod_fraction": 0.9,
-    "usable_battery_energy_90pct_dod_kWh": 9.0,
+    "usable_battery_energy_90pct_dod_kWh": 10.8,
     "inverter_efficiency": 0.9,
     "internal_loss_W": 350.0,
     "transfer_time_ms": 0.0,
+    "utility_side_tier2_contactor_ahead_of_ups": true,
+    "pt420_wall_power_utility_side_kW": 12.5,
+    "dedicated_magnet_rampdown_ups_branch_W": 650.0,
+    "tier1_plus_tier1b_peak_ups_load_kW": 5.378,
+    "ups_peak_load_within_13p5kW_rating": true,
     "tier1_critical": {
       "total_W": 2533.0,
       "total_kW": 2.533,
@@ -41,19 +46,28 @@
         "ph3_sds_cabinet_and_scrubber": 480.0,
         "s7_host_rfsoc_logging_cryo_inst": 1188.0
       },
-      "runtime_min": 213.2,
-      "runtime_tier1_min_exp150_nominal_eta090": 213.2,
+      "runtime_min": 202.8,
+      "runtime_tier1_min_exp150_nominal_eta090": 255.8,
       "battery_dc_draw_incl_350w_loss_W": 3164.44,
-      "runtime_tier1_min_conservative_100pct_dod_incl_350w_loss": 189.6,
-      "runtime_tier1_min_conservative_90pct_dod_incl_350w_loss": 170.6,
+      "tier1b_120s_rampdown_dc_energy_kWh": 0.1054,
+      "runtime_tier1_min_conservative_100pct_dod_incl_350w_loss": 225.5,
+      "runtime_tier1_min_conservative_90pct_dod_incl_350w_loss": 202.8,
+      "runtime_tier1_min_conservative_90pct_dod_steady_only": 204.8,
       "meets_180min_requirement": true,
       "tier1_conservative_100pct_dod_meets_180min": true,
-      "tier1_conservative_90pct_dod_meets_180min": false,
+      "tier1_conservative_90pct_dod_meets_180min": true,
+      "legacy_10kwh_audit_record": {
+        "legacy_battery_kWh": 10.0,
+        "legacy_runtime_90pct_dod_incl_350w_min": 170.6,
+        "legacy_meets_180min": false,
+        "remediation": "Upgraded LFP bank from 10.0 kWh to 12.0 kWh (10.8 kWh @ 90% DoD) -> 202.8 min >= 180 min PASS (OBS-068/079)."
+      },
       "conservative_sizing_requirements_for_180min_at_90pct_dod": {
-        "min_lfp_pack_kWh_at_2p533kW": 10.55,
-        "recommended_nominal_lfp_pack_kWh": 11.0,
-        "max_tier1_load_kW_at_10kWh": 2.385,
-        "sizing_note": "Exp150 reference formula (10 kWh * 0.90 / 2.533 kW) gives 213.2 min. Including continuous 350.0 W online double-conversion internal loss (P_batt_dc = 3164.44 W), runtime is 189.6 min at 100% DoD (PASS >= 180 min) and 170.6 min at conservative 90% usable LFP DoD (9.0 kWh, 9.4 min below 180 min). Meeting >= 180 min under 90% DoD + 350 W idle loss requires either >= 10.6 kWh (11 kWh nominal) LFP pack or trimming Tier-1 outage hold load to <= 2.35 kW."
+        "min_lfp_pack_kWh_at_2p533kW": 10.67,
+        "installed_nominal_lfp_pack_kWh": 12.0,
+        "recommended_nominal_lfp_pack_kWh": 12.0,
+        "max_tier1_load_kW_at_12kWh": 2.925,
+        "sizing_note": "OBS-068/079 closure: Upgraded to 12.0 kWh LFP (10.8 kWh usable @ 90% DoD). Including 350.0 W continuous double-conversion loss (P_batt_dc = 3164.44 W) and 120 s Tier-1B magnet ramp-down (650 W) + S9.HPC halt (2195 W) (0.1054 kWh DC), conservative runtime is 202.8 min @ 90% DoD (PASS >= 180 min; steady-only 204.8 min; legacy 10 kWh pack gave only 170.6 min < 180 min)."
       },
       "items_from_95_icds": [
         {
@@ -181,14 +195,14 @@
       ]
     },
     "tier2_sheddable": {
-      "total_W": 12275.0,
-      "total_kW": 12.275,
+      "total_W": 15275.0,
+      "total_kW": 15.275,
       "exp150_buckets_W": {
-        "pt420_compressor_controlled_stop": 9500.0,
+        "pt420_compressor_controlled_stop": 12500.0,
         "s9hpc_100g_rdma_graceful_halt": 2195.0,
         "s56_mbe_pbn_and_option_q_cut": 580.0
       },
-      "shed_timeline_note": "PT420 (9.5 kW, 3-ph breaker) soft-shed at t=0.5 s; S5.6/Opt-Q cut at t=45 ms; S9.HPC graceful halt at t=60 s.",
+      "shed_timeline_note": "Utility-side fast contactor (<5 ms) sheds 12.5 kW PT420 (Cryomech CPA1110 max @ 60 Hz) & heavy Tier-2 mains AHEAD of UPS (never loading the 13.5 kW inverter); S5.6/Opt-Q cut at t=45 ms; Tier-1B UPS holds S6.3-05 magnet ramp-down (650 W, 120 s) & S9.HPC graceful halt (2.195 kW) at 5.378 kW peak <= 13.5 kW, then sheds at t=125 s leaving 2.533 kW Tier-1.",
       "items": [
         {
           "part_id": "S9.HPC-01",
@@ -222,9 +236,9 @@
         },
         {
           "part_id": "S6.1-02",
-          "part_name": "Uzak doner valf, su sogutmali He kompresoru ve esnek hatlar",
+          "part_name": "Uzak doner valf, su sogutmali He kompresoru (CPA1110, 11.4-12.5 kW) ve esnek hatlar",
           "electrical_class": "E4",
-          "power_w": 9420.0
+          "power_w": 12420.0
         },
         {
           "part_id": "S6.9-01",
@@ -235,11 +249,11 @@
       ],
       "tier2_shed_28part_reconciliation": {
         "tier2_shed_part_count": 28,
-        "raw_supply_rails_steady_sum_W": 18026.0,
-        "exp150_tier2_ups_allocation_W": 12275.0,
+        "raw_supply_rails_steady_sum_W": 21026.0,
+        "exp150_tier2_ups_allocation_W": 15275.0,
         "non_exp150_aux_incremental_mains_W": 5401.0,
         "secondary_and_backplane_derived_overlap_W": 350.0,
-        "total_incremental_mains_tier2_W": 17676.0,
+        "total_incremental_mains_tier2_W": 20676.0,
         "reconciliation_discrepancy_W": 0.0,
         "formula": "raw_supply_rails_steady_sum_W == exp150_tier2_ups_allocation_W + non_exp150_aux_incremental_mains_W + secondary_and_backplane_derived_overlap_W",
         "per_part_breakdown": [
@@ -506,12 +520,12 @@
           {
             "part_id": "S6.1-02",
             "ups_budget_group": "EXP150_TIER2_SHED",
-            "supply_rails_steady_sum_w": 9420.0,
-            "incremental_mains_w": 9420.0,
-            "exp150_ups_allocation_w": 9420.0,
+            "supply_rails_steady_sum_w": 12420.0,
+            "incremental_mains_w": 12420.0,
+            "exp150_ups_allocation_w": 12420.0,
             "non_exp150_aux_shed_w": 0.0,
             "secondary_or_parent_derived_w": 0.0,
-            "reconciliation_note": "Exp150 Tier-2 sheddable baseline load: incremental_mains_w = exp150_ups_allocation_w = 9420.0 W (raw supply_rails sum = 9420.0 W, shed cleanly on utility outage)."
+            "reconciliation_note": "Exp150 Tier-2 sheddable baseline load: incremental_mains_w = exp150_ups_allocation_w = 12420.0 W (raw supply_rails sum = 12420.0 W, shed cleanly on utility outage)."
           },
           {
             "part_id": "S6.9-01",
@@ -527,13 +541,15 @@
       }
     },
     "reconciliation": {
-      "exp150_combined_tier1_plus_tier2_W": 14808.0,
-      "exp150_combined_tier1_plus_tier2_kW": 14.808,
-      "ups_bus_pre_shed_excl_3ph_pt420_kW": 5.308,
-      "ups_bus_utilization_pre_shed_pct": 39.32,
-      "runtime_at_rated_13p5kW_min": 40.0,
-      "runtime_at_rated_13p5kW_conservative_100pct_dod_incl_350w_min": 39.1,
-      "runtime_at_rated_13p5kW_conservative_90pct_dod_incl_350w_min": 35.2,
+      "exp150_combined_tier1_plus_tier2_W": 17808.0,
+      "exp150_combined_tier1_plus_tier2_kW": 17.808,
+      "all_machine_loads_incl_pt420_kW": 23.559,
+      "ups_bus_pre_shed_excl_3ph_pt420_kW": 5.378,
+      "ups_bus_utilization_pre_shed_pct": 39.84,
+      "utility_side_tier2_contactor_prevents_overload": true,
+      "runtime_at_rated_13p5kW_min": 43.2,
+      "runtime_at_rated_13p5kW_conservative_100pct_dod_incl_350w_min": 46.9,
+      "runtime_at_rated_13p5kW_conservative_90pct_dod_incl_350w_min": 42.2,
       "meets_30min_full_load_requirement": true,
       "aux_experiment_rack_sheddable_W": 5581.0,
       "aux_experiment_rack_items": [
@@ -611,7 +627,7 @@
         },
         {
           "part_id": "S6.3-05",
-          "part_name": "Cift-kutuplu superiletken miknatis guc kaynagi (\u00b1100 A) ve HTS akim uclari",
+          "part_name": "Cift-kutuplu superiletken miknatis guc kaynagi (\u00b1300 A) ve >=300 A HTS akim uclari",
           "electrical_class": "E3",
           "incremental_mains_w": 120.0,
           "sub_rail_power_w": 120.0,
@@ -726,6 +742,7 @@
         "cryo_readout_mode_excl_pt420_kW": 6.669,
         "ion_write_mode_excl_pt420_kW": 5.508,
         "flash_anneal_ups_mode_excl_3ph_flash_kW": 3.028,
+        "outage_tier1_plus_1b_rampdown_kW": 5.378,
         "utility_outage_tier1_hold_kW": 2.533,
         "all_modes_within_13p5kW_ups": true
       }

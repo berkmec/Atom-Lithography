@@ -1,4 +1,4 @@
-// tb_uhv_interlock_fsm.v - Self-checking 1oo2D fail-safe interlock & fault-injection TB
+// tb_uhv_interlock_fsm.v - Self-checking 1oo2D fail-safe interlock, 2-FF CDC & HW WDT lock TB
 `timescale 1ns/1ps
 
 module tb_uhv_interlock_fsm;
@@ -26,6 +26,8 @@ module tb_uhv_interlock_fsm;
     wire       safe_ph3_valve_en;
     wire       safe_magnet_en;
     wire       interlock_trip_out;
+    wire       safety_indep_trip_out;
+    wire       wdt_hw_locked_on;
     wire [2:0] fsm_state;
     wire [7:0] sensor_fault_latched;
     wire       discrep_fault_latched;
@@ -44,7 +46,8 @@ module tb_uhv_interlock_fsm;
     uhv_interlock_fsm #(
         .DEFAULT_DISCREP_WIN(16'd8),
         .DEFAULT_WDT_TIMEOUT(32'd25),
-        .DEFAULT_DWELL_CYCLES(32'd12)
+        .DEFAULT_DWELL_CYCLES(32'd12),
+        .HARDWIRE_WDT_ALWAYS_ON(1'b1)
     ) dut (
         .clk                              (clk),
         .rst_n                            (rst_n),
@@ -67,6 +70,8 @@ module tb_uhv_interlock_fsm;
         .safe_ph3_valve_en                (safe_ph3_valve_en),
         .safe_magnet_en                   (safe_magnet_en),
         .interlock_trip_out               (interlock_trip_out),
+        .safety_indep_trip_out            (safety_indep_trip_out),
+        .wdt_hw_locked_on                 (wdt_hw_locked_on),
         .fsm_state                        (fsm_state),
         .sensor_fault_latched             (sensor_fault_latched),
         .discrep_fault_latched            (discrep_fault_latched),
@@ -95,20 +100,23 @@ module tb_uhv_interlock_fsm;
     time    t0, t1;
     integer dt_ns;
 
-    task bring_to_run;
+    task bring_to_run(input [31:0] wdt_lim);
         begin
             @(negedge clk);
-            ch_a_ok        = 8'hFF;
-            ch_b_ok        = 8'hFF;
-            sw_estop       = 1'b0;
-            wdt_en         = 1'b0;
-            run_enable_cmd = 1'b1;
-            repeat (2) @(posedge clk);
+            ch_a_ok         = 8'hFF;
+            ch_b_ok         = 8'hFF;
+            sw_estop        = 1'b0;
+            wdt_en          = 1'b0; // Attempt to disable WDT -> hardware ignores!
+            cfg_wdt_timeout = wdt_lim;
+            run_enable_cmd  = 1'b1;
+            repeat (4) @(posedge clk); // 2-FF sensor sync settle
 
-            // Simultaneous dual-channel reset
+            // Simultaneous dual-channel reset (hold reset_cmd_b 3 cycles for 2-FF sync!)
+            @(negedge clk);
+            reset_cmd_b = 1'b1;
+            repeat (2) @(posedge clk);
             @(negedge clk);
             reset_cmd_a = 1'b1;
-            reset_cmd_b = 1'b1;
             @(posedge clk);
             @(negedge clk);
             reset_cmd_a = 1'b0;
@@ -117,9 +125,10 @@ module tb_uhv_interlock_fsm;
             // Wait through 12-cycle safe dwell + armed -> run
             repeat (16) @(posedge clk);
             #1;
-            if (fsm_state !== 3'd4 || all_safe_en !== 6'b111111 || interlock_trip_out !== 1'b0) begin
-                $display("ERROR: bring_to_run failed: state=%0d safe_en=%b trip=%b",
-                         fsm_state, all_safe_en, interlock_trip_out);
+            if (fsm_state !== 3'd4 || all_safe_en !== 6'b111111 ||
+                interlock_trip_out !== 1'b0 || safety_indep_trip_out !== 1'b0) begin
+                $display("ERROR: bring_to_run failed: state=%0d safe_en=%b trip=%b indep=%b",
+                         fsm_state, all_safe_en, interlock_trip_out, safety_indep_trip_out);
                 errors = errors + 1;
             end
         end
@@ -139,24 +148,24 @@ module tb_uhv_interlock_fsm;
         wdt_kick         = 1'b0;
         subsys_en_mask   = 6'b111111;
         cfg_discrep_win  = 16'd8;
-        cfg_wdt_timeout  = 32'd25;
+        cfg_wdt_timeout  = 32'd500;
         cfg_dwell_cycles = 32'd12;
 
         repeat (4) @(posedge clk);
         rst_n = 1'b1;
-        repeat (2) @(posedge clk);
+        repeat (5) @(posedge clk); // 2-FF reset bridge + 2-FF sensor sync
         #1;
 
-        // 1. Verify hardwired read-only epistemic status bits
+        // 1. Verify hardwired read-only epistemic status bits & HW WDT lock
         if (status_certified !== 1'b0 || status_design_only_not_certified !== 1'b1 ||
-            epistemic_csr_word !== 32'hD001_530E) begin
-            $display("ERROR: epistemic CSR mismatch: cert=%b design_only=%b word=%h",
-                     status_certified, status_design_only_not_certified, epistemic_csr_word);
+            epistemic_csr_word !== 32'hD001_530E || wdt_hw_locked_on !== 1'b1) begin
+            $display("ERROR: epistemic/WDT lock mismatch: cert=%b design=%b word=%h wdt_lock=%b",
+                     status_certified, status_design_only_not_certified, epistemic_csr_word, wdt_hw_locked_on);
             errors = errors + 1;
         end
 
         // 2. Verify power-on de-energized safe state
-        if (all_safe_en !== 6'b000000 || interlock_trip_out !== 1'b1) begin
+        if (all_safe_en !== 6'b000000 || interlock_trip_out !== 1'b1 || safety_indep_trip_out !== 1'b1) begin
             $display("ERROR: outputs not de-energized on boot!");
             errors = errors + 1;
         end
@@ -165,11 +174,11 @@ module tb_uhv_interlock_fsm;
         @(negedge clk);
         reset_cmd_a = 1'b1;
         reset_cmd_b = 1'b0;
-        @(posedge clk);
+        repeat (3) @(posedge clk);
         @(negedge clk);
         reset_cmd_a = 1'b0;
         reset_cmd_b = 1'b1;
-        @(posedge clk);
+        repeat (3) @(posedge clk);
         @(negedge clk);
         reset_cmd_b = 1'b0;
         repeat (3) @(posedge clk);
@@ -180,8 +189,10 @@ module tb_uhv_interlock_fsm;
 
         // 4. Verify glitch during safe-dwell aborts back to ST_FAULT_LATCHED
         @(negedge clk);
-        reset_cmd_a = 1'b1;
         reset_cmd_b = 1'b1;
+        repeat (2) @(posedge clk);
+        @(negedge clk);
+        reset_cmd_a = 1'b1;
         @(posedge clk);
         @(negedge clk);
         reset_cmd_a = 1'b0;
@@ -193,7 +204,7 @@ module tb_uhv_interlock_fsm;
         @(posedge clk);
         @(negedge clk);
         ch_a_ok[0] = 1'b1;
-        repeat (2) @(posedge clk);
+        repeat (4) @(posedge clk);
         #1;
         if (fsm_state !== 3'd1 || all_safe_en !== 6'b000000) begin
             $display("ERROR: dwell glitch did not abort to ST_FAULT_LATCHED! state=%0d", fsm_state);
@@ -202,50 +213,42 @@ module tb_uhv_interlock_fsm;
 
         // 5. Test ALL 8 hazard channels on BOTH Channel A and Channel B (16 1oo2 fault injections)
         for (ch_i = 0; ch_i < 8; ch_i = ch_i + 1) begin
-            // Channel A trip
-            bring_to_run();
+            // Channel A trip (2-FF CDC + 1-cycle FSM latch <= 30 ns, glitch-free!)
+            bring_to_run(32'd500);
             @(negedge clk);
             t0 = $time;
             ch_a_ok[ch_i] = 1'b0;
-            #1;
-            if (all_safe_en !== 6'b000000 || interlock_trip_out !== 1'b1) begin
-                $display("ERROR: ChA bit %0d trip failed immediate de-energize!", ch_i);
-                errors = errors + 1;
-            end
-            repeat (2) @(posedge clk);
+            repeat (3) @(posedge clk);
             #1;
             t1 = $time;
             dt_ns = t1 - t0;
             if (dt_ns > max_trip_ns) max_trip_ns = dt_ns;
-            if (fsm_state !== 3'd1 || !sensor_fault_latched[ch_i]) begin
-                $display("ERROR: ChA bit %0d did not latch fault! state=%0d latch=%b",
-                         ch_i, fsm_state, sensor_fault_latched);
+            if (all_safe_en !== 6'b000000 || interlock_trip_out !== 1'b1 ||
+                safety_indep_trip_out !== 1'b1 || fsm_state !== 3'd1 || !sensor_fault_latched[ch_i]) begin
+                $display("ERROR: ChA bit %0d trip/latch failed! state=%0d safe=%b latch=%b",
+                         ch_i, fsm_state, all_safe_en, sensor_fault_latched);
                 errors = errors + 1;
             end
 
             // Channel B trip
-            bring_to_run();
+            bring_to_run(32'd500);
             @(negedge clk);
             ch_b_ok[ch_i] = 1'b0;
+            repeat (3) @(posedge clk);
             #1;
-            if (all_safe_en !== 6'b000000 || interlock_trip_out !== 1'b1) begin
-                $display("ERROR: ChB bit %0d trip failed immediate de-energize!", ch_i);
-                errors = errors + 1;
-            end
-            repeat (2) @(posedge clk);
-            #1;
-            if (fsm_state !== 3'd1 || !sensor_fault_latched[ch_i]) begin
-                $display("ERROR: ChB bit %0d did not latch fault! state=%0d latch=%b",
-                         ch_i, fsm_state, sensor_fault_latched);
+            if (all_safe_en !== 6'b000000 || interlock_trip_out !== 1'b1 ||
+                safety_indep_trip_out !== 1'b1 || fsm_state !== 3'd1 || !sensor_fault_latched[ch_i]) begin
+                $display("ERROR: ChB bit %0d trip/latch failed! state=%0d safe=%b latch=%b",
+                         ch_i, fsm_state, all_safe_en, sensor_fault_latched);
                 errors = errors + 1;
             end
         end
 
         // 6. Test 1oo2D Cross-Channel Discrepancy Fault Detection (O2 sensor ch 2)
-        bring_to_run();
+        bring_to_run(32'd500);
         @(negedge clk);
-        ch_a_ok[2] = 1'b0; // ch_a[2]=0, ch_b[2]=1 -> cross-channel discrepancy!
-        repeat (12) @(posedge clk); // exceeds cfg_discrep_win=8
+        ch_a_ok[2] = 1'b0;
+        repeat (14) @(posedge clk);
         #1;
         if (!discrep_fault_latched || discrep_ch_latched !== 8'h04) begin
             $display("ERROR: 1oo2D discrepancy not detected! flag=%b mask=%h",
@@ -257,27 +260,31 @@ module tb_uhv_interlock_fsm;
             errors = errors + 1;
         end
 
-        // 7. Test Hardware Watchdog Heartbeat (kick keeps alive, starve trips)
-        bring_to_run();
+        // 7. Test Hardware-Locked Watchdog Heartbeat (OBS-116: trips EVEN WITH wdt_en=0!)
+        bring_to_run(32'd40);
         @(negedge clk);
-        wdt_en = 1'b1;
-        repeat (15) @(posedge clk);
-        @(negedge clk);
+        wdt_en = 1'b0; // Explicitly try to disable WDT — MUST remain locked ON in hardware!
         wdt_kick = 1'b1;
         @(posedge clk);
         @(negedge clk);
         wdt_kick = 1'b0;
-        repeat (15) @(posedge clk);
+        repeat (20) @(posedge clk);
         #1;
         if (fsm_state !== 3'd4 || wdt_fault_latched !== 1'b0) begin
             $display("ERROR: WDT tripped despite valid heartbeat kick!");
             errors = errors + 1;
         end
-        // Now starve watchdog for 30 cycles (> 25 timeout)
-        repeat (30) @(posedge clk);
+        // Kick again, then starve for 50 cycles (> 40) with wdt_en=0 -> MUST TRIP!
+        @(negedge clk);
+        wdt_kick = 1'b1;
+        @(posedge clk);
+        @(negedge clk);
+        wdt_kick = 1'b0;
+        repeat (48) @(posedge clk);
         #1;
-        if (fsm_state !== 3'd1 || wdt_fault_latched !== 1'b1 || all_safe_en !== 6'b000000) begin
-            $display("ERROR: WDT timeout did not trip! state=%0d wdt=%b safe=%b",
+        if (fsm_state !== 3'd1 || wdt_fault_latched !== 1'b1 || all_safe_en !== 6'b000000 ||
+            safety_indep_trip_out !== 1'b1) begin
+            $display("ERROR: HW-locked WDT failed to trip with wdt_en=0! state=%0d wdt=%b safe=%b",
                      fsm_state, wdt_fault_latched, all_safe_en);
             errors = errors + 1;
         end
@@ -287,17 +294,13 @@ module tb_uhv_interlock_fsm;
         end
 
         // 8. Test Software E-Stop
-        bring_to_run();
+        bring_to_run(32'd500);
         @(negedge clk);
         sw_estop = 1'b1;
-        #1;
-        if (all_safe_en !== 6'b000000 || interlock_trip_out !== 1'b1) begin
-            $display("ERROR: sw_estop did not drop enables immediately!");
-            errors = errors + 1;
-        end
         repeat (2) @(posedge clk);
         #1;
-        if (!sw_estop_latched || fsm_state !== 3'd1 || first_fault_code !== 4'd11) begin
+        if (all_safe_en !== 6'b000000 || interlock_trip_out !== 1'b1 ||
+            !sw_estop_latched || fsm_state !== 3'd1 || first_fault_code !== 4'd11) begin
             $display("ERROR: sw_estop latch/code mismatch!");
             errors = errors + 1;
         end

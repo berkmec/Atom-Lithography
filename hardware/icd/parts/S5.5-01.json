@@ -38,14 +38,14 @@
       "triangle_count": 1016,
       "temp_k": 300.0,
       "canonical_bbox_min_mm": [
-        -52.2,
-        341.0,
-        455.8
+        367.8,
+        162.196,
+        601.8
       ],
       "canonical_bbox_max_mm": [
-        52.2,
-        467.0,
-        544.55
+        472.2,
+        299.399,
+        724.402
       ],
       "datum_shift_mm": [
         0.0,
@@ -81,7 +81,17 @@
     ],
     "rtl_audit_json": "results/stage2_rtl_verification/rtl_machine_ctrl_audit.json",
     "software_and_eda_files": [],
-    "verification_tests": []
+    "verification_tests": [
+      "tests/test_bom_detailed.py",
+      "tests/test_full_180_traceability.py",
+      "tests/test_cad_s5.py",
+      "tests/test_rtl_machine_ctrl.py",
+      "tests/test_exp130.py",
+      "tests/test_exp139.py",
+      "tests/test_exp150.py",
+      "tests/test_cad_parts.py",
+      "tests/test_pcb_hv_laser_safety.py"
+    ]
   },
   "specialized_specification": null,
   "verification_status": {
@@ -91,6 +101,7 @@
     "rtl_verified": true,
     "software_or_eda_verified": false,
     "specialized_icd_present": false,
+    "verification_tests_mapped": true,
     "traceable": true
   },
   "epistemic": {

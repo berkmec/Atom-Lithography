@@ -16,14 +16,14 @@
     "qty": 1,
     "procurement_class": "COTS",
     "world_origin_mm": [
-      -211.0452,
-      177.088,
-      500.0
+      548.3218,
+      -123.9189,
+      629.6066
     ],
     "world_rotation_deg": [
       0.0,
-      0.0,
-      140.0
+      -36.0,
+      316.0
     ],
     "ports": [
       {
@@ -40,7 +40,7 @@
           0.0
         ],
         "standard": "CF100",
-        "mating_part_id": "S5.1-01",
+        "mating_part_id": "S5.1-03",
         "bore_mm": 88.0,
         "od_mm": 152.0,
         "pcd_mm": 130.2,
@@ -162,12 +162,13 @@
     "notes": [
       "Yuksek optik guc dayanimi (>10 J/cm2), genis bant gecirgenlik",
       "CF100 UV-IR fused-silica optical viewport (Dia 88 mm CA, >10 J/cm^2 LIDT, lambda/4) + focusing barrel.",
-      "Mates S5.1-01 140 deg CF100 port with 0.5 mm compressed OFHC Cu gasket gap."
+      "OBS-001 fix: Mates S5.1-03 36-deg inclined 140-deg optical port with 0.5 mm Cu gasket gap and clear LOS to wafer S5.4-01."
     ],
     "scad_params": {
       "clear_aperture_mm": 88.0,
       "window_d_mm": 96.0,
-      "barrel_l_mm": 58.0
+      "barrel_l_mm": 58.0,
+      "elev_deg": 36.0
     },
     "target_mass_kg": 3.2,
     "epistemic": {
@@ -232,6 +233,106 @@
     "warnings": [],
     "all_valid": true
   },
+  "shell_tie_manifest": [
+    {
+      "shell_index": 0,
+      "bbox_min_mm": [
+        0.0,
+        -76.0,
+        -76.0
+      ],
+      "bbox_max_mm": [
+        19.8,
+        76.0,
+        76.0
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    },
+    {
+      "shell_index": 1,
+      "bbox_min_mm": [
+        9.88,
+        -48.0,
+        -48.0
+      ],
+      "bbox_max_mm": [
+        19.8,
+        48.0,
+        48.0
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    },
+    {
+      "shell_index": 2,
+      "bbox_min_mm": [
+        20.0,
+        -58.0,
+        -58.0
+      ],
+      "bbox_max_mm": [
+        78.0,
+        58.0,
+        58.0
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    },
+    {
+      "shell_index": 3,
+      "bbox_min_mm": [
+        68.0,
+        -64.0,
+        -64.0
+      ],
+      "bbox_max_mm": [
+        78.0,
+        64.0,
+        64.0
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    },
+    {
+      "shell_index": 4,
+      "bbox_min_mm": [
+        52.5,
+        -5.5,
+        54.0
+      ],
+      "bbox_max_mm": [
+        63.5,
+        5.5,
+        76.0
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    },
+    {
+      "shell_index": 5,
+      "bbox_min_mm": [
+        52.5,
+        -68.5679,
+        -42.7631
+      ],
+      "bbox_max_mm": [
+        63.5,
+        -44.0154,
+        -22.2369
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    },
+    {
+      "shell_index": 6,
+      "bbox_min_mm": [
+        52.5,
+        44.0154,
+        -42.7631
+      ],
+      "bbox_max_mm": [
+        63.5,
+        68.5679,
+        -22.2369
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    }
+  ],
   "epistemic": {
     "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
     "no_lab_measurement": true,

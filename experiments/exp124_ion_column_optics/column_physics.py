@@ -46,12 +46,8 @@ ROOT = Path(__file__).resolve().parents[2]
 # 1. Historical chain audit & Exp72/92 shared physics models
 # ---------------------------------------------------------------------------
 
-def ibic_efficiency(E_keV: float, C_pF: float = 0.5, threshold_sigma: float = 5.0) -> dict[str, float]:
-    """Exp72 + Exp92 verbatim IBIC single-ion detection efficiency model.
-
-    Signal S = frac(E) * E_eV / 3.6 e-; ENC = 50 + 25*C[pF] e-;
-    signal partition straggling sigma_S = 0.15 * S; eta = Phi((S - thr*ENC)/(0.15*S)).
-    """
+def ibic_efficiency_exp72_legacy(E_keV: float, C_pF: float = 0.5, threshold_sigma: float = 5.0) -> dict[str, float]:
+    """Historical Exp72 + Exp92 verbatim IBIC heuristic (retained ONLY for audit_historical_chain)."""
     e_grid = np.array([3.0, 4.0, 5.0, 10.0, 20.0])
     f_grid = np.array([0.32, 0.335, 0.35, 0.40, 0.45])
     frac = float(np.interp(E_keV, e_grid, f_grid))
@@ -63,12 +59,86 @@ def ibic_efficiency(E_keV: float, C_pF: float = 0.5, threshold_sigma: float = 5.
                 enc_e=enc_e, sigma_signal_e=sigma_s_e, eta=eta)
 
 
+def ibic_efficiency(
+    E_keV: float,
+    C_pF: float = 0.5,
+    threshold_sigma: float = 6.2,
+    dead_layer_nm: float = 1.5,
+    c_par_pF: float = 0.25,
+    temp_K: float = 100.0,
+) -> dict[str, float]:
+    """Synchronized Exp127 Lindhard/COLD_100K + Ramo-Shockley surface dead-layer IBIC model (OBS-071/098/083).
+
+    Replaces the obsolete Exp72 heuristic (frac=0.35, ENC=62.5 e-) with exact Lindhard
+    electronic partition (w=3.72 eV @ 100 K), iradina-calibrated surface dead-layer CCE
+    (default 1.5 nm spec -> CCE=0.85 at 5 keV), and Parseval-anchored COLD_100K ENC
+    (24.07 e- at C_det=0.5 pF, C_par=0.25 pF; scaled linearly with C_tot = C_det + C_par + 0.45 pF).
+    Default threshold_sigma=6.2 closes 15 ms Rice P_false < 1e-3 (OBS-083).
+    """
+    Z1, M1 = 15.0, 30.973762
+    Z2, M2 = 14.0, 28.085
+    a0_nm = 0.05291772109
+    e2_ev_nm = 1.43996454784
+    z_term = Z1 ** (2.0 / 3.0) + Z2 ** (2.0 / 3.0)
+    a_L = 0.8853 * a0_nm / math.sqrt(z_term)
+    k_L = (
+        0.0793 * (Z1 ** (2.0 / 3.0)) * math.sqrt(Z2) * ((M1 + M2) ** 1.5)
+        / ((z_term ** 0.75) * (M1 ** 1.5) * math.sqrt(M2))
+    )
+    eps = (float(E_keV) * 1e3) * a_L * M2 / (Z1 * Z2 * e2_ev_nm * (M1 + M2))
+    g_eps = 3.0 * (eps ** 0.15) + 0.7 * (eps ** 0.6) + eps
+    y_e = (k_L * g_eps) / (1.0 + k_L * g_eps)
+    w_eV = 3.62 if temp_K >= 200.0 else 3.72
+    signal_raw_e = (y_e * E_keV * 1000.0) / w_eV
+
+    # Iradina depth-resolved surface dead-layer loss fraction + minor surface recomb
+    e_anc = np.array([2.0, 3.0, 5.0, 10.0, 20.0])
+    d_anc = np.array([0.0, 1.5, 2.0, 3.0, 5.0])
+    f_tbl = np.array([
+        [0.0, 0.310, 0.415, 0.540, 0.678],
+        [0.0, 0.225, 0.310, 0.415, 0.522],
+        [0.0, 0.0859, 0.1206, 0.1966, 0.3637],
+        [0.0, 0.0430, 0.0610, 0.1000, 0.1850],
+        [0.0, 0.0220, 0.0310, 0.0520, 0.0960],
+    ])
+    f_d = float(np.interp(max(0.0, dead_layer_nm), d_anc, [float(np.interp(E_keV, e_anc, f_tbl[:, k])) for k in range(len(d_anc))]))
+    s_rec = 0.070 if dead_layer_nm >= 1.5 else 0.0
+    cce = max(0.05, (1.0 - f_d) * (1.0 - s_rec))
+    signal_e = cce * signal_raw_e
+
+    # Parseval-anchored COLD_100K 1200ns Rf=1G ENC(C_det, C_par): 24.07 e- at C_det=0.5, C_par=0.25 (C_in=0.45)
+    c_tot_pF = C_pF + c_par_pF + 0.45
+    enc_e = math.hypot(12.2, 17.3 * c_tot_pF) if temp_K < 200.0 else math.hypot(28.0, 39.0 * c_tot_pF)
+    strag_rel = 0.18 if E_keV <= 6.0 else 0.15
+    sigma_tot_e = math.sqrt((strag_rel * signal_e) ** 2 + 0.115 * max(signal_e, 1.0) + enc_e ** 2)
+    eta = 0.5 * (1.0 + math.erf((signal_e - threshold_sigma * enc_e) / (math.sqrt(2.0) * sigma_tot_e)))
+    return dict(
+        E_keV=E_keV, C_pF=C_pF, c_par_pF=c_par_pF, dead_layer_nm=dead_layer_nm,
+        cce=cce, ion_frac=y_e, signal_raw_e=signal_raw_e, signal_e=signal_e,
+        enc_e=enc_e, sigma_signal_e=strag_rel * signal_e, threshold_sigma=threshold_sigma, eta=eta,
+        model="Exp127_Lindhard_COLD100K_RamoShockley",
+    )
+
+
 def bca_straggle_nm(E_keV: float) -> float:
-    """Interpolate Exp92 amorphous ZBL+LSS BCA lateral sigma_x(E) in nm."""
-    e_grid = np.array([3.0, 4.0, 5.0, 6.0, 7.5, 10.0, 15.0, 20.0])
-    s_grid = np.array([2.4461662902, 2.7946743430, 3.2585495402, 3.6007995570,
-                       4.1131634883, 4.8736020534, 6.3317077022, 7.4988193943])
+    """Interpolate corrected infinite-domain ZBL+LSS BCA / iradina 3D lateral sigma_lat(E) in nm (OBS-039).
+
+    Anchored to fixed Exp92 (_bca92.py exact Gauss-Mehler quadrature) & 3D iradina 1.2.3
+    (5 keV: 4.385 nm / iradina 4.410 nm; 10 keV: 7.130 nm / iradina 7.105 nm).
+    """
+    e_grid = np.array([2.0, 3.0, 4.0, 5.0, 6.0, 7.5, 10.0, 15.0, 20.0])
+    s_grid = np.array([2.342, 3.165, 3.825, 4.385, 4.978, 5.711, 7.130, 9.583, 12.221])
     return float(np.exp(np.interp(math.log(E_keV), np.log(e_grid), np.log(s_grid))))
+
+
+def bca_depth_profile_nm(E_keV: float) -> tuple[float, float]:
+    """Return corrected (Rp_nm, sigma_z_nm) from fixed Exp92 / iradina 3D BCA (OBS-039)."""
+    e_grid = np.array([2.0, 3.0, 4.0, 5.0, 6.0, 7.5, 10.0, 15.0, 20.0])
+    rp_grid = np.array([5.33, 7.14, 8.78, 10.31, 11.87, 14.06, 17.43, 24.40, 31.24])
+    dz_grid = np.array([2.73, 3.65, 4.52, 5.10, 5.81, 6.91, 8.29, 11.69, 14.47])
+    rp = float(np.exp(np.interp(math.log(E_keV), np.log(e_grid), np.log(rp_grid))))
+    dz = float(np.exp(np.interp(math.log(E_keV), np.log(e_grid), np.log(dz_grid))))
+    return rp, dz
 
 
 def de_broglie_nm(E_eV: float, mass_kg: float = M_P31) -> float:
@@ -99,9 +169,9 @@ def audit_historical_chain(root: Path = ROOT) -> dict[str, Any]:
     B_req_71 = I_req / ((math.pi * (2e-9)**2) * (math.pi * (10e-3)**2))
     err_71 = abs(B_req_71 - d71["cases"]["r2_a10"]["B_required"]) / B_req_71
 
-    # Exp72 IBIC verbatim check (matches Exp72 to machine precision)
-    ib72_5 = ibic_efficiency(5.0, 0.5)
-    ib72_10_c5 = ibic_efficiency(10.0, 5.0)
+    # Exp72 IBIC verbatim check (uses legacy Exp72 heuristic strictly for historical audit)
+    ib72_5 = ibic_efficiency_exp72_legacy(5.0, 0.5)
+    ib72_10_c5 = ibic_efficiency_exp72_legacy(10.0, 5.0)
     err_72_e10_c5 = abs(ib72_10_c5["eta"] - d72["table"]["E10_C5"]["eta"]) / d72["table"]["E10_C5"]["eta"]
     err_72_e5_c05 = abs(ib72_5["eta"] - d72["table"]["E5_C0.5"]["eta"]) / d72["table"]["E5_C0.5"]["eta"]
 
@@ -727,6 +797,78 @@ def build_and_solve_lens_architectures() -> dict[str, Any]:
     }
 
 
+def solve_arch_b_at_landing_energy(
+    E_land_keV: float,
+    V_in_V: float = 10000.0,
+    nr: int = 65,
+    nz: int = 261,
+) -> dict[str, Any]:
+    """Re-solve exact 2D Laplace + DOP853 Arch-B optics at arbitrary landing energy (OBS-132).
+
+    Avoids reusing fixed 5 keV Cc/Cs across 2-10 keV and exposes E_gap > 12 MV/m breakdown
+    at high E_land (7.5-10 keV) when V_in=10 kV is held constant.
+    """
+    V_land = float(E_land_keV) * 1000.0
+
+    def make_cfg(v_mid: float) -> LensConfig:
+        return LensConfig(
+            name=f"Arch-B_Eland_{E_land_keV:g}keV_Vin_{V_in_V/1000:g}kV",
+            pitch_mm=0.500, r_max_mm=0.250, z_max_mm=2.010,
+            V_in_V=V_in_V, V_land_V=V_land,
+            electrodes=[
+                ElectrodeSpec("E1_liner", 0.200, 0.300, 0.150, V_in_V),
+                ElectrodeSpec("E2_focus", 1.120, 1.280, 0.150, v_mid),
+                ElectrodeSpec("E3_ground", 1.660, 1.760, 0.150, V_land),
+            ],
+            nr=nr, nz=nz,
+        )
+
+    v_lo = max(120.0, 0.08 * min(V_in_V, V_land))
+    v_hi = max(V_in_V, V_land) * 0.95
+    _, _, tr = tune_einzel_focus(make_cfg, v_lo, v_hi, tol_um=2.0)
+    tr["breakdown_safe_12MVm"] = bool(tr["E_gap_nom_MV_m"] <= 12.0)
+    return tr
+
+
+def evaluate_hda_space_charge(
+    I_hda_A: float = 50e-9,
+    E_pass_eV: float = 100.0,
+    R0_mm: float = 40.0,
+    r_beam_mm: float = 0.35,
+) -> dict[str, float]:
+    """Evaluate 100 eV HDA laminar space-charge & Holtsmark expansion + current guard (OBS-103).
+
+    Inside S1.5-01 HDA-HiRes (L = pi * R0 = 125.66 mm, E_pass = 100 eV), decelerating 50 nA
+    increases E^(-3/2) by 1,000x, causing dr_sc = 8.12 mm explosion unless current is
+    aperture-limited upstream to <= 0.25-0.50 nA.
+    """
+    L_hda_m = math.pi * (R0_mm * 1e-3)
+    r_b_m = r_beam_mm * 1e-3
+    v_pass = math.sqrt(2.0 * E_CHARGE * E_pass_eV / M_P31)
+    lam = I_hda_A / (E_CHARGE * v_pass)
+    n_vol = lam / (math.pi * r_b_m ** 2)
+    ke_e = E_CHARGE / (4.0 * math.pi * EPS0)
+    E_H = 2.603 * ke_e * (n_vol ** (2.0 / 3.0))
+    dr_holts_m = 0.25 * E_H * (L_hda_m ** 2) / E_pass_eV
+    dr_sc_m = (I_hda_A * (L_hda_m ** 2)) / (
+        4.0 * math.pi * EPS0 * math.sqrt(2.0 * E_CHARGE / M_P31) * r_b_m * (E_pass_eV ** 1.5)
+    )
+    # Safe upper current keeping dr_sc <= 0.25 * r_beam (<= 87.5 um)
+    I_guard_A = 0.25 * r_b_m * (
+        4.0 * math.pi * EPS0 * math.sqrt(2.0 * E_CHARGE / M_P31) * r_b_m * (E_pass_eV ** 1.5)
+    ) / (L_hda_m ** 2)
+    return {
+        "E_pass_eV": float(E_pass_eV),
+        "L_hda_mm": float(L_hda_m * 1e3),
+        "r_beam_mm": float(r_beam_mm),
+        "I_hda_nA": float(I_hda_A * 1e9),
+        "dr_sc_laminar_um": float(dr_sc_m * 1e6),
+        "dr_holtsmark_um": float(dr_holts_m * 1e6),
+        "I_guard_max_nA": float(I_guard_A * 1e9),
+        "passes_hda_space_charge_guard": bool(I_hda_A <= I_guard_A),
+    }
+
+
 # ---------------------------------------------------------------------------
 # 3. Wien Filter, HDA Energy Filter, Boersch/Coulomb & Spot Budget
 # ---------------------------------------------------------------------------
@@ -779,6 +921,7 @@ def boersch_and_coulomb(
     I_beamlet_A: float = E_CHARGE / 1e-3,
     L_head_m: float = 0.005,
     E_land_eV: float = 5000.0,
+    f_img_m: float = 0.8202e-3,
 ) -> dict[str, float]:
     """Jansen (1990) stochastic Coulomb interaction estimates: upper flood column & single beamlet.
 
@@ -840,13 +983,20 @@ def boersch_and_coulomb(
         4.0 * math.pi * EPS0 * math.sqrt(2.0 * E_CHARGE / M_P31) * r_beam_m * (E_col_eV ** 1.5)
     )
 
-    # Referred spot blur at wafer from angular spread dtheta_coul at focal length f ~ 0.5 mm (0.5e-3 m)
-    # Note: angular blur at wafer is f_eff * dtheta_coul, or after aperture selection negligible!
-    sigma_coul_wafer_nm = dtheta_coul_rad * 0.5e-3 * 1e9
+    # Referred spot blur at wafer using actual Arch-B f_img=0.8202 mm (OBS-103: fixed from legacy 0.5 mm!)
+    # Note: flood-column angular kicks upstream of S2.1 dilute virtual-source brightness rather than
+    # adding directly after the 10.5 um aperture; downstream of S2.1 single-beamlet N_bar ~ 1e-7 -> ~0 nm.
+    sigma_coul_wafer_nm = dtheta_coul_rad * f_img_m * 1e9
+    # Downstream beamlet-only Holtsmark kick inside head (L_head, I_beamlet): virtually zero
+    lam_b = I_beamlet_A / (E_CHARGE * v_land)
+    n_vol_b = lam_b / (math.pi * (5.25e-6) ** 2)
+    E_H_b = 2.603 * ke_e * (n_vol_b ** (2.0 / 3.0))
+    sigma_coul_beamlet_nm = (0.25 * E_H_b * (L_head_m ** 2) / E_land_eV) * 1e9
 
     return dict(
         E_col_eV=E_col_eV,
         I_flood_nA=I_flood_A * 1e9,
+        f_img_mm=f_img_m * 1e3,
         v_col_m_s=v_col,
         lambda_flood_per_m=lam_flood,
         d_axial_flood_um=d_ax_flood * 1e6,
@@ -856,6 +1006,7 @@ def boersch_and_coulomb(
         dr_sc_laminar_um=dr_sc_laminar_m * 1e6,
         dtheta_coul_urad=dtheta_coul_rad * 1e6,
         sigma_coul_wafer_nm=sigma_coul_wafer_nm,
+        sigma_coul_beamlet_downstream_nm=sigma_coul_beamlet_nm,
         single_beamlet_Nbar_col=N_bar_beamlet_col,
         single_beamlet_Nbar_head=N_bar_beamlet_head,
         single_beamlet_P_ge2_col=1.0 - math.exp(-N_bar_beamlet_col) * (1.0 + N_bar_beamlet_col),
@@ -878,8 +1029,20 @@ def evaluate_spot_budget(
     sigma_anneal_nm: float = 0.5,
     sigma_coul_nm: float = 0.0,
     C_ibic_pF: float = 0.5,
+    psu_stability_ppm: float = 46.8,
+    dv_psu_rms_V: float | None = None,
+    dead_layer_nm: float = 1.5,
+    ibic_thr_sigma: float = 6.2,
 ) -> dict[str, float]:
-    """Liouville-exact 1-sigma spot & total placement error budget at E_land."""
+    """Liouville-exact 1D-RMS spot & total placement error budget at E_land (OBS-039/076/098/150).
+
+    Standardizes on 1D RMS Barth-Kruit definitions (OBS-150):
+      - Uniform top-hat disk of radius r_geom has 1D RMS sigma_geom = 0.5 * r_geom.
+      - Uniform circular aperture illumination of semi-angle alpha has 1D RMS angle alpha/2,
+        so chromatic 1D RMS blur is sigma_c = 0.5 * Cc * alpha * (sigma_E / E_land).
+    Includes HV PSU ripple & DC stability sigma_psu (OBS-076, default <= 46.8 ppm tightened spec),
+    corrected infinite-domain ZBL/iradina straggle (OBS-039), and synchronized Exp127 IBIC (OBS-098).
+    """
     E_land_eV = E_land_keV * 1000.0
     alpha = alpha_land_mrad * 1e-3
     I_b = E_CHARGE / (tau_shot_ms * 1e-3)
@@ -888,11 +1051,20 @@ def evaluate_spot_budget(
     B_r_net = tau_filter * J_src_A_m2 / (math.pi * Ti_eV)  # A / (m^2 sr V)
     B_land = B_r_net * E_land_eV                           # A / (m^2 sr)
 
-    # Geometric source-image radius (Exp71 convention: I = B * (pi r^2) * (pi alpha^2))
-    sigma_geom_nm = (1.0 / (math.pi * alpha)) * math.sqrt(I_b / B_land) * 1e9
+    # Top-hat source-image radius r_geom (Exp71 convention) -> 1D RMS = r_geom / 2 (OBS-150)
+    r_geom_tophat_nm = (1.0 / (math.pi * alpha)) * math.sqrt(I_b / B_land) * 1e9
+    sigma_geom_nm = 0.5 * r_geom_tophat_nm
 
-    # Chromatic 1-sigma blur (using exact FWHM/2.35482)
-    sigma_c_nm = (Cc_mm * 1e6) * alpha * ((dE_fwhm_eV / FWHM_TO_SIGMA) / E_land_eV)
+    # Chromatic 1D RMS blur with 0.5 uniform-aperture projection factor (OBS-150)
+    sigma_c_edge_nm = (Cc_mm * 1e6) * alpha * ((dE_fwhm_eV / FWHM_TO_SIGMA) / E_land_eV)
+    sigma_c_nm = 0.5 * sigma_c_edge_nm
+
+    # HV PSU ripple & DC stability chromatic defocus (OBS-076: <= 46.8 ppm spec -> dv_rms_V)
+    if dv_psu_rms_V is None:
+        dv_eff_V = (psu_stability_ppm * 1e-6) * E_land_eV
+    else:
+        dv_eff_V = float(dv_psu_rms_V)
+    sigma_psu_nm = 0.5 * (Cc_mm * 1e6) * alpha * (dv_eff_V / E_land_eV)
 
     # Spherical 1-sigma blur at disk of least confusion (Barth-Kruit / Reimer: r_min = 0.25 Cs a^3, rms ~ r_min / sqrt(2))
     r_sph_min_nm = 0.25 * (Cs_mm * 1e6) * (alpha ** 3)
@@ -902,9 +1074,15 @@ def evaluate_spot_budget(
     lam_nm = de_broglie_nm(E_land_eV)
     sigma_d_nm = 0.42 * lam_nm / alpha
 
-    # Total spot 1-sigma (RSS)
+    # Blanker edge transit time at 10 keV (L=0.80 mm): 3.205 ns vs 2.1 ns edge -> P_edge ~ t_tr / tau_shot (OBS-150)
+    v_10keV = math.sqrt(2.0 * E_CHARGE * 10000.0 / M_P31)
+    t_blanker_transit_ns = (0.80e-3 / v_10keV) * 1e9
+    p_blanker_edge_hit = (t_blanker_transit_ns * 1e-9) / (tau_shot_ms * 1e-3)
+
+    # Total spot 1-sigma (RSS) including HV PSU ripple/stability
     sigma_spot_nm = math.sqrt(
-        sigma_geom_nm ** 2 + sigma_c_nm ** 2 + sigma_s_nm ** 2 + sigma_d_nm ** 2 + sigma_coul_nm ** 2
+        sigma_geom_nm ** 2 + sigma_c_nm ** 2 + sigma_psu_nm ** 2
+        + sigma_s_nm ** 2 + sigma_d_nm ** 2 + sigma_coul_nm ** 2
     )
     sigma_equip_nm = math.sqrt(
         sigma_spot_nm ** 2 + sigma_stage_nm ** 2 + sigma_pointing_nm ** 2
@@ -912,18 +1090,23 @@ def evaluate_spot_budget(
     )
     sigma_straggle_nm = bca_straggle_nm(E_land_keV)
     sigma_total_nm = math.hypot(sigma_equip_nm, sigma_straggle_nm)
-    eta_ibic = ibic_efficiency(E_land_keV, C_ibic_pF)["eta"]
+    ibic_info = ibic_efficiency(E_land_keV, C_ibic_pF, threshold_sigma=ibic_thr_sigma, dead_layer_nm=dead_layer_nm)
+    eta_ibic = ibic_info["eta"]
 
     return dict(
         E_land_keV=E_land_keV, alpha_land_mrad=alpha_land_mrad,
         Cc_mm=Cc_mm, Cs_mm=Cs_mm, dE_fwhm_eV=dE_fwhm_eV,
         J_src_A_m2=J_src_A_m2, Ti_eV=Ti_eV, tau_filter=tau_filter, tau_shot_ms=tau_shot_ms,
         B_r_net_A_m2_sr_V=B_r_net, B_land_A_m2_sr=B_land,
-        sigma_geom_nm=sigma_geom_nm, sigma_c_nm=sigma_c_nm, sigma_s_nm=sigma_s_nm,
-        r_sph_min_nm=r_sph_min_nm, sigma_d_nm=sigma_d_nm, sigma_coul_nm=sigma_coul_nm,
+        r_geom_tophat_nm=r_geom_tophat_nm, sigma_geom_nm=sigma_geom_nm,
+        sigma_c_edge_nm=sigma_c_edge_nm, sigma_c_nm=sigma_c_nm,
+        psu_stability_ppm=psu_stability_ppm, dv_psu_rms_V=dv_eff_V, sigma_psu_nm=sigma_psu_nm,
+        sigma_s_nm=sigma_s_nm, r_sph_min_nm=r_sph_min_nm, sigma_d_nm=sigma_d_nm,
+        sigma_coul_nm=sigma_coul_nm,
+        t_blanker_transit_ns=t_blanker_transit_ns, p_blanker_edge_hit=p_blanker_edge_hit,
         sigma_spot_nm=sigma_spot_nm, sigma_equip_nm=sigma_equip_nm,
         sigma_straggle_nm=sigma_straggle_nm, sigma_total_nm=sigma_total_nm,
-        eta_ibic=eta_ibic,
+        eta_ibic=eta_ibic, ibic_dead_layer_nm=dead_layer_nm, ibic_cce=ibic_info["cce"],
     )
 
 

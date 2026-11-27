@@ -92,16 +92,16 @@
   },
   "verdicts": {
     "QL1_EXACT_BB_CSS_ALGEBRA": true,
-    "QL2_THICKNESS2_M4_LAYOUT_AND_YIELD": true,
+    "QL2_THICKNESS2_M4_LAYOUT_AND_YIELD": false,
     "QL3_BP_OSD_GAIN_AND_CODE_CAP_SCALING": true,
-    "QL4_CIRCUIT_THRESHOLD_AND_MACHINE_REGIMES": true,
+    "QL4_CIRCUIT_THRESHOLD_AND_MACHINE_REGIMES": false,
     "QL5_CRYOSTAT_AND_TCO_COMPRESSION": true,
-    "QL6_DEFECTIVE_BLOCK_RESILIENCE": true,
+    "QL6_DEFECTIVE_BLOCK_RESILIENCE": false,
     "QL7_PORTABILITY_AND_ARTIFACTS": true
   },
-  "n_passed": 7,
+  "n_passed": 4,
   "n_total": 7,
-  "success_rule_met": true,
+  "success_rule_met": false,
   "part1_bb_algebra_and_schedules": {
     "BB_72_12_6": {
       "label": "[[72, 12, 6]]",
@@ -379,6 +379,52 @@
     "flat_folded_layer1_airbridges": 220,
     "flat_folded_layer2_airbridges": 10152,
     "layout_by_pitch_um": {
+      "15um": {
+        "pitch_um": 15.0,
+        "block_size_um": [
+          360.0,
+          180.0
+        ],
+        "block_area_mm2": 0.0648,
+        "layer1_max_eucl_um": 30.0,
+        "layer2_median_eucl_um": 140.3,
+        "layer2_max_eucl_um": 201.2,
+        "L_max_um": 201.2,
+        "layer1_max_manh_um": 30.0,
+        "layer2_median_manh_um": 195.0,
+        "layer2_max_manh_um": 270.0,
+        "layer2_frac_gt_300um_manh": 0.0,
+        "fits_300um_m4_resonator": true,
+        "fits_300um_m4_manhattan": true,
+        "fits_250um_loaded_meander_eucl": true,
+        "fits_500um_extended_m4": true,
+        "f_r_fixed_100pH_ghz": 5.0,
+        "delta_f_r_fixed_100pH_ghz": 0.0,
+        "L_sq_pH_for_5GHz": 100.0
+      },
+      "18um": {
+        "pitch_um": 18.0,
+        "block_size_um": [
+          432.0,
+          216.0
+        ],
+        "block_area_mm2": 0.0933,
+        "layer1_max_eucl_um": 36.0,
+        "layer2_median_eucl_um": 168.4,
+        "layer2_max_eucl_um": 241.5,
+        "L_max_um": 241.5,
+        "layer1_max_manh_um": 36.0,
+        "layer2_median_manh_um": 234.0,
+        "layer2_max_manh_um": 324.0,
+        "layer2_frac_gt_300um_manh": 0.2361,
+        "fits_300um_m4_resonator": true,
+        "fits_300um_m4_manhattan": false,
+        "fits_250um_loaded_meander_eucl": true,
+        "fits_500um_extended_m4": true,
+        "f_r_fixed_100pH_ghz": 5.0,
+        "delta_f_r_fixed_100pH_ghz": 0.0,
+        "L_sq_pH_for_5GHz": 100.0
+      },
       "20um": {
         "pitch_um": 20.0,
         "block_size_um": [
@@ -390,7 +436,13 @@
         "layer2_median_eucl_um": 187.1,
         "layer2_max_eucl_um": 268.3,
         "L_max_um": 268.3,
+        "layer1_max_manh_um": 40.0,
+        "layer2_median_manh_um": 260.0,
+        "layer2_max_manh_um": 360.0,
+        "layer2_frac_gt_300um_manh": 0.2639,
         "fits_300um_m4_resonator": true,
+        "fits_300um_m4_manhattan": false,
+        "fits_250um_loaded_meander_eucl": false,
         "fits_500um_extended_m4": true,
         "f_r_fixed_100pH_ghz": 5.0,
         "delta_f_r_fixed_100pH_ghz": 0.0,
@@ -407,7 +459,13 @@
         "layer2_median_eucl_um": 233.8,
         "layer2_max_eucl_um": 335.4,
         "L_max_um": 335.4,
+        "layer1_max_manh_um": 50.0,
+        "layer2_median_manh_um": 325.0,
+        "layer2_max_manh_um": 450.0,
+        "layer2_frac_gt_300um_manh": 0.5417,
         "fits_300um_m4_resonator": false,
+        "fits_300um_m4_manhattan": false,
+        "fits_250um_loaded_meander_eucl": false,
         "fits_500um_extended_m4": true,
         "f_r_fixed_100pH_ghz": 4.472,
         "delta_f_r_fixed_100pH_ghz": -0.528,
@@ -424,62 +482,17 @@
         "layer2_median_eucl_um": 280.6,
         "layer2_max_eucl_um": 402.5,
         "L_max_um": 402.5,
+        "layer1_max_manh_um": 60.0,
+        "layer2_median_manh_um": 390.0,
+        "layer2_max_manh_um": 540.0,
+        "layer2_frac_gt_300um_manh": 0.6667,
         "fits_300um_m4_resonator": false,
+        "fits_300um_m4_manhattan": false,
+        "fits_250um_loaded_meander_eucl": false,
         "fits_500um_extended_m4": true,
         "f_r_fixed_100pH_ghz": 3.727,
         "delta_f_r_fixed_100pH_ghz": -1.273,
         "L_sq_pH_for_5GHz": 55.6
-      },
-      "35um": {
-        "pitch_um": 35.0,
-        "block_size_um": [
-          840.0,
-          420.0
-        ],
-        "block_area_mm2": 0.3528,
-        "layer1_max_eucl_um": 70.0,
-        "layer2_median_eucl_um": 327.4,
-        "layer2_max_eucl_um": 469.6,
-        "L_max_um": 469.6,
-        "fits_300um_m4_resonator": false,
-        "fits_500um_extended_m4": true,
-        "f_r_fixed_100pH_ghz": 3.194,
-        "delta_f_r_fixed_100pH_ghz": -1.806,
-        "L_sq_pH_for_5GHz": 40.8
-      },
-      "40um": {
-        "pitch_um": 40.0,
-        "block_size_um": [
-          960.0,
-          480.0
-        ],
-        "block_area_mm2": 0.4608,
-        "layer1_max_eucl_um": 80.0,
-        "layer2_median_eucl_um": 374.1,
-        "layer2_max_eucl_um": 536.7,
-        "L_max_um": 536.7,
-        "fits_300um_m4_resonator": false,
-        "fits_500um_extended_m4": false,
-        "f_r_fixed_100pH_ghz": 2.795,
-        "delta_f_r_fixed_100pH_ghz": -2.205,
-        "L_sq_pH_for_5GHz": 31.2
-      },
-      "50um": {
-        "pitch_um": 50.0,
-        "block_size_um": [
-          1200.0,
-          600.0
-        ],
-        "block_area_mm2": 0.72,
-        "layer1_max_eucl_um": 100.0,
-        "layer2_median_eucl_um": 467.7,
-        "layer2_max_eucl_um": 670.8,
-        "L_max_um": 670.8,
-        "fits_300um_m4_resonator": false,
-        "fits_500um_extended_m4": false,
-        "f_r_fixed_100pH_ghz": 2.236,
-        "delta_f_r_fixed_100pH_ghz": -2.764,
-        "L_sq_pH_for_5GHz": 20.0
       }
     },
     "recommended_pitch_um": 20.0,
@@ -494,7 +507,13 @@
       "layer2_median_eucl_um": 187.1,
       "layer2_max_eucl_um": 268.3,
       "L_max_um": 268.3,
+      "layer1_max_manh_um": 40.0,
+      "layer2_median_manh_um": 260.0,
+      "layer2_max_manh_um": 360.0,
+      "layer2_frac_gt_300um_manh": 0.2639,
       "fits_300um_m4_resonator": true,
+      "fits_300um_m4_manhattan": false,
+      "fits_250um_loaded_meander_eucl": false,
       "fits_500um_extended_m4": true,
       "f_r_fixed_100pH_ghz": 5.0,
       "delta_f_r_fixed_100pH_ghz": 0.0,
@@ -653,6 +672,765 @@
     "spared_9of10_cryostat_die_yield_f1p5": {
       "N6_pct": 88.4189,
       "N8_pct": 99.9411
+    },
+    "total_flat_airbridge_crossings": 10372,
+    "defect_yields": {
+      "f1p0_Ez0_baseline": {
+        "p_slot": 0.51433,
+        "N_cand_req_99pct_block": 15,
+        "by_N_cand": [
+          {
+            "N_cand": 4,
+            "p_drop": 0.055635969556569194,
+            "p_drop_pct": 5.5636,
+            "block_288_yield": 0.0,
+            "block_288_yield_pct": 0.0,
+            "cryo_10block_120L_yield_pct": 0.0,
+            "total_phys_candidates_per_block": 1152,
+            "phys_candidates_per_logical": 96.0
+          },
+          {
+            "N_cand": 5,
+            "p_drop": 0.027020574340969238,
+            "p_drop_pct": 2.70206,
+            "block_288_yield": 0.000375,
+            "block_288_yield_pct": 0.037,
+            "cryo_10block_120L_yield_pct": 0.0,
+            "total_phys_candidates_per_block": 1440,
+            "phys_candidates_per_logical": 120.0
+          },
+          {
+            "N_cand": 6,
+            "p_drop": 0.013123010950199887,
+            "p_drop_pct": 1.3123,
+            "block_288_yield": 0.022272,
+            "block_288_yield_pct": 2.227,
+            "cryo_10block_120L_yield_pct": 0.0,
+            "total_phys_candidates_per_block": 1728,
+            "phys_candidates_per_logical": 144.0
+          },
+          {
+            "N_cand": 7,
+            "p_drop": 0.006373418056401269,
+            "p_drop_pct": 0.63734,
+            "block_288_yield": 0.158592,
+            "block_288_yield_pct": 15.859,
+            "cryo_10block_120L_yield_pct": 0.0,
+            "total_phys_candidates_per_block": 2016,
+            "phys_candidates_per_logical": 168.0
+          },
+          {
+            "N_cand": 8,
+            "p_drop": 0.0030953611084994946,
+            "p_drop_pct": 0.30954,
+            "block_288_yield": 0.409488,
+            "block_288_yield_pct": 40.949,
+            "cryo_10block_120L_yield_pct": 0.013,
+            "total_phys_candidates_per_block": 2304,
+            "phys_candidates_per_logical": 192.0
+          },
+          {
+            "N_cand": 9,
+            "p_drop": 0.0015033158514351792,
+            "p_drop_pct": 0.15033,
+            "block_288_yield": 0.648378,
+            "block_288_yield_pct": 64.838,
+            "cryo_10block_120L_yield_pct": 1.313,
+            "total_phys_candidates_per_block": 2592,
+            "phys_candidates_per_logical": 216.0
+          },
+          {
+            "N_cand": 10,
+            "p_drop": 0.0007301114377158451,
+            "p_drop_pct": 0.07301,
+            "block_288_yield": 0.810301,
+            "block_288_yield_pct": 81.03,
+            "cryo_10block_120L_yield_pct": 12.203,
+            "total_phys_candidates_per_block": 2880,
+            "phys_candidates_per_logical": 240.0
+          },
+          {
+            "N_cand": 12,
+            "p_drop": 0.00017221341639906616,
+            "p_drop_pct": 0.01722,
+            "block_288_yield": 0.951608,
+            "block_288_yield_pct": 95.161,
+            "cryo_10block_120L_yield_pct": 60.895,
+            "total_phys_candidates_per_block": 3456,
+            "phys_candidates_per_logical": 288.0
+          },
+          {
+            "N_cand": 14,
+            "p_drop": 4.062045772166173e-05,
+            "p_drop_pct": 0.00406,
+            "block_288_yield": 0.988369,
+            "block_288_yield_pct": 98.837,
+            "cryo_10block_120L_yield_pct": 88.959,
+            "total_phys_candidates_per_block": 4032,
+            "phys_candidates_per_logical": 336.0
+          },
+          {
+            "N_cand": 18,
+            "p_drop": 2.259958549176278e-06,
+            "p_drop_pct": 0.00023,
+            "block_288_yield": 0.999349,
+            "block_288_yield_pct": 99.935,
+            "cryo_10block_120L_yield_pct": 99.351,
+            "total_phys_candidates_per_block": 5184,
+            "phys_candidates_per_logical": 432.0
+          },
+          {
+            "N_cand": 24,
+            "p_drop": 2.9657460787838146e-08,
+            "p_drop_pct": 0.0,
+            "block_288_yield": 0.999991,
+            "block_288_yield_pct": 99.999,
+            "cryo_10block_120L_yield_pct": 99.991,
+            "total_phys_candidates_per_block": 6912,
+            "phys_candidates_per_logical": 576.0
+          },
+          {
+            "N_cand": 30,
+            "p_drop": 3.891951826739238e-10,
+            "p_drop_pct": 0.0,
+            "block_288_yield": 1.0,
+            "block_288_yield_pct": 100.0,
+            "cryo_10block_120L_yield_pct": 100.0,
+            "total_phys_candidates_per_block": 8640,
+            "phys_candidates_per_logical": 720.0
+          }
+        ]
+      },
+      "f1p5_Ez2MVm_v5_star": {
+        "p_slot": 0.75565,
+        "N_cand_req_99pct_block": 8,
+        "by_N_cand": [
+          {
+            "N_cand": 4,
+            "p_drop": 0.0035646485891109364,
+            "p_drop_pct": 0.35646,
+            "block_288_yield": 0.35756,
+            "block_288_yield_pct": 35.756,
+            "cryo_10block_120L_yield_pct": 0.003,
+            "total_phys_candidates_per_block": 1152,
+            "phys_candidates_per_logical": 96.0
+          },
+          {
+            "N_cand": 5,
+            "p_drop": 0.000871005511744147,
+            "p_drop_pct": 0.0871,
+            "block_288_yield": 0.778054,
+            "block_288_yield_pct": 77.805,
+            "cryo_10block_120L_yield_pct": 8.13,
+            "total_phys_candidates_per_block": 1440,
+            "phys_candidates_per_logical": 120.0
+          },
+          {
+            "N_cand": 6,
+            "p_drop": 0.00021282619661476906,
+            "p_drop_pct": 0.02128,
+            "block_288_yield": 0.940541,
+            "block_288_yield_pct": 94.054,
+            "cryo_10block_120L_yield_pct": 54.172,
+            "total_phys_candidates_per_block": 1728,
+            "phys_candidates_per_logical": 144.0
+          },
+          {
+            "N_cand": 7,
+            "p_drop": 5.200310371722824e-05,
+            "p_drop_pct": 0.0052,
+            "block_288_yield": 0.985134,
+            "block_288_yield_pct": 98.513,
+            "cryo_10block_120L_yield_pct": 86.09,
+            "total_phys_candidates_per_block": 2016,
+            "phys_candidates_per_logical": 168.0
+          },
+          {
+            "N_cand": 8,
+            "p_drop": 1.270671956385059e-05,
+            "p_drop_pct": 0.00127,
+            "block_288_yield": 0.996347,
+            "block_288_yield_pct": 99.635,
+            "cryo_10block_120L_yield_pct": 96.407,
+            "total_phys_candidates_per_block": 2304,
+            "phys_candidates_per_logical": 192.0
+          },
+          {
+            "N_cand": 9,
+            "p_drop": 3.1048285685466223e-06,
+            "p_drop_pct": 0.00031,
+            "block_288_yield": 0.999106,
+            "block_288_yield_pct": 99.911,
+            "cryo_10block_120L_yield_pct": 99.11,
+            "total_phys_candidates_per_block": 2592,
+            "phys_candidates_per_logical": 216.0
+          },
+          {
+            "N_cand": 10,
+            "p_drop": 7.586506014886833e-07,
+            "p_drop_pct": 8e-05,
+            "block_288_yield": 0.999782,
+            "block_288_yield_pct": 99.978,
+            "cryo_10block_120L_yield_pct": 99.782,
+            "total_phys_candidates_per_block": 2880,
+            "phys_candidates_per_logical": 240.0
+          },
+          {
+            "N_cand": 12,
+            "p_drop": 4.5294989965508335e-08,
+            "p_drop_pct": 0.0,
+            "block_288_yield": 0.999987,
+            "block_288_yield_pct": 99.999,
+            "cryo_10block_120L_yield_pct": 99.987,
+            "total_phys_candidates_per_block": 3456,
+            "phys_candidates_per_logical": 288.0
+          },
+          {
+            "N_cand": 14,
+            "p_drop": 2.7043227962247982e-09,
+            "p_drop_pct": 0.0,
+            "block_288_yield": 0.999999,
+            "block_288_yield_pct": 100.0,
+            "cryo_10block_120L_yield_pct": 99.999,
+            "total_phys_candidates_per_block": 4032,
+            "phys_candidates_per_logical": 336.0
+          },
+          {
+            "N_cand": 18,
+            "p_drop": 9.639960440063268e-12,
+            "p_drop_pct": 0.0,
+            "block_288_yield": 1.0,
+            "block_288_yield_pct": 100.0,
+            "cryo_10block_120L_yield_pct": 100.0,
+            "total_phys_candidates_per_block": 5184,
+            "phys_candidates_per_logical": 432.0
+          },
+          {
+            "N_cand": 24,
+            "p_drop": 2.051636115975501e-15,
+            "p_drop_pct": 0.0,
+            "block_288_yield": 1.0,
+            "block_288_yield_pct": 100.0,
+            "cryo_10block_120L_yield_pct": 100.0,
+            "total_phys_candidates_per_block": 6912,
+            "phys_candidates_per_logical": 576.0
+          },
+          {
+            "N_cand": 30,
+            "p_drop": 4.366419114005631e-19,
+            "p_drop_pct": 0.0,
+            "block_288_yield": 1.0,
+            "block_288_yield_pct": 100.0,
+            "cryo_10block_120L_yield_pct": 100.0,
+            "total_phys_candidates_per_block": 8640,
+            "phys_candidates_per_logical": 720.0
+          }
+        ]
+      },
+      "f1p0_Ez0_ddrf6893": {
+        "p_slot": 0.28764,
+        "N_cand_req_99pct_block": 31,
+        "by_N_cand": [
+          {
+            "N_cand": 4,
+            "p_drop": 0.25751777478550714,
+            "p_drop_pct": 25.75178,
+            "block_288_yield": 0.0,
+            "block_288_yield_pct": 0.0,
+            "cryo_10block_120L_yield_pct": 0.0,
+            "total_phys_candidates_per_block": 1152,
+            "phys_candidates_per_logical": 96.0
+          },
+          {
+            "N_cand": 5,
+            "p_drop": 0.18344632406050548,
+            "p_drop_pct": 18.34463,
+            "block_288_yield": 0.0,
+            "block_288_yield_pct": 0.0,
+            "cryo_10block_120L_yield_pct": 0.0,
+            "total_phys_candidates_per_block": 1440,
+            "phys_candidates_per_logical": 120.0
+          },
+          {
+            "N_cand": 6,
+            "p_drop": 0.13068050871184342,
+            "p_drop_pct": 13.06805,
+            "block_288_yield": 0.0,
+            "block_288_yield_pct": 0.0,
+            "cryo_10block_120L_yield_pct": 0.0,
+            "total_phys_candidates_per_block": 1728,
+            "phys_candidates_per_logical": 144.0
+          },
+          {
+            "N_cand": 7,
+            "p_drop": 0.09309205537175877,
+            "p_drop_pct": 9.30921,
+            "block_288_yield": 0.0,
+            "block_288_yield_pct": 0.0,
+            "cryo_10block_120L_yield_pct": 0.0,
+            "total_phys_candidates_per_block": 2016,
+            "phys_candidates_per_logical": 168.0
+          },
+          {
+            "N_cand": 8,
+            "p_drop": 0.06631540433047918,
+            "p_drop_pct": 6.63154,
+            "block_288_yield": 0.0,
+            "block_288_yield_pct": 0.0,
+            "cryo_10block_120L_yield_pct": 0.0,
+            "total_phys_candidates_per_block": 2304,
+            "phys_candidates_per_logical": 192.0
+          },
+          {
+            "N_cand": 9,
+            "p_drop": 0.04724068916464241,
+            "p_drop_pct": 4.72407,
+            "block_288_yield": 1e-06,
+            "block_288_yield_pct": 0.0,
+            "cryo_10block_120L_yield_pct": 0.0,
+            "total_phys_candidates_per_block": 2592,
+            "phys_candidates_per_logical": 216.0
+          },
+          {
+            "N_cand": 10,
+            "p_drop": 0.03365255381131199,
+            "p_drop_pct": 3.36526,
+            "block_288_yield": 5.2e-05,
+            "block_288_yield_pct": 0.005,
+            "cryo_10block_120L_yield_pct": 0.0,
+            "total_phys_candidates_per_block": 2880,
+            "phys_candidates_per_logical": 240.0
+          },
+          {
+            "N_cand": 12,
+            "p_drop": 0.017077395357186182,
+            "p_drop_pct": 1.70774,
+            "block_288_yield": 0.007008,
+            "block_288_yield_pct": 0.701,
+            "cryo_10block_120L_yield_pct": 0.0,
+            "total_phys_candidates_per_block": 3456,
+            "phys_candidates_per_logical": 288.0
+          },
+          {
+            "N_cand": 14,
+            "p_drop": 0.008666130773338603,
+            "p_drop_pct": 0.86661,
+            "block_288_yield": 0.081535,
+            "block_288_yield_pct": 8.153,
+            "cryo_10block_120L_yield_pct": 0.0,
+            "total_phys_candidates_per_block": 4032,
+            "phys_candidates_per_logical": 336.0
+          },
+          {
+            "N_cand": 18,
+            "p_drop": 0.0022316827127503627,
+            "p_drop_pct": 0.22317,
+            "block_288_yield": 0.52548,
+            "block_288_yield_pct": 52.548,
+            "cryo_10block_120L_yield_pct": 0.161,
+            "total_phys_candidates_per_block": 5184,
+            "phys_candidates_per_logical": 432.0
+          },
+          {
+            "N_cand": 24,
+            "p_drop": 0.0002916374321856441,
+            "p_drop_pct": 0.02916,
+            "block_288_yield": 0.919428,
+            "block_288_yield_pct": 91.943,
+            "cryo_10block_120L_yield_pct": 43.169,
+            "total_phys_candidates_per_block": 6912,
+            "phys_candidates_per_logical": 576.0
+          },
+          {
+            "N_cand": 30,
+            "p_drop": 3.8111327997435705e-05,
+            "p_drop_pct": 0.00381,
+            "block_288_yield": 0.989084,
+            "block_288_yield_pct": 98.908,
+            "cryo_10block_120L_yield_pct": 89.605,
+            "total_phys_candidates_per_block": 8640,
+            "phys_candidates_per_logical": 720.0
+          }
+        ]
+      },
+      "f1p5_Ez2MVm_ddrf6893": {
+        "p_slot": 0.52652,
+        "N_cand_req_99pct_block": 14,
+        "by_N_cand": [
+          {
+            "N_cand": 4,
+            "p_drop": 0.05025789369129503,
+            "p_drop_pct": 5.02579,
+            "block_288_yield": 0.0,
+            "block_288_yield_pct": 0.0,
+            "cryo_10block_120L_yield_pct": 0.0,
+            "total_phys_candidates_per_block": 1152,
+            "phys_candidates_per_logical": 96.0
+          },
+          {
+            "N_cand": 5,
+            "p_drop": 0.023796076377225334,
+            "p_drop_pct": 2.37961,
+            "block_288_yield": 0.000972,
+            "block_288_yield_pct": 0.097,
+            "cryo_10block_120L_yield_pct": 0.0,
+            "total_phys_candidates_per_block": 1440,
+            "phys_candidates_per_logical": 120.0
+          },
+          {
+            "N_cand": 6,
+            "p_drop": 0.011266951504750785,
+            "p_drop_pct": 1.1267,
+            "block_288_yield": 0.038262,
+            "block_288_yield_pct": 3.826,
+            "cryo_10block_120L_yield_pct": 0.0,
+            "total_phys_candidates_per_block": 1728,
+            "phys_candidates_per_logical": 144.0
+          },
+          {
+            "N_cand": 7,
+            "p_drop": 0.005334669220170317,
+            "p_drop_pct": 0.53347,
+            "block_288_yield": 0.214274,
+            "block_288_yield_pct": 21.427,
+            "cryo_10block_120L_yield_pct": 0.0,
+            "total_phys_candidates_per_block": 2016,
+            "phys_candidates_per_logical": 168.0
+          },
+          {
+            "N_cand": 8,
+            "p_drop": 0.0025258558782855134,
+            "p_drop_pct": 0.25259,
+            "block_288_yield": 0.482697,
+            "block_288_yield_pct": 48.27,
+            "cryo_10block_120L_yield_pct": 0.069,
+            "total_phys_candidates_per_block": 2304,
+            "phys_candidates_per_logical": 192.0
+          },
+          {
+            "N_cand": 9,
+            "p_drop": 0.001195940676836528,
+            "p_drop_pct": 0.11959,
+            "block_288_yield": 0.708477,
+            "block_288_yield_pct": 70.848,
+            "cryo_10block_120L_yield_pct": 3.186,
+            "total_phys_candidates_per_block": 2592,
+            "phys_candidates_per_logical": 216.0
+          },
+          {
+            "N_cand": 10,
+            "p_drop": 0.0005662532509507416,
+            "p_drop_pct": 0.05663,
+            "block_288_yield": 0.849483,
+            "block_288_yield_pct": 84.948,
+            "cryo_10block_120L_yield_pct": 19.568,
+            "total_phys_candidates_per_block": 2880,
+            "phys_candidates_per_logical": 240.0
+          },
+          {
+            "N_cand": 12,
+            "p_drop": 0.00012694419621040598,
+            "p_drop_pct": 0.01269,
+            "block_288_yield": 0.964098,
+            "block_288_yield_pct": 96.41,
+            "cryo_10block_120L_yield_pct": 69.376,
+            "total_phys_candidates_per_block": 3456,
+            "phys_candidates_per_logical": 288.0
+          },
+          {
+            "N_cand": 14,
+            "p_drop": 2.8458695688632577e-05,
+            "p_drop_pct": 0.00285,
+            "block_288_yield": 0.991837,
+            "block_288_yield_pct": 99.184,
+            "cryo_10block_120L_yield_pct": 92.131,
+            "total_phys_candidates_per_block": 4032,
+            "phys_candidates_per_logical": 336.0
+          },
+          {
+            "N_cand": 18,
+            "p_drop": 1.4302741025122124e-06,
+            "p_drop_pct": 0.00014,
+            "block_288_yield": 0.999588,
+            "block_288_yield_pct": 99.959,
+            "cryo_10block_120L_yield_pct": 99.589,
+            "total_phys_candidates_per_block": 5184,
+            "phys_candidates_per_logical": 432.0
+          },
+          {
+            "N_cand": 24,
+            "p_drop": 1.6114828951506048e-08,
+            "p_drop_pct": 0.0,
+            "block_288_yield": 0.999995,
+            "block_288_yield_pct": 100.0,
+            "cryo_10block_120L_yield_pct": 99.995,
+            "total_phys_candidates_per_block": 6912,
+            "phys_candidates_per_logical": 576.0
+          },
+          {
+            "N_cand": 30,
+            "p_drop": 1.815649963039726e-10,
+            "p_drop_pct": 0.0,
+            "block_288_yield": 1.0,
+            "block_288_yield_pct": 100.0,
+            "cryo_10block_120L_yield_pct": 100.0,
+            "total_phys_candidates_per_block": 8640,
+            "phys_candidates_per_logical": 720.0
+          }
+        ]
+      },
+      "f1p5_Ez2MVm_iradina_valley_pff0p5375": {
+        "p_slot": 0.41573,
+        "N_cand_req_99pct_block": 20,
+        "by_N_cand": [
+          {
+            "N_cand": 4,
+            "p_drop": 0.1165376125746471,
+            "p_drop_pct": 11.65376,
+            "block_288_yield": 0.0,
+            "block_288_yield_pct": 0.0,
+            "cryo_10block_120L_yield_pct": 0.0,
+            "total_phys_candidates_per_block": 1152,
+            "phys_candidates_per_logical": 96.0
+          },
+          {
+            "N_cand": 5,
+            "p_drop": 0.06808989209659083,
+            "p_drop_pct": 6.80899,
+            "block_288_yield": 0.0,
+            "block_288_yield_pct": 0.0,
+            "cryo_10block_120L_yield_pct": 0.0,
+            "total_phys_candidates_per_block": 1440,
+            "phys_candidates_per_logical": 120.0
+          },
+          {
+            "N_cand": 6,
+            "p_drop": 0.03978315072102309,
+            "p_drop_pct": 3.97832,
+            "block_288_yield": 8e-06,
+            "block_288_yield_pct": 0.001,
+            "cryo_10block_120L_yield_pct": 0.0,
+            "total_phys_candidates_per_block": 1728,
+            "phys_candidates_per_logical": 144.0
+          },
+          {
+            "N_cand": 7,
+            "p_drop": 0.02324425891359114,
+            "p_drop_pct": 2.32443,
+            "block_288_yield": 0.001144,
+            "block_288_yield_pct": 0.114,
+            "cryo_10block_120L_yield_pct": 0.0,
+            "total_phys_candidates_per_block": 2016,
+            "phys_candidates_per_logical": 168.0
+          },
+          {
+            "N_cand": 8,
+            "p_drop": 0.013581015144598547,
+            "p_drop_pct": 1.3581,
+            "block_288_yield": 0.019485,
+            "block_288_yield_pct": 1.948,
+            "cryo_10block_120L_yield_pct": 0.0,
+            "total_phys_candidates_per_block": 2304,
+            "phys_candidates_per_logical": 192.0
+          },
+          {
+            "N_cand": 9,
+            "p_drop": 0.007935033465402027,
+            "p_drop_pct": 0.7935,
+            "block_288_yield": 0.100821,
+            "block_288_yield_pct": 10.082,
+            "cryo_10block_120L_yield_pct": 0.0,
+            "total_phys_candidates_per_block": 2592,
+            "phys_candidates_per_logical": 216.0
+          },
+          {
+            "N_cand": 10,
+            "p_drop": 0.004636233405725382,
+            "p_drop_pct": 0.46362,
+            "block_288_yield": 0.262281,
+            "block_288_yield_pct": 26.228,
+            "cryo_10block_120L_yield_pct": 0.0,
+            "total_phys_candidates_per_block": 2880,
+            "phys_candidates_per_logical": 240.0
+          },
+          {
+            "N_cand": 12,
+            "p_drop": 0.0015826990812916404,
+            "p_drop_pct": 0.15827,
+            "block_288_yield": 0.633701,
+            "block_288_yield_pct": 63.37,
+            "cryo_10block_120L_yield_pct": 1.044,
+            "total_phys_candidates_per_block": 3456,
+            "phys_candidates_per_logical": 288.0
+          },
+          {
+            "N_cand": 14,
+            "p_drop": 0.0005402955724420613,
+            "p_drop_pct": 0.05403,
+            "block_288_yield": 0.855861,
+            "block_288_yield_pct": 85.586,
+            "cryo_10block_120L_yield_pct": 21.088,
+            "total_phys_candidates_per_block": 4032,
+            "phys_candidates_per_logical": 336.0
+          },
+          {
+            "N_cand": 18,
+            "p_drop": 6.296475609705011e-05,
+            "p_drop_pct": 0.0063,
+            "block_288_yield": 0.982029,
+            "block_288_yield_pct": 98.203,
+            "cryo_10block_120L_yield_pct": 83.415,
+            "total_phys_candidates_per_block": 5184,
+            "phys_candidates_per_logical": 432.0
+          },
+          {
+            "N_cand": 24,
+            "p_drop": 2.5049363819214025e-06,
+            "p_drop_pct": 0.00025,
+            "block_288_yield": 0.999279,
+            "block_288_yield_pct": 99.928,
+            "cryo_10block_120L_yield_pct": 99.281,
+            "total_phys_candidates_per_block": 6912,
+            "phys_candidates_per_logical": 576.0
+          },
+          {
+            "N_cand": 30,
+            "p_drop": 9.965426162855343e-08,
+            "p_drop_pct": 1e-05,
+            "block_288_yield": 0.999971,
+            "block_288_yield_pct": 99.997,
+            "cryo_10block_120L_yield_pct": 99.971,
+            "total_phys_candidates_per_block": 8640,
+            "phys_candidates_per_logical": 720.0
+          }
+        ]
+      },
+      "f1p5_Ez2MVm_ddrf6893_and_iradina_valley": {
+        "p_slot": 0.28967,
+        "N_cand_req_99pct_block": 31,
+        "by_N_cand": [
+          {
+            "N_cand": 4,
+            "p_drop": 0.2545936277604871,
+            "p_drop_pct": 25.45936,
+            "block_288_yield": 0.0,
+            "block_288_yield_pct": 0.0,
+            "cryo_10block_120L_yield_pct": 0.0,
+            "total_phys_candidates_per_block": 1152,
+            "phys_candidates_per_logical": 96.0
+          },
+          {
+            "N_cand": 5,
+            "p_drop": 0.18084621007032436,
+            "p_drop_pct": 18.08462,
+            "block_288_yield": 0.0,
+            "block_288_yield_pct": 0.0,
+            "cryo_10block_120L_yield_pct": 0.0,
+            "total_phys_candidates_per_block": 1440,
+            "phys_candidates_per_logical": 120.0
+          },
+          {
+            "N_cand": 6,
+            "p_drop": 0.12846099874725833,
+            "p_drop_pct": 12.8461,
+            "block_288_yield": 0.0,
+            "block_288_yield_pct": 0.0,
+            "cryo_10block_120L_yield_pct": 0.0,
+            "total_phys_candidates_per_block": 1728,
+            "phys_candidates_per_logical": 144.0
+          },
+          {
+            "N_cand": 7,
+            "p_drop": 0.09125006375707848,
+            "p_drop_pct": 9.12501,
+            "block_288_yield": 0.0,
+            "block_288_yield_pct": 0.0,
+            "cryo_10block_120L_yield_pct": 0.0,
+            "total_phys_candidates_per_block": 2016,
+            "phys_candidates_per_logical": 168.0
+          },
+          {
+            "N_cand": 8,
+            "p_drop": 0.06481791529624548,
+            "p_drop_pct": 6.48179,
+            "block_288_yield": 0.0,
+            "block_288_yield_pct": 0.0,
+            "cryo_10block_120L_yield_pct": 0.0,
+            "total_phys_candidates_per_block": 2304,
+            "phys_candidates_per_logical": 192.0
+          },
+          {
+            "N_cand": 9,
+            "p_drop": 0.04604229268853902,
+            "p_drop_pct": 4.60423,
+            "block_288_yield": 1e-06,
+            "block_288_yield_pct": 0.0,
+            "cryo_10block_120L_yield_pct": 0.0,
+            "total_phys_candidates_per_block": 2592,
+            "phys_candidates_per_logical": 216.0
+          },
+          {
+            "N_cand": 10,
+            "p_drop": 0.03270535169679989,
+            "p_drop_pct": 3.27054,
+            "block_288_yield": 6.9e-05,
+            "block_288_yield_pct": 0.007,
+            "cryo_10block_120L_yield_pct": 0.0,
+            "total_phys_candidates_per_block": 2880,
+            "phys_candidates_per_logical": 240.0
+          },
+          {
+            "N_cand": 12,
+            "p_drop": 0.01650222819914311,
+            "p_drop_pct": 1.65022,
+            "block_288_yield": 0.008293,
+            "block_288_yield_pct": 0.829,
+            "cryo_10block_120L_yield_pct": 0.0,
+            "total_phys_candidates_per_block": 3456,
+            "phys_candidates_per_logical": 288.0
+          },
+          {
+            "N_cand": 14,
+            "p_drop": 0.008326574135670887,
+            "p_drop_pct": 0.83266,
+            "block_288_yield": 0.089987,
+            "block_288_yield_pct": 8.999,
+            "cryo_10block_120L_yield_pct": 0.0,
+            "total_phys_candidates_per_block": 4032,
+            "phys_candidates_per_logical": 336.0
+          },
+          {
+            "N_cand": 18,
+            "p_drop": 0.0021198927160170937,
+            "p_drop_pct": 0.21199,
+            "block_288_yield": 0.542712,
+            "block_288_yield_pct": 54.271,
+            "cryo_10block_120L_yield_pct": 0.222,
+            "total_phys_candidates_per_block": 5184,
+            "phys_candidates_per_logical": 432.0
+          },
+          {
+            "N_cand": 24,
+            "p_drop": 0.00027232353553659395,
+            "p_drop_pct": 0.02723,
+            "block_288_yield": 0.924558,
+            "block_288_yield_pct": 92.456,
+            "cryo_10block_120L_yield_pct": 45.639,
+            "total_phys_candidates_per_block": 6912,
+            "phys_candidates_per_logical": 576.0
+          },
+          {
+            "N_cand": 30,
+            "p_drop": 3.4982953357415356e-05,
+            "p_drop_pct": 0.0035,
+            "block_288_yield": 0.989975,
+            "block_288_yield_pct": 98.998,
+            "cryo_10block_120L_yield_pct": 90.416,
+            "total_phys_candidates_per_block": 8640,
+            "phys_candidates_per_logical": 720.0
+          }
+        ]
+      }
     }
   },
   "part3_code_capacity_bp_osd": {
@@ -2338,7 +3116,48 @@
       "d11_active_cells_per_L": 241,
       "gross_code_active_cells_per_L": 24
     },
-    "machine_elapsed_s": 334.0
+    "machine_elapsed_s": 334.0,
+    "midcycle_hadamard_audit_OBS106": {
+      "without_midcycle_H": {
+        "N_fault_mechanisms": 3024,
+        "p_L_round": 0.00314,
+        "bp_converged_frac": 0.4875
+      },
+      "with_midcycle_H": {
+        "N_fault_mechanisms": 3024,
+        "p_L_round": 0.00951,
+        "bp_converged_frac": 0.4
+      }
+    },
+    "round_depth_R_equals_d_audit_OBS086": {
+      "R4": {
+        "n_noisy_rounds": 4,
+        "M_detectors": 360,
+        "N_fault_mechanisms": 3024,
+        "p_L_block": 0.0,
+        "p_L_round": 0.0,
+        "bp_converged_frac": 0.4,
+        "osd_trigger_frac": 0.6
+      },
+      "R8": {
+        "n_noisy_rounds": 8,
+        "M_detectors": 648,
+        "N_fault_mechanisms": 5904,
+        "p_L_block": 0.0,
+        "p_L_round": 0.0,
+        "bp_converged_frac": 0.15,
+        "osd_trigger_frac": 0.85
+      },
+      "R12": {
+        "n_noisy_rounds": 12,
+        "M_detectors": 936,
+        "N_fault_mechanisms": 8784,
+        "p_L_block": 0.0,
+        "p_L_round": 0.0,
+        "bp_converged_frac": 0.0,
+        "osd_trigger_frac": 1.0
+      }
+    }
   },
   "part5_cryostat_and_tco_compression": {
     "exp140_mxc_cap_cells": 2887,
@@ -2661,5 +3480,11 @@
       "active_cells_per_L_vs_D2_1e-9_SC": 816.71
     }
   },
-  "portability_hardcoded_hits": []
+  "portability_hardcoded_hits": [],
+  "honest_obstacle_closure_notes": {
+    "OBS045_140": "20um pitch has 10,372 flat airbridge crossings (220 L1 + 10,152 L2), L2 Manhattan max=360 um (26.4% > 300 um), loaded meander ceiling 213-250 um.",
+    "OBS029_047": "At f*=1.5%+2MV/m, N_cand=8 block yield drops from 99.63% to 48.27% (DDRF 6.893 kHz), 1.95% (iradina+valley p_ff=0.5375), and <0.01% combined.",
+    "OBS086_106": "Mid-cycle Hadamard CZ->CNOT errors and R=d=12 scaling collapse BP convergence and raise steady-state p_L_round.",
+    "status": "HORIZON_TARGET_REQUIRED"
+  }
 }

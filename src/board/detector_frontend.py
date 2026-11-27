@@ -57,7 +57,7 @@ PROFILES: dict[str, dict] = {
         "q_ion_spice": "0.055f",    # ~342 e- Lindhard 5 keV 31P+ @ 100 K (w=3.72 eV)
         "v_thr_spice": "0.00423",   # 4.23 mV (5.5-sigma ENC=24.1 e- rms)
         "rhys1_Ohm": 1.0e3,
-        "rhys2_Ohm": 1.0e6,
+        "rhys2_Ohm": 3.3e6,
         "rterm_Ohm": 49.9,
         "rbias_Ohm": 10e6,
         "cbias_F": 10e-9,
@@ -89,7 +89,7 @@ PROFILES: dict[str, dict] = {
         "q_ion_spice": "0.056f",    # ~351 e- Lindhard 5 keV 31P+ @ 300 K (w=3.62 eV)
         "v_thr_spice": "0.01567",   # 15.67 mV (5.5-sigma ENC=89.9 e- rms)
         "rhys1_Ohm": 1.0e3,
-        "rhys2_Ohm": 1.0e6,
+        "rhys2_Ohm": 3.3e6,
         "rterm_Ohm": 49.9,
         "rbias_Ohm": 10e6,
         "cbias_F": 10e-9,
@@ -206,12 +206,12 @@ def build_board_design(channels: int = CHANNELS, profile: str = DEFAULT_PROFILE)
             Component(f"D{ch}", "IBIC_PIXEL_DIODE_C0p5", "CUSTOM_FLIPCHIP", "diode", "{Ozel-Uretim}", ("1", "2")),
             Component(f"RBIAS{ch}", "10M_100V", "0402", "R", "{Pasif-COTS}", ("1", "2")),
             Component(f"CBIAS{ch}", "10nF_100V_C0G", "0603", "C", "{Pasif-COTS}", ("1", "2")),
-            Component(f"U{ch}A", "LTC6268_CSA_FET", "SOIC-8", "opamp", "{Aday-COTS}", ("2", "3", "4", "6", "7")),
+            Component(f"U{ch}A", "LTC6268_CSA_FET", "SOIC-8", "opamp", "{Aday-COTS}", ("1", "2", "3", "4", "6", "7")),
             Component(f"CF{ch}", "0.25pF_C0G", "0402", "C", "{Pasif-COTS}", ("1", "2")),
             Component(f"RF{ch}", cfg["rf_label"], "0402", "R", "{Pasif-COTS}", ("1", "2")),
             Component(f"CS{ch}", cfg["cs_label"], "0402", "C", "{Pasif-COTS}", ("1", "2")),
             Component(f"RS1{ch}", "2.00k_0.1pct", "0402", "R", "{Pasif-COTS}", ("1", "2")),
-            Component(f"U{ch}B", "ADA4817-1_SHAPER", "SOIC-8", "opamp", "{Aday-COTS}", ("2", "3", "4", "6", "7")),
+            Component(f"U{ch}B", "ADA4817-1_SHAPER", "SOIC-8-1EP", "opamp", "{Aday-COTS}", ("1", "2", "3", "4", "6", "7", "8", "EP")),
             Component(f"RG1{ch}", "100R_0.1pct", "0402", "R", "{Pasif-COTS}", ("1", "2")),
             Component(f"RG2{ch}", "13.5k_0.1pct", "0402", "R", "{Pasif-COTS}", ("1", "2")),
             Component(f"RS2{ch}", "2.00k_0.1pct", "0402", "R", "{Pasif-COTS}", ("1", "2")),
@@ -219,7 +219,7 @@ def build_board_design(channels: int = CHANNELS, profile: str = DEFAULT_PROFILE)
             Component(f"RDAC{ch}", "1.00k_1pct", "0402", "R", "{Pasif-COTS}", ("1", "2")),
             Component(f"CDAC{ch}", "100nF_C0G", "0402", "C", "{Pasif-COTS}", ("1", "2")),
             Component(f"RHYS1{ch}", "1.00k_1pct", "0402", "R", "{Pasif-COTS}", ("1", "2")),
-            Component(f"RHYS2{ch}", "1.00M_1pct", "0402", "R", "{Pasif-COTS}", ("1", "2")),
+            Component(f"RHYS2{ch}", "3.30M_1pct", "0402", "R", "{Pasif-COTS}", ("1", "2")),
             Component(f"U{ch}C", "TLV3501_CMP_4p5NS", "SOT-23-6", "comparator", "{Aday-COTS}", ("1", "2", "3", "4", "5", "6")),
             Component(f"RTERM{ch}", "49.9R_1pct", "0402", "R", "{Pasif-COTS}", ("1", "2")),
             Component(f"CD{ch}AP", "100nF_C0G", "0402", "C", "{Pasif-COTS}", ("1", "2")),
@@ -236,31 +236,34 @@ def build_board_design(channels: int = CHANNELS, profile: str = DEFAULT_PROFILE)
         connect("AGND", f"CBIAS{ch}", 2)
         connect(f"{p}.DET_BIAS", f"D{ch}", 2)
 
-        # Single merged summing node: D{ch} pin 1 + CF{ch} pin 2 + RF{ch} pin 2 + U{ch}A IN- (pin 2)
+        # Single merged summing node: D{ch}.1 + CF{ch}.2 + RF{ch}.2 + U{ch}A IN- (LTC6268IS8 S8 pin 6)
+        # Exact Analog Devices LTC6268IS8 S8 pinout: 1:~SHDN, 2:V+, 3:OUT, 4:V-, 5:NC, 6:-IN, 7:+IN, 8:NC
         connect(f"{p}.CSA_SUM", f"D{ch}", 1)
         connect(f"{p}.CSA_SUM", f"CF{ch}", 2)
         connect(f"{p}.CSA_SUM", f"RF{ch}", 2)
-        connect(f"{p}.CSA_SUM", f"U{ch}A", 2)
-        connect("AGND", f"U{ch}A", 3)   # IN+ tied cleanly to AGND (no floating input!)
+        connect(f"{p}.CSA_SUM", f"U{ch}A", 6)
+        connect("AGND", f"U{ch}A", 7)   # +IN (pin 7) tied cleanly to AGND (no floating input!)
 
-        # CSA output -> feedback + CR differentiator input
-        connect(f"{p}.CSA_OUT", f"U{ch}A", 6)
+        # CSA output (pin 3) -> feedback + CR differentiator input
+        connect(f"{p}.CSA_OUT", f"U{ch}A", 3)
         connect(f"{p}.CSA_OUT", f"CF{ch}", 1)
         connect(f"{p}.CSA_OUT", f"RF{ch}", 1)
         connect(f"{p}.CSA_OUT", f"CS{ch}", 1)
 
-        # CR differentiator (CS + RS1) -> Shaper U{ch}B IN+ (pin 3)
+        # CR differentiator (CS + RS1) -> Shaper U{ch}B +IN (ADA4817-1ARDZ SOIC-8-EP pin 3)
         connect(f"{p}.CR_OUT", f"CS{ch}", 2)
         connect(f"{p}.CR_OUT", f"RS1{ch}", 1)
         connect(f"{p}.CR_OUT", f"U{ch}B", 3)
         connect("AGND", f"RS1{ch}", 2)
 
         # Shaper U{ch}B non-inverting gain feedback (RG1=100R, RG2=13.5k -> G=136)
+        # Exact ADA4817-1ARDZ SOIC-8-EP pinout: 1:FB, 2:-IN, 3:+IN, 4:-VS, 5:NC, 6:OUT, 7:+VS, 8:PD, EP:-VS
         connect(f"{p}.SHP_FB", f"U{ch}B", 2)
         connect(f"{p}.SHP_FB", f"RG1{ch}", 1)
         connect(f"{p}.SHP_FB", f"RG2{ch}", 1)
         connect("AGND", f"RG1{ch}", 2)
         connect(f"{p}.SHP_GAIN", f"U{ch}B", 6)
+        connect(f"{p}.SHP_GAIN", f"U{ch}B", 1)  # Pin 1 FB tied to OUT/RG2 node
         connect(f"{p}.SHP_GAIN", f"RG2{ch}", 2)
         connect(f"{p}.SHP_GAIN", f"RS2{ch}", 1)
 
@@ -270,34 +273,36 @@ def build_board_design(channels: int = CHANNELS, profile: str = DEFAULT_PROFILE)
         connect(f"{p}.SHP_OUT", f"RHYS1{ch}", 1)
         connect("AGND", f"CP{ch}", 2)
 
-        # Per-channel SPI DAC threshold + RC filter -> comparator IN- (pin 4)
+        # Per-channel SPI DAC threshold + RC filter -> comparator -IN (TI SBOS321 TLV3501 DBV pin 1)
+        # Exact TI SBOS321 SOT-23-6 DBV pinout: 1:-IN, 2:V-, 3:+IN, 4:V+, 5:OUT, 6:SHDN(active-HIGH)
         connect(f"{p}.THRESH_RAW", "UDAC", dac_out_pins[ch])
         connect(f"{p}.THRESH_RAW", f"RDAC{ch}", 1)
         connect(f"{p}.THRESH", f"RDAC{ch}", 2)
         connect(f"{p}.THRESH", f"CDAC{ch}", 1)
-        connect(f"{p}.THRESH", f"U{ch}C", 4)
+        connect(f"{p}.THRESH", f"U{ch}C", 1)
         connect("AGND", f"CDAC{ch}", 2)
 
-        # Hysteresis comparator U{ch}C -> RTERM -> JFPGA
+        # Hysteresis comparator U{ch}C -> RTERM -> JFPGA (Pin 3:+IN, Pin 5:OUT)
         connect(f"{p}.CMP_INP", f"RHYS1{ch}", 2)
         connect(f"{p}.CMP_INP", f"RHYS2{ch}", 1)
         connect(f"{p}.CMP_INP", f"U{ch}C", 3)
-        connect(f"{p}.CMP_OUT", f"U{ch}C", 1)
+        connect(f"{p}.CMP_OUT", f"U{ch}C", 5)
         connect(f"{p}.CMP_OUT", f"RHYS2{ch}", 2)
         connect(f"{p}.CMP_OUT", f"RTERM{ch}", 1)
         connect(f"{p}.COUNT_HIT", f"RTERM{ch}", 2)
         connect(f"{p}.COUNT_HIT", "JFPGA", 1 + ch)
 
-        # Active IC power & local 100 nF decoupling
-        connect("VCCA", f"U{ch}A", 7); connect("VSSA", f"U{ch}A", 4)
+        # Active IC power, enable/PD/SHDN & local 100 nF decoupling
+        connect("VCCA", f"U{ch}A", 1); connect("VCCA", f"U{ch}A", 2); connect("VSSA", f"U{ch}A", 4)
         connect("VCCA", f"CD{ch}AP", 1); connect("AGND", f"CD{ch}AP", 2)
         connect("VSSA", f"CD{ch}AN", 1); connect("AGND", f"CD{ch}AN", 2)
 
-        connect("VCCA", f"U{ch}B", 7); connect("VSSA", f"U{ch}B", 4)
+        connect("VCCA", f"U{ch}B", 7); connect("VCCA", f"U{ch}B", 8)
+        connect("VSSA", f"U{ch}B", 4); connect("VSSA", f"U{ch}B", "EP")
         connect("VCCA", f"CD{ch}BP", 1); connect("AGND", f"CD{ch}BP", 2)
         connect("VSSA", f"CD{ch}BN", 1); connect("AGND", f"CD{ch}BN", 2)
 
-        connect("VCCD", f"U{ch}C", 6); connect("VCCD", f"U{ch}C", 5); connect("DGND", f"U{ch}C", 2)
+        connect("VCCD", f"U{ch}C", 4); connect("DGND", f"U{ch}C", 2); connect("DGND", f"U{ch}C", 6)
         connect("VCCD", f"CD{ch}C", 1); connect("DGND", f"CD{ch}C", 2)
 
     return BoardDesign(components=comps, nets=dict(nets), profile=profile)
@@ -346,8 +351,27 @@ def validate_netlist(design: BoardDesign, channels: int = CHANNELS) -> list[str]
             n = f"CH{ch}.{suffix}"
             if n not in design.nets:
                 errors.append(f"Missing channel net: {n}")
-        if pin_owner.get((f"U{ch}C", "4")) != f"CH{ch}.THRESH":
-            errors.append(f"Channel {ch} comparator IN- not driven by dedicated CH{ch}.THRESH")
+        # Verify exact LTC6268IS8 S8 pinout (1:~SHDN=VCCA, 2:V+=VCCA, 3:OUT=CSA_OUT, 4:V-=VSSA, 6:-IN=CSA_SUM, 7:+IN=AGND)
+        if pin_owner.get((f"U{ch}A", "1")) != "VCCA" or pin_owner.get((f"U{ch}A", "2")) != "VCCA":
+            errors.append(f"Channel {ch} LTC6268IS8 pin 1 (~SHDN) / pin 2 (V+) must tie to VCCA")
+        if pin_owner.get((f"U{ch}A", "3")) != f"CH{ch}.CSA_OUT" or pin_owner.get((f"U{ch}A", "6")) != f"CH{ch}.CSA_SUM":
+            errors.append(f"Channel {ch} LTC6268IS8 pin 3 (OUT) / pin 6 (-IN) pinout mismatch")
+        if pin_owner.get((f"U{ch}A", "7")) != "AGND":
+            errors.append(f"Channel {ch} LTC6268IS8 pin 7 (+IN) must tie to AGND")
+        # Verify exact ADA4817-1ARDZ SOIC-8-EP pinout (1:FB=SHP_GAIN, 8:PD=VCCA, EP=VSSA)
+        if pin_owner.get((f"U{ch}B", "1")) != f"CH{ch}.SHP_GAIN" or pin_owner.get((f"U{ch}B", "8")) != "VCCA":
+            errors.append(f"Channel {ch} ADA4817-1ARDZ pin 1 (FB) / pin 8 (PD) pinout mismatch")
+        if pin_owner.get((f"U{ch}B", "EP")) != "VSSA":
+            errors.append(f"Channel {ch} ADA4817-1ARDZ exposed thermal pad EP must tie to VSSA")
+        # Verify exact TI SBOS321 TLV3501AIDBVR SOT-23-6 DBV pinout
+        if pin_owner.get((f"U{ch}C", "1")) != f"CH{ch}.THRESH":
+            errors.append(f"Channel {ch} TLV3501 pin 1 (-IN) not driven by dedicated CH{ch}.THRESH")
+        if pin_owner.get((f"U{ch}C", "4")) != "VCCD":
+            errors.append(f"Channel {ch} TLV3501 pin 4 (V+) must tie to VCCD")
+        if pin_owner.get((f"U{ch}C", "5")) != f"CH{ch}.CMP_OUT":
+            errors.append(f"Channel {ch} TLV3501 pin 5 (OUT) must drive CH{ch}.CMP_OUT")
+        if pin_owner.get((f"U{ch}C", "6")) != "DGND":
+            errors.append(f"Channel {ch} TLV3501 pin 6 (SHDN, active-HIGH) must tie to DGND to enable")
 
     # 4. Verify active ICs carry candidate-COTS MPN values (not bare placeholders)
     banned = {"CSA_OPAMP_JFET", "SHAPER_OPAMP", "COMPARATOR_FAST", "THRESHOLD_DAC"}
@@ -393,58 +417,68 @@ def render_kicad_netlist(design: BoardDesign) -> str:
 
 
 def render_spice_deck(channels: int = CHANNELS, profile: str = DEFAULT_PROFILE) -> str:
-    """Emit standard SPICE3 / ngspice deck matching the 8-channel IBIC circuit."""
+    """Emit native SPICE3 / ngspice-47 deck matching the 8-channel IBIC circuit."""
     p = get_profile(profile)
+    temp_c = p["temp_K"] - 273.15
     tran_stop = "8.0u" if p["tau_s_ns"] >= 800.0 else "2.5u"
     tran_step = "5n" if p["tau_s_ns"] >= 800.0 else "2n"
+    rhys2_spice = "3.3Meg"
     lines = [
         f"* Atom Lithography Machine - 8-Channel IBIC Detector Front-End (v2.1, Profile={p['name']}, Exp127)",
-        "* Candidate COTS macromodel deck ({Aday-COTS}; no physical lab measurement).",
+        "* Native ngspice-47 macromodel deck ({Aday-COTS}; no physical lab measurement).",
         f"* Locked P91 5 keV 31P+ @ {p['temp_K']:.0f} K: RF={p['rf_spice']}, CS=CP={p['cs_spice']} (tau_s={p['tau_s_ns']:.0f} ns), Q_ION={p['q_ion_spice']}.",
         f"* Rails: VCCA=+{p['vcca_V']}V, VSSA={p['vssa_V']}V, VCCD=+{p['vccd_V']}V, VBIAS={p['vbias_V']}V.",
         "",
+        f".temp {temp_c:.2f}",
+        "",
         f".param C_DET=0.5p  C_PAR=0.25p  C_F=0.25p  R_F={p['rf_spice']}",
         f".param C_S={p['cs_spice']}   R_S1=2.0k    R_G1=100   R_G2=13.5k",
-        f".param R_S2=2.0k   C_P={p['cp_spice']}    R_HYS1=1.0k R_HYS2=1.0Meg  R_TERM=49.9",
+        f".param R_S2=2.0k   C_P={p['cp_spice']}    R_HYS1=1.0k R_HYS2={rhys2_spice}  R_TERM=49.9",
         f".param Q_ION={p['q_ion_spice']}  TAU_COL=1.5n  V_THR={p['v_thr_spice']}",
         "",
-        "* Behavioral single-pole op-amp macromodels matching datasheet GBP & C_in",
+        "* Behavioral single-pole op-amp macromodels matching datasheet GBP, C_in & white e_n (native ngspice B-sources)",
         ".subckt OPAMP_LTC6268 inp inn vcc vss out",
         "Cin inp inn 0.45p",
-        "Rin inp inn 1T",
-        "Egain n1 0 VALUE = { 1e5 * V(inp, inn) }",
+        "Rin inp inn 1T noisy=0",
+        "* White series voltage noise: 2.0 nV/rtHz (zero DC offset)",
+        "Rnw nw 0 241.43235 temp=26.85",
+        "Evn inp_int inp nw 0 1.0",
+        "Egain n1 0 inp_int inn 1e5",
         "* GBP = 500 MHz -> dominant pole f_p = 5 kHz (R=1k, C=31.83nF)",
-        "Rp n1 n2 1k",
-        "Cp n2 0 31.83n",
-        "Ebuf out 0 VALUE = { LIMIT(V(n2), V(vss)+0.1, V(vcc)-0.1) }",
+        "Rp n1 n2 1k noisy=0",
+        "Cp n2 0 31.8309886n",
+        "Bbuf n_out 0 V = 0.5*(v(vcc)+v(vss)) + (0.5*(v(vcc)-v(vss))-0.1) * tanh((v(n2) - 0.5*(v(vcc)+v(vss))) / (0.5*(v(vcc)-v(vss))-0.1 + 1m))",
+        "Rout n_out out 1 noisy=0",
         ".ends OPAMP_LTC6268",
         "",
         ".subckt OPAMP_ADA4817 inp inn vcc vss out",
         "Cin inp inn 1.3p",
-        "Rin inp inn 500G",
-        "Egain n1 0 VALUE = { 1e5 * V(inp, inn) }",
+        "Rin inp inn 500G noisy=0",
+        "* White series voltage noise: 4.0 nV/rtHz (zero DC offset)",
+        "Rnw nw 0 965.7294 temp=26.85",
+        "Evn inp_int inp nw 0 1.0",
+        "Egain n1 0 inp_int inn 1e5",
         "* GBP = 1.05 GHz -> dominant pole f_p = 10.5 kHz (R=1k, C=15.16nF)",
-        "Rp n1 n2 1k",
-        "Cp n2 0 15.16n",
-        "Ebuf out 0 VALUE = { LIMIT(V(n2), V(vss)+0.2, V(vcc)-0.2) }",
+        "Rp n1 n2 1k noisy=0",
+        "Cp n2 0 15.1576136n",
+        "Bbuf n_out 0 V = 0.5*(v(vcc)+v(vss)) + (0.5*(v(vcc)-v(vss))-0.2) * tanh((v(n2) - 0.5*(v(vcc)+v(vss))) / (0.5*(v(vcc)-v(vss))-0.2 + 1m))",
+        "Rout n_out out 1 noisy=0",
         ".ends OPAMP_ADA4817",
         "",
-        ".subckt CMP_TLV3501 inp inn vcc gnd out",
-        "* 4.5 ns comparator macromodel with rail-to-rail 0..VCCD output",
-        "Eraw n1 gnd VALUE = { V(vcc) * 0.5 * (1 + TANH((V(inp, inn)) / 0.2m)) }",
-        "Rdel n1 out 100",
+        ".subckt CMP_TLV3501 inp inn vcc gnd shdn out",
+        "* 4.5 ns comparator macromodel with rail-to-rail 0..VCCD output & smooth active-HIGH SHDN (TI SBOS321)",
+        "Braw n1 gnd V = v(vcc, gnd) * 0.5 * (1 + tanh((0.5*v(vcc, gnd) - v(shdn, gnd)) / 0.05)) * 0.5 * (1 + tanh(v(inp, inn) / 0.2m))",
+        "Rdel n1 out 100 noisy=0",
         "Cdel out gnd 45p",
         ".ends CMP_TLV3501",
         "",
-        "* Single IBIC Front-End Channel Subcircuit",
-        ".subckt IBIC_CHANNEL hv_bias thresh_in count_hit vcca vssa vccd agnd dgnd PARAMS: qion={Q_ION}",
-        "* Per-channel HV bias filter & pixel capacitance + ion charge impulse",
+        "* Single IBIC Front-End Channel Subcircuit (csa_sum exposed for top-level stimulus & .noise)",
+        ".subckt IBIC_CHANNEL csa_sum hv_bias thresh_in count_hit vcca vssa vccd agnd dgnd",
+        "* Per-channel HV bias filter & pixel capacitance",
         "Rbias hv_bias det_bias 10Meg",
         "Cbias det_bias agnd 10n",
         "Cdet  csa_sum agnd {C_DET + C_PAR}",
-        "* Exponential charge collection pulse: integral I_ion dt = qion",
-        "Iion  agnd csa_sum EXP(0 {qion/TAU_COL} 50n 0.2n 51n {TAU_COL})",
-        "* CSA stage (LTC6268): positive output for positive hole-collection polarity",
+        "* CSA stage (LTC6268): positive output when Iion extracts charge (csa_sum -> agnd)",
         "Xcsa  agnd csa_sum vcca vssa csa_out OPAMP_LTC6268",
         "Cf    csa_out csa_sum {C_F}",
         "Rf    csa_out csa_sum {R_F}",
@@ -456,12 +490,12 @@ def render_spice_deck(channels: int = CHANNELS, profile: str = DEFAULT_PROFILE) 
         "Rg2   shp_gain shp_fb {R_G2}",
         "Rs2   shp_gain shp_out {R_S2}",
         "Cp    shp_out agnd   {C_P}",
-        "* Per-channel DAC threshold RC filter & hysteresis comparator (TLV3501)",
+        "* Per-channel DAC threshold RC filter & non-latching hysteresis comparator (TLV3501, V_hys=3.0mV < V_THR)",
         "Rdac  thresh_in thresh 1k",
         "Cdac  thresh agnd 100n",
         "Rhys1 shp_out cmp_inp {R_HYS1}",
         "Rhys2 cmp_out cmp_inp {R_HYS2}",
-        "Xcmp  cmp_inp thresh vccd dgnd cmp_out CMP_TLV3501",
+        "Xcmp  cmp_inp thresh vccd dgnd dgnd cmp_out CMP_TLV3501",
         "Rterm cmp_out count_hit {R_TERM}",
         ".ends IBIC_CHANNEL",
         "",
@@ -470,28 +504,48 @@ def render_spice_deck(channels: int = CHANNELS, profile: str = DEFAULT_PROFILE) 
         f"Vssa vssa agnd DC {p['vssa_V']}",
         f"Vccd vccd dgnd DC {p['vccd_V']}",
         f"Vbias hv_in agnd DC {p['vbias_V']}",
-        "Rstar agnd dgnd 1m",
+        "Rstar agnd dgnd 1m noisy=0",
         "Rbias_bulk hv_in hv_filt 100k",
         "Cbias_bulk hv_filt agnd 100n",
         "Vagnd agnd 0 DC 0",
         "",
-        "* 8-Channel Tile Instantiation (CH0..CH7) with Individual DAC Thresholds",
+        "* 8-Channel Tile Instantiation (CH0..CH7) with Individual DAC Thresholds & Top-Level Ion Stimulus",
+        "* CH0 receives 5 keV 31P+ charge pulse Q_ION (csa_sum -> agnd = positive hole-collection polarity); CH1..CH7 dark",
     ]
     for ch in range(channels):
-        q_expr = "{Q_ION}" if ch == 0 else "0"
+        if ch == 0:
+            lines.append(
+                "Iion0 csa_sum_0 agnd DC 0 AC 1 PULSE(0 {Q_ION/TAU_COL} 50n 0.1n 0.1n 1.4n 1m)"
+            )
+        else:
+            lines.append(f"Iion{ch} csa_sum_{ch} agnd DC 0")
         lines.append(f"Vthr{ch} thr_raw_{ch} agnd DC {{V_THR}}")
         lines.append(
-            f"Xch{ch} hv_filt thr_raw_{ch} count_hit_{ch} vcca vssa vccd agnd dgnd "
-            f"IBIC_CHANNEL PARAMS: qion={q_expr}"
+            f"Xch{ch} csa_sum_{ch} hv_filt thr_raw_{ch} count_hit_{ch} vcca vssa vccd agnd dgnd IBIC_CHANNEL"
         )
         lines.append(f"Rfpga{ch} count_hit_{ch} dgnd 10k")
 
     lines.extend([
         "",
-        "* Standard Analyses (cross-checked by experiments/exp127_detector_frontend_sim/)",
-        ".ac dec 100 100 100Meg",
-        f".tran {tran_step} {tran_stop}",
-        ".noise V(Xch0.shp_out) Iion dec 50 1k 50Meg",
+        "* Native ngspice-47 Batch Analyses (AC, TRAN, NOISE)",
+        ".control",
+        "set noaskquit",
+        "ac dec 100 100 100Meg",
+        "meas ac z_peak_ohm MAX vm(Xch0.shp_out)",
+        f"tran {tran_step} {tran_stop}",
+        "meas tran csa_peak_v MAX v(Xch0.csa_out)",
+        "meas tran shp_peak_v MAX v(Xch0.shp_out)",
+        "meas tran hit0_init_v FIND v(count_hit_0) AT=10n",
+        "meas tran hit0_max_v MAX v(count_hit_0)",
+        f"meas tran hit0_end_v FIND v(count_hit_0) AT={tran_stop}",
+        "meas tran hit1_max_v MAX v(count_hit_1)",
+        "meas tran hit7_max_v MAX v(count_hit_7)",
+        "noise v(Xch0.shp_out) Iion0 dec 50 1k 50Meg",
+        "setplot noise2",
+        "let shp_onoise_rms_v = onoise_total",
+        "print shp_onoise_rms_v",
+        "quit 0",
+        ".endc",
         ".end",
     ])
     return "\n".join(lines) + "\n"

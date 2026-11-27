@@ -141,6 +141,15 @@ def test_exp126_json_schema_risk_r3_and_16cell_integrity():
     data = json.loads((RES_DIR / "exp126.json").read_text(encoding="utf-8"))
     assert data["no_lab_measurement"] is True
     assert len(data["verdicts"]) == 8
+    # OBS-029 & OBS-141: physical HM5962 calibration fixed, DDRF 6.893 kHz wall enforced, honest FAILs retained
+    kl_aud = h126.audit_legacy_kl_vs_hm5962()
+    assert kl_aud["hm5962_a004_MHz"] > 5.90
+    assert kl_aud["hm5962_over_legacy_a004_ratio"] > 1.90
+    assert h126.DDRF_MIN_GAP_WALL_HZ == 6893.0
+    assert data["obs_029_141_honest_audit"]["unresolved_gate_wall_status"] == "HONEST_FAIL_RECORDED"
+    assert data["verdicts"]["P126_1_unitarity_and_grape_corners"]["passed"] is False
+    assert data["verdicts"]["P126_2_two_qubit_cz_cnot"]["passed"] is False
+    assert data["verdicts"]["P126_3_hahn_echo_calibration"]["passed"] is False
 
     # Risk R3 closure at f=1%, N=64, eps=1e-3 for BOTH alpha=1 and alpha=2
     f1_n64 = data["part2_risk_r3_interleaved_dd"]["abundance_dd_vs_exp63"]["F1"]["N_runs"]["N64"]

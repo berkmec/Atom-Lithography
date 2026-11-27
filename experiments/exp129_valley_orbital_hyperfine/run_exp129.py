@@ -277,6 +277,19 @@ def main() -> None:
             "max_abs_yield_shift_hm5962": max_abs_shift_hm5962,
             "max_abs_yield_shift_abinit": max_abs_shift_abinit,
             "legacy_exp60_ext_diag_f0p5_shift": +0.43,
+            "ab_initio_scale_uncertainty_band_OBS048": {
+                "exp129_vokl6_abinit_a004_MHz": float(b_vk["abinitio_A004_MHz_eta186"]),
+                "exp136_sp3d5s_abinit_a004_MHz": 3.648,
+                "hale_mieher_1969_target_a004_MHz": 5.962,
+                "inter_model_spread_ratio": round(float(b_vk["abinitio_A004_MHz_eta186"]) / 3.648, 3),
+                "exp129_rel_err_vs_HM5962": round((float(b_vk["abinitio_A004_MHz_eta186"]) - 5.962) / 5.962, 4),
+                "exp136_rel_err_vs_HM5962": round((3.648 - 5.962) / 5.962, 4),
+                "planning_floor_note": "Treat unscaled Exp136 ab-initio Mode B yield (21.75% @ 1%, 38.00% @ 1.5%) as conservative planning floor until ENDOR calibration.",
+            },
+            "ddrf_6p89kHz_certified_yields_VOKL6_HM5962": {
+                fk: float(mode_b_full["VOKL6_HM5962_ext"][fk]["gap_stats"]["yield_and_gap_ge_6893Hz"])
+                for fk in ("F0.5", "F1", "F2")
+            },
             "ddrf_6p89kHz_risk_F1": {
                 "KL_legacy_frac_lt_6893Hz": mode_b_full["KL_legacy"]["F1"]["gap_stats"]["frac_lt_6893Hz"],
                 "VOKL6_norm_ext_frac_lt_6893Hz": f1_vk_gs["frac_lt_6893Hz"],

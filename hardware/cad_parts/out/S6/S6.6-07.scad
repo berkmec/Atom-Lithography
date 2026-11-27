@@ -9,7 +9,7 @@
 // temp_stage        : 20 mK (MXC)
 // vacuum_grade      : UHV / Kriyo-vakum
 // tolerance         : sigma_f <= 0.27%
-// computed_mass_kg  : 0.12901
+// computed_mass_kg  : 0.12574
 // envelope_mm       : 50.000 x 50.000 x 23.000
 // design_maturity   : M0_M1_DETAILED_CAD_DESIGN_ONLY
 // no_lab_measurement: true

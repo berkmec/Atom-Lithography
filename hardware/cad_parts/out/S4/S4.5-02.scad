@@ -27,7 +27,8 @@ bbox_z = 69.2355;
 
 // Part-specific parametric dimensions
 azimuth_deg = 50.0;
-z_mount_mm = 60.0;
+z_mount_mm = 9.0;
+r_face_mm = 240.5;
 cf40_od_mm = 69.5;
 clear_aperture_mm = 32.0;
 
@@ -39,8 +40,8 @@ port_fiducial_cf40_viewport_bolts = 6;
 
 module part_S4_5_02() {
   union() {
-    // ISO 3669 CF40 fiducial microscope viewport
-    translate([142.924, 170.330, 0.000]) rotate([0.000, -90.000, 50.000]) {
+    // ISO 3669 CF40 fiducial microscope split-gap viewport
+    translate([158.672, 189.098, 0.000]) rotate([0.000, -90.000, 50.000]) {
       difference() {
         cylinder(d=69.500, h=12.700, center=true);
         cylinder(d=32.000, h=14.700, center=true);
@@ -52,13 +53,13 @@ module part_S4_5_02() {
       }
     }
     // Long-WD objective & dark-field ring illuminator
-    translate([159.733, 190.362, 0.000]) rotate([0.000, 90.000, 50.000]) cylinder(d=44.000, h=39.000, center=true);
+    translate([175.481, 209.130, 0.000]) rotate([0.000, 90.000, 50.000]) cylinder(d=44.000, h=39.000, center=true);
     // Scientific CMOS dark-field camera head
-    translate([186.087, 221.770, 0.000]) rotate([0.000, 0.000, 50.000]) cube([42.000, 54.000, 54.000], center=true);
+    translate([201.835, 240.538, 0.000]) rotate([0.000, 0.000, 50.000]) cube([42.000, 54.000, 54.000], center=true);
   }
 }
 
 // World assembly mounting transform (global machine frame, mm / deg):
-// translate([0.000, 0.000, 60.000]) rotate([0.000, 0.000, 0.000]) part_S4_5_02();
+// translate([0.000, 0.000, 9.000]) rotate([0.000, 0.000, 0.000]) part_S4_5_02();
 
 part_S4_5_02();

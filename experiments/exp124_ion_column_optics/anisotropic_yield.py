@@ -359,6 +359,10 @@ def run_all_anisotropic_yields(sigma_exp124_nm: float, reals: int = 400) -> dict
         ("ANISO_P91_BCA_DONOR_N1024",     12, 3.80, 3.80, 2.88, 1024, True,  6.4582, True),
         ("ANISO_EXP124_BCA_DONOR_N1024",  13, sigma_exp124_nm, sigma_exp124_nm, 2.88, 1024, True, 6.4582, True),
         ("ANISO_P91_HOLMES_DONOR_N1024",  14, 3.80, 3.80, 5.27, 1024, True,  6.4582, True),
+        # OBS-039: True 3D iradina / fixed infinite-domain ZBL BCA 5 keV (Rp=10.31 nm, dRp=5.10 nm, sig_lat=4.41 nm)
+        ("ANISO_IRADINA_5KEV_PURE_N1024", 15, 4.41, 4.41, 5.10, 1024, True, 10.3107, False),
+        ("ANISO_IRADINA_5KEV_EXP124_N1024", 16, sigma_exp124_nm, sigma_exp124_nm, 5.10, 1024, True, 10.3107, False),
+        ("ANISO_IRADINA_5KEV_DONOR_N1024", 17, sigma_exp124_nm, sigma_exp124_nm, 5.10, 1024, True, 10.3107, True),
     ]
 
     for key, idx, sx, sy, sz, n_imp, surf, rp, dstr in specs:

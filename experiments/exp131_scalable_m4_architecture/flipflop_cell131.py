@@ -27,11 +27,21 @@ H_PLANCK = 6.62607015e-34     # J*s
 E_CHARGE = 1.602176634e-19    # C
 GHZ_PER_UEV = (E_CHARGE * 1e-6) / H_PLANCK / 1e9  # 0.2417989242 GHz/ueV
 
-# Exp124 5 keV 31P+ implantation straggle anchor (Arch-B + HDA-HiRes, Exp92 BCA)
+# Exp124 5 keV 31P+ implantation straggle anchor (legacy truncated Exp92 BCA)
 EXP124_RP_NM = 6.46
 EXP124_SIGMA_Z_NM = 2.88
 EXP124_SIGMA_XY_NM = 3.67
 EXP124_Z_MIN_IMP_NM = 0.50
+
+# Actual Pilot 2B iradina 1.2.3 3D BCA 5 keV 31P+ straggle + Exp124 equip (OBS-047)
+IRADINA_5KEV_RP_NM = 10.3107
+IRADINA_5KEV_SIGMA_Z_NM = 5.098
+IRADINA_5KEV_SIGMA_XY_NM = 4.718
+
+# Si(001) monolayer lattice & 2-valley interference constants (Calderon 2006 / Tosi 2017, OBS-047)
+A0_SI_NM = 0.5431
+A_ML_SI_NM = A0_SI_NM / 4.0         # 0.135775 nm Si(001) monolayer spacing
+K0_VALLEY_INV_NM = 0.85 * 2.0 * math.pi / A0_SI_NM  # pi/k0 = 0.3195 nm valley oscillation half-period
 
 # Tosi 2017 / Si:P flip-flop physical parameters
 A0_HYPERFINE_GHZ = 0.11753          # 117.53 MHz bulk 31P isotropic hyperfine
@@ -44,7 +54,12 @@ LATERAL_STRAGGLE_WEIGHT = 0.20      # Effective path-length sensitivity to later
 LEVER_ARM_AT_14NM = 0.20            # Capacitive resonator lever arm alpha_r(14 nm)
 GAMMA_1_CHARGE_10GHZ_GHZ = 5.305e-3 # T_1,ch(10 GHz) = 30 ns -> Gamma/(2pi) = 5.305 MHz
 GAMMA_1_SO_FLOOR_GHZ = 1.6e-8       # 16 Hz residual spin-orbit relaxation floor (~10 ms)
-GAMMA_PHI_NUC_1PCT_GHZ = 0.5e-6     # 0.5 kHz residual Mod B f=1% 29Si nuclear bath floor
+GAMMA_PHI_NUC_1PCT_GHZ = 0.5e-6     # Legacy 0.5 kHz Markovian floor (understates un-echoed Overhauser >1000x; see OBS-110)
+OVERHAUSER_SIGMA_1PCT_KL_MHZ = 1.001     # Quasistatic Overhauser sigma_OH at f=1.0% (KL, T2*=0.225 us; OBS-110)
+OVERHAUSER_SIGMA_1P5PCT_KL_MHZ = 1.281   # Quasistatic Overhauser sigma_OH at f=1.5% (KL, T2*=0.176 us; OBS-110)
+OVERHAUSER_T2_STAR_1P5PCT_HM5962_US = 0.088
+ROUTE_C_S_EPS_NOM_UEV = 0.3897      # Exp139 Route C nominal 1/f charge noise (OBS-111)
+ROUTE_C_S_EPS_CONS_UEV = 0.5491     # Exp139 Route C conservative 1/f charge noise (OBS-111)
 ONE_OVER_F_RMS_FACTOR = 5.2565      # sqrt(ln(10^12)) over 12 decades [1e-2, 1e10] Hz
 
 # Pauli-like charge dipole operator tau_z = diag(-1, -1, +1, +1) in {|D,0>,|D,1>,|I,0>,|I,1>}
@@ -94,10 +109,23 @@ def bare_charge_coupling_ghz(z_nm: float, f_r_ghz: float = 5.0, z_r_ohm: float =
     return 0.5 * delta_eps_r_ghz, delta_eps_r_ghz
 
 
-def tunnel_coupling_ghz(z_nm: float, r_xy_nm: float = 0.0) -> tuple[float, float]:
-    """Return (t_c_ghz, d_eff_nm) for a 31P donor at (r_xy, z)."""
-    d_eff = math.sqrt(z_nm * z_nm + LATERAL_STRAGGLE_WEIGHT * r_xy_nm * r_xy_nm)
+def tunnel_coupling_ghz(
+    z_nm: float,
+    r_xy_nm: float = 0.0,
+    include_valley_interference: bool = False,
+    valley_phase_rad: float = 0.0,
+    snap_monolayer: bool = True,
+) -> tuple[float, float]:
+    """Return (t_c_ghz, d_eff_nm) for a 31P donor at (r_xy, z).
+
+    When `include_valley_interference=True` (OBS-047 fix), applies Si(001) monolayer-snapped
+    2-valley donor-interface interference |cos(k0 * z_ml + phi0)| (Calderon 2006 / Tosi 2017).
+    """
+    z_use = round(z_nm / A_ML_SI_NM) * A_ML_SI_NM if (include_valley_interference and snap_monolayer) else z_nm
+    d_eff = math.sqrt(z_use * z_use + LATERAL_STRAGGLE_WEIGHT * r_xy_nm * r_xy_nm)
     t_c = TC_REF_GHZ * math.exp(-(d_eff - TC_REF_DEPTH_NM) / TC_DECAY_LEN_NM)
+    if include_valley_interference:
+        t_c *= abs(math.cos(K0_VALLEY_INV_NM * z_use + valley_phase_rad))
     return t_c, d_eff
 
 
@@ -133,6 +161,9 @@ def evaluate_flipflop_cell(
     s_eps_uev: float = 1.0,
     f_r_ghz: float = 5.0,
     omega_ff_ghz: float = 5.0,
+    include_valley_interference: bool = False,
+    valley_phase_rad: float = 0.0,
+    gamma_phi_nuc_ghz: float = GAMMA_PHI_NUC_1PCT_GHZ,
 ) -> CellResult | None:
     """Evaluate exact 4x4 flip-flop qubit properties at fixed DC detuning eps_ghz.
 
@@ -142,7 +173,11 @@ def evaluate_flipflop_cell(
     """
     if z_nm < Z_MIN_DOUBLE_WELL_NM:
         return None
-    t_c, d_eff = tunnel_coupling_ghz(z_nm, r_xy_nm)
+    t_c, d_eff = tunnel_coupling_ghz(
+        z_nm, r_xy_nm,
+        include_valley_interference=include_valley_interference,
+        valley_phase_rad=valley_phase_rad,
+    )
     e_ch = math.hypot(eps_ghz, t_c)
     if e_ch < omega_ff_ghz + 0.35:
         return None
@@ -175,10 +210,10 @@ def evaluate_flipflop_cell(
     d1 = (wq_p - wq_m) / (2.0 * deps)
     d2 = (wq_p - 2.0 * omega_q + wq_m) / (deps * deps)
 
-    # Conservative Markovian upper bound on 1/f Gaussian charge noise dephasing + residual 1% 29Si
+    # Conservative Markovian upper bound on 1/f Gaussian charge noise dephasing + nuclear bath term
     sigma_eps_ghz = ONE_OVER_F_RMS_FACTOR * s_eps_uev * GHZ_PER_UEV
     gamma_phi_ch_ghz = math.hypot(abs(d1) * sigma_eps_ghz / math.sqrt(2.0), 0.5 * abs(d2) * sigma_eps_ghz * sigma_eps_ghz)
-    gamma_phi_ghz = gamma_phi_ch_ghz + GAMMA_PHI_NUC_1PCT_GHZ
+    gamma_phi_ghz = gamma_phi_ch_ghz + gamma_phi_nuc_ghz
 
     # Acoustic phonon charge relaxation dressed by exact dipole matrix element + spin-orbit floor
     gamma_1_ch_ghz = GAMMA_1_CHARGE_10GHZ_GHZ * ((omega_q / 10.0) ** 3)
@@ -220,6 +255,9 @@ def optimize_cell_dc_bias(
     s_eps_uev: float = 1.0,
     f_r_ghz: float = 5.0,
     objective: str = "m_res",
+    include_valley_interference: bool = False,
+    valley_phase_rad: float = 0.0,
+    gamma_phi_nuc_ghz: float = GAMMA_PHI_NUC_1PCT_GHZ,
 ) -> CellResult | None:
     """Optimize local DC gate detuning eps >= 0 (donor-bound side, p_D >= 0.5) for one donor.
 
@@ -229,7 +267,11 @@ def optimize_cell_dc_bias(
     """
     if z_nm < Z_MIN_DOUBLE_WELL_NM:
         return None
-    t_c, _ = tunnel_coupling_ghz(z_nm, r_xy_nm)
+    t_c, _ = tunnel_coupling_ghz(
+        z_nm, r_xy_nm,
+        include_valley_interference=include_valley_interference,
+        valley_phase_rad=valley_phase_rad,
+    )
     eps_min = 0.0
     if t_c < f_r_ghz + 0.35:
         eps_min = math.sqrt(max(0.0, (f_r_ghz + 0.36) ** 2 - t_c * t_c))
@@ -243,7 +285,12 @@ def optimize_cell_dc_bias(
     # Coarse grid (step 0.25 GHz)
     n_coarse = max(12, int(round((14.0 - eps_min) / 0.25)) + 1)
     for ep in np.linspace(eps_min, 14.0, n_coarse):
-        res = evaluate_flipflop_cell(z_nm, r_xy_nm, float(ep), z_r_ohm, q_l, s_eps_uev, f_r_ghz, f_r_ghz)
+        res = evaluate_flipflop_cell(
+            z_nm, r_xy_nm, float(ep), z_r_ohm, q_l, s_eps_uev, f_r_ghz, f_r_ghz,
+            include_valley_interference=include_valley_interference,
+            valley_phase_rad=valley_phase_rad,
+            gamma_phi_nuc_ghz=gamma_phi_nuc_ghz,
+        )
         if res is not None:
             sc = key_fn(res)
             if sc > best_score:
@@ -257,7 +304,12 @@ def optimize_cell_dc_bias(
     lo = max(eps_min, best.eps_ghz - 0.30)
     hi = min(14.0, best.eps_ghz + 0.30)
     for ep in np.linspace(lo, hi, 25):
-        res = evaluate_flipflop_cell(z_nm, r_xy_nm, float(ep), z_r_ohm, q_l, s_eps_uev, f_r_ghz, f_r_ghz)
+        res = evaluate_flipflop_cell(
+            z_nm, r_xy_nm, float(ep), z_r_ohm, q_l, s_eps_uev, f_r_ghz, f_r_ghz,
+            include_valley_interference=include_valley_interference,
+            valley_phase_rad=valley_phase_rad,
+            gamma_phi_nuc_ghz=gamma_phi_nuc_ghz,
+        )
         if res is not None:
             sc = key_fn(res)
             if sc > best_score:
@@ -268,7 +320,7 @@ def optimize_cell_dc_bias(
 
 
 def sample_exp124_donors(n_samples: int, delta_z_cap_nm: float, rng: np.random.Generator) -> tuple[np.ndarray, np.ndarray]:
-    """Draw 3D donor coordinates (z_nm, r_xy_nm) from Exp124 5 keV 31P+ BCA straggle + capping."""
+    """Draw 3D donor coordinates (z_nm, r_xy_nm) from legacy Exp92/124 5 keV 31P+ BCA straggle + capping."""
     z_list: list[np.ndarray] = []
     count = 0
     while count < n_samples:
@@ -282,6 +334,104 @@ def sample_exp124_donors(n_samples: int, delta_z_cap_nm: float, rng: np.random.G
     y = rng.normal(0.0, EXP124_SIGMA_XY_NM, size=n_samples)
     r_xy = np.hypot(x, y)
     return z_total, r_xy
+
+
+def sample_iradina_5kev_donors(n_samples: int, delta_z_cap_nm: float, rng: np.random.Generator) -> tuple[np.ndarray, np.ndarray]:
+    """Draw 3D donor coordinates (z_nm, r_xy_nm) from actual iradina 1.2.3 5 keV 3D BCA + Exp124 equip (OBS-047)."""
+    z_list: list[np.ndarray] = []
+    count = 0
+    while count < n_samples:
+        batch = rng.normal(IRADINA_5KEV_RP_NM, IRADINA_5KEV_SIGMA_Z_NM, size=max(n_samples * 2, 256))
+        batch = batch[batch > EXP124_Z_MIN_IMP_NM]
+        z_list.append(batch)
+        count += len(batch)
+    z_imp = np.concatenate(z_list)[:n_samples]
+    z_total = z_imp + delta_z_cap_nm
+    x = rng.normal(0.0, IRADINA_5KEV_SIGMA_XY_NM, size=n_samples)
+    y = rng.normal(0.0, IRADINA_5KEV_SIGMA_XY_NM, size=n_samples)
+    r_xy = np.hypot(x, y)
+    return z_total, r_xy
+
+
+def run_iradina_valley_audit(
+    delta_z_caps_nm: list[float] | None = None,
+    n_donors: int = 2000,
+    z_r_ohm: float = 3000.0,
+    q_l: float = 2e5,
+    s_eps_uev: float = ROUTE_C_S_EPS_NOM_UEV,
+    f_r_ghz: float = 5.0,
+    seed: int = 13199,
+) -> dict[str, Any]:
+    """Quantify true p_ff(C>=100) and median g_eff under iradina 5 keV + Si(001) 2-valley interference (OBS-047)."""
+    if delta_z_caps_nm is None:
+        delta_z_caps_nm = [4.0, 8.0]
+    rng = np.random.default_rng(seed)
+    z_exp92, r_exp92 = sample_exp124_donors(n_donors, 0.0, rng)
+    z_ira, r_ira = sample_iradina_5kev_donors(n_donors, 0.0, rng)
+    phi_step = rng.uniform(0.0, math.pi, size=n_donors)
+
+    def _eval_mode(z_base: np.ndarray, r_base: np.ndarray, dz: float, valley: bool) -> dict[str, Any]:
+        z_arr = z_base + dz
+        c_arr = np.zeros(n_donors, dtype=np.float64)
+        g_arr = np.zeros(n_donors, dtype=np.float64)
+        shallow_frac = float(np.mean(z_arr < Z_MIN_DOUBLE_WELL_NM))
+        for i in range(n_donors):
+            rt = optimize_cell_dc_bias(
+                float(z_arr[i]), float(r_base[i]),
+                z_r_ohm=z_r_ohm, q_l=q_l, s_eps_uev=s_eps_uev, f_r_ghz=f_r_ghz,
+                objective="m_res",
+                include_valley_interference=valley,
+                valley_phase_rad=float(phi_step[i]) if valley else 0.0,
+            )
+            if rt is not None:
+                c_arr[i] = rt.cooperativity
+                g_arr[i] = rt.g_eff_mhz
+        m100 = c_arr >= 100.0
+        return {
+            "delta_z_cap_nm": float(dz),
+            "valley_interference": bool(valley),
+            "mean_z_nm": float(np.mean(z_arr)),
+            "frac_below_8p5nm_double_well": shallow_frac,
+            "yield_C_ge_100": float(np.mean(m100)),
+            "median_g_eff_mhz_all": float(np.median(g_arr)),
+            "median_g_eff_mhz_certified": float(np.median(g_arr[m100])) if np.any(m100) else 0.0,
+            "median_C_all": float(np.median(c_arr)),
+        }
+
+    rows: dict[str, Any] = {}
+    for dz in delta_z_caps_nm:
+        kdz = f"cap_{dz:g}nm"
+        rows[f"exp92_smooth_{kdz}"] = _eval_mode(z_exp92, r_exp92, dz, valley=False)
+        rows[f"exp92_valley2_{kdz}"] = _eval_mode(z_exp92, r_exp92, dz, valley=True)
+        rows[f"iradina5keV_smooth_{kdz}"] = _eval_mode(z_ira, r_ira, dz, valley=False)
+        rows[f"iradina5keV_valley2_{kdz}"] = _eval_mode(z_ira, r_ira, dz, valley=True)
+
+    p_ff_honest = rows["iradina5keV_valley2_cap_8nm"]["yield_C_ge_100"]
+    # Downstream BB_144 (288-cell, N_cand=8) and BB_288 (576-cell, N_cand=9) impact at f*=1.5%+2MV/m
+    fnr = 0.002008
+    p_slot_unfilt = 0.7750 * p_ff_honest * (1.0 - fnr)
+    p_slot_ddrf = 0.5400 * p_ff_honest * (1.0 - fnr)
+    return {
+        "n_donors": int(n_donors),
+        "s_eps_uev": float(s_eps_uev),
+        "q_l": float(q_l),
+        "z_r_ohm": float(z_r_ohm),
+        "iradina_5keV_params_nm": {
+            "Rp_nm": IRADINA_5KEV_RP_NM,
+            "sigma_z_nm": IRADINA_5KEV_SIGMA_Z_NM,
+            "sigma_xy_nm": IRADINA_5KEV_SIGMA_XY_NM,
+        },
+        "regimes": rows,
+        "honest_p_ff_iradina_8nm_valley2": float(p_ff_honest),
+        "downstream_qldpc_impact_at_f1p5_Ez2MVm": {
+            "p_slot_unfiltered_bath_x_honest_pff": float(p_slot_unfilt),
+            "bb144_Ncand8_yield_pct_unfiltered_bath": round(100.0 * ((1.0 - (1.0 - p_slot_unfilt) ** 8) ** 288), 3),
+            "bb288_Ncand9_yield_pct_unfiltered_bath": round(100.0 * ((1.0 - (1.0 - p_slot_unfilt) ** 9) ** 576), 3),
+            "p_slot_ddrf6893_bath_x_honest_pff": float(p_slot_ddrf),
+            "bb144_Ncand8_yield_pct_ddrf6893": round(100.0 * ((1.0 - (1.0 - p_slot_ddrf) ** 8) ** 288), 5),
+            "bb288_Ncand9_yield_pct_ddrf6893": round(100.0 * ((1.0 - (1.0 - p_slot_ddrf) ** 9) ** 576), 5),
+        },
+    }
 
 
 def run_capping_and_tuning_sweep(

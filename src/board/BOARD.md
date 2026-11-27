@@ -17,10 +17,10 @@ Kapsam: BOM `S3.1/S3.2/S3.3` + `S2.4` FPGA sayım arayüzü (`DESIGN.md v3.0`, `
 |---|---|---|---|
 | HV Bias Filtresi | `RBIAS_BULK/CBIAS_BULK`, `RBIAS{ch}/CBIAS{ch}` | `{Pasif-COTS}` | `-30 V` ortak besleme → `100 kΩ/100 nF` + kanal başı `10 MΩ/10 nF` |
 | Piksel Diyot | `D0..D7` | `IBIC_PIXEL_DIODE_C0p5` `{Özel-Üretim}` | `C_det ≤ 0,5 pF` koruma halkalı Si p-i-n piksel diyot (`η ≥ 0,99` penceresi `C_det ≤ 1,5 pF`) |
-| CSA (İlk Kademe, `100 K`) | `U0A..U7A`, `CF`, `RF` | **`LTC6268`** `{Aday-COTS}` | Birim-kazanç kararlı FET op-amp (`GBP=500 MHz`, `C_in=0,45 pF`, `±2,5 V`); `Cf=0,25 pF`, **`Rf=1 GΩ`** (`1G_THICKFILM`, `τ_f=250 µs`); `IN+ = AGND` |
-| CR-RC Aktif Şekillendirici | `CS`, `RS1`, `U0B..U7B`, `RG1/RG2`, `RS2`, `CP` | **`ADA4817-1`** `{Aday-COTS}` | `GBP=1,05 GHz`; **`CS=CP=600 pF`** (`600pF_C0G_1pct`), `RS1=RS2=2,00 kΩ` (**`τ_s = 1,2 µs`** `≪ 15 ms` atış); `RG1=100 Ω`, `RG2=13,5 kΩ` (`G_stage=136 →` balistik `1/e` sonrası net tepe kazancı `×50,0`) |
+| CSA (İlk Kademe, `100 K`) | `U0A..U7A`, `CF`, `RF` | **`LTC6268IS8`** `{Aday-COTS}` | S8 pin düzeni (`1:~SHDN=VCCA, 2:V+, 3:OUT, 4:V-, 5/8:NC, 6:-IN, 7:+IN=AGND`); `GBP=500 MHz`, `C_in=0,45 pF`, `±2,5 V`; `Cf=0,25 pF`, **`Rf=1 GΩ`** (`τ_f=250 µs`) |
+| CR-RC Aktif Şekillendirici | `CS`, `RS1`, `U0B..U7B`, `RG1/RG2`, `RS2`, `CP` | **`ADA4817-1ARDZ`** `{Aday-COTS}` | SOIC-8-EP (`1:FB=SHP_GAIN, 8:PD=VCCA, EP=VSSA`); `GBP=1,05 GHz`; **`CS=CP=600 pF`**, `RS1=RS2=2,00 kΩ` (**`τ_s = 1,2 µs`**); `RG1=100 Ω`, `RG2=13,5 kΩ` (`G_stage=136 → ×50,0`) |
 | Kanal-Başı Eşik DAC | `UDAC`, `RDAC`, `CDAC` | **`DAC8568`** `{Aday-COTS}` | 8-kanallı 16-bit SPI DAC + kanal başı `1 kΩ / 100 nF` RC filtre (`f_c=1,59 kHz`); yükselen kenar `V_DAC = V_thr − 0,5·V_hys` |
-| Histerezisli Karşılaştırıcı | `U0C..U7C`, `RHYS1/2`, `RTERM` | **`TLV3501`** `{Aday-COTS}` | `t_pd = 4,5 ns`, `+3,3 V` CMOS; `RHYS1=1 kΩ, RHYS2=1 MΩ` (`3,3 mV` histerezis); `49,9 Ω` seri sonlandırma → `JFPGA` `COUNT_HIT[0:7]` |
+| Histerezisli Karşılaştırıcı | `U0C..U7C`, `RHYS1/2`, `RTERM` | **`TLV3501AIDBVR`** `{Aday-COTS}` | TI SBOS321 SOT-23-6 DBV (`1:-IN=THRESH, 2:V-=DGND, 3:+IN=CMP_INP, 4:V+=VCCD, 5:OUT=CMP_OUT, 6:SHDN=DGND`); `RHYS1=1 kΩ, RHYS2=3,3 MΩ` (`3,0 mV < V_THR` kilitlenmesiz histerezis); `49,9 Ω` seri sonlandırma → `JFPGA` `COUNT_HIT[0:7]` |
 | Güç & Yıldız Toprak | `JPWR`, `R_STAR`, `CBULK*`, `CD*` | `{Pasif-COTS}` | `VCCA (+2,5 V)`, `VSSA (−2,5 V)`, `VCCD (+3,3 V)`, `AGND ↔ DGND` (`R_STAR = 0 Ω`), her aktif IC'de `100 nF C0G` dekuplaj |
 
 ## 3. Exp127 Analitik/SPICE Benzeri Devre Modeli: Sinyal, Gürültü & Verim Bütçesi

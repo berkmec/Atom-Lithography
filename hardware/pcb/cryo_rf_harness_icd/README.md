@@ -8,15 +8,15 @@
 
 ## 2. KiCad 8 Bulkhead Distribution PCB (`cryo_rf_bias_panel`)
 - **Stackup:** 4-layer Rogers RO4350B (`er=3.48`, `0.254 mm` outer cores), `170 x 120 mm`
-- **Verification:** **`0` ERC errors**, **`0` ERC warnings**, **`0` DRC errors**, SCH/PCB parity = **`True`**, **`routed_net_count = 59/59`**, **`unrouted_net_count = 0`**, **`unconnected_items = 0`**, **`track_dangling_count = 0`** (`278` segments, `74` vias)
-- **Contents:** `94` components, `59` nets: `8x` 4 K InP HEMT bias channels, `4x` 20 mK TWPA flux-bias + Eccosorb CR-124 LPF lanes, `4x` `50.00 Ohm` controlled-impedance Rogers RO4350B RF/rf-SET bias-tee monitor lanes (`32` Z0 checks PASS), and `S6.3-04` `400 V` quench voltage-tap isolation bay protected by a `2.5 x 92 mm` milled `Edge.Cuts` air-slot (`1` HV checks PASS).
+- **Verification:** **`0` ERC errors**, **`0` ERC warnings**, **`0` DRC errors**, SCH/PCB parity = **`True`**, **`routed_net_count = 67/67`**, **`unrouted_net_count = 0`**, **`unconnected_items = 0`**, **`track_dangling_count = 0`** (`316` segments, `95` vias)
+- **Contents:** `115` components, `67` nets: `8x` 4 K InP HEMT bias channels, `4x` 20 mK TWPA flux-bias + Eccosorb CR-124 LPF lanes, `4x` `50.00 Ohm` controlled-impedance Rogers RO4350B RF/rf-SET bias-tee monitor lanes (`8` Z0 checks PASS), and `S6.3-04` `400 V` quench voltage-tap isolation bay protected by a `2.5 x 92 mm` milled `Edge.Cuts` air-slot (`1` HV checks PASS).
 
 ## 3. Live `ngspice-47` Simulation Verification
 | Deck | BOM ID | Key Measured Metrics | Cross-Check Parity | Verdict |
 |---|---|---|---|---|
-| `qram_chebyshev_50_to_3k.cir` | `S9.4-02` | `max |S11|(4-8 GHz) = -39.5549 dB` (`<= -20 dB`), `min |S21| = -0.000723 dB` (`> -0.2 dB`), `BW(-20 dB) = 4.8154 GHz` (`3.5923-8.4077 GHz`) | Exact ABCD `|dS11| = 0.002 dB` | **PASS** |
-| `magnet_quench_dump_1p563ohm.cir` | `S6.3-04` | `V_peak = 396.694 V` (`<= 400 V`), `tau = 0.37032 s` (`~0.370 s`), `E_dump = 18.817 / 18.9408 kJ` (**`99.347% >= 99%`**), `T_dump_peak = 38.05 C` | Analytical LR `|dtau| = 0.014%` | **PASS** |
-| `rf_set_tank_biastee.cir` | `S6.7-01` | `f_res = 321.5 MHz` (`250-400 MHz`), `|Gamma(50k)| = 0.08215`, `|Gamma(200k)| = 0.47807`, `Delta|Gamma| = 0.39592`, DC-bias RF isolation = **`113.23 dB`** (worst `200-450 MHz`: `98.46 dB > 40 dB`) | Python MNA `|dGamma| = 0.0` | **PASS** |
+| `qram_chebyshev_50_to_3k.cir` | `S9.4-02` | `max |S11|(4-8 GHz) = -24.4482 dB` (`<= -20 dB`), `min |S21| = -0.016282 dB` (`> -0.2 dB`), `BW(-20 dB) = 4.5181 GHz` (`3.7412-8.2592 GHz`) | Exact ABCD `|dS11| = 0.0 dB` | **PASS** |
+| `magnet_quench_dump_1p563ohm.cir` | `S6.3-04` | `V_peak = 398.746 V` (`<= 400 V`), `tau = 0.37023 s` (`~0.370 s`), `E_dump = 18.8243 / 18.9408 kJ` (**`99.385% >= 99%`**), `T_dump_peak = 38.06 C` | Analytical LR `|dtau| = 0.011%` | **PASS** |
+| `rf_set_tank_biastee.cir` | `S6.7-01` | `f_res = 321.0 MHz` (`250-400 MHz`), `|Gamma(50k)| = 0.07782`, `|Gamma(200k)| = 0.48068`, `Delta|Gamma| = 0.40286`, DC-bias RF isolation = **`113.57 dB`** (worst `200-450 MHz`: `98.69 dB > 40 dB`) | Python MNA `|dGamma| = 0.0` | **PASS** |
 
 ## 4. 6-Stage Thermal & Attenuation Reconciliation (`Exp125` / `Exp140` / `Exp142`)
 - **Staged RF Input Attenuation:** `-20 dB (4 K) / -10 dB (800 mK Still) / -10 dB (100 mK CP) / -20 dB (20 mK MXC)` (`-60 dB` total, cascaded `n_th(6 GHz, 20 mK) = 0.00505`).

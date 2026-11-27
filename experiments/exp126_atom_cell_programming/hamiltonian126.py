@@ -24,6 +24,9 @@ A0_NM = 0.5431
 A_T_NM = 2.5
 B_L_NM = 1.4
 K0_INV_NM = 0.844 * 2.0 * math.pi / A0_NM
+A004_HM5962_HZ = 5.962e6            # Physical Hale & Mieher (1969) A(0,0,4) = 5.962 MHz (OBS-029 fix)
+A004_LEGACY_KL_HZ = 2.981e6         # Legacy Exp25/59/62 double-halved calibration (archived for audit parity only)
+DDRF_MIN_GAP_WALL_HZ = 6893.0       # Exp126 DDRF crowding wall: registers with min_gap < 6.893 kHz fail bare GAUSS500
 GAMMA_N_HZ_PER_T = 8.465e6          # 29Si nuclear gyromagnetic ratio (Hz/T)
 D_NN_HZ_NM3 = 4.748                 # Secular 29Si-29Si dipolar prefactor (Hz * nm^3)
 MU0_OVER_4PI = 1e-7
@@ -60,7 +63,7 @@ def t2e_bath_s(abundance_pct: float) -> float:
 # ---------------------------------------------------------------------------
 # Diamond lattice + Kohn-Luttinger hyperfine atlas (cached singleton)
 # ---------------------------------------------------------------------------
-_ATLAS_CACHE: Optional[Tuple[np.ndarray, Dict[str, np.ndarray]]] = None
+_ATLAS_CACHE: Dict[Tuple[float, str], Tuple[np.ndarray, Dict[str, np.ndarray]]] = {}
 
 
 def _kl_envelope_S(r_nm: np.ndarray) -> np.ndarray:
@@ -75,11 +78,28 @@ def _kl_envelope_S(r_nm: np.ndarray) -> np.ndarray:
     return out
 
 
-def get_silicon_atlas(radius_nm: float = 6.0) -> Tuple[np.ndarray, Dict[str, np.ndarray]]:
-    """Return (SITES [N,3] nm, A_BY_DIR dict of Hz arrays), exact match to Exp25/42/62."""
-    global _ATLAS_CACHE
-    if _ATLAS_CACHE is not None and abs(radius_nm - 6.0) < 1e-12:
-        return _ATLAS_CACHE
+def get_silicon_atlas(
+    radius_nm: float = 6.0,
+    hyperfine_scale: str = "hm5962",
+) -> Tuple[np.ndarray, Dict[str, np.ndarray]]:
+    """Return (SITES [N,3] nm, A_BY_DIR dict of Hz arrays).
+
+    hyperfine_scale:
+      - "hm5962" (default, OBS-029 fix): physical Hale-Mieher A(0,0,4) = 5.962 MHz
+        (fixes the Exp25/59/62 double-halving bug where a_HM/2 = 2.981 MHz was plugged into |nu_n +- A/2|).
+      - "legacy_kl_2p981MHz": archived Exp25/42/62 scaling (A(0,0,4) = 2.981 MHz) solely for
+        bit-for-bit reproduction of archived Exp62 finalist JSON indices.
+    """
+    cache_key = (round(float(radius_nm), 6), str(hyperfine_scale))
+    if cache_key in _ATLAS_CACHE:
+        return _ATLAS_CACHE[cache_key]
+
+    if hyperfine_scale == "hm5962":
+        a004_target = A004_HM5962_HZ
+    elif hyperfine_scale == "legacy_kl_2p981MHz":
+        a004_target = A004_LEGACY_KL_HZ
+    else:
+        raise ValueError(f"Unknown hyperfine_scale: {hyperfine_scale}")
 
     basis = np.array([
         [0.0, 0.0, 0.0], [0.0, 0.5, 0.5], [0.5, 0.0, 0.5], [0.5, 0.5, 0.0],
@@ -92,7 +112,7 @@ def get_silicon_atlas(radius_nm: float = 6.0) -> Tuple[np.ndarray, Dict[str, np.
     dists = np.linalg.norm(pts, axis=1)
     sites = pts[(dists > 1e-6) & (dists <= radius_nm)]
 
-    c_cal = 2.981e6 / float(_kl_envelope_S(np.array([[0.0, 0.0, A0_NM]]))[0] ** 2)
+    c_cal = a004_target / float(_kl_envelope_S(np.array([[0.0, 0.0, A0_NM]]))[0] ** 2)
     a_iso = c_cal * (_kl_envelope_S(sites) ** 2)
 
     r_m = np.linalg.norm(sites, axis=1) * 1e-9
@@ -103,9 +123,26 @@ def get_silicon_atlas(radius_nm: float = 6.0) -> Tuple[np.ndarray, Dict[str, np.
         cos_th = r_hat @ bdir
         a_by_dir[name] = a_iso + dip_scale * (3.0 * cos_th * cos_th - 1.0)
 
-    if abs(radius_nm - 6.0) < 1e-12:
-        _ATLAS_CACHE = (sites, a_by_dir)
+    _ATLAS_CACHE[cache_key] = (sites, a_by_dir)
     return sites, a_by_dir
+
+
+def audit_legacy_kl_vs_hm5962(radius_nm: float = 6.0) -> Dict[str, float]:
+    """Quantify the Exp25/126 double-halving bug (2.981 MHz vs 5.962 MHz) and strong-site counts."""
+    sites, a_leg = get_silicon_atlas(radius_nm=radius_nm, hyperfine_scale="legacy_kl_2p981MHz")
+    _, a_hm = get_silicon_atlas(radius_nm=radius_nm, hyperfine_scale="hm5962")
+    idx_004 = int(np.argmin(np.linalg.norm(sites - np.array([0.0, 0.0, A0_NM]), axis=1)))
+    a_leg_p = a_leg[PRIMARY_DIR]
+    a_hm_p = a_hm[PRIMARY_DIR]
+    return {
+        "n_sites": int(len(sites)),
+        "legacy_kl_a004_MHz": float(a_leg_p[idx_004] / 1e6),
+        "hm5962_a004_MHz": float(a_hm_p[idx_004] / 1e6),
+        "hm5962_over_legacy_a004_ratio": float(a_hm_p[idx_004] / a_leg_p[idx_004]),
+        "legacy_kl_n_strong_ge_10kHz": int(np.sum(np.abs(a_leg_p) >= 10e3)),
+        "hm5962_n_strong_ge_10kHz": int(np.sum(np.abs(a_hm_p) >= 10e3)),
+        "ddrf_min_gap_wall_Hz": float(DDRF_MIN_GAP_WALL_HZ),
+    }
 
 
 def dipolar_J_matrix(positions_nm: np.ndarray, bdir: Optional[np.ndarray] = None) -> np.ndarray:
@@ -489,8 +526,9 @@ def build_cell_from_globals(
     source: str,
     verify_lie: bool = True,
     realization_seed: int = 0,
+    hyperfine_scale: str = "hm5962",
 ) -> CellSpec:
-    sites, a_by_dir = get_silicon_atlas()
+    sites, a_by_dir = get_silicon_atlas(hyperfine_scale=hyperfine_scale)
     A_all = a_by_dir[PRIMARY_DIR]
     k4 = [int(x) for x in k4_globals]
     k8 = [int(x) for x in k8_globals]
@@ -534,8 +572,12 @@ def build_cell_from_globals(
     )
 
 
-def load_exp62_finalists(verify_lie: bool = True) -> Dict[str, CellSpec]:
-    """Load the exact four Exp59/Exp62 epitaxial bath finalists (F0.5, F1, F2, F4.7)."""
+def load_exp62_finalists(verify_lie: bool = True, hyperfine_scale: str = "legacy_kl_2p981MHz") -> Dict[str, CellSpec]:
+    """Load the four Exp59/Exp62 epitaxial bath finalists (F0.5, F1, F2, F4.7).
+
+    Defaults to legacy_kl_2p981MHz solely for archived Exp62 index parity; pass
+    hyperfine_scale="hm5962" for physical 5.962 MHz Hale-Mieher couplings (OBS-029).
+    """
     root = repo_root()
     b59 = json.loads((root / "results/exp59/bath59.json").read_text(encoding="utf-8"))["cells"]
     b62 = json.loads((root / "results/exp62/bath62.json").read_text(encoding="utf-8"))["cells"]
@@ -549,7 +591,7 @@ def load_exp62_finalists(verify_lie: bool = True) -> Dict[str, CellSpec]:
     out["F0.5"] = build_cell_from_globals(
         "F0.5", 0.5, k4_05, fin05["selected_global"], fin05["cloud_global_indices"],
         source="results/exp59/bath59.json + finalist59.json", verify_lie=verify_lie,
-        realization_seed=int(fin05["realization"]),
+        realization_seed=int(fin05["realization"]), hyperfine_scale=hyperfine_scale,
     )
     # F1, F2, F4.7
     meta = [
@@ -562,6 +604,7 @@ def load_exp62_finalists(verify_lie: bool = True) -> Dict[str, CellSpec]:
         out[key] = build_cell_from_globals(
             key, f_pct, k4, fin["selected_global"], fin["cloud_global_indices"],
             source=src, verify_lie=verify_lie, realization_seed=int(fin["realization"]),
+            hyperfine_scale=hyperfine_scale,
         )
     return out
 
@@ -569,19 +612,19 @@ def load_exp62_finalists(verify_lie: bool = True) -> Dict[str, CellSpec]:
 def sample_certified_f1_cells(
     n_cells: int = 16,
     abundance_pct: float = 1.0,
-    min_gap_hz: float = 5_000.0,
+    min_gap_hz: float = DDRF_MIN_GAP_WALL_HZ,
     min_abs_A_hz: float = 150_000.0,
     max_abs_J_hz: float = 100.0,
     min_pair_dist_nm: float = 0.30,
     include_exp62_f1_first: bool = True,
+    hyperfine_scale: str = "hm5962",
 ) -> List[CellSpec]:
     """Sample n_cells distinct certified heterogeneous silicon atom cells from f=1% epitaxial bath.
 
-    Each cell is drawn from a fresh independent random 29Si cloud (M=452 sites on the 45,214-site
-    diamond lattice), screened through the exact Exp48/59/61 certification gates (min_gap >= 5 kHz,
-    min_pair_dist >= 0.30 nm, max |J_ij| <= 100 Hz, K=8 Vandermonde rank 8, K=4 active Lie rank 1023/1023).
+    Enforces Exp126 DDRF crowding filter min_gap_hz >= 6893 Hz (OBS-029) and physical
+    HM5962 5.962 MHz hyperfine calibration by default.
     """
-    sites, a_by_dir = get_silicon_atlas()
+    sites, a_by_dir = get_silicon_atlas(hyperfine_scale=hyperfine_scale)
     A_all = a_by_dir[PRIMARY_DIR]
     n_sites = len(sites)
     m_cloud = int(round(abundance_pct / 100.0 * n_sites))

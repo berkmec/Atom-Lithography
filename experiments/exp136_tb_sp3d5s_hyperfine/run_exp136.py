@@ -409,6 +409,21 @@ def main() -> None:
                 },
             },
         },
+        "ab_initio_uncertainty_and_stark_convergence_audit": {
+            "exp129_vokl6_abinit_a004_MHz": float(vokl_129["abinitio_A004_MHz_eta186"]),
+            "exp136_sp3d5s_abinit_a004_MHz": float(sh_primary_cp["abinitio_a004_MHz"]),
+            "hale_mieher_1969_target_a004_MHz": 5.962,
+            "inter_model_spread_ratio": round(float(vokl_129["abinitio_A004_MHz_eta186"]) / float(sh_primary_cp["abinitio_a004_MHz"]), 3),
+            "empirical_rescaling_to_HM5962": round(5.962 / float(sh_primary_cp["abinitio_a004_MHz"]), 4),
+            "tb4_honest_verdict": "FAIL" if not verdicts["TB4_MULTISHELL_ENDOR_BENCHMARK"] else "PASS",
+            "tb5_honest_verdict": "FAIL" if not verdicts["TB5_STARK_SHIFT_AND_TUNING"] else "PASS",
+            "stark_finite_box_eta_A_um2_per_V2": stark["finite_box_eta_A_scaling"],
+            "stark_bulk_rahman2007_eta_A_um2_per_V2": -2.78e-3,
+            "stark_n20_suppression_below_bulk_x": round(abs(-2.78e-3 / float(stark["eta_A_fit_um2_per_V2"])), 2),
+            "stark_convergence_requirement": "Supercell >=40 nm (N>=90) or hybrid TB-core + continuum 2p/3p variational basis required to converge eta_A to bulk -2.78e-3 um^2/V^2.",
+            "ddrf_6893Hz_mandatory_filter_note": "Downstream QEC N_cand sizing MUST use yield_and_gap_ge_6893Hz (0.2950 @ f=1.0%, 0.5400 @ f=1.5%+2MV/m, 0.6800 @ f=2.0%+3MV/m), not unfiltered GAUSS500 yield.",
+            "conservative_alpha1_T2e_note": "Use alpha=1 (1/f) N^0.5 coherence (7.07 ms @ f=1.5%, 5.42 ms @ f=2.0%) rather than alpha=2 N^(2/3) (14.135 ms) for QEC idle budgets.",
+        },
     }
 
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)

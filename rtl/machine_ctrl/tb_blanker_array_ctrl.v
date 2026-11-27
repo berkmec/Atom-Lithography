@@ -231,7 +231,7 @@ module tb_blanker_array_ctrl;
 
         repeat (4) @(posedge clk);
         rst_n = 1'b1;
-        @(posedge clk);
+        repeat (4) @(posedge clk);
 
         // Verify power-on safe blanked state
         if (!safe_blanked || tile_beam_en !== 16'h0000) begin
@@ -272,18 +272,18 @@ module tb_blanker_array_ctrl;
             errors = errors + 1;
         end
 
-        // 4. Sticky tile done/abort aggregation test
+        // 4. Sticky tile done/abort aggregation test (allow 2-FF CDC sync latency)
         @(negedge clk);
         tile_done_in  = 16'h00FF;
         tile_abort_in = 16'h0004;
-        @(posedge clk);
+        repeat (3) @(posedge clk);
         @(negedge clk);
         tile_done_in  = 16'hFF00;
         tile_abort_in = 16'h0000;
-        @(posedge clk);
+        repeat (3) @(posedge clk);
         @(negedge clk);
         tile_done_in  = 16'h0000;
-        @(posedge clk);
+        repeat (3) @(posedge clk);
         if (tile_done_sticky !== 16'hFFFF || !all_tiles_done) begin
             $display("ERROR: tile_done_sticky aggregation failed: %h", tile_done_sticky);
             errors = errors + 1;

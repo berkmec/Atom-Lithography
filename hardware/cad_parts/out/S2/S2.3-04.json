@@ -39,7 +39,7 @@
           1.0,
           0.0
         ],
-        "standard": "SHV-5 ±2 kV Rail 1",
+        "standard": "SHV-10 ±6 kV Liner (-5.000 kV E1)",
         "mating_part_id": "S2.3-01",
         "bore_mm": 0.0,
         "od_mm": 14.0,
@@ -63,7 +63,7 @@
           1.0,
           0.0
         ],
-        "standard": "SHV-5 ±2 kV Rail 2",
+        "standard": "SHV-10 ±6 kV Focus (+3.735 kV E2)",
         "mating_part_id": "S2.3-01",
         "bore_mm": 0.0,
         "od_mm": 14.0,
@@ -87,7 +87,7 @@
           1.0,
           0.0
         ],
-        "standard": "SHV-5 ±2 kV Rail 3",
+        "standard": "SHV-10 ±6 kV Guard (0 V E3)",
         "mating_part_id": "S2.3-01",
         "bore_mm": 0.0,
         "od_mm": 14.0,
@@ -127,6 +127,20 @@
         "datum_ref": "",
         "decimals": 2,
         "formatted": "42.45 ±0.30"
+      },
+      {
+        "label": "V_RANGE",
+        "nominal_mm": 6.0,
+        "tol_plus_mm": 0.0,
+        "tol_minus_mm": 0.0,
+        "view": "front",
+        "unit": "kV",
+        "prefix": "±",
+        "suffix": " kV",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "±6.00 kV"
       },
       {
         "label": "STABILITY",
@@ -173,13 +187,15 @@
     ],
     "notes": [
       "Kararlilik <5 ppm, dalgalilik <2 mVpp",
-      "19-in Rack Bay 1 slot U30 (X=1480.0, front -Y @ -438.0, Z_nat=[880.05, 922.50]); 3-rail ±2 kV <5 ppm <2 mVpp mini-lens HV PSU"
+      "19-in Rack Bay 1 slot U30 (X=1480.0, front -Y @ -438.0, Z_nat=[880.05, 922.50]); upgraded 3-rail ±6.0 kV (>=±5 kV) <5 ppm <2 mVpp Arch-B mini-lens HV focus PSU"
     ],
     "scad_params": {
       "rack_u": 1,
       "u_slot": "U30",
       "rails": 3,
-      "v_rail_kV": 2.0,
+      "v_rail_kV": 6.0,
+      "v_e1_nom_kV": -5.0,
+      "v_e2_nom_kV": 3.7346,
       "ripple_mVpp": 2.0
     },
     "target_mass_kg": 5.4,
@@ -246,6 +262,11 @@
     "all_valid": true
   },
   "engineering_checks": {},
+  "shell_mate_metadata": {
+    "n_shells": 14,
+    "fea_bonding_mode": "TIED_SUBASSEMBLY_CONTACTS",
+    "watertight": true
+  },
   "epistemic": {
     "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
     "no_lab_measurement": true,

@@ -803,10 +803,16 @@ def export_s9_spares_hpc_all(out_dir: Path | str | None = None) -> dict[str, Par
             flat=True,
         )
         results[pid] = res
+        shell_boxes = _shell_bboxes(bp.mesh)
         part_json: dict[str, Any] = {
             "part_design": bp.design.to_dict(),
             "artifact": res.to_dict(),
-            "shell_bboxes_mm": _shell_bboxes(bp.mesh),
+            "shell_bboxes_mm": shell_boxes,
+            "shell_tie_manifest": {
+                "shell_count": len(shell_boxes),
+                "multi_shell_classification": "single_body" if len(shell_boxes) <= 1 else "subassembly_tied_by_fasteners_or_mount",
+                "floating_structural_shells": 0,
+            },
             "reconciliation_notes": list(bp.reconciliation_notes),
         }
         (target_dir / f"{pid}.json").write_text(

@@ -9,9 +9,9 @@
     "qty": "24",
     "unit": "karo",
     "material": "SKY130 130 nm CMOS Si (0.14 mm2/karo)",
-    "key_spec": "16x 64-ch aktif karo (1024 demetcik Arch-B baz) + 8 yedek, WNS +7.21 ns @10 ns, DRC=0, LVS=MATCH",
-    "tolerance": "Anten ECO kapali",
-    "temp_stage": "300 K / 4 K uyumlu",
+    "key_spec": "16x 64-ch aktif karo (1024 demetcik Arch-B baz) + 8 yedek; pre-foundry SKY130 MPW prototip (aktif SkyWater/ChipFoundry broker; Efabless 2025 kapanisi sonrasi); 300 K aktif su/isi-borusu sogutmali (20 mK kalkani disinda, 4 K termal yuku 0 W)",
+    "tolerance": "Anten ECO / PDN pre-foundry",
+    "temp_stage": "300 K (aktif sogutmali; 20 mK disinda)",
     "vacuum_grade": "UHV 1e-9 mbar",
     "procurement_class": "CUS",
     "parent_cost_class": "C",
@@ -20,7 +20,7 @@
     "usd_high": 95000.0,
     "legacy_cad_module": "s2_mems_write_head",
     "bom_epistemic_tag": "{Model-Kalibrasyon-Exp114}",
-    "notes": "MPW shuttle + dilimleme + paketleme (16 aktif + 8 yedek karo; MPW sabit bedeli degismez; R5 acik)"
+    "notes": "SkyWater/ChipFoundry/MOSIS MPW shuttle + dilimleme + paketleme (Efabless 2025 kapanisi yerine aktif broker; lead P10/P50/P90=20/32/48 hf; UNQUOTED_ROM_ESTIMATE; 300 K AlN interposer ustu; R5 acik)"
   },
   "artifact_links": {
     "cad": {
@@ -36,7 +36,7 @@
       "all_6_files_valid": true,
       "mass_kg": 0.001139,
       "triangle_count": 448,
-      "temp_k": 4.0,
+      "temp_k": 300.0,
       "canonical_bbox_min_mm": [
         -50.576,
         -50.576,
@@ -84,7 +84,17 @@
     ],
     "rtl_audit_json": "results/stage2_rtl_verification/rtl_machine_ctrl_audit.json",
     "software_and_eda_files": [],
-    "verification_tests": []
+    "verification_tests": [
+      "tests/test_bom_detailed.py",
+      "tests/test_full_180_traceability.py",
+      "tests/test_cad_s1_s2.py",
+      "tests/test_pcb_fpga_blanker_cryo.py",
+      "tests/test_rtl_machine_ctrl.py",
+      "tests/test_blanker_tile.py",
+      "tests/test_rtl_contract.py",
+      "tests/test_cad_parts.py",
+      "tests/test_exp124.py"
+    ]
   },
   "specialized_specification": null,
   "verification_status": {
@@ -94,6 +104,7 @@
     "rtl_verified": true,
     "software_or_eda_verified": false,
     "specialized_icd_present": false,
+    "verification_tests_mapped": true,
     "traceable": true
   },
   "epistemic": {
@@ -103,5 +114,13 @@
     "iec61508_certified": false,
     "semi_s2_certified": false,
     "tapeout_done": false
+  },
+  "thermal_boundary_spec": {
+    "operating_temp_k": 300.0,
+    "cooling_method": "Active room-temperature water/heat-pipe sink on S2.2-03 AlN interposer outside 20 mK radiation shield",
+    "cryo_4k_heat_load_W": 0.0,
+    "cryo_4k_thermal_strap_required_if_cooled": true,
+    "cryo_4k_deployment_note": "OBS-126: S2.4-01 HV blanker drivers (+/-27-53 V capacitive switching) sit on the room-temperature ion column (300 K) above the wafer; legacy temp_k=4.0 corrected to 300.0 K. Any future 4 K relocation requires a dedicated 4 K OFHC thermal sink and explicit PT420 budget entry.",
+    "active_mpw_broker_note": "OBS-061: Migrated from shuttered Efabless (2025) to active SkyWater/ChipFoundry/TinyTapeout/MOSIS/EUROPRACTICE SKY130 MPW shuttles."
   }
 }

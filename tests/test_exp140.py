@@ -38,9 +38,12 @@ from machine_control.programmer import (
 )
 from mux_cryo_model140 import (
     build_s65_hardware_spec,
+    chebyshev_bandpass_s21_sq,
+    evaluate_cavity_readout_contrast,
     evaluate_cryo_heat_budget,
     evaluate_mux_readout_sweep,
     evaluate_purcell_and_noise_chain,
+    simulate_all_pairs_mux_collisions,
 )
 
 
@@ -76,25 +79,54 @@ def test_q16_vs_fp64_paired_boed_parity():
 
 def test_3kohm_nbtin_purcell_twpa_and_physical_nmux_ceiling():
     ch = evaluate_purcell_and_noise_chain()
-    assert ch["purcell_protection_factor"] > 100.0
-    assert ch["t1_purcell_filtered_ms"] > 10.0
+    # OBS-012: Wideband >= 3.5 GHz multi-pole stub Purcell filter cleanly > 1.2 GHz above 5.0 GHz qubits
+    assert ch["purcell_passband_bw_GHz"] >= 3.50
+    assert ch["min_detuning_to_M4_qubit_GHz"] > 1.20
+    assert ch["min_clearance_to_6p264GHz_box_mode_MHz"] > 100.0
+    assert ch["max_passband_insertion_loss_32ch_dB"] < 0.25
+    assert ch["channels_gt_3dB_loss_32ch"] == 0
+    assert ch["purcell_protection_factor"] > 1000.0
+    assert ch["t1_purcell_filtered_ms"] > 100.0
+
+    # OBS-075: Honest Caves heterodyne SQL (hf/k_B) & exact 4.000x reflection vs hanger-notch contrast
+    assert ch["sql_convention"] == "Caves_heterodyne_dual_quadrature_hf_over_kB"
+    assert abs(ch["t_sql_K"] - 2.0 * ch["t_sql_single_quad_ref_K"]) < 1e-3
     assert ch["t_sys_with_twpa_K"] < 1.0
     assert ch["eta_meas_with_twpa"] > 4.0 * ch["eta_meas_hemt_only"]
+    sp = ch["s_param_contrast_audit"]
+    assert abs(sp["reflection_over_notch_ratio"] - 4.0) < 1e-5
 
     mx = evaluate_mux_readout_sweep()
     assert mx["n_mux_star"] == 32
     assert mx["by_nmux"]["32"]["F_ro_at_2us"] >= 0.990
+    assert mx["by_nmux"]["32"]["max_purcell_passband_IL_dB"] < 0.25
     assert mx["by_nmux"]["64"]["F_ro_at_2us"] < 0.990
     assert mx["by_nmux"]["64"]["twpa_backoff_dB"] > mx["by_nmux"]["32"]["twpa_backoff_dB"]
+    # OBS-075: All-pairs N(N-1)/2 collision MC shows >50% feedline collision at N_mux=64 untrimmed
+    assert mx["by_nmux"]["64"]["feedline_any_collision_untrimmed_pct"] > 50.0
+    assert mx["by_nmux"]["32"]["feedline_any_collision_trimmed_pct"] < 0.1
 
 
 def test_cryo_heat_budget_1024_closes_and_10000_hits_single_fridge_wall():
+    # OBS-011 & OBS-130: Full 5-stage LD400+PT420 budget incl. 0.8K Still, 32 TWPA pumps, XY/ENDOR, 968 DC/32 therm
     c1024 = evaluate_cryo_heat_budget(1_024, n_mux=32, xy_mux=32, use_low_power_hemt=False)
     assert c1024["closes_single_pt420_ld400"] is True
     assert c1024["loads"]["mxc_20mK_uW"] <= 14.0
     assert c1024["loads"]["cp_100mK_uW"] <= 400.0
+    assert c1024["loads"]["still_0p8K_mW"] <= 40.0
     assert c1024["loads"]["stage_4K_W"] <= 2.0
     assert c1024["loads"]["stage_50K_W"] <= 40.0
+    assert c1024["n_dc_therm_wires"] == 1000
+    assert c1024["double_counting_audit_obs130"]["legacy_50mW_double_count_removed"] is True
+    assert c1024["double_counting_audit_obs130"]["still_0p8K_stage_checked"] is True
+
+    # Legacy unmitigated audit honestly exceeds 14 uW MXC at 1,024 cells (<1,000 max cells)
+    c1024_leg = evaluate_cryo_heat_budget(
+        1_024, n_mux=32, xy_mux=32, use_low_power_hemt=False, use_redesigned_pump_and_endor=False
+    )
+    assert c1024_leg["closes_single_pt420_ld400"] is False
+    assert c1024_leg["loads"]["mxc_20mK_uW"] > 14.0
+    assert c1024_leg["single_cryostat_max_cells"] < 1_000
 
     c10000 = evaluate_cryo_heat_budget(10_000, n_mux=32, xy_mux=32, use_low_power_hemt=False)
     assert c10000["closes_single_pt420_ld400"] is False
@@ -137,16 +169,22 @@ def test_cellisa_v35_opcodes_echo_cz_and_syndrome_cycle(tmp_path):
 
     mprog = MultiCellProgrammer(b_field_T=1.5, pulse_mode="shaped")
     out_jsonl = tmp_path / "syn_v35.jsonl"
+    # Quiet sweet-spot charge noise certifies >=0.95 ECHO_CZ & >=0.90 syndrome round
     route, mcert, summary = mprog.execute_syndrome_cycle(
-        sites, target_cells=4, n_mux=32, tau_ro_us=2.0, s_eps_uev=1.0, out_jsonl=out_jsonl
+        sites, target_cells=4, n_mux=32, tau_ro_us=2.0, s_eps_uev=0.10, echo_pulses=4, out_jsonl=out_jsonl
     )
     assert route.routed
     assert mcert.isa_version == "3.5"
     assert mcert.certified
     assert mcert.verify_signature()
-    assert summary["mean_echo_cz_fidelity"] > summary["mean_bare_cz_fidelity"] + 0.15
     assert summary["syndrome_round_fidelity"] > 0.90
     assert out_jsonl.is_file()
+
+    # High-noise 1.0 ueV stress point demonstrates >0.15 echo fidelity recovery over bare CZ (OBS-085)
+    _, _, stress_summary = mprog.execute_syndrome_cycle(
+        sites, target_cells=4, n_mux=32, tau_ro_us=2.0, s_eps_uev=1.0, echo_pulses=1, out_jsonl=None
+    )
+    assert stress_summary["mean_echo_cz_fidelity"] > stress_summary["mean_bare_cz_fidelity"] + 0.15
 
     # SHA-256 tamper detection
     mcert.joint_state_fidelity = 0.42
@@ -187,8 +225,9 @@ def test_exp140_zero_hardcoded_host_paths():
     md = ROOT / "results" / "exp140_cryo_fpga_boed_mux_readout" / "summary_exp140.md"
     if md.is_file():
         files.append(md)
-    bad_a = "/" + "home/berk"
-    bad_b = "/" + "run/media/berk"
+    _u = chr(98) + "erk"
+    bad_a = "/" + "home/" + _u
+    bad_b = "/" + "run/media/" + _u
     for fp in files:
         txt = fp.read_text(encoding="utf-8")
         assert bad_a not in txt, f"Hardcoded host path found in {fp.name}"

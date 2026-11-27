@@ -17,8 +17,11 @@
     "iec61508_certified": false,
     "semi_s2_certified": false,
     "requires_third_party_assessment": true,
-    "architecture_target": "1oo2D_de_energize_to_trip",
+    "architecture_target": "1oo2D_de_energize_to_trip_live_zero_window",
     "hv_crowbar_rating_V": 22000.0,
+    "o2_trip_threshold_pct": 19.57,
+    "live_zero_trip_mA": 3.54,
+    "discrepancy_blanking_ms": 33.0,
     "rtl_interface": "rtl/machine_ctrl/uhv_interlock_fsm.v"
   },
   "iec61508_certified": false,
@@ -43,40 +46,49 @@
       "passed": true,
       "errors": [],
       "warnings": [],
-      "component_count": 83,
-      "net_count": 74,
+      "component_count": 156,
+      "net_count": 127,
       "sch_pcb_parity_ok": true,
       "details": {
         "power_rails_driven": [
           "GND_A",
           "GND_B",
+          "GND_DIAG",
+          "GND_FPGA",
           "HV_22KV_BUS",
           "HV_CROWBAR_RTN",
           "V_24V_A",
           "V_24V_B",
+          "V_24V_DIAG",
+          "V_3V3_FPGA",
           "V_5V_A",
-          "V_5V_B"
+          "V_5V_B",
+          "V_5V_DIAG"
         ],
         "pwr_flags_found": [
           "GND_A",
           "GND_B",
+          "GND_DIAG",
+          "GND_FPGA",
           "HV_22KV_BUS",
           "HV_CROWBAR_RTN",
           "V_24V_A",
-          "V_24V_B"
+          "V_24V_B",
+          "V_24V_DIAG",
+          "V_3V3_FPGA"
         ],
-        "lib_symbol_count": 45
+        "lib_symbol_count": 58
       }
     },
     "drc": {
       "passed": true,
       "errors": [],
       "warnings": [],
-      "pad_count": 300,
-      "segment_count": 910,
-      "via_count": 203,
-      "zone_count": 4,
-      "air_slot_count": 2,
+      "pad_count": 528,
+      "segment_count": 1728,
+      "via_count": 384,
+      "zone_count": 5,
+      "air_slot_count": 3,
       "min_measured_clearance_mm": 0.145,
       "impedance_checks": [],
       "hv_checks": [
@@ -88,12 +100,12 @@
             "HV_22KV_MID"
           ],
           "working_voltage_v": 22000.0,
-          "standard": "IEC 61010-1 / IPC-2221B (22 kV MG-I Air-Slotted)",
+          "standard": "IEC 61010-1 / IPC-2221B (22 kV MG-I Air-Slotted, Open-Contact Checked)",
           "req_clearance_mm": 30.0,
           "req_creepage_mm": 50.0,
-          "measured_clearance_mm": 43.17,
-          "measured_creepage_mm": 59.631,
-          "worst_pair": "seg:HV_22KV_DUMP(HV_22KV_DUMP) vs seg:GND_B(GND_B) on F.Cu",
+          "measured_clearance_mm": 41.6,
+          "measured_creepage_mm": 50.3784,
+          "worst_pair": "pad:K_CROWBAR_A.1(HV_22KV_BUS) vs pad:K_CROWBAR_A.2(HV_22KV_DUMP) on F.Cu",
           "through_board_ok": true,
           "passed": true
         }
@@ -102,15 +114,15 @@
         "copper_layers": 4,
         "total_thickness_mm": 1.67,
         "board_size_mm": [
-          280.0,
-          175.0
+          312.0,
+          190.0
         ]
       },
-      "routed_net_count": 74,
+      "routed_net_count": 127,
       "unrouted_net_count": 0,
       "unconnected_items": 0,
       "track_dangling_count": 0,
-      "total_multi_pin_nets": 74
+      "total_multi_pin_nets": 127
     },
     "passed": true,
     "epistemic_meta": {
@@ -121,8 +133,11 @@
       "iec61508_certified": false,
       "semi_s2_certified": false,
       "requires_third_party_assessment": true,
-      "architecture_target": "1oo2D_de_energize_to_trip",
+      "architecture_target": "1oo2D_de_energize_to_trip_live_zero_window",
       "hv_crowbar_rating_V": 22000.0,
+      "o2_trip_threshold_pct": 19.57,
+      "live_zero_trip_mA": 3.54,
+      "discrepancy_blanking_ms": 33.0,
       "rtl_interface": "rtl/machine_ctrl/uhv_interlock_fsm.v"
     }
   },
@@ -135,34 +150,48 @@
     "warnings": [],
     "metrics_raw": {
       "hv_nom_init_v": 22000.0,
-      "hv_nom_t50_abs": 0.0192856,
-      "hv_nom_v_at_40m": 0.489683,
-      "hv_nom_energy_j": 0.362999,
-      "hv_nom_t50_ms": 18.28559,
-      "hv_flt_t50_abs": 0.0192856,
-      "hv_flt_v_at_40m": 0.489683,
-      "hv_flt_energy_j": 0.362999,
-      "hv_flt_t50_ms": 18.2856,
-      "sh_i_on": 0.499375,
-      "sh_v_on": 23.97,
-      "sh_v_safe": 1.14935e-05,
-      "sh_i_safe": 2.39885e-07,
-      "sh_t_drop_abs": 0.00182383,
+      "hv_nom_t50_abs": 0.0192858,
+      "hv_nom_v_at_40m": 0.489687,
+      "hv_nom_energy_j": 0.363001,
+      "hv_nom_t50_ms": 18.28577,
+      "hv_flt_t50_abs": 0.0192858,
+      "hv_flt_v_at_40m": 0.489687,
+      "hv_flt_energy_j": 0.363001,
+      "hv_flt_t50_ms": 18.28577,
+      "sh_i_on": 0.499243,
+      "sh_v_on": 23.9637,
+      "sh_v_safe": 1.15076e-09,
+      "sh_i_safe": 2.39766e-11,
+      "sh_t_drop_abs": 0.0018247,
+      "pmos_vgs_on_v": 11.84157,
       "discrep_fault_v": 5.0,
-      "sh_drop_ms": 0.823828,
-      "ow_v_on": 23.9501,
-      "ow_v_safe": 5.76e-06
+      "sh_drop_ms": 0.824698,
+      "skew_blank_peak_v": 1.302576,
+      "ph3_healthy_5ma_v": 5.0,
+      "ph3_openwire_0ma_v": 0.0299701,
+      "ph3_leak_12ma_v": 0.0299701,
+      "o2_healthy_20p9_v": 5.0,
+      "o2_osha_19p0_trip_v": 0.0299701,
+      "ow_v_on": 23.975,
+      "ow_v_safe": 1.152e-05
     },
     "summary": {
-      "hv_22kv_nom_t50v_ms": 18.2856,
+      "hv_22kv_nom_t50v_ms": 18.2858,
       "hv_22kv_nom_energy_j": 0.363,
       "hv_22kv_nom_v_at_40ms_v": 0.4897,
-      "hv_22kv_fault_cha_stuck_open_t50v_ms": 18.2856,
+      "hv_22kv_fault_cha_stuck_open_t50v_ms": 18.2858,
       "hv_22kv_fault_cha_stuck_open_energy_j": 0.363,
-      "shutter_fault_cha_welded_v_safe_v": 1.1e-05,
-      "shutter_fault_cha_welded_drop_ms": 0.8238,
+      "shutter_fault_cha_welded_v_safe_v": 0.0,
+      "shutter_fault_cha_welded_drop_ms": 0.8247,
+      "pmos_vgs_clamped_v": 11.842,
+      "skew_blank_peak_v": 1.303,
       "discrepancy_fault_asserted_v": 5.0,
-      "open_wire_estop_load_v_safe_v": 6e-06
+      "ph3_healthy_5ma_v": 5.0,
+      "ph3_openwire_0ma_v": 0.03,
+      "ph3_leak_12ma_v": 0.03,
+      "o2_healthy_20p9_v": 5.0,
+      "o2_osha_19p0_trip_v": 0.03,
+      "open_wire_estop_load_v_safe_v": 1.2e-05
     }
   },
   "analytical_crosscheck": {
@@ -180,7 +209,11 @@
     "hv_energy_lt_0p5j": true,
     "fault_cha_crowbar_stuck_open_still_safe_lt_50ms": true,
     "fault_cha_relay_welded_shutter_still_safe": true,
+    "pmos_vgs_zener_clamped_lt_15v": true,
+    "skew_blanking_no_nuisance_trip": true,
     "fault_discrepancy_comparator_triggered": true,
+    "live_zero_ph3_openwire_and_leak_trip_safe": true,
+    "osha_o2_19p5pct_trip_safe": true,
     "fault_open_wire_sensor_deenergizes_safe": true
   },
   "all_passed": true

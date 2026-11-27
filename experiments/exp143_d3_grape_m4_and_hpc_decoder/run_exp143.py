@@ -66,9 +66,15 @@ def load_upstream_anchors() -> Dict[str, Any]:
     e126 = json.loads((REPO_ROOT / "results/exp126_atom_cell_programming/exp126.json").read_text())
 
     prim136 = {r["abundance_pct"]: r for r in e136["stage6_isotope_stark_sweep"]["primary_TB_CP_HM5962"]}
-    t2e_f15_ms = float(prim136[1.5]["coherence"]["T2e_XY8_N64_alpha2_ms"])
-    t2e_f10_ms = float(prim136[1.0]["coherence"]["T2e_XY8_N64_alpha2_ms"])
-    gamma_phi_echo_f15_khz = 1.0 / (math.pi * t2e_f15_ms)  # 1 / (pi * 14.135 ms) = 0.02252 kHz!
+    t2e_f15_alpha2_ms = float(prim136[1.5]["coherence"]["T2e_XY8_N64_alpha2_ms"])
+    t2e_f15_alpha1_ms = float(prim136[1.5]["coherence"]["T2e_XY8_N64_alpha1_ms"])
+    t2e_f15_hahn_ms = float(prim136[1.5]["coherence"]["T2e_hahn_ms"])
+    # OBS-085/OBS-110 FIX: A 4-pulse bus gate has N=4 (NOT N=64!) under conservative alpha=1 (1/f) noise:
+    # T2e_N4_alpha1 = T2e_hahn * sqrt(4) = 2 * T2e_hahn (~1.76 ms at f=1.5%), while idle memory uses alpha=1 N=64 (7.07 ms).
+    t2e_f15_ms = t2e_f15_alpha1_ms
+    t2e_f10_ms = float(prim136[1.0]["coherence"]["T2e_XY8_N64_alpha1_ms"])
+    t2e_4pulse_alpha1_ms = t2e_f15_hahn_ms * math.sqrt(4.0)
+    gamma_phi_echo_f15_khz = 1.0 / (math.pi * t2e_4pulse_alpha1_ms)  # Honest 4-pulse alpha=1 rate (~0.180 kHz, NOT N=64 0.0225 kHz!)
 
     s_eps_route_c = float(
         e139["charge_noise_and_exp137_bridge"]["routes"]["route_C_nominal_FG350C_Dit_1p5e10"]["S_eps_ueV_rtHz"]
@@ -187,7 +193,8 @@ def _worker_exp138_mwpm(task: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def scan_portability() -> List[str]:
-    forbidden = ("/" + "home" + "/" + "berk", "/" + "run" + "/" + "media" + "/" + "berk")
+    import re
+    patterns = (re.compile(r"/(?:home|run/media)/[a-zA-Z0-9_-]+"),)
     hits: List[str] = []
     targets = [
         REPO_ROOT / "experiments" / "exp143_d3_grape_m4_and_hpc_decoder",
@@ -203,9 +210,9 @@ def scan_portability() -> List[str]:
             continue
         for f in files:
             txt = f.read_text(errors="ignore")
-            for pat in forbidden:
-                if pat in txt:
-                    hits.append(f"{f.relative_to(REPO_ROOT)} contains '{pat}'")
+            for pat in patterns:
+                if pat.search(txt):
+                    hits.append(f"{f.relative_to(REPO_ROOT)} matches {pat.pattern}")
     return hits
 
 
@@ -229,7 +236,7 @@ def run_exp143() -> Dict[str, Any]:
     for i, p in enumerate(fast_pairs):
         pl_c = optimize_grape_slice_multistart_cuda(
             pair=p,
-            q_r_target=1e6,
+            q_r_target=5e5,
             gamma_phi_nuc_khz=anchors["gamma_phi_nuc_cons_khz"],
             k_harmonics=8,
             n_steps=24,
@@ -296,7 +303,7 @@ def run_exp143() -> Dict[str, Any]:
     t_sim = time.time()
     n_traj = 512
     s_grid = [0.25, anchors["s_eps_route_c_uev"], 0.50]
-    q_grid = [500000.0, 1000000.0]
+    q_grid = [200000.0, 500000.0, 1000000.0]  # Physical NbTiN Q=2e5, 5e5 + horizon target 1e6 (OBS-085)
 
     # Apples-to-apples Exp137 P4 baseline on the exact same 5 fast pairs (N_traj=512/pair)
     p4_baselines: Dict[str, Any] = {}

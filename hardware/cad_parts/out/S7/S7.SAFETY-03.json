@@ -715,6 +715,11 @@
       ]
     ]
   ],
+  "shell_tie_manifest": {
+    "shell_count": 38,
+    "multi_shell_classification": "subassembly_tied_by_fasteners_or_mount",
+    "floating_structural_shells": 0
+  },
   "reconciliation_notes": [
     "Canonical BOM_DETAILED.csv & s_safety_spec.json specify S7.SAFETY-03 = 18.0 kg and S7.SAFETY-05 = 24.0 kg (total S7.SAFETY-01..06 = 355.0 kg)."
   ]

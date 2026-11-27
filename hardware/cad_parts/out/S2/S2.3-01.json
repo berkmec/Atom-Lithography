@@ -105,6 +105,34 @@
         "formatted": "1.760 ±0.002"
       },
       {
+        "label": "GAP_12",
+        "nominal_mm": 0.9,
+        "tol_plus_mm": 0.002,
+        "tol_minus_mm": -0.002,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 3,
+        "formatted": "0.900 ±0.002"
+      },
+      {
+        "label": "GAP_23",
+        "nominal_mm": 0.4,
+        "tol_plus_mm": 0.002,
+        "tol_minus_mm": -0.002,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 3,
+        "formatted": "0.400 ±0.002"
+      },
+      {
         "label": "ARCHB_WD",
         "nominal_mm": 0.25,
         "tol_plus_mm": 0.005,
@@ -201,16 +229,25 @@
     ],
     "notes": [
       "Arch-B 0.50 mm es-adim 32x32=1024 (16.0x16.0 mm < Ø28.0 mm), h=1.76 mm, WD=0.250 mm, Cc=2.660 mm, E_gap=10.60 MV/m, sigma_spot=1.428 nm",
-      "Exp124 locked 3-wafer anodically bonded Arch-B retarding mini-lens (3,072 bores, h=1.760 mm, WD=0.250 mm, Cc=2.660 mm, sigma_spot=1.428 nm)"
+      "Exp124 Arch-B breakdown-safe 3-wafer retarding mini-lens (E1=0.10, gap12=0.90, E2=0.16, gap23=0.40, E3=0.10, WD=0.250 mm; E_gap=9.71 MV/m < 10 MV/m, focus_error=0.005 um @ V_E2=+3734.6 V)"
     ],
     "scad_params": {
       "nx": 32,
       "ny": 32,
       "pitch_mm": 0.5,
       "hole_d_mm": 0.3,
+      "e1_t_mm": 0.1,
+      "gap12_mm": 0.9,
+      "e2_t_mm": 0.16,
+      "gap23_mm": 0.4,
+      "e3_t_mm": 0.1,
       "stack_h_mm": 1.76,
       "wd_mm": 0.25,
-      "e_gap_MV_m": 10.6
+      "v_e1_V": -5000.0,
+      "v_e2_focus_V": 3734.61,
+      "v_e3_V": 0.0,
+      "e_gap_MV_m": 9.71,
+      "focus_error_um": 0.005
     },
     "target_mass_kg": 0.011,
     "epistemic": {
@@ -236,18 +273,18 @@
     "watertight": true,
     "boundary_edges": 0,
     "non_manifold_edges": 0,
-    "signed_volume_mm3": 4246.396217887829,
-    "surface_area_mm2": 26011.58745930084,
-    "mass_kg": 0.00988985679146075,
+    "signed_volume_mm3": 3820.9721100686743,
+    "surface_area_mm2": 29846.930911886946,
+    "mass_kg": 0.008899044044349944,
     "cg_mm": [
-      8.221184766218141e-16,
-      -1.2744803803732054e-15,
-      1.1305333788557037
+      2.7521877120062195e-15,
+      -1.3723746834193176e-15,
+      1.1225995648571578
     ],
     "bbox_min_mm": [
       -30.0,
       -30.0,
-      0.24999999999999997
+      0.25
     ],
     "bbox_max_mm": [
       30.0,
@@ -255,15 +292,15 @@
       2.0100000000000002
     ],
     "inertia_kg_mm2": [
-      2.367145399047415,
-      2.3671453990474176,
-      4.7288552965256665,
-      2.8006523380974537e-16,
-      5.516743427890172e-17,
-      -5.617495298795464e-17
+      2.2437542492438975,
+      2.2437542492439,
+      4.482737060960121,
+      1.62374277579147e-16,
+      3.693547080343816e-17,
+      -6.134912739640627e-19
     ],
-    "triangle_count": 152832,
-    "vertex_count": 70278,
+    "triangle_count": 153216,
+    "vertex_count": 70470,
     "step_valid": true,
     "dxf_valid": true,
     "svg_valid": true,
@@ -324,6 +361,11 @@
         "S2.3-03_dowel_pin_reg": 84.7457627118644
       }
     }
+  },
+  "shell_mate_metadata": {
+    "n_shells": 6,
+    "fea_bonding_mode": "TIED_SUBASSEMBLY_CONTACTS",
+    "watertight": true
   },
   "epistemic": {
     "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",

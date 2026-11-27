@@ -69,6 +69,7 @@ class FactoryReport:
     real_bath_sub_linewidth_warnings: int = 0
     real_bath_a_par_rmse_Hz: float | None = None
     real_bath_b_perp_rmse_Hz: float | None = None
+    false_positive_shots: int = 0
 
 
 class Factory:
@@ -88,10 +89,18 @@ class Factory:
         self.bath_mode = str(bath_mode)
         self.estimate_b_perp = bool(estimate_b_perp)
         self.rng = np.random.default_rng(self.cfg.seed)
-        self.writer = CountedWriter(self.cfg.detector_eta, self.rng)
+        self.writer = CountedWriter(
+            self.cfg.detector_eta,
+            self.rng,
+            false_positive_rate=self.cfg.detector_false_positive_rate,
+        )
         self.spec = Spectrometer(self.cfg.spec_sigma_Hz, self.cfg.blank_prob, self.rng)
         self.selector = selector or StochasticSelector(self.cfg.bath_yield, self.rng)
-        self.dd_ok = dd_is_feasible(self.cfg.abundance_pct, self.cfg.require_both_alpha)
+        # Honor AtlasSelector's physical 29Si abundance when provided
+        self._effective_abundance_pct = float(
+            getattr(self.selector, "abundance_pct", self.cfg.abundance_pct)
+        )
+        self.dd_ok = dd_is_feasible(self._effective_abundance_pct, self.cfg.require_both_alpha)
         self.adaptive_spec = adaptive_spec
         if self.adaptive_spec is None and self.bath_mode == "real_si29":
             from .adaptive_spectroscopy import AdaptiveBOEDSpectroscopy
@@ -136,6 +145,19 @@ class Factory:
         self.spec.sessions += 1
         self._last_failure_kind = None
 
+        # False-positive IBIC trigger aborted write with zero implanted ions -> blank slot
+        if shot.false_positive or shot.implanted == 0:
+            cand = generate_real_si29_bath_spectrum(
+                rng=self.rng,
+                abundance_pct=self._effective_abundance_pct,
+                donor_present=False,
+                b_field_T=self.cfg.b_sample_T,
+                site_indices=None,
+            )
+            self.adaptive_spec.inspect_candidate(cand)
+            self._last_failure_kind = "blank"
+            return None, shot.shots_fired
+
         stray_contaminated = False
         if shot.implanted > 1:
             surv_prob = self.cfg.stray_survival ** (shot.implanted - 1)
@@ -144,10 +166,12 @@ class Factory:
 
         site_indices = None
         donor_present = True
+        atlas_ok = True
         is_stoch = isinstance(self.selector, StochasticSelector)
         if not is_stoch:
-            # Real AtlasSelector: pull exact occupied lattice indices from its deterministic draw
+            # Real AtlasSelector: honor both its selection result and its physical abundance_pct
             _atlas_res = self.selector.attempt()
+            atlas_ok = bool(_atlas_res.success)
             if hasattr(self.selector, "_seed59") and hasattr(self.selector, "n_sites") and hasattr(self.selector, "m"):
                 rng_cloud = np.random.default_rng(
                     self.selector._seed59(self.selector.seed + self.selector.counter - 1)
@@ -155,7 +179,7 @@ class Factory:
                 site_indices = np.sort(
                     rng_cloud.choice(self.selector.n_sites, size=self.selector.m, replace=False)
                 )
-            donor_present = True
+            donor_present = bool(shot.implanted >= 1)
         else:
             p_blank_attempt = max(0.0, min(1.0, (1.0 - self.cfg.bath_yield) * self.cfg.blank_prob))
             if self.rng.random() < p_blank_attempt:
@@ -163,7 +187,7 @@ class Factory:
 
         cand = generate_real_si29_bath_spectrum(
             rng=self.rng,
-            abundance_pct=self.cfg.abundance_pct,
+            abundance_pct=self._effective_abundance_pct,
             donor_present=donor_present,
             b_field_T=self.cfg.b_sample_T,
             site_indices=site_indices,
@@ -172,8 +196,8 @@ class Factory:
             self._real_bath_spin_counts.append(int(cand.metadata.get("n_bath_spins", 0)))
 
         boed_res = self.adaptive_spec.inspect_candidate(cand)
-        if not boed_res.accepted or stray_contaminated:
-            self._last_failure_kind = "blank" if boed_res.classification == "blank" else "consumed"
+        if not atlas_ok or not boed_res.accepted or stray_contaminated:
+            self._last_failure_kind = "blank" if (not donor_present or boed_res.classification == "blank") else "consumed"
             return None, shot.shots_fired
 
         # Record honest localization error and any sub-linewidth leakage against ground-truth bath
@@ -214,6 +238,18 @@ class Factory:
 
         self._last_failure_kind = None
         shot = self.writer.fire_single()
+        # False-positive IBIC trigger aborts write with zero implanted ions -> blank attempt
+        if shot.false_positive or shot.implanted == 0:
+            if self.adaptive_spec is not None:
+                from .adaptive_spectroscopy import CandidateSpectrum
+                self.spec.sessions += 1
+                cand = CandidateSpectrum("blank", False, np.zeros(0, dtype=float), 0.0)
+                self.adaptive_spec.inspect_candidate(cand)
+            else:
+                self.spec.measure(np.zeros(1), donor_present=False)
+            self._last_failure_kind = "blank"
+            return None, shot.shots_fired
+
         is_stoch = isinstance(self.selector, StochasticSelector)
         if is_stoch:
             p_eff = self.writer.effective_yield(self.cfg.bath_yield, self.cfg.stray_survival)
@@ -245,12 +281,14 @@ class Factory:
                 else:
                     # Randomized crowded donor candidate (colliding pair or <8 lines)
                     cand = sample_candidate_population(1, self.rng, p_working=0.0, p_crowded=1.0)[0]
-                self.adaptive_spec.inspect_candidate(cand)
+                boed_fail = self.adaptive_spec.inspect_candidate(cand)
+                self._last_failure_kind = "blank" if boed_fail.classification == "blank" else "consumed"
                 return None, shot.shots_fired
             true_l = np.sort(np.abs(np.asarray(res.true_lines_Hz, dtype=float)))
             cand = CandidateSpectrum("working", True, true_l, compute_min_transition_spacing_Hz(true_l))
             boed_res = self.adaptive_spec.inspect_candidate(cand)
             if not boed_res.accepted:
+                self._last_failure_kind = "blank" if boed_res.classification == "blank" else "consumed"
                 return None, shot.shots_fired
             cal = calibrate(
                 boed_res.estimated_lines_Hz,
@@ -259,6 +297,7 @@ class Factory:
                 flip_min=self.cfg.flip_min,
             )
             if not cal.certified:
+                self._last_failure_kind = "consumed"
                 return None, shot.shots_fired
             return (cal, boed_res.estimated_lines_Hz, None), shot.shots_fired
 
@@ -279,6 +318,7 @@ class Factory:
     def run(self, slots: int, cert_path: str | Path | None = None) -> FactoryReport:
         certs: list[Certificate] = []
         shots0, specs0 = self.writer.total_shots, self.spec.sessions
+        fp0 = self.writer.total_false_positives
         spec_ms0 = self.adaptive_spec.total_time_ms if self.adaptive_spec is not None else 0.0
         aborts0 = self.adaptive_spec.early_aborts if self.adaptive_spec is not None else 0
         rb_spins0 = len(self._real_bath_spin_counts)
@@ -363,6 +403,7 @@ class Factory:
             real_bath_sub_linewidth_warnings=int(rb_sw_run),
             real_bath_a_par_rmse_Hz=rb_a_rmse,
             real_bath_b_perp_rmse_Hz=rb_b_rmse,
+            false_positive_shots=int(self.writer.total_false_positives - fp0),
         )
         if cert_path:
             out = Path(cert_path)
@@ -373,6 +414,8 @@ class Factory:
         return rep
 
     def _analytic_rate(self, exp_attempts_per_register: float, spec_time_s_override: float | None = None) -> float:
+        if not self.dd_ok:
+            return 0.0
         day = 86400.0
         t_spec = self.cfg.spec_time_s if spec_time_s_override is None else float(spec_time_s_override)
         shots_per = exp_attempts_per_register * (1.0 / self.cfg.detector_eta)

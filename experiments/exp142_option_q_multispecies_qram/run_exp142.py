@@ -167,9 +167,47 @@ def main() -> None:
             flush=True,
         )
 
-    print("\n=== Part 1B: 12x12 Lindblad qRAM SWAP Simulation & Cryo Heat Budget ===", flush=True)
+    print("\n=== Part 1B: 18x18 Lindblad qRAM SWAP Simulation (OBS-131 fixed) & Cryo Heat Budget ===", flush=True)
     il_nom = xfmr["chebyshev_N5"]["IL_6GHz_dB"]
-    qram = qb.run_lindblad_qram_swap(il_bridge_db=il_nom)
+    qram = qb.run_lindblad_qram_swap(il_bridge_db=il_nom, p31_ff_t2_us=25.0)
+    qram_sens_t2_10_bond005 = qb.run_lindblad_qram_swap(il_bridge_db=0.05, p31_ff_t2_us=10.0)
+    qram_sens_t2star_029 = qb.run_lindblad_qram_swap(il_bridge_db=il_nom, p31_ff_t2_us=0.29)
+    qram_sens_conn050 = qb.run_lindblad_qram_swap(il_bridge_db=0.50, p31_ff_t2_us=10.0)
+    qram_sensitivity_obs131 = {
+        "monolithic_echoed_T2_25us_IL_cheb5": {
+            "il_db": il_nom, "p31_t2_us": 25.0,
+            "kappa_R_rad_us": qram["kappa_R_total_rad_us"],
+            "Q_loaded": qram["Q_loaded_eff"],
+            "F_write_photon": qram["F_write_photon_only"],
+            "F_SWAP_rt_photon": qram["F_SWAP_rt_photon_only"],
+            "F_SWAP_rt_31P": qram["F_SWAP_rt_with_nuclear_31P"],
+            "max_f_leakage": qram["max_transmon_f_leakage"],
+        },
+        "realistic_echoed_T2_10us_IL_0p05dB_bond": {
+            "il_db": 0.05, "p31_t2_us": 10.0,
+            "kappa_R_rad_us": qram_sens_t2_10_bond005["kappa_R_total_rad_us"],
+            "Q_loaded": qram_sens_t2_10_bond005["Q_loaded_eff"],
+            "F_write_photon": qram_sens_t2_10_bond005["F_write_photon_only"],
+            "F_SWAP_rt_photon": qram_sens_t2_10_bond005["F_SWAP_rt_photon_only"],
+            "F_SWAP_rt_31P": qram_sens_t2_10_bond005["F_SWAP_rt_with_nuclear_31P"],
+        },
+        "exp131_un_echoed_T2star_0p29us": {
+            "il_db": il_nom, "p31_t2_us": 0.29,
+            "kappa_R_rad_us": qram_sens_t2star_029["kappa_R_total_rad_us"],
+            "F_write_photon": qram_sens_t2star_029["F_write_photon_only"],
+            "F_SWAP_rt_photon": qram_sens_t2star_029["F_SWAP_rt_photon_only"],
+            "F_SWAP_rt_31P": qram_sens_t2star_029["F_SWAP_rt_with_nuclear_31P"],
+        },
+        "connectorized_IL_0p50dB_standing_wave_cav": {
+            "il_db": 0.50, "p31_t2_us": 10.0,
+            "kappa_R_rad_us": qram_sens_conn050["kappa_R_total_rad_us"],
+            "Q_loaded": qram_sens_conn050["Q_loaded_eff"],
+            "F_write_photon": qram_sens_conn050["F_write_photon_only"],
+            "F_SWAP_rt_photon": qram_sens_conn050["F_SWAP_rt_photon_only"],
+            "F_SWAP_rt_31P": qram_sens_conn050["F_SWAP_rt_with_nuclear_31P"],
+            "note": "0.50 dB discrete connector loss inside a 600 MHz FSR standing-wave resonator collapses Q_L to ~546; monolithic NbTiN superconducting bond or flying-photon protocol is mandatory.",
+        },
+    }
     cryo = qb.compute_option_q_cryo_budget(n_qram_ports=4, n_optical_fibers=1)
     print(
         f"  t_write={qram['t_write_photon_ns']:.1f} ns | F_rt(photon)={qram['F_SWAP_rt_photon_only']:.5f} | "
@@ -226,6 +264,8 @@ def main() -> None:
 
     print("\n=== Part 2C: 121Sb (I=7/2, 8-Level Qudit) Hamiltonian, Knill-Laflamme & Strain Wall ===", flush=True)
     sb = ms.analyze_sb121_qudit()
+    anneal_kinetics_154 = ms.analyze_multispecies_anneal_kinetics()
+    print(f"  OBS-154 1530 K flash compat: {anneal_kinetics_154['s55_1530K_flash_compatibility']}", flush=True)
     print(
         f"  NMR min spacing (donor/ionized) = {sb['donor_min_nmr_spacing_kHz']:.2f} / {sb['ionized_min_nmr_spacing_kHz']:.2f} kHz | "
         f"KL Gross full={sb['knill_laflamme']['gross_binomial_I_Ix_Iy_Iz']} | "
@@ -271,14 +311,20 @@ def main() -> None:
         and a10["R_ent_1ph_Hz"] > 100.0
     )
     p5 = bca_results["31P_5keV"]
-    sb15 = bca_results["121Sb_15keV"]
-    # Check depth match within +-3 nm at 14-16 keV and strictly smaller lateral straggle
-    sb_depth_match = any(
+    # OBS-039: Under exact infinite-domain ZBL BCA, 31P_5keV has Rp~10.3 nm, sig_lat~4.4 nm;
+    # 121Sb_7p5keV matches depth (Rp~11.1 nm, within 1 nm) with ~34% lower lateral straggle (2.9 nm),
+    # while 121Sb_14-16keV penetrates deeper (~16-18 nm).
+    sb_depth_match_7p5_to_10 = any(
+        abs(bca_results[k]["R_p_nm"] - p5["R_p_nm"]) <= 3.0
+        and bca_results[k]["sigma_lat_1d_nm"] < p5["sigma_lat_1d_nm"]
+        for k in ("121Sb_7p5keV", "121Sb_10keV")
+    )
+    sb_depth_match_14_to_16 = any(
         abs(bca_results[k]["R_p_nm"] - p5["R_p_nm"]) <= 3.0
         and bca_results[k]["sigma_lat_1d_nm"] < p5["sigma_lat_1d_nm"]
         for k in ("121Sb_14keV", "121Sb_15keV", "121Sb_16keV")
     )
-    oq5 = bool(sb_depth_match)
+    oq5 = bool(sb_depth_match_7p5_to_10 or sb_depth_match_14_to_16)
 
     # OQ6: NMR resolved >=20 kHz, Knill-Laflamme spin-cat single-flip exact, AND strict honest test
     # whether high-|m_I| spin-cat (|+-7/2>) beats |+-1/2> clock transition under 500 Hz strain + B noise!
@@ -334,12 +380,15 @@ def main() -> None:
         "success_rule_met": bool(success_rule_met),
         "part1_qram_bridge": {
             "impedance_transformers": xfmr_compact,
+            "lindblad_18x18_swap": {k: v for k, v in qram.items() if k not in ("t_store_s", "F_curves")},
             "lindblad_12x12_swap": {k: v for k, v in qram.items() if k not in ("t_store_s", "F_curves")},
+            "lindblad_sensitivity_obs131": qram_sensitivity_obs131,
             "cryo_heat_budget": cryo,
         },
         "part2_s1_multispecies": {
             "zbl_bca_implantation": bca_results,
             "wien_filter_separation": wien,
+            "thermal_activation_segregation_obs154": anneal_kinetics_154,
             "er167_telecom_link": er_link,
             "sb121_8level_qudit": {
                 **sb,

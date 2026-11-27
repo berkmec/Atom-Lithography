@@ -18,7 +18,7 @@
     "world_origin_mm": [
       0.0,
       0.0,
-      20.0
+      14.3
     ],
     "world_rotation_deg": [
       0.0,
@@ -30,17 +30,17 @@
         "name": "interf_mirror_x",
         "kind": "optical",
         "position_mm": [
-          28.750000000000007,
-          49.79646071760522,
-          20.0
+          62.0,
+          0.0,
+          14.3
         ],
         "normal": [
-          0.5,
-          0.866025,
+          1.0,
+          0.0,
           0.0
         ],
-        "standard": "λ/20 @ 633 nm",
-        "mating_part_id": "",
+        "standard": "λ/20 @ 632.8 nm",
+        "mating_part_id": "S4.4-02",
         "bore_mm": 0.0,
         "od_mm": 0.0,
         "pcd_mm": 0.0,
@@ -54,17 +54,17 @@
         "name": "interf_mirror_y",
         "kind": "optical",
         "position_mm": [
-          -57.5,
           0.0,
-          20.0
+          62.0,
+          14.3
         ],
         "normal": [
-          -1.0,
           0.0,
+          1.0,
           0.0
         ],
-        "standard": "λ/20 @ 633 nm",
-        "mating_part_id": "",
+        "standard": "λ/20 @ 632.8 nm",
+        "mating_part_id": "S4.4-02",
         "bore_mm": 0.0,
         "od_mm": 0.0,
         "pcd_mm": 0.0,
@@ -78,17 +78,17 @@
         "name": "interf_mirror_z",
         "kind": "optical",
         "position_mm": [
-          28.750000000000007,
-          -49.79646071760522,
-          20.0
+          0.0,
+          -62.0,
+          14.3
         ],
         "normal": [
-          0.5,
-          -0.866025,
+          0.0,
+          -1.0,
           0.0
         ],
-        "standard": "λ/20 @ 633 nm",
-        "mating_part_id": "",
+        "standard": "λ/20 @ 632.8 nm",
+        "mating_part_id": "S4.4-02",
         "bore_mm": 0.0,
         "od_mm": 0.0,
         "pcd_mm": 0.0,
@@ -102,7 +102,7 @@
     "dimensions": [
       {
         "label": "MIRROR_PCD",
-        "nominal_mm": 115.0,
+        "nominal_mm": 116.0,
         "tol_plus_mm": 0.02,
         "tol_minus_mm": -0.02,
         "view": "front",
@@ -112,7 +112,7 @@
         "is_basic": false,
         "datum_ref": "",
         "decimals": 2,
-        "formatted": "Ø115.00 ±0.02"
+        "formatted": "Ø116.00 ±0.02"
       },
       {
         "label": "MIRROR_W",
@@ -130,7 +130,7 @@
       },
       {
         "label": "MIRROR_H",
-        "nominal_mm": 13.6,
+        "nominal_mm": 6.6,
         "tol_plus_mm": 0.05,
         "tol_minus_mm": -0.05,
         "view": "front",
@@ -140,7 +140,7 @@
         "is_basic": false,
         "datum_ref": "",
         "decimals": 2,
-        "formatted": "13.60 ±0.05"
+        "formatted": "6.60 ±0.05"
       }
     ],
     "gdt_frames": [
@@ -152,7 +152,7 @@
         "datum_primary": "",
         "datum_secondary": "",
         "datum_tertiary": "",
-        "feature_note": "LAMBDA/20 @ 633 NM",
+        "feature_note": "LAMBDA/20 @ 632.8 NM",
         "glyph": "⏥",
         "tolerance_text": "0.0000"
       },
@@ -185,16 +185,17 @@
     ],
     "notes": [
       "Yuzey duzlemligi lambda/20 @ 633 nm",
-      "3x Zerodur Al-SiO2 coated reference mirrors/prisms (λ/20 @ 633 nm, ±2 arcsec) at R=57.5 mm (60/180/300 deg) for S4.4 interferometry"
+      "3x Zerodur Al-SiO2 coated reference mirrors (λ/20 @ 632.8 nm) at R=58.0 mm (0/90/270 deg, Z_nat=[11.0, 17.6] / Z_canon=[511.0, 517.6] inside split gap) with clear normal-incidence LOS to S4.4-02"
     ],
     "scad_params": {
-      "mirror_pcd": 115.0,
+      "mirror_pcd": 116.0,
       "mirror_t": 8.0,
       "mirror_w": 14.0,
-      "mirror_h": 13.6,
+      "mirror_h": 6.6,
+      "z_nat_center_mm": 14.3,
       "flatness_nm": 31.6
     },
-    "target_mass_kg": 0.012,
+    "target_mass_kg": 0.008,
     "epistemic": {
       "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
       "no_lab_measurement": true,
@@ -218,31 +219,31 @@
     "watertight": true,
     "boundary_edges": 0,
     "non_manifold_edges": 0,
-    "signed_volume_mm3": 4556.5440000000035,
-    "surface_area_mm2": 2427.039861351716,
-    "mass_kg": 0.011528056320000013,
+    "signed_volume_mm3": 2211.2640000000006,
+    "surface_area_mm2": 1522.7222856559797,
+    "mass_kg": 0.0055944979199999975,
     "cg_mm": [
-      2.5149835582272188e-14,
-      -4.0169876277240304e-14,
-      19.999999999999993
+      19.333333333333343,
+      -1.228761206959741e-14,
+      14.300000000000018
     ],
     "bbox_min_mm": [
-      -61.5,
-      -56.560562332742975,
-      13.2
+      -7.0000000000000115,
+      -62.0,
+      11.0
     ],
     "bbox_max_mm": [
-      36.61217782649108,
-      56.560562332742975,
-      26.8
+      62.0,
+      62.0,
+      17.6
     ],
     "inertia_kg_mm2": [
-      19.359223034764806,
-      19.35922303476482,
-      38.36307452003843,
-      1.6589215192652762e-14,
-      4.878165782429258e-16,
-      -1.4634497347287803e-15
+      12.616984915180796,
+      4.272988793708796,
+      16.849357653990396,
+      -3.1560428700079992e-15,
+      2.0617153495550157e-15,
+      -6.827418701504951e-16
     ],
     "triangle_count": 84,
     "vertex_count": 48,
@@ -258,6 +259,11 @@
     "all_valid": true
   },
   "engineering_checks": {},
+  "shell_mate_metadata": {
+    "n_shells": 3,
+    "fea_bonding_mode": "TIED_SUBASSEMBLY_CONTACTS",
+    "watertight": true
+  },
   "epistemic": {
     "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
     "no_lab_measurement": true,

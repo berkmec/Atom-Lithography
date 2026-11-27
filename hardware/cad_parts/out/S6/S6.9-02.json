@@ -14,7 +14,7 @@
     "qty": 1,
     "procurement_class": "CUS",
     "world_origin_mm": [
-      -352.0,
+      -367.5,
       0.0,
       493.5
     ],
@@ -25,10 +25,10 @@
     ],
     "ports": [
       {
-        "name": "ovc_dr_cf63",
+        "name": "ovc_dr_cf100",
         "kind": "flange",
         "position_mm": [
-          -77.7,
+          -78.0,
           0.0,
           0.0
         ],
@@ -37,19 +37,19 @@
           0.0,
           0.0
         ],
-        "standard": "CF63",
+        "standard": "CF100",
         "mating_part_id": "S6.8-04",
-        "bore_mm": 44.0,
-        "od_mm": 113.5,
-        "pcd_mm": 92.1,
-        "bolt_count": 8,
+        "bore_mm": 76.0,
+        "od_mm": 152.0,
+        "pcd_mm": 130.2,
+        "bolt_count": 16,
         "bolt_hole_mm": 8.4,
         "bolt_spec": "M8",
         "frame": "local",
-        "notes": "ISO 3669 CF63 Cu-gasket knife-edge"
+        "notes": "ISO 3669 CF100 Cu-gasket knife-edge"
       },
       {
-        "name": "uhv_chamber_cf63",
+        "name": "uhv_chamber_cf100",
         "kind": "flange",
         "position_mm": [
           78.0,
@@ -61,22 +61,22 @@
           0.0,
           0.0
         ],
-        "standard": "CF63",
+        "standard": "CF100",
         "mating_part_id": "S5.1-01",
-        "bore_mm": 44.0,
-        "od_mm": 113.5,
-        "pcd_mm": 92.1,
-        "bolt_count": 8,
+        "bore_mm": 76.0,
+        "od_mm": 152.0,
+        "pcd_mm": 130.2,
+        "bolt_count": 16,
         "bolt_hole_mm": 8.4,
         "bolt_spec": "M8",
         "frame": "local",
-        "notes": "ISO 3669 CF63 Cu-gasket knife-edge"
+        "notes": "ISO 3669 CF100 Cu-gasket knife-edge"
       }
     ],
     "dimensions": [
       {
         "label": "BELLOWS_ID",
-        "nominal_mm": 44.0,
+        "nominal_mm": 76.0,
         "tol_plus_mm": 0.1,
         "tol_minus_mm": -0.1,
         "view": "front",
@@ -86,11 +86,11 @@
         "is_basic": false,
         "datum_ref": "",
         "decimals": 2,
-        "formatted": "Ø44.00 ±0.10"
+        "formatted": "Ø76.00 ±0.10"
       },
       {
         "label": "BELLOWS_OD",
-        "nominal_mm": 68.0,
+        "nominal_mm": 98.0,
         "tol_plus_mm": 0.1,
         "tol_minus_mm": -0.1,
         "view": "front",
@@ -100,11 +100,11 @@
         "is_basic": false,
         "datum_ref": "",
         "decimals": 2,
-        "formatted": "Ø68.00 ±0.10"
+        "formatted": "Ø98.00 ±0.10"
       },
       {
         "label": "L_ACTIVE",
-        "nominal_mm": 120.0,
+        "nominal_mm": 116.0,
         "tol_plus_mm": 0.5,
         "tol_minus_mm": -0.5,
         "view": "front",
@@ -114,11 +114,11 @@
         "is_basic": false,
         "datum_ref": "",
         "decimals": 2,
-        "formatted": "120.00 ±0.50"
+        "formatted": "116.00 ±0.50"
       },
       {
         "label": "FLANGE_OD",
-        "nominal_mm": 113.5,
+        "nominal_mm": 152.0,
         "tol_plus_mm": 0.1,
         "tol_minus_mm": -0.1,
         "view": "front",
@@ -128,7 +128,7 @@
         "is_basic": false,
         "datum_ref": "",
         "decimals": 2,
-        "formatted": "Ø113.50 ±0.10"
+        "formatted": "Ø152.00 ±0.10"
       }
     ],
     "gdt_frames": [
@@ -140,7 +140,7 @@
         "datum_primary": "B",
         "datum_secondary": "",
         "datum_tertiary": "",
-        "feature_note": "CF63 sealing faces",
+        "feature_note": "CF100 sealing faces",
         "glyph": "◎",
         "tolerance_text": "Ø0.050"
       },
@@ -173,18 +173,18 @@
     ],
     "notes": [
       "ID=44 mm, OD=68 mm, L_aktif=120 mm, k_bellows=2000 N/m <= 6282 N/m (3.14x emniyet); 4.96 MN/m rijit kopruyu degistirir",
-      "Edge-welded 316L 0.15 mm x 28 convolutions; axial stiffness k=2000 N/m <= 6282 N/m (3.14x margin, Exp133)",
-      "Right CF63 sealing face terminates at world X=-274.0 mm (0.50 mm Cu-gasket gap to S5.1-01 -X CF63 weld-neck at X=-273.5 mm); left neck ends at X=-474.5 mm."
+      "OBS-065 fix: Upgraded to CF100 (ID=76.0 mm, OD=98.0 mm, flange OD=152.0 mm, 28-conv 0.15 mm 316L, k=2000 N/m) clearing Ø52 mm 4K bridge tube by 12.0 mm radially.",
+      "Right CF100 sealing face terminates at world X=-289.5 mm (0.50 mm Cu-gasket gap to S5.1-01 -X CF100 weld-neck at X=-289.0 mm, clearing S3.2-05); left neck ends at X=-474.5 mm."
     ],
     "scad_params": {
-      "bellows_id": 44.0,
-      "bellows_od": 68.0,
-      "l_active": 120.0,
+      "bellows_id": 76.0,
+      "bellows_od": 98.0,
+      "l_active": 116.0,
       "n_convolutions": 28,
       "sheet_mm": 0.15,
       "k_n_per_m": 2000.0
     },
-    "target_mass_kg": 3.1,
+    "target_mass_kg": 5.2,
     "epistemic": {
       "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
       "no_lab_measurement": true,
@@ -208,34 +208,34 @@
     "watertight": true,
     "boundary_edges": 0,
     "non_manifold_edges": 0,
-    "signed_volume_mm3": 330083.5691716908,
-    "surface_area_mm2": 322480.1818088779,
-    "mass_kg": 2.640668553373526,
+    "signed_volume_mm3": 561655.8713706482,
+    "surface_area_mm2": 471787.85801558004,
+    "mass_kg": 4.493246970965185,
     "cg_mm": [
-      -7.990457609338925,
-      -9.307905864979883e-16,
-      -1.34460923207702e-15
+      -4.742844191672896,
+      9.9184732487567e-15,
+      -2.1666361432356833e-15
     ],
     "bbox_min_mm": [
-      -122.5,
-      -56.75,
-      -56.75
+      -107.0,
+      -76.0,
+      -76.0
     ],
     "bbox_max_mm": [
       78.0,
-      56.75,
-      56.75
+      76.0,
+      76.0
     ],
     "inertia_kg_mm2": [
-      4280.570179546961,
-      14784.478082209103,
-      14784.478082209105,
-      -2.594149812564516e-13,
-      -7.128005881271823e-14,
-      2.997694537043572e-14
+      15065.518463399882,
+      27878.121809526983,
+      27878.12180952698,
+      -1.8538058451318977e-13,
+      8.634082443929099e-13,
+      1.342923496849834e-13
     ],
-    "triangle_count": 18144,
-    "vertex_count": 9040,
+    "triangle_count": 19616,
+    "vertex_count": 9744,
     "step_valid": true,
     "dxf_valid": true,
     "svg_valid": true,
@@ -250,18 +250,76 @@
   "json_path": "hardware/cad_parts/out/S6/S6.9-02.json",
   "world_bbox_min_mm": [
     -474.5,
-    -56.75,
-    436.75
+    -76.0,
+    417.5
   ],
   "world_bbox_max_mm": [
-    -274.0,
-    56.75,
-    550.25
+    -289.5,
+    76.0,
+    569.5
   ],
   "world_cg_mm": [
-    -359.9905,
-    0.0,
+    -372.2428,
+    -0.0,
     493.5
+  ],
+  "shell_tie_manifest": [
+    {
+      "shell_index": 0,
+      "bbox_min_mm": [
+        -58.0,
+        -49.0,
+        -49.0
+      ],
+      "bbox_max_mm": [
+        58.0,
+        49.0,
+        49.0
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    },
+    {
+      "shell_index": 1,
+      "bbox_min_mm": [
+        -78.0,
+        -76.0,
+        -76.0
+      ],
+      "bbox_max_mm": [
+        -58.2,
+        76.0,
+        76.0
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    },
+    {
+      "shell_index": 2,
+      "bbox_min_mm": [
+        58.2,
+        -76.0,
+        -76.0
+      ],
+      "bbox_max_mm": [
+        78.0,
+        76.0,
+        76.0
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    },
+    {
+      "shell_index": 3,
+      "bbox_min_mm": [
+        -107.0,
+        -42.0,
+        -42.0
+      ],
+      "bbox_max_mm": [
+        -78.2,
+        42.0,
+        42.0
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    }
   ],
   "epistemic": {
     "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
@@ -271,24 +329,43 @@
   },
   "analysis": {
     "all_passed": true,
-    "cold_clearance_count": 11,
+    "cold_clearance_count": 12,
     "cold_clearances": {
-      "uhv_chamber_vs_magnet_former_4k": {
+      "uhv_chamber_vs_50k_chamber_shield_50k": {
         "outer_material": "316LN",
+        "inner_material": "Al 6061",
+        "t_cold_k": 50.0,
+        "t_ref_k": 293.15,
+        "warm_outer_id_mm": 364.0,
+        "warm_inner_od_mm": 359.0,
+        "cold_outer_id_mm": 362.92256000000003,
+        "cold_inner_od_mm": 357.5281,
+        "outer_strain": -0.0029599999999999627,
+        "inner_strain": -0.0040999999999999925,
+        "warm_radial_clearance_mm": 2.5,
+        "cold_nominal_radial_clearance_mm": 2.697230000000019,
+        "cold_worst_case_radial_clearance_mm": 2.597230000000019,
+        "delta_radial_clearance_mm": 0.1972300000000189,
+        "min_required_radial_clearance_mm": 2.0,
+        "interference_risk": false,
+        "passed": true
+      },
+      "50k_chamber_shield_vs_magnet_former_4k": {
+        "outer_material": "Al 6061",
         "inner_material": "Ti-6Al-4V",
         "t_cold_k": 4.2,
         "t_ref_k": 293.15,
-        "warm_outer_id_mm": 364.0,
+        "warm_outer_id_mm": 355.0,
         "warm_inner_od_mm": 352.0,
-        "cold_outer_id_mm": 362.9189291,
+        "cold_outer_id_mm": 353.5267721875,
         "cold_inner_od_mm": 351.39104879999996,
-        "outer_strain": -0.002969974999999958,
+        "outer_strain": -0.004149937500000034,
         "inner_strain": -0.0017299750000000502,
-        "warm_radial_clearance_mm": 6.0,
-        "cold_nominal_radial_clearance_mm": 5.763940150000025,
-        "cold_worst_case_radial_clearance_mm": 5.663940150000025,
-        "delta_radial_clearance_mm": -0.2360598499999753,
-        "min_required_radial_clearance_mm": 5.0,
+        "warm_radial_clearance_mm": 1.5,
+        "cold_nominal_radial_clearance_mm": 1.067861693750018,
+        "cold_worst_case_radial_clearance_mm": 1.017861693750018,
+        "delta_radial_clearance_mm": -0.43213830624998195,
+        "min_required_radial_clearance_mm": 1.0,
         "interference_risk": false,
         "passed": true
       },
@@ -354,17 +431,17 @@
         "inner_material": "Nb",
         "t_cold_k": 0.02,
         "t_ref_k": 293.15,
-        "warm_outer_id_mm": 78.0,
+        "warm_outer_id_mm": 71.0,
         "warm_inner_od_mm": 69.0,
-        "cold_outer_id_mm": 77.8206,
+        "cold_outer_id_mm": 70.83670000000001,
         "cold_inner_od_mm": 68.90133,
         "outer_strain": -0.0022999999999999687,
         "inner_strain": -0.0014300000000000423,
-        "warm_radial_clearance_mm": 4.5,
-        "cold_nominal_radial_clearance_mm": 4.459634999999999,
-        "cold_worst_case_radial_clearance_mm": 4.409634999999999,
-        "delta_radial_clearance_mm": -0.040365000000001316,
-        "min_required_radial_clearance_mm": 4.0,
+        "warm_radial_clearance_mm": 1.0,
+        "cold_nominal_radial_clearance_mm": 0.967685000000003,
+        "cold_worst_case_radial_clearance_mm": 0.917685000000003,
+        "delta_radial_clearance_mm": -0.032314999999996985,
+        "min_required_radial_clearance_mm": 0.8,
         "interference_risk": false,
         "passed": true
       },
@@ -444,21 +521,21 @@
         "interference_risk": false,
         "passed": true
       },
-      "cf63_bellows_vs_4k_bridge_tube_4k": {
+      "cf100_bellows_vs_4k_bridge_tube_4k": {
         "outer_material": "316LN",
         "inner_material": "OFHC Cu",
         "t_cold_k": 4.0,
         "t_ref_k": 293.15,
-        "warm_outer_id_mm": 44.0,
-        "warm_inner_od_mm": 21.0,
-        "cold_outer_id_mm": 43.86932,
-        "cold_inner_od_mm": 20.93154,
+        "warm_outer_id_mm": 76.0,
+        "warm_inner_od_mm": 52.0,
+        "cold_outer_id_mm": 75.77428,
+        "cold_inner_od_mm": 51.830479999999994,
         "outer_strain": -0.002970000000000028,
         "inner_strain": -0.0032600000000000406,
-        "warm_radial_clearance_mm": 11.5,
-        "cold_nominal_radial_clearance_mm": 11.468890000000002,
-        "cold_worst_case_radial_clearance_mm": 11.368890000000002,
-        "delta_radial_clearance_mm": -0.031109999999998195,
+        "warm_radial_clearance_mm": 12.0,
+        "cold_nominal_radial_clearance_mm": 11.971900000000005,
+        "cold_worst_case_radial_clearance_mm": 11.871900000000005,
+        "delta_radial_clearance_mm": -0.028099999999994907,
         "min_required_radial_clearance_mm": 10.0,
         "interference_risk": false,
         "passed": true
@@ -468,41 +545,41 @@
         "inner_material": "OFHC Cu",
         "t_cold_k": 0.02,
         "t_ref_k": 293.15,
-        "warm_outer_id_mm": 18.0,
-        "warm_inner_od_mm": 12.0,
-        "cold_outer_id_mm": 17.941319999999997,
-        "cold_inner_od_mm": 11.96088,
+        "warm_outer_id_mm": 46.0,
+        "warm_inner_od_mm": 30.0,
+        "cold_outer_id_mm": 45.85004,
+        "cold_inner_od_mm": 29.9022,
         "outer_strain": -0.0032600000000000406,
         "inner_strain": -0.0032600000000000406,
-        "warm_radial_clearance_mm": 3.0,
-        "cold_nominal_radial_clearance_mm": 2.990219999999999,
-        "cold_worst_case_radial_clearance_mm": 2.940219999999999,
-        "delta_radial_clearance_mm": -0.00978000000000101,
-        "min_required_radial_clearance_mm": 2.5,
+        "warm_radial_clearance_mm": 8.0,
+        "cold_nominal_radial_clearance_mm": 7.97392,
+        "cold_worst_case_radial_clearance_mm": 7.92392,
+        "delta_radial_clearance_mm": -0.026080000000000325,
+        "min_required_radial_clearance_mm": 7.5,
         "interference_risk": false,
         "passed": true
       }
     },
     "tolerance_stacks": {
       "magnet_split_gap_vs_4k_bridge_tube": {
-        "nominal_mm": 15.0,
-        "mean_mm": 15.0,
+        "nominal_mm": 52.0,
+        "mean_mm": 52.0,
         "wc_half_band_mm": 0.22,
-        "wc_min_mm": 14.78,
-        "wc_max_mm": 15.22,
+        "wc_min_mm": 51.78,
+        "wc_max_mm": 52.22,
         "rss_half_band_mm": 0.1392838827718412,
-        "rss_min_mm": 14.86071611722816,
-        "rss_max_mm": 15.13928388277184,
+        "rss_min_mm": 51.86071611722816,
+        "rss_max_mm": 52.13928388277184,
         "modified_rss_half_band_mm": 0.20892582415776179,
-        "modified_rss_min_mm": 14.791074175842239,
-        "modified_rss_max_mm": 15.208925824157761,
-        "target_min_mm": 14.0,
-        "target_max_mm": 16.0,
+        "modified_rss_min_mm": 51.79107417584224,
+        "modified_rss_max_mm": 52.20892582415776,
+        "target_min_mm": 50.0,
+        "target_max_mm": 54.0,
         "wc_pass": true,
         "rss_pass": true,
         "modified_rss_pass": true,
         "variance_shares_pct": {
-          "magnet_split_gap": 12.886597938144332,
+          "helmholtz_x_bore_id": 12.886597938144332,
           "bridge_4k_tube_od": 12.886597938144332,
           "thermal_z_shift_4k": 74.22680412371133
         }

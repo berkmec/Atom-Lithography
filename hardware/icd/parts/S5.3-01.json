@@ -38,14 +38,14 @@
       "triangle_count": 1008,
       "temp_k": 300.0,
       "canonical_bbox_min_mm": [
-        -418.516,
-        179.607,
-        414.5
+        523.605,
+        -311.012,
+        624.78
       ],
       "canonical_bbox_max_mm": [
-        -231.067,
-        362.964,
-        599.5
+        738.897,
+        -96.993,
+        819.726
       ],
       "datum_shift_mm": [
         0.0,
@@ -74,7 +74,15 @@
     "rtl_modules": [],
     "rtl_audit_json": null,
     "software_and_eda_files": [],
-    "verification_tests": []
+    "verification_tests": [
+      "tests/test_bom_detailed.py",
+      "tests/test_full_180_traceability.py",
+      "tests/test_cad_s5.py",
+      "tests/test_pcb_cryo_and_elec_icds.py",
+      "tests/test_exp130.py",
+      "tests/test_cad_parts.py",
+      "tests/test_exp139.py"
+    ]
   },
   "specialized_specification": null,
   "verification_status": {
@@ -84,6 +92,7 @@
     "rtl_verified": false,
     "software_or_eda_verified": false,
     "specialized_icd_present": false,
+    "verification_tests_mapped": true,
     "traceable": true
   },
   "epistemic": {

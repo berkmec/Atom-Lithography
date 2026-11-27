@@ -9,7 +9,7 @@
 // temp_stage        : 300 K
 // vacuum_grade      : UHV 1e-9 mbar
 // tolerance         : ±20 um aciklik
-// computed_mass_kg  : 0.01801
+// computed_mass_kg  : 0.01813
 // envelope_mm       : 59.088 x 60.000 x 1.200
 // design_maturity   : M0_M1_DETAILED_CAD_DESIGN_ONLY
 // no_lab_measurement: true
@@ -29,7 +29,8 @@ bbox_z = 1.2000;
 nx = 32;
 ny = 32;
 pitch_mm = 0.5;
-stop_hole_mm = 0.18;
+stop_hole_mm = 0.012;
+blanked_leak_frac = 0.0;
 backscatter_max = 0.0001;
 
 // Interface / port parameters (mm)
@@ -42,18 +43,18 @@ module part_S2_2_04() {
   difference() {
     union() {
       // Graphite-coated Mo beam-stop diaphragm
-      cylinder(d=52.000, h=0.500, center=true);
+      cylinder(d=50.000, h=0.500, center=true);
       // OFHC Cu thermal sink mounting rim
       difference() {
         cylinder(d=60.000, h=1.200, center=true);
         cylinder(d=52.400, h=3.200, center=true);
       }
     }
-    // 32x32 pass-through beam-stop apertures
+    // 32x32 Ø12.0 um pass-through beam-stop apertures
     for (ix = [0 : 32 - 1])
       for (iy = [0 : 32 - 1])
         translate([(ix - 15.500) * 0.5000, (iy - 15.500) * 0.5000, 0])
-          cylinder(d=0.1800, h=1.000, center=true);
+          cylinder(d=0.0120, h=1.000, center=true);
   }
 }
 

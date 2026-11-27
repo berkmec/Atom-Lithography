@@ -76,30 +76,55 @@ def test_cryo_rf_bias_panel_kicad_erc_and_drc() -> None:
     assert len(erc.errors) == 0
     assert len(erc.warnings) == 0
     assert erc.sch_pcb_parity_ok is True
-    assert erc.component_count >= 90
-    assert erc.net_count == 59
+    assert erc.component_count >= 110
+    assert erc.net_count >= 65
 
     drc = run_drc(pcb_path, board)
     assert drc.passed, f"DRC failed: {drc.errors}"
     assert len(drc.errors) == 0
-    assert drc.total_multi_pin_nets == 59
-    assert drc.routed_net_count == 59
+    assert drc.total_multi_pin_nets == erc.net_count
+    assert drc.routed_net_count == drc.total_multi_pin_nets
     assert drc.unrouted_net_count == 0
     assert drc.unconnected_items == 0
     assert drc.track_dangling_count == 0
     assert drc.air_slot_count == 1
-    assert len(drc.impedance_checks) >= 24
+    assert len(drc.impedance_checks) == 8  # 8 straight zero-jog, zero-stub 50.00 Ohm RF segments (RF50_IN0..3, RF50_OUT0..3)
     assert all(c["passed"] for c in drc.impedance_checks)
     assert len(drc.hv_checks) >= 1
     assert all(c["passed"] for c in drc.hv_checks)
     assert all(c["through_board_ok"] for c in drc.hv_checks)
 
-    # Stored verification JSON must also carry semi_s2_certified=False and 59/59 routing
+    # OBS-033: Verify MSOP-12-1EP LDO pinouts (LT3045 EP=AGND_CRYO, LT3094 EP=VIN_N5V)
+    pin_net = {node: ns.name for ns in board.nets for node in ns.nodes}
+    ldo_p = [c for c in board.components if c.ref == "U_LDO_P"][0]
+    ldo_n = [c for c in board.components if c.ref == "U_LDO_N"][0]
+    assert "MSOP-12-1EP" in ldo_p.footprint and len(ldo_p.pins) == 13
+    assert "MSOP-12-1EP" in ldo_n.footprint and len(ldo_n.pins) == 13
+    assert pin_net[("U_LDO_P", "8")] == "AGND_CRYO" and pin_net[("U_LDO_P", "13")] == "AGND_CRYO"
+    assert pin_net[("U_LDO_N", "9")] == "AGND_CRYO" and pin_net[("U_LDO_N", "13")] == "VIN_N5V"
+
+    # OBS-028 & OBS-036: Verify inline zero-stub RF routing + full 2-stage choke/shunt + Kelvin divider
+    for k in range(4):
+        assert any(c.ref == f"C_SH1_{k}" for c in board.components)
+        assert any(c.ref == f"L_CHK2_{k}" for c in board.components)
+        assert any(c.ref == f"C_SH2_{k}" for c in board.components)
+        assert any(c.ref == f"R_SETDIV_{k}" for c in board.components)
+        in_segs = [t for t in board.traces if t.net == f"RF50_IN{k}"]
+        assert all(len(t.points_mm) == 2 for t in in_segs), f"RF50_IN{k} must be straight inline (no 90-deg jogs)"
+
+    # OBS-092: Verify >=5.0 mm VTAP differential pad gap on J_QUENCH_MAG & R_QTAP_DIV sense divider
+    j_q = [c for c in board.components if c.ref == "J_QUENCH_MAG"][0]
+    p1, p2 = j_q.pins[0], j_q.pins[1]
+    vtap_gap_mm = abs(p2.dy_mm - p1.dy_mm) - 0.5 * (p1.pad_h_mm + p2.pad_h_mm)
+    assert vtap_gap_mm >= 5.0, f"VTAP_P/N differential gap {vtap_gap_mm:.2f} mm < 5.0 mm"
+    assert any(c.ref == "R_QTAP_DIV" for c in board.components)
+
+    # Stored verification JSON must also carry semi_s2_certified=False and 100% routing
     stored = json.loads((CRYO_DIR / "cryo_rf_thermal_attenuation.json").read_text(encoding="utf-8"))
     pcb_rep = stored["pcb_verification"]
     assert pcb_rep["epistemic_meta"]["semi_s2_certified"] is False
     assert pcb_rep["epistemic_meta"]["iec61508_certified"] is False
-    assert pcb_rep["drc"]["routed_net_count"] == 59
+    assert pcb_rep["drc"]["routed_net_count"] == pcb_rep["drc"]["total_multi_pin_nets"]
     assert pcb_rep["drc"]["unrouted_net_count"] == 0
     assert pcb_rep["drc"]["unconnected_items"] == 0
     assert pcb_rep["drc"]["track_dangling_count"] == 0
@@ -112,6 +137,10 @@ def test_cryo_rf_bias_panel_kicad_erc_and_drc() -> None:
 def test_live_ngspice_qram_chebyshev_50_to_3k(tmp_path: Path) -> None:
     disk_cir = CRYO_DIR / "qram_chebyshev_50_to_3k.cir"
     assert disk_cir.is_file()
+    cir_txt = disk_cir.read_text(encoding="utf-8")
+    # OBS-105: zero unrealizable >200 Ohm T-line circuit cards (pure lumped superconducting NbTiN LC ladder)
+    t_cards = [ln.strip() for ln in cir_txt.splitlines() if ln.strip() and not ln.strip().startswith("*") and ln.strip().upper().startswith("T")]
+    assert t_cards == [], f"Unexpected transmission line cards in lumped cryo LC deck: {t_cards}"
     res_disk = run_ngspice(disk_cir, workdir=tmp_path)
     assert res_disk.ok, f"Disk Chebyshev deck failed: {res_disk.errors}"
 
@@ -130,6 +159,7 @@ def test_live_ngspice_qram_chebyshev_50_to_3k(tmp_path: Path) -> None:
 def test_live_ngspice_magnet_quench_dump_1p563ohm(tmp_path: Path) -> None:
     disk_cir = CRYO_DIR / "magnet_quench_dump_1p563ohm.cir"
     assert disk_cir.is_file()
+    assert ".temp -268.95" in disk_cir.read_text(encoding="utf-8")  # OBS-092: true 4.2 K bath
     res_disk = run_ngspice(disk_cir, workdir=tmp_path)
     assert res_disk.ok, f"Disk quench deck failed: {res_disk.errors}"
 
@@ -139,6 +169,7 @@ def test_live_ngspice_magnet_quench_dump_1p563ohm(tmp_path: Path) -> None:
     assert rep["n_coils"] == 8
     assert abs(rep["E_stored_kJ"] - 18.9408) < 0.01
     assert rep["v_peak_V"] <= 400.0, f"Peak voltage exceeded 400 V: {rep['v_peak_V']}"
+    assert rep["v_open_dump_fault_peak_V"] < 400.0, f"Open-dump fault exceeded 400 V: {rep['v_open_dump_fault_peak_V']}"
     assert abs(rep["tau_decay_s"] - 0.370) <= 0.010, f"tau out of range: {rep['tau_decay_s']}"
     assert rep["e_dump_fraction_pct"] >= 99.0, f"Dump fraction < 99%: {rep['e_dump_fraction_pct']}"
     assert rep["dump_bank_T_peak_C"] < 55.0
@@ -158,6 +189,12 @@ def test_live_ngspice_rf_set_tank_biastee(tmp_path: Path) -> None:
     assert rep["delta_gamma_mag"] >= 0.25
     assert rep["dc_bias_isolation_at_fres_dB"] > 40.0
     assert rep["dc_bias_isolation_worst_200_450MHz_dB"] > 40.0
+    # OBS-036: Safe mV-scale DC bias across rf-SET (zero +3.3 V leak!)
+    assert 0.5 <= rep["v_set_dc_50k_mV"] <= 2.0
+    assert 0.5 <= rep["v_set_dc_200k_mV"] <= 2.0
+    # OBS-028: Zero-stub inline conical bias-tee through-line S11/S21 across 4-8 GHz (eliminates -21.8 dB stub notch!)
+    assert rep["inline_biastee_4_8ghz_max_s11_dB"] <= -20.0
+    assert rep["inline_biastee_4_8ghz_min_s21_dB"] > -0.1
     # Independent MNA cross-check parity
     assert rep["mna_crosscheck"]["delta_gamma_diff"] < 1e-4
     assert rep["mna_crosscheck"]["iso_diff_dB"] < 0.05
@@ -304,9 +341,13 @@ def test_master_ups_power_budget_and_timing_trees() -> None:
     ups = master["ups_s7_safety_04"]
     assert ups["rating_kVA"] == 15.0
     assert ups["rated_real_power_kW"] == 13.5
-    assert ups["battery_energy_kWh"] == 10.0
+    assert ups["battery_energy_kWh"] == 12.0
     assert ups["internal_loss_W"] == 350.0
     assert ups["transfer_time_ms"] == 0.0
+    assert ups["utility_side_tier2_contactor_ahead_of_ups"] is True
+    assert ups["pt420_wall_power_utility_side_kW"] == 12.5
+    assert ups["dedicated_magnet_rampdown_ups_branch_W"] == 650.0
+    assert ups["ups_peak_load_within_13p5kW_rating"] is True
 
     # Tier-1 exact math: 95-ICD sum + E1 external (S7.SAFETY-03 120 W + S6.11-01 88 W) == 2533.0 W
     t1 = ups["tier1_critical"]
@@ -316,49 +357,48 @@ def test_master_ups_power_budget_and_timing_trees() -> None:
     assert t1["total_kW"] == 2.533
     assert abs(sum(t1["exp150_buckets_W"].values()) - 2533.0) < 1e-6
 
-    # Runtime verification: BOTH Exp150 reference formula AND conservative incl. 350 W idle loss + LFP DoD
-    expected_t1_exp150_min = round((10.0 * 0.90 / 2.533) * 60.0, 1)
-    assert t1["runtime_min"] == expected_t1_exp150_min == 213.2
-    assert t1["runtime_tier1_min_exp150_nominal_eta090"] == 213.2
+    # Runtime verification: BOTH Exp150 reference formula AND conservative 12 kWh LFP incl. 350 W idle loss + 120 s Tier-1B ramp-down
+    expected_t1_exp150_min = round((12.0 * 0.90 / 2.533) * 60.0, 1)
+    assert t1["runtime_tier1_min_exp150_nominal_eta090"] == expected_t1_exp150_min == 255.8
+    assert t1["runtime_min"] == 202.8
     assert t1["meets_180min_requirement"] is True
 
     expected_p_batt_w = round(2533.0 / 0.90 + 350.0, 2)
-    expected_100dod_min = round((10000.0 / (2533.0 / 0.90 + 350.0)) * 60.0, 1)
-    expected_90dod_min = round((9000.0 / (2533.0 / 0.90 + 350.0)) * 60.0, 1)
     assert abs(t1["battery_dc_draw_incl_350w_loss_W"] - expected_p_batt_w) < 0.05
-    assert t1["runtime_tier1_min_conservative_100pct_dod_incl_350w_loss"] == expected_100dod_min == 189.6
-    assert t1["runtime_tier1_min_conservative_90pct_dod_incl_350w_loss"] == expected_90dod_min == 170.6
+    assert t1["runtime_tier1_min_conservative_100pct_dod_incl_350w_loss"] == 225.5
+    assert t1["runtime_tier1_min_conservative_90pct_dod_incl_350w_loss"] == 202.8
     assert t1["tier1_conservative_100pct_dod_meets_180min"] is True
-    assert t1["tier1_conservative_90pct_dod_meets_180min"] is False
+    assert t1["tier1_conservative_90pct_dod_meets_180min"] is True
     sizing = t1["conservative_sizing_requirements_for_180min_at_90pct_dod"]
     assert sizing["min_lfp_pack_kWh_at_2p533kW"] >= 10.5
-    assert sizing["recommended_nominal_lfp_pack_kWh"] >= 11.0
-    assert sizing["max_tier1_load_kW_at_10kWh"] <= 2.39
+    assert sizing["installed_nominal_lfp_pack_kWh"] == 12.0
+    assert sizing["recommended_nominal_lfp_pack_kWh"] == 12.0
+    assert sizing["max_tier1_load_kW_at_12kWh"] >= 2.90
 
-    # Tier-2 exact math & 28-part TIER2_SHED zero-discrepancy reconciliation
-    assert abs(disk_t2_w - 12275.0) < 1e-6
-    assert ups["tier2_sheddable"]["total_kW"] == 12.275
-    assert abs(sum(ups["tier2_sheddable"]["exp150_buckets_W"].values()) - 12275.0) < 1e-6
+    # Tier-2 exact math & 28-part TIER2_SHED zero-discrepancy reconciliation (12.5 kW PT420 utility-side)
+    assert abs(disk_t2_w - 15275.0) < 1e-6
+    assert ups["tier2_sheddable"]["total_kW"] == 15.275
+    assert abs(sum(ups["tier2_sheddable"]["exp150_buckets_W"].values()) - 15275.0) < 1e-6
     t2_rec = ups["tier2_sheddable"]["tier2_shed_28part_reconciliation"]
     assert t2_28_count == t2_rec["tier2_shed_part_count"] == 28
-    assert abs(t2_28_raw_w - 18026.0) < 1e-6
-    assert abs(t2_28_exp150_w - 12275.0) < 1e-6
+    assert abs(t2_28_raw_w - 21026.0) < 1e-6
+    assert abs(t2_28_exp150_w - 15275.0) < 1e-6
     assert abs(t2_28_aux_w - 5401.0) < 1e-6
     assert abs(t2_28_overlap_w - 350.0) < 1e-6
     assert abs(t2_28_incr_w - (t2_28_exp150_w + t2_28_aux_w)) < 1e-6
     assert abs(t2_28_raw_w - (t2_28_exp150_w + t2_28_aux_w + t2_28_overlap_w)) < 1e-6
     assert t2_rec["reconciliation_discrepancy_W"] == 0.0
-    assert t2_rec["raw_supply_rails_steady_sum_W"] == 18026.0
-    assert t2_rec["exp150_tier2_ups_allocation_W"] == 12275.0
+    assert t2_rec["raw_supply_rails_steady_sum_W"] == 21026.0
+    assert t2_rec["exp150_tier2_ups_allocation_W"] == 15275.0
     assert t2_rec["non_exp150_aux_incremental_mains_W"] == 5401.0
     assert t2_rec["secondary_and_backplane_derived_overlap_W"] == 350.0
 
-    # Combined reconciliation & full-load runtime (40.0 min nom / 39.1 min 100% DoD / 35.2 min 90% DoD >= 30 min)
+    # Combined reconciliation & full-load runtime (43.2 min nom / 46.9 min 100% DoD / 42.2 min 90% DoD >= 30 min)
     rec = ups["reconciliation"]
-    assert rec["exp150_combined_tier1_plus_tier2_kW"] == 14.808
-    assert rec["runtime_at_rated_13p5kW_min"] == 40.0
-    assert rec["runtime_at_rated_13p5kW_conservative_100pct_dod_incl_350w_min"] == 39.1
-    assert rec["runtime_at_rated_13p5kW_conservative_90pct_dod_incl_350w_min"] == 35.2
+    assert rec["exp150_combined_tier1_plus_tier2_kW"] == 17.808
+    assert rec["runtime_at_rated_13p5kW_min"] == 43.2
+    assert rec["runtime_at_rated_13p5kW_conservative_100pct_dod_incl_350w_min"] == 46.9
+    assert rec["runtime_at_rated_13p5kW_conservative_90pct_dod_incl_350w_min"] == 42.2
     assert rec["meets_30min_full_load_requirement"] is True
     assert rec["operational_phase_ups_load_kW"]["all_modes_within_13p5kW_ups"] is True
 

@@ -176,7 +176,8 @@
     "notes": [
       "s1_duoplasmatron +Y flans (76x76x95 mm, [0,110,992.66] mm, min bosluk 27 mm), 31P+ / 121Sb+ / 167Er+ (1536 nm F_P_eff=1520, beta_ZPL=0.9993), 180 W tepe / 0 W kriyo, kutle=4.80 kg",
       "Exp142 Option-Q S1-Multi cartridge (76x76x95 mm @ [0, +110, 492.66] in Z_wafer=0 frame, 27.0 mm body clearance to S1.1-01)",
-      "STRICTLY tagged S1.7-01 — fixes legacy CAD v6 S1.6 aliasing bug; 31P gas / 121Sb 450 C PBN oven / 167Er micro-Paul"
+      "STRICTLY tagged S1.7-01 — fixes legacy CAD v6 S1.6 aliasing bug; 31P gas / 121Sb 450 C PBN oven / 167Er micro-Paul",
+      "Isotope dispersion note: heavy 121Sb+ (dx=0.260 mm) and 167Er+ (dx=0.081 mm) are below single-pass 350 um Wien slit resolution and require isotopically enriched source feed or <=50 um S1.2-04 exit slit"
     ],
     "scad_params": {
       "bay_x": 76.0,
@@ -268,6 +269,11 @@
       "interference_risk": false,
       "passed": true
     }
+  },
+  "shell_mate_metadata": {
+    "n_shells": 12,
+    "fea_bonding_mode": "TIED_SUBASSEMBLY_CONTACTS",
+    "watertight": true
   },
   "epistemic": {
     "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",

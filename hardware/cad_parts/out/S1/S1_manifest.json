@@ -5,7 +5,7 @@
   "cots_env_icd_count": 8,
   "all_watertight": true,
   "all_valid": true,
-  "total_computed_mass_kg": 327.3461,
+  "total_computed_mass_kg": 331.7638,
   "engineering_checks": {
     "bakeout_decel_clearance": {
       "outer_material": "Ti-6Al-4V",
@@ -111,6 +111,18 @@
         "S1.3-02_archB_decel_coax": 0.7220216606498194,
         "S1.3-01_cf100_column_runout": 72.20216606498195
       }
+    },
+    "wien_efield_balance": {
+      "species": "31P+",
+      "e_ext_eV": 10000.0,
+      "b_tesla": 0.45,
+      "e_gap_mm": 12.0,
+      "v_plates_V": 1347.85,
+      "e_field_required_kV_m": 112.321,
+      "e_field_actual_kV_m": 112.321,
+      "nominal_steer_mrad": -0.0009,
+      "passed": true,
+      "option_q_heavy_isotope_note": "Single-pass Wien (B=0.45 T, L_w=80 mm) resolves 31P+ vs 32PH+; heavy Option-Q 121Sb+ (dx=0.260 mm) and 167Er+ (dx=0.081 mm) exceed single-pass M/dM resolving power at 350 um slit and require isotopically enriched source feed or <=50 um S1.2-04 exit slit."
     }
   },
   "epistemic": {
@@ -261,7 +273,7 @@
     "S1.2-02": {
       "design_tier": "CUSTOM_FULL",
       "material": "OFHC Cu",
-      "mass_kg": 0.16822,
+      "mass_kg": 0.17276,
       "watertight": true,
       "all_valid": true,
       "bbox_min_mm": [
@@ -307,17 +319,17 @@
     "S1.2-04": {
       "design_tier": "COTS_ENV_ICD",
       "material": "316LN",
-      "mass_kg": 1.46578,
+      "mass_kg": 1.47838,
       "watertight": true,
       "all_valid": true,
       "bbox_min_mm": [
         -42.0,
-        -162.5,
+        -169.0,
         217.43
       ],
       "bbox_max_mm": [
         42.0,
-        162.5,
+        169.0,
         251.23
       ],
       "json_path": "hardware/cad_parts/out/S1/S1.2-04.json",
@@ -329,17 +341,17 @@
     },
     "S1.3-01": {
       "design_tier": "CUSTOM_FULL",
-      "material": "Al2O3",
-      "mass_kg": 1.44216,
+      "material": "316LN",
+      "mass_kg": 5.86447,
       "watertight": true,
       "all_valid": true,
       "bbox_min_mm": [
+        -87.5,
         -76.0,
-        -76.0,
-        369.5
+        205.0
       ],
       "bbox_max_mm": [
-        76.0,
+        87.5,
         76.0,
         421.3
       ],
@@ -410,7 +422,7 @@
       "bbox_max_mm": [
         62.0,
         62.0,
-        215.0
+        204.5
       ],
       "json_path": "hardware/cad_parts/out/S1/S1.3-04.json",
       "stl_path": "hardware/cad_parts/out/S1/S1.3-04.stl",
@@ -422,18 +434,18 @@
     "S1.3-05": {
       "design_tier": "CUSTOM_FULL",
       "material": "316LN",
-      "mass_kg": 2.21643,
+      "mass_kg": 2.19465,
       "watertight": true,
       "all_valid": true,
       "bbox_min_mm": [
         -184.75,
         -56.75,
-        425.25
+        369.16
       ],
       "bbox_max_mm": [
-        -58.3,
+        41.5,
         56.75,
-        538.75
+        549.41
       ],
       "json_path": "hardware/cad_parts/out/S1/S1.3-05.json",
       "stl_path": "hardware/cad_parts/out/S1/S1.3-05.stl",

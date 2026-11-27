@@ -316,5 +316,10 @@
     "justification": "A 600x450 mm block cannot structurally support the Ø456 mm CF400 UHV bottom flange, the 820x620 mm S4.2-01 active 6-DOF isolation table, the metrology bridge footprint, and the S4.4-01 He-Ne laser shelf while preserving a clear R=210 mm bore. 900x700x120 mm spans all supports cleanly and clears the -X DR OVC (x_min=-450 mm > -475 mm)."
   },
   "thermal_contraction_checks": [],
-  "tolerance_stack_checks": []
+  "tolerance_stack_checks": [],
+  "shell_mate_metadata": {
+    "n_shells": 1,
+    "fea_bonding_mode": "SINGLE_MONOLITHIC_SOLID",
+    "watertight": true
+  }
 }

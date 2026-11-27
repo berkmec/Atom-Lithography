@@ -37,15 +37,15 @@ Evn_1f inp_int inp_w flk_ac 0 1.0
 * 3) Parallel input current noise: sqrt(2*q*0.05p + (0.5f)^2) = 0.515773 fA/rtHz (zero DC!)
 Rni ni 0 1k temp=26.85
 Gin 0 inn ni 0 1.267145e-7
-* Single-pole open-loop gain (A0=1e5, GBP=500 MHz -> fp=5 kHz) + 1 Ohm output impedance
+* Single-pole open-loop gain (A0=1e5, GBP=500 MHz -> fp=5 kHz) + +/-2.5 V rail saturation clamp + 1 Ohm Rout
 Egain n1 0 inp_int inn 1e5
 Rp n1 n2 1k noisy=0
 Cp n2 0 31.8309886n
-Ebuf n_out 0 n2 0 1.0
+Bbuf n_out 0 V = 2.4 * tanh(v(n2) / 2.4)
 Rout n_out out 1 noisy=0
 .ends OPAMP_LTC6268_100K
 
-* --- Calibrated Cold 50 Ohm Coax Line Driver (LTC6268 @ 100 K, e_n=2.0 nV/rtHz, GBP=500 MHz) ---
+* --- Calibrated Cold 50 Ohm Coax Line Driver (LTC6268 @ 100 K, e_n=2.0 nV/rtHz, GBP=500 MHz, +/-2.5 V clamp) ---
 .subckt OPAMP_LTC6268_DRV inp inn out
 Cin inp inn 0.45p
 Rin inp inn 1T noisy=0
@@ -54,11 +54,11 @@ Evn inp_int inp nw 0 1.0
 Egain n1 0 inp_int inn 1e5
 Rp n1 n2 1k noisy=0
 Cp n2 0 31.8309886n
-Ebuf n_out 0 n2 0 1.0
+Bbuf n_out 0 V = 2.4 * tanh(v(n2) / 2.4)
 Rout n_out out 1 noisy=0
 .ends OPAMP_LTC6268_DRV
 
-* --- Calibrated Warm ADA4817-1 Shaper/Buffer Macromodel (300 K: e_n=4.0 nV/rtHz, GBP=1.05 GHz) ---
+* --- Calibrated Warm ADA4817-1 Shaper/Buffer Macromodel (300 K: e_n=4.0 nV/rtHz, GBP=1.05 GHz, +/-2.5 V clamp) ---
 .subckt OPAMP_ADA4817_300K inp inn out
 Cin inp inn 1.3p
 Rin inp inn 500G noisy=0
@@ -68,13 +68,13 @@ Evn inp_int inp nw 0 1.0
 Egain n1 0 inp_int inn 1e5
 Rp n1 n2 1k noisy=0
 Cp n2 0 15.1576136n
-Ebuf n_out 0 n2 0 1.0
+Bbuf n_out 0 V = 2.3 * tanh(v(n2) / 2.3)
 Rout n_out out 1 noisy=0
 .ends OPAMP_ADA4817_300K
 
-* --- Fast Rail-to-Rail Comparator (TLV3501, t_pd=4.5 ns, 0..3.3 V) ---
-.subckt CMP_TLV3501 inp inn vcc gnd out
-Braw n1 gnd V = V(vcc) * 0.5 * (1 + tanh(V(inp, inn) / 0.2m))
+* --- Fast Rail-to-Rail Comparator (TI SBOS321 TLV3501AIDBVR, t_pd=4.5 ns, 0..3.3 V, active-HIGH SHDN) ---
+.subckt CMP_TLV3501 inp inn vcc gnd shdn out
+Braw n1 gnd V = v(vcc, gnd) * 0.5 * (1 + tanh((0.5*v(vcc, gnd) - v(shdn, gnd)) / 0.05)) * 0.5 * (1 + tanh(v(inp, inn) / 0.2m))
 Rdel n1 out 100 noisy=0
 Cdel out gnd 45p
 .ends CMP_TLV3501
@@ -88,12 +88,18 @@ Vthr thr_in 0 DC {V_THR}
 * CHANNEL 0 FULL SPLIT 3-PCB SIGNAL CHAIN (100 K Cold -> 50 Ohm Coax -> 300 K Warm)
 * =========================================================================
 * 1) Cold-Island 100 K CSA PCB (S3.2-01, global .temp = -173.15 C)
+*    Includes active cold guard bootstrap buffer (U_GRD_BOOT, zero 100nF AC-short to AGND)
+*    and 0805 cryo thin-film RF (0.03 pF stray body C trimmed into Cf_nom=0.22 pF -> Cf_eff=0.25 pF)
 Cdet0 csa_sum 0 {C_DET + C_PAR}
+Xgrd0 csa_sum grd_boot grd_boot OPAMP_LTC6268_DRV
+Rgrd_iso grd_boot guard_drv 49.9
+Ccsa_grd csa_sum guard_drv 0.65p
 * Positive output polarity (5 keV 31P+ Lindhard @ 100 K: Q_ION = 341.715 e- = 0.05475 fC in 1.5 ns collection pulse)
 * Trapezoid area = Ipk * (PW + 0.5*(TR+TF)) = (Q_ION/1.5n) * (1.4n + 0.1n) = Q_ION exact with automatic SPICE breakpoints!
 Iion0 csa_sum 0 DC 0 AC 1 PULSE(0 {Q_ION/TAU_COL} 50n 0.1n 0.1n 1.4n 1m)
 Xcsa0 0 csa_sum csa_out OPAMP_LTC6268_100K
-Cf0   csa_out csa_sum {C_F}
+Cf0   csa_out csa_sum 0.22p
+Crf_p csa_out csa_sum 0.03p
 Rf0   csa_out csa_sum {R_F}
 
 * Cold 50 Ohm Coax Line Driver (G = +2.00 -> 49.9 Ohm series -> 50 Ohm CF63 coax -> 49.9 Ohm RX = 1.000x net)
@@ -133,7 +139,7 @@ Rdac0  thr_in  thresh  1k      temp=26.85
 Cdac0  thresh  0       100n
 Rhys1  shp_buf cmp_inp {R_HYS1} temp=26.85
 Rhys2  cmp_out cmp_inp {R_HYS2} temp=26.85
-Xcmp0  cmp_inp thresh  vccd 0 cmp_out CMP_TLV3501
+Xcmp0  cmp_inp thresh  vccd 0 0 cmp_out CMP_TLV3501
 Rterm0 cmp_out count_hit {R_TERM} temp=26.85
 Rfpga0 count_hit 0     10k     temp=26.85
 

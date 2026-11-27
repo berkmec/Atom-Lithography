@@ -30,11 +30,15 @@ sys.path.insert(0, str(ROOT / "experiments" / "exp42_isotope_coded_atom"))
 import bath_yield129 as by129  # noqa: E402
 
 # Fixed repo anchors (read-only literature / upstream ledger constants)
-M4_CAP_YIELD_EXP131 = 0.9520  # Exp131 Δz_cap* = 8.0 nm tuned flip-flop yield (p_ff_opt)
+M4_CAP_YIELD_EXP131 = 0.9520  # Legacy smooth-t_c Exp131 Δz_cap* = 8.0 nm yield (without valley/iradina)
+M4_CAP_YIELD_IRADINA_VALLEY = 0.5375  # Honest OBS-047 yield: iradina 5 keV + 8 nm cap + Si(001) 2-valley |cos(k0*z+phi)|
 T2E0_S_EXP126 = 0.010  # 10.0 ms purified 28Si baseline (Exp62/63/126)
 T2E_NAT_S_EXP126 = 0.0003  # 0.30 ms natural Si (4.7% 29Si, Abe et al. 2010 / Exp62/126)
 F_NAT_FRAC = 0.047
 K_BATH_PER_FRAC_EXP126 = (1.0 / T2E_NAT_S_EXP126 - 1.0 / T2E0_S_EXP126) / F_NAT_FRAC
+# Quasistatic Overhauser bath spread at f=1% (OBS-110): ~1.00 MHz (KL) / ~2.00 MHz (HM5962) -> scales as sqrt(f)
+OVERHAUSER_SIGMA_1PCT_KL_MHZ = 1.001
+OVERHAUSER_SIGMA_1PCT_HM5962_MHZ = 2.002
 
 # First-principles Abragam (1961) dilute spin-1/2 29Si dipolar linewidth constants
 MU0_OVER_4PI = 1e-7
@@ -73,6 +77,13 @@ def coherence_vs_abundance(f_pct: float) -> dict[str, float]:
     dw_half_rad_s = ABRAGAM_PREF * DIP_CONST_RAD_NM3_S * n_29si_nm3
     t2n_star_ms = (1.0 / dw_half_rad_s) * 1e3
 
+    # 5. Quasistatic 29Si Overhauser bath linewidth & T2* (OBS-110: replaces 0.5 kHz Markovian floor!)
+    #    sigma_OH(f) ~ sqrt(f / 1%) * sigma_OH(1%), T2* = 1 / (sqrt(2) * pi * sigma_OH)
+    sigma_oh_kl_mhz = OVERHAUSER_SIGMA_1PCT_KL_MHZ * math.sqrt(max(float(f_pct), 1e-6))
+    sigma_oh_hm_mhz = OVERHAUSER_SIGMA_1PCT_HM5962_MHZ * math.sqrt(max(float(f_pct), 1e-6))
+    t2_star_kl_us = 1.0 / (math.sqrt(2.0) * math.pi * sigma_oh_kl_mhz)
+    t2_star_hm_us = 1.0 / (math.sqrt(2.0) * math.pi * sigma_oh_hm_mhz)
+
     return {
         "abundance_pct": float(f_pct),
         "T2e_hahn_ms": float(t2e_hahn_ms),
@@ -81,6 +92,11 @@ def coherence_vs_abundance(f_pct: float) -> dict[str, float]:
         "T2e_XY8_N64_alpha2_ms": float(t2e_xy8_n64_a2_ms),
         "T2e_XY8_N32_alpha1_ms": float(t2e_xy8_n32_a1_ms),
         "T2e_XY8_N64_alpha1_ms": float(t2e_xy8_n64_a1_ms),
+        "T2e_conservative_planning_alpha1_ms": float(t2e_xy8_n64_a1_ms),
+        "overhauser_sigma_KL_MHz": float(sigma_oh_kl_mhz),
+        "overhauser_sigma_HM5962_MHz": float(sigma_oh_hm_mhz),
+        "overhauser_T2_star_KL_us": float(t2_star_kl_us),
+        "overhauser_T2_star_HM5962_us": float(t2_star_hm_us),
         "T2n_star_abragam_ms": float(t2n_star_ms),
         "gamma_29si_hwhm_Hz": float(dw_half_rad_s / (2.0 * math.pi)),
     }
@@ -190,6 +206,11 @@ def run_abundance_sweep(
         perc_gap10 = evaluate_m4_percolation(
             cell["gap_stats"]["yield_and_gap_ge_10kHz"], n_cand_list=n_cand_list
         )
+        perc_ddrf_valley = evaluate_m4_percolation(
+            cell["gap_stats"]["yield_and_gap_ge_6893Hz"],
+            m4_cap_yield=M4_CAP_YIELD_IRADINA_VALLEY,
+            n_cand_list=n_cand_list,
+        )
         rows.append({
             "abundance_pct": float(f_pct),
             "mode_b": cell,
@@ -197,6 +218,7 @@ def run_abundance_sweep(
             "m4_percolation_base": perc_base,
             "m4_percolation_gap6p89kHz": perc_gap6p89,
             "m4_percolation_gap10kHz": perc_gap10,
+            "m4_percolation_ddrf_and_iradina_valley": perc_ddrf_valley,
         })
     return rows
 

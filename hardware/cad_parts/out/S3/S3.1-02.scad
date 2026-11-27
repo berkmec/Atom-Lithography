@@ -10,7 +10,7 @@
 // vacuum_grade      : UHV 1e-9 mbar
 // tolerance         : <1 Ohm kontak
 // computed_mass_kg  : 0.00299
-// envelope_mm       : 52.459 x 52.459 x 0.720
+// envelope_mm       : 52.824 x 53.156 x 0.720
 // design_maturity   : M0_M1_DETAILED_CAD_DESIGN_ONLY
 // no_lab_measurement: true
 // iec61508_certified: false
@@ -21,8 +21,8 @@
 $fn = 64;
 
 // Nominal bounding envelope parameters (mm)
-bbox_x = 52.4588;
-bbox_y = 52.4588;
+bbox_x = 52.8237;
+bbox_y = 53.1561;
 bbox_z = 0.7200;
 
 // Part-specific parametric dimensions

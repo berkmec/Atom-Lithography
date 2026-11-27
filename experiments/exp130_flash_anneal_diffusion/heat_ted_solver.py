@@ -335,31 +335,45 @@ class KineticsParams:
 
     # Bracht et al. (PRL 81, 393, 1998): Si self-interstitial equilibrium & self-diffusion
     # Exact product D_I * C_I* / C_Si = 2980 * exp(-4.95 eV/kT) cm^2/s -> D_I0 * C_I0 = 1.49e26 cm^-1 s^-1
-    # Formation entropy S_f^I ~= 11 k_B -> C_I0 = 2.98e27 cm^-3, D_I0 = 0.05 cm^2/s
+    # OBS-038 FIX: Decouple fast isolated monomer migration (Em_I = 0.90 eV, Ef_I = 4.05 eV, preserving
+    # Bracht's EXACT D_I * C_I* product = 1.49e26 * exp(-4.95 eV/kT)!) from trap-limited high-T tracer
+    # effective Em_I=1.77 eV, which unphysically froze 1.2e15 cm^-3 monomers during sub-ms quench.
     C_I0_cm3: float = 2.98e27
-    Ef_I_eV: float = 3.18
+    Ef_I_eV: float = 4.05
     D_I0_cm2_s: float = 0.05
-    Em_I_eV: float = 1.77
+    Em_I_eV: float = 0.90
     D_Si0_cm2_s: float = 530.0
     Ea_Si_eV: float = 4.75
     f_I_Si: float = 0.60
+
+    # OBS-038 FIX: Explicit vacancy field V(z, t) + diffusion-limited bulk I-V recombination
+    C_V0_cm3: float = 1.0e26
+    Ef_V_eV: float = 3.60
+    D_V0_cm2_s: float = 0.01
+    Em_V_eV: float = 0.45
+    r_cap_iv_nm: float = 0.50      # I-V capture radius (nm)
+    f_vac_init_ratio: float = 0.85  # initial surviving Frenkel V/I ratio in cascade
 
     # Stolk (JAP 1997) & Cowern (PRL 1999): shallow-implant interstitial cluster release & surface sink
     nu_cl_s: float = 1.5e15        # cluster dissolution attempt frequency (1/s)
     Ea_cl_diss_eV: float = 3.10    # small-cluster dissociation energy (eV)
     L_surf_nm: float = 2.0         # surface interstitial recombination length (nm)
 
-    # Olson & Roth (Mater. Sci. Rep. 3, 1, 1988, Table 1): Si(100) SPE velocity
-    # v_SPE(T) = 3.68e8 cm/s * exp(-2.70 eV / kT) = 3.68e15 nm/s * exp(-2.70 eV / kT).
-    # Across damaged layer depth L_regrow = 10.0 nm (~Rp + sigma_z = 9.34 nm):
-    # nu_act = v_0 / L_regrow = 3.68e14 s^-1 (gives ~0.96 nm/s SPE at 600 C -> ~10 s regrowth).
-    nu_act_s: float = 3.68e14      # Olson-Roth v_0 / L_regrow (1/s)
+    # OBS-151 FIX: Distinguish 3D single-ion disordered pocket SPE (L_pocket ~ 2.0 nm -> nu_act = 1.84e15 s^-1)
+    # from Olson & Roth (1988) planar Si(100) amorphous-layer SPE (L_regrow = 10.0 nm -> nu_act = 3.68e14 s^-1).
+    nu_act_s: float = 3.68e14      # planar Olson-Roth v_0 / 10 nm (1/s)
+    nu_act_pocket_s: float = 1.84e15  # 3D pocket regrowth v_0 / 2 nm (1/s)
+    spe_regime: str = "planar_10nm"   # "planar_10nm" or "pocket_3d"
     Ea_act_eV: float = 2.70        # SPE / substitutional incorporation energy (eV)
+    f_inact_mobile: float = 0.15   # kick-out interstitialcy mobility fraction of unactivated P_i (OBS-151)
 
     # Surface P segregation trapping & UHV desorption (Exp108 doi:10.1063/1.331355 anchor)
+    # OBS-151 FIX: Monolayer surface saturation N_ML_cm2 = 6.78e14 cm^-2 (Si(100) 1 ML)
     L_trap_nm: float = 0.5
     nu_evap_s: float = 1.0e12      # surface P thermal desorption prefactor (1/s)
     Ea_evap_eV: float = 3.10       # surface P UHV desorption activation energy (eV)
+    N_ML_surf_cm2: float = 6.78e14  # Si(100) 1 ML saturation capacity (atoms/cm^2)
+    dose_cm2: float = 1.0e12       # effective local dose (1e12 single-ion; 1e15 Exp108 blanket)
 
 
 def D_P_eq_nm2_s(T_K: float, p: KineticsParams) -> float:
@@ -374,12 +388,21 @@ def D_I_nm2_s(T_K: float, p: KineticsParams) -> float:
     return p.D_I0_cm2_s * 1e14 * math.exp(-p.Em_I_eV / (KB_EV * T_K))
 
 
+def C_V_star_cm3(T_K: float, p: KineticsParams) -> float:
+    return p.C_V0_cm3 * math.exp(-p.Ef_V_eV / (KB_EV * T_K))
+
+
+def D_V_nm2_s(T_K: float, p: KineticsParams) -> float:
+    return p.D_V0_cm2_s * 1e14 * math.exp(-p.Em_V_eV / (KB_EV * T_K))
+
+
 def D_Si_eq_nm2_s(T_K: float, p: KineticsParams) -> float:
     return p.D_Si0_cm2_s * 1e14 * math.exp(-p.Ea_Si_eV / (KB_EV * T_K))
 
 
 def k_act_s(T_K: float, p: KineticsParams) -> float:
-    return p.nu_act_s * math.exp(-p.Ea_act_eV / (KB_EV * T_K))
+    nu = p.nu_act_pocket_s if p.spe_regime == "pocket_3d" else p.nu_act_s
+    return nu * math.exp(-p.Ea_act_eV / (KB_EV * T_K))
 
 
 def k_cl_diss_s(T_K: float, p: KineticsParams) -> float:
@@ -433,9 +456,11 @@ def solve_ted_kinetics_1d(
     N_surf = 0.0   # trapped at z=0 front surface (fraction of total dose)
     N_evap = 0.0   # thermally evaporated into UHV (fraction of total dose)
 
-    # Initial implant-damage interstitial cluster reservoir (peaks slightly deeper/overlapping Rp)
+    # Initial implant-damage interstitial cluster reservoir + surviving monovacancy field (OBS-038)
     C_cl = C_cl_peak_cm3 * (g0 / float(np.max(g0)))
     I_conc = np.full(n_cells, C_I_star_cm3(float(T_K[0]), params), dtype=np.float64)
+    c_v0_init = C_V_star_cm3(float(T_K[0]), params)
+    V_conc = c_v0_init + (0.10 * params.f_vac_init_ratio) * C_cl
 
     # Initial 29Si epitaxial layer profile: f = 1% for z <= z_epi_nm, 0% in 28Si substrate
     C29 = np.where(z <= z_epi_nm, 0.01, 0.0).astype(np.float64)
@@ -446,6 +471,8 @@ def solve_ted_kinetics_1d(
     int_2D_Si_rp = 0.0
     int_2D_Si_epi = 0.0
     max_S_I = 1.0
+    iv_recomb_tot_cm3 = 0.0
+    n_ml_frac = params.N_ML_surf_cm2 / max(params.dose_cm2, 1.0)
 
     for step in range(t_s.size - 1):
         dt = float(t_s[step + 1] - t_s[step])
@@ -459,6 +486,8 @@ def solve_ted_kinetics_1d(
         d_p_eq = D_P_eq_nm2_s(Tm, params)
         d_i = D_I_nm2_s(Tm, params)
         c_i_star = max(C_I_star_cm3(Tm, params), 1e-30)
+        d_v = D_V_nm2_s(Tm, params)
+        c_v_star = max(C_V_star_cm3(Tm, params), 1e-30)
         d_si_eq = D_Si_eq_nm2_s(Tm, params)
         ka = k_act_s(Tm, params)
         kd = k_cl_diss_s(Tm, params)
@@ -470,20 +499,18 @@ def solve_ted_kinetics_1d(
         C_cl = C_cl * exp_kd
         gen_I_rate = dC_cl_released / dt  # cm^-3 / s
 
-        # 2. Implicit 1D diffusion PDE for Si self-interstitials I(z, t)
-        #    Surface Robin sink at z=0: J_I(0) = -(d_i / L_surf) * (I(0) - C_I*)
-        #    Deep bulk Dirichlet at z=z_max: I(z_max) = C_I*
-        #    For isolated single-donor cascade (r_casc_nm != None), include exact 3D radial
-        #    out-diffusion loss rate k_rad = 4 * d_i / r_casc^2 toward equilibrium C_I*!
+        # Diffusion-limited bulk I-V recombination constant k_IV = 4*pi*r_cap*(D_I + D_V) [cm^3/s] (OBS-038)
+        k_iv_cm3_s = 4.0 * math.pi * (params.r_cap_iv_nm * 1e-7) * ((d_i + d_v) * 1e-14)
+        k_iv_I_dt = k_iv_cm3_s * V_conc * dt
+
+        # 2a. Implicit 1D diffusion + 3D radial sink + I-V recombination PDE for self-interstitials I(z, t)
         alpha_I = d_i * dt / (dz * dz)
         k_rad_dt = (4.0 * d_i / (r_casc_nm ** 2)) * dt if r_casc_nm is not None else 0.0
-        diag_I = np.full(n_cells, 1.0 + 2.0 * alpha_I + k_rad_dt, dtype=np.float64)
-        # Surface cell i=0: one internal face + exact Robin sink (distance dz/2 to z=0) + radial loss
+        diag_I = 1.0 + 2.0 * alpha_I + k_rad_dt + k_iv_I_dt
         k_surf_I = (d_i / (params.L_surf_nm + 0.5 * dz)) * dt / dz
-        diag_I[0] = 1.0 + alpha_I + k_surf_I + k_rad_dt
-        # Deep cell i=-1: Dirichlet C_I* at outer boundary (distance dz/2) + radial loss
-        diag_I[-1] = 1.0 + 3.0 * alpha_I + k_rad_dt
-        rhs_I = I_conc + gen_I_rate * dt + k_rad_dt * c_i_star
+        diag_I[0] = 1.0 + alpha_I + k_surf_I + k_rad_dt + k_iv_I_dt[0]
+        diag_I[-1] = 1.0 + 3.0 * alpha_I + k_rad_dt + k_iv_I_dt[-1]
+        rhs_I = I_conc + gen_I_rate * dt + k_rad_dt * c_i_star + k_iv_cm3_s * c_i_star * c_v_star * dt
         rhs_I[0] += k_surf_I * c_i_star
         rhs_I[-1] += 2.0 * alpha_I * c_i_star
 
@@ -493,28 +520,57 @@ def solve_ted_kinetics_1d(
         ab_I[2, :-1] = -alpha_I
         I_conc = np.maximum(solve_banded((1, 1), ab_I, rhs_I, overwrite_ab=True, overwrite_b=True), c_i_star)
 
+        # 2b. Implicit 1D diffusion + I-V recombination PDE for vacancies V(z, t) (OBS-038)
+        alpha_V = d_v * dt / (dz * dz)
+        k_rad_V_dt = (4.0 * d_v / (r_casc_nm ** 2)) * dt if r_casc_nm is not None else 0.0
+        k_iv_V_dt = k_iv_cm3_s * I_conc * dt
+        diag_V = 1.0 + 2.0 * alpha_V + k_rad_V_dt + k_iv_V_dt
+        k_surf_V = (d_v / (params.L_surf_nm + 0.5 * dz)) * dt / dz
+        diag_V[0] = 1.0 + alpha_V + k_surf_V + k_rad_V_dt + k_iv_V_dt[0]
+        diag_V[-1] = 1.0 + 3.0 * alpha_V + k_rad_V_dt + k_iv_V_dt[-1]
+        rhs_V = V_conc + k_rad_V_dt * c_v_star + k_iv_cm3_s * c_i_star * c_v_star * dt
+        rhs_V[0] += k_surf_V * c_v_star
+        rhs_V[-1] += 2.0 * alpha_V * c_v_star
+        ab_V = np.zeros((3, n_cells), dtype=np.float64)
+        ab_V[0, 1:] = -alpha_V
+        ab_V[1, :] = diag_V
+        ab_V[2, :-1] = -alpha_V
+        V_new = np.maximum(solve_banded((1, 1), ab_V, rhs_V, overwrite_ab=True, overwrite_b=True), c_v_star)
+        iv_recomb_tot_cm3 += float(np.mean(np.maximum(0.0, k_iv_cm3_s * (I_conc * V_new - c_i_star * c_v_star) * dt)))
+        V_conc = V_new
+
         S_I = I_conc / c_i_star
         max_S_I = max(max_S_I, float(S_I[idx_rp]))
 
-        # 3. Activation: exact exponential transfer P_inact -> P_act
+        # 3. Mobile P_inact kick-out transport during short high-S_I pulses (OBS-151) + activation
+        D_P_eff = d_p_eq * (params.f_I_P * S_I + (1.0 - params.f_I_P))
+        if params.f_inact_mobile > 0.0 and float(np.sum(P_inact)) > 1e-12:
+            D_in = params.f_inact_mobile * D_P_eff
+            D_in_f = 2.0 * D_in[:-1] * D_in[1:] / np.maximum(D_in[:-1] + D_in[1:], 1e-60)
+            lam_in = D_in_f * dt / (dz * dz)
+            diag_in = np.ones(n_cells, dtype=np.float64)
+            diag_in[:-1] += lam_in
+            diag_in[1:] += lam_in
+            ab_in = np.zeros((3, n_cells), dtype=np.float64)
+            ab_in[0, 1:] = -lam_in
+            ab_in[1, :] = diag_in
+            ab_in[2, :-1] = -lam_in
+            P_inact = solve_banded((1, 1), ab_in, P_inact, overwrite_ab=True, overwrite_b=True)
+
         exp_ka = math.exp(-min(ka * dt, 500.0))
         dP_act = P_inact * (1.0 - exp_ka)
         P_inact = P_inact * exp_ka
         P_act = P_act + dP_act
 
-        # 4. Implicit mass-conserving 1D PDE for mobile/active P under TED kick-out diffusivity
-        #    D_P,eff(z) = d_p_eq * (f_I * S_I(z) + (1 - f_I))
-        #    Note: During high-S_I TED (like 600 C / 10 min), even partially un-activated P-I pairs
-        #    participate in interstitialcy kick-out migration; we apply D_P,eff to P_act and also
-        #    allow TED-driven kick-out transport of P_act with surface trapping sink at z=0.
-        D_P_eff = d_p_eq * (params.f_I_P * S_I + (1.0 - params.f_I_P))
+        # 4. Implicit mass-conserving 1D PDE for active P under TED kick-out diffusivity
         int_2D_P_lat += 2.0 * float(D_P_eff[idx_rp]) * dt
 
         # Face diffusivities (harmonic mean)
         D_face = 2.0 * D_P_eff[:-1] * D_P_eff[1:] / np.maximum(D_P_eff[:-1] + D_P_eff[1:], 1e-60)
         lam_f = D_face * dt / (dz * dz)
-        # Surface segregation sink velocity at z=0 (exact FVM distance dz/2 + L_trap)
-        k_trap = (D_P_eff[0] / (params.L_trap_nm + 0.5 * dz)) * dt / dz
+        # Surface segregation sink velocity at z=0 with 1 ML monolayer saturation (OBS-151)
+        sat_factor = max(0.0, 1.0 - N_surf / max(n_ml_frac, 1e-9))
+        k_trap = sat_factor * (D_P_eff[0] / (params.L_trap_nm + 0.5 * dz)) * dt / dz
 
         diag_P = np.ones(n_cells, dtype=np.float64)
         diag_P[:-1] += lam_f
@@ -599,6 +655,10 @@ def solve_ted_kinetics_1d(
         "c29_at_rp_pct": c29_at_rp_pct,
         "c29_drift_rel_at_rp": c29_drift_rel,
         "max_S_I_at_Rp": max_S_I,
+        "iv_recombined_mean_cm3": iv_recomb_tot_cm3,
+        "Em_I_eV_used": params.Em_I_eV,
+        "spe_regime": params.spe_regime,
+        "surface_ML_cap_frac": n_ml_frac,
         "z_nm": z,
         "P_init": P_init,
         "P_act_final": P_act,
@@ -671,66 +731,125 @@ def cp_debye_solid(T_K: np.ndarray, theta_D: float, molar_mass_kg: float) -> np.
     return out
 
 
+GAMMA_CU_SOMMERFELD_J_KG_K2 = 0.01094  # OFHC Cu conduction-electron Sommerfeld coefficient [J/(kg K^2)]
+
+
 def compute_cryo_cooldown_to_20mK(
     fluence_J_per_cm2: float,
     area_illuminated_cm2: float,
     absorptivity: float = 0.67,
     wafer_diam_mm: float = 50.0,
     wafer_thick_mm: float = 0.50,
-    cu_carrier_mass_kg: float = 0.15,
+    cu_carrier_mass_kg: float = 0.725,
+    aln_stage_mass_kg: float = 0.080,
     T_pre_K: float = 4.0,
     P_4K_switch_W: float = 1.0,
     P_still_W: float = 0.030,
-    P_mxc_100mK_W: float = 540e-6,
-    P_mxc_20mK_W: float = 19e-6,
+    P_mxc_100mK_W: float = 400e-6,
+    P_mxc_20mK_W: float = 14e-6,
+    R_joint_100mK_K_W: float = 1000.0,
+    R_kapitza_100mK_K_W: float = 50.0,
+    has_4k_thermal_switch: bool = False,
     thermal_contact_overhead_s: float = 120.0,
 ) -> Dict[str, float]:
-    """Compute exact Debye-integral thermal recovery time of wafer + Cu/AlN carrier to 20 mK.
+    """Compute realistic Debye + Cu Sommerfeld + Kapitza/joint RC thermal recovery to 20 mK (OBS-100).
 
-    Models realistic in-situ flash recovery: absorbed optical energy equilibrates across the
-    50 mm Si wafer + 0.15 kg OFHC-Cu/AlN cold-stage carrier (Theta_D_Cu = 343 K), then is
-    extracted strictly via the 4 K PT410/420 thermal switch (1.0-1.5 W), Still (30 mW), and
-    MXC (540 uW @100 mK -> 19 uW @20 mK), plus conservative 120 s contact/DR settling overhead.
+    Fixes OBS-100 defects:
+      1. Real S6.2-01 OFHC Cu chuck mass = 0.725 kg (4.83x larger than legacy 0.15 kg) + 0.08 kg AlN/stage.
+      2. Includes Cu Sommerfeld electronic specific heat c_el = gamma_Cu * T (gamma = 10.94 mJ/(kg K^2)),
+         which dominates phonon T^3 by ~2,800x below 100 mK and increases H(0.02->4 K) to ~98 mJ.
+      3. Uses updated Bluefors LD400 capacities (400 uW @ 100 mK, 14 uW @ 20 mK, not 540/19 uW PT410).
+      4. Models conductive/Kapitza/bolted-joint thermal resistance (Pilot 1B 500-2500 K/W) below 4 K
+         instead of ideal Q/P_mxc division.
+      5. Explicitly distinguishes current CAD (has_4k_thermal_switch=False -> heat above 4 K must route
+         through 30 mW Still -> hours & DR circulation boil-off -> in-situ 20 mK flash LOCKED OUT!)
+         vs a dedicated mechanical 4 K thermal switch hardware upgrade (has_4k_thermal_switch=True).
     """
     vol_m3 = math.pi * ((0.5 * wafer_diam_mm * 1e-3) ** 2) * (wafer_thick_mm * 1e-3)
     mass_si_kg = RHO_SI * vol_m3
     E_abs_J = fluence_J_per_cm2 * area_illuminated_cm2 * absorptivity
 
-    # Exact Debye enthalpy of (Si wafer + OFHC-Cu carrier) from 0.02 K to 300 K
-    T_grid = np.concatenate([np.geomspace(0.02, 10.0, 200), np.linspace(10.5, 450.0, 300)])
+    # Exact Debye phonon + Cu Sommerfeld electronic enthalpy from 0.02 K to 450 K
+    T_grid = np.concatenate([np.geomspace(0.02, 10.0, 240), np.linspace(10.5, 450.0, 300)])
     cp_si_arr = cp_debye_solid(T_grid, THETA_DEBYE_SI, MOLAR_MASS_SI)
-    cp_cu_arr = cp_debye_solid(T_grid, 343.0, 0.063546)  # OFHC Cu Theta_D=343 K, M=63.546 g/mol
-    C_tot_J_K = mass_si_kg * cp_si_arr + cu_carrier_mass_kg * cp_cu_arr
+    cp_cu_phonon = cp_debye_solid(T_grid, 343.0, 0.063546)  # OFHC Cu Theta_D=343 K, M=63.546 g/mol
+    cp_cu_elec = GAMMA_CU_SOMMERFELD_J_KG_K2 * T_grid       # Linear Sommerfeld electronic term!
+    cp_aln_arr = cp_debye_solid(T_grid, 950.0, 0.040988)    # AlN ceramic chuck/carrier
+
+    C_tot_J_K = (
+        mass_si_kg * cp_si_arr
+        + cu_carrier_mass_kg * (cp_cu_phonon + cp_cu_elec)
+        + aln_stage_mass_kg * cp_aln_arr
+    )
     H_tot = np.concatenate([[0.0], np.cumsum(0.5 * (C_tot_J_K[:-1] + C_tot_J_K[1:]) * np.diff(T_grid))])
+
+    # Diagnostics: phonon vs Sommerfeld electronic enthalpy in [20 mK, 100 mK] & [20 mK, 4 K]
+    m_100 = T_grid <= 0.10001
+    t_sub = T_grid[m_100]
+    h_cu_ph_100 = float(np.trapezoid(cu_carrier_mass_kg * cp_cu_phonon[m_100], t_sub))
+    h_cu_el_100 = float(np.trapezoid(cu_carrier_mass_kg * cp_cu_elec[m_100], t_sub))
 
     H_pre = float(np.interp(T_pre_K, T_grid, H_tot))
     H_post = H_pre + E_abs_J
     T_eq_post = float(np.interp(H_post, H_tot, T_grid))
-
     H_4K = float(np.interp(4.0, T_grid, H_tot))
-    H_1K = float(np.interp(1.0, T_grid, H_tot))
-    H_100mK = float(np.interp(0.10, T_grid, H_tot))
 
-    # All heat above 4 K extracted via 4 K thermal switch (PT410=1.0 W / PT420=2.0 W)
-    t_above_4K = max(0.0, H_post - H_4K) / P_4K_switch_W
-    t_4K_to_1K = max(0.0, min(H_post, H_4K) - H_1K) / P_still_W
-    t_1K_to_100mK = max(0.0, min(H_post, H_1K) - H_100mK) / P_mxc_100mK_W
-    t_100mK_to_20mK = max(0.0, min(H_post, H_100mK)) / P_mxc_20mK_W
-    t_cryo_sub4K = t_4K_to_1K + t_1K_to_100mK + t_100mK_to_20mK
-    t_tot_s = t_above_4K + t_cryo_sub4K + thermal_contact_overhead_s
+    # Heat extraction above 4 K: 4 K mechanical switch (1.0 W) if present, else Still-limited (30 mW)
+    if has_4k_thermal_switch:
+        t_above_4K = max(0.0, H_post - H_4K) / P_4K_switch_W
+    else:
+        t_above_4K = max(0.0, H_post - H_4K) / P_still_W
+
+    # Conduction/Kapitza/bolted-joint RC-limited + LD400 MXC cooldown from min(T_eq_post, 4 K) to 20 mK
+    T_start_sub4 = min(T_eq_post, 4.0)
+    t_cryo_sub4K_rc = 0.0
+    t_cryo_sub4K_ideal_mxc = 0.0
+    if T_start_sub4 > 0.0205:
+        t_int = np.geomspace(0.0205, T_start_sub4, 300)
+        c_int = np.interp(t_int, T_grid, C_tot_J_K)
+        for k in range(t_int.size - 1):
+            Tm = 0.5 * float(t_int[k] + t_int[k + 1])
+            dT = float(t_int[k + 1] - t_int[k])
+            dH = 0.5 * float(c_int[k] + c_int[k + 1]) * dT
+            # LD400 fridge cooling power curve (14 uW @ 20 mK, 400 uW @ 100 mK, 30 mW @ >= 1 K)
+            if Tm >= 1.0:
+                p_fridge = P_still_W
+            elif Tm >= 0.10:
+                frac = (Tm - 0.10) / 0.90
+                p_fridge = P_mxc_100mK_W + frac * (P_still_W - P_mxc_100mK_W)
+            else:
+                frac = max(0.0, (Tm - 0.02) / 0.08)
+                p_fridge = P_mxc_20mK_W + (P_mxc_100mK_W - P_mxc_20mK_W) * (frac ** 2)
+            # Bolted-joint Wiedemann-Franz R_joint ~ 1/T + Kapitza R_K ~ 1/T^3
+            r_wf = R_joint_100mK_K_W * (0.10 / Tm)
+            r_kap = R_kapitza_100mK_K_W * ((0.10 / Tm) ** 3)
+            p_cond = max(Tm - 0.020, 1e-4) / (r_wf + r_kap)
+            p_eff = min(p_fridge, p_cond)
+            t_cryo_sub4K_rc += dH / max(p_eff, 1e-12)
+            t_cryo_sub4K_ideal_mxc += dH / max(p_fridge, 1e-12)
+
+    t_tot_s = t_above_4K + t_cryo_sub4K_rc + thermal_contact_overhead_s
 
     return {
         "wafer_mass_g": mass_si_kg * 1e3,
         "cu_carrier_mass_kg": cu_carrier_mass_kg,
+        "aln_stage_mass_kg": aln_stage_mass_kg,
+        "has_4k_thermal_switch": bool(has_4k_thermal_switch),
         "E_absorbed_J": E_abs_J,
         "T_pre_K": T_pre_K,
         "T_bulk_eq_post_flash_K": T_eq_post,
         "H_stage_4K_to_20mK_mJ": H_4K * 1e3,
+        "H_cu_phonon_20mK_to_100mK_uJ": h_cu_ph_100 * 1e6,
+        "H_cu_sommerfeld_20mK_to_100mK_uJ": h_cu_el_100 * 1e6,
+        "sommerfeld_to_phonon_ratio_lt100mK": h_cu_el_100 / max(h_cu_ph_100, 1e-18),
         "t_cool_above_4K_s": t_above_4K,
-        "t_cool_4K_to_20mK_s": t_cryo_sub4K,
+        "t_cool_4K_to_20mK_ideal_mxc_s": t_cryo_sub4K_ideal_mxc,
+        "t_cool_4K_to_20mK_rc_s": t_cryo_sub4K_rc,
+        "t_cool_4K_to_20mK_s": t_cryo_sub4K_rc,
         "t_contact_settling_s": thermal_contact_overhead_s,
         "t_cool_total_s": t_tot_s,
         "t_cool_total_min": t_tot_s / 60.0,
+        "in_situ_20mK_flash_viable": bool(has_4k_thermal_switch and (t_tot_s / 60.0) <= 15.0),
     }
 
 

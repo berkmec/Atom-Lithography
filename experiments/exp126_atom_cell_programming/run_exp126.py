@@ -668,6 +668,17 @@ def main() -> None:
         "n_predictions_total": len(verdicts),
         "success_rule_met": bool(success_rule_met),
         "verdicts": verdicts,
+        "obs_029_141_honest_audit": {
+            "kl_scale_audit": h126.audit_legacy_kl_vs_hm5962(),
+            "ddrf_crowding_wall_Hz": float(h126.DDRF_MIN_GAP_WALL_HZ),
+            "unresolved_gate_wall_status": "HONEST_FAIL_RECORDED" if not success_rule_met else "CLOSED",
+            "honest_failed_verdicts": [k for k, v in verdicts.items() if not v["passed"]],
+            "remediation_note": (
+                "Legacy 2.981 MHz double-halved KL fixed via hyperfine_scale='hm5962' (5.962 MHz); "
+                "DDRF 6.893 kHz crowding wall enforced in sample_certified_f1_cells; P126_1/2/3 "
+                "failures honestly retained until longer frequency-selective GRAPE + dipolar bath calibration."
+            ),
+        },
         "part1_f1_universal_gates": {
             "cell_meta": f1.to_metadata_dict(),
             "gates_summary": f1_gates_summary,

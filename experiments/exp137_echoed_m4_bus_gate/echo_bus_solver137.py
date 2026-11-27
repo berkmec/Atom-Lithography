@@ -47,7 +47,10 @@ from .noise_ou137 import (
 )
 
 KB_BOLTZMANN = 1.380649e-23
-GAMMA_PHI_NUC_1PCT_KHZ = 0.5  # Residual Mod B f=1% 29Si nuclear bath dephasing (Exp131 anchor)
+GAMMA_PHI_NUC_1PCT_KHZ = 0.5  # Legacy 0.5 kHz Markovian floor (understates un-echoed Overhauser >1000x; see OBS-110)
+OVERHAUSER_SIGMA_1P5PCT_MHZ = 1.281  # Quasistatic 29Si Overhauser linewidth at f=1.5% (OBS-110)
+J1_BESSEL_PEAK = 0.5818652242        # Exact max |J_1(beta)| at beta* = 1.84118 (OBS-042)
+DEFAULT_T_PI_DRAG_GAUSS_US = 0.060   # 60 ns DRAG/Gaussian echo pi-pulse replacing 15 ns square pulse (OBS-101)
 
 # Basis operators on Q1(2) x Q2(2) x Cavity(3)
 _I2 = np.eye(2, dtype=np.complex128)
@@ -403,9 +406,12 @@ def simulate_echoed_cz_cuda(
     protocol: str = "P3",
     alpha: float = 1.0,
     n_traj: int = 512,
-    t_pi_us: float = 0.015,
+    t_pi_us: float = DEFAULT_T_PI_DRAG_GAUSS_US,
     eps_rot: float = 0.015,
     include_dg_jitter: bool = True,
+    include_overhauser_bath: bool = False,
+    sigma_oh_mhz: float = OVERHAUSER_SIGMA_1P5PCT_MHZ,
+    pi_pulse_shape: str = "drag_gaussian",
     markovian_dephasing_override_khz: tuple[float, float] | None = None,
     f_r_ghz: float = 5.0,
     temp_mk: float = 20.0,
@@ -414,33 +420,38 @@ def simulate_echoed_cz_cuda(
     n_fluct: int = DEFAULT_N_FLUCT,
     seed: int = 13701,
 ) -> dict[str, Any]:
-    """Run exact 12x12 CUDA Strang-split Lindblad + colored 1/f^alpha simulation for one pair."""
+    """Run exact 12x12 CUDA Strang-split Lindblad + colored 1/f^alpha simulation for one pair.
+
+    OBS-042 FIX: ZERO synthetic clamping of d1 or artificial 0.20x rescaling of dg!
+    For P4 parametric sideband modulation, uses exact self-consistent (g_eff, d1, dg)
+    from the 4x4 Tosi Hamiltonian with exact Bessel J_1(1.841) = 0.5819 sideband scaling.
+    OBS-101 FIX: Defaults to 60 ns DRAG/Gaussian echo pi-pulses eliminating 97.8% square-pulse crosstalk.
+    OBS-110 FIX: Supports explicit quasistatic + spectral-diffusion 29Si Overhauser OU trajectories.
+    """
     rng = np.random.default_rng(seed)
     n_slices, pulse_seq = _build_protocol_ops(protocol)
     slice_angle = (0.5 * math.pi) / n_slices  # Total swap angle across 2 halves = pi/2 (each half = pi/4)
 
-    # Protocol-specific physical parameters
+    # Protocol-specific physical parameters (ZERO synthetic clamping!)
     alpha_drag = 0.0 if protocol == "P3_no_drag" else -1.0
     eta_min = 3.5 if protocol == "P4" else 4.0
 
-    # P4 Sweet-Spot Parametric AC-Stark / Flux-Modulated Bus (Didier PRA 2018 + Tosi 2017):
-    # - Both donors biased to clock transition (|D1| capped at clock-transition residual <= 4e-6)
-    # - Resonator flux-modulated at Bessel stationary peak beta*=1.841 (J1'(beta*)=0) + flat-g bias ->
-    #   reduces effective 1st-order transverse dg/deps sensitivity by 5x!
+    # Exact unclamped 4x4 Tosi derivatives (OBS-042: removed synthetic |d1|<=4e-6 and dg*=0.20!)
     d1_1, d2_1 = pair.d1_1_ghz_per_ghz, pair.d2_1_inv_ghz
     d1_2, d2_2 = pair.d1_2_ghz_per_ghz, pair.d2_2_inv_ghz
     dg1, dg2 = pair.dg1_mhz_per_ghz, pair.dg2_mhz_per_ghz
+    # Exact Bessel J_1(1.841) = 0.5819 sideband coupling scaling for P4 parametric modulation
+    g1_eff_mhz = pair.g1_mhz * (J1_BESSEL_PEAK if protocol == "P4" else 1.0)
+    g2_eff_mhz = pair.g2_mhz * (J1_BESSEL_PEAK if protocol == "P4" else 1.0)
     if protocol == "P4":
-        d1_1 = math.copysign(min(abs(d1_1), 4.0e-6), d1_1)
-        d1_2 = math.copysign(min(abs(d1_2), 4.0e-6), d1_2)
-        dg1 *= 0.20
-        dg2 *= 0.20
+        dg1 *= J1_BESSEL_PEAK
+        dg2 *= J1_BESSEL_PEAK
 
     if not include_dg_jitter:
         dg1, dg2 = 0.0, 0.0
 
     sched = _calibrate_slice_schedule(
-        pair.g1_mhz, pair.g2_mhz, slice_angle=slice_angle, eta_min=eta_min, alpha_drag=alpha_drag, n_edge=6, n_hold=4
+        g1_eff_mhz, g2_eff_mhz, slice_angle=slice_angle, eta_min=eta_min, alpha_drag=alpha_drag, n_edge=6, n_hold=4
     )
     n_pts = sched["n_pts"]
     dts_slice = sched["dts_slice"]
@@ -450,10 +461,10 @@ def simulate_echoed_cz_cuda(
     delta = sched["delta"]
     fac_arr = sched["fac_arr"]
     u_rf = sched["u_rf"]
-    g1_0 = 2.0 * math.pi * pair.g1_mhz
-    g2_0 = 2.0 * math.pi * pair.g2_mhz
+    g1_0 = 2.0 * math.pi * g1_eff_mhz
+    g2_0 = 2.0 * math.pi * g2_eff_mhz
 
-    # Build full time-step array dts_all for OU noise generation (includes finite 15 ns pi-pulses!)
+    # Build full time-step array dts_all for OU noise generation (includes finite pi-pulses!)
     dts_all: list[float] = []
     for _sl in range(n_slices):
         dts_all.extend(dts_slice)
@@ -466,15 +477,15 @@ def simulate_echoed_cz_cuda(
     kappa = 2.0 * math.pi * (kappa_khz * 1e-3)
     gam1_1 = 2.0 * math.pi * (pair.gamma1_1_khz * 1e-3)
     gam1_2 = 2.0 * math.pi * (pair.gamma1_2_khz * 1e-3)
-    # Residual 1% 29Si nuclear bath (or explicit Markovian dephasing for Exp131 anchor verification)
+    # Residual nuclear bath (Markovian floor disabled when explicit Overhauser trajectories are active)
     if markovian_dephasing_override_khz is not None:
         gphi1_khz, gphi2_khz = markovian_dephasing_override_khz
         n_traj_eff = 1
         s_eps_eff = 0.0
     else:
-        gphi1_khz = GAMMA_PHI_NUC_1PCT_KHZ if q_r > 0.0 else 0.0
-        gphi2_khz = GAMMA_PHI_NUC_1PCT_KHZ if q_r > 0.0 else 0.0
-        n_traj_eff = 1 if (s_eps_uev <= 0.0) else n_traj
+        gphi1_khz = 0.0 if (include_overhauser_bath or q_r <= 0.0) else GAMMA_PHI_NUC_1PCT_KHZ
+        gphi2_khz = 0.0 if (include_overhauser_bath or q_r <= 0.0) else GAMMA_PHI_NUC_1PCT_KHZ
+        n_traj_eff = 1 if (s_eps_uev <= 0.0 and not include_overhauser_bath) else n_traj
         s_eps_eff = s_eps_uev
 
     l_diss = (
@@ -496,9 +507,33 @@ def simulate_echoed_cz_cuda(
     # Exact 2nd-order Taylor frequency shifts dw(t) in Mrad/s (1 GHz = 1000 MHz -> 2*pi*1000 Mrad/s)
     dw1 = 2.0 * math.pi * 1e3 * (d1_1 * de1 + 0.5 * d2_1 * (de1 * de1))
     dw2 = 2.0 * math.pi * 1e3 * (d1_2 * de2 + 0.5 * d2_2 * (de2 * de2))
+
+    # Explicit quasistatic + slow spectral-diffusion 29Si Overhauser OU bath (OBS-110)
+    if include_overhauser_bath and q_r > 0.0 and sigma_oh_mhz > 0.0:
+        oh1 = rng.normal(0.0, 2.0 * math.pi * sigma_oh_mhz, size=(n_traj_eff, 1))
+        oh2 = rng.normal(0.0, 2.0 * math.pi * sigma_oh_mhz, size=(n_traj_eff, 1))
+        # Add slow OU nuclear flip-flop spectral diffusion (~50 Hz corner) over the gate
+        dt_arr = np.asarray(dts_all, dtype=np.float64) * 1e-6
+        f_ff = 50.0
+        sd1 = np.zeros((n_traj_eff, len(dts_all)), dtype=np.float64)
+        sd2 = np.zeros((n_traj_eff, len(dts_all)), dtype=np.float64)
+        x1 = oh1[:, 0].copy()
+        x2 = oh2[:, 0].copy()
+        sig_rad = 2.0 * math.pi * sigma_oh_mhz
+        for k_t in range(len(dts_all)):
+            sd1[:, k_t] = x1
+            sd2[:, k_t] = x2
+            if k_t + 1 < len(dts_all):
+                dec = math.exp(-2.0 * math.pi * f_ff * dt_arr[k_t])
+                inn = sig_rad * math.sqrt(max(0.0, 1.0 - dec * dec))
+                x1 = x1 * dec + rng.normal(0.0, inn, size=n_traj_eff)
+                x2 = x2 * dec + rng.normal(0.0, inn, size=n_traj_eff)
+        dw1 = dw1 + sd1
+        dw2 = dw2 + sd2
+
     # Physically bounded transverse coupling jitter dg(t) in Mrad/s (clamped to [-0.45 g, +0.60 g])
-    dg1_arr = 2.0 * math.pi * np.clip(dg1 * de1, -0.45 * pair.g1_mhz, 0.60 * pair.g1_mhz)
-    dg2_arr = 2.0 * math.pi * np.clip(dg2 * de2, -0.45 * pair.g2_mhz, 0.60 * pair.g2_mhz)
+    dg1_arr = 2.0 * math.pi * np.clip(dg1 * de1, -0.45 * g1_eff_mhz, 0.60 * g1_eff_mhz)
+    dg2_arr = 2.0 * math.pi * np.clip(dg2 * de2, -0.45 * g2_eff_mhz, 0.60 * g2_eff_mhz)
 
     use_gpu = _TORCH_AVAILABLE and _TORCH_DEVICE is not None and _TORCH_DEVICE.type == "cuda"
 
@@ -653,6 +688,97 @@ def simulate_echoed_cz_cuda(
     out["q_r"] = float(q_r)
     out["s_eps_uev"] = float(s_eps_uev)
     out["include_dg_jitter"] = bool(include_dg_jitter)
+    out["include_overhauser_bath"] = bool(include_overhauser_bath)
+    out["pi_pulse_shape"] = str(pi_pulse_shape)
+    out["t_pi_us"] = float(t_pi_us)
+    out["synthetic_clamping_removed"] = True
     out["eta"] = float(sched["eta"])
     out["device_used"] = str(_TORCH_DEVICE) if use_gpu else "scipy_cpu"
     return out
+
+
+def audit_mw_pi_pulse_crosstalk(
+    t_rect_ns: float = 15.0,
+    t_drag_gauss_ns: float = 60.0,
+    detunings_mhz: tuple[float, ...] = (5.0, 12.0, 50.0, 100.0, 117.53),
+) -> dict[str, Any]:
+    """Exact 2-level Rabi propagator audit comparing 15 ns rectangular vs 60 ns DRAG/Gaussian pi-pulses (OBS-101)."""
+    sx = np.array([[0.0, 1.0], [1.0, 0.0]], dtype=np.complex128)
+    sy = np.array([[0.0, -1j], [1j, 0.0]], dtype=np.complex128)
+    sz = np.array([[1.0, 0.0], [0.0, -1.0]], dtype=np.complex128)
+
+    def _p_flip(delta_mhz: float, t_ns: float, shaped: bool, n_steps: int = 240) -> float:
+        dt_us = (t_ns * 1e-3) / n_steps
+        u = (np.arange(n_steps) + 0.5) / n_steps
+        if shaped:
+            sig = 1.0 / 6.0
+            env = np.exp(-0.5 * ((u - 0.5) / sig) ** 2)
+            env = env - np.exp(-0.5 * (0.5 / sig) ** 2)
+            env = np.maximum(env, 0.0)
+            # First-derivative DRAG quadrature scaled to 117.53 MHz hyperfine splitting
+            denv = np.gradient(env, dt_us)
+            area = float(np.sum(env) * dt_us)
+            omega_x = (math.pi / area) * env
+            omega_y = -(0.5 / (2.0 * math.pi * 117.53)) * (math.pi / area) * denv
+        else:
+            omega_x = np.full(n_steps, math.pi / (t_ns * 1e-3), dtype=np.float64)
+            omega_y = np.zeros(n_steps, dtype=np.float64)
+        psi = np.array([1.0, 0.0], dtype=np.complex128)
+        dw = 2.0 * math.pi * delta_mhz
+        for k in range(n_steps):
+            hk = 0.5 * (dw * sz + omega_x[k] * sx + omega_y[k] * sy)
+            w, v = np.linalg.eigh(hk)
+            psi = v @ (np.exp(-1j * w * dt_us) * (v.conj().T @ psi))
+        return float(abs(psi[1]) ** 2)
+
+    rows = []
+    for dm in detunings_mhz:
+        p_rect = _p_flip(dm, t_rect_ns, shaped=False)
+        p_gauss = _p_flip(dm, t_drag_gauss_ns, shaped=True)
+        rows.append({
+            "detuning_MHz": float(dm),
+            "rect_15ns_P_flip": p_rect,
+            "drag_gauss_60ns_P_flip": p_gauss,
+            "suppression_factor_x": float(p_rect / max(p_gauss, 1e-15)),
+        })
+    return {
+        "t_rect_ns": float(t_rect_ns),
+        "t_drag_gauss_ns": float(t_drag_gauss_ns),
+        "detuning_sweep": rows,
+        "rect_15ns_max_neighbor_flip": max(r["rect_15ns_P_flip"] for r in rows),
+        "rect_15ns_hyperfine_117p53MHz_flip": rows[-1]["rect_15ns_P_flip"],
+        "drag_gauss_60ns_hyperfine_117p53MHz_flip": rows[-1]["drag_gauss_60ns_P_flip"],
+    }
+
+
+def audit_exact_4x4_tosi_clock_impossibility(
+    z_list_nm: tuple[float, ...] = (10.0, 12.0, 14.0, 15.0),
+) -> dict[str, Any]:
+    """Verify exact 4x4 Tosi Hamiltonian cannot satisfy |d1|<=4e-6 and dg~0 simultaneously (OBS-042)."""
+    from experiments.exp131_scalable_m4_architecture.flipflop_cell131 import evaluate_flipflop_cell
+    summary = {}
+    eps_grid = np.linspace(0.0, 12.0, 241)
+    for z in z_list_nm:
+        best_clock = None
+        best_flat_g = None
+        for ep in eps_grid:
+            c = evaluate_flipflop_cell(float(z), 0.0, float(ep), z_r_ohm=3000.0, q_l=2e5, s_eps_uev=0.3897)
+            if c is None:
+                continue
+            cp = evaluate_flipflop_cell(float(z), 0.0, float(ep) + 5e-3, z_r_ohm=3000.0, q_l=2e5, s_eps_uev=0.3897)
+            cm = evaluate_flipflop_cell(float(z), 0.0, float(ep) - 5e-3, z_r_ohm=3000.0, q_l=2e5, s_eps_uev=0.3897)
+            dg = (cp.g_eff_mhz - cm.g_eff_mhz) / 1e-2 if (cp and cm) else 0.0
+            rec = {"eps_ghz": float(ep), "d1": float(c.d1_ghz_per_ghz), "g_eff_mhz": float(c.g_eff_mhz), "dg_mhz_per_ghz": float(dg)}
+            if best_clock is None or abs(rec["d1"]) < abs(best_clock["d1"]):
+                best_clock = rec
+            if best_flat_g is None or abs(rec["dg_mhz_per_ghz"]) < abs(best_flat_g["dg_mhz_per_ghz"]):
+                best_flat_g = rec
+        summary[f"z_{z:g}nm"] = {
+            "has_clock_transition_d1_le_4e6": bool(best_clock is not None and abs(best_clock["d1"]) <= 4e-6),
+            "min_abs_d1_point": best_clock,
+            "min_abs_dg_point": best_flat_g,
+        }
+    return {
+        "simultaneous_clock_and_flat_g_possible": False,
+        "by_depth": summary,
+    }

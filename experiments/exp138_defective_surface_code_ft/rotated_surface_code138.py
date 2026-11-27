@@ -804,6 +804,8 @@ def compile_ideal_circuit_dem(
     p_idle_Z: float,
     p_idle_X: float = 0.0,
     memory_basis: str = "Z",
+    p_prep: Optional[float] = None,
+    include_final_data_ro: bool = True,
 ) -> CircuitDEM:
     """
     Compile the exact circuit-level 3D Detector Error Model for `rounds` syndrome
@@ -983,6 +985,18 @@ def compile_ideal_circuit_dem(
         for a_idx in range(n_prim):
             add_mech([det_id(a_idx, r), det_id(a_idx, r + 1)], 0, p_ro_tot)
 
+    # (e) OBS-133 FIX: Boundary data-qubit preparation (r=0) and final transversal data-qubit readout error (r=rounds)
+    if include_final_data_ro:
+        p_prep_eff = p_1q_flip if p_prep is None else float(p_prep)
+        for q in range(code.n_data):
+            obs_q = int(logical_vec[q])
+            if p_prep_eff > 1e-15:
+                dets_init = [det_id(a_idx, 0) for a_idx, _ in q_to_prim[q]]
+                add_mech(dets_init, obs_q, p_prep_eff)
+            if p_meas > 1e-15:
+                dets_fin = [det_id(a_idx, rounds) for a_idx, _ in q_to_prim[q]]
+                add_mech(dets_fin, obs_q, p_meas)
+
     return _build_dem_from_mechanisms(memory_basis, n_det, raw_mechs)
 
 
@@ -995,6 +1009,8 @@ def compile_deformed_circuit_dem(
     p_idle_Z: float,
     p_idle_X: float = 0.0,
     memory_basis: str = "Z",
+    p_prep: Optional[float] = None,
+    include_final_data_ro: bool = True,
 ) -> Optional[CircuitDEM]:
     """
     Compile circuit-level 3D DEM on a gauge-deformed defective surface code.
@@ -1106,6 +1122,20 @@ def compile_deformed_circuit_dem(
             for _ in range(w_a):
                 p_time = _combine_bernoulli(p_time, p_anc_only_prim)
             add_mech([det_id(a_idx, r), det_id(a_idx, r + 1)], 0, p_time)
+
+    # OBS-133 FIX: Boundary data-qubit prep (r=0) and final transversal data readout (r=rounds) on deformed lattice
+    if include_final_data_ro:
+        p_prep_eff = p_1q_flip if p_prep is None else float(p_prep)
+        for q, stabs_q in q_to_stabs.items():
+            in_a = (q in bnd_a_edges)
+            in_b = (q in bnd_b_edges)
+            obs_q = 1 if in_a else 0
+            if len(stabs_q) == 0 and not (in_a and in_b):
+                continue
+            if p_prep_eff > 1e-15:
+                add_mech([det_id(a, 0) for a in stabs_q], obs_q, p_prep_eff)
+            if p_meas > 1e-15:
+                add_mech([det_id(a, rounds) for a in stabs_q], obs_q, p_meas)
 
     return _build_dem_from_mechanisms(memory_basis, n_det, raw_mechs)
 

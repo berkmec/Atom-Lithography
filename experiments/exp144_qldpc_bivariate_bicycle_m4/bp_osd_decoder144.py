@@ -346,6 +346,7 @@ def build_bb_circuit_dem(
     memory_basis: str = "Z",
     p2q_pauli_weights: Dict[str, float] | None = None,
     include_boundary_noise: bool = True,
+    p_1q_hadamard: float = 0.0,
 ) -> Dict[str, Any]:
     """Build exact 3D space-time Circuit-Level Detector Error Model (H_dem, L_dem, p_fault)
     from the verified depth-7 zero-kickback Bravyi CNOT schedule.
@@ -430,12 +431,22 @@ def build_bb_circuit_dem(
         p_old = single_round_faults.get(key, 0.0)
         single_round_faults[key] = p_old * (1.0 - prob) + (1.0 - p_old) * prob
 
-    # 1a. CNOT gate faults & per-step idle faults across all 7 schedule steps
+    # 1a. CNOT gate faults, mid-cycle Hadamard CZ->CNOT conversion faults (OBS-106), & per-step idle faults
+    p_h_flip = (2.0 / 3.0) * p_1q_hadamard
     for st, pairs in enumerate(step_cnots):
         active_q = set()
         for ctrl, tgt in pairs:
             active_q.add(ctrl)
             active_q.add(tgt)
+            # OBS-106 FIX: Native M4 CZ -> CNOT requires H before and after CZ on the target qubit
+            # (for X-check CNOTs, target `tgt` is a data qubit < n_data; each H injects (2/3)*p_1q flip!)
+            if p_h_flip > 1e-15 and tgt < n_data:
+                # Pre-CZ Hadamard error (propagates through step `st` CNOT via after_step=st-1)
+                d_h_pre, a_h_pre = _propagate_to_round_end([tgt], st - 1)
+                _add_sr_fault(d_h_pre, a_h_pre, p_h_flip)
+                # Post-CZ Hadamard error (after step `st`)
+                d_h_post, a_h_post = _propagate_to_round_end([tgt], st)
+                _add_sr_fault(d_h_post, a_h_post, p_h_flip)
             d_c, a_c = _propagate_to_round_end([ctrl], st)
             _add_sr_fault(d_c, a_c, p_c_only)
             d_t, a_t = _propagate_to_round_end([tgt], st)

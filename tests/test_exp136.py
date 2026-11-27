@@ -182,6 +182,16 @@ def test_08_exp136_verdict_integrity_and_preregistration() -> None:
     # Honest physical fact: raw Hahn-echo T2e at f >= 0.5% cannot reach 10 ms
     assert re_tb7 is False
     assert d["verdict_counts"]["passed"] == sum(1 for x in v.values() if x)
+    # OBS-048, OBS-029, OBS-110 audits
+    aud48 = d["ab_initio_uncertainty_and_stark_convergence_audit"]
+    assert aud48["inter_model_spread_ratio"] > 2.0
+    assert aud48["stark_n20_suppression_below_bulk_x"] > 7.0
+    assert aud48["tb4_honest_verdict"] == "FAIL"
+    assert aud48["tb5_honest_verdict"] == "FAIL"
+    row_f15 = next(r for r in d["stage6_isotope_stark_sweep"]["primary_TB_CP_HM5962"] if abs(r["abundance_pct"] - 1.5) < 1e-6)
+    assert 6.5 <= row_f15["coherence"]["T2e_conservative_planning_alpha1_ms"] <= 7.5
+    assert row_f15["coherence"]["overhauser_sigma_KL_MHz"] > 1.2
+    assert "m4_percolation_ddrf_and_iradina_valley" in row_f15
 
 
 def test_09_png_integrity_and_zero_hardcoded_paths() -> None:
@@ -193,11 +203,12 @@ def test_09_png_integrity_and_zero_hardcoded_paths() -> None:
     width, height = struct.unpack(">II", raw[16:24])
     assert (width, height) == (2400, 1400), f"Unexpected PNG dimensions: {(width, height)}"
 
+    import re
     forbidden = [
-        "/" + "home" + "/" + "berk",
-        "/" + "run" + "/" + "media" + "/" + "berk",
-        "E:" + "\\",
-        "C:" + "\\Users\\",
+        re.compile(r"/home/[a-zA-Z0-9_-]+"),
+        re.compile(r"/run/media/"),
+        re.compile(r"E:\\\\"),
+        re.compile(r"C:\\\\Users\\\\"),
     ]
     files_to_scan = [
         *EXP_DIR.glob("*.py"),
@@ -207,8 +218,10 @@ def test_09_png_integrity_and_zero_hardcoded_paths() -> None:
     ]
     for fp in files_to_scan:
         txt = fp.read_text(encoding="utf-8")
-        for tok in forbidden:
-            assert tok not in txt, f"Hardcoded host path {tok!r} found in {fp.name}"
+        if fp == Path(__file__).resolve():
+            txt = "\n".join(ln for ln in txt.splitlines() if "re.compile(" not in ln)
+        for pat in forbidden:
+            assert pat.search(txt) is None, f"Hardcoded host path {pat.pattern!r} found in {fp.name}"
 
 
 def test_10_summary_gfm_table_integrity() -> None:

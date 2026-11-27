@@ -9,7 +9,7 @@
 // temp_stage        : 300 K
 // vacuum_grade      : UHV 1e-9 mbar
 // tolerance         : ±0.2 um elektrot araligi
-// computed_mass_kg  : 0.00569
+// computed_mass_kg  : 0.00575
 // envelope_mm       : 59.088 x 60.000 x 1.400
 // design_maturity   : M0_M1_DETAILED_CAD_DESIGN_ONLY
 // no_lab_measurement: true
@@ -29,9 +29,12 @@ bbox_z = 1.4000;
 nx = 32;
 ny = 32;
 pitch_mm = 0.5;
-hole_d_mm = 0.26;
-v_blank_V = 27.0;
-f1_MHz = 2.591;
+hole_d_mm = 0.16;
+coaxial_shield_septum_um = 80.0;
+v_blank_diff_10keV_Vpp = 106.6;
+v_blank_per_plate_V = 53.3;
+crosstalk_shielded_nm = 4.08e-07;
+membrane_f1_MHz = 2.591;
 
 // Interface / port parameters (mm)
 port_blanker_inlet_od = 60.000;
@@ -42,19 +45,19 @@ port_blanker_outlet_bore = 22.627;
 module part_S2_2_01() {
   difference() {
     union() {
-      // Doped-Si 1024-ch electrostatic blanker wafer
-      cylinder(d=52.000, h=0.800, center=true);
-      // Stiffening perimeter bezel (f1=2.59 MHz)
+      // Doped-Si 1024-ch coaxially shielded differential blanker wafer
+      cylinder(d=50.000, h=0.800, center=true);
+      // Stiffening perimeter bezel (membrane f1=2.591 MHz)
       difference() {
         cylinder(d=60.000, h=1.400, center=true);
         cylinder(d=52.400, h=3.400, center=true);
       }
     }
-    // 32x32 = 1,024 blanker channels
+    // 32x32 = 1,024 coaxial blanker channels w/ 80 um grounded Si septa
     for (ix = [0 : 32 - 1])
       for (iy = [0 : 32 - 1])
         translate([(ix - 15.500) * 0.5000, (iy - 15.500) * 0.5000, 0])
-          cylinder(d=0.2600, h=1.200, center=true);
+          cylinder(d=0.1600, h=1.200, center=true);
   }
 }
 

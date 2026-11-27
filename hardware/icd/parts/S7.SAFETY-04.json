@@ -3,14 +3,14 @@
   "part_id": "S7.SAFETY-04",
   "parent_bom_id": "S7.SAFETY",
   "subsystem": "S7",
-  "part_name": "15 kVA / 10 kWh Online Cift-Donusumlu LFP UPS (0 ms Gecis) & Kademeli Yuk-Atma PDU (Exp150, 145.0 kg)",
+  "part_name": "15 kVA / 12 kWh Online Cift-Donusumlu LFP UPS (0 ms Gecis) & Sebeke-Tarafi Yuk-Atma Kontaktor/PDU (Exp150, 145.0 kg)",
   "part_category": "PHYSICAL_SOLID",
   "bom_metadata": {
     "qty": "1",
     "unit": "set",
-    "material": "15 kVA / 13.5 kW online cift-donusumlu UPS + 10 kWh LFP aku + PDU",
-    "key_spec": "440x720x780 mm (tesis guc bolmesi), 0.0 ms gecis, 40.0 dk tam yuk (>=30 dk) / 213.2 dk Tier-1 (>=180 dk), 350 W kayip / 0 W kriyo, kutle=145.0 kg",
-    "tolerance": "0 ms gecis, >=30 dk tam",
+    "material": "15 kVA / 13.5 kW online cift-donusumlu UPS + 12 kWh LFP aku (10.8 kWh @ %90 DoD) + sebeke-tarafi kontaktor/PDU",
+    "key_spec": "440x720x780 mm (tesis guc bolmesi), 0.0 ms gecis, 42.2-43.2 dk tam yuk (>=30 dk) / 202.8 dk Tier-1 @ %90 DoD + 350 W kayip (>=180 dk PASS; eski 10 kWh=170.6 dk yetersizdi), pik UPS yuku 5.38 kW <= 13.5 kW (12.5 kW PT420 sebeke tarafinda atilir; 650 W miknatis rampa kolu dahil), 0 W kriyo, kutle=145.0 kg",
+    "tolerance": "0 ms gecis, >=180 dk @ 90% DoD",
     "temp_stage": "300 K (tesis guc bolmesi)",
     "vacuum_grade": "Atmosfer",
     "procurement_class": "COTS",
@@ -20,7 +20,7 @@
     "usd_high": 36000.0,
     "legacy_cad_module": "s7_electronics_rack_interconnect",
     "bom_epistemic_tag": "{Liste-Çapası}",
-    "notes": "DELTA-V7.0-SAFETY-EXP150 (S7.SAFETY 4/6, 145.0 kg tesis emniyeti, SIL-2; s_safety_spec.json birebir; RFQ-10)"
+    "notes": "DELTA-V7.0-SAFETY-EXP150 (S7.SAFETY 4/6, 145.0 kg tesis emniyeti, SIL-2; OBS-068/079: 12 kWh LFP + sebeke-tarafi PT420 kontaktor + 650 W Tier-1B miknatis rampa-indirme kolu; lead P10/P50/P90=10/18/28 hf; UNQUOTED_ROM_ESTIMATE; RFQ-10)"
   },
   "artifact_links": {
     "cad": {
@@ -69,6 +69,7 @@
         "S7.1-03",
         "S7.4-03",
         "S9.HPC-01",
+        "S6.3-05",
         "S6.8-02"
       ],
       "interlock_hooks_count": 1
@@ -78,7 +79,16 @@
     ],
     "rtl_audit_json": "results/stage2_rtl_verification/rtl_machine_ctrl_audit.json",
     "software_and_eda_files": [],
-    "verification_tests": []
+    "verification_tests": [
+      "tests/test_bom_detailed.py",
+      "tests/test_full_180_traceability.py",
+      "tests/test_cad_s7_s9.py",
+      "tests/test_pcb_cryo_and_elec_icds.py",
+      "tests/test_rtl_machine_ctrl.py",
+      "tests/test_exp150.py",
+      "tests/test_pcb_hv_laser_safety.py",
+      "tests/test_cad_parts.py"
+    ]
   },
   "specialized_specification": null,
   "verification_status": {
@@ -88,6 +98,7 @@
     "rtl_verified": true,
     "software_or_eda_verified": false,
     "specialized_icd_present": false,
+    "verification_tests_mapped": true,
     "traceable": true
   },
   "epistemic": {

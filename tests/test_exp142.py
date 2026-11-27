@@ -48,16 +48,23 @@ def test_01_abcd_impedance_transformers_unitarity_and_bw() -> None:
     assert xf["bw_gain_N5_vs_N1"] >= 5.0
 
 
-def test_02_lindblad_12x12_cptp_swap_and_lifetime_gain() -> None:
-    """Verify exact 12x12 Lindblad CPTP preservation, round-trip SWAP fidelity & >1,000x memory gain."""
-    qr = qb.run_lindblad_qram_swap(il_bridge_db=0.0005)
-    assert qr["hilbert_dim"] == 12
+def test_02_lindblad_18x18_cptp_swap_and_lifetime_gain() -> None:
+    """Verify exact 18x18 Lindblad CPTP (3-level transmon |g,e,f>), physical FSR loss & honest T2 sensitivity."""
+    qr = qb.run_lindblad_qram_swap(il_bridge_db=0.0007, p31_ff_t2_us=25.0)
+    assert qr["hilbert_dim"] == 18
+    assert qr["transmon_levels"] == 3
     assert qr["cptp_max_trace_err"] < 1e-12
     assert qr["cptp_min_eig"] >= -1e-12
-    assert qr["F_SWAP_rt_photon_only"] > 0.99
+    assert qr["F_SWAP_rt_photon_only"] > 0.985
     assert qr["F_SWAP_rt_with_nuclear_31P"] >= 0.960
     assert qr["lifetime_gain_F90_vs_transmon"]["qram_XY8_DD_1s"] >= 1000.0
     assert qr["lifetime_gain_F90_vs_transmon"]["qram_T2n_star_17p7ms"] > 50.0
+    # OBS-131: Honest sensitivity to Exp131 T2*=0.29 us and connector IL=0.50 dB
+    qr_t2s = qb.run_lindblad_qram_swap(il_bridge_db=0.0007, p31_ff_t2_us=0.29)
+    qr_loss = qb.run_lindblad_qram_swap(il_bridge_db=0.50, p31_ff_t2_us=10.0)
+    assert qr_t2s["F_SWAP_rt_photon_only"] < 0.93
+    assert qr_loss["kappa_R_total_rad_us"] > 50.0
+    assert qr_loss["F_SWAP_rt_photon_only"] < 0.70
 
 
 def test_03_option_q_cryo_heat_budget_closes() -> None:
@@ -93,16 +100,26 @@ def test_05_zbl_bca_heavy_ion_straggle_and_wien() -> None:
     sb75 = bca["121Sb_7p5keV"]
     sb14 = bca["121Sb_14keV"]
     er15 = bca["167Er_15keV"]
+    # OBS-039: Corrected infinite-domain ZBL BCA matches iradina scale (31P 5 keV ~10.3/4.4 nm, 121Sb 7.5 keV ~9.8/2.3 nm vs buggy 7.17/1.85 nm)
+    assert 9.5 < p5["R_p_nm"] < 11.5
+    assert 4.0 < p5["sigma_lat_1d_nm"] < 4.9
+    assert 9.0 < sb75["R_p_nm"] < 12.5
+    assert 2.1 < sb75["sigma_lat_1d_nm"] < 3.5
     # Heavy 121Sb and 167Er have strictly smaller lateral straggle than 5 keV 31P
     assert sb75["sigma_lat_1d_nm"] < p5["sigma_lat_1d_nm"]
     assert sb14["sigma_lat_1d_nm"] < p5["sigma_lat_1d_nm"]
     assert er15["sigma_lat_1d_nm"] < p5["sigma_lat_1d_nm"]
-    # Depth-matched 7.5 keV Sb matches 5 keV P within 1.5 nm with >35% lower straggle
+    # Depth-matched 7.5 keV Sb matches 5 keV P within 1.5 nm with ~30-35% lower straggle
     assert abs(sb75["R_p_nm"] - p5["R_p_nm"]) < 1.5
     # Exact kinematic max lab scattering angle check: asin(28.0855 / 120.9038) ~ 13.43 deg
     assert abs(sb14["theta_max_lab_deg"] - math.degrees(math.asin(28.0855 / 120.9038))) < 0.05
     wien = d["part2_s1_multispecies"]["wien_filter_separation"]
     assert wien["cross_species_separated"] is True
+    # OBS-154: Preliminary Arrhenius activation/segregation/precipitation model present
+    ann = d["part2_s1_multispecies"]["thermal_activation_segregation_obs154"]
+    assert ann["obstacle_id"] == "OBS-154"
+    assert ann["s55_1530K_flash_compatibility"]["167Er"] is False
+    assert ann["er167_kinetics"]["furnace_750C_30min_ErO"]["compatible_with_1536nm_optical_center"] is True
 
 
 def test_06_sb121_qudit_hamiltonian_knill_laflamme_and_strain_wall() -> None:

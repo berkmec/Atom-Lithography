@@ -53,13 +53,39 @@ def test_board_netlist_erc_zero_errors_and_locked_cold100k_default():
 
 def test_board_erc_catches_injected_floating_pin_and_conflict():
     design = build_board_design(CHANNELS)
-    # Break CH0.CSA_SUM by duplicating a pin into another net
-    design.nets["CH0.CSA_OUT"].append(("U0A", "2"))
+    # Break CH0.CSA_SUM by duplicating LTC6268 pin 6 (-IN) into another net
+    design.nets["CH0.CSA_OUT"].append(("U0A", "6"))
     errs = validate_netlist(design, CHANNELS)
     assert any("Pin conflict" in e for e in errs)
 
 
-def test_spice_deck_structure_and_8_channels():
+def test_exact_datasheet_pinouts_in_v21_netlist():
+    design = build_board_design(CHANNELS)
+    pin_owner = {node: net for net, nodes in design.nets.items() for node in nodes}
+    for ch in range(CHANNELS):
+        # LTC6268IS8 S8: 1:~SHDN, 2:V+, 3:OUT, 4:V-, 6:-IN, 7:+IN
+        assert pin_owner[(f"U{ch}A", "1")] == "VCCA"
+        assert pin_owner[(f"U{ch}A", "2")] == "VCCA"
+        assert pin_owner[(f"U{ch}A", "3")] == f"CH{ch}.CSA_OUT"
+        assert pin_owner[(f"U{ch}A", "4")] == "VSSA"
+        assert pin_owner[(f"U{ch}A", "6")] == f"CH{ch}.CSA_SUM"
+        assert pin_owner[(f"U{ch}A", "7")] == "AGND"
+        # ADA4817-1ARDZ SOIC-8-EP: 1:FB, 2:-IN, 3:+IN, 4:-VS, 6:OUT, 7:+VS, 8:PD, EP:-VS
+        assert pin_owner[(f"U{ch}B", "1")] == f"CH{ch}.SHP_GAIN"
+        assert pin_owner[(f"U{ch}B", "8")] == "VCCA"
+        assert pin_owner[(f"U{ch}B", "EP")] == "VSSA"
+        # TI SBOS321 TLV3501AIDBVR SOT-23-6 DBV: 1:-IN, 2:V-, 3:+IN, 4:V+, 5:OUT, 6:SHDN
+        assert pin_owner[(f"U{ch}C", "1")] == f"CH{ch}.THRESH"
+        assert pin_owner[(f"U{ch}C", "2")] == "DGND"
+        assert pin_owner[(f"U{ch}C", "3")] == f"CH{ch}.CMP_INP"
+        assert pin_owner[(f"U{ch}C", "4")] == "VCCD"
+        assert pin_owner[(f"U{ch}C", "5")] == f"CH{ch}.CMP_OUT"
+        assert pin_owner[(f"U{ch}C", "6")] == "DGND"
+
+
+def test_spice_deck_structure_and_live_ngspice_8_channels(tmp_path: Path):
+    from hardware.pcb.kicad_eda_verify import run_ngspice
+
     cir = render_spice_deck(CHANNELS)
     assert "Profile=COLD_100K" in cir
     assert "R_F=1G" in cir
@@ -67,16 +93,37 @@ def test_spice_deck_structure_and_8_channels():
     assert "C_P=600p" in cir
     assert "Q_ION=0.055f" in cir
     assert "V_THR=0.00423" in cir
+    assert "LIMIT(" not in cir
     assert ".subckt IBIC_CHANNEL" in cir
     assert ".subckt OPAMP_LTC6268" in cir
     assert ".subckt OPAMP_ADA4817" in cir
     assert ".subckt CMP_TLV3501" in cir
-    assert ".ac " in cir and ".tran " in cir and ".noise " in cir
+    assert "ac dec " in cir and "tran " in cir and "noise v(Xch0.shp_out) Iion0" in cir
     for ch in range(CHANNELS):
         assert f"Xch{ch} " in cir
 
+    # Live ngspice -b execution on disk deck (cold100k)
+    disk_cir = ROOT / "src" / "board" / "detector_frontend.cir"
+    res = run_ngspice(disk_cir, workdir=tmp_path)
+    assert res.ok and res.returncode == 0, f"ngspice failed: {res.errors}\n{res.stderr}"
+    m = res.metrics
+    assert m["csa_peak_v"] > 0.1e-3, f"Expected positive CSA pulse, got {m['csa_peak_v']}"
+    assert 9.0e-3 <= m["shp_peak_v"] <= 14.0e-3, f"Expected positive 9-14 mV shaper peak, got {m['shp_peak_v']}"
+    assert m["hit0_init_v"] < 0.05, f"CH0 latched HIGH at t=0: {m['hit0_init_v']}"
+    assert m["hit0_max_v"] >= 3.0, f"CH0 comparator failed to trigger: {m['hit0_max_v']}"
+    assert m["hit0_end_v"] < 0.05, f"CH0 comparator stayed latched at end: {m['hit0_end_v']}"
+    assert m["hit1_max_v"] < 0.05 and m["hit7_max_v"] < 0.05, "Dark channels false-triggered/latched!"
+    assert 1e-6 < m["shp_onoise_rms_v"] < 5e-3, f"Invalid .noise RMS: {m['shp_onoise_rms_v']}"
+
+    # Also verify optional rt300k profile executes cleanly in ngspice -b without latch-up
     cir_rt = render_spice_deck(CHANNELS, profile="rt300k")
     assert "Profile=RT_300K" in cir_rt and "R_F=100Meg" in cir_rt and "C_S=100p" in cir_rt
+    rt_path = tmp_path / "detector_frontend_rt300k.cir"
+    rt_path.write_text(cir_rt, encoding="utf-8")
+    res_rt = run_ngspice(rt_path, workdir=tmp_path)
+    assert res_rt.ok and res_rt.returncode == 0
+    assert res_rt.metrics["shp_peak_v"] > 8.0e-3
+    assert res_rt.metrics["hit1_max_v"] < 0.05
 
 
 def test_lindhard_31p_in_si_is_monotonic_and_physical():

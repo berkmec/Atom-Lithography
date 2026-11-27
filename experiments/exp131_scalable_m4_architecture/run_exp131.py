@@ -30,6 +30,7 @@ if str(REPO_ROOT) not in sys.path:
 
 from experiments.exp131_scalable_m4_architecture.flipflop_cell131 import (
     run_capping_and_tuning_sweep,
+    run_iradina_valley_audit,
 )
 from experiments.exp131_scalable_m4_architecture.lindblad_bus131 import (
     run_lindblad_bus_study,
@@ -279,6 +280,9 @@ def main() -> dict[str, Any]:
 
     # Strip non-JSON CellResult objects from part1 before serialization
     part1_serializable = {k: v for k, v in p1_raw.items() if k != "ensembles"}
+    part1_serializable["iradina_5keV_and_valley_audit_OBS047"] = run_iradina_valley_audit(
+        delta_z_caps_nm=[4.0, 8.0], n_donors=2000, z_r_ohm=3000.0, q_l=2e5, seed=13199
+    )
     # Save compact sample of optimal-capping donor metrics (first 200 certified) for plotting histograms
     opt_sample = p1_raw["ensembles"][dz_opt][:200]
     part1_serializable["optimal_certified_sample"] = {

@@ -29,6 +29,7 @@ bbox_z = 185.0000;
 head_l = 148.2;
 aperture_d = 96.0;
 pulse_ms = 1.0;
+elev_deg = 36.0;
 
 // Interface / port parameters (mm)
 port_optical_exit_aperture_bore = 96.000;
@@ -49,6 +50,6 @@ module part_S5_3_01() {
 }
 
 // World assembly mounting transform (global machine frame, mm / deg):
-// translate([-271.563, 227.868, 500.000]) rotate([0.000, 0.000, 140.000]) part_S5_3_01();
+// translate([594.005, -168.035, 675.748]) rotate([0.000, -36.000, 316.000]) part_S5_3_01();
 
 part_S5_3_01();

@@ -9,7 +9,7 @@
 // temp_stage        : 4 K / 20 mK
 // vacuum_grade      : Kriyo-vakum
 // tolerance         : ±0.1 mm
-// computed_mass_kg  : 0.64382
+// computed_mass_kg  : 1.15156
 // envelope_mm       : 82.000 x 82.000 x 58.600
 // design_maturity   : M0_M1_DETAILED_CAD_DESIGN_ONLY
 // no_lab_measurement: true
@@ -28,9 +28,11 @@ bbox_z = 58.6000;
 // Part-specific parametric dimensions
 nb_r_in = 32.0;
 nb_r_out = 34.5;
-cp_r_in = 39.0;
+cp_r_in = 35.5;
 cp_r_out = 41.0;
+cp_t_total = 5.0;
 n_vents = 6;
+rf_mode_f1_ghz = 10.5;
 
 // Interface / port parameters (mm)
 port_chimney_coax_port_od = 16.000;
@@ -45,7 +47,7 @@ port_cryoperm_vent_base_bolts = 6;
 module part_S6_3_03() {
   difference() {
     union() {
-      // Nb RRR>300 Meissner cup
+      // Nb RRR>300 Meissner cup w/ RF baffle
       translate([0.000, 0.000, -1.250]) {
         difference() {
           cylinder(d=69.000, h=35.500, center=true);
@@ -59,11 +61,11 @@ module part_S6_3_03() {
           cylinder(d=12.000, h=12.900, center=true);
         }
       }
-      // Cryoperm-10 outer shield
+      // Dual-layer 5.0 mm Cryoperm-10 outer shield
       translate([0.000, 0.000, 3.000]) {
         difference() {
           cylinder(d=82.000, h=56.000, center=true);
-          cylinder(d=78.000, h=58.000, center=true);
+          cylinder(d=71.000, h=58.000, center=true);
         }
       }
     }

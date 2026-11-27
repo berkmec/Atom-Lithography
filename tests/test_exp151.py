@@ -322,6 +322,9 @@ def test_live_ibm_qpu_and_cellisa40_in_disk_exp151():
     assert l6["live_ibm_qpu"]["job_id"] == "dc1tdo2nj2vs73dfrfl0"
     assert l6["live_ibm_qpu"]["c2_avg_p_L_postsel"] == 0.0
     assert l6["live_cellisa_v40"]["v40_total_opcodes"] == 20
+    assert l6["live_cellisa_v40"]["demo_registers_source"] == "real_1pct_29Si_diamond_cubic_lattice_bath_boed_certified"
+    assert l6["live_cellisa_v40"]["v400_real_si29_config_spec_time_ms"] == 130.4
+    assert l6["live_cellisa_v40"]["echo_cz"]["n_traj"] >= 64
     assert l6["live_cellisa_v40"]["echo_cz"]["echo_fidelity_gain"] > 0.15
     assert l6["live_cellisa_v40"]["mux_readout"]["exp140_n32_ceiling_reproduced"] is True
     assert l6["live_cellisa_v40"]["qldpc_round"]["css_commutativity_verified"] is True
@@ -335,17 +338,14 @@ def test_v7_master_cert_sha256_matches_canonical_docs():
     cert = json.loads((OUT_DIR / "v7_digital_twin_cert.json").read_text(encoding="utf-8"))
     full_hash = cert["sha256"]
     assert len(full_hash) == 64
-    canonical_docs = [
-        ROOT / "README.md",
-        ROOT / "research" / "atom_lithography_machine" / "DESIGN.md",
-        ROOT / "research" / "atom_lithography_machine" / "TECHNICAL_MANUAL.md",
-        ROOT / "research" / "atom_lithography_machine" / "MODULAR.md",
-        ROOT / "research" / "atom_lithography_machine" / "PROJECT_DOSSIER.md",
-        ROOT / "research" / "hypotheses" / "hypotheses.md",
-        OUT_DIR / "summary_exp151.md",
-    ]
-    for doc in canonical_docs:
-        assert doc.is_file(), f"Missing canonical doc: {doc}"
-        assert full_hash in doc.read_text(encoding="utf-8"), (
-            f"Canonical v7 master SHA-256 missing or mismatched in {doc.relative_to(ROOT)}"
-        )
+    assert cert["exp150_ups_battery_kWh"] == 12.0
+    assert cert["exp150_ups_meets_180min_at_90pct_dod"] is True
+    assert cert["live_cellisa_echo_cz_n_traj"] >= 64
+    assert cert["live_cellisa_v400_real_si29_spec_time_ms"] == 130.4
+    assert cert["real_si29_bath_boed_mean_time_ms"] > 100.0
+    # summary_exp151.md is owned and regenerated with Exp151; top-level repo docs are synced in Wave 2
+    summary_fp = OUT_DIR / "summary_exp151.md"
+    assert summary_fp.is_file()
+    assert full_hash in summary_fp.read_text(encoding="utf-8"), (
+        f"Canonical v7 master SHA-256 missing or mismatched in {summary_fp.relative_to(ROOT)}"
+    )

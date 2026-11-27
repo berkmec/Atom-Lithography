@@ -8,6 +8,7 @@ Strictly portable (Path(__file__).resolve() only; zero hardcoded host paths).
 from __future__ import annotations
 
 import json
+import re
 import struct
 import sys
 from pathlib import Path
@@ -79,19 +80,29 @@ def test_thickness2_m4_layout_fits_300um_bus() -> None:
     assert p20["L_max_um"] <= 300.0
     assert p20["fits_300um_m4_resonator"] is True
     assert p20["f_r_fixed_100pH_ghz"] == 5.0
+    # Honest OBS-045 / OBS-140 physical routing audit: 10,372 flat airbridge crossings & Manhattan L2=360 um > 300 um
+    assert lay["total_flat_airbridge_crossings"] == 10372
+    assert p20["layer2_max_manh_um"] == 360.0
+    assert p20["fits_300um_m4_manhattan"] is False
+    assert p20["layer2_frac_gt_300um_manh"] > 0.25
 
 
 def test_defect_yield_stark_cliff_and_n8_recovery() -> None:
-    """Verify f=1.0% N=6 collapses (<5%) while Exp136 f*=1.5%+2MV/m N=8 exceeds 99.5%."""
+    """Verify f=1.0% N=6 collapses (<5%), idealized N=8 hits >99.5%, AND honest DDRF/iradina-valley collapse (<55% / <3%)."""
     dy = compute_defective_block_yields(n_cells_block=288, n_blocks_cryo=10)
     f10_n6 = next(r for r in dy["f1p0_Ez0_baseline"]["by_N_cand"] if r["N_cand"] == 6)
     f15_n6 = next(r for r in dy["f1p5_Ez2MVm_v5_star"]["by_N_cand"] if r["N_cand"] == 6)
     f15_n8 = next(r for r in dy["f1p5_Ez2MVm_v5_star"]["by_N_cand"] if r["N_cand"] == 8)
+    f15_ddrf_n8 = next(r for r in dy["f1p5_Ez2MVm_ddrf6893"]["by_N_cand"] if r["N_cand"] == 8)
+    f15_val_n8 = next(r for r in dy["f1p5_Ez2MVm_iradina_valley_pff0p5375"]["by_N_cand"] if r["N_cand"] == 8)
 
     assert f10_n6["block_288_yield_pct"] < 5.0
     assert 93.0 <= f15_n6["block_288_yield_pct"] <= 96.0
     assert f15_n8["block_288_yield_pct"] > 99.5
     assert f15_n8["cryo_10block_120L_yield_pct"] > 96.0
+    # Honest OBS-029 & OBS-047 yield collapse
+    assert f15_ddrf_n8["block_288_yield_pct"] < 55.0
+    assert f15_val_n8["block_288_yield_pct"] < 3.0
 
 
 def test_bp_osd_syndrome_validity_and_osd2_gain() -> None:
@@ -124,6 +135,13 @@ def test_circuit_dem_zero_noise_and_pauli_channel_consistency() -> None:
     assert dem_depol["N_fault_mechanisms"] == dem_pauli["N_fault_mechanisms"]
     assert np.allclose(np.sort(dem_depol["p_dem"]), np.sort(dem_pauli["p_dem"]), atol=1e-12)
 
+    # OBS-106: mid-cycle Hadamard CZ->CNOT conversion noise strictly raises total DEM fault weight
+    dem_had = build_bb_circuit_dem(
+        c72, s72, n_noisy_rounds=2, p_2q=0.005, p_meas=0.005, p_1q_idle_step=0.001, p_prep=0.002,
+        memory_basis="Z", p_1q_hadamard=0.001,
+    )
+    assert float(np.sum(dem_had["p_dem"])) > float(np.sum(dem_depol["p_dem"]))
+
     # Zero syndrome must decode cleanly to zero error
     dec = BPOSDDecoder(dem_depol["H_dem"], dem_depol["p_dem"], bp_max_iter=20)
     z_syn = np.zeros((4, dem_depol["M_detectors"]), dtype=np.uint8)
@@ -133,7 +151,7 @@ def test_circuit_dem_zero_noise_and_pauli_channel_consistency() -> None:
 
 
 def test_exp144_json_schema_verdicts_and_epistemic_flags() -> None:
-    """Verify exp144.json exists, passes success rule (>=6/7 QL verdicts), and sets honest epistemic flags."""
+    """Verify exp144.json exists, preserves honest OBS-022/029/045/047/086/106/140 verdicts, and sets epistemic flags."""
     jpath = RES_DIR / "exp144.json"
     assert jpath.exists(), "Run run_exp144.py first"
     data = json.loads(jpath.read_text())
@@ -142,13 +160,16 @@ def test_exp144_json_schema_verdicts_and_epistemic_flags() -> None:
     assert data["hypothesis_id"] == "H162"
     assert data["no_lab_measurement"] is True
     assert data["no_supplier_quotes"] is True
-    assert data["success_rule_met"] is True
-    assert data["n_passed"] >= 6
+    assert data["n_passed"] == 4
+    assert data["success_rule_met"] is False
     assert data["verdicts"]["QL1_EXACT_BB_CSS_ALGEBRA"] is True
-    assert data["verdicts"]["QL2_THICKNESS2_M4_LAYOUT_AND_YIELD"] is True
+    assert data["verdicts"]["QL2_THICKNESS2_M4_LAYOUT_AND_YIELD"] is False
+    assert data["verdicts"]["QL4_CIRCUIT_THRESHOLD_AND_MACHINE_REGIMES"] is False
     assert data["verdicts"]["QL5_CRYOSTAT_AND_TCO_COMPRESSION"] is True
-    assert data["verdicts"]["QL6_DEFECTIVE_BLOCK_RESILIENCE"] is True
+    assert data["verdicts"]["QL6_DEFECTIVE_BLOCK_RESILIENCE"] is False
     assert data["portability_hardcoded_hits"] == []
+    assert "midcycle_hadamard_audit_OBS106" in data["part4_circuit_level_dem"]
+    assert "round_depth_R_equals_d_audit_OBS086" in data["part4_circuit_level_dem"]
 
     # Verify exact single-cryostat 120L packing & 100x cryostat compression vs D3 Surface Code
     p5 = data["part5_cryostat_and_tco_compression"]
@@ -199,12 +220,11 @@ def test_exp144_summary_gfm_tables_zero_errors() -> None:
 
 def test_exp144_strict_portability_no_hardcoded_host_paths() -> None:
     """Verify ZERO hardcoded host paths across all Exp144 code, results, markdown, and tests."""
-    bad_tokens = ("/home/" + "berk", "/run/media/" + "berk", "/" + "Users/")
+    pat_re = re.compile(r"/(?:home|run/media|Users)/[a-zA-Z0-9_-]+")
     files = list(EXP_DIR.glob("*.py")) + list(RES_DIR.glob("*.json")) + list(RES_DIR.glob("*.md")) + [Path(__file__).resolve()]
     hits = []
     for f in files:
         txt = f.read_text(errors="ignore")
-        for tok in bad_tokens:
-            if tok in txt:
-                hits.append(f"{f.name}:{tok}")
+        for m in pat_re.finditer(txt):
+            hits.append(f"{f.name}:{m.group(0)}")
     assert hits == [], f"Hardcoded host path detected: {hits}"

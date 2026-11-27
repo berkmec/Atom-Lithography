@@ -106,7 +106,7 @@
       },
       {
         "label": "E_GAP",
-        "nominal_mm": 20.0,
+        "nominal_mm": 12.0,
         "tol_plus_mm": 0.01,
         "tol_minus_mm": -0.01,
         "view": "front",
@@ -116,7 +116,7 @@
         "is_basic": false,
         "datum_ref": "",
         "decimals": 2,
-        "formatted": "20.00 ±0.01"
+        "formatted": "12.00 ±0.01"
       }
     ],
     "gdt_frames": [
@@ -173,16 +173,18 @@
     ],
     "notes": [
       "E-alani +/-20 kV/m, ExB dengeli dogrusal eksen",
-      "Exp124 Wien E-field length L_w=80.0 mm orthogonal to 0.45 T B-field (V_plate=1348 V @ 10 keV)",
-      "4.0 mm radial clearance to S1.2-01 pole shoes"
+      "Exp124 Wien E-field length L_w=80.0 mm, E_gap=12.0 mm orthogonal to 0.45 T B-field (E=112.32 kV/m, V_plate=1347.85 V @ 10 keV 31P+, 0.0 mrad nominal steer)",
+      "Option-Q isotope dispersion limit: 121Sb+ (dx=0.260 mm) and 167Er+ (dx=0.081 mm) require enriched isotope source feed or <=50 um S1.2-04 exit slit"
     ],
     "scad_params": {
       "plate_l": 80.0,
       "plate_w": 28.0,
-      "e_gap": 20.0,
-      "v_plate_nom_V": 1348.0
+      "e_gap": 12.0,
+      "e_field_kV_m": 112.32,
+      "v_plate_nom_V": 1347.85,
+      "nominal_steer_mrad": 0.0
     },
-    "target_mass_kg": 0.24,
+    "target_mass_kg": 0.26,
     "epistemic": {
       "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
       "no_lab_measurement": true,
@@ -206,12 +208,12 @@
     "watertight": true,
     "boundary_edges": 0,
     "non_manifold_edges": 0,
-    "signed_volume_mm3": 18774.6455758846,
-    "surface_area_mm2": 11302.084859404116,
-    "mass_kg": 0.16822082435992605,
+    "signed_volume_mm3": 19280.93901946853,
+    "surface_area_mm2": 11622.46264380651,
+    "mass_kg": 0.17275721361443808,
     "cg_mm": [
-      9.43119000759481e-16,
-      -1.2352890924875385e-15,
+      9.139316207088035e-17,
+      2.6887278647949315e-15,
       310.0
     ],
     "bbox_min_mm": [
@@ -225,12 +227,12 @@
       350.0
     ],
     "inertia_kg_mm2": [
-      117.16878706719781,
-      100.7370030391105,
-      36.5903028707181,
-      3.9115548133850083e-16,
-      4.500987415667624e-14,
-      -9.135110303759575e-15
+      108.03743730061916,
+      103.59509371059728,
+      24.623709820078737,
+      -8.638016879558563e-16,
+      7.419424946419895e-14,
+      6.941379979252816e-14
     ],
     "triangle_count": 376,
     "vertex_count": 200,
@@ -245,7 +247,25 @@
     "warnings": [],
     "all_valid": true
   },
-  "engineering_checks": {},
+  "engineering_checks": {
+    "wien_efield_balance": {
+      "species": "31P+",
+      "e_ext_eV": 10000.0,
+      "b_tesla": 0.45,
+      "e_gap_mm": 12.0,
+      "v_plates_V": 1347.85,
+      "e_field_required_kV_m": 112.321,
+      "e_field_actual_kV_m": 112.321,
+      "nominal_steer_mrad": -0.0009,
+      "passed": true,
+      "option_q_heavy_isotope_note": "Single-pass Wien (B=0.45 T, L_w=80 mm) resolves 31P+ vs 32PH+; heavy Option-Q 121Sb+ (dx=0.260 mm) and 167Er+ (dx=0.081 mm) exceed single-pass M/dM resolving power at 350 um slit and require isotopically enriched source feed or <=50 um S1.2-04 exit slit."
+    }
+  },
+  "shell_mate_metadata": {
+    "n_shells": 6,
+    "fea_bonding_mode": "TIED_SUBASSEMBLY_CONTACTS",
+    "watertight": true
+  },
   "epistemic": {
     "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
     "no_lab_measurement": true,

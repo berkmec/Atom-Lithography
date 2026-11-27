@@ -341,6 +341,7 @@ def run_verilator_lint_all(rtl_dir: Path = RTL_DIR) -> dict[str, Any]:
         ("cryo_mux_ddc_ctrl_32ch", ["-GN_CH=32"], ("cryo_mux_ddc_ctrl.v",)),
         ("uart_axi_regmap", [], ("uart_axi_regmap.v",)),
         ("fpga_top_machine_ctrl", [], TOP_SYNTH_SRCS),
+        ("fpga_top_carrier_wrap", [], TOP_SYNTH_SRCS + ("fpga_top_carrier_wrap.v",)),
     ]
 
     results: dict[str, Any] = {}
@@ -468,7 +469,7 @@ def run_iverilog_all_testbenches(rtl_dir: Path = RTL_DIR) -> dict[str, Any]:
                     pass_marker and len(comp_warns) == 0 and sim.returncode == 0
                     and rec["errors"] == 0 and rec["channels_tested"] == 16
                     and rec["discrep_ok"] and rec["wdt_ok"]
-                    and rec["max_trip_ns"] <= 20
+                    and rec["max_trip_ns"] <= 30
                     and rec["status_certified"] == 0 and rec["status_design_only"] == 1
                 )
 
@@ -629,7 +630,7 @@ def run_iverilog_all_testbenches(rtl_dir: Path = RTL_DIR) -> dict[str, Any]:
                     and rec["boed_next_probe_q8"] == 5611
                     and rec["boed_0lsb_ok"]
                     and rec["ddc_autofeed_ok"]
-                    and rec["simultaneous_trip_ns"] <= 20 and rec["spi_zero_clamp_ok"]
+                    and rec["simultaneous_trip_ns"] <= 30 and rec["spi_zero_clamp_ok"]
                 )
 
             # Strip verbose raw stdout from saved JSON summaries
@@ -908,7 +909,7 @@ def test_static_synthesizable_rtl_hygiene_zero_div_zero_pragmas_clean_xdc():
 def test_live_verilator_lint_wall_zero_warnings_all_modules_and_top():
     res = run_verilator_lint_all(RTL_DIR)
     assert res["all_passed"] is True
-    assert len(res["targets"]) == 8
+    assert len(res["targets"]) == 9
     for mod, rec in res["targets"].items():
         assert rec["passed"] is True, f"Verilator lint failed for {mod}: {rec}"
         assert rec["returncode"] == 0
@@ -928,12 +929,12 @@ def test_live_iverilog_vvp_all_6_testbenches_and_bit_exact_python_parity():
     assert b["frames_verified"] == 2 and b["bits_per_frame"] == 1024
     assert b["trip_latency_ns"] <= 20  # <= 2 clocks @ 100 MHz, strictly < 1000 ns
 
-    # 2. UHV 1oo2D Safety Interlock FSM
+    # 2. UHV 1oo2D Safety Interlock FSM (2-FF CDC + 1-cycle FSM latch <= 30 ns, glitch-free!)
     il = tbs["tb_uhv_interlock_fsm"]
     assert il["passed"] is True and il["errors"] == 0
     assert il["channels_tested"] == 16
     assert il["discrep_ok"] is True and il["wdt_ok"] is True
-    assert il["max_trip_ns"] <= 20
+    assert il["max_trip_ns"] <= 30
     assert il["status_certified"] == 0 and il["status_design_only"] == 1
 
     # 3. AOM Q16.16 PID Controller (bit-exact 0-LSB vs Python reference)
@@ -971,8 +972,82 @@ def test_live_iverilog_vvp_all_6_testbenches_and_bit_exact_python_parity():
     assert top["boed_next_probe_q8"] == 5611
     assert top["boed_0lsb_ok"] is True
     assert top["ddc_autofeed_ok"] is True
-    assert top["simultaneous_trip_ns"] <= 20
+    assert top["simultaneous_trip_ns"] <= 30
     assert top["spi_zero_clamp_ok"] is True
+
+
+def test_live_sky130_4k_crossbar_968g_verilator_iverilog_and_yosys():
+    """OBS-143: Verify synthesizable 968-gate 4 K Cryo-CMOS crossbar RTL + 8-die daisy-chain TB."""
+    xbar_dir = REPO_ROOT / "rtl" / "cryo_crossbar_4k"
+    assert (xbar_dir / "sky130_4k_crossbar_121g.v").is_file()
+    assert (xbar_dir / "tb_sky130_4k_crossbar_121g.v").is_file()
+
+    verilator_bin = resolve_eda_tool("verilator")
+    iverilog_bin = resolve_eda_tool("iverilog")
+    vvp_bin = resolve_eda_tool("vvp")
+    yosys_bin = resolve_eda_tool("yosys")
+    assert verilator_bin and iverilog_bin and vvp_bin and yosys_bin
+
+    vproc = subprocess.run(
+        [str(verilator_bin), "--lint-only", "-Wall", "--top-module", "sky130_4k_crossbar_121g",
+         "sky130_4k_crossbar_121g.v"],
+        cwd=str(xbar_dir), capture_output=True, text=True, timeout=60, env=_eda_env(verilator_bin), check=False,
+    )
+    assert vproc.returncode == 0 and "%Warning" not in (vproc.stdout + vproc.stderr)
+
+    with tempfile.TemporaryDirectory(prefix="xbar4k_sim_") as tmpdir:
+        sim_bin = Path(tmpdir) / "sim_xbar"
+        comp = subprocess.run(
+            [str(iverilog_bin), "-g2012", "-Wall", "-o", str(sim_bin),
+             "sky130_4k_crossbar_121g.v", "tb_sky130_4k_crossbar_121g.v"],
+            cwd=str(xbar_dir), capture_output=True, text=True, timeout=60, env=_eda_env(iverilog_bin), check=False,
+        )
+        assert comp.returncode == 0 and "warning:" not in (comp.stdout + comp.stderr).lower()
+        sim = subprocess.run(
+            [str(vvp_bin), str(sim_bin)],
+            cwd=str(xbar_dir), capture_output=True, text=True, timeout=60, env=_eda_env(vvp_bin), check=False,
+        )
+        assert sim.returncode == 0
+        assert "PASS: tb_sky130_4k_crossbar_121g" in sim.stdout
+        assert "total_gates=968" in sim.stdout and "trl=2_pending_4k_pdk" in sim.stdout
+
+    yproc = subprocess.run(
+        [str(yosys_bin), "-q", "-p",
+         "read_verilog sky130_4k_crossbar_121g.v; hierarchy -check -top sky130_4k_crossbar_121g; proc; opt; check -assert"],
+        cwd=str(xbar_dir), capture_output=True, text=True, timeout=60, env=_eda_env(yosys_bin), check=False,
+    )
+    assert yproc.returncode == 0
+
+
+def test_openroad_signoff_manifest_honesty_and_sha_integrity():
+    """OBS-049 / OBS-112 / OBS-152: Verify honest SKY130 manifest (no fake 0-violation Attempt-2 signoff)."""
+    import hashlib
+    manifest = json.loads(
+        (REPO_ROOT / "hardware" / "eda_flow" / "openroad_signoff_manifest.json").read_text(encoding="utf-8")
+    )
+    assert manifest["tapeout_readiness_status"] == "PRE_FOUNDRY_NCH8_MACRO_PROTOTYPE_NOT_TAPEOUT_READY"
+    assert manifest["epistemic"]["tapeout_done"] is False
+    assert manifest["epistemic"]["tapeout_ready"] is False
+    assert manifest["epistemic"]["foundry_signoff_complete"] is False
+    assert manifest["epistemic"]["real_io_pad_cells"] == []
+
+    p4c = manifest["pilot4c_sky130_audit_correction"]
+    assert abs(p4c["nch8_true_sync_fmax_tt_25c_1v8_MHz"] - 272.48) < 0.1
+    assert abs(p4c["nch8_true_sync_fmax_ss_100c_1v6_MHz"] - 154.08) < 0.1
+    assert p4c["missing_pdn_verified"] is True
+
+    att2 = manifest["historical_sky130_signoff_runs_exp76_to_exp123"]["exp123_openroad_2024_antenna_eco"]
+    assert att2["attempt2_status"] == "INVALID_DISCONNECTED_NETS"
+    assert att2["attempt2_valid_signoff"] is False
+    assert att2["attempt2_unrouted_nets_stripped"] == 101
+
+    assert manifest["drc_exclude_cells_audit"]["historical_blanker_tile_synth_v_excluded_cells"] == 1154
+    assert manifest["legacy_exp38_exp58_exp64_archive_notice"]["status"] == "ARCHIVED_RD_PROTOTYPE_NOT_MPW_CANDIDATE"
+
+    for src in manifest["whitelisted_rtl_sources"]:
+        fp = REPO_ROOT / src["path"]
+        assert fp.is_file()
+        assert hashlib.sha256(fp.read_bytes()).hexdigest() == src["sha256"]
 
 
 def test_live_yosys_check_assert_zero_latches_zero_comb_loops():

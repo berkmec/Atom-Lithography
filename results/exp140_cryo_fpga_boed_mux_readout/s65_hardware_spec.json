@@ -1,6 +1,6 @@
 {
   "subsystem_id": "S6.5",
-  "title": "Cryo-FPGA BOED Accelerator & 3 kOhm NbTiN Multiplexed TWPA Readout Stack (v5.0)",
+  "title": "Cryo-FPGA BOED Accelerator & 3 kOhm NbTiN Wideband-Purcell Multiplexed TWPA Readout Stack (v5.1)",
   "module_scale_cells": 1024,
   "n_mux_star": 32,
   "no_supplier_quotes": true,
@@ -14,11 +14,12 @@
     "cryo_cold_mass_kg": 7.77,
     "room_temp_power_W": 87.96,
     "cryo_loads_1024": {
-      "mxc_20mK_uW": 6.256,
-      "cp_100mK_uW": 59.58,
-      "stage_4K_W": 0.488,
+      "mxc_20mK_uW": 7.175,
+      "cp_100mK_uW": 66.59,
+      "still_0p8K_mW": 1.366,
+      "stage_4K_W": 0.4949,
       "stage_4K_sky130_W": 0.0154,
-      "stage_50K_W": 8.26
+      "stage_50K_W": 9.43
     },
     "cost_usd_low": 456400,
     "cost_usd_nom": 629200,
@@ -27,10 +28,11 @@
   "scaling_10000_cell_note": {
     "closes_single_ld400_pt420": false,
     "min_modular_ld400_pt420_cryostats": 4,
-    "single_cryostat_max_cells": 2887,
+    "single_cryostat_max_cells": 2671,
     "tightest_stage": "20mK_MXC",
-    "total_4K_W_10000": 3.9384,
-    "total_20mK_uW_10000": 43.629
+    "total_4K_W_10000": 3.998,
+    "total_still_0p8K_mW_10000": 4.474,
+    "total_20mK_uW_10000": 44.317
   },
   "items": [
     {
@@ -53,7 +55,7 @@
     },
     {
       "part_id": "S6.5-02",
-      "name": "20 mK Josephson TWPA + Bandpass Purcell Filter + Dual Cryo-Isolator Pack (32 ch)",
+      "name": "20 mK Josephson TWPA + 5th-Order Wideband Stub Purcell (6.25-9.75 GHz) + Still-Dumped Pump Manifold (32 ch)",
       "qty": 32,
       "stage": "20mK_MXC",
       "envelope_mm": [
@@ -63,7 +65,7 @@
       ],
       "mass_kg_total": 2.72,
       "power_W_total": 0.0,
-      "cryo_load_20mK_uW": 2.144,
+      "cryo_load_20mK_uW": 1.956,
       "cost_usd_low": 240000,
       "cost_usd_nom": 336000,
       "cost_usd_high": 512000,
@@ -89,8 +91,10 @@
     },
     {
       "part_id": "S6.5-04",
-      "name": "Cryo-Coax Loom & Attenuator Pack (96 lines: CuNi/NbTi, 0.86 mm)",
+      "name": "Cryo-Coax Loom & Attenuator Pack (96 RO/XY + 4 pump + 8 ENDOR lines: CuNi/NbTi)",
       "qty": 96,
+      "total_rf_coax_lines_incl_pump_endor": 108,
+      "n_dc_therm_wires": 1000,
       "stage": "300K_to_20mK",
       "envelope_mm": [
         95.0,
@@ -99,7 +103,7 @@
       ],
       "mass_kg_total": 4.03,
       "power_W_total": 0.0,
-      "cryo_load_50K_W": 5.76,
+      "cryo_load_50K_W": 6.93,
       "cost_usd_low": 62400,
       "cost_usd_nom": 91200,
       "cost_usd_high": 139200,

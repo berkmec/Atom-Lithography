@@ -1,86 +1,163 @@
-* Atom Lithography Machine - 1oo2D Safety Interlock & 22 kV 2 MOhm HV Crowbar Verification
+* Atom Lithography Machine - 1oo2D Safety Interlock & 22 kV 2 MOhm HV Crowbar (Component-Level SPICE)
 * BOM: S7.SAFETY-03, S7.SAFETY-02, S7.SAFETY-05, S7.SAFETY-06, S7.SAFETY-01, S7.4-04, S5.5-04
 * STRICT EPISTEMIC NOTICE: DESIGN_ONLY_NOT_CERTIFIED (iec61508_certified=false, semi_s2_certified=false)
 
 .temp 26.85
 .options reltol=1e-4 vntol=1e-6 abstol=1e-12
 
-* --- Switch Models ---
-* Normally-Closed 25 kV HV Vacuum Crowbar Relay: CLOSED (Ron=0.1 Ohm) when coil V < 2 V (de-energized), OPEN (100 GOhm) when V > 2 V
-.model SW_HV_NC  SW(VT=2.5 VH=0.2 RON=100G ROFF=0.1)
-* HV PSU Isolation Contactor (OPEN on trip, CLOSED when healthy)
-.model SW_HV_NO  SW(VT=2.5 VH=0.2 RON=100  ROFF=100G)
-* LV Safety Relay / MOSFET Cutoff (CLOSED when energized > 2.5 V, OPEN = 100 MOhm when de-energized)
-.model SW_LV_NO  SW(VT=2.5 VH=0.2 RON=0.05 ROFF=100Meg)
-* Fast 36 V TVS Zener Demagnetization Clamp Model
+* --- Real Component Semiconductor & Relay Models ---
+.model QN_BJT    NPN(IS=1e-14 BF=150 VAF=80)
+.model M_2N7002  NMOS(LEVEL=1 VTO=2.0 KP=0.35 RD=1.5 RS=0.5)
+.model M_SQJ461  PMOS(LEVEL=1 VTO=-2.5 KP=4.0 RD=0.04 RS=0.02)
+.model D_Z12V    D(IS=1e-12 BV=12.0 IBV=5m N=1.2 RS=2.0)
 .model D_TVS36   D(IS=1e-12 BV=36.0 IBV=1m N=1.5 RS=0.5)
+.model D_1N4148  D(IS=2.5e-9 RS=0.6 N=1.75)
+* Normally-Closed 25 kV HV Vacuum Crowbar Relay: CLOSED (0.1 Ohm) when coil V < 8 V, OPEN (100 GOhm) when coil V > 12 V
+.model SW_HV_NC  SW(VT=10.0 VH=2.0 RON=100G ROFF=0.1)
+* HV PSU Isolation Contactor
+.model SW_HV_NO  SW(VT=10.0 VH=2.0 RON=100  ROFF=100G)
+* Omron G7SA 24 V Force-Guided Relay Contact (closes when 24 V coil energized > 12 V)
+.model SW_G7SA   SW(VT=12.0 VH=2.0 RON=0.05 ROFF=100Meg)
+* CPC1017N Opto-SSR Output (closes when LED forward drop > 0.45 V / I_LED > 3 mA)
+.model SW_OPTO   SW(VT=0.45 VH=0.05 RON=8.0 ROFF=100Meg)
 
-* Trip command: HEALTHY (5.0 V) for t < 1.0 ms; TRIPPED (0.0 V) for t >= 1.0 ms
-Vtrip_cmd trip_ok 0 DC 5.0 PWL(0 5.0 0.999m 5.0 1.000m 0.0 50m 0.0)
-* Always-HIGH rail (for modeling stuck-ON / stuck-welded Channel-A fault!)
-Vstuck_hi stuck_hi 0 DC 5.0
+* --- Real Open-Collector LM2903DR Comparator Subcircuit (Requires External Pull-Up!) ---
+.subckt LM2903_OC inp inn out vcc gnd
+* Input differential stage driving open-collector NPN sinking stage (no internal pull-up!)
+Ediff n_drv gnd VALUE = { 2.5 * (1.0 - tanh(200.0 * (V(inp) - V(inn)))) }
+Rb_oc n_drv n_b 10k
+Q_oc  out n_b gnd QN_BJT
+.ends LM2903_OC
+
+* --- 5 V CMOS 2-Input AND Gate Subcircuit (SN74LVC1G08) ---
+.subckt CMOS_AND2 a b y vcc gnd
+Band y_int gnd V = { 0.5 * V(vcc) * (1.0 + tanh(20.0 * (min(V(a), V(b)) - 0.5 * V(vcc)))) }
+R_o  y_int y 50
+C_o  y gnd 2p
+.ends CMOS_AND2
+
+* --- 5 V CMOS 2-Input XOR Gate Subcircuit (SN74AHC1G86) ---
+.subckt CMOS_XOR2 a b y vcc gnd
+Bxor y_int gnd V = { 0.5 * V(vcc) * (1.0 + tanh(20.0 * (abs(V(a) - V(b)) - 0.5 * V(vcc)))) }
+R_o  y_int y 50
+C_o  y gnd 2p
+.ends CMOS_XOR2
+
+* Supplies
+V5a  v5a  0 DC 5.0
+V24a v24a 0 DC 24.0
+V24b v24b 0 DC 24.0
+
+* Global 24 V trip stimulus: HEALTHY (24 V) for t < 1.0 ms; TRIPPED (0 V) for t >= 1.0 ms
+Vtrip24 trip_24v 0 DC 24.0 PWL(0 24.0 0.999m 24.0 1.000m 0.0 50m 0.0)
+Vtrip5  trip_5v  0 DC 5.0  PWL(0 5.0  0.999m 5.0  1.000m 0.0 50m 0.0)
+Vstuck24 stuck_24v 0 DC 24.0
 
 * =========================================================================
-* 1) NOMINAL 22 kV 1.5 nF ACTIVE 2.00 MOhm HV CROWBAR DISCHARGE (BOTH Ch-A & Ch-B TRIP)
+* 1) NOMINAL 22 kV 1.5 nF ACTIVE 2.00 MOhm HV CROWBAR DISCHARGE
 * =========================================================================
-* C_stray = 1.500 nF charged to 22,000 V; at t=1.0 ms HV PSU disconnects & K_CROWBAR_A || K_CROWBAR_B close
-* onto R_CROWBAR_1 (1.00 MOhm) + R_CROWBAR_2 (1.00 MOhm) = 2.00 MOhm.
-* Analytical: tau = 2.00M * 1.5n = 3.000 ms; t_50V = 3.000 * ln(22000/50) = 18.2603 ms; E = 0.3630 J.
 Vhv_nom   hv_src_n 0 DC 22000
-Spsu_nom  hv_src_n hv_bus_n trip_ok 0 SW_HV_NO
+Spsu_nom  hv_src_n hv_bus_n trip_24v 0 SW_HV_NO
 Cstray_n  hv_bus_n 0 1.5n IC=22000
-Sk_cba_n  hv_bus_n hv_dmp_n trip_ok 0 SW_HV_NC
-Sk_cbb_n  hv_bus_n hv_dmp_n trip_ok 0 SW_HV_NC
+Sk_cba_n  hv_bus_n hv_dmp_n trip_24v 0 SW_HV_NC
+Sk_cbb_n  hv_bus_n hv_dmp_n trip_24v 0 SW_HV_NC
 Rcb1_n    hv_dmp_n hv_mid_n 1.00Meg
 Rcb2_n    hv_mid_n 0        1.00Meg
-* Instantaneous power dissipated in 2.00 MOhm dump resistor: P = V(hv_dmp_n)^2 / 2.00Meg
 Bp_nom    p_dump_n 0 V = (V(hv_dmp_n) * V(hv_dmp_n)) / 2.0e6
 
 * =========================================================================
-* 2) SINGLE-CHANNEL FAULT INJECTION #1: K_CROWBAR_A STUCK OPEN (FAILED RELAY)
+* 2) SINGLE-CHANNEL FAULT INJECTION #1: K_CROWBAR_A STUCK OPEN (Ch-B Discharges!)
 * =========================================================================
-* K_CROWBAR_A coil stuck energized (HV contact STUCK OPEN = 100 GOhm!), ONLY diverse Ch-B K_CROWBAR_B closes!
 Vhv_flt   hv_src_f 0 DC 22000
-Spsu_flt  hv_src_f hv_bus_f trip_ok  0 SW_HV_NO
+Spsu_flt  hv_src_f hv_bus_f trip_24v  0 SW_HV_NO
 Cstray_f  hv_bus_f 0 1.5n IC=22000
-Sk_cba_f  hv_bus_f hv_dmp_f stuck_hi 0 SW_HV_NC
-Sk_cbb_f  hv_bus_f hv_dmp_f trip_ok  0 SW_HV_NC
+Sk_cba_f  hv_bus_f hv_dmp_f stuck_24v 0 SW_HV_NC
+Sk_cbb_f  hv_bus_f hv_dmp_f trip_24v  0 SW_HV_NC
 Rcb1_f    hv_dmp_f hv_mid_f 1.00Meg
 Rcb2_f    hv_mid_f 0        1.00Meg
 Bp_flt    p_dump_f 0 V = (V(hv_dmp_f) * V(hv_dmp_f)) / 2.0e6
 
 * =========================================================================
-* 3) SINGLE-CHANNEL FAULT INJECTION #2: K_FG_A1 STUCK WELDED CLOSED ON 24 V SHUTTER
+* 3) COMPONENT-LEVEL 24V SHUTTER CUTOFF (K_FG_A1 WELDED CLOSED + REAL SQJ461EP PMOS
+*    WITH 10k/10k + 12V ZENER GATE CLAMP + 470R CPC1017N + 33 ms DISCREPANCY BLANKING)
 * =========================================================================
-* Channel-A force-guided relay K_FG_A1 sticks WELDED CLOSED (10 mOhm!).
-* Diverse Channel-B P-MOSFET SSR Q_SSR_B1 in SERIES still opens at t=1.0 ms -> de-energizes shutter coil!
-* 36 V TVS zener clamp accelerates coil demagnetization (< 1 ms << 3.2 ms mechanical shutter spec!).
-V24_sh    v24_sh 0 DC 24.0
-R_weld_a  v24_sh sh_mid_ab 10m
-Sq_ssr_b  sh_mid_ab sh_out trip_ok 0 SW_LV_NO
-* Dual-coil shutter actuator load (48 Ohm, 20 mH -> 500 mA hold current) + 36 V fast-drop TVS clamp
-R_sh_c    sh_out sh_ind 48.0
-L_sh_c    sh_ind 0      20m
-D_sh_tvs  0      sh_out D_TVS36
-R_sh_bleed sh_out 0     100k
+R_weld_a   v24a sh_mid_ab 10m
+* CPC1017N LED driven by 5 V trip_5v via 470 Ohm current-limiting resistor
+R_led_s1   trip_5v ssr1_led 470
+D_led_s1   ssr1_led 0 D_1N4148
+S_opto_s1  ssr1_div_lo 0 ssr1_led 0 SW_OPTO
+* 10k/10k divider + 12 V Zener clamp protecting SQJ461EP Vgs <= -12 V (abs-max +/-20 V!)
+R_ssr1_pu  sh_mid_ab ssr1_gate 10k
+R_ssr1_div ssr1_gate ssr1_div_lo 10k
+Dz_ssr1    ssr1_gate sh_mid_ab D_Z12V
+* Real P-MOSFET SQJ461EP high-side safety cutoff switch
+M_ssr_b1   sh_out ssr1_gate sh_mid_ab sh_mid_ab M_SQJ461 W=10 L=1
+* Dual-coil shutter actuator load (48 Ohm, 20 mH) + 36 V fast-drop TVS clamp
+R_sh_c     sh_out sh_ind 48.0
+L_sh_c     sh_ind 0      20m
+D_sh_tvs   0      sh_out D_TVS36
+R_sh_bleed sh_out 0      100k
 
-* Cross-channel diagnostic discrepancy comparator:
-* Mirror feedback A reads 0 V (welded closed!) while Ch-B feedback reads 5 V (open!) -> XOR asserts 5 V FAULT!
-B_fb_a    diag_fb_a 0 V = 0.0
-B_fb_b    diag_fb_b 0 V = 5.0 * (1.0 - V(trip_ok) / 5.0)
-B_xor_d   discrep_fault 0 V = abs(V(diag_fb_a) - V(diag_fb_b))
+* Component-level discrepancy XOR + 33 ms RC blanking filter (verifies welded relay trips after blanking!)
+* Mirror A reads 0 V (welded closed); Ch-B 24V->4.51V divider reads ~4.5V when ON, 0V when OFF -> inverted FB_B=5V when OFF
+R_fbb_t    sh_out fb_b_div 43.2k
+R_fbb_b    fb_b_div 0      10.0k
+* Compare welded-closed Ch-A (stuck 5 V) vs actual Ch-B divider (drops 4.5 V -> 0 V at t=1 ms)
+V_mira_wld diag_fb_a 0 DC 5.0
+X_xor_wld  diag_fb_a fb_b_div disc_wld_raw v5a 0 CMOS_XOR2
+R_wld_flt  disc_wld_raw disc_wld_rc 33k
+C_wld_flt  disc_wld_rc  0           1.0u
+X_wld_buf  disc_wld_rc v5a discrep_fault v5a 0 CMOS_AND2
 
 * =========================================================================
-* 4) SINGLE-CHANNEL FAULT INJECTION #3: OPEN-WIRE SENSOR BREAK ON Ch-A E-STOP
+* 4) TURN-ON SKEW TEST (10 ms G7SA MECHANICAL RELAY vs 50 us SSR THROUGH 33 ms BLANKING!)
 * =========================================================================
-* ESTOP_A breaks (5 V -> 0 V at t=1.0 ms) while ESTOP_B stays 5.0 V -> 1oo2 hardware AND drops BOTH channels!
-Vestop_a  es_a 0 DC 5.0 PWL(0 5.0 0.999m 5.0 1.000m 0.0 50m 0.0)
-Vestop_b  es_b 0 DC 5.0
-B_vote1oo2 vote_1oo2 0 V = min(V(es_a), V(es_b))
-V24_ow    v24_ow 0 DC 24.0
-S_ow_a    v24_ow ow_mid vote_1oo2 0 SW_LV_NO
-S_ow_b    ow_mid ow_load vote_1oo2 0 SW_LV_NO
-R_ow_ld   ow_load 0 48.0
+* Normal turn-on at t=1 ms: SSR closes in 50 us (t=1.05 ms), G7SA relay closes in 10 ms (t=11 ms)
+* -> raw XOR pulses HIGH for 10 ms, but 33 ms RC blanking keeps disc_skew_rc < 1.3 V (ZERO nuisance trip!)
+V_skew_a   sk_a 0 DC 0 PWL(0 0 11.0m 0 11.1m 5.0 50m 5.0)
+V_skew_b   sk_b 0 DC 0 PWL(0 0 1.05m 0 1.10m 5.0 50m 5.0)
+X_xor_sk   sk_a sk_b disc_sk_raw v5a 0 CMOS_XOR2
+R_sk_flt   disc_sk_raw disc_sk_rc 33k
+C_sk_flt   disc_sk_rc  0          1.0u
+
+* =========================================================================
+* 5) REAL 4-20 mA LIVE-ZERO WINDOW COMPARATORS (LM2903DR + 10k PULL-UP) & 19.5% OSHA O2
+* =========================================================================
+* Precision Reference Dividers
+R_ref_ph3t v5a vref_ph3 10.0k
+R_ref_ph3b vref_ph3 0   4.99k
+R_ref_lzt  v5a vref_lz  10.0k
+R_ref_lzb  vref_lz 0    2.15k
+R_ref_o2t  v5a vref_o2  10.0k
+R_ref_o2b  vref_o2 0    47.5k
+
+* PH3 4-20 mA sensor: 0..10 ms = 5.0 mA (healthy!), 10..25 ms = 0.0 mA (OPEN WIRE -> MUST TRIP SAFE!), 25..45 ms = 12 mA (GAS LEAK -> TRIP!)
+I_ph3_loop 0 ph3_sens DC 5m PWL(0 5m 9.9m 5m 10.0m 0 24.9m 0 25.0m 12m 45m 12m)
+R_burd_ph3 ph3_sens 0 250.0
+X_ph3_hi   vref_ph3 ph3_sens ph3_ok_a v5a 0 LM2903_OC
+X_ph3_lz   ph3_sens vref_lz  ph3_ok_a v5a 0 LM2903_OC
+R_pu_ph3   v5a ph3_ok_a 10.0k
+
+* O2 4-20 mA sensor (0-25%): 0..15 ms = 20.9% (17.376 mA -> HEALTHY!), 15..45 ms = 19.0% (16.16 mA < 19.5% OSHA -> MUST TRIP SAFE!)
+I_o2_loop  0 o2_sens DC 17.376m PWL(0 17.376m 14.9m 17.376m 15.0m 16.16m 45m 16.16m)
+R_burd_o2  o2_sens 0 250.0
+X_o2_lo    o2_sens vref_o2 o2_ok_a v5a 0 LM2903_OC
+X_o2_lz    o2_sens vref_lz o2_ok_a v5a 0 LM2903_OC
+R_pu_o2    v5a o2_ok_a 10.0k
+
+* =========================================================================
+* 6) SINGLE-CHANNEL OPEN-WIRE E-STOP BREAK WITH REAL 2N7002K 24V RELAY DRIVER
+* =========================================================================
+Vestop_a   es_a 0 DC 5.0 PWL(0 5.0 0.999m 5.0 1.000m 0.0 50m 0.0)
+Vestop_b   es_b 0 DC 5.0
+X_and_ow   es_a es_b vote_ow v5a 0 CMOS_AND2
+R_g_ow     vote_ow g_ow 100
+R_pd_ow    g_ow 0 100k
+M_drv_ow   coil_n_ow g_ow 0 0 M_2N7002 W=2 L=1
+R_coil_ow  v24a coil_n_ow 1150
+D_fly_ow   coil_n_ow v24a D_1N4148
+S_g7sa_ow  v24a ow_load v24a coil_n_ow SW_G7SA
+R_ow_ld    ow_load 0 48.0
 
 .control
 set noaskquit
@@ -102,7 +179,7 @@ meas tran hv_flt_v_at_40m FIND v(hv_bus_f) AT=40m
 meas tran hv_flt_energy_j INTEG v(p_dump_f) FROM=0.99m TO=44m
 print hv_flt_t50_ms
 
-* 3) Fault-Injected Welded Ch-A Relay (K_FG_A1 welded 10 mOhm; Ch-B SSR cuts 24 V shutter safe!)
+* 3) Component-Level Welded Ch-A Relay + Zener-Clamped SQJ461EP PMOS + 33 ms Blanking Discrepancy
 meas tran sh_i_on   FIND i(L_sh_c) AT=0.5m
 meas tran sh_v_on   FIND v(sh_out) AT=0.5m
 meas tran sh_v_safe FIND v(sh_out) AT=5.0m
@@ -110,10 +187,24 @@ meas tran sh_i_safe FIND i(L_sh_c) AT=5.0m
 let sh_i10 = 0.10 * sh_i_on
 meas tran sh_t_drop_abs WHEN i(L_sh_c)=$&sh_i10 FALL=1 TD=0.99m
 let sh_drop_ms = (sh_t_drop_abs - 1.0m) * 1e3
-meas tran discrep_fault_v FIND v(discrep_fault) AT=5.0m
-print sh_drop_ms
+let v_pmos_sg = v(sh_mid_ab) - v(ssr1_gate)
+meas tran pmos_vgs_on_v FIND v_pmos_sg AT=0.5m
+meas tran discrep_fault_v FIND v(discrep_fault) AT=42.0m
+print sh_drop_ms pmos_vgs_on_v discrep_fault_v
 
-* 4) Fault-Injected Open-Wire Sensor Break (ESTOP_A broken while ESTOP_B=5V -> 1oo2 load safe!)
+* 4) 10 ms Relay/SSR Turn-On Skew Blanking (peak filtered voltage stays < 2.0 V -> zero nuisance trip!)
+meas tran skew_blank_peak_v MAX v(disc_sk_rc) FROM=0 TO=20m
+print skew_blank_peak_v
+
+* 5) 4-20 mA Live-Zero PH3 Window & 19.5% OSHA O2 Comparator Verification
+meas tran ph3_healthy_5ma_v   FIND v(ph3_ok_a) AT=5.0m
+meas tran ph3_openwire_0ma_v  FIND v(ph3_ok_a) AT=18.0m
+meas tran ph3_leak_12ma_v     FIND v(ph3_ok_a) AT=35.0m
+meas tran o2_healthy_20p9_v   FIND v(o2_ok_a)  AT=5.0m
+meas tran o2_osha_19p0_trip_v FIND v(o2_ok_a)  AT=25.0m
+print ph3_healthy_5ma_v ph3_openwire_0ma_v ph3_leak_12ma_v o2_healthy_20p9_v o2_osha_19p0_trip_v
+
+* 6) Open-Wire E-Stop Break via Real 2N7002K + 24 V G7SA Coil
 meas tran ow_v_on   FIND v(ow_load) AT=0.5m
 meas tran ow_v_safe FIND v(ow_load) AT=5.0m
 

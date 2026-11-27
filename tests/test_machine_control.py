@@ -179,3 +179,124 @@ def test_sim_cli_presets_and_program(tmp_path):
     prows = [json.loads(x) for x in pcerts.read_text(encoding="utf-8").splitlines() if x.strip()]
     assert len(prows) == min(2, rep.certified)
     assert all(r["certified"] and len(r["sha256"]) == 64 for r in prows)
+
+
+# ===========================================================================
+# Regression Tests for OBS-013, OBS-056, OBS-081, OBS-083, OBS-128, OBS-153
+# ===========================================================================
+
+def test_obs153_scada_telemetry_exported_in_all():
+    import machine_control
+    assert "scada_telemetry" in machine_control.__all__
+
+
+def test_obs013_kapitza_electron_heating_and_dynamic_elzerman_set_readout():
+    from machine_control.config import (
+        elzerman_thermal_error,
+        elzerman_zeeman_splitting_ueV,
+        kapitza_electron_temp_K,
+    )
+    from machine_control.sim import ElzermanSETConfig, simulate_elzerman_set_readout
+
+    # Kapitza T^5 electron-phonon heating: 0.1 pW in 2e-19 m^3 -> 346.6 mK; 10 uW in 2e-12 m^3 -> 549.3 mK
+    t_set = kapitza_electron_temp_K(0.020, 1.0e-13, 2.0e-19, 1.0e8)
+    t_mw = kapitza_electron_temp_K(0.020, 10.0e-6, 2.0e-12, 1.0e8)
+    assert t_set == pytest.approx(0.34657, abs=5e-4)
+    assert t_mw == pytest.approx(0.54928, abs=5e-4)
+
+    # Zeeman splitting & Fermi dark-tunneling error at B_M4 = 0.1785 T
+    ez_m4 = elzerman_zeeman_splitting_ueV(0.1785)
+    assert 20.0 <= ez_m4 <= 21.0
+    assert elzerman_thermal_error(0.1785, 0.020) == pytest.approx(0.00248, abs=3e-4)
+    assert elzerman_thermal_error(0.1785, 0.100) == pytest.approx(0.23165, abs=3e-3)
+    assert elzerman_thermal_error(0.1785, 0.350) == pytest.approx(0.41518, abs=3e-3)
+    assert elzerman_thermal_error(1.5, 0.350) == pytest.approx(0.05321, abs=3e-3)
+
+    # MachineConfig tracks non-zero Kapitza thermal readout error (never silently zeroed)
+    cfg = MachineConfig.v224_baseline()
+    assert cfg.effective_electron_temp_K() > 0.30
+    assert cfg.elzerman_thermal_error(b_field_T=cfg.b_m4_T) > 0.40
+
+    # Dynamic Monte Carlo rf-SET simulator rejects Elzerman at B_M4=0.1785 T under Kapitza heating
+    mc_m4 = simulate_elzerman_set_readout(ElzermanSETConfig(b_field_T=0.1785, set_power_W=1e-13, n_shots=1500), seed=13)
+    assert mc_m4["t_e_K"] > 0.34
+    assert mc_m4["thermal_fermi_error"] > 0.40
+    assert mc_m4["elzerman_viable"] is False
+    assert mc_m4["recommended_mechanism"] == "Dispersive_PSB_M4_TWPA"
+
+    # M4 dispersive preset aligns B_sample with B_M4=0.1785 T and switches away from Elzerman
+    cfg_m4 = MachineConfig.v400_m4_dispersive()
+    assert cfg_m4.b_sample_T == pytest.approx(0.1785)
+    assert "Elzerman" not in cfg_m4.readout_mechanism
+
+
+def test_obs056_calibrator_removes_hardcoded_rubber_stamp_and_rejects_degenerate_lines():
+    # Degenerate 1-line and empty inputs MUST be rejected in every mode
+    for mode in ("spectral", "shaped", "grape"):
+        r1 = calibrate(np.array([120e3]), mode=mode, b_field_T=1.5)
+        assert r1.certified is False
+        assert r1.min_corner_fidelity == 0.0
+
+    # Tight 5.1 kHz register [62e3, 72.2e3, ...] MUST NOT be rubber-stamped at 0.9975
+    tight = np.array([62e3, 72.2e3, 240e3, 470e3, 820e3, 1280e3, 1950e3, 2950e3])
+    r_spec = calibrate(tight, mode="spectral", b_field_T=1.5)
+    assert r_spec.corner_verified is True
+    assert r_spec.certified is False
+    assert r_spec.min_spectator_retention < 0.99
+
+    # Well-separated register passes genuine Bloch 9-corner verification (no hardcoded 0.9975)
+    wide = np.array([50e3, 400e3, 1.2e6, 2.9e6])
+    r_wide = calibrate(wide, mode="spectral", b_field_T=1.5)
+    assert r_wide.certified is True
+    assert r_wide.corner_verified is True
+    assert r_wide.min_corner_fidelity >= 0.99
+    assert r_wide.min_spectator_retention >= 0.99
+    assert r_wide.min_corner_fidelity != 0.9975
+
+
+def test_obs081_factory_analytic_rate_respects_dd_ok_and_atlas_abundance():
+    # When dd_ok is False (4.7% natural Si), BOTH certified count AND analytic rate MUST be 0.0
+    rep_nat = Factory(MachineConfig(abundance_pct=4.7, bath_yield=0.66, seed=42)).run(10)
+    assert rep_nat.certified == 0
+    assert rep_nat.certified_per_day_analytic == 0.0
+
+    # AtlasSelector(4.7) in real_si29 mode MUST honor selector's abundance_pct=4.7 and dd_ok=False
+    atlas47 = AtlasSelector(abundance_pct=4.7, seed=42)
+    rep_r47 = Factory(MachineConfig(seed=42), selector=atlas47, bath_mode="real_si29").run(4)
+    assert rep_r47.certified == 0
+    assert rep_r47.certified_per_day_analytic == 0.0
+
+
+def test_obs083_ibic_rice_false_positive_rate_and_counted_writer_propagation():
+    from machine_control.config import compute_ibic_rice_false_positive_rate
+
+    # At locked 15 ms window: 5.5 sigma exceeds 1e-3 gate; 6.2 sigma drops < 1e-4
+    p_fp_55 = compute_ibic_rice_false_positive_rate(0.015, threshold_sigma=5.5)
+    p_fp_62 = compute_ibic_rice_false_positive_rate(0.015, threshold_sigma=6.2)
+    assert p_fp_55 > 3.0e-3
+    assert p_fp_62 < 1.0e-4
+
+    # v224_baseline locks 6.2-sigma rate (< 1e-3) instead of silent 0.0
+    c224 = MachineConfig.v224_baseline()
+    assert 0.0 < c224.detector_false_positive_rate < 1.0e-3
+
+    # CountedWriter models zero-ion false-positive triggers and yield reduction (1 - p_fp)
+    w = CountedWriter(eta=0.999, rng=np.random.default_rng(7), false_positive_rate=0.10)
+    shots = [w.fire_single() for _ in range(4000)]
+    fp_frac = sum(1 for s in shots if s.false_positive and s.implanted == 0) / len(shots)
+    assert abs(fp_frac - 0.10) < 0.015
+    w_zero = CountedWriter(eta=0.999, rng=np.random.default_rng(7), false_positive_rate=0.0)
+    assert w.effective_yield(0.51, 0.5) == pytest.approx(0.90 * w_zero.effective_yield(0.51, 0.5), rel=1e-9)
+
+    # Factory propagates false_positive_shots into FactoryReport
+    rep_fp = Factory(MachineConfig.v224_baseline(detector_false_positive_rate=0.15, seed=99)).run(60)
+    assert rep_fp.false_positive_shots > 0
+
+
+def test_obs128_v400_bayesian_uses_realistic_1pct_si29_boed_constants():
+    c_v4 = MachineConfig.v400_bayesian()
+    c_real = MachineConfig.v400_real_si29()
+    assert c_v4.spec_time_s >= 0.12
+    assert c_v4.spec_sigma_Hz >= 90.0
+    assert c_real.spec_time_s == pytest.approx(0.1304, abs=1e-3)
+    assert c_real.spec_sigma_Hz == pytest.approx(96.0, abs=1.0)

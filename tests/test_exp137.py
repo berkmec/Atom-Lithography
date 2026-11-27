@@ -24,6 +24,8 @@ if str(REPO_ROOT) not in sys.path:
 from experiments.exp137_echoed_m4_bus_gate.echo_bus_solver137 import (
     PAULI_16_NAMES,
     FlipFlopPairSpec,
+    audit_exact_4x4_tosi_clock_impossibility,
+    audit_mw_pi_pulse_crosstalk,
     simulate_echoed_cz_cuda,
 )
 from experiments.exp137_echoed_m4_bus_gate.noise_ou137 import (
@@ -122,6 +124,18 @@ def test_exp137_json_schema_and_cptp_bounds() -> None:
     for v in ev["predictions"].values():
         assert v["verdict"] in ("PASS", "FAIL")
 
+    # OBS-042 (no synthetic clamping), OBS-101 (60ns DRAG/Gauss eliminates 97.8% rect flip), OBS-111 (12-dec OU)
+    assert data["part4_exp138_pauli_channels"]["synthetic_clamping_removed"] is True
+    assert data["part1_noise_and_unitary"]["ou_psd_audit"]["f_ir_hz"] <= 1e-2
+    xt = audit_mw_pi_pulse_crosstalk()
+    assert xt["rect_15ns_max_neighbor_flip"] > 0.90
+    assert xt["drag_gauss_60ns_hyperfine_117p53MHz_flip"] < 1e-3
+    clk = audit_exact_4x4_tosi_clock_impossibility()
+    assert clk["simultaneous_clock_and_flat_g_possible"] is False
+    assert clk["by_depth"]["z_12nm"]["has_clock_transition_d1_le_4e6"] is False
+    assert clk["by_depth"]["z_14nm"]["has_clock_transition_d1_le_4e6"] is True
+    assert abs(clk["by_depth"]["z_14nm"]["min_abs_d1_point"]["dg_mhz_per_ghz"]) > 0.5
+
 
 def test_exp138_pauli_channels_exact_normalization() -> None:
     """Verify exported Exp138 Pauli error channels at S_eps=1.0 and 0.5 ueV/rtHz."""
@@ -182,10 +196,11 @@ def test_summary_gfm_tables_and_portability() -> None:
             in_table = False
             expected_cols = 0
 
-    forb_a = "/" + "home" + "/" + "berk"
-    forb_b = "/" + "run" + "/" + "media" + "/" + "berk"
+    forb_pats = (re.compile(r"/home/[a-zA-Z0-9_-]+"), re.compile(r"/run/media/"))
     files = list(EXP_DIR.glob("*.py")) + list(RES_DIR.glob("*.json")) + list(RES_DIR.glob("*.md")) + [Path(__file__)]
     for fp in files:
         txt = fp.read_text(encoding="utf-8")
-        assert forb_a not in txt, f"Hardcoded home path in {fp.name}"
-        assert forb_b not in txt, f"Hardcoded media path in {fp.name}"
+        if fp == Path(__file__):
+            txt = "\n".join(ln for ln in txt.splitlines() if "forb_pats =" not in ln)
+        for pat in forb_pats:
+            assert pat.search(txt) is None, f"Hardcoded path {pat.pattern} in {fp.name}"

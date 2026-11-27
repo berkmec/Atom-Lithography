@@ -30,6 +30,7 @@ cf63_od = 113.5;
 clear_aperture_mm = 44.0;
 sapphire_d = 50.0;
 sapphire_t = 8.0;
+elev_deg = 36.0;
 
 // Interface / port parameters (mm)
 port_chamber_pos_y_cf63_od = 113.500;
@@ -59,6 +60,6 @@ module part_S5_5_02() {
 }
 
 // World assembly mounting transform (global machine frame, mm / deg):
-// translate([0.000, 295.500, 500.000]) rotate([0.000, 0.000, 0.000]) part_S5_5_02();
+// translate([420.000, 150.073, 609.034]) rotate([36.000, 0.000, 0.000]) part_S5_5_02();
 
 part_S5_5_02();

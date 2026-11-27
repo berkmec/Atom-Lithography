@@ -32,15 +32,15 @@
         "position_mm": [
           0.0,
           0.0,
-          12.0
+          12.5
         ],
         "normal": [
           0.0,
           0.0,
           1.0
         ],
-        "standard": "4x Vespel SP-22 Thermal Standoff Seats @ (±32, ±32)",
-        "mating_part_id": "S6.2-02",
+        "standard": "4x Raised Vespel SP-22 Thermal Standoff Bosses @ (±32, ±32), Z_world=-28.50 mm",
+        "mating_part_id": "S6.2-01",
         "bore_mm": 36.0,
         "od_mm": 0.0,
         "pcd_mm": 0.0,
@@ -63,7 +63,7 @@
           0.0,
           -1.0
         ],
-        "standard": "4x M4 Corner Mounts @ (±39.5, ±39.5)",
+        "standard": "4x M4 Corner Mounts @ (±39.5, ±39.5) flush on S4.3-02",
         "mating_part_id": "S4.3-02",
         "bore_mm": 0.0,
         "od_mm": 0.0,
@@ -87,7 +87,7 @@
           0.0,
           0.0
         ],
-        "standard": "Zerodur Bar Mirror Kinematic Seat (+X/+Y/-Y)",
+        "standard": "Zerodur Bar Mirror Riser Bracket Seat (+X/+Y/-Y)",
         "mating_part_id": "S4.4-03",
         "bore_mm": 0.0,
         "od_mm": 0.0,
@@ -130,7 +130,7 @@
       },
       {
         "label": "STAGE_H",
-        "nominal_mm": 24.0,
+        "nominal_mm": 24.5,
         "tol_plus_mm": 0.005,
         "tol_minus_mm": -0.005,
         "view": "front",
@@ -140,7 +140,35 @@
         "is_basic": false,
         "datum_ref": "",
         "decimals": 2,
-        "formatted": "24.00 ±0.005"
+        "formatted": "24.50 ±0.005"
+      },
+      {
+        "label": "BLADE_TX",
+        "nominal_mm": 1.96,
+        "tol_plus_mm": 0.005,
+        "tol_minus_mm": -0.005,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "1.96 ±0.005"
+      },
+      {
+        "label": "BLADE_TY",
+        "nominal_mm": 1.29,
+        "tol_plus_mm": 0.005,
+        "tol_minus_mm": -0.005,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "1.29 ±0.005"
       },
       {
         "label": "CENTER_BORE",
@@ -211,15 +239,20 @@
     ],
     "notes": [
       "200 um strok, 0.2 nm tipik cozunurluk (Exp79), sigma_kademe<=0.5 nm",
-      "PI PIMars P-562/563 UHV-class non-magnetic Ti-6Al-4V / Invar-36 6-DOF monolithic EDM flexure stage.",
-      "200 um XYZ stroke, 0.2 nm RMS resolution (Exp79/133 closed-loop sigma_stage = 0.102 nm).",
+      "Monolithic double-compound serpentine EDM Ti-6Al-4V flexure stage (t_x=1.96 mm, t_y=1.29 mm, k_eff~2.17 MN/m matching Exp133 k_piezo=2.174 MN/m, ~16,354x reduction from legacy 35.5 GN/m, peak vM < 200 MPa << 880 MPa yield at 200 um stroke).",
+      "Eliminated 0.200 mm top-deck air gap and 0.50-1.50 mm stack Z-gaps; embedded 8x UHV PZT multilayer actuator stacks (2X + 2Y + 4Z/tip/tilt).",
       "Z stage stackup RSS=0.0187 mm, WC=0.0300 mm (PASS)."
     ],
     "scad_params": {
       "stage_xy_mm": 90.0,
-      "stage_h_mm": 24.0,
+      "stage_h_mm": 24.5,
       "stroke_um": 200.0,
+      "blade_tx_mm": 1.96,
+      "blade_ty_mm": 1.29,
+      "k_eff_target_MN_m": 2.174,
       "n_flexure_slots": 8,
+      "n_pzt_stacks": 8,
+      "top_deck_gap_mm": 0.0,
       "bore_d_mm": 36.0
     },
     "target_mass_kg": null,
@@ -246,13 +279,13 @@
     "watertight": true,
     "boundary_edges": 0,
     "non_manifold_edges": 0,
-    "signed_volume_mm3": 141847.58271468652,
-    "surface_area_mm2": 45129.85389650162,
-    "mass_kg": 0.6283847914260613,
+    "signed_volume_mm3": 123899.93032051717,
+    "surface_area_mm2": 61373.07032711868,
+    "mass_kg": 0.5488766913198913,
     "cg_mm": [
-      2.9173573591242912e-16,
-      6.299568363383772e-16,
-      -0.5881889939810254
+      -9.244516014514739e-16,
+      -1.1882529269277008e-16,
+      -0.22973162776378195
     ],
     "bbox_min_mm": [
       -45.0,
@@ -262,18 +295,18 @@
     "bbox_max_mm": [
       45.0,
       45.0,
-      12.0
+      12.5
     ],
     "inertia_kg_mm2": [
-      490.4078855804709,
-      490.4078855804712,
-      924.1211447244815,
-      1.55360612552613e-14,
-      4.562404550854031e-16,
-      5.492458704650056e-15
+      439.8050514746255,
+      444.97210753963486,
+      833.6647459529452,
+      5.25389623362571e-15,
+      -7.319064940892757e-15,
+      -1.6772226457676806e-15
     ],
-    "triangle_count": 992,
-    "vertex_count": 464,
+    "triangle_count": 1856,
+    "vertex_count": 904,
     "step_valid": true,
     "dxf_valid": true,
     "svg_valid": true,
@@ -293,7 +326,7 @@
   "world_bbox_max_mm": [
     45.0,
     45.0,
-    -29.0
+    -28.5
   ],
   "reconciliation": null,
   "thermal_contraction_checks": [],
@@ -322,5 +355,10 @@
         "datum_height": 0.0
       }
     }
-  ]
+  ],
+  "shell_mate_metadata": {
+    "n_shells": 14,
+    "fea_bonding_mode": "TIED_SUBASSEMBLY_CONTACTS",
+    "watertight": true
+  }
 }

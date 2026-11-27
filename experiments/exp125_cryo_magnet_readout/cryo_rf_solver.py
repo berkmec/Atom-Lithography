@@ -33,7 +33,7 @@ KRINNER_OUTPUT = {
     "MXC_uW": 0.020,  # Measured NbTi Table 2
 }
 
-# Stage cooling capacities (Bluefors/Cryomech PT410 baseline + DR class, Krinner measured MXC)
+# Stage cooling capacities (Bluefors/Cryomech PT410 legacy baseline + authoritative LD400+PT420 map, OBS-130)
 CAPACITIES_20MK_PT410 = {
     "50K_W": 40.0,
     "4K_W": 1.0,
@@ -43,12 +43,24 @@ CAPACITIES_20MK_PT410 = {
     "MXC_100mK_uW": 540.0,
 }
 
+# Authoritative unified 6-stage Bluefors LD400 + PT420 cooling map (synced across Exp125 & Exp140, OBS-130)
+CAPACITIES_LD400_PT420_UNIFIED = {
+    "cryostat_class": "Bluefors_LD400_PT420_unified",
+    "50K_W": 40.0,
+    "4K_W": 2.0,
+    "Still_0p8K_mW": 40.0,
+    "CP_100mK_uW": 400.0,
+    "MXC_20mK_uW": 14.0,
+    "MXC_100mK_uW": 540.0,
+}
+
 # Non-readout steady-state cryostat loads (labeled engineering inputs)
-# Persistent-mode superconducting magnet (I_leads=0), 4K SKY130 cryo-CMOS DC mux (Exp33/58),
-# G10 structural supports & thermal radiation shields.
+# Note (OBS-130): 4K overhead split into non-CMOS baseline (0.045 W) + explicit 4K cryo-CMOS (0.050 W)
+# so downstream Exp140 does not double-count SKY130 4K cryo-CMOS power.
 SYSTEM_OVERHEAD_20MK = {
     "50K_W": 2.50,     # HTS magnet current leads upper stage + radiation + supports
     "4K_W": 0.095,     # 25 mW persistent magnet leads/switch + 50 mW 4K cryo-CMOS + 20 mW struts/rad
+    "4K_non_cmos_W": 0.045,  # 25 mW persistent magnet leads/switch + 20 mW struts/rad (excludes cryo-CMOS)
     "Still_mW": 0.80,  # Structural supports + NbTi DC looms + radiation
     "CP_uW": 15.0,     # Supports + isolator/circulator mounting
     "MXC_uW": 2.00,    # Structural supports + residual IR/radiation + sample dissipation
@@ -172,6 +184,20 @@ def thermal_5stage_20mk(
             and tot_cp_uW < cap["CP_uW"]
             and tot_mxc_uW < cap["MXC_20mK_uW"]
         ),
+        "closes_ld400_pt420_unified_14uW": bool(
+            tot_50k_W <= CAPACITIES_LD400_PT420_UNIFIED["50K_W"]
+            and tot_4k_W <= CAPACITIES_LD400_PT420_UNIFIED["4K_W"]
+            and tot_still_mW <= CAPACITIES_LD400_PT420_UNIFIED["Still_0p8K_mW"]
+            and tot_cp_uW <= CAPACITIES_LD400_PT420_UNIFIED["CP_100mK_uW"]
+            and tot_mxc_uW <= CAPACITIES_LD400_PT420_UNIFIED["MXC_20mK_uW"]
+        ),
+        "utilization_ld400_pt420_unified": {
+            "50K_frac": tot_50k_W / CAPACITIES_LD400_PT420_UNIFIED["50K_W"],
+            "4K_frac": tot_4k_W / CAPACITIES_LD400_PT420_UNIFIED["4K_W"],
+            "Still_0p8K_frac": tot_still_mW / CAPACITIES_LD400_PT420_UNIFIED["Still_0p8K_mW"],
+            "CP_100mK_frac": tot_cp_uW / CAPACITIES_LD400_PT420_UNIFIED["CP_100mK_uW"],
+            "MXC_20mK_frac": tot_mxc_uW / CAPACITIES_LD400_PT420_UNIFIED["MXC_20mK_uW"],
+        },
     }
 
 

@@ -189,8 +189,11 @@ DESIGN_SPECS = {
     "option_hpc_ingest_latency_us": 0.777,
     "option_hpc_surface_d37_capacity_L": 16,
     "option_hpc_qldpc_capacity_L": 108,
-    # Exp80 s=0.5 & Exp84 modal specs
-    "wafer_diameter_mm": 50.0,
+    # Exp80 s=0.5 & Exp84 modal specs — OBS-060 canonical wafer-tier reconciliation
+    "wafer_diameter_mm": 50.0,             # Canonical FOAK R&D prototype (fits Ø150 mm bore w/ 80x80 mm carrier)
+    "wafer_tier_canonical": "FOAK_50mm",
+    "wafer_tier_pilot_100mm_note": "100 mm epi wafers diced 4x into 50 mm coupons for FOAK, or require >=Ø240 mm bore upgrade",
+    "wafer_tier_fab_200mm_requires_bore_redesign": True,  # 200 mm fab TCO (Exp134/141) needs >=Ø300 mm bore/LL redesign + CAPEX adder
     "carrier_size_mm": 80.0,               # Exp80 BC1: >= 25 mm (diag 113.1 < 150 bore)
     "chamber_r_out_mm": 192.0,             # Compact s=0.5 UHV vessel enclosing Ø352 mm magnet
     "chamber_r_in_mm": 182.0,              # 6 mm radial vacuum clearance to Ø352 former

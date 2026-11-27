@@ -3,7 +3,8 @@
 Verifies:
 1. Exact 164/164 physical BOM part coverage, 0 duplicates, 0 bom_id aliasing.
 2. All 164 x 6 = 984 disk artifacts (.stl/.step/.scad/.dxf/.svg/.json) valid
-   and all 164 binary STLs strictly watertight (0 boundary/non-manifold/orientation).
+   and all 164 binary STLs strictly watertight (0 boundary/non-manifold/orientation),
+   with finite vertices, positive surface area, outward signed volume, and exact bbox span.
 3. Canonical datum normalization (Z_FLOOR=0.0 mm, Z_WAFER=+500.0 mm).
 4. Exact global 13,366-pair 3D solid clash audit == 0 clashes.
 5. Exact mass aggregation including locked S7.SAFETY-01..06 == 355.0 kg and
@@ -13,9 +14,19 @@ Verifies:
    iec61508_certified=False, semi_s2_certified=False) and 0 host-path leaks.
 8. Integrity of hardware/cad_parts/cad_parts_verification.json and the 2400x1400
    white-paper assembly figure hardware/cad_parts/master_164_assembly_views.png.
+9. Strictly read-only execution (zero tracked CAD artifacts mutated on test run).
+
+Verification Scope Boundary (OBS-118):
+   This suite validates 3D STL/B-rep mesh geometry, watertightness, 13,366-pair solid clash,
+   mass anchors, and analytic NIST cryogenic contraction/GD&T stacks. It does NOT replace
+   3D multiphysics EM/FEM verification (DOLFINx, openEMS, structural/modal FEA) or post-P&R
+   FPGA/ASIC timing closure (nextpnr, OpenROAD), which are tracked separately in
+   `INTERNAL_PILOT_REPORT.md` (`M0_M1_DETAILED_CAD_DESIGN_ONLY`, `no_lab_measurement=True`).
 """
 from __future__ import annotations
 
+import hashlib
+import importlib.util
 import json
 import struct
 from pathlib import Path
@@ -281,3 +292,69 @@ def test_verification_json_and_master_assembly_png_integrity(
     assert raw[12:16] == b"IHDR"
     width, height = struct.unpack(">II", raw[16:24])
     assert (width, height) == (2400, 1400), f"Expected 2400x1400 PNG, got {width}x{height}"
+
+
+def test_all_164_disk_stls_3d_geometry_winding_bbox_and_zero_mutation(
+    canonical_assembly,
+) -> None:
+    """Verify 3D mesh invariants across all 164 disk STLs (+ optional trimesh) and zero file mutations."""
+    records, _ = canonical_assembly
+
+    # Snapshot SHA-256 of verification JSON + 1 representative STL per subsystem before auditing
+    seen_subs: set[str] = set()
+    watched: list[Path] = [VERIFICATION_JSON_PATH]
+    for pid, rec in sorted(records.items()):
+        if rec.subsystem not in seen_subs:
+            seen_subs.add(rec.subsystem)
+            watched.append(rec.out_dir / f"{pid}.stl")
+    before_sha = {p: hashlib.sha256(p.read_bytes()).hexdigest() for p in watched}
+
+    audit = audit_disk_artifacts(records, out_root=OUT_ROOT)
+    assert audit["passed"] is True
+
+    stl_dtype = np.dtype([("normal", "<f4", 3), ("verts", "<f4", (3, 3)), ("attr", "<u2")])
+    has_trimesh = importlib.util.find_spec("trimesh") is not None
+    trimesh_mod = __import__("trimesh") if has_trimesh else None
+    trimesh_checked_subs: set[str] = set()
+
+    for pid, rec in sorted(records.items()):
+        stl_p = rec.out_dir / f"{pid}.stl"
+        raw = stl_p.read_bytes()
+        n_tri = struct.unpack_from("<I", raw, 80)[0]
+        assert n_tri > 0, f"Zero triangles in {pid}"
+        assert len(raw) == 84 + 50 * n_tri, f"Invalid binary STL byte length for {pid}"
+
+        arr = np.frombuffer(raw, dtype=stl_dtype, offset=84, count=n_tri)
+        verts = arr["verts"].astype(np.float64)
+        assert np.all(np.isfinite(verts)), f"Non-finite vertices in {pid}"
+
+        e1 = verts[:, 1] - verts[:, 0]
+        e2 = verts[:, 2] - verts[:, 0]
+        area = 0.5 * float(np.sum(np.linalg.norm(np.cross(e1, e2), axis=1)))
+        assert area > 0.0, f"Zero surface area in {pid}"
+
+        signed_vol = float(np.sum(np.einsum("ij,ij->i", verts[:, 0], np.cross(verts[:, 1], verts[:, 2])))) / 6.0
+        assert signed_vol > 0.0, f"Non-positive signed volume in {pid}: {signed_vol}"
+
+        flat_v = verts.reshape(-1, 3)
+        disk_span = flat_v.max(axis=0) - flat_v.min(axis=0)
+        assert np.all(disk_span > 0.0), f"Degenerate STL bbox in {pid}: {disk_span}"
+
+        # Signed volume is invariant under rigid 3D rotation + translation between local STL and canonical assembly
+        canon_v = np.asarray(rec.canonical_mesh.vertices, dtype=np.float64)
+        canon_f = np.asarray(rec.canonical_mesh.faces, dtype=np.int64)
+        cv = canon_v[canon_f]
+        canon_vol = float(np.sum(np.einsum("ij,ij->i", cv[:, 0], np.cross(cv[:, 1], cv[:, 2])))) / 6.0
+        assert canon_vol > 0.0, f"Non-positive canonical mesh volume for {pid}: {canon_vol}"
+        assert abs(signed_vol - canon_vol) / max(canon_vol, 1e-9) < 1e-2, (
+            f"Disk STL vs canonical signed volume mismatch for {pid}: disk={signed_vol:.3f}, canon={canon_vol:.3f}"
+        )
+
+        if trimesh_mod is not None and rec.subsystem not in trimesh_checked_subs:
+            trimesh_checked_subs.add(rec.subsystem)
+            tm = trimesh_mod.load(stl_p, force="mesh")
+            assert tm.is_watertight, f"trimesh reports non-watertight STL: {pid}"
+            assert abs(float(tm.volume) - signed_vol) / signed_vol < 1e-3
+
+    after_sha = {p: hashlib.sha256(p.read_bytes()).hexdigest() for p in watched}
+    assert after_sha == before_sha, "Read-only CAD parts test mutated tracked disk artifacts!"

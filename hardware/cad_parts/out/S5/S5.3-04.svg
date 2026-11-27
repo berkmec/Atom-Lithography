@@ -149,7 +149,7 @@
 <text x="1173.0" y="512.0" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="600" fill="#111827">0.15</text>
 <line x1="1203.0" y1="497.0" x2="1203.0" y2="519.0" stroke="#1B365D" stroke-width="1.1"/>
 <text x="1214.0" y="512.0" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#1B365D">A</text>
-<text x="1235.0" y="512.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#334155">Blade travel plane inside 36 mm magnet…</text>
+<text x="1235.0" y="512.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" fill="#334155">Blade travel plane inside load-lock Z=545…</text>
     <line x1="1105.0" y1="527.0" x2="1620.0" y2="527.0" stroke="#CBD5E1" stroke-width="0.9"/>
     <text x="1117.0" y="541.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="9.5" font-weight="700" fill="#1B365D">DATUMS:</text>
     <text x="1173.0" y="541.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="9.5" font-weight="600" fill="#1B365D">[A] PRIMARY MOUNTING PLANE</text>
@@ -157,7 +157,7 @@
     <text x="1173.0" y="568.0" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="9.5" font-weight="600" fill="#1B365D">[C] ANGULAR INDEX / BOLT ORIENTATION</text>
     <line x1="1105.0" y1="586.5" x2="1620.0" y2="586.5" stroke="#CBD5E1" stroke-width="0.9"/>
     <text x="1117.0" y="600.5" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" font-weight="700" fill="#1B365D">INTERFACES / PORTS (3):</text>
-    <text x="1121.0" y="615.0" font-family="DejaVu Sans Mono, monospace" font-size="9.2" fill="#111827">• chamber_cf40_mate [CF40] PCD 58.7 (6xØ6.6) -&gt; S5.1-01</text>
+    <text x="1121.0" y="615.0" font-family="DejaVu Sans Mono, monospace" font-size="9.2" fill="#111827">• chamber_cf40_mate [CF40] PCD 58.7 (6xØ6.6) -&gt; S5.1-03</text>
     <text x="1121.0" y="628.5" font-family="DejaVu Sans Mono, monospace" font-size="9.2" fill="#111827">• di_water_loop [Dual 1/8 in VCR Cooling]</text>
     <text x="1121.0" y="642.0" font-family="DejaVu Sans Mono, monospace" font-size="9.2" fill="#111827">• pneumatic_6bar [6 bar Dry N2 Actuator]</text>
     <text x="1117.0" y="658.5" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="10" font-weight="700" fill="#1B365D">CRITICAL DIMENSIONS:</text>

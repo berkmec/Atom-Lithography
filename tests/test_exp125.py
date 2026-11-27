@@ -230,3 +230,78 @@ def test_exp125_artifacts_and_verdicts():
     assert cad["nb_meissner_cup"]["z_top_machine_mm"] == 364.0
     assert cad["cryoperm_outer_sleeve"]["z_bot_machine_mm"] == 320.0
     assert cad["cryoperm_outer_sleeve"]["z_top_machine_mm"] == 376.0
+
+
+# ---------------------------------------------------------------------------
+# 5. Wave 1B Obstacle Closure Tests (OBS-008, OBS-072, OBS-099, OBS-130)
+# ---------------------------------------------------------------------------
+def test_obs008_obs072_obs099_horizontal_inplane_vector_magnet_and_quench_eddy():
+    """Live solver test for horizontal in-plane split-Helmholtz vector magnet, series PSU, Cryoperm 2R/t & eddy."""
+    ivm = ms.solve_horizontal_inplane_vector_magnet(
+        target_B_parallel_T=0.1785,
+        r_writehead_m=0.01131,
+        z_wafer_tol_m=0.0005,
+        target_series_current_A=28.0,
+        hts_lead_rating_A=320.0,
+    )
+    # OBS-008: Strict in-plane field eliminating perpendicular Abrikosov vortices in NbTiN
+    vx = ivm["inplane_vortex_safety_obs008"]
+    assert vx["inplane_limit_satisfied"] is True
+    assert vx["max_B_perp_z0_uT"] == 0.0
+    assert vx["vortex_free_10um_pads"] is True
+    assert vx["vortex_free_2um_feedlines"] is True
+    assert vx["max_intrinsic_tilt_deg"] < 0.05
+    assert vx["homogeneity_16x16mm_ppm"] < 50.0  # r <= 11.31 mm uniformity (OBS-072)
+
+    # OBS-072: Equal-current series winding (1 PSU, 1 persistent switch), tie flanges, Cryoperm 2R/t
+    ser = ivm["series_winding_topology"]
+    assert ser["n_independent_main_psus"] == 1
+    assert ser["n_persistent_switches"] == 1
+    assert ser["n_trim_psus"] == 1
+    assert ser["max_I_over_Ic_at_1p5T"] < 0.55
+
+    fl = ivm["structural_tie_flanges_obs072"]
+    assert fl["zero_floating_coils"] is True
+    assert abs(fl["net_axial_force_residual_kN"]) < 1e-3
+    assert fl["safety_factor"] > 5.0
+
+    # Thin-wall 2R/t flux concentration factor in Cryoperm-10
+    cp_dual = ivm["stray_field_and_cryoperm_obs072"]["redesigned_dual_layer_cryoperm"]
+    assert cp_dual["flux_concentration_transverse_2R_over_t"] > 5.0
+    assert cp_dual["wall_saturated"] is False
+    assert cp_dual["wall_saturation_margin"] > 4.0
+
+    # Legacy 2 mm Cryoperm explicitly exposes thin-wall 2R/t concentration (40x at R=40mm, t=2mm)
+    cp_sat = ms.cryoperm_cylindrical_sf(
+        mu_r=20000.0, thickness_m=0.002, radius_m=0.040, length_m=0.056,
+        b_radial_ext_T=0.04856, b_axial_ext_T=0.07546,
+    )
+    assert math.isclose(cp_sat["flux_concentration_transverse_2R_over_t"], 40.0, rel_tol=1e-6)
+    assert cp_sat["wall_saturated"] is True
+    assert cp_sat["B_wall_peak_T"] > 0.75
+
+    # OBS-099: >= 300 A HTS leads + radially-slotted AlN chuck quench eddy reduction
+    hts = ivm["hts_leads_and_quench_eddy_obs099"]["hts_leads"]
+    assert hts["rated_current_A"] >= 300.0
+    assert hts["meets_300A_spec"] is True
+    assert hts["operating_current_ESR_1p50T_A"] < hts["rated_current_A"]
+
+    ed_mono = ivm["hts_leads_and_quench_eddy_obs099"]["chuck_eddy_legacy_mono_1p5T_RRR50"]
+    ed_slot = ivm["hts_leads_and_quench_eddy_obs099"]["chuck_eddy_redesigned_slotted_AlN_1p5T"]
+    ed_m4 = ivm["hts_leads_and_quench_eddy_obs099"]["chuck_eddy_redesigned_slotted_AlN_M4"]
+    assert ed_mono["E_eddy_J"] > 50.0 and ed_mono["T_chuck_peak_K"] > 20.0
+    assert ed_slot["E_eddy_J"] < 0.2 and ed_slot["T_chuck_peak_K"] < 6.0
+    assert ed_m4["E_eddy_J"] < 0.01 and ed_m4["T_chuck_peak_K"] < 1.0
+    assert ivm["hts_leads_and_quench_eddy_obs099"]["eddy_energy_reduction_factor_1p5T"] > 1000.0
+
+
+def test_obs130_unified_ld400_pt420_14uW_capacity_map():
+    """Verify authoritative 6-stage LD400+PT420 14 uW MXC capacity map in Exp125 cryo_rf_solver."""
+    cap = cryo.CAPACITIES_LD400_PT420_UNIFIED
+    assert cap["MXC_20mK_uW"] == 14.0
+    assert cap["4K_W"] == 2.0
+    assert cap["Still_0p8K_mW"] == 40.0
+    assert cap["CP_100mK_uW"] == 400.0
+    b20 = cryo.thermal_5stage_20mk(9000, 160, 7.8, include_system_overhead=True)
+    assert b20["closes_ld400_pt420_unified_14uW"] is True
+    assert b20["total"]["MXC_uW"] <= 14.0

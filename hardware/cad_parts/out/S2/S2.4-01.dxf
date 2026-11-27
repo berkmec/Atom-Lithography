@@ -16817,7 +16817,7 @@ TITLEBLOCK
  40
 2.4074
   1
-MAT: Si | TEMP: 300 K / 4 K uyum | VAC: UHV 1e-9 mbar
+MAT: Si | TEMP: 300 K (aktif sog | VAC: UHV 1e-9 mbar
   0
 TEXT
   8
@@ -16831,7 +16831,7 @@ TITLEBLOCK
  40
 2.4074
   1
-TOL: Anten ECO kapali | MASS: 0.0011 kg | UNITS: mm
+TOL: Anten ECO / PDN pre-foun | MASS: 0.0011 kg | UNITS: mm
   0
 TEXT
   8

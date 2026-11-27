@@ -30,6 +30,7 @@ z_bus_ohm = 3000.0;
 f_res_ghz = 5.0;
 l_res_um = 300.0;
 b_m4_t = 0.1785;
+cavity_f1_ghz = 8.842;
 
 // Interface / port parameters (mm)
 

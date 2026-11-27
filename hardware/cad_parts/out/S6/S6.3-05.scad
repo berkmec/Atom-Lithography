@@ -9,7 +9,7 @@
 // temp_stage        : 300 K -> 4 K
 // vacuum_grade      : Atmosfer/Kriyo
 // tolerance         : ±10 ppm
-// computed_mass_kg  : 22.22199
+// computed_mass_kg  : 22.60495
 // envelope_mm       : 482.600 x 574.550 x 131.350
 // design_maturity   : M0_M1_DETAILED_CAD_DESIGN_ONLY
 // no_lab_measurement: true
@@ -29,7 +29,8 @@ bbox_z = 131.3500;
 rack_u = 3;
 bay = 2;
 u_start = 1;
-i_max_a = 100.0;
+n_hts_pairs = 4;
+i_max_a = 320.0;
 
 // Interface / port parameters (mm)
 

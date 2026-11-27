@@ -254,3 +254,34 @@ def test_benchmark_json_artifact_and_zero_hardcoded_paths():
         txt = fp.read_text(encoding="utf-8")
         assert bad_a not in txt, f"Hardcoded host path found in {fp.name}"
         assert bad_b not in txt, f"Hardcoded mount path found in {fp.name}"
+
+
+def test_obs117_fpga_q16_boed_high_snr_no_int32_saturation():
+    import math
+    from machine_control.fpga_boed_dsp import FPGACoreConfig, Q1616BOEDCore
+
+    core = Q1616BOEDCore(FPGACoreConfig())
+    for sigma_n in (0.002, 0.001, 0.0005):
+        for prior_sigma in (2000.0, 100.0):
+            f_init, f_probe, y_meas, gamma = 42_000.0, 42_500.0, 0.9, 1_200.0
+            f_init_i, df_bins, lp_q = core.init_prior_q16(f_init, prior_sigma_Hz=prior_sigma)
+            _, trace = core.update_and_select_next(
+                f_init_i, df_bins, lp_q, f_probe, y_meas, gamma, sigma_n, step_idx=0
+            )
+            # Exact FP64 posterior on identical grid
+            grid_Hz = f_init + df_bins * core.cfg.bin_step_Hz
+            lp_f = -0.5 * ((grid_Hz - f_init) / prior_sigma) ** 2
+            lor_f = 1.0 / (1.0 + ((f_probe - grid_Hz) / gamma) ** 2)
+            lp_f -= 0.5 * ((y_meas - lor_f) / sigma_n) ** 2
+            w = np.exp(lp_f - np.max(lp_f))
+            w /= np.sum(w)
+            mu_fp64 = float(np.sum(w * grid_Hz))
+            std_fp64 = float(math.sqrt(max(float(np.sum(w * (grid_Hz - mu_fp64) ** 2)), 0.0)))
+
+            assert abs(trace.mu_Hz - mu_fp64) < 1.0, (
+                f"sigma_n={sigma_n}, prior={prior_sigma}: Q16 mu={trace.mu_Hz} vs FP64 {mu_fp64}"
+            )
+            rel_std_err = abs(trace.std_Hz - std_fp64) / max(std_fp64, 1.0)
+            assert rel_std_err < 0.05, (
+                f"sigma_n={sigma_n}, prior={prior_sigma}: Q16 std={trace.std_Hz} vs FP64 {std_fp64}"
+            )

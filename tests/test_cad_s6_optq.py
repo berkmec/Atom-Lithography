@@ -138,30 +138,54 @@ class TestGeometryAndFeatures:
     def test_flagship_mechanical_dimensions_and_interfaces(self, all_43_parts) -> None:
         _, _, c = all_43_parts
 
-        # S6.9-02: 28-conv edge-welded 316L CF63 bellows (k=2000 N/m), #309 world X=[-474.5, -274.0]
+        # S6.9-02: 28-conv edge-welded 316L CF100 bellows (k=2000 N/m, OBS-065), world X=[-474.5, -289.5]
         b_params = dict(c["S6.9-02"].design.scad_params)
         assert b_params["n_convolutions"] == 28
         assert math.isclose(float(b_params["k_n_per_m"]), 2000.0)
         bmin, bmax = c["S6.9-02"].mesh.bbox()
-        assert math.isclose(bmax[1] - bmin[1], 113.5, abs_tol=0.3)  # ISO 3669 CF63 OD
+        assert math.isclose(bmax[1] - bmin[1], 152.0, abs_tol=0.3)  # ISO 3669 CF100 OD
         bw_min, bw_max = c["S6.9-02"].world_mesh().bbox()
         assert math.isclose(float(bw_min[0]), -474.5, abs_tol=0.1)
-        assert math.isclose(float(bw_max[0]), -274.0, abs_tol=0.1)
-        assert len([p for p in c["S6.9-02"].design.ports if p.standard == "CF63"]) == 2
+        assert math.isclose(float(bw_max[0]), -289.5, abs_tol=0.1)
+        assert len([p for p in c["S6.9-02"].design.ports if p.standard == "CF100"]) == 2
 
-        # S6.9-03: 4x S-loop OFHC Cu braids (k=52.7 N/m) + Ø12x397 Cu busbar
+        # S6.9-03: 8x electron-beam-welded OFHC Cu braids (88 mm^2 >= 80 mm^2) + Ø30x397 RRR>=200 Cu busbar (OBS-041/065)
         br_params = dict(c["S6.9-03"].design.scad_params)
-        assert br_params["n_braids"] == 4
-        assert math.isclose(float(br_params["k_braid_n_per_m"]), 52.7)
+        assert br_params["n_braids"] == 8
+        assert float(br_params["a_braid_mm2"]) >= 80.0
+        assert float(br_params["busbar_d"]) >= 30.0
+        assert float(br_params["t_chuck_14uw_mk"]) <= 25.0
 
-        # S6.3-01: Ø352 mm 8-coil magnet former & 36 mm split gap
+        # S6.2-01 & S6.2-02: PCD=96 mm, Ø34.5 boss pocket, Ø46 mm 4K bridge tube + nested 50K/4K chamber shields (OBS-010/017/040/046/065)
+        c21_params = dict(c["S6.2-01"].design.scad_params)
+        assert math.isclose(float(c21_params["bolt_pcd"]), 96.0, abs_tol=0.05)
+        assert math.isclose(float(c21_params["boss_pocket_id"]), 34.5, abs_tol=0.05)
+        c22_params = dict(c["S6.2-02"].design.scad_params)
+        assert float(c22_params["bridge_4k_id"]) >= 45.0
+
+        # S6.3-01..05: Horizontal split-Helmholtz in-plane magnet, anchored active shields, 4 switches, 4x 320A HTS leads (OBS-008/072)
         m_min, m_max = c["S6.3-01"].mesh.bbox()
         assert math.isclose(m_max[0] - m_min[0], 352.0, abs_tol=0.5)
+        m_params = dict(c["S6.3-01"].design.scad_params)
+        assert m_params["orientation"] == "HORIZONTAL_SPLIT_HELMHOLTZ_IN_PLANE_X"
+        assert float(m_params["b_perp_max_mt"]) <= 0.05
+        assert dict(c["S6.3-02"].design.scad_params)["n_lorentz_ties"] == 8
+        assert dict(c["S6.3-04"].design.scad_params)["n_switches"] == 4
+        assert float(dict(c["S6.3-05"].design.scad_params)["i_max_a"]) >= 300.0
 
-        # S6.3-03: Bolted Nb Meissner cup (R=32..34.5) + Cryoperm-10 (R=39..41) w/ vents
+        # S6.3-03: Bolted Nb Meissner cup + dual-layer 5 mm Cryoperm-10 (OD=82) + RF baffle (OBS-072/108)
         sh_min, sh_max = c["S6.3-03"].mesh.bbox()
         assert math.isclose(sh_max[0] - sh_min[0], 82.0, abs_tol=0.3)
         assert dict(c["S6.3-03"].design.scad_params)["n_vents"] == 6
+
+        # S6.11-02: Hollow 32-ch sub-cutoff TWPA shield box (f_TE101 > 10 GHz >> 8 GHz, OBS-108)
+        twpa_params = dict(c["S6.11-02"].design.scad_params)
+        assert float(twpa_params["f_te101_ghz"]) > 10.0
+
+        # S6.6-03/04 & S6.11-04: Realistic full 56 & 96 coax bundle counts (OBS-122)
+        assert len(split_shells(c["S6.6-03"].mesh)) >= 56
+        assert len(split_shells(c["S6.6-04"].mesh)) >= 56
+        assert len(split_shells(c["S6.11-04"].mesh)) >= 96
 
         # S6.8-04: DR OVC includes dedicated ASME DN50 rupture-disk relief port for S7.SAFETY-05
         relief_ports = [p for p in c["S6.8-04"].design.ports if p.mating_part_id == "S7.SAFETY-05"]
@@ -215,7 +239,7 @@ class TestZeroClashesAndThermal:
     def test_cryo_thermal_contraction_300k_to_20mk_and_stacks_pass(self) -> None:
         report = run_cryo_thermal_checks()
         assert report["all_passed"] is True
-        assert report["cold_clearance_count"] == 11
+        assert report["cold_clearance_count"] == 12
         for key, res in report["cold_clearances"].items():
             assert res["passed"] is True, f"Cold clearance failed for {key}: {res}"
             assert res["interference_risk"] is False

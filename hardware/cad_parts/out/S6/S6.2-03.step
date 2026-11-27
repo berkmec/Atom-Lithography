@@ -1,7 +1,7 @@
 ISO-10303-21;
 HEADER;
 FILE_DESCRIPTION(('Atom Lithography Machine CAD Part S6.2-03','M0_M1_DETAILED_CAD_DESIGN_ONLY; no_lab_measurement=true; iec61508_certified=false; semi_s2_certified=false; rep=watertight_envelope_proxy(full_stl_faces=884;step_faces=12;exact_bbox); bbox_mm=482.600x432.050x86.900'),'2;1');
-FILE_NAME('S6.2-03.step','2026-11-25T02:29:08',('Atom Lithography CAD Kernel'),('Hydrogen Mechanical Design'),'Pure-Python ISO 10303-21 AP214 Writer','hardware.cad_parts.core.step_writer','M0_M1_DETAILED_CAD_DESIGN_ONLY');
+FILE_NAME('S6.2-03.step','2026-11-27T18:07:54',('Atom Lithography CAD Kernel'),('Hydrogen Mechanical Design'),'Pure-Python ISO 10303-21 AP214 Writer','hardware.cad_parts.core.step_writer','M0_M1_DETAILED_CAD_DESIGN_ONLY');
 FILE_SCHEMA(('AUTOMOTIVE_DESIGN { 1 0 10303 214 1 1 1 1 }'));
 ENDSEC;
 DATA;

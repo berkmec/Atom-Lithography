@@ -8,9 +8,9 @@
   "bom_metadata": {
     "qty": "1",
     "unit": "lot",
-    "material": "SKY130 130 nm CMOS (4 K karakterize, Exp33)",
-    "key_spec": "Anten-temiz post-Exp123 ECO sonrasi 100+ cip partisi (R5 acik)",
-    "tolerance": "DRC/LVS/Ant=0",
+    "material": "SKY130 130 nm CMOS (4 K TRL-2 karakterizasyon gerekli, Exp33)",
+    "key_spec": "Pre-foundry NCH=8/64-ch MPW prototip partisi; 4 K PDK karakterizasyonu acik (R5)",
+    "tolerance": "Pre-foundry MPW",
     "temp_stage": "4 K",
     "vacuum_grade": "Kriyo-vakum",
     "procurement_class": "CUS",
@@ -20,7 +20,7 @@
     "usd_high": 92000.0,
     "legacy_cad_module": "s7_electronics_rack_interconnect",
     "bom_epistemic_tag": "{Model-Kalibrasyon-Exp114}",
-    "notes": "Efabless/SkyWater MPW shuttle + maske payi + dilimleme"
+    "notes": "Aktif SkyWater/ChipFoundry/TinyTapeout/MOSIS/EUROPRACTICE MPW shuttle (Efabless 2025 kapanisi sonrasi migrasyon; lead P10/P50/P90=20/32/48 hf; UNQUOTED_ROM_ESTIMATE)"
   },
   "artifact_links": {
     "cad": {
@@ -76,19 +76,31 @@
     ],
     "legacy_board_files": [],
     "electrical_icd": null,
-    "rtl_modules": [],
+    "rtl_modules": [
+      "rtl/cryo_crossbar_4k/sky130_4k_crossbar_121g.v"
+    ],
     "rtl_audit_json": null,
     "software_and_eda_files": [],
-    "verification_tests": []
+    "verification_tests": [
+      "tests/test_bom_detailed.py",
+      "tests/test_full_180_traceability.py",
+      "tests/test_cad_s7_s9.py",
+      "tests/test_pcb_fpga_blanker_cryo.py",
+      "tests/test_exp131.py",
+      "tests/test_cad_parts.py",
+      "tests/test_exp150.py",
+      "tests/test_rtl_machine_ctrl.py"
+    ]
   },
   "specialized_specification": null,
   "verification_status": {
     "cad_verified": true,
     "pcb_verified": true,
     "electrical_icd_verified": false,
-    "rtl_verified": false,
+    "rtl_verified": true,
     "software_or_eda_verified": false,
     "specialized_icd_present": false,
+    "verification_tests_mapped": true,
     "traceable": true
   },
   "epistemic": {

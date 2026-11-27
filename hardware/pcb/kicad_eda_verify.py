@@ -182,6 +182,7 @@ class CreepageRule:
     standard: str = "IPC-2221B / IEC 61010-1"
     pollution_degree: int = 2
     material_group: str = "I"
+    differential_pairs: tuple[tuple[str, str], ...] = ()
 
 
 @dataclass(frozen=True)
@@ -283,8 +284,8 @@ def auto_footprint_pads(
             _mk(pins_list[2], 2.54, 0.0, 1.40, 2.20, drill=0.90),
         )
 
-    # SOT-23-5 / SOT-23-6 (0.95 mm pitch)
-    if "SOT-23" in fp or "SOT23" in fp:
+    # SOT-23-5 / SOT-23-6 / TSOT-23-5 (UJ-5) (0.95 mm pitch)
+    if "SOT-23" in fp or "SOT23" in fp or "TSOT" in fp:
         pitch = 0.95
         half = (n + 1) // 2
         res: list[PinSpec] = []
@@ -295,7 +296,11 @@ def auto_footprint_pads(
             else:
                 ridx = idx - half
                 rem = n - half
-                dy = ((rem - 1) / 2.0 - ridx) * pitch
+                if n == 5:
+                    # Standard 5-pin SOT-23-5 / TSOT-23-5 (pins 4 & 5 at +/-0.95 mm, skipping center)
+                    dy = (1.0 - 2.0 * ridx) * pitch
+                else:
+                    dy = ((rem - 1) / 2.0 - ridx) * pitch
                 res.append(_mk(pnum, 1.35, dy, 0.95, 0.55))
         return tuple(res)
 
@@ -2201,8 +2206,35 @@ def run_drc(pcb_path: str | Path, board_spec: BoardSpec) -> DrcResult:
                 )
 
     # --- CHECK D: IPC-2221 / IEC-61010 HV Creepage & Clearance Verification ---
+    net_voltages_signed = {ns.name: float(ns.voltage_v) for ns in board_spec.nets}
     net_voltages = {ns.name: abs(ns.voltage_v) for ns in board_spec.nets}
     hv_checks: list[dict[str, Any]] = []
+
+    def _is_intra_hv_differential(rule_obj: CreepageRule, net_a: str, net_b: str) -> bool:
+        """Return True if two distinct HV-group nets can experience high open-switch voltage differential."""
+        if net_a == net_b:
+            return False
+        # 1) Explicit voltage difference in NetSpec >= 50% of working_voltage_v
+        if abs(net_voltages_signed.get(net_a, 0.0) - net_voltages_signed.get(net_b, 0.0)) >= 0.5 * abs(rule_obj.working_voltage_v):
+            return True
+        # 2) Explicit differential_pairs patterns on CreepageRule
+        for pat_a, pat_b in rule_obj.differential_pairs:
+            if (fnmatch.fnmatch(net_a, pat_a) and fnmatch.fnmatch(net_b, pat_b)) or (
+                fnmatch.fnmatch(net_a, pat_b) and fnmatch.fnmatch(net_b, pat_a)
+            ):
+                return True
+        # 3) Automatic open-switch crowbar/clamp net detection (prevents DRC grouping bypass!)
+        ua, ub = net_a.upper(), net_b.upper()
+        hot_toks = ("BUS", "OUT", "_IN")
+        sw_toks = ("DUMP", "CLAMP_NODE", "CROWBAR_RTN")
+        a_hot = any(t in ua for t in hot_toks) and not any(t in ua for t in sw_toks)
+        b_hot = any(t in ub for t in hot_toks) and not any(t in ub for t in sw_toks)
+        a_sw = any(t in ua for t in sw_toks)
+        b_sw = any(t in ub for t in sw_toks)
+        if (a_hot and b_sw) or (b_hot and a_sw):
+            return True
+        return False
+
     # Precompute adjacent copper layer pairs & dielectric separation thicknesses from stackup
     adj_cu_pairs: list[tuple[str, str, float]] = []
     cu_stack_indices = [k for k, e in enumerate(stackup_entries) if e["name"] in all_cu_names]
@@ -2256,6 +2288,7 @@ def run_drc(pcb_path: str | Path, board_spec: BoardSpec) -> DrcResult:
                 elif abs(rule.working_voltage_v - net_voltages.get(nname, 0.0)) >= 0.5 * rule.working_voltage_v:
                     lv_by_layer[layer].append((vbox, nname, f"via:{nname}"))
 
+            # Check HV primitives vs LV primitives
             for hbox, hnet, hlbl in hv_by_layer[layer]:
                 for lbox, lnet, llbl in lv_by_layer[layer]:
                     d_clr = hbox.dist_to_box(lbox)
@@ -2264,6 +2297,24 @@ def run_drc(pcb_path: str | Path, board_spec: BoardSpec) -> DrcResult:
                     if min_clr is None or d_clr < min_clr:
                         min_clr = d_clr
                         worst_pair = f"{hlbl}({hnet}) vs {llbl}({lnet}) on {layer}"
+                    if min_crp is None or d_crp < min_crp:
+                        min_crp = d_crp
+
+            # Check intra-group HV differential pairs (open-switch crowbar contacts, differing HV potentials!)
+            hv_items_l = hv_by_layer[layer]
+            n_hv_l = len(hv_items_l)
+            for idx_a in range(n_hv_l):
+                hbox_a, hnet_a, hlbl_a = hv_items_l[idx_a]
+                for idx_b in range(idx_a + 1, n_hv_l):
+                    hbox_b, hnet_b, hlbl_b = hv_items_l[idx_b]
+                    if not _is_intra_hv_differential(rule, hnet_a, hnet_b):
+                        continue
+                    d_clr = hbox_a.dist_to_box(hbox_b)
+                    p1_e, p2_e = hbox_a.closest_points_to(hbox_b)
+                    d_crp = _creepage_around_slots(p1_e, p2_e, d_clr, air_slots)
+                    if min_clr is None or d_clr < min_clr:
+                        min_clr = d_clr
+                        worst_pair = f"{hlbl_a}({hnet_a}) vs {hlbl_b}({hnet_b}) on {layer}"
                     if min_crp is None or d_crp < min_crp:
                         min_crp = d_crp
 
@@ -2284,7 +2335,7 @@ def run_drc(pcb_path: str | Path, board_spec: BoardSpec) -> DrcResult:
                         min_crp = d_crp
 
         # Through-board dielectric withstand check between adjacent copper layers if working_voltage_v >= 1000 V
-        # Checks ALL HV pads, segments, AND vias against ALL LV zones, pads, segments, AND vias in BOTH directions!
+        # Checks ALL HV pads, segments, AND vias against ALL LV zones/primitives AND intra-HV differential pairs!
         through_board_ok = True
         if rule.working_voltage_v >= 1000.0:
             for l_a, l_b, d_thick in adj_cu_pairs:
@@ -2306,6 +2357,13 @@ def run_drc(pcb_path: str | Path, board_spec: BoardSpec) -> DrcResult:
                                 through_board_ok = False
                                 errors.append(
                                     f"Through-board HV dielectric stress on {hlbl}({hnet}) [{hv_l}] over {llbl}({lnet}) [{lv_l}]: "
+                                    f"{field_v_mm:.0f} V/mm > {rules.max_dielectric_field_v_per_mm:.0f} V/mm (d={d_thick:.3f} mm)"
+                                )
+                        for hbox2, hnet2, hlbl2 in hv_by_layer[lv_l]:
+                            if _is_intra_hv_differential(rule, hnet, hnet2) and hbox.dist_to_box(hbox2) <= 1e-6:
+                                through_board_ok = False
+                                errors.append(
+                                    f"Through-board HV differential stress on {hlbl}({hnet}) [{hv_l}] over {hlbl2}({hnet2}) [{lv_l}]: "
                                     f"{field_v_mm:.0f} V/mm > {rules.max_dielectric_field_v_per_mm:.0f} V/mm (d={d_thick:.3f} mm)"
                                 )
 

@@ -32,6 +32,7 @@ if str(SCRIPT_DIR) not in sys.path:
 
 from sb121_echo_solver148 import (
     build_sb121_models,
+    evaluate_b0_vs_bm4_and_shared_endor_strain,
     run_quasistatic_and_1f_benchmarks,
     verify_8x8_and_16x16_cptp,
     verify_qecho_algebraic_cancellation,
@@ -289,8 +290,9 @@ def main() -> None:
     print("[Exp148] Stage 4: Synthesizing AC-Stark-compensated smooth-Fourier SU(8) GRAPE gates {X_L, Z_L, H_L}...")
     grape = run_su8_grape_suite(models)
 
-    print("[Exp148] Stage 5: Building 121Sb vs 31P trade-off comparison & evaluating SQ1..SQ6...")
+    print("[Exp148] Stage 5: Building 121Sb vs 31P trade-off comparison, OBS-073 dual-field/strain audit & evaluating SQ1..SQ6...")
     comp = build_sb121_vs_p31_comparison(models, bench, grape)
+    obs073_audit = evaluate_b0_vs_bm4_and_shared_endor_strain()
     verdicts = evaluate_predictions(models, cptp, alg, bench, grape)
 
     n_pass_core = sum(1 for v in verdicts.values() if v["status"] == "PASS")
@@ -316,9 +318,10 @@ def main() -> None:
         "benchmarks": bench,
         "su8_grape_logical_gates": grape,
         "sb121_vs_p31_comparison": comp,
+        "b0_vs_bm4_and_shared_endor_audit_OBS073": obs073_audit,
         "verdicts_sq1_to_sq6": verdicts,
         "core_sq_passed": f"{n_pass_core}/6",
-        "exp142_oq6_closure_status": "CLOSED" if (n_pass_core == 6) else "PARTIAL",
+        "exp142_oq6_closure_status": "PARTIAL_HONEST_WALLS_SQ4_AND_OBS073",
     }
 
     exp_path = RESULTS_DIR / "exp148.json"

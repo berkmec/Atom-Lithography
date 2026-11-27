@@ -6,9 +6,9 @@
 // subsystem         : S2
 // part_name         : SKY130 blanker_tile 64-kanalli surucu ASIC yongalari (16 aktif karo + yedek, 1024 ch)
 // material          : Si
-// temp_stage        : 300 K / 4 K uyumlu
+// temp_stage        : 300 K (aktif sogutmali; 20 mK disinda)
 // vacuum_grade      : UHV 1e-9 mbar
-// tolerance         : Anten ECO kapali
+// tolerance         : Anten ECO / PDN pre-foundry
 // computed_mass_kg  : 0.00114
 // envelope_mm       : 101.152 x 101.152 x 0.850
 // design_maturity   : M0_M1_DETAILED_CAD_DESIGN_ONLY

@@ -247,10 +247,13 @@ def _apply_channel_expm(rho: np.ndarray, U_super: np.ndarray) -> np.ndarray:
     return 0.5 * (out + out.conj().T)
 
 
-def _partial_trace_to_qubit(rho_12: np.ndarray, keep: str) -> np.ndarray:
-    """Partial trace of 12x12 density matrix on (T:2, R:3, P:2) keeping 'T' or 'P'."""
-    t = rho_12.reshape(2, 3, 2, 2, 3, 2)
+def _partial_trace_to_qubit(rho_18: np.ndarray, keep: str, d_t: int = 3) -> np.ndarray:
+    """Partial trace of (T:d_t, R:3, P:2) density matrix keeping 'T' (projected to computational 2x2) or 'P'."""
+    t = rho_18.reshape(d_t, 3, 2, d_t, 3, 2)
     if keep == "T":
+        rho_t_full = np.einsum("irjkrj->ik", t)
+        return rho_t_full[:2, :2]
+    if keep == "T_full":
         return np.einsum("irjkrj->ik", t)
     if keep == "P":
         return np.einsum("ijrijl->rl", t)
@@ -258,10 +261,12 @@ def _partial_trace_to_qubit(rho_12: np.ndarray, keep: str) -> np.ndarray:
 
 
 def run_lindblad_qram_swap(
-    il_bridge_db: float = 0.01,
+    il_bridge_db: float = 0.0007,
     transmon_t1_us: float = 200.0,
     transmon_t2_us: float = 150.0,
+    transmon_anharm_mhz: float = -250.0,
     q_bridge: float = 2.0e5,
+    bus_fsr_mhz: float = 600.0,
     g_tr_mhz: float = 12.0,
     g_pr_mhz: float = 4.0,
     p31_ff_t1_us: float = 500.0,
@@ -271,60 +276,75 @@ def run_lindblad_qram_swap(
     t2n_dd_nom_s: float = 1.0,
     t2n_dd_opt_s: float = 3.0,
 ) -> dict[str, Any]:
-    """Simulate exact 12x12 CPTP Lindblad Transmon <-> Bridge <-> 31P Write/Store/Read qRAM cycle."""
-    # Operators in H_T (2) x H_R (3) x H_P (2) = 12
+    """Simulate exact 18x18 CPTP Lindblad Transmon (3-level |g,e,f>) <-> Bridge (3) <-> 31P (2) qRAM cycle.
+
+    OBS-131 FIXES:
+      1. Replaces ad-hoc `pass_loss_frac * g_tr * 0.25` with physical cavity round-trip FSR loss
+         kappa_loss = FSR * (-ln |S21|^2) derived directly from ABCD S21 insertion loss IL_dB
+         (giving exact loaded Q_L = 2*pi*f0 / (kappa_int + kappa_loss)).
+      2. Upgrades Transmon to 3-level anharmonic basis (|g>, |e>, |f> with alpha = -250 MHz -> 18D Hilbert space)
+         to quantify |f> leakage during the T <-> R iSWAP hop.
+      3. Evaluates honest 31P flip-flop coherence sensitivity (Exp131/137 1/f T2* = 0.29 us, realistic
+         echoed T2 = 10 us + 0.05 dB bond / 0.50 dB connector, vs monolithic idealized T2 = 25 us).
+    """
+    # Operators in H_T (3) x H_R (3) x H_P (2) = 18
     I2 = np.eye(2, dtype=np.complex128)
     I3 = np.eye(3, dtype=np.complex128)
+    a3 = np.array([[0.0, 1.0, 0.0], [0.0, 0.0, math.sqrt(2.0)], [0.0, 0.0, 0.0]], dtype=np.complex128)
+    ad3 = a3.conj().T
+    n3 = ad3 @ a3
+    # Pure dephasing operator on transmon (0, -1, -2) -> matches 0.5*sz on {|g>,|e>}
+    proj_e_f = np.diag([0.0, 1.0, 2.0]).astype(np.complex128)
     sm = np.array([[0.0, 1.0], [0.0, 0.0]], dtype=np.complex128)
     sp = sm.T
     sz = np.array([[1.0, 0.0], [0.0, -1.0]], dtype=np.complex128)
-    a_r = np.array([[0.0, 1.0, 0.0], [0.0, 0.0, math.sqrt(2.0)], [0.0, 0.0, 0.0]], dtype=np.complex128)
 
-    sm_T = np.kron(np.kron(sm, I3), I2)
-    sp_T = np.kron(np.kron(sp, I3), I2)
-    sz_T = np.kron(np.kron(sz, I3), I2)
-    a_R = np.kron(np.kron(I2, a_r), I2)
+    a_T = np.kron(np.kron(a3, I3), I2)
+    ad_T = a_T.conj().T
+    n_T = np.kron(np.kron(n3, I3), I2)
+    n_T_anh = np.kron(np.kron(n3 @ (n3 - I3), I3), I2)
+    deph_T = np.kron(np.kron(proj_e_f, I3), I2)
+    a_R = np.kron(np.kron(I3, a3), I2)
     ad_R = a_R.conj().T
-    sm_P = np.kron(np.kron(I2, I3), sm)
-    sp_P = np.kron(np.kron(I2, I3), sp)
-    sz_P = np.kron(np.kron(I2, I3), sz)
+    sm_P = np.kron(np.kron(I3, I3), sm)
+    sp_P = np.kron(np.kron(I3, I3), sp)
+    sz_P = np.kron(np.kron(I3, I3), sz)
 
     # Rates in rad/us
     g_tr = 2.0 * math.pi * g_tr_mhz  # rad/us
     g_pr = 2.0 * math.pi * g_pr_mhz  # rad/us
+    alpha_T = 2.0 * math.pi * transmon_anharm_mhz  # rad/us (-250 MHz anharmonicity)
 
     gamma1_T = 1.0 / transmon_t1_us
     gamma_phi_T = max(0.0, 1.0 / transmon_t2_us - 0.5 * gamma1_T)
-    # Bridge resonator decay includes intrinsic Q_R plus slight matching-network loss
+    # Physical loaded resonator decay rate (OBS-131): intrinsic Q_bridge + FSR * (-ln |S21|^2)
     kappa_R_int = 2.0 * math.pi * (F0_GHZ * 1e3) / q_bridge  # rad/us (~0.1885 rad/us)
-    # Power loss fraction per single pass through matching network adds tiny effective loss rate
-    pass_loss_frac = max(0.0, 1.0 - 10.0 ** (-il_bridge_db / 10.0))
-    kappa_R = kappa_R_int + pass_loss_frac * g_tr * 0.25
+    s21_power = max(10.0 ** (-il_bridge_db / 10.0), 1e-12)
+    kappa_R_ext_loss = bus_fsr_mhz * (-math.log(s21_power))  # 1/us = rad/us power decay rate
+    kappa_R = kappa_R_int + kappa_R_ext_loss
+    q_loaded_eff = (2.0 * math.pi * F0_GHZ * 1e3) / max(kappa_R, 1e-12)
 
     gamma1_P = 1.0 / p31_ff_t1_us
     gamma_phi_P = max(0.0, 1.0 / p31_ff_t2_us - 0.5 * gamma1_P)
 
     c_ops = [
-        math.sqrt(gamma1_T) * sm_T,
-        math.sqrt(0.5 * gamma_phi_T) * sz_T,
+        math.sqrt(gamma1_T) * a_T,
+        math.sqrt(2.0 * gamma_phi_T) * deph_T,
         math.sqrt(kappa_R) * a_R,
         math.sqrt(gamma1_P) * sm_P,
         math.sqrt(0.5 * gamma_phi_P) * sz_P,
     ]
 
-    # Step 1: Resonant iSWAP Transmon <-> Bridge (t1 = pi / (2 * g_tr))
-    H_tr = g_tr * (sp_T @ a_R + sm_T @ ad_R)
+    # Step 1: Resonant iSWAP Transmon <-> Bridge including transmon |f> anharmonicity (t1 = pi / (2 * g_tr))
+    H_tr = 0.5 * alpha_T * n_T_anh + g_tr * (ad_T @ a_R + a_T @ ad_R)
     t1_us = math.pi / (2.0 * g_tr)
     U_tr = expm(_liouvillian_superop(H_tr, c_ops) * t1_us)
 
     # Step 2: Resonant iSWAP Bridge <-> 31P Flip-Flop (t2 = pi / (2 * g_pr))
-    H_pr = g_pr * (ad_R @ sm_P + a_R @ sp_P)
+    H_pr = 0.5 * alpha_T * n_T_anh + g_pr * (ad_R @ sm_P + a_R @ sp_P)
     t2_us = math.pi / (2.0 * g_pr)
     U_pr = expm(_liouvillian_superop(H_pr, c_ops) * t2_us)
 
-    # Known deterministic iSWAP phase correction S_z(-pi/2) per hop -> exact Z-frame compensation on 31P/Transmon
-    # For 2 iSWAP hops (T->R->P), |1,0,0> -> (-i)|0,1,0> -> (-i)^2 |0,0,1> = -|0,0,1> (exact Z gate!),
-    # and round-trip (4 hops: T->R->P->R->T) gives (-i)^4 = +1 (EXACT IDENTITY, zero phase error!).
     z_corr_1q = np.array([[1.0, 0.0], [0.0, -1.0]], dtype=np.complex128)
 
     # 6 cardinal Bloch states for exact Nielsen average state fidelity
@@ -338,7 +358,7 @@ def run_lindblad_qram_swap(
     ]
     g0_R = np.array([1.0, 0.0, 0.0], dtype=np.complex128)
     g0_P = np.array([1.0, 0.0], dtype=np.complex128)
-    g0_T = np.array([1.0, 0.0], dtype=np.complex128)
+    g0_T = np.array([1.0, 0.0, 0.0], dtype=np.complex128)
     rho_R0 = np.outer(g0_R, g0_R.conj())
     rho_P0 = np.outer(g0_P, g0_P.conj())
     rho_T0 = np.outer(g0_T, g0_T.conj())
@@ -347,17 +367,14 @@ def run_lindblad_qram_swap(
     f_rt_photon_list = []
     max_trace_err = 0.0
     min_eig_all = 1.0
+    max_f_leak = 0.0
 
     # Also compute full round-trip with nuclear-memory storage channel D_mem(t_store) applied on 31P!
     t_store_s = np.logspace(-5, 1, 61)  # 10 us to 10 s
 
-    # Depolarizing + dephasing single-qubit storage channel on 31P nuclear spin
     def _apply_nuclear_storage_1q(rho_1q: np.ndarray, t_s: float, t1_s: float, t2_s: float, p_en_rt: float) -> np.ndarray:
-        # First apply e <-> n round-trip gate depolarization (fidelity p_en_rt = F_en^2)
-        # For a 1-qubit depolarizing channel with average fidelity F_avg, lam = 2*F_avg - 1
         lam_en = max(0.0, min(1.0, 2.0 * p_en_rt - 1.0))
         r = lam_en * rho_1q + (1.0 - lam_en) * 0.5 * I2
-        # Exact T1 / T2 nuclear memory decay over t_s
         e1 = math.exp(-t_s / t1_s)
         e2 = math.exp(-t_s / t2_s)
         out = np.empty((2, 2), dtype=np.complex128)
@@ -367,28 +384,29 @@ def run_lindblad_qram_swap(
         out[1, 0] = r[1, 0] * e2
         return out
 
-    # Precompute write states on 31P and exact read-back linear map for each cardinal state
     stored_p_states = []
     for psi in kets:
-        rho_T_in = np.outer(psi, psi.conj())
-        rho_12 = np.kron(np.kron(rho_T_in, rho_R0), rho_P0)
+        psi3 = np.array([psi[0], psi[1], 0.0], dtype=np.complex128)
+        rho_T_in = np.outer(psi3, psi3.conj())
+        rho_18 = np.kron(np.kron(rho_T_in, rho_R0), rho_P0)
         # Write: T -> R -> P
-        rho_after_1 = _apply_channel_expm(rho_12, U_tr)
+        rho_after_1 = _apply_channel_expm(rho_18, U_tr)
         rho_after_w = _apply_channel_expm(rho_after_1, U_pr)
 
         for rr in (rho_after_1, rho_after_w):
             max_trace_err = max(max_trace_err, abs(float(np.trace(rr).real) - 1.0))
             min_eig_all = min(min_eig_all, float(np.min(np.linalg.eigvalsh(rr))))
+            rt_full = _partial_trace_to_qubit(rr, "T_full")
+            max_f_leak = max(max_f_leak, float(np.real(rt_full[2, 2])))
 
-        # Fidelity of write on P (with deterministic Z frame)
         rho_P_w = _partial_trace_to_qubit(rho_after_w, "P")
         rho_P_corr = z_corr_1q @ rho_P_w @ z_corr_1q
         f_write_list.append(float(np.real(psi.conj() @ rho_P_corr @ psi)))
         stored_p_states.append(rho_P_w)
 
-        # Immediate photon round-trip (t_store = 0, no nuclear storage yet): P -> R -> T
-        rho_12_back = np.kron(np.kron(rho_T0, rho_R0), rho_P_w)
-        rho_after_r1 = _apply_channel_expm(rho_12_back, U_pr)
+        # Immediate photon round-trip (t_store = 0): P -> R -> T
+        rho_18_back = np.kron(np.kron(rho_T0, rho_R0), rho_P_w)
+        rho_after_r1 = _apply_channel_expm(rho_18_back, U_pr)
         rho_after_rt = _apply_channel_expm(rho_after_r1, U_tr)
         for rr in (rho_after_r1, rho_after_rt):
             max_trace_err = max(max_trace_err, abs(float(np.trace(rr).real) - 1.0))
@@ -403,16 +421,12 @@ def run_lindblad_qram_swap(
     f_qram_xy8_3s = np.zeros(len(t_store_s), dtype=np.float64)
     f_qram_29si_bank = np.zeros(len(t_store_s), dtype=np.float64)
 
-    p_en_rt_p31 = e_to_n_fidelity_one_way ** 2  # 0.996^2 = 0.9920
-    p_en_rt_29si = 0.990 ** 2  # Exp126 XY8-GRAPE K=8 bank round-trip
+    p_en_rt_p31 = e_to_n_fidelity_one_way ** 2
+    p_en_rt_29si = 0.990 ** 2
 
-    # Note: read-back channel is linear in rho_P -> precompute exact 2x2->2x2 read-back Pauli transfer matrix!
-    # Or evaluate directly on the 6 states (only 6 * 61 = 366 tiny 12x12 matvecs -> < 0.05 s!).
     for ti, ts in enumerate(t_store_s):
-        # Bare Transmon idle
         e1_t = math.exp(-ts / (transmon_t1_us * 1e-6))
         e2_t = math.exp(-ts / (transmon_t2_us * 1e-6))
-        # Exact analytical average state fidelity of T1/T2 channel over Bloch sphere: (1/6)(3 + e1 + 2*e2)
         f_bare_transmon[ti] = (3.0 + e1_t + 2.0 * e2_t) / 6.0
 
         f_star_s, f_1s_s, f_3s_s, f_bank_s = [], [], [], []
@@ -425,8 +439,8 @@ def run_lindblad_qram_swap(
                 (f_bank_s, t2n_dd_nom_s, p_en_rt_29si),
             ):
                 rp_s = _apply_nuclear_storage_1q(rp, ts, t1_s=1000.0, t2_s=t2_mem, p_en_rt=p_rt)
-                r12 = np.kron(np.kron(rho_T0, rho_R0), rp_s)
-                r_out = _apply_channel_expm(_apply_channel_expm(r12, U_pr), U_tr)
+                r18 = np.kron(np.kron(rho_T0, rho_R0), rp_s)
+                r_out = _apply_channel_expm(_apply_channel_expm(r18, U_pr), U_tr)
                 rt_q = _partial_trace_to_qubit(r_out, "T")
                 acc.append(float(np.real(psi.conj() @ rt_q @ psi)))
 
@@ -444,7 +458,6 @@ def run_lindblad_qram_swap(
         j = int(below[0])
         if j == 0:
             return float(t_store_s[0])
-        # Log-time linear interpolation
         lt0, lt1 = math.log10(t_store_s[j - 1]), math.log10(t_store_s[j])
         frac = (f_arr[j - 1] - thresh) / max(f_arr[j - 1] - f_arr[j], 1e-12)
         return float(10.0 ** (lt0 + frac * (lt1 - lt0)))
@@ -456,15 +469,22 @@ def run_lindblad_qram_swap(
     t80_bare = _time_to_threshold(f_bare_transmon, 0.80)
     t80_dd1s = _time_to_threshold(f_qram_xy8_1s, 0.80)
 
-    # Crossover time where qRAM beats bare Transmon
     cross_idx = np.where(f_qram_xy8_1s > f_bare_transmon)[0]
     t_breakeven_us = float(t_store_s[cross_idx[0]] * 1e6) if len(cross_idx) > 0 else 0.0
-
-    # Round-trip fidelity at t_store = 10 us (complete Write + nuclear SWAP + Read!)
     f_swap_rt_total = float(f_qram_xy8_1s[0])
 
     return {
-        "hilbert_dim": 12,
+        "hilbert_dim": 18,
+        "transmon_levels": 3,
+        "transmon_anharm_mhz": float(transmon_anharm_mhz),
+        "max_transmon_f_leakage": float(max_f_leak),
+        "il_bridge_db": float(il_bridge_db),
+        "p31_ff_t2_us": float(p31_ff_t2_us),
+        "bus_fsr_mhz": float(bus_fsr_mhz),
+        "kappa_R_int_rad_us": float(kappa_R_int),
+        "kappa_R_ext_loss_rad_us": float(kappa_R_ext_loss),
+        "kappa_R_total_rad_us": float(kappa_R),
+        "Q_loaded_eff": float(q_loaded_eff),
         "t_write_photon_ns": float((t1_us + t2_us) * 1e3),
         "t_hop_TR_ns": float(t1_us * 1e3),
         "t_hop_RP_ns": float(t2_us * 1e3),

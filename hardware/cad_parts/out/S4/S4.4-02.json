@@ -30,7 +30,7 @@
         "name": "optical_viewport_beam_in",
         "kind": "optical",
         "position_mm": [
-          102.4,
+          128.0,
           0.0,
           0.0
         ],
@@ -39,7 +39,7 @@
           0.0,
           0.0
         ],
-        "standard": "3x 632.8 nm Differential Plane-Mirror Optical Axis",
+        "standard": "3x 632.8 nm Lower Periscope Entry @ Z=-133 mm (Z_canon=367 mm)",
         "mating_part_id": "S4.4-04",
         "bore_mm": 0.0,
         "od_mm": 0.0,
@@ -51,20 +51,44 @@
         "notes": ""
       },
       {
-        "name": "metrology_ring_mount",
-        "kind": "mechanical",
+        "name": "splitgap_stage_beam_out",
+        "kind": "optical",
         "position_mm": [
-          93.0,
+          128.0,
           0.0,
-          -7.5
+          124.0
         ],
         "normal": [
+          -1.0,
           0.0,
-          0.0,
-          -1.0
+          0.0
         ],
-        "standard": "3x Kinematic Optical Pads on S4.5-01 Invar Ring",
-        "mating_part_id": "S4.5-01",
+        "standard": "3x 632.8 nm Split-Gap Measurement Beam @ Z_nat=-9.0 mm (Z_canon=491 mm)",
+        "mating_part_id": "S4.4-03",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 0.0,
+        "bolt_count": 0,
+        "bolt_hole_mm": 0.0,
+        "bolt_spec": "",
+        "frame": "local",
+        "notes": ""
+      },
+      {
+        "name": "splitgap_ref_beam_out",
+        "kind": "optical",
+        "position_mm": [
+          128.0,
+          0.0,
+          147.3
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "standard": "3x 632.8 nm Split-Gap Reference Beam @ Z_nat=+14.3 mm (Z_canon=514.3 mm)",
+        "mating_part_id": "S2.5-03",
         "bore_mm": 0.0,
         "od_mm": 0.0,
         "pcd_mm": 0.0,
@@ -77,50 +101,8 @@
     ],
     "dimensions": [
       {
-        "label": "HEAD_LEN",
-        "nominal_mm": 14.0,
-        "tol_plus_mm": 0.05,
-        "tol_minus_mm": -0.05,
-        "view": "top",
-        "unit": "mm",
-        "prefix": "",
-        "suffix": "",
-        "is_basic": false,
-        "datum_ref": "",
-        "decimals": 2,
-        "formatted": "14.00 ±0.05"
-      },
-      {
-        "label": "HEAD_WID",
-        "nominal_mm": 14.0,
-        "tol_plus_mm": 0.05,
-        "tol_minus_mm": -0.05,
-        "view": "top",
-        "unit": "mm",
-        "prefix": "",
-        "suffix": "",
-        "is_basic": false,
-        "datum_ref": "",
-        "decimals": 2,
-        "formatted": "14.00 ±0.05"
-      },
-      {
-        "label": "HEAD_H",
-        "nominal_mm": 15.0,
-        "tol_plus_mm": 0.05,
-        "tol_minus_mm": -0.05,
-        "view": "front",
-        "unit": "mm",
-        "prefix": "",
-        "suffix": "",
-        "is_basic": false,
-        "datum_ref": "",
-        "decimals": 2,
-        "formatted": "15.00 ±0.05"
-      },
-      {
-        "label": "MOUNT_RADIUS",
-        "nominal_mm": 93.0,
+        "label": "RELAY_RADIUS",
+        "nominal_mm": 128.0,
         "tol_plus_mm": 0.05,
         "tol_minus_mm": -0.05,
         "view": "top",
@@ -130,7 +112,35 @@
         "is_basic": false,
         "datum_ref": "",
         "decimals": 2,
-        "formatted": "R93.00 ±0.05"
+        "formatted": "R128.00 ±0.05"
+      },
+      {
+        "label": "PERISCOPE_H",
+        "nominal_mm": 156.0,
+        "tol_plus_mm": 0.05,
+        "tol_minus_mm": -0.05,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "156.00 ±0.05"
+      },
+      {
+        "label": "PBS_HEAD_H",
+        "nominal_mm": 32.5,
+        "tol_plus_mm": 0.05,
+        "tol_minus_mm": -0.05,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "32.50 ±0.05"
       }
     ],
     "gdt_frames": [
@@ -142,7 +152,7 @@
         "datum_primary": "A",
         "datum_secondary": "",
         "datum_tertiary": "",
-        "feature_note": "PBS OPTICAL REFERENCE AXIS",
+        "feature_note": "PERISCOPE & PBS OPTICAL AXES",
         "glyph": "⊥",
         "tolerance_text": "0.005"
       },
@@ -154,7 +164,7 @@
         "datum_primary": "A",
         "datum_secondary": "B",
         "datum_tertiary": "",
-        "feature_note": "3-AXIS ORTHOGONALITY",
+        "feature_note": "3-AXIS SPLIT-GAP RELAY",
         "glyph": "⌖",
         "tolerance_text": "Ø0.020"
       }
@@ -175,13 +185,15 @@
     ],
     "notes": [
       "Vakum-ici sifir olu-yol hatali diferansiyel olcum",
-      "3x UHV zero-dead-path differential plane-mirror interferometer optical heads (X, Y, Z; ±0.1 nm, mu_r < 1.01).",
-      "Mounted at R=93.0 mm (radial span 83.6..102.4 mm), cleanly clearing S6 B_upper (R=82 mm) & S4.5-01 ring (R_in=104 mm)."
+      "3x UHV zero-dead-path differential plane-mirror interferometer periscope relay assemblies (X:0, Y:90, Z:270 deg) @ R=128.0 mm.",
+      "Routes beams unobstructed from S4.4-04 viewports (Z_canon=367) through carved S4.5-01 windows up the R=128 mm inter-coil corridor into the Z_canon=[482, 518] mm split gap to S4.4-03 (Z=491) & S2.5-03 (Z=514.3)."
     ],
     "scad_params": {
       "n_heads": 3,
-      "mount_radius_mm": 93.0,
-      "z_axis_mm": -133.0
+      "relay_radius_mm": 128.0,
+      "z_entry_mm": -133.0,
+      "z_meas_mm": -9.0,
+      "z_ref_mm": 14.3
     },
     "target_mass_kg": null,
     "epistemic": {
@@ -207,34 +219,34 @@
     "watertight": true,
     "boundary_edges": 0,
     "non_manifold_edges": 0,
-    "signed_volume_mm3": 9685.866677361524,
-    "surface_area_mm2": 4818.968315785165,
-    "mass_kg": 0.05230368005775223,
+    "signed_volume_mm3": 18974.46,
+    "surface_area_mm2": 12368.304241512109,
+    "mass_kg": 0.10246208399999994,
     "cg_mm": [
-      31.02848830136723,
-      2.7442028209451196e-14,
-      1.230592448710286e-16
+      43.59809897093256,
+      1.1111936782390266,
+      95.58581271878093
     ],
     "bbox_min_mm": [
-      -7.000000000000018,
-      -102.4,
-      -7.5
+      -11.499999999999993,
+      -137.5,
+      -5.5
     ],
     "bbox_max_mm": [
-      102.4,
-      102.4,
-      7.5
+      137.5,
+      137.5,
+      150.5
     ],
     "inertia_kg_mm2": [
-      304.0516109094545,
-      102.51841705996327,
-      404.74466595834593,
-      8.229207026308988e-15,
-      2.539867418803503e-16,
-      -8.840288501232861e-16
+      1442.5635131728402,
+      664.6007154133908,
+      1563.6876443106714,
+      19.537339309916888,
+      -5.131954437392914,
+      4.48997313297591
     ],
-    "triangle_count": 468,
-    "vertex_count": 252,
+    "triangle_count": 204,
+    "vertex_count": 120,
     "step_valid": true,
     "dxf_valid": true,
     "svg_valid": true,
@@ -247,16 +259,21 @@
     "all_valid": true
   },
   "world_bbox_min_mm": [
-    -7.000000000000018,
-    -102.4,
-    -140.5
+    -11.499999999999993,
+    -137.5,
+    -138.5
   ],
   "world_bbox_max_mm": [
-    102.4,
-    102.4,
-    -125.5
+    137.5,
+    137.5,
+    17.5
   ],
   "reconciliation": null,
   "thermal_contraction_checks": [],
-  "tolerance_stack_checks": []
+  "tolerance_stack_checks": [],
+  "shell_mate_metadata": {
+    "n_shells": 9,
+    "fea_bonding_mode": "TIED_SUBASSEMBLY_CONTACTS",
+    "watertight": true
+  }
 }

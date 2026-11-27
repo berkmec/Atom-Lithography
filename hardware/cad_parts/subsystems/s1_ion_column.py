@@ -424,12 +424,41 @@ def compute_s1_engineering_checks() -> dict[str, Any]:
         target_min_mm=-0.050,
         target_max_mm=+0.050,
     )
+    # 6. Wien ExB mass-filter E-field balance check (10 keV 31P+, B=0.45 T, gap=12.0 mm)
+    e_charge = 1.602176634e-19
+    m_31p = 30.973762 * 1.66053906660e-27
+    v0_31p = math.sqrt(2.0 * e_charge * 10000.0 / m_31p)
+    b_wien = 0.45
+    e_gap_mm = 12.0
+    e_req_v_m = v0_31p * b_wien
+    v_plates_nom = 1347.85
+    e_actual_v_m = v_plates_nom / (e_gap_mm * 1e-3)
+    l_wien_m = 0.080
+    theta_err_mrad = ((e_actual_v_m - e_req_v_m) * l_wien_m / (2.0 * 10000.0)) * 1e3
+    wien_balance = {
+        "species": "31P+",
+        "e_ext_eV": 10000.0,
+        "b_tesla": b_wien,
+        "e_gap_mm": e_gap_mm,
+        "v_plates_V": v_plates_nom,
+        "e_field_required_kV_m": round(e_req_v_m / 1e3, 3),
+        "e_field_actual_kV_m": round(e_actual_v_m / 1e3, 3),
+        "nominal_steer_mrad": round(theta_err_mrad, 4),
+        "passed": abs(theta_err_mrad) < 0.05,
+        "option_q_heavy_isotope_note": (
+            "Single-pass Wien (B=0.45 T, L_w=80 mm) resolves 31P+ vs 32PH+; "
+            "heavy Option-Q 121Sb+ (dx=0.260 mm) and 167Er+ (dx=0.081 mm) exceed "
+            "single-pass M/dM resolving power at 350 um slit and require isotopically "
+            "enriched source feed or <=50 um S1.2-04 exit slit."
+        ),
+    }
     return {
         "bakeout_decel_clearance": bake_decel_clr.to_dict(),
         "bakeout_mumetal_clearance": bake_mumetal_clr.to_dict(),
         "s17_450c_oven_clearance": oven_clr.to_dict(),
         "hda_r0_gap_tolerance_stack": hda_gap_stack.to_dict(),
         "column_coaxiality_stack": col_coax_stack.to_dict(),
+        "wien_efield_balance": wien_balance,
     }
 
 
@@ -707,18 +736,18 @@ def build_s1_parts() -> dict[str, BuiltPart]:
     parts["S1.2-01"] = BuiltPart(d_s1201, m_s1201, f_s1201, {})
 
     # -----------------------------------------------------------------------
-    # S1.2-02: Wien Electrostatic Deflection Plates & Macor Standoffs (L_w=80.0 mm)
+    # S1.2-02: Wien Electrostatic Deflection Plates & Macor Standoffs (L_w=80.0 mm, E_gap=12.0 mm)
     # -----------------------------------------------------------------------
     s1202_parts: list[SolidMesh] = []
     for sgn in (-1.0, 1.0):
-        # OFHC Cu / Mo Rogowski-chamfered E-plate (X ∈ [-14, 14], |Y| ∈ [10, 14], Z ∈ [270, 350])
+        # OFHC Cu / Mo Rogowski-chamfered E-plate (X ∈ [-14, 14], |Y| ∈ [6, 10] -> exact 12.0 mm gap!)
         s1202_parts.append(
-            make_chamfered_box(28.0, 4.0, 80.0, chamfer=0.9, center=(0.0, sgn * 12.0, 310.0), name=f"S1.2-02_eplate_{'p' if sgn > 0 else 'n'}", material="OFHC Cu")
+            make_chamfered_box(28.0, 4.0, 80.0, chamfer=0.9, center=(0.0, sgn * 8.0, 310.0), name=f"S1.2-02_eplate_{'p' if sgn > 0 else 'n'}", material="OFHC Cu")
         )
-        # 2x Macor HV standoffs per plate (|Y| ∈ [14.2, 23.0], Z = 285 & 335, X = 0)
+        # 2x Macor HV standoffs per plate (|Y| ∈ [10.2, 23.0], Z = 285 & 335, X = 0)
         for zs in (285.0, 335.0):
             s1202_parts.append(
-                make_cylinder(3.2, 8.8, segments=20, axis="y", center=(0.0, sgn * 18.6, zs), name=f"S1.2-02_macor_{'p' if sgn > 0 else 'n'}_{int(zs)}", material="Macor")
+                make_cylinder(3.2, 12.8, segments=20, axis="y", center=(0.0, sgn * 16.6, zs), name=f"S1.2-02_macor_{'p' if sgn > 0 else 'n'}_{int(zs)}", material="Macor")
             )
     m_s1202 = merge_solids(s1202_parts, name="S1.2-02", material="OFHC Cu")
     d_s1202 = make_part_design_from_bom(
@@ -734,24 +763,34 @@ def build_s1_parts() -> dict[str, BuiltPart]:
         dimensions=(
             DimensionCallout("PLATE_L", 80.0, 0.02, -0.02),
             DimensionCallout("PLATE_W", 28.0, 0.02, -0.02),
-            DimensionCallout("E_GAP", 20.0, 0.01, -0.01),
+            DimensionCallout("E_GAP", 12.0, 0.01, -0.01),
         ),
         gdt_frames=(
             GDTFrame("parallelism", 0.010, datum_primary="A", feature_note="E-PLATE FACES"),
             GDTFrame("flatness", 0.005, datum_primary="", feature_note="ACTIVE ELECTRODE"),
             GDTFrame("symmetry", 0.010, datum_primary="B", feature_note="BEAM AXIS CENTER"),
         ),
-        scad_params=(("plate_l", 80.0), ("plate_w", 28.0), ("e_gap", 20.0), ("v_plate_nom_V", 1348.0)),
-        notes=("Exp124 Wien E-field length L_w=80.0 mm orthogonal to 0.45 T B-field (V_plate=1348 V @ 10 keV)", "4.0 mm radial clearance to S1.2-01 pole shoes"),
-        target_mass_kg=0.24,
+        scad_params=(
+            ("plate_l", 80.0),
+            ("plate_w", 28.0),
+            ("e_gap", 12.0),
+            ("e_field_kV_m", 112.32),
+            ("v_plate_nom_V", 1347.85),
+            ("nominal_steer_mrad", 0.0),
+        ),
+        notes=(
+            "Exp124 Wien E-field length L_w=80.0 mm, E_gap=12.0 mm orthogonal to 0.45 T B-field (E=112.32 kV/m, V_plate=1347.85 V @ 10 keV 31P+, 0.0 mrad nominal steer)",
+            "Option-Q isotope dispersion limit: 121Sb+ (dx=0.260 mm) and 167Er+ (dx=0.081 mm) require enriched isotope source feed or <=50 um S1.2-04 exit slit",
+        ),
+        target_mass_kg=0.26,
     )
     f_s1202 = (
-        ScadFeature("add_box", {"dx": 28.0, "dy": 4.0, "dz": 80.0}, translate=(0.0, 12.0, 0.0), comment="+Y E-field deflection plate"),
-        ScadFeature("add_box", {"dx": 28.0, "dy": 4.0, "dz": 80.0}, translate=(0.0, -12.0, 0.0), comment="-Y E-field deflection plate"),
-        ScadFeature("add_cylinder", {"d": 6.4, "h": 8.8}, translate=(0.0, 18.6, 25.0), rotate=(90.0, 0.0, 0.0), comment="Macor HV standoff"),
-        ScadFeature("add_cylinder", {"d": 6.4, "h": 8.8}, translate=(0.0, -18.6, -25.0), rotate=(90.0, 0.0, 0.0), comment="Macor HV standoff"),
+        ScadFeature("add_box", {"dx": 28.0, "dy": 4.0, "dz": 80.0}, translate=(0.0, 8.0, 0.0), comment="+Y E-field deflection plate (12.0 mm gap)"),
+        ScadFeature("add_box", {"dx": 28.0, "dy": 4.0, "dz": 80.0}, translate=(0.0, -8.0, 0.0), comment="-Y E-field deflection plate (12.0 mm gap)"),
+        ScadFeature("add_cylinder", {"d": 6.4, "h": 12.8}, translate=(0.0, 16.6, 25.0), rotate=(90.0, 0.0, 0.0), comment="Macor HV standoff"),
+        ScadFeature("add_cylinder", {"d": 6.4, "h": 12.8}, translate=(0.0, -16.6, -25.0), rotate=(90.0, 0.0, 0.0), comment="Macor HV standoff"),
     )
-    parts["S1.2-02"] = BuiltPart(d_s1202, m_s1202, f_s1202, {})
+    parts["S1.2-02"] = BuiltPart(d_s1202, m_s1202, f_s1202, {"wien_efield_balance": checks["wien_efield_balance"]})
 
     # -----------------------------------------------------------------------
     # S1.2-03: Wien Bipolar Precision E-Field Power Supply (1U Rack Bay 1, U35 per #309)
@@ -800,31 +839,31 @@ def build_s1_parts() -> dict[str, BuiltPart]:
         s1204_parts.append(
             make_chamfered_box(20.0, 15.0, 8.5, chamfer=1.2, center=(0.0, sgn * 8.0, zc_slit), name=f"S1.2-04_mo_jaw_{'p' if sgn > 0 else 'n'}", material="Mo")
         )
-        # Slim UHV pushrod housing stub (|Y| ∈ [42.5, 70.0], R=8.0 -> Z ∈ [226.3, 242.3], clear of S1.3-04 & S1.2-01!)
+        # Slim UHV pushrod housing stub (|Y| ∈ [42.5, 76.5], R=8.0 -> Z ∈ [226.3, 242.3], clear of S1.3-01 CF100!)
         s1204_parts.append(
-            make_tube(5.0, 8.0, 27.5, segments=24, axis="y", center=(0.0, sgn * 56.25, zc_slit), name=f"S1.2-04_stem_{'p' if sgn > 0 else 'n'}", material="316LN")
+            make_tube(5.0, 8.0, 34.0, segments=24, axis="y", center=(0.0, sgn * 59.5, zc_slit), name=f"S1.2-04_stem_{'p' if sgn > 0 else 'n'}", material="316LN")
         )
-        # ISO 3669 CF16 UHV flange (OD=33.8 mm, t=7.5 mm, |Y| ∈ [70.25, 77.75], Z ∈ [217.43, 251.23])
+        # ISO 3669 CF16 UHV flange (OD=33.8 mm, t=7.5 mm, |Y| ∈ [76.75, 84.25], clears S1.3-01 CF100 R=76.0 by 0.75 mm!)
         s1204_parts.append(
             make_cf_flange(
                 "CF16",
                 bore_id=14.0,
                 axis="+y" if sgn > 0 else "-y",
-                center=(0.0, sgn * 74.0, zc_slit),
+                center=(0.0, sgn * 80.5, zc_slit),
                 name=f"S1.2-04_cf16_{'p' if sgn > 0 else 'n'}",
                 material="316LN",
             )
         )
-        # True 12-convolution edge-welded 316LN UHV bellows (|Y| ∈ [78.0, 120.0], R=8..13)
+        # True 12-convolution edge-welded 316LN UHV bellows (|Y| ∈ [84.5, 126.5], R=8..13)
         s1204_parts.append(
             make_bellows(
                 r_in=8.0, r_out=13.0, length=42.0, n_convolutions=12, wall_thickness=0.15, end_cuff_mm=2.5,
-                segments=32, axis="y", center=(0.0, sgn * 99.0, zc_slit), name=f"S1.2-04_bellows_{'p' if sgn > 0 else 'n'}", material="316L",
+                segments=32, axis="y", center=(0.0, sgn * 105.5, zc_slit), name=f"S1.2-04_bellows_{'p' if sgn > 0 else 'n'}", material="316L",
             )
         )
-        # Knurled differential micrometer thimble barrel (|Y| ∈ [120.5, 162.5], R=11.0)
+        # Knurled differential micrometer thimble barrel (|Y| ∈ [127.0, 169.0], R=11.0)
         s1204_parts.append(
-            make_cylinder(11.0, 42.0, segments=24, axis="y", center=(0.0, sgn * 141.5, zc_slit), name=f"S1.2-04_micrometer_{'p' if sgn > 0 else 'n'}", material="316LN")
+            make_cylinder(11.0, 42.0, segments=24, axis="y", center=(0.0, sgn * 148.0, zc_slit), name=f"S1.2-04_micrometer_{'p' if sgn > 0 else 'n'}", material="316LN")
         )
     m_s1204 = merge_solids(s1204_parts, name="S1.2-04", material="316LN")
     d_s1204 = make_part_design_from_bom(
@@ -834,13 +873,13 @@ def build_s1_parts() -> dict[str, BuiltPart]:
         surface_finish_ra_um=0.4,
         world_origin_mm=(0.0, 0.0, zc_slit),
         ports=(
-            make_cf_port_interface("CF16", "slit_drive_pos_y", (0.0, 77.75, zc_slit), (0.0, 1.0, 0.0), bore_override_mm=14.0, frame="global"),
-            make_cf_port_interface("CF16", "slit_drive_neg_y", (0.0, -77.75, zc_slit), (0.0, -1.0, 0.0), bore_override_mm=14.0, frame="global"),
+            make_cf_port_interface("CF16", "slit_drive_pos_y", (0.0, 84.25, zc_slit), (0.0, 1.0, 0.0), bore_override_mm=14.0, frame="global"),
+            make_cf_port_interface("CF16", "slit_drive_neg_y", (0.0, -84.25, zc_slit), (0.0, -1.0, 0.0), bore_override_mm=14.0, frame="global"),
         ),
         dimensions=(
             DimensionCallout("COLLAR_OD", 84.0, 0.05, -0.05, prefix="Ø"),
             DimensionCallout("COLLAR_H", 33.34, 0.05, -0.05),
-            DimensionCallout("SLIT_SPAN", 325.0, 0.5, -0.5),
+            DimensionCallout("SLIT_SPAN", 338.0, 0.5, -0.5),
             DimensionCallout("BELLOWS_L", 42.0, 0.2, -0.2),
         ),
         gdt_frames=(
@@ -853,19 +892,65 @@ def build_s1_parts() -> dict[str, BuiltPart]:
     )
     f_s1204 = (
         ScadFeature("add_tube", {"od": 84.0, "id": 44.0, "h": 33.34}, comment="316LN Wien exit slit collar"),
-        ScadFeature("add_cf_flange", {"size": "CF16", "bore_id": 14.0}, translate=(0.0, 74.0, 0.0), rotate=(-90.0, 0.0, 0.0), comment="+Y CF16 bellows drive flange"),
-        ScadFeature("add_cf_flange", {"size": "CF16", "bore_id": 14.0}, translate=(0.0, -74.0, 0.0), rotate=(90.0, 0.0, 0.0), comment="-Y CF16 bellows drive flange"),
+        ScadFeature("add_cf_flange", {"size": "CF16", "bore_id": 14.0}, translate=(0.0, 80.5, 0.0), rotate=(-90.0, 0.0, 0.0), comment="+Y CF16 bellows drive flange"),
+        ScadFeature("add_cf_flange", {"size": "CF16", "bore_id": 14.0}, translate=(0.0, -80.5, 0.0), rotate=(90.0, 0.0, 0.0), comment="-Y CF16 bellows drive flange"),
         ScadFeature("add_box", {"dx": 28.0, "dy": 20.0, "dz": 8.5}, translate=(0.0, 10.5, 0.0), comment="+Y Mo slit blade"),
         ScadFeature("add_box", {"dx": 28.0, "dy": 20.0, "dz": 8.5}, translate=(0.0, -10.5, 0.0), comment="-Y Mo slit blade"),
     )
     parts["S1.2-04"] = BuiltPart(d_s1204, m_s1204, f_s1204, {})
 
     # -----------------------------------------------------------------------
-    # S1.3-01: Brazed Al2O3 / Ti-6Al-4V CF100 Main Decel Ceramic Column Tube (Z=[369.50, 421.30])
+    # S1.3-01: Brazed Al2O3 / Ti-6Al-4V HV Ceramic Break + Extended 316LN UHV Beamline Spool
+    #          Spanning Z_nat=[205.00, 421.30] (Z_canon=[705.00, 921.30] -> mates S5.1-02 CF100!)
     # -----------------------------------------------------------------------
-    cf100_bot = make_cf_flange(
+    # 1. Lower ISO 3669 CF100 vacuum sealing flange at Z_nat=205.00 mm (Z_canon=705.00 mm, mates S5.1-02!)
+    cf100_lower_mate = make_cf_flange(
+        "CF100", bore_id=112.0, axis="-z", center=(0.0, 0.0, 214.90),
+        name="S1.3-01_cf100_lower_z705", material="316LN",
+    )
+    # 2. Ported 4-pillar cross-spool belt across Z_nat=[225.00, 270.00] (R=56.0..60.5) clearing S1.2-04 (±Y) & S1.4-01 (±X)
+    spool_parts: list[SolidMesh] = [cf100_lower_mate]
+    for p_idx, (d0, d1) in enumerate(((22.0, 68.0), (112.0, 158.0), (202.0, 248.0), (292.0, 338.0)), start=1):
+        pts_arc: list[tuple[float, float]] = []
+        n_arc = 10
+        for i in range(n_arc + 1):
+            a = math.radians(d0 + (d1 - d0) * i / n_arc)
+            pts_arc.append((60.5 * math.cos(a), 60.5 * math.sin(a)))
+        for i in range(n_arc, -1, -1):
+            a = math.radians(d0 + (d1 - d0) * i / n_arc)
+            pts_arc.append((56.0 * math.cos(a), 56.0 * math.sin(a)))
+        spool_parts.append(
+            make_plate_with_holes(
+                pts_arc, holes_2d=[], thickness=44.80, axis="z", center=(0.0, 0.0, 247.50),
+                name=f"S1.3-01_cross_pillar_{p_idx}", material="316LN",
+            )
+        )
+    # Radial CF16 slit port collars (±Y @ Z=234.33, |Y| in [60.8, 76.0], R=8.3..9.3 clearing CF100 Z<=224.8 & S1.2-04 R=8.0 stems)
+    for sgn in (-1.0, 1.0):
+        spool_parts.append(
+            make_tube(
+                8.3, 9.3, 15.2, segments=24, axis="y", center=(0.0, sgn * 68.40, 234.33),
+                name=f"S1.3-01_slit_port_{'p' if sgn > 0 else 'n'}", material="316LN",
+            )
+        )
+    # Radial CF40 Faraday-cup port collars (±X @ Z=255.0, |X| in [60.8, 87.5], R=14.5..18.0 clearing S1.4-01 R=12.5 cups)
+    for sgn in (-1.0, 1.0):
+        spool_parts.append(
+            make_tube(
+                14.5, 18.0, 26.7, segments=28, axis="x", center=(sgn * 74.15, 0.0, 255.0),
+                name=f"S1.3-01_fc_port_{'p' if sgn > 0 else 'n'}", material="316LN",
+            )
+        )
+    # 3. Continuous 316LN UHV Wien-enclosure vacuum spool (Z_nat=[270.10, 369.30], R=56.0..60.5 clearing S1.2-01 R=55.0)
+    wien_spool = make_tube(
+        56.0, 60.5, 99.20, segments=56, axis="z", center=(0.0, 0.0, 319.70),
+        name="S1.3-01_wien_uhv_spool", material="316LN",
+    )
+    spool_parts.append(wien_spool)
+    # 4. Upper HV transition CF100 flange (Z_nat=[369.50, 389.30]) + ribbed Al2O3 HV break + top Ti collar
+    cf100_hv = make_cf_flange(
         "CF100", bore_id=88.0, axis="-z", center=(0.0, 0.0, 379.40),
-        name="S1.3-01_cf100_base", material="Ti-6Al-4V",
+        name="S1.3-01_cf100_hv_transition", material="Ti-6Al-4V",
     )
     # 25 kV ribbed Al2O3 ceramic HV break cylinder (R_in=44.0, core R=52.0, 3 creepage sheds to R=60.5)
     cer_prof = [
@@ -888,37 +973,46 @@ def build_s1_parts() -> dict[str, BuiltPart]:
         44.0, 63.0, 9.70, pcd=112.0, n_bolts=12, bolt_diameter=6.6, sub_per_side=2,
         axis="z", center=(0.0, 0.0, 416.45), name="S1.3-01_ti_top_collar", material="Ti-6Al-4V",
     )
-    m_s1301 = merge_solids([cf100_bot, cer_break, top_collar], name="S1.3-01", material="Al2O3")
+    m_s1301 = merge_solids([*spool_parts, cf100_hv, cer_break, top_collar], name="S1.3-01", material="316LN")
     d_s1301 = make_part_design_from_bom(
         "S1.3-01",
         design_tier="CUSTOM_FULL",
-        material="Al2O3",
+        material="316LN",
         surface_finish_ra_um=0.4,
-        world_origin_mm=(0.0, 0.0, 395.40),
+        world_origin_mm=(0.0, 0.0, 313.15),
         ports=(
-            make_cf_port_interface("CF100", "lower_cf100", (0.0, 0.0, 369.50), (0.0, 0.0, -1.0), mating_part_id="S1.2-01", bore_override_mm=88.0, frame="global"),
+            make_cf_port_interface("CF100", "lower_cf100", (0.0, 0.0, 205.00), (0.0, 0.0, -1.0), mating_part_id="S5.1-02", bore_override_mm=112.0, frame="global", notes="Mates S5.1-02 at canonical Z=705.0 mm closing 164.5 mm UHV gap"),
+            make_cf_port_interface("CF16", "wien_slit_port_pos_y", (0.0, 76.00, 234.33), (0.0, 1.0, 0.0), mating_part_id="S1.2-04", bore_override_mm=16.6, frame="global"),
+            make_cf_port_interface("CF16", "wien_slit_port_neg_y", (0.0, -76.00, 234.33), (0.0, -1.0, 0.0), mating_part_id="S1.2-04", bore_override_mm=16.6, frame="global"),
+            make_cf_port_interface("CF40", "faraday_port_pos_x", (87.50, 0.0, 255.0), (1.0, 0.0, 0.0), mating_part_id="S1.4-01", bore_override_mm=29.0, frame="global"),
+            make_cf_port_interface("CF40", "faraday_port_neg_x", (-87.50, 0.0, 255.0), (-1.0, 0.0, 0.0), mating_part_id="S1.4-01", bore_override_mm=29.0, frame="global"),
             PortInterface("upper_ti_collar", "flange", (0.0, 0.0, 421.30), (0.0, 0.0, 1.0), "12xM6 PCD 112", mating_part_id="S1.1-01", bore_mm=88.0, od_mm=126.0, pcd_mm=112.0, bolt_count=12, bolt_hole_mm=6.6, frame="global"),
         ),
         dimensions=(
             DimensionCallout("FLANGE_CF100", 152.0, 0.10, -0.10, prefix="Ø"),
-            DimensionCallout("BORE_ID", 88.0, 0.05, -0.05, prefix="Ø"),
+            DimensionCallout("SPOOL_ID", 112.0, 0.05, -0.05, prefix="Ø"),
             DimensionCallout("SHED_OD", 121.0, 0.10, -0.10, prefix="Ø"),
-            DimensionCallout("HEIGHT", 51.80, 0.05, -0.05),
+            DimensionCallout("TOTAL_HEIGHT", 216.30, 0.05, -0.05),
         ),
         gdt_frames=(
-            GDTFrame("concentricity", 0.020, diameter_zone=True, datum_primary="B", feature_note="CERAMIC BORE"),
-            GDTFrame("perpendicularity", 0.020, datum_primary="A", feature_note="CF100 TO COLLAR"),
-            GDTFrame("flatness", 0.015, datum_primary="", feature_note="BRAZE FLANGE"),
+            GDTFrame("concentricity", 0.020, diameter_zone=True, datum_primary="B", feature_note="UHV SPOOL & CERAMIC BORE"),
+            GDTFrame("perpendicularity", 0.020, datum_primary="A", feature_note="CF100 Z=705 TO COLLAR"),
+            GDTFrame("flatness", 0.015, datum_primary="", feature_note="CF100 KNIFE-EDGE FACE"),
         ),
-        scad_params=(("cf_size", "CF100"), ("bore_id", 88.0), ("hv_rating_kV", 25.0), ("bakeout_C", 150.0)),
-        notes=("Brazed 99.7% Al2O3 25 kV ribbed insulator + ISO 3669 CF100 Ti-6Al-4V flange; encloses S1.1-03 w/ 2.0 mm radial vacuum gap",),
-        target_mass_kg=3.15,
+        scad_params=(("cf_size", "CF100"), ("lower_z_canon_mm", 705.0), ("spool_id", 112.0), ("bore_id", 88.0), ("hv_rating_kV", 25.0), ("bakeout_C", 150.0)),
+        notes=(
+            "Extended 316LN UHV beamline spool + CF100 flange terminating at Z_nat=205.0 mm (Z_canon=705.0 mm), closing the 164.5 mm vacuum gap to S5.1-02",
+            "Encloses S1.2-01 Wien yoke, S1.2-04 exit slit (±Y CF16 ports), and S1.4-01 Faraday cups (±X CF40 ports) under 1e-9 mbar UHV with 25 kV Al2O3 HV ceramic break above",
+        ),
+        target_mass_kg=7.40,
     )
     f_s1301 = (
-        ScadFeature("add_cf_flange", {"size": "CF100", "bore_id": 88.0}, translate=(0.0, 0.0, -16.0), rotate=(180.0, 0.0, 0.0), comment="ISO 3669 CF100 Ti-6Al-4V base flange"),
-        ScadFeature("add_tube", {"od": 121.0, "id": 88.0, "h": 21.8}, translate=(0.0, 0.0, 5.0), comment="Ribbed 25 kV Al2O3 HV ceramic break"),
-        ScadFeature("add_tube", {"od": 126.0, "id": 88.0, "h": 9.7}, translate=(0.0, 0.0, 21.05), comment="Brazed Ti-6Al-4V upper collar"),
-        ScadFeature("cut_bolt_circle", {"pcd": 112.0, "bolt_d": 6.6, "count": 12, "h": 14.0}, translate=(0.0, 0.0, 21.05), comment="12xM6 upper collar bolts"),
+        ScadFeature("add_cf_flange", {"size": "CF100", "bore_id": 112.0}, translate=(0.0, 0.0, -98.25), rotate=(180.0, 0.0, 0.0), comment="Lower ISO 3669 CF100 mating flange at Z_canon=705.0 mm"),
+        ScadFeature("add_tube", {"od": 121.0, "id": 112.0, "h": 144.5}, translate=(0.0, 0.0, -16.0), comment="316LN UHV Wien & slit enclosure spool"),
+        ScadFeature("add_cf_flange", {"size": "CF100", "bore_id": 88.0}, translate=(0.0, 0.0, 66.25), rotate=(180.0, 0.0, 0.0), comment="Upper HV transition CF100 Ti-6Al-4V flange"),
+        ScadFeature("add_tube", {"od": 121.0, "id": 88.0, "h": 21.8}, translate=(0.0, 0.0, 87.25), comment="Ribbed 25 kV Al2O3 HV ceramic break"),
+        ScadFeature("add_tube", {"od": 126.0, "id": 88.0, "h": 9.7}, translate=(0.0, 0.0, 103.30), comment="Brazed Ti-6Al-4V upper collar"),
+        ScadFeature("cut_bolt_circle", {"pcd": 112.0, "bolt_d": 6.6, "count": 12, "h": 14.0}, translate=(0.0, 0.0, 103.30), comment="12xM6 upper collar bolts"),
     )
     parts["S1.3-01"] = BuiltPart(d_s1301, m_s1301, f_s1301, {"bakeout_clearance": checks["bakeout_decel_clearance"]})
 
@@ -1020,12 +1114,12 @@ def build_s1_parts() -> dict[str, BuiltPart]:
     # Lower dual-layer shield enclosing S1.3-02 (Z ∈ [42.0, 104.0], R1=45..47, R2=52..54)
     lo_in = make_tube(45.0, 47.0, 62.0, segments=48, axis="z", center=(0.0, 0.0, 73.0), name="S1.3-04_lo_inner", material="Mu-metal")
     lo_out = make_tube(52.0, 54.0, 62.0, segments=48, axis="z", center=(0.0, 0.0, 73.0), name="S1.3-04_lo_outer", material="Mu-metal")
-    # Upper dual-layer shield enclosing S1.5-01 HDA (Z ∈ [150.0, 215.0], R1=57.0..58.5, R2=60.5..62.0 -> +2.0 mm clear of both S1.5-01 R=55 & S5.1-02 CF250 R_in=64!)
-    hi_in = make_tube(57.0, 58.5, 65.0, segments=56, axis="z", center=(0.0, 0.0, 182.5), name="S1.3-04_hi_inner", material="Mu-metal")
-    hi_out = make_tube(60.5, 62.0, 65.0, segments=56, axis="z", center=(0.0, 0.0, 182.5), name="S1.3-04_hi_outer", material="Mu-metal")
+    # Upper dual-layer shield enclosing S1.5-01 HDA (Z ∈ [139.5, 204.5], R1=57.0..58.5, R2=60.5..62.0 -> clears S1.3-01 CF100 @ Z=205.0 by 0.5 mm!)
+    hi_in = make_tube(57.0, 58.5, 65.0, segments=56, axis="z", center=(0.0, 0.0, 172.0), name="S1.3-04_hi_inner", material="Mu-metal")
+    hi_out = make_tube(60.5, 62.0, 65.0, segments=56, axis="z", center=(0.0, 0.0, 172.0), name="S1.3-04_hi_outer", material="Mu-metal")
     s1304_parts: list[SolidMesh] = [lo_in, lo_out, hi_in, hi_out]
     # Non-magnetic Ti-6Al-4V inter-layer radial spacer lugs between inner & outer mu-metal shells
-    for z_sp, r_mid, dr in ((46.0, 49.5, 4.6), (100.0, 49.5, 4.6), (154.0, 59.5, 1.6), (211.0, 59.5, 1.6)):
+    for z_sp, r_mid, dr in ((46.0, 49.5, 4.6), (100.0, 49.5, 4.6), (143.5, 59.5, 1.6), (200.5, 59.5, 1.6)):
         for k in range(4):
             ang = math.radians(45.0 + k * 90.0)
             s1304_parts.append(
@@ -1041,10 +1135,10 @@ def build_s1_parts() -> dict[str, BuiltPart]:
         design_tier="CUSTOM_FULL",
         material="Mu-metal",
         surface_finish_ra_um=0.8,
-        world_origin_mm=(0.0, 0.0, 128.50),
+        world_origin_mm=(0.0, 0.0, 123.25),
         ports=(
             PortInterface("lower_shield_bore", "mechanical", (0.0, 0.0, 42.0), (0.0, 0.0, -1.0), "Dual-Wall Ø90/Ø108", mating_part_id="S1.3-02", bore_mm=90.0, od_mm=108.0, frame="global"),
-            PortInterface("upper_shield_bore", "mechanical", (0.0, 0.0, 215.0), (0.0, 0.0, 1.0), "Dual-Wall Ø114/Ø124", mating_part_id="S1.5-01", bore_mm=114.0, od_mm=124.0, frame="global"),
+            PortInterface("upper_shield_bore", "mechanical", (0.0, 0.0, 204.5), (0.0, 0.0, 1.0), "Dual-Wall Ø114/Ø124", mating_part_id="S1.5-01", bore_mm=114.0, od_mm=124.0, frame="global"),
         ),
         dimensions=(
             DimensionCallout("HI_OUTER_OD", 124.0, 0.2, -0.2, prefix="Ø"),
@@ -1069,16 +1163,18 @@ def build_s1_parts() -> dict[str, BuiltPart]:
     parts["S1.3-04"] = BuiltPart(d_s1304, m_s1304, f_s1304, {"bakeout_clearance": checks["bakeout_mumetal_clearance"]})
 
     # -----------------------------------------------------------------------
-    # S1.3-05: Differential Pumping Aperture Diaphragm & CF63 Intermediate Chamber (-X)
+    # S1.3-05: Inline Z-Axis Ø2.0 mm Differential Pumping Diaphragm & Unchoked -X CF63 Pump Chamber
     # -----------------------------------------------------------------------
-    z_dp = 482.0
+    z_dp = 492.66  # Exact S1.1-01 duoplasmatron midplane (eliminates 10.66 mm Z-offset)
     dp_body = make_tube(38.0, 43.0, 94.0, segments=48, axis="x", center=(-119.0, 0.0, z_dp), name="S1.3-05_chamber_body", material="316LN")
     dp_cf63 = make_cf_flange("CF63", bore_id=63.5, axis="-x", center=(-176.0, 0.0, z_dp), name="S1.3-05_cf63_pump", material="316LN")
     dp_cf40 = make_cf_flange("CF40", bore_id=38.0, axis="+x", center=(-64.65, 0.0, z_dp), name="S1.3-05_cf40_col", material="316LN")
-    # Precision internal Molybdenum differential pumping diaphragm (Ø74 mm disc, Ø2.0 mm orifice)
+    # Inline Molybdenum differential pumping diaphragm ON THE Z BEAM AXIS below S1.1-03 (Z=370.66, Ø2.0 mm orifice)
+    # Leaves -X CF63 pump port 100% unchoked (C_pump ~ 142 L/s) while restricting downward column conductance to 0.339 L/s (PH3)!
+    z_orifice = 370.66
     mo_diaph = make_revolved_profile(
-        [(1.0, -3.0), (6.0, -3.0), (14.0, -1.5), (37.0, -1.5), (37.0, 1.5), (14.0, 1.5), (6.0, 3.0), (1.0, 3.0)],
-        segments=40, axis="x", center=(-112.0, 0.0, z_dp), name="S1.3-05_mo_diaphragm", material="Mo",
+        [(1.0, -1.5), (6.0, -1.5), (14.0, -1.0), (41.5, -1.0), (41.5, 1.0), (14.0, 1.0), (6.0, 1.5), (1.0, 1.5)],
+        segments=40, axis="z", center=(0.0, 0.0, z_orifice), name="S1.3-05_mo_inline_diaphragm", material="Mo",
     )
     # Top CF16 pressure-gauge port flange
     dp_cf16 = make_cf_flange("CF16", bore_id=14.0, axis="+z", center=(-119.0, 0.0, z_dp + 48.0), name="S1.3-05_cf16_gauge", material="316LN")
@@ -1090,8 +1186,9 @@ def build_s1_parts() -> dict[str, BuiltPart]:
         surface_finish_ra_um=0.4,
         world_origin_mm=(-121.0, 0.0, z_dp),
         ports=(
-            make_cf_port_interface("CF63", "diff_pump_cf63_neg_x", (-184.75, 0.0, z_dp), (-1.0, 0.0, 0.0), frame="global"),
+            make_cf_port_interface("CF63", "diff_pump_cf63_neg_x", (-184.75, 0.0, z_dp), (-1.0, 0.0, 0.0), frame="global", notes="Unchoked Ø63.5 mm radial differential pump port (C_PH3~142 L/s)"),
             make_cf_port_interface("CF40", "source_mate_cf40_pos_x", (-58.30, 0.0, z_dp), (1.0, 0.0, 0.0), mating_part_id="S1.1-01", frame="global"),
+            PortInterface("inline_beam_orifice_z", "vacuum", (0.0, 0.0, z_orifice), (0.0, 0.0, -1.0), "Mo Ø2.0 mm Inline Differential Orifice", mating_part_id="S1.1-03", bore_mm=2.0, od_mm=83.0, frame="global"),
             make_cf_port_interface("CF16", "gauge_port_cf16_top", (-119.0, 0.0, z_dp + 51.75), (0.0, 0.0, 1.0), frame="global"),
         ),
         dimensions=(
@@ -1100,18 +1197,30 @@ def build_s1_parts() -> dict[str, BuiltPart]:
             DimensionCallout("DIAPH_ORIFICE", 2.00, 0.05, -0.05, prefix="Ø"),
         ),
         gdt_frames=(
-            GDTFrame("concentricity", 0.050, diameter_zone=True, datum_primary="B", feature_note="MO APERTURE ORIFICE"),
+            GDTFrame("concentricity", 0.050, diameter_zone=True, datum_primary="B", feature_note="INLINE Z-AXIS MO ORIFICE"),
             GDTFrame("parallelism", 0.030, datum_primary="A", feature_note="CF63 TO CF40 FACES"),
         ),
-        scad_params=(("chamber_od", 86.0), ("diaph_bore", 2.0), ("pressure_ratio", 1000.0)),
-        notes=("1000x differential pumping stage (1e-6 mbar source -> 1e-9 mbar UHV column); Mo conductance diaphragm + CF63 pump port",),
+        scad_params=(
+            ("chamber_od", 86.0),
+            ("diaph_bore", 2.0),
+            ("diaph_axis", "Z"),
+            ("diaph_z_mm", z_orifice),
+            ("pump_duct_unchoked", True),
+            ("c_orifice_ph3_Ls", 0.339),
+            ("c_pump_duct_ph3_Ls", 142.0),
+            ("pressure_ratio", 418.9),
+        ),
+        notes=(
+            "Differential pumping stage with inline Z-axis Mo Ø2.0 mm conductance aperture (Z=370.66 mm, C_PH3=0.339 L/s) below S1.1-03 extraction",
+            "Radial -X CF63 differential pump duct at Z=492.66 mm (exact S1.1-01 midplane) is 100% unchoked (Ø63.5 mm bore, C_PH3~142 L/s)",
+        ),
         target_mass_kg=3.40,
     )
     f_s1305 = (
-        ScadFeature("add_tube", {"od": 86.0, "id": 76.0, "h": 94.0}, translate=(2.0, 0.0, 0.0), rotate=(0.0, 90.0, 0.0), comment="316LN CF63 intermediate chamber"),
+        ScadFeature("add_tube", {"od": 86.0, "id": 76.0, "h": 94.0}, translate=(2.0, 0.0, 0.0), rotate=(0.0, 90.0, 0.0), comment="Unchoked 316LN CF63 differential pump chamber"),
         ScadFeature("add_cf_flange", {"size": "CF63"}, translate=(-55.0, 0.0, 0.0), rotate=(0.0, -90.0, 0.0), comment="ISO 3669 CF63 differential pump flange"),
         ScadFeature("add_cf_flange", {"size": "CF40"}, translate=(56.35, 0.0, 0.0), rotate=(0.0, 90.0, 0.0), comment="ISO 3669 CF40 source-side flange"),
-        ScadFeature("add_tube", {"od": 74.0, "id": 2.0, "h": 3.0}, translate=(9.0, 0.0, 0.0), rotate=(0.0, 90.0, 0.0), comment="Mo Ø2.0 mm differential pumping diaphragm"),
+        ScadFeature("add_tube", {"od": 83.0, "id": 2.0, "h": 3.0}, translate=(121.0, 0.0, z_orifice - z_dp), comment="Inline Z-axis Mo Ø2.0 mm differential pumping diaphragm"),
     )
     parts["S1.3-05"] = BuiltPart(d_s1305, m_s1305, f_s1305, {})
 
@@ -1627,6 +1736,7 @@ def build_s1_parts() -> dict[str, BuiltPart]:
         notes=(
             "Exp142 Option-Q S1-Multi cartridge (76x76x95 mm @ [0, +110, 492.66] in Z_wafer=0 frame, 27.0 mm body clearance to S1.1-01)",
             "STRICTLY tagged S1.7-01 — fixes legacy CAD v6 S1.6 aliasing bug; 31P gas / 121Sb 450 C PBN oven / 167Er micro-Paul",
+            "Isotope dispersion note: heavy 121Sb+ (dx=0.260 mm) and 167Er+ (dx=0.081 mm) are below single-pass 350 um Wien slit resolution and require isotopically enriched source feed or <=50 um S1.2-04 exit slit",
         ),
         target_mass_kg=4.80,
     )
@@ -1675,12 +1785,19 @@ def export_all(out_dir: Path | str | None = None) -> dict[str, PartArtifactResul
         results[pid] = res
 
         part_json_path = dest / f"{pid}.json"
+        from hardware.cad_parts.core import verify_watertight as _vw
+        _vr = _vw(bp.mesh)
         part_payload = {
             "part_id": pid,
             "subsystem": "S1",
             "design": bp.design.to_dict(),
             "artifact": res.to_dict(),
             "engineering_checks": bp.checks,
+            "shell_mate_metadata": {
+                "n_shells": _vr.n_shells,
+                "fea_bonding_mode": "SINGLE_MONOLITHIC_SOLID" if _vr.n_shells == 1 else "TIED_SUBASSEMBLY_CONTACTS",
+                "watertight": _vr.watertight,
+            },
             "epistemic": {
                 "design_maturity": DESIGN_MATURITY,
                 "no_lab_measurement": NO_LAB_MEASUREMENT,

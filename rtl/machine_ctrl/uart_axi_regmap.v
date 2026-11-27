@@ -2,20 +2,20 @@
 // BOM Traceability: S3.3-01, S3.3-04, S7.2-02, S8.4-02
 // Target Clock    : 100.0 MHz (10.0 ns period), default 115,200 baud (baud_div = 868)
 //
-// Binary Framed UART Protocol (8N1, LSB-first UART bytes, Big-Endian 16b addr / 32b data):
-//   WRITE Command (7 bytes RX -> 1 byte TX ACK):
-//     RX: [0x57 'W'] [addr_hi] [addr_lo] [wdata3] [wdata2] [wdata1] [wdata0]
-//     TX: [0x4B 'K'] if AXI bresp==2'b00 else [0x45 'E']
-//   READ Command  (3 bytes RX -> 5 bytes TX RESP):
-//     RX: [0x52 'R'] [addr_hi] [addr_lo]
-//     TX: [0x44 'D'] [rdata3] [rdata2] [rdata1] [rdata0]
-//   Unknown command opcode bytes are ignored safely without wedging the FSM.
+// Hardened Protocol & Flow Control (OBS-115, OBS-113):
+//   - 16-byte synchronous RX FIFO prevents byte drops during 5-byte TX read responses!
+//   - Active-LOW hardware flow control output `uart_rts_n` (deasserts HIGH when FIFO >= 12/16).
+//   - Inter-byte frame timeout (`FRAME_TIMEOUT_BITS = 128` bit-times) automatically recovers
+//     command parser from P_ADDR/P_WDATA back to P_IDLE on truncated/dropped frames!
+//   - Independent AXI4-Lite AWVALID/WVALID completion tracking (no write deadlock).
+//   - Built-in 2-FF async-assert / sync-deassert reset synchronizer (`rst_sync_n`).
 //
 // Synthesis Hygiene: ZERO latches, ZERO combinational '/', ZERO Verilator -Wall warnings.
 `timescale 1ns/1ps
 
 module uart_axi_regmap #(
-    parameter [15:0] DEFAULT_BAUD_DIV = 16'd868 // 100 MHz / 115200 baud = 868.06
+    parameter [15:0] DEFAULT_BAUD_DIV   = 16'd868, // 100 MHz / 115200 baud = 868.06
+    parameter [7:0]  FRAME_TIMEOUT_BITS = 8'd128   // ~12.8 byte-times inter-byte watchdog
 ) (
     input  wire        clk,
     input  wire        rst_n,
@@ -23,9 +23,10 @@ module uart_axi_regmap #(
     // Configurable baud divider (clocks per bit; 0 selects DEFAULT_BAUD_DIV)
     input  wire [15:0] cfg_baud_div,
 
-    // Physical UART 8N1 pins
+    // Physical UART 8N1 + hardware flow-control pins
     input  wire        uart_rx,
     output reg         uart_tx,
+    output wire        uart_rts_n,      // Active-LOW ready-to-receive (HIGH when RX FIFO >= 12/16)
 
     // AXI4-Lite Master Interface (16-bit address, 32-bit data)
     output reg  [15:0] m_axil_awaddr,
@@ -52,8 +53,23 @@ module uart_axi_regmap #(
 
     // Status telemetry
     output wire        bridge_busy,
-    output reg  [15:0] rx_frame_err_cnt
+    output reg  [15:0] rx_frame_err_cnt,
+    output reg  [15:0] rx_overrun_cnt
 );
+    // 2-FF async-assert / sync-deassert reset synchronizer
+    (* ASYNC_REG = "TRUE" *) reg rst_sync_s1;
+    (* ASYNC_REG = "TRUE" *) reg rst_sync_s2;
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n) begin
+            rst_sync_s1 <= 1'b0;
+            rst_sync_s2 <= 1'b0;
+        end else begin
+            rst_sync_s1 <= 1'b1;
+            rst_sync_s2 <= rst_sync_s1;
+        end
+    end
+    wire rst_sync_n = rst_sync_s2;
+
     // Effective baud divider (minimum 4 clocks/bit for clean mid-bit sampling)
     wire [15:0] baud_raw = (cfg_baud_div == 16'd0) ? DEFAULT_BAUD_DIV : cfg_baud_div;
     wire [15:0] baud_div = (baud_raw < 16'd4) ? 16'd4 : baud_raw;
@@ -67,30 +83,32 @@ module uart_axi_regmap #(
     localparam [1:0] RX_DATA  = 2'd2;
     localparam [1:0] RX_STOP  = 2'd3;
 
-    reg        rx_sync1;
-    reg        rx_sync2;
+    (* ASYNC_REG = "TRUE" *) reg rx_sync1;
+    (* ASYNC_REG = "TRUE" *) reg rx_sync2;
     reg [1:0]  rx_state;
     reg [15:0] rx_cnt;
     reg [2:0]  rx_bit_idx;
     reg [7:0]  rx_shift;
     reg        rx_byte_valid;
     reg [7:0]  rx_byte_data;
+    reg        rx_stop_err_pulse;
 
     always @(posedge clk) begin
-        if (!rst_n) begin
-            rx_sync1         <= 1'b1;
-            rx_sync2         <= 1'b1;
-            rx_state         <= RX_IDLE;
-            rx_cnt           <= 16'd0;
-            rx_bit_idx       <= 3'd0;
-            rx_shift         <= 8'd0;
-            rx_byte_valid    <= 1'b0;
-            rx_byte_data     <= 8'd0;
-            rx_frame_err_cnt <= 16'd0;
+        if (!rst_sync_n) begin
+            rx_sync1          <= 1'b1;
+            rx_sync2          <= 1'b1;
+            rx_state          <= RX_IDLE;
+            rx_cnt            <= 16'd0;
+            rx_bit_idx        <= 3'd0;
+            rx_shift          <= 8'd0;
+            rx_byte_valid     <= 1'b0;
+            rx_byte_data      <= 8'd0;
+            rx_stop_err_pulse <= 1'b0;
         end else begin
-            rx_sync1      <= uart_rx;
-            rx_sync2      <= rx_sync1;
-            rx_byte_valid <= 1'b0;
+            rx_sync1          <= uart_rx;
+            rx_sync2          <= rx_sync1;
+            rx_byte_valid     <= 1'b0;
+            rx_stop_err_pulse <= 1'b0;
 
             case (rx_state)
                 RX_IDLE: begin
@@ -107,7 +125,7 @@ module uart_axi_regmap #(
                             rx_bit_idx <= 3'd0;
                             rx_state   <= RX_DATA;
                         end else begin
-                            rx_state <= RX_IDLE; // false start glitch
+                            rx_state <= RX_IDLE;
                         end
                     end else begin
                         rx_cnt <= rx_cnt + 16'd1;
@@ -136,7 +154,7 @@ module uart_axi_regmap #(
                             rx_byte_valid <= 1'b1;
                             rx_byte_data  <= rx_shift;
                         end else begin
-                            rx_frame_err_cnt <= rx_frame_err_cnt + 16'd1;
+                            rx_stop_err_pulse <= 1'b1;
                         end
                     end else begin
                         rx_cnt <= rx_cnt + 16'd1;
@@ -151,7 +169,20 @@ module uart_axi_regmap #(
     end
 
     // -----------------------------------------------------------------------
-    // 2. UART 8N1 Transmitter
+    // 2. 16-Byte Synchronous RX FIFO + Hardware RTS Flow Control
+    // -----------------------------------------------------------------------
+    reg [7:0] rx_fifo [0:15];
+    reg [3:0] rx_wr_ptr;
+    reg [3:0] rx_rd_ptr;
+    reg [4:0] rx_fifo_cnt;
+
+    wire       fifo_empty = (rx_fifo_cnt == 5'd0);
+    wire       fifo_full  = (rx_fifo_cnt == 5'd16);
+    wire [7:0] fifo_head  = rx_fifo[rx_rd_ptr];
+    assign     uart_rts_n = (rx_fifo_cnt >= 5'd12); // Backpressure HIGH at 75% full
+
+    // -----------------------------------------------------------------------
+    // 3. UART 8N1 Transmitter
     // -----------------------------------------------------------------------
     localparam [1:0] TX_IDLE  = 2'd0;
     localparam [1:0] TX_START = 2'd1;
@@ -167,7 +198,7 @@ module uart_axi_regmap #(
     wire       tx_busy = (tx_state != TX_IDLE);
 
     always @(posedge clk) begin
-        if (!rst_n) begin
+        if (!rst_sync_n) begin
             tx_state   <= TX_IDLE;
             tx_cnt     <= 16'd0;
             tx_bit_idx <= 3'd0;
@@ -180,7 +211,7 @@ module uart_axi_regmap #(
                     tx_cnt  <= 16'd0;
                     if (tx_start_req) begin
                         tx_shift <= tx_start_byte;
-                        uart_tx  <= 1'b0; // start bit
+                        uart_tx  <= 1'b0;
                         tx_state <= TX_START;
                     end
                 end
@@ -202,7 +233,7 @@ module uart_axi_regmap #(
                     if (tx_cnt >= (baud_div - 16'd1)) begin
                         tx_cnt <= 16'd0;
                         if (tx_bit_idx == 3'd7) begin
-                            uart_tx  <= 1'b1; // stop bit
+                            uart_tx  <= 1'b1;
                             tx_state <= TX_STOP;
                         end else begin
                             tx_bit_idx <= tx_bit_idx + 3'd1;
@@ -233,7 +264,7 @@ module uart_axi_regmap #(
     end
 
     // -----------------------------------------------------------------------
-    // 3. Framed Command Parser & AXI4-Lite Master FSM
+    // 4. Framed Command Parser (consuming RX FIFO) + Inter-Byte Timeout + AXI4-Lite Master
     // -----------------------------------------------------------------------
     localparam [3:0] P_IDLE      = 4'd0;
     localparam [3:0] P_ADDR_HI   = 4'd1;
@@ -264,14 +295,38 @@ module uart_axi_regmap #(
     reg [2:0]  tx_idx;
     reg        aw_done;
     reg        w_done;
+    reg [15:0] to_baud_cnt;
+    reg [7:0]  to_bit_cnt;
 
-    assign bridge_busy = (p_state != P_IDLE) || tx_busy;
+    wire parser_wants_byte = (p_state == P_IDLE)   || (p_state == P_ADDR_HI) ||
+                             (p_state == P_ADDR_LO) || (p_state == P_WDATA3)  ||
+                             (p_state == P_WDATA2) || (p_state == P_WDATA1)  ||
+                             (p_state == P_WDATA0);
+    wire parser_mid_frame  = (p_state == P_ADDR_HI) || (p_state == P_ADDR_LO) ||
+                             (p_state == P_WDATA3)  || (p_state == P_WDATA2)  ||
+                             (p_state == P_WDATA1)  || (p_state == P_WDATA0);
+    wire fifo_pop          = parser_wants_byte && !fifo_empty;
+    wire fifo_push         = rx_byte_valid && !fifo_full;
+    wire frame_timeout_hit = parser_mid_frame && fifo_empty &&
+                             (to_bit_cnt >= FRAME_TIMEOUT_BITS);
 
-    // Sink unused rresp bits cleanly (AXI4-Lite slave always returns OKAY or SLVERR)
+    assign bridge_busy = (p_state != P_IDLE) || tx_busy || !fifo_empty;
+
     wire _unused_ok = &{1'b0, m_axil_rresp[1:0]};
 
+    integer fi;
+
     always @(posedge clk) begin
-        if (!rst_n) begin
+        if (!rst_sync_n) begin
+            rx_wr_ptr        <= 4'd0;
+            rx_rd_ptr        <= 4'd0;
+            rx_fifo_cnt      <= 5'd0;
+            for (fi = 0; fi < 16; fi = fi + 1) rx_fifo[fi] <= 8'd0;
+            rx_frame_err_cnt <= 16'd0;
+            rx_overrun_cnt   <= 16'd0;
+            to_baud_cnt      <= 16'd0;
+            to_bit_cnt       <= 8'd0;
+
             p_state        <= P_IDLE;
             is_write_cmd   <= 1'b0;
             cmd_addr       <= 16'd0;
@@ -299,150 +354,191 @@ module uart_axi_regmap #(
         end else begin
             tx_start_req <= 1'b0;
 
-            case (p_state)
-                P_IDLE: begin
-                    m_axil_awvalid <= 1'b0;
-                    m_axil_wvalid  <= 1'b0;
-                    m_axil_bready  <= 1'b0;
-                    m_axil_arvalid <= 1'b0;
-                    m_axil_rready  <= 1'b0;
-                    if (rx_byte_valid) begin
-                        if (rx_byte_data == CMD_WRITE) begin
-                            is_write_cmd <= 1'b1;
-                            p_state      <= P_ADDR_HI;
-                        end else if (rx_byte_data == CMD_READ) begin
-                            is_write_cmd <= 1'b0;
-                            p_state      <= P_ADDR_HI;
-                        end
-                    end
-                end
-
-                P_ADDR_HI: begin
-                    if (rx_byte_valid) begin
-                        cmd_addr[15:8] <= rx_byte_data;
-                        p_state        <= P_ADDR_LO;
-                    end
-                end
-
-                P_ADDR_LO: begin
-                    if (rx_byte_valid) begin
-                        cmd_addr[7:0] <= rx_byte_data;
-                        if (is_write_cmd) begin
-                            p_state <= P_WDATA3;
-                        end else begin
-                            m_axil_araddr  <= {cmd_addr[15:8], rx_byte_data};
-                            m_axil_arvalid <= 1'b1;
-                            p_state        <= P_AXI_AR;
-                        end
-                    end
-                end
-
-                P_WDATA3: begin
-                    if (rx_byte_valid) begin
-                        cmd_wdata_hi[23:16] <= rx_byte_data;
-                        p_state             <= P_WDATA2;
-                    end
-                end
-
-                P_WDATA2: begin
-                    if (rx_byte_valid) begin
-                        cmd_wdata_hi[15:8] <= rx_byte_data;
-                        p_state            <= P_WDATA1;
-                    end
-                end
-
-                P_WDATA1: begin
-                    if (rx_byte_valid) begin
-                        cmd_wdata_hi[7:0] <= rx_byte_data;
-                        p_state           <= P_WDATA0;
-                    end
-                end
-
-                P_WDATA0: begin
-                    if (rx_byte_valid) begin
-                        m_axil_awaddr  <= cmd_addr;
-                        m_axil_awvalid <= 1'b1;
-                        m_axil_wdata   <= {cmd_wdata_hi, rx_byte_data};
-                        m_axil_wstrb   <= 4'hF;
-                        m_axil_wvalid  <= 1'b1;
-                        aw_done        <= 1'b0;
-                        w_done         <= 1'b0;
-                        p_state        <= P_AXI_WR;
-                    end
-                end
-
-                P_AXI_WR: begin
-                    if (m_axil_awvalid && m_axil_awready) begin
-                        m_axil_awvalid <= 1'b0;
-                        aw_done        <= 1'b1;
-                    end
-                    if (m_axil_wvalid && m_axil_wready) begin
-                        m_axil_wvalid <= 1'b0;
-                        w_done        <= 1'b1;
-                    end
-                    if ((aw_done || (m_axil_awvalid && m_axil_awready)) &&
-                        (w_done  || (m_axil_wvalid  && m_axil_wready))) begin
-                        m_axil_bready <= 1'b1;
-                        p_state       <= P_AXI_BRESP;
-                    end
-                end
-
-                P_AXI_BRESP: begin
-                    if (m_axil_bvalid && m_axil_bready) begin
-                        m_axil_bready <= 1'b0;
-                        tx_buf[0]     <= (m_axil_bresp == 2'b00) ? RSP_OK : RSP_ERR;
-                        tx_len        <= 3'd1;
-                        tx_idx        <= 3'd0;
-                        p_state       <= P_TX_SEND;
-                    end
-                end
-
-                P_AXI_AR: begin
-                    if (m_axil_arvalid && m_axil_arready) begin
-                        m_axil_arvalid <= 1'b0;
-                        m_axil_rready  <= 1'b1;
-                        p_state        <= P_AXI_RDATA;
-                    end
-                end
-
-                P_AXI_RDATA: begin
-                    if (m_axil_rvalid && m_axil_rready) begin
-                        m_axil_rready <= 1'b0;
-                        tx_buf[0]     <= RSP_DATA;
-                        tx_buf[1]     <= m_axil_rdata[31:24];
-                        tx_buf[2]     <= m_axil_rdata[23:16];
-                        tx_buf[3]     <= m_axil_rdata[15:8];
-                        tx_buf[4]     <= m_axil_rdata[7:0];
-                        tx_len        <= 3'd5;
-                        tx_idx        <= 3'd0;
-                        p_state       <= P_TX_SEND;
-                    end
-                end
-
-                P_TX_SEND: begin
-                    if (!tx_busy) begin
-                        tx_start_req  <= 1'b1;
-                        tx_start_byte <= tx_buf[tx_idx];
-                        p_state       <= P_TX_WAIT;
-                    end
-                end
-
-                P_TX_WAIT: begin
-                    // Wait 1 cycle for tx_busy to assert, then wait until TX finishes
-                    if (!tx_start_req && !tx_busy) begin
-                        if ((tx_idx + 3'd1) >= tx_len) begin
-                            p_state <= P_IDLE;
-                        end else begin
-                            tx_idx  <= tx_idx + 3'd1;
-                            p_state <= P_TX_SEND;
-                        end
-                    end
-                end
-
-                default: begin
-                    p_state <= P_IDLE;
-                end
+            // RX FIFO push / pop / overrun accounting
+            if (rx_byte_valid && fifo_full && !fifo_pop) begin
+                rx_overrun_cnt <= rx_overrun_cnt + 16'd1;
+            end
+            if (fifo_push) begin
+                rx_fifo[rx_wr_ptr] <= rx_byte_data;
+                rx_wr_ptr          <= rx_wr_ptr + 4'd1;
+            end
+            if (fifo_pop) begin
+                rx_rd_ptr <= rx_rd_ptr + 4'd1;
+            end
+            case ({fifo_push, fifo_pop})
+                2'b10:   rx_fifo_cnt <= rx_fifo_cnt + 5'd1;
+                2'b01:   rx_fifo_cnt <= rx_fifo_cnt - 5'd1;
+                default: rx_fifo_cnt <= rx_fifo_cnt;
             endcase
+
+            // Frame error counter (stop-bit error OR mid-frame inter-byte timeout)
+            if (rx_stop_err_pulse || frame_timeout_hit) begin
+                rx_frame_err_cnt <= rx_frame_err_cnt + 16'd1;
+            end
+
+            // Inter-byte timeout watchdog while mid-frame
+            if (!parser_mid_frame || fifo_pop) begin
+                to_baud_cnt <= 16'd0;
+                to_bit_cnt  <= 8'd0;
+            end else if (to_baud_cnt >= (baud_div - 16'd1)) begin
+                to_baud_cnt <= 16'd0;
+                if (to_bit_cnt < FRAME_TIMEOUT_BITS) begin
+                    to_bit_cnt <= to_bit_cnt + 8'd1;
+                end
+            end else begin
+                to_baud_cnt <= to_baud_cnt + 16'd1;
+            end
+
+            if (frame_timeout_hit) begin
+                p_state        <= P_IDLE;
+                m_axil_awvalid <= 1'b0;
+                m_axil_wvalid  <= 1'b0;
+                m_axil_arvalid <= 1'b0;
+            end else begin
+                case (p_state)
+                    P_IDLE: begin
+                        m_axil_awvalid <= 1'b0;
+                        m_axil_wvalid  <= 1'b0;
+                        m_axil_bready  <= 1'b0;
+                        m_axil_arvalid <= 1'b0;
+                        m_axil_rready  <= 1'b0;
+                        if (fifo_pop) begin
+                            if (fifo_head == CMD_WRITE) begin
+                                is_write_cmd <= 1'b1;
+                                p_state      <= P_ADDR_HI;
+                            end else if (fifo_head == CMD_READ) begin
+                                is_write_cmd <= 1'b0;
+                                p_state      <= P_ADDR_HI;
+                            end
+                        end
+                    end
+
+                    P_ADDR_HI: begin
+                        if (fifo_pop) begin
+                            cmd_addr[15:8] <= fifo_head;
+                            p_state        <= P_ADDR_LO;
+                        end
+                    end
+
+                    P_ADDR_LO: begin
+                        if (fifo_pop) begin
+                            cmd_addr[7:0] <= fifo_head;
+                            if (is_write_cmd) begin
+                                p_state <= P_WDATA3;
+                            end else begin
+                                m_axil_araddr  <= {cmd_addr[15:8], fifo_head};
+                                m_axil_arvalid <= 1'b1;
+                                p_state        <= P_AXI_AR;
+                            end
+                        end
+                    end
+
+                    P_WDATA3: begin
+                        if (fifo_pop) begin
+                            cmd_wdata_hi[23:16] <= fifo_head;
+                            p_state             <= P_WDATA2;
+                        end
+                    end
+
+                    P_WDATA2: begin
+                        if (fifo_pop) begin
+                            cmd_wdata_hi[15:8] <= fifo_head;
+                            p_state            <= P_WDATA1;
+                        end
+                    end
+
+                    P_WDATA1: begin
+                        if (fifo_pop) begin
+                            cmd_wdata_hi[7:0] <= fifo_head;
+                            p_state           <= P_WDATA0;
+                        end
+                    end
+
+                    P_WDATA0: begin
+                        if (fifo_pop) begin
+                            m_axil_awaddr  <= cmd_addr;
+                            m_axil_awvalid <= 1'b1;
+                            m_axil_wdata   <= {cmd_wdata_hi, fifo_head};
+                            m_axil_wstrb   <= 4'hF;
+                            m_axil_wvalid  <= 1'b1;
+                            aw_done        <= 1'b0;
+                            w_done         <= 1'b0;
+                            p_state        <= P_AXI_WR;
+                        end
+                    end
+
+                    P_AXI_WR: begin
+                        if (m_axil_awvalid && m_axil_awready) begin
+                            m_axil_awvalid <= 1'b0;
+                            aw_done        <= 1'b1;
+                        end
+                        if (m_axil_wvalid && m_axil_wready) begin
+                            m_axil_wvalid <= 1'b0;
+                            w_done        <= 1'b1;
+                        end
+                        if ((aw_done || (m_axil_awvalid && m_axil_awready)) &&
+                            (w_done  || (m_axil_wvalid  && m_axil_wready))) begin
+                            m_axil_bready <= 1'b1;
+                            p_state       <= P_AXI_BRESP;
+                        end
+                    end
+
+                    P_AXI_BRESP: begin
+                        if (m_axil_bvalid && m_axil_bready) begin
+                            m_axil_bready <= 1'b0;
+                            tx_buf[0]     <= (m_axil_bresp == 2'b00) ? RSP_OK : RSP_ERR;
+                            tx_len        <= 3'd1;
+                            tx_idx        <= 3'd0;
+                            p_state       <= P_TX_SEND;
+                        end
+                    end
+
+                    P_AXI_AR: begin
+                        if (m_axil_arvalid && m_axil_arready) begin
+                            m_axil_arvalid <= 1'b0;
+                            m_axil_rready  <= 1'b1;
+                            p_state        <= P_AXI_RDATA;
+                        end
+                    end
+
+                    P_AXI_RDATA: begin
+                        if (m_axil_rvalid && m_axil_rready) begin
+                            m_axil_rready <= 1'b0;
+                            tx_buf[0]     <= RSP_DATA;
+                            tx_buf[1]     <= m_axil_rdata[31:24];
+                            tx_buf[2]     <= m_axil_rdata[23:16];
+                            tx_buf[3]     <= m_axil_rdata[15:8];
+                            tx_buf[4]     <= m_axil_rdata[7:0];
+                            tx_len        <= 3'd5;
+                            tx_idx        <= 3'd0;
+                            p_state       <= P_TX_SEND;
+                        end
+                    end
+
+                    P_TX_SEND: begin
+                        if (!tx_busy) begin
+                            tx_start_req  <= 1'b1;
+                            tx_start_byte <= tx_buf[tx_idx];
+                            p_state       <= P_TX_WAIT;
+                        end
+                    end
+
+                    P_TX_WAIT: begin
+                        if (!tx_start_req && !tx_busy) begin
+                            if ((tx_idx + 3'd1) >= tx_len) begin
+                                p_state <= P_IDLE;
+                            end else begin
+                                tx_idx  <= tx_idx + 3'd1;
+                                p_state <= P_TX_SEND;
+                            end
+                        end
+                    end
+
+                    default: begin
+                        p_state <= P_IDLE;
+                    end
+                endcase
+            end
         end
     end
 endmodule

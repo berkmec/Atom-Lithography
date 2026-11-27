@@ -166,6 +166,19 @@ def test_07_independent_preregistered_verdict_recomputation() -> None:
     assert v["SQ6_SU8_GRAPE_LOGICAL_GATES"]["status"] == "PASS"
 
 
+def test_07b_obs073_dual_field_and_shared_endor_strain_audit() -> None:
+    """OBS-073 check: B_M4=0.1785 T increases electron-spin mixing ~70x & 5-20 kHz strain collapses shared ENDOR lines."""
+    doc = json.loads((RES_DIR / "exp148.json").read_text(encoding="utf-8"))
+    obs = doc["b0_vs_bm4_and_shared_endor_audit_OBS073"]
+    df = obs["dual_field_comparison"]
+    se = obs["shared_s65_02_4line_endor_strain_audit"]
+    assert df["electron_spin_mixing_increase_factor_x"] > 65.0
+    assert df["compatible_with_B_M4_0p1785T"] is False
+    assert se["compatible_with_untrimmed_shared_4line_endor"] is False
+    assert se["shared_25kHz_gross_F_at_5kHz_strain"] < 0.65
+    assert se["shared_25kHz_gross_F_at_20kHz_strain"] < 0.15
+
+
 def test_08_png_dimensions_and_portability() -> None:
     """SQ7 check: 2400x1400 PNG exists & zero hardcoded host paths across all Exp148 code/results/tests."""
     png = RES_DIR / "fig_exp148_sb121_qudit_echo.png"
@@ -175,17 +188,12 @@ def test_08_png_dimensions_and_portability() -> None:
     w, h = struct.unpack(">II", raw[16:24])
     assert (w, h) == (2400, 1400)
 
-    forbidden = (
-        "/home/" + "berk",
-        "/run/media/" + "berk",
-        "E:" + "\\",
-        "C:" + "\\Users",
-    )
+    pat_re = re.compile(r"(?:/(?:home|run/media)/[a-zA-Z0-9_-]+|[A-Z]:\\Users)")
     files = list(EXP_DIR.glob("*.py")) + list(RES_DIR.glob("*.json")) + list(RES_DIR.glob("*.md")) + [Path(__file__)]
     for fp in files:
         txt = fp.read_text(encoding="utf-8")
-        for pat in forbidden:
-            assert pat not in txt, f"Hardcoded host path {pat!r} found in {fp.name}"
+        m = pat_re.search(txt)
+        assert m is None, f"Hardcoded host path {m.group(0)!r} found in {fp.name}"
 
 
 def test_09_summary_gfm_tables_and_bom_untouched() -> None:

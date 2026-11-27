@@ -9,6 +9,7 @@ Strictly portable (Path(__file__).resolve() only; zero hardcoded host paths).
 from __future__ import annotations
 
 import json
+import re
 import struct
 import sys
 from pathlib import Path
@@ -82,15 +83,23 @@ def test_bb288_z12_automorphism_layout_fits_300um_bus() -> None:
     p20 = next(r for r in lay["pitch_sweep"] if r["pitch_um"] == 20.0)
     assert p15["L_max_um"] <= 300.0 and p15["fits_300um_m4_resonator"] is True
     assert p20["L_max_um"] <= 300.0 and p20["fits_300um_m4_resonator"] is True
+    # Honest OBS-045 / OBS-140 flat-chip routing audit: 24,256 airbridge crossings & Manhattan L2=360 um > 300 um
+    assert lay["total_flat_airbridge_crossings"] == 24256
+    assert p20["layer2_max_manh_um"] == 360.0
+    assert p20["fits_300um_m4_manhattan"] is False
+    assert p20["layer2_frac_gt_300um_manh"] > 0.45
 
 
 def test_bb288_576cell_defect_yield_stark_cliff() -> None:
-    """Verify f=1.0% N=6 collapses (<0.1%) while Exp136 f*=1.5%+2MV/m hits >99.0% at N=8 and >99.8% at N=9."""
+    """Verify f=1.0% N=6 collapses (<0.1%), idealized N=8/9 >99%, AND honest DDRF/iradina-valley collapse (<55% / <2%)."""
     dy = compute_bb288_defect_yields(n_cells_block=576, n_blocks_cryo=5, n_blocks_femoco_mem=16)
     assert dy["f1p0_Ez0_no_stark"]["by_N_cand"]["N6"]["block_576_yield_pct"] < 0.1
     assert dy["f1p5_Ez2MVm_v5_star"]["by_N_cand"]["N8"]["block_576_yield_pct"] > 99.0
     assert dy["f1p5_Ez2MVm_v5_star"]["by_N_cand"]["N9"]["block_576_yield_pct"] > 99.8
     assert dy["f1p5_Ez2MVm_v5_star"]["by_N_cand"]["N8"]["femoco_16of18_spared_yield_pct"] > 99.9
+    # Honest OBS-029 & OBS-047 576-cell yield collapse
+    assert dy["f1p5_Ez2MVm_ddrf6893"]["by_N_cand"]["N9"]["block_576_yield_pct"] < 55.0
+    assert dy["f1p5_Ez2MVm_iradina_valley_pff0p5375"]["by_N_cand"]["N9"]["block_576_yield_pct"] < 2.0
 
 
 def test_bb288_circuit_dem_zero_syndrome_and_shape() -> None:
@@ -128,7 +137,7 @@ def test_magic_state_factory_physics_honest_1stage_fail_and_2stage_pass() -> Non
 
 
 def test_exp147_json_schema_honest_verdicts_and_epistemic_flags() -> None:
-    """Verify exp147.json exists, enforces epistemic flags, and preserves honest verdicts & >=10x algo compression."""
+    """Verify exp147.json exists, enforces epistemic flags, and preserves honest OBS-030/045/047/086 verdicts."""
     jpath = RES_DIR / "exp147.json"
     assert jpath.exists(), "Run run_exp147.py first"
     d = json.loads(jpath.read_text())
@@ -137,12 +146,21 @@ def test_exp147_json_schema_honest_verdicts_and_epistemic_flags() -> None:
     assert d["hypothesis_id"] == "H165"
     assert d["no_lab_measurement"] is True
     assert d["no_supplier_quotes"] is True
+    assert d["n_passed"] == 3
+    assert d["success_rule_met"] is False
     assert d["verdicts"]["UQ1_EXACT_BB288_ALGEBRA_AND_SCHEDULE"] is True
-    assert d["verdicts"]["UQ2_THICKNESS2_M4_LAYOUT_AND_576_YIELD"] is True
+    assert d["verdicts"]["UQ2_THICKNESS2_M4_LAYOUT_AND_576_YIELD"] is False
     assert d["verdicts"]["UQ3_D6_TO_D18_CIRCUIT_DEM_SCALING"] is True
-    assert d["verdicts"]["UQ6_RSA2048_SHOR_CRYO_POWER_COMPRESSION"] is True
+    assert d["verdicts"]["UQ4_UNIVERSAL_MAGIC_STATE_FACTORIES"] is False
+    assert d["verdicts"]["UQ5_FEMOCO_CHEMISTRY_RESOURCE_AND_COST"] is False
+    # OBS-030 honest gate fix: RSA-2048 d=24 has p_fail_total = 1.0 -> UQ6 MUST FAIL!
+    assert d["verdicts"]["UQ6_RSA2048_SHOR_CRYO_POWER_COMPRESSION"] is False
     assert d["verdicts"]["UQ7_PORTABILITY_VISUALIZATION_AND_TESTS"] is True
     assert d["portability_hardcoded_hits"] == []
+    audit = d["honest_obstacle_closure_audit"]
+    assert audit["OBS030_rsa2048_d24_p_fail_total"] == 1.0
+    assert audit["OBS045_bb288_total_airbridges"] == 24256
+    assert "bb288_round_depth_scaling_OBS086" in d["part3_d6_to_d18_circuit_dem"]
 
     # Verify >= 10x compression on both FeMoco and RSA-2048
     p5 = d["part5_flagship_algorithms"]
@@ -191,12 +209,11 @@ def test_exp147_summary_gfm_tables_zero_errors() -> None:
 
 def test_exp147_strict_portability_no_hardcoded_host_paths() -> None:
     """Verify ZERO hardcoded host paths across all Exp147 code, results, markdown, and tests."""
-    bad_tokens = ("/home/" + "berk", "/run/media/" + "berk", "/" + "Users/")
+    pat_re = re.compile(r"/(?:home|run/media|Users)/[a-zA-Z0-9_-]+")
     files = list(EXP_DIR.glob("*.py")) + list(RES_DIR.glob("*.json")) + list(RES_DIR.glob("*.md")) + [Path(__file__).resolve()]
     hits = []
     for f in files:
         txt = f.read_text(errors="ignore")
-        for tok in bad_tokens:
-            if tok in txt:
-                hits.append(f"{f.name}:{tok}")
+        for m in pat_re.finditer(txt):
+            hits.append(f"{f.name}:{m.group(0)}")
     assert hits == [], f"Hardcoded host path detected: {hits}"

@@ -16,8 +16,11 @@ from typing import Any, Dict, List
 import numpy as np
 
 from epi_cap_physics139 import (
+    KineticsParams,
     build_zbl_scattering_table,
     evaluate_charge_noise_routes,
+    evaluate_fga_passivation_kinetics,
+    evaluate_gate_oxide_and_regrowth_interface,
     evaluate_lt_mbe_kinetics,
     evaluate_route_flipflop_yield,
     mcwhorter_geom_integrals,
@@ -50,10 +53,10 @@ def main() -> None:
     exp92 = json.loads(EXP92_JSON.read_text(encoding="utf-8"))
 
     # =========================================================================
-    # 1. ZBL+LSS BCA Sweep (5..24 keV, N=4,000) + Convergence + Recoil-O
+    # 1. Exact Infinite-Domain ZBL+LSS BCA Sweep (2..24 keV, N=4,000) + Recoil-O
     # =========================================================================
     zbl_table = build_zbl_scattering_table()
-    energies_keV = [5.0, 10.0, 14.0, 15.0, 18.0, 20.0, 22.0, 24.0]
+    energies_keV = [2.0, 3.0, 4.0, 5.0, 10.0, 14.0, 15.0, 18.0, 20.0, 22.0, 24.0]
     bca_raw: Dict[float, Dict[str, Any]] = {}
     bca_summary: Dict[str, Dict[str, Any]] = {}
     for idx_e, E_k in enumerate(energies_keV):
@@ -73,8 +76,8 @@ def main() -> None:
         }
 
     # BCA convergence check N=2,000 vs N=4,000 (pre-registered EP7) + diagnostic N=4,000 vs N=8,000
-    b5_2k = simulate_bca_31p_in_si(5.0, n_ions=2000, zbl_table=zbl_table, seed=2026139)
-    b22_2k = simulate_bca_31p_in_si(22.0, n_ions=2000, zbl_table=zbl_table, seed=2026139 + 6 * 17)
+    b5_2k = simulate_bca_31p_in_si(5.0, n_ions=2000, zbl_table=zbl_table, seed=2026139 + 3 * 17)
+    b22_2k = simulate_bca_31p_in_si(22.0, n_ions=2000, zbl_table=zbl_table, seed=2026139 + 9 * 17)
     b5_8k = simulate_bca_31p_in_si(5.0, n_ions=8000, zbl_table=zbl_table, seed=2026999)
     b22_8k = simulate_bca_31p_in_si(22.0, n_ions=8000, zbl_table=zbl_table, seed=2027001)
     bca_conv = {
@@ -91,7 +94,7 @@ def main() -> None:
     }
     bca_conv_max_err = max(bca_conv.values())
 
-    # Compare against Exp92 canonical 5/10/20 keV anchors
+    # Compare against fixed Exp92 canonical 5/10/20 keV anchors (OBS-039)
     exp92_check: Dict[str, Dict[str, float]] = {}
     for ek_str, E_val in [("E5", 5.0), ("E10", 10.0), ("E20", 20.0)]:
         ref92 = exp92["bca"][ek_str]
@@ -107,11 +110,19 @@ def main() -> None:
         }
     exp92_max_rel_diff = max(max(v["Rp_rel_diff"], v["sigma_lat_rel_diff"]) for v in exp92_check.values())
 
-    # Recoil-O knock-on for Route B through 1.5 nm SiO2 gate oxide (20, 22, 24 keV)
+    # OBS-129 & OBS-138: Multilayer SiO2/Si recoil-O + primary through-oxide transport
+    # Evaluated at consistent 1.5 nm AND 8.0 nm SiO2, PLUS 5 keV native-oxide hazard check!
     recoil_oxygen: Dict[str, Dict[str, Any]] = {}
-    for idx_r, E_k in enumerate((20.0, 22.0, 24.0)):
-        rec = simulate_recoil_oxygen_through_oxide(E_k, oxide_thick_nm=1.5, n_ions=4000, zbl_table=zbl_table, seed=2026200 + idx_r * 13)
-        recoil_oxygen[f"E{int(E_k)}_1p5nm_SiO2"] = {k: (round(v, 4) if isinstance(v, float) else v) for k, v in rec.items()}
+    for idx_r, (E_k, dox, tag) in enumerate([
+        (20.0, 1.5, "E20_1p5nm_SiO2"),
+        (22.0, 1.5, "E22_1p5nm_SiO2"),
+        (24.0, 1.5, "E24_1p5nm_SiO2"),
+        (22.0, 8.0, "E22_8p0nm_SiO2"),
+        (20.0, 8.0, "E20_8p0nm_SiO2"),
+        (5.0, 1.5, "E5_1p5nm_native_SiO2_hazard"),
+    ]):
+        rec = simulate_recoil_oxygen_through_oxide(E_k, oxide_thick_nm=dox, n_ions=4000, zbl_table=zbl_table, seed=2026200 + idx_r * 13)
+        recoil_oxygen[tag] = {k: (round(v, 4) if isinstance(v, float) else v) for k, v in rec.items()}
 
     # =========================================================================
     # 2. Route A Low-T 28Si MBE Growth Kinetics Sweep (250..450 C, 8 nm Cap)
@@ -129,38 +140,56 @@ def main() -> None:
     }
 
     # =========================================================================
-    # 3. Coupled Full Thermal Chain PDE (Flash -> LT-MBE -> 350 C Passivation)
+    # 3. Coupled Full Thermal Chain PDE (OBS-038 fixed Em_I=0.90 eV + I-V recomb)
     # =========================================================================
-    # (a) v4.0 Exp130 nominal flash setpoint (1x 1.0 ms @ 1440 K, 41.15 J/cm^2)
+    rp5_true = float(bca_raw[5.0]["Rp_nm"])
+    sigz5_true = float(bca_raw[5.0]["sigma_z_nm"])
+    siglat5_true = float(bca_raw[5.0]["sigma_lat_nm"])
+
+    # (a) v4.0 1x1440 K under FIXED Em_I=0.90 eV + I-V recombination (zero monomer-freezing artifact!)
     thermal_chain_5keV_v4 = run_coupled_thermal_chain_ted(
-        Rp_nm=6.46, sigma_z_nm=2.88, T_epi_C=T_epi_opt_C, t_mbe_s=mbe_opt["deposition_time_s"],
-        T_peak_K=1440.0, n_flash_pulses=1,
+        Rp_nm=rp5_true, sigma_z_nm=sigz5_true, T_epi_C=T_epi_opt_C, t_mbe_s=mbe_opt["deposition_time_s"],
+        T_peak_K=1440.0, n_flash_pulses=1, C_cl_peak_cm3=3.0e19,
     )
-    # (b) v5.0 Remedial Option 1: Cluster-clearing single pulse (1x 1.0 ms @ 1530 K, 43.49 J/cm^2, < 0.92 T_melt)
+    # (b) v5.0 1x1530 K (43.49 J/cm^2) under FIXED Em_I=0.90 eV + I-V recombination
     thermal_chain_5keV_v5_1530K = run_coupled_thermal_chain_ted(
-        Rp_nm=6.46, sigma_z_nm=2.88, T_epi_C=T_epi_opt_C, t_mbe_s=mbe_opt["deposition_time_s"],
-        T_peak_K=1530.0, n_flash_pulses=1,
+        Rp_nm=rp5_true, sigma_z_nm=sigz5_true, T_epi_C=T_epi_opt_C, t_mbe_s=mbe_opt["deposition_time_s"],
+        T_peak_K=1530.0, n_flash_pulses=1, C_cl_peak_cm3=3.0e19,
     )
-    # (c) v5.0 Remedial Option 2: Multi-pulse at v4.0 T_peak (4x 1.0 ms @ 1440 K, 41.15 J/cm^2)
+    # (c) v5.0 4x1440 K multi-pulse
     thermal_chain_5keV_v5_quad = run_coupled_thermal_chain_ted(
-        Rp_nm=6.46, sigma_z_nm=2.88, T_epi_C=T_epi_opt_C, t_mbe_s=mbe_opt["deposition_time_s"],
-        T_peak_K=1440.0, n_flash_pulses=4,
+        Rp_nm=rp5_true, sigma_z_nm=sigz5_true, T_epi_C=T_epi_opt_C, t_mbe_s=mbe_opt["deposition_time_s"],
+        T_peak_K=1440.0, n_flash_pulses=4, C_cl_peak_cm3=3.0e19,
     )
-    # (d) Literature 14 keV SRIM/Tosi anchor (z0=15.0 nm, sig_z=5.0 nm) under v5.0 cluster-clearing flash
+    # (d) OBS-038 iradina cascade damage sensitivity (10% and 30% of Pilot 2B 99.6 vac/ion -> 1.5e20 & 4.5e20 cm^-3)
+    thermal_chain_5keV_v5_iradina10pct = run_coupled_thermal_chain_ted(
+        Rp_nm=rp5_true, sigma_z_nm=sigz5_true, T_epi_C=T_epi_opt_C, t_mbe_s=mbe_opt["deposition_time_s"],
+        T_peak_K=1530.0, n_flash_pulses=1, C_cl_peak_cm3=1.5e20,
+    )
+    thermal_chain_5keV_v5_iradina30pct = run_coupled_thermal_chain_ted(
+        Rp_nm=rp5_true, sigma_z_nm=sigz5_true, T_epi_C=T_epi_opt_C, t_mbe_s=mbe_opt["deposition_time_s"],
+        T_peak_K=1530.0, n_flash_pulses=1, C_cl_peak_cm3=4.5e20,
+    )
+    # (e) Legacy Em_I=1.77 eV diagnostic reproducing why old v4 jumped +1.32 nm (frozen monomers, NOT 345 C clusters!)
+    p_legacy_177 = KineticsParams(Ef_I_eV=3.18, Em_I_eV=1.77, f_vac_init_ratio=0.0)
+    thermal_chain_5keV_v4_legacy_177 = run_coupled_thermal_chain_ted(
+        Rp_nm=6.46, sigma_z_nm=2.88, T_epi_C=T_epi_opt_C, t_mbe_s=mbe_opt["deposition_time_s"],
+        T_peak_K=1440.0, n_flash_pulses=1, C_cl_peak_cm3=3.0e19, params=p_legacy_177,
+    )
+    # (f) Literature 14 keV SRIM/Tosi anchor + Route B 22 keV through-cap
     thermal_chain_14keV_v5 = run_coupled_thermal_chain_ted(
         Rp_nm=15.0, sigma_z_nm=5.0, T_epi_C=T_epi_opt_C, t_mbe_s=mbe_opt["deposition_time_s"],
         T_peak_K=1530.0, n_flash_pulses=1,
     )
-    # (e) Route B 22 keV through-cap (flash only)
     thermal_chain_22keV_B = run_coupled_thermal_chain_ted(
-        Rp_nm=bca_raw[22.0]["Rp_nm"], sigma_z_nm=bca_raw[22.0]["sigma_z_nm"],
+        Rp_nm=recoil_oxygen["E22_8p0nm_SiO2"]["primary_Rp_in_Si_nm"],
+        sigma_z_nm=recoil_oxygen["E22_8p0nm_SiO2"]["primary_sigma_z_in_Si_nm"],
         T_epi_C=25.0, t_mbe_s=1.0, T_peak_K=1440.0, n_flash_pulses=1,
     )
 
     # =========================================================================
-    # 4. Exact 2D Image-Charge McWhorter Electrostatics & Exp137 Bridge
+    # 4. Exact 2D McWhorter, OBS-094 1 atm FGA vs UHV Leak-Valve, OBS-095 Oxide/Regrowth
     # =========================================================================
-    # Radial grid convergence check (n_r = 400 vs 800 vs 1600)
     g400 = mcwhorter_geom_integrals(14.5, n_r=400)
     g800 = mcwhorter_geom_integrals(14.5, n_r=800)
     g1600 = mcwhorter_geom_integrals(14.5, n_r=1600)
@@ -169,45 +198,80 @@ def main() -> None:
         abs(g1600["I_Ez_V2"] - g800["I_Ez_V2"]) / g1600["I_Ez_V2"],
     )
 
-    rec22_O = recoil_oxygen["E22_1p5nm_SiO2"]["O_injected_into_Si_per_ion"]
-    rec20_O = recoil_oxygen["E20_1p5nm_SiO2"]["O_injected_into_Si_per_ion"]
+    # OBS-094: Dedicated 1 atm FGA vs failed UHV TMP+NEG leak valve
+    fga_passivation_audit = {
+        "dedicated_1atm_furnace_5pctH2_38Torr": evaluate_fga_passivation_kinetics(P_H2_torr=38.0, T_C=350.0, t_min=15.0),
+        "uhv_leak_valve_high_5e_5Torr": evaluate_fga_passivation_kinetics(P_H2_torr=5.0e-5, T_C=350.0, t_min=15.0),
+        "uhv_leak_valve_low_5e_7Torr": evaluate_fga_passivation_kinetics(P_H2_torr=5.0e-7, T_C=350.0, t_min=15.0),
+        "process_change": (
+            "Route C forming-gas passivation moved from S5.6 UHV TMP+NEG leak valve (fails by 6-8 orders "
+            "of magnitude: 21.7 to 2,170 years, and thermally depassivates PbH) to an isolated valved "
+            "~1 atm 5% H2/N2 furnace/RTA bake cell (P_H2=38 Torr, 350-400 C / 15 min, post-gate-oxide/post-metal)."
+        ),
+    }
+
+    # OBS-095: Gate-oxide Si consumption (0.44*d_ox), OED, and pre-MBE H-desorption regrowth traps
+    gate_oxide_and_regrowth_audit = {
+        "ald_lowT_8nm_zero_Si_consumption": evaluate_gate_oxide_and_regrowth_interface(
+            delta_z_cap_nm=8.0, d_ox_nm=8.0, oxide_process="ald_lowT", t_uhv_transfer_min=5.0, P_uhv_torr=2.0e-10
+        ),
+        "thermal_SiO2_8nm_uncompensated_cap": evaluate_gate_oxide_and_regrowth_interface(
+            delta_z_cap_nm=8.0, d_ox_nm=8.0, oxide_process="thermal_SiO2", t_uhv_transfer_min=5.0, P_uhv_torr=2.0e-10
+        ),
+        "thermal_SiO2_8nm_pilot3A_stress_uhv": evaluate_gate_oxide_and_regrowth_interface(
+            delta_z_cap_nm=8.0, d_ox_nm=8.0, oxide_process="thermal_SiO2", t_uhv_transfer_min=15.0, P_uhv_torr=1.0e-8
+        ),
+    }
+    D_it_regrowth_nom = gate_oxide_and_regrowth_audit["ald_lowT_8nm_zero_Si_consumption"]["regrowth_interface_D_it_cm2_eV"]
+
+    # OBS-129: Consistent oxide thickness (d_ox_nm matched between recoil-O, primary BCA, and McWhorter!)
+    rec22_O_8nm = recoil_oxygen["E22_8p0nm_SiO2"]["O_injected_into_Si_per_ion"]
+    rec20_O_8nm = recoil_oxygen["E20_8p0nm_SiO2"]["O_injected_into_Si_per_ion"]
+    rec22_O_1p5nm = recoil_oxygen["E22_1p5nm_SiO2"]["O_injected_into_Si_per_ion"]
+    rec20_O_1p5nm = recoil_oxygen["E20_1p5nm_SiO2"]["O_injected_into_Si_per_ion"]
+    rec20_O = rec20_O_1p5nm
+    rec22_O = rec22_O_1p5nm
     N_def_opt = float(mbe_opt["N_def_cm3"])
 
     charge_noise_routes = {
         "route_B_22keV_through_cap": evaluate_charge_noise_routes(
-            z_donor_nm=bca_raw[22.0]["Rp_nm"], D_it_cm2_eV=1.8e11, d_ox_nm=8.0,
-            bulk_defect_N_cm3=1.0e14, recoil_O_per_ion=rec22_O,
+            z_donor_nm=recoil_oxygen["E22_8p0nm_SiO2"]["primary_Rp_in_Si_nm"], D_it_cm2_eV=1.8e11, d_ox_nm=8.0,
+            bulk_defect_N_cm3=1.0e14, recoil_O_per_ion=rec22_O_8nm,
+        ),
+        "route_B_22keV_consistent_dox1p5nm": evaluate_charge_noise_routes(
+            z_donor_nm=recoil_oxygen["E22_1p5nm_SiO2"]["primary_Rp_in_Si_nm"], D_it_cm2_eV=1.8e11, d_ox_nm=1.5,
+            bulk_defect_N_cm3=1.0e14, recoil_O_per_ion=rec22_O_1p5nm,
         ),
         "route_B_20keV_through_cap": evaluate_charge_noise_routes(
-            z_donor_nm=bca_raw[20.0]["Rp_nm"], D_it_cm2_eV=1.8e11, d_ox_nm=8.0,
-            bulk_defect_N_cm3=1.0e14, recoil_O_per_ion=rec20_O,
+            z_donor_nm=recoil_oxygen["E20_8p0nm_SiO2"]["primary_Rp_in_Si_nm"], D_it_cm2_eV=1.8e11, d_ox_nm=8.0,
+            bulk_defect_N_cm3=1.0e14, recoil_O_per_ion=rec20_O_8nm,
         ),
         "route_A_5keV_post_anneal_mbe_unpassivated": evaluate_charge_noise_routes(
-            z_donor_nm=bca_raw[5.0]["Rp_nm"] + 8.0, D_it_cm2_eV=1.0e11, d_ox_nm=8.0,
+            z_donor_nm=rp5_true + 8.0, D_it_cm2_eV=1.0e11 + D_it_regrowth_nom, d_ox_nm=8.0,
             bulk_defect_N_cm3=N_def_opt, recoil_O_per_ion=0.0,
         ),
         "route_C_nominal_FG350C_Dit_1p5e10": evaluate_charge_noise_routes(
-            z_donor_nm=bca_raw[5.0]["Rp_nm"] + 8.0, D_it_cm2_eV=1.5e10, d_ox_nm=8.0,
+            z_donor_nm=rp5_true + 8.0, D_it_cm2_eV=1.5e10 + D_it_regrowth_nom, d_ox_nm=8.0,
             bulk_defect_N_cm3=N_def_opt, recoil_O_per_ion=0.0,
         ),
         "route_C_conservative_Dit_3p0e10": evaluate_charge_noise_routes(
-            z_donor_nm=bca_raw[5.0]["Rp_nm"] + 8.0, D_it_cm2_eV=3.0e10, d_ox_nm=8.0,
+            z_donor_nm=rp5_true + 8.0, D_it_cm2_eV=3.0e10 + D_it_regrowth_nom, d_ox_nm=8.0,
             bulk_defect_N_cm3=N_def_opt, recoil_O_per_ion=0.0,
         ),
         "route_C_optimistic_Dit_1p0e10_dox8": evaluate_charge_noise_routes(
-            z_donor_nm=bca_raw[5.0]["Rp_nm"] + 8.0, D_it_cm2_eV=1.0e10, d_ox_nm=8.0,
+            z_donor_nm=rp5_true + 8.0, D_it_cm2_eV=1.0e10 + D_it_regrowth_nom, d_ox_nm=8.0,
             bulk_defect_N_cm3=N_def_opt, recoil_O_per_ion=0.0,
         ),
         "route_C_thin_oxide_Dit_1p0e10_dox5": evaluate_charge_noise_routes(
-            z_donor_nm=bca_raw[5.0]["Rp_nm"] + 8.0, D_it_cm2_eV=1.0e10, d_ox_nm=5.0,
+            z_donor_nm=rp5_true + 8.0, D_it_cm2_eV=1.0e10 + D_it_regrowth_nom, d_ox_nm=5.0,
             bulk_defect_N_cm3=N_def_opt, recoil_O_per_ion=0.0,
         ),
         "route_A_14keV_deep_23nm_unpassivated": evaluate_charge_noise_routes(
-            z_donor_nm=23.0, D_it_cm2_eV=1.0e11, d_ox_nm=8.0,
+            z_donor_nm=23.0, D_it_cm2_eV=1.0e11 + D_it_regrowth_nom, d_ox_nm=8.0,
             bulk_defect_N_cm3=N_def_opt, recoil_O_per_ion=0.0,
         ),
         "route_C_14keV_deep_23nm_Dit_1p5e10": evaluate_charge_noise_routes(
-            z_donor_nm=23.0, D_it_cm2_eV=1.5e10, d_ox_nm=8.0,
+            z_donor_nm=23.0, D_it_cm2_eV=1.5e10 + D_it_regrowth_nom, d_ox_nm=8.0,
             bulk_defect_N_cm3=N_def_opt, recoil_O_per_ion=0.0,
         ),
     }
@@ -237,27 +301,44 @@ def main() -> None:
     sig_C_v5 = float(thermal_chain_5keV_v5_1530K["route_C_full_chain"]["sigma_anneal_nm"])
     sig_B_fl = float(thermal_chain_22keV_B["flash_only"]["sigma_anneal_nm"])
 
+    L_seg_opt = float(mbe_opt["L_seg_nm"])
+
     def make_final_ensemble(
-        z_base: np.ndarray, r_xy_base: np.ndarray, cap_nm: float, extra_z_sig: float, extra_xy_sig: float
+        z_base: np.ndarray, r_xy_base: np.ndarray, cap_nm: float, extra_z_sig: float, extra_xy_sig: float,
+        apply_mbe_segregation: bool = False,
     ) -> tuple[np.ndarray, np.ndarray]:
         dz_n = rng_ens.normal(0.0, extra_z_sig, size=z_base.size)
         dx_n = rng_ens.normal(0.0, extra_xy_sig, size=z_base.size)
         dy_n = rng_ens.normal(0.0, extra_xy_sig, size=z_base.size)
-        z_fin = np.maximum(0.5, z_base + cap_nm + dz_n)
+        z_shift = np.zeros_like(z_base)
+        if apply_mbe_segregation and cap_nm > 0.0:
+            # OBS-095: Apply MBE P surface segregation L_seg to near-surface donors (z_base < 2 nm)
+            near_surf = z_base < 2.0
+            if np.any(near_surf):
+                # Exponential segregation tail moving P upward into cap (reducing final depth by <= cap_nm)
+                seg_up = np.minimum(cap_nm, rng_ens.exponential(L_seg_opt, size=int(np.sum(near_surf))))
+                z_shift[near_surf] = -seg_up
+        z_fin = np.maximum(0.5, z_base + cap_nm + dz_n + z_shift)
         r_fin = np.hypot(r_xy_base + dx_n, dy_n)
         return z_fin, r_fin
 
     z_bare, r_bare = make_final_ensemble(bca_raw[5.0]["z_samples_nm"], bca_raw[5.0]["r_xy_samples_nm"], 0.0, sig_fl_v4, math.sqrt(EXP124_EQUIP_NO_ANN_VAR_NM2 + sig_fl_v4**2))
-    # v4.0 unmitigated 1440 K flash ensembles (showing latent back-end TED penalty)
-    z_rA_v4, r_rA_v4 = make_final_ensemble(bca_raw[5.0]["z_samples_nm"], bca_raw[5.0]["r_xy_samples_nm"], 8.0, math.hypot(sig_A_v4, R_q_opt), math.sqrt(EXP124_EQUIP_NO_ANN_VAR_NM2 + sig_A_v4**2))
-    z_rC_v4, r_rC_v4 = make_final_ensemble(bca_raw[5.0]["z_samples_nm"], bca_raw[5.0]["r_xy_samples_nm"], 8.0, math.hypot(sig_C_v4, R_q_opt), math.sqrt(EXP124_EQUIP_NO_ANN_VAR_NM2 + sig_C_v4**2))
-    # v5.0 cluster-clearing 1530 K (43.49 J/cm^2) flash ensembles (RECOMMENDED v5.0 LOCKED RECIPE)
-    z_rA_v5, r_rA_v5 = make_final_ensemble(bca_raw[5.0]["z_samples_nm"], bca_raw[5.0]["r_xy_samples_nm"], 8.0, math.hypot(sig_A_v5, R_q_opt), math.sqrt(EXP124_EQUIP_NO_ANN_VAR_NM2 + sig_A_v5**2))
-    z_rC_v5, r_rC_v5 = make_final_ensemble(bca_raw[5.0]["z_samples_nm"], bca_raw[5.0]["r_xy_samples_nm"], 8.0, math.hypot(sig_C_v5, R_q_opt), math.sqrt(EXP124_EQUIP_NO_ANN_VAR_NM2 + sig_C_v5**2))
+    z_rA_v4, r_rA_v4 = make_final_ensemble(bca_raw[5.0]["z_samples_nm"], bca_raw[5.0]["r_xy_samples_nm"], 8.0, math.hypot(sig_A_v4, R_q_opt), math.sqrt(EXP124_EQUIP_NO_ANN_VAR_NM2 + sig_A_v4**2), apply_mbe_segregation=True)
+    z_rC_v4, r_rC_v4 = make_final_ensemble(bca_raw[5.0]["z_samples_nm"], bca_raw[5.0]["r_xy_samples_nm"], 8.0, math.hypot(sig_C_v4, R_q_opt), math.sqrt(EXP124_EQUIP_NO_ANN_VAR_NM2 + sig_C_v4**2), apply_mbe_segregation=True)
+    z_rA_v5, r_rA_v5 = make_final_ensemble(bca_raw[5.0]["z_samples_nm"], bca_raw[5.0]["r_xy_samples_nm"], 8.0, math.hypot(sig_A_v5, R_q_opt), math.sqrt(EXP124_EQUIP_NO_ANN_VAR_NM2 + sig_A_v5**2), apply_mbe_segregation=True)
+    z_rC_v5, r_rC_v5 = make_final_ensemble(bca_raw[5.0]["z_samples_nm"], bca_raw[5.0]["r_xy_samples_nm"], 8.0, math.hypot(sig_C_v5, R_q_opt), math.sqrt(EXP124_EQUIP_NO_ANN_VAR_NM2 + sig_C_v5**2), apply_mbe_segregation=True)
+    # OBS-006 & OBS-095: Thin-cap 4 nm @ 5 keV, thermal-oxide consumed cap (4.48 nm), plus 3 keV & 2 keV & 121Sb trade-off options!
+    z_rC_cap4, r_rC_cap4 = make_final_ensemble(bca_raw[5.0]["z_samples_nm"], bca_raw[5.0]["r_xy_samples_nm"], 4.0, math.hypot(sig_C_v5, R_q_opt), math.sqrt(EXP124_EQUIP_NO_ANN_VAR_NM2 + sig_C_v5**2), apply_mbe_segregation=True)
+    z_rC_thox, r_rC_thox = make_final_ensemble(bca_raw[5.0]["z_samples_nm"], bca_raw[5.0]["r_xy_samples_nm"], 8.0 - 0.44 * 8.0, math.hypot(sig_C_v5, R_q_opt), math.sqrt(EXP124_EQUIP_NO_ANN_VAR_NM2 + sig_C_v5**2), apply_mbe_segregation=True)
+    z_3keV_cap6, r_3keV_cap6 = make_final_ensemble(bca_raw[3.0]["z_samples_nm"], bca_raw[3.0]["r_xy_samples_nm"], 6.0, math.hypot(sig_C_v5, R_q_opt), math.sqrt(EXP124_EQUIP_NO_ANN_VAR_NM2 + sig_C_v5**2), apply_mbe_segregation=True)
+    z_2keV_cap8, r_2keV_cap8 = make_final_ensemble(bca_raw[2.0]["z_samples_nm"], bca_raw[2.0]["r_xy_samples_nm"], 8.0, math.hypot(sig_C_v5, R_q_opt), math.sqrt(EXP124_EQUIP_NO_ANN_VAR_NM2 + sig_C_v5**2), apply_mbe_segregation=True)
+    # Heavy-ion 7.5 keV 121Sb+ iradina profile (Rp=11.136 nm, dRp=2.875 nm, sig_lat=2.911 nm) + 3.0 nm cap
+    z_sb75 = np.maximum(1.0, rng_ens.normal(11.136, 2.875, size=2500))
+    r_sb75 = np.hypot(rng_ens.normal(0.0, 2.911, size=2500), rng_ens.normal(0.0, 2.911, size=2500))
+    z_sb_cap3, r_sb_cap3 = make_final_ensemble(z_sb75, r_sb75, 3.0, math.hypot(sig_C_v5, R_q_opt), math.sqrt(EXP124_EQUIP_NO_ANN_VAR_NM2 + sig_C_v5**2))
 
     z_rB22, r_rB22 = make_final_ensemble(bca_raw[22.0]["z_samples_nm"], bca_raw[22.0]["r_xy_samples_nm"], 0.0, sig_B_fl, math.sqrt(EXP124_EQUIP_NO_ANN_VAR_NM2 + sig_B_fl**2))
     z_rB20, r_rB20 = make_final_ensemble(bca_raw[20.0]["z_samples_nm"], bca_raw[20.0]["r_xy_samples_nm"], 0.0, sig_B_fl, math.sqrt(EXP124_EQUIP_NO_ANN_VAR_NM2 + sig_B_fl**2))
-    # 14 keV SRIM/Tosi anchor (z0=15.0 +- 5.0 nm, r_xy ~ 6.0 nm) + 8.0 nm cap -> 23.0 nm
     z14_srim = np.maximum(1.0, rng_ens.normal(15.0, 5.0, size=2500))
     r14_srim = np.hypot(rng_ens.normal(0.0, 6.0, size=2500), rng_ens.normal(0.0, 6.0, size=2500))
     z_14_cap, r_14_cap = make_final_ensemble(z14_srim, r14_srim, 8.0, math.hypot(sig_C_v5, R_q_opt), math.sqrt(EXP124_EQUIP_NO_ANN_VAR_NM2 + sig_C_v5**2))
@@ -273,6 +354,11 @@ def main() -> None:
         "route_C_v4_1440K_5keV_8nm_FG350C": evaluate_route_flipflop_yield(z_rC_v4, r_rC_v4, s_eps_uev=S_eps_C, max_donors=2000, seed=103),
         "route_A_v5_1530K_5keV_8nm_mbe": evaluate_route_flipflop_yield(z_rA_v5, r_rA_v5, s_eps_uev=S_eps_A, max_donors=2000, seed=107),
         "route_C_v5_1530K_5keV_8nm_FG350C": evaluate_route_flipflop_yield(z_rC_v5, r_rC_v5, s_eps_uev=S_eps_C, max_donors=2000, seed=108),
+        "route_C_v5_5keV_thin_4nm_cap_opt": evaluate_route_flipflop_yield(z_rC_cap4, r_rC_cap4, s_eps_uev=S_eps_C, max_donors=2000, seed=109),
+        "route_C_v5_5keV_thermal_SiO2_consumed_4p48nm": evaluate_route_flipflop_yield(z_rC_thox, r_rC_thox, s_eps_uev=S_eps_C, max_donors=2000, seed=110),
+        "tradeoff_3keV_31P_6nm_cap_needs_cryoJFET_IBIC": evaluate_route_flipflop_yield(z_3keV_cap6, r_3keV_cap6, s_eps_uev=S_eps_C, max_donors=2000, seed=111),
+        "tradeoff_2keV_31P_8nm_cap_needs_ulc_IBIC": evaluate_route_flipflop_yield(z_2keV_cap8, r_2keV_cap8, s_eps_uev=S_eps_C, max_donors=2000, seed=112),
+        "tradeoff_7p5keV_121Sb_3nm_cap_heavy_ion": evaluate_route_flipflop_yield(z_sb_cap3, r_sb_cap3, s_eps_uev=S_eps_C, max_donors=2000, seed=113),
         "route_B_22keV_through_cap_flash": evaluate_route_flipflop_yield(z_rB22, r_rB22, s_eps_uev=S_eps_B22, max_donors=2000, seed=104),
         "route_B_20keV_through_cap_flash": evaluate_route_flipflop_yield(z_rB20, r_rB20, s_eps_uev=S_eps_B20, max_donors=2000, seed=105),
         "route_A_14keV_srim_15nm_plus_8nm_cap": evaluate_route_flipflop_yield(z_14_cap, r_14_cap, s_eps_uev=S_eps_C, max_donors=2000, seed=106),
@@ -332,7 +418,16 @@ def main() -> None:
             "deposition_time_range_s": [40.0, 160.0],
             "optimal_substrate_T_C": T_epi_opt_C,
             "substrate_heater": "Load-Lock UHV pyrolytic-BN radiative chuck (RT-450 C, PID +-2 C, 150 W max)",
-            "passivation_manifold_route_C": "Precision leak-valve 5% H2/N2 forming-gas (or UHV atomic-H thermal cracker), 350 C / 15 min, backed by 80 L/s TMP + NEG",
+            "passivation_manifold_route_C": (
+                "Dedicated isolated valved ~1 atm forming-gas furnace/RTA bake cell (5% H2/N2, P_H2=38 Torr, "
+                "350-400 C / 15 min, post-gate-oxide / post-metallization). OBS-094: UHV TMP+NEG leak valve "
+                "removed because P_H2~1e-6 Torr fails Henry's-law passivation by 6-8 orders (21.7-2,170 yr)."
+            ),
+            "gate_oxide_process_spec": (
+                "Low-T ALD oxide (200-300 C, 0.0 nm Si consumption, 0 OED) + post-metal 1 atm FGA; "
+                "if thermal SiO2 (d_ox=8 nm) is used instead, pre-compensate MBE cap by +0.44*d_ox (+3.52 nm). "
+                "Pre-implant surface must be H-terminated / flash-desorbed oxide-free (<0.3 nm) to prevent 0.69 O/ion recoil."
+            ),
         },
         "mass_power_cryo": {
             "mass_breakdown_kg": {
@@ -416,9 +511,9 @@ def main() -> None:
         and (1.0 / S_eps_C) >= 2.2
     )
 
-    sig_tot_v4_chain = exp124_sigma_tot(3.259, float(thermal_chain_5keV_v4["route_C_full_chain"]["sigma_anneal_nm"]))
-    sig_tot_v5_1530K = exp124_sigma_tot(3.259, float(thermal_chain_5keV_v5_1530K["route_C_full_chain"]["sigma_anneal_nm"]))
-    sig_tot_v5_quad = exp124_sigma_tot(3.259, float(thermal_chain_5keV_v5_quad["route_C_full_chain"]["sigma_anneal_nm"]))
+    sig_tot_v4_chain = exp124_sigma_tot(siglat5_true, float(thermal_chain_5keV_v4["route_C_full_chain"]["sigma_anneal_nm"]))
+    sig_tot_v5_1530K = exp124_sigma_tot(siglat5_true, float(thermal_chain_5keV_v5_1530K["route_C_full_chain"]["sigma_anneal_nm"]))
+    sig_tot_v5_quad = exp124_sigma_tot(siglat5_true, float(thermal_chain_5keV_v5_quad["route_C_full_chain"]["sigma_anneal_nm"]))
     ep5_pass = (
         abs(thermal_chain_5keV_v4["delta_sigma_anneal_route_C_nm"]) < 0.01
         and thermal_chain_5keV_v4["route_C_full_chain"]["sigma_anneal_nm"] <= 0.35
@@ -490,9 +585,11 @@ def main() -> None:
         "EP5": {
             "pass": ep5_pass,
             "summary": (
-                f"HONEST DISCOVERY @ v4 1x1440K (41.15 J/cm^2): {thermal_chain_5keV_v4['cluster_remaining_frac_post_flash']*100:.1f}% {{311}} clusters survive flash -> "
-                f"+{thermal_chain_5keV_v4['delta_sigma_anneal_route_C_nm']:.2f}nm latent back-end TED during MBE+350C FG (tot={thermal_chain_5keV_v4['route_C_full_chain']['sigma_anneal_nm']:.3f}nm, Exp124={sig_tot_v4_chain:.3f}nm); "
-                f"v5 FIX (1x1530K / 43.49 J/cm^2): 99.99% cluster clear -> tot={thermal_chain_5keV_v5_1530K['route_C_full_chain']['sigma_anneal_nm']:.3f}nm, Exp124={sig_tot_v5_1530K:.3f}nm (<=3.80)!"
+                f"OBS-038 FIXED (Em_I=0.90 eV + I-V recomb): v4 1x1440K back-end delta_sigma={thermal_chain_5keV_v4['delta_sigma_anneal_route_C_nm']:.4f}nm "
+                f"(tot={thermal_chain_5keV_v4['route_C_full_chain']['sigma_anneal_nm']:.3f}nm; legacy Em_I=1.77eV frozen-monomer artifact gave {thermal_chain_5keV_v4_legacy_177['route_C_full_chain']['sigma_anneal_nm']:.3f}nm); "
+                f"iradina cascade damage sensitivity (1530K): 10% (1.5e20) -> {thermal_chain_5keV_v5_iradina10pct['route_C_full_chain']['sigma_anneal_nm']:.3f}nm, "
+                f"30% (4.5e20) -> {thermal_chain_5keV_v5_iradina30pct['route_C_full_chain']['sigma_anneal_nm']:.3f}nm; "
+                f"true-BCA Exp124 sig_tot={sig_tot_v5_1530K:.3f}nm (>3.80 nm ceiling)"
             ),
         },
         "EP6": {
@@ -550,8 +647,12 @@ def main() -> None:
             "combined_sigma_iso_flash_plus_mbe_nm": round(sigma_iso_combined_v4, 6),
         },
         "coupled_thermal_chain_ted": {
+            "v4_1x1440K_41p15J_fixed_EmI0p90": thermal_chain_5keV_v4,
             "v4_1x1440K_41p15J_unmitigated": thermal_chain_5keV_v4,
+            "v4_1x1440K_legacy_EmI1p77_monomer_freezing_artifact": thermal_chain_5keV_v4_legacy_177,
             "v5_1x1530K_43p49J_cluster_clearing": thermal_chain_5keV_v5_1530K,
+            "v5_1x1530K_iradina_damage_10pct_1p5e20": thermal_chain_5keV_v5_iradina10pct,
+            "v5_1x1530K_iradina_damage_30pct_4p5e20": thermal_chain_5keV_v5_iradina30pct,
             "v5_4x1440K_41p15J_quad_pulse": thermal_chain_5keV_v5_quad,
             "lit_14keV_srim_15nm_v5_1530K": thermal_chain_14keV_v5,
             "route_B_22keV_through_cap": thermal_chain_22keV_B,
@@ -561,6 +662,8 @@ def main() -> None:
             "v5_s55_window_fluence_1530K_AR_J_cm2": round(F_win_v5_AR, 2),
             "v5_s55_lidt_margin_1530K_vs_100J_AR": round(100.0 / F_win_v5_AR, 2),
         },
+        "fga_passivation_kinetics_obs094": fga_passivation_audit,
+        "gate_oxide_and_regrowth_obs095": gate_oxide_and_regrowth_audit,
         "charge_noise_and_exp137_bridge": {
             "routes": charge_noise_routes,
             "recommended_route_C_S_eps_band_ueV_rtHz": {

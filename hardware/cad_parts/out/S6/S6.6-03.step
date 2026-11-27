@@ -1,14 +1,14 @@
 ISO-10303-21;
 HEADER;
-FILE_DESCRIPTION(('Atom Lithography Machine CAD Part S6.6-03','M0_M1_DETAILED_CAD_DESIGN_ONLY; no_lab_measurement=true; iec61508_certified=false; semi_s2_certified=false; rep=watertight_envelope_proxy(full_stl_faces=3040;step_faces=12;exact_bbox); bbox_mm=44.000x22.000x334.000'),'2;1');
-FILE_NAME('S6.6-03.step','2026-11-25T02:29:10',('Atom Lithography CAD Kernel'),('Hydrogen Mechanical Design'),'Pure-Python ISO 10303-21 AP214 Writer','hardware.cad_parts.core.step_writer','M0_M1_DETAILED_CAD_DESIGN_ONLY');
+FILE_DESCRIPTION(('Atom Lithography Machine CAD Part S6.6-03','M0_M1_DETAILED_CAD_DESIGN_ONLY; no_lab_measurement=true; iec61508_certified=false; semi_s2_certified=false; rep=watertight_envelope_proxy(full_stl_faces=6048;step_faces=12;exact_bbox); bbox_mm=44.000x22.000x334.000'),'2;1');
+FILE_NAME('S6.6-03.step','2026-11-27T18:07:56',('Atom Lithography CAD Kernel'),('Hydrogen Mechanical Design'),'Pure-Python ISO 10303-21 AP214 Writer','hardware.cad_parts.core.step_writer','M0_M1_DETAILED_CAD_DESIGN_ONLY');
 FILE_SCHEMA(('AUTOMOTIVE_DESIGN { 1 0 10303 214 1 1 1 1 }'));
 ENDSEC;
 DATA;
 #1=APPLICATION_CONTEXT('core data for automotive mechanical design processes');
 #2=APPLICATION_PROTOCOL_DEFINITION('international standard','automotive_design',2000,#1);
 #3=PRODUCT_CONTEXT('',#1,'mechanical');
-#4=PRODUCT('S6.6-03','Giris kriyo koaksiyel (SS) + 3x kriyo zayiflatici seti (56 zincir, Exp114)','Material=304 SS; Temp=300 K -> 20 mK; Vacuum=Kriyo-vakum; BBox=44.00x22.00x334.00mm; watertight_envelope_proxy(full_stl_faces=3040;step_faces=12;exact_bbox)',(#3));
+#4=PRODUCT('S6.6-03','Giris kriyo koaksiyel (SS) + 3x kriyo zayiflatici seti (56 zincir, Exp114)','Material=304 SS; Temp=300 K -> 20 mK; Vacuum=Kriyo-vakum; BBox=44.00x22.00x334.00mm; watertight_envelope_proxy(full_stl_faces=6048;step_faces=12;exact_bbox)',(#3));
 #5=PRODUCT_RELATED_PRODUCT_CATEGORY('part','',(#4));
 #6=PRODUCT_DEFINITION_FORMATION_WITH_SPECIFIED_SOURCE('1','M0_M1_DETAILED_CAD_DESIGN_ONLY',#4,.NOT_KNOWN.);
 #7=PRODUCT_DEFINITION_CONTEXT('part definition',#1,'design');

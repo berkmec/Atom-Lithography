@@ -38,14 +38,14 @@
       "triangle_count": 8020,
       "temp_k": 300.0,
       "canonical_bbox_min_mm": [
-        -394.659,
-        -252.933,
-        475.25
+        478.145,
+        109.483,
+        425.25
       ],
       "canonical_bbox_max_mm": [
-        -194.021,
-        -103.275,
-        544.75
+        632.926,
+        307.506,
+        494.75
       ],
       "datum_shift_mm": [
         0.0,
@@ -61,7 +61,14 @@
     "rtl_modules": [],
     "rtl_audit_json": null,
     "software_and_eda_files": [],
-    "verification_tests": []
+    "verification_tests": [
+      "tests/test_bom_detailed.py",
+      "tests/test_full_180_traceability.py",
+      "tests/test_cad_s5.py",
+      "tests/test_exp130.py",
+      "tests/test_cad_parts.py",
+      "tests/test_exp139.py"
+    ]
   },
   "specialized_specification": null,
   "verification_status": {
@@ -71,6 +78,7 @@
     "rtl_verified": false,
     "software_or_eda_verified": false,
     "specialized_icd_present": false,
+    "verification_tests_mapped": true,
     "traceable": true
   },
   "epistemic": {

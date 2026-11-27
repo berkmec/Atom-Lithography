@@ -171,7 +171,7 @@ def build_bb288_thickness2_m4_layout(
     l1_all_unit_torus = bool(np.allclose(l1_torus_dists, 1.0, atol=1e-12))
     l2_torus_unique = sorted({round(float(d), 4) for d in l2_torus_dists})
 
-    # Compute folded flat-chip Euclidean distances (in cell-pitch units)
+    # Compute folded flat-chip Euclidean AND exact orthogonal Manhattan distances (OBS-045)
     e1_grid = np.array(
         [math.hypot(coords_folded[u][0] - coords_folded[v][0], coords_folded[u][1] - coords_folded[v][1]) for u, v in layer1_edges],
         dtype=np.float64,
@@ -180,7 +180,41 @@ def build_bb288_thickness2_m4_layout(
         [math.hypot(coords_folded[u][0] - coords_folded[v][0], coords_folded[u][1] - coords_folded[v][1]) for u, v in layer2_edges],
         dtype=np.float64,
     )
+    m1_grid = np.array(
+        [abs(coords_folded[u][0] - coords_folded[v][0]) + abs(coords_folded[u][1] - coords_folded[v][1]) for u, v in layer1_edges],
+        dtype=np.float64,
+    )
+    m2_grid = np.array(
+        [abs(coords_folded[u][0] - coords_folded[v][0]) + abs(coords_folded[u][1] - coords_folded[v][1]) for u, v in layer2_edges],
+        dtype=np.float64,
+    )
     all_e_grid = np.concatenate([e1_grid, e2_grid])
+
+    # OBS-045: Exact flat-chip airbridge crossing counts for BB_288 (484 L1 + 23,772 L2 = 24,256!)
+    def _count_proper_crossings(edges: List[Tuple[int, int]]) -> int:
+        segs = [(coords_folded[u], coords_folded[v], u, v) for u, v in edges]
+        cnt = 0
+        for i in range(len(segs)):
+            (x1, y1), (x2, y2), u1, v1 = segs[i]
+            b1x0, b1x1 = (x1, x2) if x1 < x2 else (x2, x1)
+            b1y0, b1y1 = (y1, y2) if y1 < y2 else (y2, y1)
+            for j in range(i + 1, len(segs)):
+                (x3, y3), (x4, y4), u2, v2 = segs[j]
+                if u1 == u2 or u1 == v2 or v1 == u2 or v1 == v2:
+                    continue
+                if max(x3, x4) < b1x0 or min(x3, x4) > b1x1 or max(y3, y4) < b1y0 or min(y3, y4) > b1y1:
+                    continue
+                d1 = (x4 - x3) * (y1 - y3) - (y4 - y3) * (x1 - x3)
+                d2 = (x4 - x3) * (y2 - y3) - (y4 - y3) * (x2 - x3)
+                d3 = (x2 - x1) * (y3 - y1) - (y2 - y1) * (x3 - x1)
+                d4 = (x2 - x1) * (y4 - y1) - (y2 - y1) * (x4 - x1)
+                if ((d1 > 0 and d2 < 0) or (d1 < 0 and d2 > 0)) and ((d3 > 0 and d4 < 0) or (d3 < 0 and d4 > 0)):
+                    cnt += 1
+        return cnt
+
+    xings_l1_flat = _count_proper_crossings(layer1_edges)
+    xings_l2_flat = _count_proper_crossings(layer2_edges)
+    l_res_loaded_um = 250.0  # OBS-140 loaded meander ceiling at 160 pF/m
 
     pitch_sweep: List[Dict[str, Any]] = []
     for pitch in pitches_um:
@@ -188,6 +222,10 @@ def build_bb288_thickness2_m4_layout(
         L_l2_med = float(np.median(e2_grid) * pitch)
         L_l2_max = float(np.max(e2_grid) * pitch)
         L_max = float(np.max(all_e_grid) * pitch)
+        L_l1_manh_max = float(np.max(m1_grid) * pitch)
+        L_l2_manh_med = float(np.median(m2_grid) * pitch)
+        L_l2_manh_max = float(np.max(m2_grid) * pitch)
+        L_l2_manh_frac_gt_300 = float(np.mean(m2_grid * pitch > l_res_nominal_um))
         f_r_fixed = f_r_nominal_ghz if L_max <= l_res_nominal_um else f_r_nominal_ghz * (l_res_nominal_um / L_max)
         L_sq_5G = 100.0 if L_max <= l_res_nominal_um else 100.0 * ((l_res_nominal_um / L_max) ** 2)
         pitch_sweep.append({
@@ -198,7 +236,13 @@ def build_bb288_thickness2_m4_layout(
             "layer2_median_eucl_um": round(L_l2_med, 1),
             "layer2_max_eucl_um": round(L_l2_max, 1),
             "L_max_um": round(L_max, 1),
+            "layer1_max_manh_um": round(L_l1_manh_max, 1),
+            "layer2_median_manh_um": round(L_l2_manh_med, 1),
+            "layer2_max_manh_um": round(L_l2_manh_max, 1),
+            "layer2_frac_gt_300um_manh": round(L_l2_manh_frac_gt_300, 4),
             "fits_300um_m4_resonator": bool(L_max <= l_res_nominal_um),
+            "fits_300um_m4_manhattan": bool(max(L_l1_manh_max, L_l2_manh_max) <= l_res_nominal_um),
+            "fits_250um_loaded_meander_eucl": bool(L_max <= l_res_loaded_um),
             "fits_500um_extended_m4": bool(L_max <= 500.0),
             "f_r_fixed_100pH_ghz": round(f_r_fixed, 3),
             "L_sq_pH_for_5GHz": round(L_sq_5G, 1),
@@ -215,6 +259,9 @@ def build_bb288_thickness2_m4_layout(
         "torus_thickness": 2,
         "layer1_all_unit_torus_distance": l1_all_unit_torus,
         "layer1_torus_crossings": 0 if l1_all_unit_torus else -1,
+        "flat_folded_layer1_airbridges": int(xings_l1_flat),
+        "flat_folded_layer2_airbridges": int(xings_l2_flat),
+        "total_flat_airbridge_crossings": int(xings_l1_flat + xings_l2_flat),
         "layer2_torus_lengths_pitch": l2_torus_unique,
         "pitch_sweep": pitch_sweep,
         "coords_folded": coords_folded,
@@ -230,23 +277,27 @@ def compute_bb288_defect_yields(
     n_blocks_femoco_mem: int = 16,
 ) -> Dict[str, Any]:
     """Compute exact defect-free 576-cell [[288,12,18]] block yield, 5-block (60L) single-cryostat
-    yield, and 16-block (192L FeMoco memory) yield across Exp136/138/139 fabrication regimes.
+    yield, and 16-block (192L FeMoco memory) yield across legacy unfiltered AND honest DDRF
+    (OBS-029) + iradina/valley (OBS-047) fabrication regimes.
     """
+    fnr = 0.002008
     regimes = {
-        "f1p0_Ez0_no_stark": 0.5275 * 0.9770 * (1.0 - 0.002008),
-        "f1p5_Ez2MVm_v5_star": 0.7750 * 0.9770 * (1.0 - 0.002008),
+        "f1p0_Ez0_no_stark": 0.5275 * 0.9770 * (1.0 - fnr),
+        "f1p5_Ez2MVm_v5_star": 0.7750 * 0.9770 * (1.0 - fnr),
+        "f1p0_Ez0_ddrf6893": 0.2950 * 0.9770 * (1.0 - fnr),
+        "f1p5_Ez2MVm_ddrf6893": 0.5400 * 0.9770 * (1.0 - fnr),
+        "f1p5_Ez2MVm_iradina_valley_pff0p5375": 0.7750 * 0.5375 * (1.0 - fnr),
+        "f1p5_Ez2MVm_ddrf6893_and_iradina_valley": 0.5400 * 0.5375 * (1.0 - fnr),
     }
     out: Dict[str, Any] = {}
     for rname, p_slot in regimes.items():
         by_n: Dict[str, Any] = {}
-        for n_cand in (6, 7, 8, 9, 10, 11):
+        for n_cand in (6, 7, 8, 9, 10, 11, 14, 18, 24, 30):
             p_drop = (1.0 - p_slot) ** n_cand
             y_blk = (1.0 - p_drop) ** n_cells_block
             y_5blk = y_blk ** n_blocks_cryo
-            # Spared 4-of-5 (4 active + 1 cold spare = 48L per cryo) and 16-of-18 spared FeMoco memory
             y_4of5 = (y_blk ** 5) + 5.0 * (y_blk ** 4) * (1.0 - y_blk)
             y_16blk = y_blk ** n_blocks_femoco_mem
-            # Binomial >= 16 good out of 18 placed blocks (2 spares!)
             y_16of18 = (
                 (y_blk ** 18)
                 + 18.0 * (y_blk ** 17) * (1.0 - y_blk)
@@ -265,7 +316,10 @@ def compute_bb288_defect_yields(
                 "phys_candidates_per_block": n_cells_block * n_cand,
                 "phys_candidates_per_logical": round((n_cells_block * n_cand) / 12.0, 2),
             }
-        out[rname] = {"p_slot": round(p_slot, 5), "by_N_cand": by_n}
+        n_req_99 = 1
+        while ((1.0 - (1.0 - p_slot) ** n_req_99) ** n_cells_block) < 0.99 and n_req_99 < 100:
+            n_req_99 += 1
+        out[rname] = {"p_slot": round(p_slot, 5), "N_cand_req_99pct_block": int(n_req_99), "by_N_cand": by_n}
     return out
 
 

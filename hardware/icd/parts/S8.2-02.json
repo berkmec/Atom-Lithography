@@ -38,7 +38,9 @@
     ],
     "verification_tests": [
       "tests/test_full_180_traceability.py",
-      "tests/test_blanker_tile.py"
+      "tests/test_blanker_tile.py",
+      "tests/test_bom_detailed.py",
+      "tests/test_rtl_machine_ctrl.py"
     ]
   },
   "specialized_specification": {
@@ -59,10 +61,13 @@
     "openroad_signoff_summary": {
       "design_top": "blanker_tile",
       "pdk": "sky130A",
+      "tapeout_readiness_status": "PRE_FOUNDRY_NCH8_MACRO_PROTOTYPE_NOT_TAPEOUT_READY",
       "yosys_abc_cells": 11835,
+      "nch8_true_sync_fmax_tt_MHz": 272.48,
+      "nch8_true_sync_fmax_ss_MHz": 154.08,
       "exp76_wns_ns": 7.21,
-      "exp100_klayout_drc_violations": 0,
-      "exp101_klayout_lvs": "MATCH",
+      "exp100_klayout_drc_after_patch": 0,
+      "exp123_attempt2_status": "INVALID_DISCONNECTED_NETS",
       "tapeout_done": false
     }
   },
@@ -73,6 +78,7 @@
     "rtl_verified": true,
     "software_or_eda_verified": true,
     "specialized_icd_present": true,
+    "verification_tests_mapped": true,
     "traceable": true
   },
   "epistemic": {

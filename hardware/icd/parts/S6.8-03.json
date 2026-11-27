@@ -9,7 +9,7 @@
     "qty": "20",
     "unit": "L_STP",
     "material": "3He (%99.99 saflik, izotopik)",
-    "key_spec": "20 L STP (piyasa dalgalanmasina acik kritik sarj)",
+    "key_spec": "20 L STP (stratejik tahsis ve ihracat kontrolune tabi kritik izotop sarji)",
     "tolerance": ">99.99%",
     "temp_stage": "300 K -> 20 mK",
     "vacuum_grade": "Kapali dongu",
@@ -20,7 +20,7 @@
     "usd_high": 130000.0,
     "legacy_cad_module": "s6_cryo_dr_magnet_readout",
     "bom_epistemic_tag": "{Varsayım}",
-    "notes": "~$3,500/L STP nominal ($2k-$6.5k/L); 3He tedarik riski yuksek"
+    "notes": "~$3,500/L STP nominal ($2k-$6.5k/L); tek/duopoli stratejik 3He tahsis darbogazi; lead P10/P50/P90=24/44/78 hf; UNQUOTED_ROM_ESTIMATE"
   },
   "artifact_links": {
     "cad": null,
@@ -30,7 +30,12 @@
     "rtl_modules": [],
     "rtl_audit_json": null,
     "software_and_eda_files": [],
-    "verification_tests": []
+    "verification_tests": [
+      "tests/test_bom_detailed.py",
+      "tests/test_full_180_traceability.py",
+      "tests/test_exp125.py",
+      "tests/test_exp150.py"
+    ]
   },
   "specialized_specification": {
     "kind": "ISOTOPE_GAS_CHARGE_SPECIFICATION",
@@ -67,6 +72,7 @@
     "rtl_verified": false,
     "software_or_eda_verified": false,
     "specialized_icd_present": true,
+    "verification_tests_mapped": true,
     "traceable": true
   },
   "epistemic": {

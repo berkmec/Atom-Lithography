@@ -22,24 +22,26 @@
       "mean_time_ms": 43.607
     },
     "q16_16": {
-      "rms_freq_error_Hz": 73.38,
-      "mae_freq_error_Hz": 57.643,
+      "rms_freq_error_Hz": 73.384,
+      "mae_freq_error_Hz": 57.669,
       "fnr_pct": 0.4651,
       "fpr_pct": 0.0,
-      "mean_time_ms": 41.62,
-      "total_fpga_steps": 10912,
-      "total_fpga_compute_ms": 25.49
+      "mean_time_ms": 41.618,
+      "total_fpga_steps": 10911,
+      "total_fpga_compute_ms": 25.488
     },
     "parity": {
-      "abs_delta_rms_Hz": 0.0502,
-      "rms_quantization_diff_Hz": 1.5926,
-      "p99_quantization_diff_Hz": 0.4477,
-      "max_quantization_diff_Hz": 31.1121,
+      "abs_delta_rms_Hz": 0.0545,
+      "rms_quantization_diff_Hz": 1.5619,
+      "p99_quantization_diff_Hz": 0.4714,
+      "max_quantization_diff_Hz": 31.1082,
       "abs_delta_fnr_pct": 0.0,
       "abs_delta_fpr_pct": 0.0
     },
     "fpga_resources": {
       "target_fpga": "Xilinx Zynq UltraScale+ RFSoC ZU48DR (8x 5GSPS ADC / 8x 10GSPS DAC)",
+      "estimation_kind": "analytical_vivado_post_pnr_estimate",
+      "no_vendor_vivado_pnr": true,
       "f_clk_MHz": 250.0,
       "simd_lanes": 4,
       "cycles_per_boed_step": 584,
@@ -67,103 +69,171 @@
         "ff_pct": 9.59,
         "board_total_power_W": 37.98,
         "cryo_heat_load_W": 0.0
-      }
+      },
+      "epistemic_note": "Analytical per-engine/16ch budget represents a vendor Vivado post-P&R estimate (assuming 1-DSP packed multipliers; no Vivado run on host). Unshared full-32x32 Q16.16 RTL measured by Yosys synth_xilinx -family xcup pre-P&R is tracked separately under yosys_measured_pre_pnr."
     }
   },
   "mux_res": {
     "chain_physics": {
-      "f_center_GHz": 6.0,
+      "f_center_GHz": 7.8063,
+      "purcell_filter_topology": "Chebyshev_order_5_stepped_impedance_stub",
+      "purcell_passband_GHz": [
+        6.25,
+        9.75
+      ],
+      "purcell_passband_bw_GHz": 3.5,
+      "mux_comb_band_GHz": [
+        6.4,
+        9.6
+      ],
+      "f_qubit_M4_GHz": 5.0,
+      "min_detuning_to_M4_qubit_GHz": 1.45,
+      "min_clearance_to_6p264GHz_box_mode_MHz": 186.1,
+      "max_passband_insertion_loss_32ch_dB": 0.15,
+      "channels_gt_3dB_loss_32ch": 0,
+      "purcell_stopband_5GHz_dB": 37.95,
+      "legacy_80MHz_purcell_audit": {
+        "kappa_purcell_MHz": 80.0,
+        "band_GHz": [
+          4.4,
+          7.6
+        ],
+        "channels_gt_3dB_loss": 32,
+        "channels_gt_10dB_loss": 30,
+        "edge_channel_loss_dB": 31.77,
+        "closest_channel_to_5GHz_qubit_MHz": 50.0
+      },
+      "readout_topology": "hanger_notch_S21",
       "chi_MHz": 0.24,
+      "g_readout_center_MHz": 25.95,
       "kappa_ro_MHz": 2.0,
-      "n_crit": 625.0,
+      "n_crit": 2923.2,
       "n_bar_target": 40.0,
-      "p_tone_target_dBm": -120.0,
-      "sin2_half_theta": 0.05446,
-      "t1_purcell_bare_us": 198.94,
-      "purcell_protection_factor": 625.0,
-      "t1_purcell_filtered_ms": 124.34,
-      "t1_eff_bare_us": 159.32,
-      "t1_eff_filtered_us": 794.89,
-      "t_sql_K": 0.144,
-      "t_sys_with_twpa_K": 0.6719,
-      "t_sys_hemt_only_K": 4.6808,
-      "eta_meas_with_twpa": 0.2143,
-      "eta_meas_hemt_only": 0.0308
+      "p_tone_target_dBm": -118.86,
+      "signal_contrast_active": 0.0515,
+      "sin2_half_theta": 0.0515,
+      "s_param_contrast_audit": {
+        "contrast_hanger_notch_S21": 0.051497,
+        "contrast_reflection_S11": 0.205987,
+        "reflection_over_notch_ratio": 4.0,
+        "legacy_sin2_half_theta": 0.054463
+      },
+      "t1_purcell_bare_us": 480.78,
+      "purcell_protection_factor": 6241.7,
+      "t1_purcell_filtered_ms": 3000.89,
+      "t1_eff_bare_us": 300.3,
+      "t1_eff_filtered_us": 799.79,
+      "sql_convention": "Caves_heterodyne_dual_quadrature_hf_over_kB",
+      "t_sql_K": 0.3746,
+      "t_sql_single_quad_ref_K": 0.1873,
+      "t_sys_with_twpa_K": 0.8652,
+      "t_sys_hemt_only_K": 4.6725,
+      "eta_meas_with_twpa": 0.433,
+      "eta_meas_hemt_only": 0.0802
     },
     "by_nmux": {
       "8": {
         "n_mux": 8,
         "channel_spacing_MHz": 400.0,
         "spacing_over_sigma_fab": 26.67,
+        "max_purcell_passband_IL_dB": 0.1433,
         "papr_dB": 5.89,
-        "p_tot_nom_twpa_dBm": -112.47,
-        "p_peak_nom_twpa_dBm": -106.58,
+        "p_tot_nom_twpa_dBm": -111.17,
+        "p_peak_nom_twpa_dBm": -105.28,
         "twpa_backoff_dB": 0.0,
         "n_bar_effective": 40.0,
-        "im3_noise_penalty": 2e-05,
-        "lorentz_xt_dB": -49.03,
+        "im3_noise_penalty": 4e-05,
+        "lorentz_xt_dB": -47.59,
         "pair_collision_prob_pct": 0.0,
-        "F_ro_at_2us": 0.998229,
-        "snr_at_2us": 6.572,
-        "best_F_ro": 0.998229,
-        "best_tau_us": 2.0,
+        "feedline_any_collision_untrimmed_pct": 0.0,
+        "feedline_any_collision_trimmed_pct": 0.0,
+        "all_pairs_collision_mc": {
+          "untrimmed": {
+            "n_mux": 8,
+            "df_ch_MHz": 400.0,
+            "sigma_fab_MHz": 15.0,
+            "min_sep_MHz": 6.0,
+            "n_trials": 4000,
+            "per_channel_collision_prob": 0.0,
+            "per_channel_collision_pct": 0.0,
+            "feedline_any_collision_prob": 0.0,
+            "feedline_any_collision_pct": 0.0,
+            "nearest_neighbor_only_pct": 0.0
+          },
+          "trimmed_2MHz_plan": {
+            "n_mux": 8,
+            "df_ch_MHz": 400.0,
+            "sigma_fab_MHz": 2.0,
+            "min_sep_MHz": 6.0,
+            "n_trials": 4000,
+            "per_channel_collision_prob": 0.0,
+            "per_channel_collision_pct": 0.0,
+            "feedline_any_collision_prob": 0.0,
+            "feedline_any_collision_pct": 0.0,
+            "nearest_neighbor_only_pct": 0.0
+          }
+        },
+        "F_ro_at_2us": 0.998739,
+        "snr_at_2us": 8.936,
+        "best_F_ro": 0.998986,
+        "best_tau_us": 1.5,
         "passes_99pct_at_2us": true,
         "tau_curve": [
           {
             "tau_ro_us": 0.5,
-            "snr": 2.856,
-            "err_sep": 0.076619,
-            "err_t1": 0.000314,
-            "err_xt_collision": 6e-06,
-            "F_ro": 0.923061
+            "snr": 3.884,
+            "err_sep": 0.026079,
+            "err_t1": 0.000312,
+            "err_xt_collision": 9e-06,
+            "F_ro": 0.9736
           },
           {
             "tau_ro_us": 1.0,
-            "snr": 4.443,
-            "err_sep": 0.013166,
-            "err_t1": 0.000629,
-            "err_xt_collision": 6e-06,
-            "F_ro": 0.986199
+            "snr": 6.04,
+            "err_sep": 0.001263,
+            "err_t1": 0.000625,
+            "err_xt_collision": 9e-06,
+            "F_ro": 0.998103
           },
           {
             "tau_ro_us": 1.5,
-            "snr": 5.609,
-            "err_sep": 0.002519,
-            "err_t1": 0.000943,
-            "err_xt_collision": 6e-06,
-            "F_ro": 0.996532
+            "snr": 7.626,
+            "err_sep": 6.9e-05,
+            "err_t1": 0.000937,
+            "err_xt_collision": 9e-06,
+            "F_ro": 0.998986
           },
           {
             "tau_ro_us": 2.0,
-            "snr": 6.572,
-            "err_sep": 0.000508,
-            "err_t1": 0.001256,
-            "err_xt_collision": 6e-06,
-            "F_ro": 0.998229
+            "snr": 8.936,
+            "err_sep": 4e-06,
+            "err_t1": 0.001249,
+            "err_xt_collision": 9e-06,
+            "F_ro": 0.998739
           },
           {
             "tau_ro_us": 3.0,
-            "snr": 8.164,
-            "err_sep": 2.2e-05,
-            "err_t1": 0.001883,
-            "err_xt_collision": 6e-06,
-            "F_ro": 0.998088
+            "snr": 11.101,
+            "err_sep": 0.0,
+            "err_t1": 0.001872,
+            "err_xt_collision": 9e-06,
+            "F_ro": 0.998119
           },
           {
             "tau_ro_us": 4.0,
-            "snr": 9.493,
-            "err_sep": 1e-06,
-            "err_t1": 0.00251,
-            "err_xt_collision": 6e-06,
-            "F_ro": 0.997483
+            "snr": 12.907,
+            "err_sep": 0.0,
+            "err_t1": 0.002494,
+            "err_xt_collision": 9e-06,
+            "F_ro": 0.997497
           },
           {
             "tau_ro_us": 5.0,
-            "snr": 10.658,
+            "snr": 14.491,
             "err_sep": 0.0,
-            "err_t1": 0.003135,
-            "err_xt_collision": 6e-06,
-            "F_ro": 0.996858
+            "err_t1": 0.003116,
+            "err_xt_collision": 9e-06,
+            "F_ro": 0.996875
           }
         ]
       },
@@ -171,75 +241,104 @@
         "n_mux": 16,
         "channel_spacing_MHz": 200.0,
         "spacing_over_sigma_fab": 13.33,
+        "max_purcell_passband_IL_dB": 0.1496,
         "papr_dB": 6.85,
-        "p_tot_nom_twpa_dBm": -109.46,
-        "p_peak_nom_twpa_dBm": -102.61,
+        "p_tot_nom_twpa_dBm": -108.17,
+        "p_peak_nom_twpa_dBm": -101.32,
         "twpa_backoff_dB": 0.0,
         "n_bar_effective": 40.0,
-        "im3_noise_penalty": 9e-05,
-        "lorentz_xt_dB": -43.01,
+        "im3_noise_penalty": 0.00016,
+        "lorentz_xt_dB": -41.19,
         "pair_collision_prob_pct": 0.0,
-        "F_ro_at_2us": 0.99821,
-        "snr_at_2us": 6.571,
-        "best_F_ro": 0.99821,
-        "best_tau_us": 2.0,
+        "feedline_any_collision_untrimmed_pct": 0.0,
+        "feedline_any_collision_trimmed_pct": 0.0,
+        "all_pairs_collision_mc": {
+          "untrimmed": {
+            "n_mux": 16,
+            "df_ch_MHz": 200.0,
+            "sigma_fab_MHz": 15.0,
+            "min_sep_MHz": 6.0,
+            "n_trials": 4000,
+            "per_channel_collision_prob": 0.0,
+            "per_channel_collision_pct": 0.0,
+            "feedline_any_collision_prob": 0.0,
+            "feedline_any_collision_pct": 0.0,
+            "nearest_neighbor_only_pct": 0.0
+          },
+          "trimmed_2MHz_plan": {
+            "n_mux": 16,
+            "df_ch_MHz": 200.0,
+            "sigma_fab_MHz": 2.0,
+            "min_sep_MHz": 6.0,
+            "n_trials": 4000,
+            "per_channel_collision_prob": 0.0,
+            "per_channel_collision_pct": 0.0,
+            "feedline_any_collision_prob": 0.0,
+            "feedline_any_collision_pct": 0.0,
+            "nearest_neighbor_only_pct": 0.0
+          }
+        },
+        "F_ro_at_2us": 0.998709,
+        "snr_at_2us": 8.928,
+        "best_F_ro": 0.998956,
+        "best_tau_us": 1.5,
         "passes_99pct_at_2us": true,
         "tau_curve": [
           {
             "tau_ro_us": 0.5,
-            "snr": 2.856,
-            "err_sep": 0.076641,
-            "err_t1": 0.000314,
-            "err_xt_collision": 2.5e-05,
-            "F_ro": 0.923019
+            "snr": 3.88,
+            "err_sep": 0.026186,
+            "err_t1": 0.000312,
+            "err_xt_collision": 3.8e-05,
+            "F_ro": 0.973464
           },
           {
             "tau_ro_us": 1.0,
-            "snr": 4.442,
-            "err_sep": 0.013174,
-            "err_t1": 0.000629,
-            "err_xt_collision": 2.5e-05,
-            "F_ro": 0.986172
+            "snr": 6.035,
+            "err_sep": 0.001275,
+            "err_t1": 0.000625,
+            "err_xt_collision": 3.8e-05,
+            "F_ro": 0.998063
           },
           {
             "tau_ro_us": 1.5,
-            "snr": 5.608,
-            "err_sep": 0.002522,
-            "err_t1": 0.000943,
-            "err_xt_collision": 2.5e-05,
-            "F_ro": 0.99651
+            "snr": 7.619,
+            "err_sep": 7e-05,
+            "err_t1": 0.000937,
+            "err_xt_collision": 3.8e-05,
+            "F_ro": 0.998956
           },
           {
             "tau_ro_us": 2.0,
-            "snr": 6.571,
-            "err_sep": 0.000509,
-            "err_t1": 0.001256,
-            "err_xt_collision": 2.5e-05,
-            "F_ro": 0.99821
+            "snr": 8.928,
+            "err_sep": 4e-06,
+            "err_t1": 0.001249,
+            "err_xt_collision": 3.8e-05,
+            "F_ro": 0.998709
           },
           {
             "tau_ro_us": 3.0,
-            "snr": 8.163,
-            "err_sep": 2.2e-05,
-            "err_t1": 0.001883,
-            "err_xt_collision": 2.5e-05,
-            "F_ro": 0.998069
+            "snr": 11.091,
+            "err_sep": 0.0,
+            "err_t1": 0.001872,
+            "err_xt_collision": 3.8e-05,
+            "F_ro": 0.99809
           },
           {
             "tau_ro_us": 4.0,
-            "snr": 9.492,
-            "err_sep": 1e-06,
-            "err_t1": 0.00251,
-            "err_xt_collision": 2.5e-05,
-            "F_ro": 0.997464
+            "snr": 12.896,
+            "err_sep": 0.0,
+            "err_t1": 0.002494,
+            "err_xt_collision": 3.8e-05,
+            "F_ro": 0.997468
           },
           {
             "tau_ro_us": 5.0,
-            "snr": 10.656,
+            "snr": 14.477,
             "err_sep": 0.0,
-            "err_t1": 0.003135,
-            "err_xt_collision": 2.5e-05,
-            "F_ro": 0.99684
+            "err_t1": 0.003116,
+            "err_xt_collision": 3.8e-05,
+            "F_ro": 0.996846
           }
         ]
       },
@@ -247,75 +346,104 @@
         "n_mux": 32,
         "channel_spacing_MHz": 100.0,
         "spacing_over_sigma_fab": 6.67,
+        "max_purcell_passband_IL_dB": 0.15,
         "papr_dB": 7.82,
-        "p_tot_nom_twpa_dBm": -106.45,
-        "p_peak_nom_twpa_dBm": -98.64,
-        "twpa_backoff_dB": 1.36,
-        "n_bar_effective": 29.22,
+        "p_tot_nom_twpa_dBm": -105.16,
+        "p_peak_nom_twpa_dBm": -97.34,
+        "twpa_backoff_dB": 2.66,
+        "n_bar_effective": 21.69,
         "im3_noise_penalty": 0.00019,
-        "lorentz_xt_dB": -36.99,
-        "pair_collision_prob_pct": 0.0009,
-        "F_ro_at_2us": 0.996139,
-        "snr_at_2us": 5.614,
-        "best_F_ro": 0.997768,
-        "best_tau_us": 3.0,
+        "lorentz_xt_dB": -35.0,
+        "pair_collision_prob_pct": 0.0,
+        "feedline_any_collision_untrimmed_pct": 0.0,
+        "feedline_any_collision_trimmed_pct": 0.0,
+        "all_pairs_collision_mc": {
+          "untrimmed": {
+            "n_mux": 32,
+            "df_ch_MHz": 100.0,
+            "sigma_fab_MHz": 15.0,
+            "min_sep_MHz": 6.0,
+            "n_trials": 4000,
+            "per_channel_collision_prob": 0.0,
+            "per_channel_collision_pct": 0.0,
+            "feedline_any_collision_prob": 0.0,
+            "feedline_any_collision_pct": 0.0,
+            "nearest_neighbor_only_pct": 0.0009
+          },
+          "trimmed_2MHz_plan": {
+            "n_mux": 32,
+            "df_ch_MHz": 100.0,
+            "sigma_fab_MHz": 2.0,
+            "min_sep_MHz": 6.0,
+            "n_trials": 4000,
+            "per_channel_collision_prob": 0.0,
+            "per_channel_collision_pct": 0.0,
+            "feedline_any_collision_prob": 0.0,
+            "feedline_any_collision_pct": 0.0,
+            "nearest_neighbor_only_pct": 0.0
+          }
+        },
+        "F_ro_at_2us": 0.998084,
+        "snr_at_2us": 6.571,
+        "best_F_ro": 0.998084,
+        "best_tau_us": 2.0,
         "passes_99pct_at_2us": true,
         "tau_curve": [
           {
             "tau_ro_us": 0.5,
-            "snr": 2.44,
-            "err_sep": 0.11123,
-            "err_t1": 0.000314,
-            "err_xt_collision": 0.000105,
-            "F_ro": 0.88835
+            "snr": 2.856,
+            "err_sep": 0.076652,
+            "err_t1": 0.000312,
+            "err_xt_collision": 0.000158,
+            "F_ro": 0.922877
           },
           {
             "tau_ro_us": 1.0,
-            "snr": 3.795,
-            "err_sep": 0.028881,
-            "err_t1": 0.000629,
-            "err_xt_collision": 0.000105,
-            "F_ro": 0.970386
+            "snr": 4.442,
+            "err_sep": 0.013178,
+            "err_t1": 0.000625,
+            "err_xt_collision": 0.000158,
+            "F_ro": 0.986039
           },
           {
             "tau_ro_us": 1.5,
-            "snr": 4.791,
-            "err_sep": 0.008294,
-            "err_t1": 0.000943,
-            "err_xt_collision": 0.000105,
-            "F_ro": 0.990659
+            "snr": 5.608,
+            "err_sep": 0.002523,
+            "err_t1": 0.000937,
+            "err_xt_collision": 0.000158,
+            "F_ro": 0.996382
           },
           {
             "tau_ro_us": 2.0,
-            "snr": 5.614,
-            "err_sep": 0.0025,
-            "err_t1": 0.001256,
-            "err_xt_collision": 0.000105,
-            "F_ro": 0.996139
+            "snr": 6.571,
+            "err_sep": 0.000509,
+            "err_t1": 0.001249,
+            "err_xt_collision": 0.000158,
+            "F_ro": 0.998084
           },
           {
             "tau_ro_us": 3.0,
-            "snr": 6.974,
-            "err_sep": 0.000244,
-            "err_t1": 0.001883,
-            "err_xt_collision": 0.000105,
-            "F_ro": 0.997768
+            "snr": 8.163,
+            "err_sep": 2.2e-05,
+            "err_t1": 0.001872,
+            "err_xt_collision": 0.000158,
+            "F_ro": 0.997947
           },
           {
             "tau_ro_us": 4.0,
-            "snr": 8.109,
-            "err_sep": 2.5e-05,
-            "err_t1": 0.00251,
-            "err_xt_collision": 0.000105,
-            "F_ro": 0.99736
+            "snr": 9.492,
+            "err_sep": 1e-06,
+            "err_t1": 0.002494,
+            "err_xt_collision": 0.000158,
+            "F_ro": 0.997346
           },
           {
             "tau_ro_us": 5.0,
-            "snr": 9.104,
-            "err_sep": 3e-06,
-            "err_t1": 0.003135,
-            "err_xt_collision": 0.000105,
-            "F_ro": 0.996757
+            "snr": 10.656,
+            "err_sep": 0.0,
+            "err_t1": 0.003116,
+            "err_xt_collision": 0.000158,
+            "F_ro": 0.996726
           }
         ]
       },
@@ -323,75 +451,104 @@
         "n_mux": 64,
         "channel_spacing_MHz": 50.0,
         "spacing_over_sigma_fab": 3.33,
+        "max_purcell_passband_IL_dB": 0.1499,
         "papr_dB": 8.78,
-        "p_tot_nom_twpa_dBm": -103.44,
-        "p_peak_nom_twpa_dBm": -94.66,
-        "twpa_backoff_dB": 5.34,
-        "n_bar_effective": 11.7,
+        "p_tot_nom_twpa_dBm": -102.15,
+        "p_peak_nom_twpa_dBm": -93.37,
+        "twpa_backoff_dB": 6.63,
+        "n_bar_effective": 8.69,
         "im3_noise_penalty": 0.00012,
-        "lorentz_xt_dB": -30.97,
-        "pair_collision_prob_pct": 3.8063,
-        "F_ro_at_2us": 0.94132,
-        "snr_at_2us": 3.549,
-        "best_F_ro": 0.97543,
+        "lorentz_xt_dB": -28.89,
+        "pair_collision_prob_pct": 2.8828,
+        "feedline_any_collision_untrimmed_pct": 61.9,
+        "feedline_any_collision_trimmed_pct": 0.0,
+        "all_pairs_collision_mc": {
+          "untrimmed": {
+            "n_mux": 64,
+            "df_ch_MHz": 50.0,
+            "sigma_fab_MHz": 15.0,
+            "min_sep_MHz": 6.0,
+            "n_trials": 4000,
+            "per_channel_collision_prob": 0.028828125,
+            "per_channel_collision_pct": 2.8828,
+            "feedline_any_collision_prob": 0.619,
+            "feedline_any_collision_pct": 61.9,
+            "nearest_neighbor_only_pct": 3.8063
+          },
+          "trimmed_2MHz_plan": {
+            "n_mux": 64,
+            "df_ch_MHz": 50.0,
+            "sigma_fab_MHz": 2.0,
+            "min_sep_MHz": 6.0,
+            "n_trials": 4000,
+            "per_channel_collision_prob": 0.0,
+            "per_channel_collision_pct": 0.0,
+            "feedline_any_collision_prob": 0.0,
+            "feedline_any_collision_pct": 0.0,
+            "nearest_neighbor_only_pct": 0.0
+          }
+        },
+        "F_ro_at_2us": 0.964716,
+        "snr_at_2us": 4.151,
+        "best_F_ro": 0.981443,
         "best_tau_us": 5.0,
         "passes_99pct_at_2us": false,
         "tau_curve": [
           {
             "tau_ro_us": 0.5,
-            "snr": 1.542,
-            "err_sep": 0.220288,
-            "err_t1": 0.000314,
-            "err_xt_collision": 0.019431,
-            "F_ro": 0.759966
+            "snr": 1.804,
+            "err_sep": 0.183529,
+            "err_t1": 0.000312,
+            "err_xt_collision": 0.015059,
+            "F_ro": 0.8011
           },
           {
             "tau_ro_us": 1.0,
-            "snr": 2.399,
-            "err_sep": 0.115169,
-            "err_t1": 0.000629,
-            "err_xt_collision": 0.019431,
-            "F_ro": 0.864772
+            "snr": 2.806,
+            "err_sep": 0.080324,
+            "err_t1": 0.000625,
+            "err_xt_collision": 0.015059,
+            "F_ro": 0.903991
           },
           {
             "tau_ro_us": 1.5,
-            "snr": 3.029,
-            "err_sep": 0.064956,
-            "err_t1": 0.000943,
-            "err_xt_collision": 0.019431,
-            "F_ro": 0.91467
+            "snr": 3.543,
+            "err_sep": 0.038259,
+            "err_t1": 0.000937,
+            "err_xt_collision": 0.015059,
+            "F_ro": 0.945745
           },
           {
             "tau_ro_us": 2.0,
-            "snr": 3.549,
-            "err_sep": 0.037992,
-            "err_t1": 0.001256,
-            "err_xt_collision": 0.019431,
-            "F_ro": 0.94132
+            "snr": 4.151,
+            "err_sep": 0.018975,
+            "err_t1": 0.001249,
+            "err_xt_collision": 0.015059,
+            "F_ro": 0.964716
           },
           {
             "tau_ro_us": 3.0,
-            "snr": 4.409,
-            "err_sep": 0.013749,
-            "err_t1": 0.001883,
-            "err_xt_collision": 0.019431,
-            "F_ro": 0.964936
+            "snr": 5.156,
+            "err_sep": 0.004966,
+            "err_t1": 0.001872,
+            "err_xt_collision": 0.015059,
+            "F_ro": 0.978103
           },
           {
             "tau_ro_us": 4.0,
-            "snr": 5.126,
-            "err_sep": 0.005186,
-            "err_t1": 0.00251,
-            "err_xt_collision": 0.019431,
-            "F_ro": 0.972873
+            "snr": 5.996,
+            "err_sep": 0.00136,
+            "err_t1": 0.002494,
+            "err_xt_collision": 0.015059,
+            "F_ro": 0.981087
           },
           {
             "tau_ro_us": 5.0,
-            "snr": 5.755,
-            "err_sep": 0.002004,
-            "err_t1": 0.003135,
-            "err_xt_collision": 0.019431,
-            "F_ro": 0.97543
+            "snr": 6.731,
+            "err_sep": 0.000382,
+            "err_t1": 0.003116,
+            "err_xt_collision": 0.015059,
+            "F_ro": 0.981443
           }
         ]
       }
@@ -402,36 +559,60 @@
     "n_cells": 1024,
     "n_mux": 32,
     "xy_mux": 32,
+    "topology": "redesigned_shared_still_dump_and_sc_endor",
     "hemt_power_mW": 7.8,
     "n_ro_chains": 32,
     "n_xy_lines": 32,
-    "total_rf_coax_lines": 96,
+    "n_twpa_pump_coax": 4,
+    "n_endor_lines": 8,
+    "n_dc_therm_wires": 1000,
+    "total_rf_coax_lines": 108,
     "loads": {
-      "mxc_20mK_uW": 6.256,
-      "cp_100mK_uW": 59.58,
-      "stage_4K_W": 0.488,
+      "mxc_20mK_uW": 7.175,
+      "cp_100mK_uW": 66.59,
+      "still_0p8K_mW": 1.366,
+      "stage_4K_W": 0.4949,
       "stage_4K_sky130_W": 0.0154,
-      "stage_50K_W": 8.26
+      "stage_50K_W": 9.43
+    },
+    "load_breakdown_20mK_uW": {
+      "static_overhead": 2.0,
+      "option_q": 0.78,
+      "dc_and_thermometry_1000w": 0.009,
+      "readout_coax_and_iso": 2.496,
+      "twpa_pump_lines_and_dumps": 0.516,
+      "xy_passive_and_active": 1.214,
+      "endor_lines": 0.16
+    },
+    "double_counting_audit_obs130": {
+      "ovh_4K_non_cmos_W": 0.045,
+      "sky130_4K_single_counted_W": 0.0154,
+      "legacy_50mW_double_count_removed": true,
+      "unified_ld400_mxc_limit_uW": 14.0,
+      "still_0p8K_stage_checked": true
     },
     "limits": {
       "mxc_20mK_uW": 14.0,
       "cp_100mK_uW": 400.0,
+      "still_0p8K_mW": 40.0,
       "stage_4K_W": 2.0,
       "stage_50K_W": 40.0
     },
     "utilization": {
-      "mxc_20mK_frac": 0.4469,
-      "cp_100mK_frac": 0.1489,
-      "stage_4K_frac": 0.244,
-      "stage_50K_frac": 0.2065
+      "mxc_20mK_frac": 0.5125,
+      "cp_100mK_frac": 0.1665,
+      "still_0p8K_frac": 0.0341,
+      "stage_4K_frac": 0.2474,
+      "stage_50K_frac": 0.2357
     },
     "closes_single_pt420_ld400": true,
-    "single_cryostat_max_cells": 2887,
+    "single_cryostat_max_cells": 2677,
     "tightest_cryo_stage": "20mK_MXC",
     "min_modular_ld400_pt420_cryostats": 1,
     "fridges_by_stage": {
       "20mK": 1,
       "100mK": 1,
+      "0p8K_Still": 1,
       "4K": 1,
       "50K": 1
     }
@@ -440,36 +621,60 @@
     "n_cells": 10000,
     "n_mux": 32,
     "xy_mux": 32,
+    "topology": "redesigned_shared_still_dump_and_sc_endor",
     "hemt_power_mW": 7.8,
     "n_ro_chains": 313,
     "n_xy_lines": 313,
-    "total_rf_coax_lines": 939,
+    "n_twpa_pump_coax": 40,
+    "n_endor_lines": 8,
+    "n_dc_therm_wires": 1000,
+    "total_rf_coax_lines": 987,
     "loads": {
-      "mxc_20mK_uW": 43.629,
-      "cp_100mK_uW": 451.01,
-      "stage_4K_W": 3.9384,
+      "mxc_20mK_uW": 44.317,
+      "cp_100mK_uW": 496.17,
+      "still_0p8K_mW": 4.474,
+      "stage_4K_W": 3.998,
       "stage_4K_sky130_W": 0.15,
-      "stage_50K_W": 58.84
+      "stage_50K_W": 63.25
+    },
+    "load_breakdown_20mK_uW": {
+      "static_overhead": 2.0,
+      "option_q": 0.78,
+      "dc_and_thermometry_1000w": 0.009,
+      "readout_coax_and_iso": 24.414,
+      "twpa_pump_lines_and_dumps": 5.076,
+      "xy_passive_and_active": 11.878,
+      "endor_lines": 0.16
+    },
+    "double_counting_audit_obs130": {
+      "ovh_4K_non_cmos_W": 0.045,
+      "sky130_4K_single_counted_W": 0.15,
+      "legacy_50mW_double_count_removed": true,
+      "unified_ld400_mxc_limit_uW": 14.0,
+      "still_0p8K_stage_checked": true
     },
     "limits": {
       "mxc_20mK_uW": 14.0,
       "cp_100mK_uW": 400.0,
+      "still_0p8K_mW": 40.0,
       "stage_4K_W": 2.0,
       "stage_50K_W": 40.0
     },
     "utilization": {
-      "mxc_20mK_frac": 3.1164,
-      "cp_100mK_frac": 1.1275,
-      "stage_4K_frac": 1.9692,
-      "stage_50K_frac": 1.471
+      "mxc_20mK_frac": 3.1655,
+      "cp_100mK_frac": 1.2404,
+      "still_0p8K_frac": 0.1118,
+      "stage_4K_frac": 1.999,
+      "stage_50K_frac": 1.5813
     },
     "closes_single_pt420_ld400": false,
-    "single_cryostat_max_cells": 2887,
+    "single_cryostat_max_cells": 2671,
     "tightest_cryo_stage": "20mK_MXC",
     "min_modular_ld400_pt420_cryostats": 4,
     "fridges_by_stage": {
       "20mK": 4,
       "100mK": 2,
+      "0p8K_Still": 1,
       "4K": 3,
       "50K": 2
     }
@@ -479,36 +684,60 @@
       "n_cells": 256,
       "n_mux": 32,
       "xy_mux": 32,
+      "topology": "redesigned_shared_still_dump_and_sc_endor",
       "hemt_power_mW": 7.8,
       "n_ro_chains": 8,
       "n_xy_lines": 8,
-      "total_rf_coax_lines": 24,
+      "n_twpa_pump_coax": 1,
+      "n_endor_lines": 8,
+      "n_dc_therm_wires": 1000,
+      "total_rf_coax_lines": 33,
       "loads": {
-        "mxc_20mK_uW": 3.064,
-        "cp_100mK_uW": 26.14,
-        "stage_4K_W": 0.1932,
+        "mxc_20mK_uW": 4.006,
+        "cp_100mK_uW": 29.95,
+        "still_0p8K_mW": 1.1,
+        "stage_4K_W": 0.1957,
         "stage_4K_sky130_W": 0.0038,
-        "stage_50K_W": 3.94
+        "stage_50K_W": 4.84
+      },
+      "load_breakdown_20mK_uW": {
+        "static_overhead": 2.0,
+        "option_q": 0.78,
+        "dc_and_thermometry_1000w": 0.009,
+        "readout_coax_and_iso": 0.624,
+        "twpa_pump_lines_and_dumps": 0.129,
+        "xy_passive_and_active": 0.304,
+        "endor_lines": 0.16
+      },
+      "double_counting_audit_obs130": {
+        "ovh_4K_non_cmos_W": 0.045,
+        "sky130_4K_single_counted_W": 0.0038,
+        "legacy_50mW_double_count_removed": true,
+        "unified_ld400_mxc_limit_uW": 14.0,
+        "still_0p8K_stage_checked": true
       },
       "limits": {
         "mxc_20mK_uW": 14.0,
         "cp_100mK_uW": 400.0,
+        "still_0p8K_mW": 40.0,
         "stage_4K_W": 2.0,
         "stage_50K_W": 40.0
       },
       "utilization": {
-        "mxc_20mK_frac": 0.2189,
-        "cp_100mK_frac": 0.0654,
-        "stage_4K_frac": 0.0966,
-        "stage_50K_frac": 0.0985
+        "mxc_20mK_frac": 0.2861,
+        "cp_100mK_frac": 0.0749,
+        "still_0p8K_frac": 0.0275,
+        "stage_4K_frac": 0.0979,
+        "stage_50K_frac": 0.121
       },
       "closes_single_pt420_ld400": true,
-      "single_cryostat_max_cells": 2887,
+      "single_cryostat_max_cells": 2677,
       "tightest_cryo_stage": "20mK_MXC",
       "min_modular_ld400_pt420_cryostats": 1,
       "fridges_by_stage": {
         "20mK": 1,
         "100mK": 1,
+        "0p8K_Still": 1,
         "4K": 1,
         "50K": 1
       }
@@ -517,36 +746,60 @@
       "n_cells": 512,
       "n_mux": 32,
       "xy_mux": 32,
+      "topology": "redesigned_shared_still_dump_and_sc_endor",
       "hemt_power_mW": 7.8,
       "n_ro_chains": 16,
       "n_xy_lines": 16,
-      "total_rf_coax_lines": 48,
+      "n_twpa_pump_coax": 2,
+      "n_endor_lines": 8,
+      "n_dc_therm_wires": 1000,
+      "total_rf_coax_lines": 58,
       "loads": {
-        "mxc_20mK_uW": 4.128,
-        "cp_100mK_uW": 37.29,
-        "stage_4K_W": 0.2915,
+        "mxc_20mK_uW": 5.062,
+        "cp_100mK_uW": 42.16,
+        "still_0p8K_mW": 1.189,
+        "stage_4K_W": 0.2954,
         "stage_4K_sky130_W": 0.0077,
-        "stage_50K_W": 5.38
+        "stage_50K_W": 6.37
+      },
+      "load_breakdown_20mK_uW": {
+        "static_overhead": 2.0,
+        "option_q": 0.78,
+        "dc_and_thermometry_1000w": 0.009,
+        "readout_coax_and_iso": 1.248,
+        "twpa_pump_lines_and_dumps": 0.258,
+        "xy_passive_and_active": 0.607,
+        "endor_lines": 0.16
+      },
+      "double_counting_audit_obs130": {
+        "ovh_4K_non_cmos_W": 0.045,
+        "sky130_4K_single_counted_W": 0.0077,
+        "legacy_50mW_double_count_removed": true,
+        "unified_ld400_mxc_limit_uW": 14.0,
+        "still_0p8K_stage_checked": true
       },
       "limits": {
         "mxc_20mK_uW": 14.0,
         "cp_100mK_uW": 400.0,
+        "still_0p8K_mW": 40.0,
         "stage_4K_W": 2.0,
         "stage_50K_W": 40.0
       },
       "utilization": {
-        "mxc_20mK_frac": 0.2949,
-        "cp_100mK_frac": 0.0932,
-        "stage_4K_frac": 0.1457,
-        "stage_50K_frac": 0.1345
+        "mxc_20mK_frac": 0.3616,
+        "cp_100mK_frac": 0.1054,
+        "still_0p8K_frac": 0.0297,
+        "stage_4K_frac": 0.1477,
+        "stage_50K_frac": 0.1592
       },
       "closes_single_pt420_ld400": true,
-      "single_cryostat_max_cells": 2887,
+      "single_cryostat_max_cells": 2677,
       "tightest_cryo_stage": "20mK_MXC",
       "min_modular_ld400_pt420_cryostats": 1,
       "fridges_by_stage": {
         "20mK": 1,
         "100mK": 1,
+        "0p8K_Still": 1,
         "4K": 1,
         "50K": 1
       }
@@ -555,36 +808,60 @@
       "n_cells": 1024,
       "n_mux": 32,
       "xy_mux": 32,
+      "topology": "redesigned_shared_still_dump_and_sc_endor",
       "hemt_power_mW": 7.8,
       "n_ro_chains": 32,
       "n_xy_lines": 32,
-      "total_rf_coax_lines": 96,
+      "n_twpa_pump_coax": 4,
+      "n_endor_lines": 8,
+      "n_dc_therm_wires": 1000,
+      "total_rf_coax_lines": 108,
       "loads": {
-        "mxc_20mK_uW": 6.256,
-        "cp_100mK_uW": 59.58,
-        "stage_4K_W": 0.488,
+        "mxc_20mK_uW": 7.175,
+        "cp_100mK_uW": 66.59,
+        "still_0p8K_mW": 1.366,
+        "stage_4K_W": 0.4949,
         "stage_4K_sky130_W": 0.0154,
-        "stage_50K_W": 8.26
+        "stage_50K_W": 9.43
+      },
+      "load_breakdown_20mK_uW": {
+        "static_overhead": 2.0,
+        "option_q": 0.78,
+        "dc_and_thermometry_1000w": 0.009,
+        "readout_coax_and_iso": 2.496,
+        "twpa_pump_lines_and_dumps": 0.516,
+        "xy_passive_and_active": 1.214,
+        "endor_lines": 0.16
+      },
+      "double_counting_audit_obs130": {
+        "ovh_4K_non_cmos_W": 0.045,
+        "sky130_4K_single_counted_W": 0.0154,
+        "legacy_50mW_double_count_removed": true,
+        "unified_ld400_mxc_limit_uW": 14.0,
+        "still_0p8K_stage_checked": true
       },
       "limits": {
         "mxc_20mK_uW": 14.0,
         "cp_100mK_uW": 400.0,
+        "still_0p8K_mW": 40.0,
         "stage_4K_W": 2.0,
         "stage_50K_W": 40.0
       },
       "utilization": {
-        "mxc_20mK_frac": 0.4469,
-        "cp_100mK_frac": 0.1489,
-        "stage_4K_frac": 0.244,
-        "stage_50K_frac": 0.2065
+        "mxc_20mK_frac": 0.5125,
+        "cp_100mK_frac": 0.1665,
+        "still_0p8K_frac": 0.0341,
+        "stage_4K_frac": 0.2474,
+        "stage_50K_frac": 0.2357
       },
       "closes_single_pt420_ld400": true,
-      "single_cryostat_max_cells": 2887,
+      "single_cryostat_max_cells": 2677,
       "tightest_cryo_stage": "20mK_MXC",
       "min_modular_ld400_pt420_cryostats": 1,
       "fridges_by_stage": {
         "20mK": 1,
         "100mK": 1,
+        "0p8K_Still": 1,
         "4K": 1,
         "50K": 1
       }
@@ -593,36 +870,60 @@
       "n_cells": 2048,
       "n_mux": 32,
       "xy_mux": 32,
+      "topology": "redesigned_shared_still_dump_and_sc_endor",
       "hemt_power_mW": 7.8,
       "n_ro_chains": 64,
       "n_xy_lines": 64,
-      "total_rf_coax_lines": 192,
+      "n_twpa_pump_coax": 8,
+      "n_endor_lines": 8,
+      "n_dc_therm_wires": 1000,
+      "total_rf_coax_lines": 208,
       "loads": {
-        "mxc_20mK_uW": 10.512,
-        "cp_100mK_uW": 104.15,
-        "stage_4K_W": 0.8809,
+        "mxc_20mK_uW": 11.402,
+        "cp_100mK_uW": 115.44,
+        "still_0p8K_mW": 1.719,
+        "stage_4K_W": 0.8937,
         "stage_4K_sky130_W": 0.0307,
-        "stage_50K_W": 14.02
+        "stage_50K_W": 15.55
+      },
+      "load_breakdown_20mK_uW": {
+        "static_overhead": 2.0,
+        "option_q": 0.78,
+        "dc_and_thermometry_1000w": 0.009,
+        "readout_coax_and_iso": 4.992,
+        "twpa_pump_lines_and_dumps": 1.032,
+        "xy_passive_and_active": 2.429,
+        "endor_lines": 0.16
+      },
+      "double_counting_audit_obs130": {
+        "ovh_4K_non_cmos_W": 0.045,
+        "sky130_4K_single_counted_W": 0.0307,
+        "legacy_50mW_double_count_removed": true,
+        "unified_ld400_mxc_limit_uW": 14.0,
+        "still_0p8K_stage_checked": true
       },
       "limits": {
         "mxc_20mK_uW": 14.0,
         "cp_100mK_uW": 400.0,
+        "still_0p8K_mW": 40.0,
         "stage_4K_W": 2.0,
         "stage_50K_W": 40.0
       },
       "utilization": {
-        "mxc_20mK_frac": 0.7509,
-        "cp_100mK_frac": 0.2604,
-        "stage_4K_frac": 0.4405,
-        "stage_50K_frac": 0.3505
+        "mxc_20mK_frac": 0.8144,
+        "cp_100mK_frac": 0.2886,
+        "still_0p8K_frac": 0.043,
+        "stage_4K_frac": 0.4469,
+        "stage_50K_frac": 0.3887
       },
       "closes_single_pt420_ld400": true,
-      "single_cryostat_max_cells": 2887,
+      "single_cryostat_max_cells": 2677,
       "tightest_cryo_stage": "20mK_MXC",
       "min_modular_ld400_pt420_cryostats": 1,
       "fridges_by_stage": {
         "20mK": 1,
         "100mK": 1,
+        "0p8K_Still": 1,
         "4K": 1,
         "50K": 1
       }
@@ -631,36 +932,60 @@
       "n_cells": 3000,
       "n_mux": 32,
       "xy_mux": 32,
+      "topology": "redesigned_shared_still_dump_and_sc_endor",
       "hemt_power_mW": 7.8,
       "n_ro_chains": 94,
       "n_xy_lines": 94,
-      "total_rf_coax_lines": 282,
+      "n_twpa_pump_coax": 12,
+      "n_endor_lines": 8,
+      "n_dc_therm_wires": 1000,
+      "total_rf_coax_lines": 302,
       "loads": {
-        "mxc_20mK_uW": 14.502,
-        "cp_100mK_uW": 145.94,
-        "stage_4K_W": 1.2492,
+        "mxc_20mK_uW": 15.372,
+        "cp_100mK_uW": 161.41,
+        "still_0p8K_mW": 2.052,
+        "stage_4K_W": 1.2678,
         "stage_4K_sky130_W": 0.045,
-        "stage_50K_W": 19.42
+        "stage_50K_W": 21.31
+      },
+      "load_breakdown_20mK_uW": {
+        "static_overhead": 2.0,
+        "option_q": 0.78,
+        "dc_and_thermometry_1000w": 0.009,
+        "readout_coax_and_iso": 7.332,
+        "twpa_pump_lines_and_dumps": 1.524,
+        "xy_passive_and_active": 3.567,
+        "endor_lines": 0.16
+      },
+      "double_counting_audit_obs130": {
+        "ovh_4K_non_cmos_W": 0.045,
+        "sky130_4K_single_counted_W": 0.045,
+        "legacy_50mW_double_count_removed": true,
+        "unified_ld400_mxc_limit_uW": 14.0,
+        "still_0p8K_stage_checked": true
       },
       "limits": {
         "mxc_20mK_uW": 14.0,
         "cp_100mK_uW": 400.0,
+        "still_0p8K_mW": 40.0,
         "stage_4K_W": 2.0,
         "stage_50K_W": 40.0
       },
       "utilization": {
-        "mxc_20mK_frac": 1.0359,
-        "cp_100mK_frac": 0.3649,
-        "stage_4K_frac": 0.6246,
-        "stage_50K_frac": 0.4855
+        "mxc_20mK_frac": 1.098,
+        "cp_100mK_frac": 0.4035,
+        "still_0p8K_frac": 0.0513,
+        "stage_4K_frac": 0.6339,
+        "stage_50K_frac": 0.5327
       },
       "closes_single_pt420_ld400": false,
-      "single_cryostat_max_cells": 2887,
+      "single_cryostat_max_cells": 2668,
       "tightest_cryo_stage": "20mK_MXC",
       "min_modular_ld400_pt420_cryostats": 2,
       "fridges_by_stage": {
         "20mK": 2,
         "100mK": 1,
+        "0p8K_Still": 1,
         "4K": 1,
         "50K": 1
       }
@@ -669,36 +994,60 @@
       "n_cells": 4096,
       "n_mux": 32,
       "xy_mux": 32,
+      "topology": "redesigned_shared_still_dump_and_sc_endor",
       "hemt_power_mW": 7.8,
       "n_ro_chains": 128,
       "n_xy_lines": 128,
-      "total_rf_coax_lines": 384,
+      "n_twpa_pump_coax": 16,
+      "n_endor_lines": 8,
+      "n_dc_therm_wires": 1000,
+      "total_rf_coax_lines": 408,
       "loads": {
-        "mxc_20mK_uW": 19.024,
-        "cp_100mK_uW": 193.3,
-        "stage_4K_W": 1.6668,
+        "mxc_20mK_uW": 19.855,
+        "cp_100mK_uW": 213.14,
+        "still_0p8K_mW": 2.426,
+        "stage_4K_W": 1.6914,
         "stage_4K_sky130_W": 0.0614,
-        "stage_50K_W": 25.54
+        "stage_50K_W": 27.79
+      },
+      "load_breakdown_20mK_uW": {
+        "static_overhead": 2.0,
+        "option_q": 0.78,
+        "dc_and_thermometry_1000w": 0.009,
+        "readout_coax_and_iso": 9.984,
+        "twpa_pump_lines_and_dumps": 2.064,
+        "xy_passive_and_active": 4.858,
+        "endor_lines": 0.16
+      },
+      "double_counting_audit_obs130": {
+        "ovh_4K_non_cmos_W": 0.045,
+        "sky130_4K_single_counted_W": 0.0614,
+        "legacy_50mW_double_count_removed": true,
+        "unified_ld400_mxc_limit_uW": 14.0,
+        "still_0p8K_stage_checked": true
       },
       "limits": {
         "mxc_20mK_uW": 14.0,
         "cp_100mK_uW": 400.0,
+        "still_0p8K_mW": 40.0,
         "stage_4K_W": 2.0,
         "stage_50K_W": 40.0
       },
       "utilization": {
-        "mxc_20mK_frac": 1.3589,
-        "cp_100mK_frac": 0.4833,
-        "stage_4K_frac": 0.8334,
-        "stage_50K_frac": 0.6385
+        "mxc_20mK_frac": 1.4182,
+        "cp_100mK_frac": 0.5329,
+        "still_0p8K_frac": 0.0607,
+        "stage_4K_frac": 0.8457,
+        "stage_50K_frac": 0.6947
       },
       "closes_single_pt420_ld400": false,
-      "single_cryostat_max_cells": 2887,
+      "single_cryostat_max_cells": 2677,
       "tightest_cryo_stage": "20mK_MXC",
       "min_modular_ld400_pt420_cryostats": 2,
       "fridges_by_stage": {
         "20mK": 2,
         "100mK": 1,
+        "0p8K_Still": 1,
         "4K": 1,
         "50K": 1
       }
@@ -707,36 +1056,60 @@
       "n_cells": 6000,
       "n_mux": 32,
       "xy_mux": 32,
+      "topology": "redesigned_shared_still_dump_and_sc_endor",
       "hemt_power_mW": 7.8,
       "n_ro_chains": 188,
       "n_xy_lines": 188,
-      "total_rf_coax_lines": 564,
+      "n_twpa_pump_coax": 24,
+      "n_endor_lines": 8,
+      "n_dc_therm_wires": 1000,
+      "total_rf_coax_lines": 596,
       "loads": {
-        "mxc_20mK_uW": 27.004,
-        "cp_100mK_uW": 276.88,
-        "stage_4K_W": 2.4034,
+        "mxc_20mK_uW": 27.796,
+        "cp_100mK_uW": 305.09,
+        "still_0p8K_mW": 3.091,
+        "stage_4K_W": 2.4396,
         "stage_4K_sky130_W": 0.09,
-        "stage_50K_W": 36.34
+        "stage_50K_W": 39.31
+      },
+      "load_breakdown_20mK_uW": {
+        "static_overhead": 2.0,
+        "option_q": 0.78,
+        "dc_and_thermometry_1000w": 0.009,
+        "readout_coax_and_iso": 14.664,
+        "twpa_pump_lines_and_dumps": 3.048,
+        "xy_passive_and_active": 7.135,
+        "endor_lines": 0.16
+      },
+      "double_counting_audit_obs130": {
+        "ovh_4K_non_cmos_W": 0.045,
+        "sky130_4K_single_counted_W": 0.09,
+        "legacy_50mW_double_count_removed": true,
+        "unified_ld400_mxc_limit_uW": 14.0,
+        "still_0p8K_stage_checked": true
       },
       "limits": {
         "mxc_20mK_uW": 14.0,
         "cp_100mK_uW": 400.0,
+        "still_0p8K_mW": 40.0,
         "stage_4K_W": 2.0,
         "stage_50K_W": 40.0
       },
       "utilization": {
-        "mxc_20mK_frac": 1.9289,
-        "cp_100mK_frac": 0.6922,
-        "stage_4K_frac": 1.2017,
-        "stage_50K_frac": 0.9085
+        "mxc_20mK_frac": 1.9854,
+        "cp_100mK_frac": 0.7627,
+        "still_0p8K_frac": 0.0773,
+        "stage_4K_frac": 1.2198,
+        "stage_50K_frac": 0.9828
       },
       "closes_single_pt420_ld400": false,
-      "single_cryostat_max_cells": 2887,
+      "single_cryostat_max_cells": 2668,
       "tightest_cryo_stage": "20mK_MXC",
       "min_modular_ld400_pt420_cryostats": 3,
       "fridges_by_stage": {
         "20mK": 3,
         "100mK": 1,
+        "0p8K_Still": 1,
         "4K": 2,
         "50K": 1
       }
@@ -745,36 +1118,60 @@
       "n_cells": 8000,
       "n_mux": 32,
       "xy_mux": 32,
+      "topology": "redesigned_shared_still_dump_and_sc_endor",
       "hemt_power_mW": 7.8,
       "n_ro_chains": 250,
       "n_xy_lines": 250,
-      "total_rf_coax_lines": 750,
+      "n_twpa_pump_coax": 32,
+      "n_endor_lines": 8,
+      "n_dc_therm_wires": 1000,
+      "total_rf_coax_lines": 790,
       "loads": {
-        "mxc_20mK_uW": 35.25,
-        "cp_100mK_uW": 363.25,
-        "stage_4K_W": 3.165,
+        "mxc_20mK_uW": 35.992,
+        "cp_100mK_uW": 399.91,
+        "still_0p8K_mW": 3.777,
+        "stage_4K_W": 3.2128,
         "stage_4K_sky130_W": 0.12,
-        "stage_50K_W": 47.5
+        "stage_50K_W": 51.19
+      },
+      "load_breakdown_20mK_uW": {
+        "static_overhead": 2.0,
+        "option_q": 0.78,
+        "dc_and_thermometry_1000w": 0.009,
+        "readout_coax_and_iso": 19.5,
+        "twpa_pump_lines_and_dumps": 4.056,
+        "xy_passive_and_active": 9.488,
+        "endor_lines": 0.16
+      },
+      "double_counting_audit_obs130": {
+        "ovh_4K_non_cmos_W": 0.045,
+        "sky130_4K_single_counted_W": 0.12,
+        "legacy_50mW_double_count_removed": true,
+        "unified_ld400_mxc_limit_uW": 14.0,
+        "still_0p8K_stage_checked": true
       },
       "limits": {
         "mxc_20mK_uW": 14.0,
         "cp_100mK_uW": 400.0,
+        "still_0p8K_mW": 40.0,
         "stage_4K_W": 2.0,
         "stage_50K_W": 40.0
       },
       "utilization": {
-        "mxc_20mK_frac": 2.5179,
-        "cp_100mK_frac": 0.9081,
-        "stage_4K_frac": 1.5825,
-        "stage_50K_frac": 1.1875
+        "mxc_20mK_frac": 2.5709,
+        "cp_100mK_frac": 0.9998,
+        "still_0p8K_frac": 0.0944,
+        "stage_4K_frac": 1.6064,
+        "stage_50K_frac": 1.2797
       },
       "closes_single_pt420_ld400": false,
-      "single_cryostat_max_cells": 2887,
+      "single_cryostat_max_cells": 2675,
       "tightest_cryo_stage": "20mK_MXC",
       "min_modular_ld400_pt420_cryostats": 3,
       "fridges_by_stage": {
         "20mK": 3,
         "100mK": 1,
+        "0p8K_Still": 1,
         "4K": 2,
         "50K": 2
       }
@@ -783,36 +1180,60 @@
       "n_cells": 10000,
       "n_mux": 32,
       "xy_mux": 32,
+      "topology": "redesigned_shared_still_dump_and_sc_endor",
       "hemt_power_mW": 7.8,
       "n_ro_chains": 313,
       "n_xy_lines": 313,
-      "total_rf_coax_lines": 939,
+      "n_twpa_pump_coax": 40,
+      "n_endor_lines": 8,
+      "n_dc_therm_wires": 1000,
+      "total_rf_coax_lines": 987,
       "loads": {
-        "mxc_20mK_uW": 43.629,
-        "cp_100mK_uW": 451.01,
-        "stage_4K_W": 3.9384,
+        "mxc_20mK_uW": 44.317,
+        "cp_100mK_uW": 496.17,
+        "still_0p8K_mW": 4.474,
+        "stage_4K_W": 3.998,
         "stage_4K_sky130_W": 0.15,
-        "stage_50K_W": 58.84
+        "stage_50K_W": 63.25
+      },
+      "load_breakdown_20mK_uW": {
+        "static_overhead": 2.0,
+        "option_q": 0.78,
+        "dc_and_thermometry_1000w": 0.009,
+        "readout_coax_and_iso": 24.414,
+        "twpa_pump_lines_and_dumps": 5.076,
+        "xy_passive_and_active": 11.878,
+        "endor_lines": 0.16
+      },
+      "double_counting_audit_obs130": {
+        "ovh_4K_non_cmos_W": 0.045,
+        "sky130_4K_single_counted_W": 0.15,
+        "legacy_50mW_double_count_removed": true,
+        "unified_ld400_mxc_limit_uW": 14.0,
+        "still_0p8K_stage_checked": true
       },
       "limits": {
         "mxc_20mK_uW": 14.0,
         "cp_100mK_uW": 400.0,
+        "still_0p8K_mW": 40.0,
         "stage_4K_W": 2.0,
         "stage_50K_W": 40.0
       },
       "utilization": {
-        "mxc_20mK_frac": 3.1164,
-        "cp_100mK_frac": 1.1275,
-        "stage_4K_frac": 1.9692,
-        "stage_50K_frac": 1.471
+        "mxc_20mK_frac": 3.1655,
+        "cp_100mK_frac": 1.2404,
+        "still_0p8K_frac": 0.1118,
+        "stage_4K_frac": 1.999,
+        "stage_50K_frac": 1.5813
       },
       "closes_single_pt420_ld400": false,
-      "single_cryostat_max_cells": 2887,
+      "single_cryostat_max_cells": 2671,
       "tightest_cryo_stage": "20mK_MXC",
       "min_modular_ld400_pt420_cryostats": 4,
       "fridges_by_stage": {
         "20mK": 4,
         "100mK": 2,
+        "0p8K_Still": 1,
         "4K": 3,
         "50K": 2
       }
@@ -875,21 +1296,156 @@
       ],
       "total_opcodes_supported": 17,
       "rounds": 1,
-      "mean_bare_cz_fidelity": 0.779146,
-      "mean_echo_cz_fidelity": 0.981799,
-      "echo_fidelity_gain": 0.202653,
+      "mean_bare_cz_fidelity": 0.962161,
+      "mean_echo_cz_fidelity": 0.993314,
+      "echo_fidelity_gain": 0.031153,
       "mux_readout": {
         "opcode": "MUX_READOUT",
+        "model": "exp140_dispersive_lorentzian_purcell_twpa_erfc",
         "n_cells": 4,
         "n_mux": 32,
         "feedlines_used": 1,
         "parallel_duration_us": 2.0,
-        "per_cell_readout_fidelity": 0.996139,
-        "batch_joint_readout_fidelity": 0.984645
+        "per_cell_readout_fidelity": 0.995405,
+        "batch_joint_readout_fidelity": 0.981744,
+        "chi_MHz": 0.24,
+        "n_crit": 625.0,
+        "sin2_half_theta": 0.0515,
+        "channel_spacing_MHz": 100.0,
+        "purcell_gamma_kHz": 0.0013,
+        "purcell_protection_factor": 625.0,
+        "t1_eff_us": 794.89,
+        "t_sys_K": 0.6719,
+        "eta_meas": 0.2143,
+        "twpa_backoff_dB": 1.36,
+        "n_bar_effective": 29.22,
+        "im3_noise_penalty": 0.000192,
+        "mean_snr": 5.4578,
+        "mean_lorentzian_xt": 0.000314,
+        "err_t1": 0.001256,
+        "sample_channels": [
+          {
+            "freq_MHz": 5250.0,
+            "snr": 5.4578,
+            "err_sep": 0.003177,
+            "err_t1": 0.001256,
+            "lorentz_xt": 0.000313,
+            "collision_err": 9e-06,
+            "fidelity": 0.995405
+          },
+          {
+            "freq_MHz": 5350.0,
+            "snr": 5.4578,
+            "err_sep": 0.003177,
+            "err_t1": 0.001256,
+            "lorentz_xt": 0.000314,
+            "collision_err": 9e-06,
+            "fidelity": 0.995405
+          },
+          {
+            "freq_MHz": 5450.0,
+            "snr": 5.4578,
+            "err_sep": 0.003177,
+            "err_t1": 0.001256,
+            "lorentz_xt": 0.000315,
+            "collision_err": 9e-06,
+            "fidelity": 0.995404
+          },
+          {
+            "freq_MHz": 5550.0,
+            "snr": 5.4578,
+            "err_sep": 0.003177,
+            "err_t1": 0.001256,
+            "lorentz_xt": 0.000315,
+            "collision_err": 9e-06,
+            "fidelity": 0.995404
+          }
+        ]
       },
-      "syndrome_round_fidelity": 0.942731,
-      "cycle_duration_us": 2.6201
+      "syndrome_round_fidelity": 0.975572,
+      "cycle_duration_us": 7.5134
     },
+    "stress_1uev_summary": {
+      "isa_version": "3.5",
+      "opcodes_used": [
+        "BUS_TUNE",
+        "ECHO_CZ",
+        "MUX_READOUT",
+        "SYNDROME_CYCLE",
+        "WAFER_MAP_ROUTE"
+      ],
+      "total_opcodes_supported": 17,
+      "rounds": 1,
+      "mean_bare_cz_fidelity": 0.284742,
+      "mean_echo_cz_fidelity": 0.846041,
+      "echo_fidelity_gain": 0.561299,
+      "mux_readout": {
+        "opcode": "MUX_READOUT",
+        "model": "exp140_dispersive_lorentzian_purcell_twpa_erfc",
+        "n_cells": 4,
+        "n_mux": 32,
+        "feedlines_used": 1,
+        "parallel_duration_us": 2.0,
+        "per_cell_readout_fidelity": 0.995405,
+        "batch_joint_readout_fidelity": 0.981744,
+        "chi_MHz": 0.24,
+        "n_crit": 625.0,
+        "sin2_half_theta": 0.0515,
+        "channel_spacing_MHz": 100.0,
+        "purcell_gamma_kHz": 0.0013,
+        "purcell_protection_factor": 625.0,
+        "t1_eff_us": 794.89,
+        "t_sys_K": 0.6719,
+        "eta_meas": 0.2143,
+        "twpa_backoff_dB": 1.36,
+        "n_bar_effective": 29.22,
+        "im3_noise_penalty": 0.000192,
+        "mean_snr": 5.4578,
+        "mean_lorentzian_xt": 0.000314,
+        "err_t1": 0.001256,
+        "sample_channels": [
+          {
+            "freq_MHz": 5250.0,
+            "snr": 5.4578,
+            "err_sep": 0.003177,
+            "err_t1": 0.001256,
+            "lorentz_xt": 0.000313,
+            "collision_err": 9e-06,
+            "fidelity": 0.995405
+          },
+          {
+            "freq_MHz": 5350.0,
+            "snr": 5.4578,
+            "err_sep": 0.003177,
+            "err_t1": 0.001256,
+            "lorentz_xt": 0.000314,
+            "collision_err": 9e-06,
+            "fidelity": 0.995405
+          },
+          {
+            "freq_MHz": 5450.0,
+            "snr": 5.4578,
+            "err_sep": 0.003177,
+            "err_t1": 0.001256,
+            "lorentz_xt": 0.000315,
+            "collision_err": 9e-06,
+            "fidelity": 0.995404
+          },
+          {
+            "freq_MHz": 5550.0,
+            "snr": 5.4578,
+            "err_sep": 0.003177,
+            "err_t1": 0.001256,
+            "lorentz_xt": 0.000315,
+            "collision_err": 9e-06,
+            "fidelity": 0.995404
+          }
+        ]
+      },
+      "syndrome_round_fidelity": 0.602801,
+      "cycle_duration_us": 8.045
+    },
+    "stress_1uev_certified": false,
     "certificate": {
       "isa_version": "3.5",
       "program_name": "syndrome_stabilizer_z4_echo_mux",
@@ -921,59 +1477,128 @@
         {
           "cell_a": "M4V35-R0C0",
           "cell_b": "M4V35-R1C0",
-          "j_bus_MHz": 1.5,
-          "cz_duration_us": 0.2067,
-          "bare_cz_bell_fidelity": 0.779146,
-          "echo_cz_bell_fidelity": 0.981799,
-          "echo_fidelity_gain": 0.202653,
-          "bus_cz_fidelity": 0.981799,
-          "joint_bell_fidelity": 0.981799,
-          "echo_pulses": 1,
-          "s_eps_uev": 1.0,
+          "model": "exact_16d_lindblad_gillespie_ou_1f_choi",
+          "j_bus_MHz": 0.125,
+          "cz_duration_us": 1.8378,
+          "bare_cz_bell_fidelity": 0.962161,
+          "echo_cz_bell_fidelity": 0.993314,
+          "echo_fidelity_gain": 0.031154,
+          "bare_process_fidelity": 0.961661,
+          "echo_process_fidelity": 0.992855,
+          "bare_avg_gate_fidelity": 0.969329,
+          "echo_avg_gate_fidelity": 0.994284,
+          "echo_entangling_phase_over_pi": 1.00004,
+          "cavity_leakage_prob": 2e-06,
+          "pauli_error_budget": {
+            "p_I": 0.992855,
+            "p_X": 0.000463,
+            "p_Y": 0.000468,
+            "p_Z": 0.006205,
+            "p_ZZ": 1e-05,
+            "p_total_err": 0.007145,
+            "pauli_sum": 1.0
+          },
+          "cptp_audit": {
+            "max_trace_err": 1.7551787377673957e-14,
+            "max_herm_err": 1.1920450339848583e-15,
+            "min_eigval": 2.5241038138897713e-14
+          },
+          "bus_cz_fidelity": 0.993314,
+          "joint_bell_fidelity": 0.993314,
+          "echo_pulses": 4,
+          "s_eps_uev": 0.1,
+          "alpha_1f": 1.0,
+          "n_trajectories": 96,
           "hop_distance": 1,
-          "local_pulses": 2,
-          "total_duration_us": 0.2067
+          "local_pulses": 8,
+          "total_duration_us": 1.8378
         },
         {
           "cell_a": "M4V35-R1C0",
           "cell_b": "M4V35-R1C1",
-          "j_bus_MHz": 1.5,
-          "cz_duration_us": 0.2067,
-          "bare_cz_bell_fidelity": 0.779146,
-          "echo_cz_bell_fidelity": 0.981799,
-          "echo_fidelity_gain": 0.202653,
-          "bus_cz_fidelity": 0.981799,
-          "joint_bell_fidelity": 0.981799,
-          "echo_pulses": 1,
-          "s_eps_uev": 1.0,
+          "model": "exact_16d_lindblad_gillespie_ou_1f_choi",
+          "j_bus_MHz": 0.125,
+          "cz_duration_us": 1.8378,
+          "bare_cz_bell_fidelity": 0.962161,
+          "echo_cz_bell_fidelity": 0.993314,
+          "echo_fidelity_gain": 0.031154,
+          "bare_process_fidelity": 0.961661,
+          "echo_process_fidelity": 0.992855,
+          "bare_avg_gate_fidelity": 0.969329,
+          "echo_avg_gate_fidelity": 0.994284,
+          "echo_entangling_phase_over_pi": 1.00004,
+          "cavity_leakage_prob": 2e-06,
+          "pauli_error_budget": {
+            "p_I": 0.992855,
+            "p_X": 0.000463,
+            "p_Y": 0.000468,
+            "p_Z": 0.006205,
+            "p_ZZ": 1e-05,
+            "p_total_err": 0.007145,
+            "pauli_sum": 1.0
+          },
+          "cptp_audit": {
+            "max_trace_err": 1.7551787377673957e-14,
+            "max_herm_err": 1.1920450339848583e-15,
+            "min_eigval": 2.5241038138897713e-14
+          },
+          "bus_cz_fidelity": 0.993314,
+          "joint_bell_fidelity": 0.993314,
+          "echo_pulses": 4,
+          "s_eps_uev": 0.1,
+          "alpha_1f": 1.0,
+          "n_trajectories": 96,
           "hop_distance": 1,
-          "local_pulses": 2,
-          "total_duration_us": 0.2067
+          "local_pulses": 8,
+          "total_duration_us": 1.8378
         },
         {
           "cell_a": "M4V35-R1C0",
           "cell_b": "M4V35-R2C0",
-          "j_bus_MHz": 1.5,
-          "cz_duration_us": 0.2067,
-          "bare_cz_bell_fidelity": 0.779146,
-          "echo_cz_bell_fidelity": 0.981799,
-          "echo_fidelity_gain": 0.202653,
-          "bus_cz_fidelity": 0.981799,
-          "joint_bell_fidelity": 0.981799,
-          "echo_pulses": 1,
-          "s_eps_uev": 1.0,
+          "model": "exact_16d_lindblad_gillespie_ou_1f_choi",
+          "j_bus_MHz": 0.125,
+          "cz_duration_us": 1.8378,
+          "bare_cz_bell_fidelity": 0.962161,
+          "echo_cz_bell_fidelity": 0.993314,
+          "echo_fidelity_gain": 0.031154,
+          "bare_process_fidelity": 0.961661,
+          "echo_process_fidelity": 0.992855,
+          "bare_avg_gate_fidelity": 0.969329,
+          "echo_avg_gate_fidelity": 0.994284,
+          "echo_entangling_phase_over_pi": 1.00004,
+          "cavity_leakage_prob": 2e-06,
+          "pauli_error_budget": {
+            "p_I": 0.992855,
+            "p_X": 0.000463,
+            "p_Y": 0.000468,
+            "p_Z": 0.006205,
+            "p_ZZ": 1e-05,
+            "p_total_err": 0.007145,
+            "pauli_sum": 1.0
+          },
+          "cptp_audit": {
+            "max_trace_err": 1.7551787377673957e-14,
+            "max_herm_err": 1.1920450339848583e-15,
+            "min_eigval": 2.5241038138897713e-14
+          },
+          "bus_cz_fidelity": 0.993314,
+          "joint_bell_fidelity": 0.993314,
+          "echo_pulses": 4,
+          "s_eps_uev": 0.1,
+          "alpha_1f": 1.0,
+          "n_trajectories": 96,
           "hop_distance": 1,
-          "local_pulses": 2,
-          "total_duration_us": 0.2067
+          "local_pulses": 8,
+          "total_duration_us": 1.8378
         }
       ],
       "logical_code": "stabilizer_z4_echo_mux",
-      "local_pulse_count": 6,
+      "local_pulse_count": 24,
       "bus_cz_count": 3,
-      "total_duration_us": 2.6201,
-      "joint_state_fidelity": 0.942731,
-      "min_bus_cz_fidelity": 0.981799,
-      "logical_error_rate": 0.00098177,
+      "total_duration_us": 7.5134,
+      "joint_state_fidelity": 0.975572,
+      "min_bus_cz_fidelity": 0.993314,
+      "logical_error_rate": 0.00013351,
       "exp126_bridge": {
         "exp126_ledger_found": true,
         "n_cells_checked": 4,
@@ -991,13 +1616,13 @@
       },
       "certified": true,
       "epistemic_tag": "Model",
-      "sha256": "63b341f7277dd98b9ed108853840c56a6499ce1278b6a9a05cd73ba30cb2cd60"
+      "sha256": "ad39289f20bdaf126e2017f8898f1ed50fc817bd321c872b4bd2b3a76129c583"
     },
     "sha256_verified": true
   },
   "s65_spec": {
     "subsystem_id": "S6.5",
-    "title": "Cryo-FPGA BOED Accelerator & 3 kOhm NbTiN Multiplexed TWPA Readout Stack (v5.0)",
+    "title": "Cryo-FPGA BOED Accelerator & 3 kOhm NbTiN Wideband-Purcell Multiplexed TWPA Readout Stack (v5.1)",
     "module_scale_cells": 1024,
     "n_mux_star": 32,
     "no_supplier_quotes": true,
@@ -1011,11 +1636,12 @@
       "cryo_cold_mass_kg": 7.77,
       "room_temp_power_W": 87.96,
       "cryo_loads_1024": {
-        "mxc_20mK_uW": 6.256,
-        "cp_100mK_uW": 59.58,
-        "stage_4K_W": 0.488,
+        "mxc_20mK_uW": 7.175,
+        "cp_100mK_uW": 66.59,
+        "still_0p8K_mW": 1.366,
+        "stage_4K_W": 0.4949,
         "stage_4K_sky130_W": 0.0154,
-        "stage_50K_W": 8.26
+        "stage_50K_W": 9.43
       },
       "cost_usd_low": 456400,
       "cost_usd_nom": 629200,
@@ -1024,10 +1650,11 @@
     "scaling_10000_cell_note": {
       "closes_single_ld400_pt420": false,
       "min_modular_ld400_pt420_cryostats": 4,
-      "single_cryostat_max_cells": 2887,
+      "single_cryostat_max_cells": 2671,
       "tightest_stage": "20mK_MXC",
-      "total_4K_W_10000": 3.9384,
-      "total_20mK_uW_10000": 43.629
+      "total_4K_W_10000": 3.998,
+      "total_still_0p8K_mW_10000": 4.474,
+      "total_20mK_uW_10000": 44.317
     },
     "items": [
       {
@@ -1050,7 +1677,7 @@
       },
       {
         "part_id": "S6.5-02",
-        "name": "20 mK Josephson TWPA + Bandpass Purcell Filter + Dual Cryo-Isolator Pack (32 ch)",
+        "name": "20 mK Josephson TWPA + 5th-Order Wideband Stub Purcell (6.25-9.75 GHz) + Still-Dumped Pump Manifold (32 ch)",
         "qty": 32,
         "stage": "20mK_MXC",
         "envelope_mm": [
@@ -1060,7 +1687,7 @@
         ],
         "mass_kg_total": 2.72,
         "power_W_total": 0.0,
-        "cryo_load_20mK_uW": 2.144,
+        "cryo_load_20mK_uW": 1.956,
         "cost_usd_low": 240000,
         "cost_usd_nom": 336000,
         "cost_usd_high": 512000,
@@ -1086,8 +1713,10 @@
       },
       {
         "part_id": "S6.5-04",
-        "name": "Cryo-Coax Loom & Attenuator Pack (96 lines: CuNi/NbTi, 0.86 mm)",
+        "name": "Cryo-Coax Loom & Attenuator Pack (96 RO/XY + 4 pump + 8 ENDOR lines: CuNi/NbTi)",
         "qty": 96,
+        "total_rf_coax_lines_incl_pump_endor": 108,
+        "n_dc_therm_wires": 1000,
         "stage": "300K_to_20mK",
         "envelope_mm": [
           95.0,
@@ -1096,7 +1725,7 @@
         ],
         "mass_kg_total": 4.03,
         "power_W_total": 0.0,
-        "cryo_load_50K_W": 5.76,
+        "cryo_load_50K_W": 6.93,
         "cost_usd_low": 62400,
         "cost_usd_nom": 91200,
         "cost_usd_high": 139200,

@@ -29,7 +29,9 @@ bbox_z = 42.4500;
 rack_u = 1;
 u_slot = "U30";
 rails = 3;
-v_rail_kV = 2.0;
+v_rail_kV = 6.0;
+v_e1_nom_kV = -5.0;
+v_e2_nom_kV = 3.7346;
 ripple_mVpp = 2.0;
 
 // Interface / port parameters (mm)

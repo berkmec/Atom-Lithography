@@ -221,6 +221,190 @@
     -0.0,
     560.0
   ],
+  "shell_tie_manifest": [
+    {
+      "shell_index": 0,
+      "bbox_min_mm": [
+        -1.1,
+        -11.6,
+        -154.0
+      ],
+      "bbox_max_mm": [
+        1.1,
+        -9.4,
+        154.0
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    },
+    {
+      "shell_index": 1,
+      "bbox_min_mm": [
+        -1.1,
+        -6.6,
+        -154.0
+      ],
+      "bbox_max_mm": [
+        1.1,
+        -4.4,
+        154.0
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    },
+    {
+      "shell_index": 2,
+      "bbox_min_mm": [
+        -1.1,
+        4.4,
+        -154.0
+      ],
+      "bbox_max_mm": [
+        1.1,
+        6.6,
+        154.0
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    },
+    {
+      "shell_index": 3,
+      "bbox_min_mm": [
+        -1.1,
+        9.4,
+        -154.0
+      ],
+      "bbox_max_mm": [
+        1.1,
+        11.6,
+        154.0
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    },
+    {
+      "shell_index": 4,
+      "bbox_min_mm": [
+        -1.6,
+        -1.6,
+        -154.0
+      ],
+      "bbox_max_mm": [
+        1.6,
+        1.6,
+        154.0
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    },
+    {
+      "shell_index": 5,
+      "bbox_min_mm": [
+        -5.0,
+        -15.0,
+        -153.0
+      ],
+      "bbox_max_mm": [
+        -2.4,
+        15.0,
+        -143.0
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    },
+    {
+      "shell_index": 6,
+      "bbox_min_mm": [
+        2.4,
+        -15.0,
+        -153.0
+      ],
+      "bbox_max_mm": [
+        5.0,
+        15.0,
+        -143.0
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    },
+    {
+      "shell_index": 7,
+      "bbox_min_mm": [
+        -5.0,
+        -15.0,
+        -55.0
+      ],
+      "bbox_max_mm": [
+        -2.4,
+        15.0,
+        -45.0
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    },
+    {
+      "shell_index": 8,
+      "bbox_min_mm": [
+        2.4,
+        -15.0,
+        -55.0
+      ],
+      "bbox_max_mm": [
+        5.0,
+        15.0,
+        -45.0
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    },
+    {
+      "shell_index": 9,
+      "bbox_min_mm": [
+        -5.0,
+        -15.0,
+        45.0
+      ],
+      "bbox_max_mm": [
+        -2.4,
+        15.0,
+        55.0
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    },
+    {
+      "shell_index": 10,
+      "bbox_min_mm": [
+        2.4,
+        -15.0,
+        45.0
+      ],
+      "bbox_max_mm": [
+        5.0,
+        15.0,
+        55.0
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    },
+    {
+      "shell_index": 11,
+      "bbox_min_mm": [
+        -5.0,
+        -15.0,
+        143.0
+      ],
+      "bbox_max_mm": [
+        -2.4,
+        15.0,
+        153.0
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    },
+    {
+      "shell_index": 12,
+      "bbox_min_mm": [
+        2.4,
+        -15.0,
+        143.0
+      ],
+      "bbox_max_mm": [
+        5.0,
+        15.0,
+        153.0
+      ],
+      "fea_tie_constraint": "BONDED_WELD_OR_BOLT_ASSEMBLY"
+    }
+  ],
   "epistemic": {
     "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
     "no_lab_measurement": true,

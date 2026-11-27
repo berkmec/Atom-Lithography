@@ -1,6 +1,6 @@
 # Exp150 (`H168`): Ön Emniyet Tasarım Hedefi, HAZOP, 25-Satırlı FMEA & `S7.SAFETY` Kiti Taslağı (Sertifikasız `M0`)
 
-- **Tarih:** 2026-11-24  
+- **Tarih:** 2026-11-27  
 - **Hipotez:** `H168` (`Exp150_industrial_safety_fmea_hazop`, `v7.0` / `v7.2`)  
 - **Ön-Kayıtlı Model Kriter Kararı:** **7/7 PASS** (`PASS`, yazılım/analitik model kontrolü)  
 - **Sertifikasyon Durumu:** `PRELIMINARY_PARAMETRIC_CALCULATION_NOT_CERTIFIED` — `iec61508_certified = false`, `semi_s2_certified = false`, `sil3_pfd_band_met_at_nominal_assumed_lambda_du = true`, `requires_third_party_assessment = true`  
@@ -19,7 +19,7 @@ Atom Litografi Makinesi kavramsal tasarımı (`CAD v6.0`, `M3 v6.0 Full BOM = $5
 | `SF2_ph3_sds_subatmospheric_and_forming_gas_safety` | Ön-kayıtlı emniyet eşiği | `unmitigated_peak_ppm=1206.9`, `mitigated_operator_ppm=0.007153`, `tlv_margin=7.0`, `idlh_margin=6990.0`, `forming_gas_nonflammable=True` | **PASS** |
 | `SF3_hv_bremsstrahlung_xray_and_crowbar` | Ön-kayıtlı emniyet eşiği | `dose_6mm_316L_22keV_uSv_h=1.0596e-43`, `dose_s55_shrouded_22keV_uSv_h=1.1939e-23`, `hv_stored_energy_10kV_J=0.075`, `hv_stored_energy_22kV_J=0.363`, `hv_crowbar_50V_ms=18.26` | **PASS** |
 | `SF4_cryo_he_odh_rupture_disk_and_quench` | Ön-kayıtlı emniyet eşiği | `cleanroom_60m3_O2_pct=20.567`, `dn50_relief_margin=16.37`, `dump_resistor_peak_C=38.15`, `exp125_hotspot_K=64.62` | **PASS** |
-| `SF5_epo_ups_15kva_safe_shutdown` | Ön-kayıtlı emniyet eşiği | `ups_transfer_ms=0.0`, `uhv_gate_valve_close_ms=80.0`, `wafer_oxidation_ML=0.0006`, `full_load_runtime_min=40.0`, `tier1_runtime_min=213.2` | **PASS** |
+| `SF5_epo_ups_15kva_safe_shutdown` | Ön-kayıtlı emniyet eşiği | `ups_transfer_ms=0.0`, `uhv_gate_valve_close_ms=80.0`, `wafer_oxidation_ML=0.0006`, `full_load_runtime_min=43.2`, `tier1_runtime_min=202.8` | **PASS** |
 | `SF6_25row_fmea_and_hazop_closure` | Ön-kayıtlı emniyet eşiği | `n_fmea_rows=25`, `n_hazop_nodes=10`, `max_rpn_pre=280`, `max_rpn_post=42`, `mean_rpn_reduction_pct=86.3` | **PASS** |
 | `SF7_safety_kit_spec_ready_for_bom_v7` | Ön-kayıtlı emniyet eşiği | `n_items=6`, `total_mass_kg=355.0`, `cryo_load_W=0.0`, `pct_of_m3_v6_full=2.61`, `no_supplier_quotes=True` | **PASS** |
 
@@ -73,6 +73,10 @@ Nominal `λ_DU = 2.50e-07 /h` varsayımı tedarikçi FMEDA ölçümü olmadığ�
 | `10keV` | `2007554.42` | `3.127e-237` | `1.979e-298` | `2.041e-21` | `9.613e-192` |
 | `14keV` | `3984451.68` | `2.337e-137` | `4.175e-229` | `1.070e-06` | `6.423e-77` |
 | `22keV` | `8220881.33` | `1.060e-43` | `2.211e-73` | `1.011e+01` | `1.194e-23` |
+| `25keV` | `9853947.78` | `2.070e-29` | `9.805e-50` | `7.811e+01` | `1.053e-15` |
+| `30keV` | `12607841.21` | `5.218e-17` | `2.482e-29` | `6.217e+02` | `1.031e-08` |
+| `40keV` | `18205791.76` | `1.139e-06` | `1.779e-12` | `5.049e+03` | `9.015e-03` |
+| `50keV` | `23900839.20` | `1.493e-02` | `6.545e-06` | `1.512e+04` | `2.570e+00` |
 
 ### 2.4. Tehlike-4: `20 mK / 4 K` Kriyojenik Helyum ODH (Statik & Kutu-ODE), `ASME 0,5 barg` Tahliye & `Exp125` Quench
 
@@ -99,17 +103,18 @@ Nominal `λ_DU = 2.50e-07 /h` varsayımı tedarikçi FMEDA ölçümü olmadığ�
 
 ### 2.5. Tehlike-5: Plansız Güç Kesintisi (`EPO` / `15 kVA` Çevrimiçi UPS & Güvenli Kapanma)
 
-- **`15 kVA / 10 kWh` LFP Online Double-Conversion UPS:** Geçiş süresi **`0.0 ms`**, nominal tam güçte (`13.5 kW`) **`40.0 dk`** (`≥ 30 dk`), kritik Tier-1 güvenlik + UHV + kontrol yükünde (`2.533 kW`) **`213.2 dk`** (`≥ 180 dk`).
+- **`15 kVA / 10 kWh` LFP Online Double-Conversion UPS:** Geçiş süresi **`0.0 ms`**, nominal tam güçte (`13.5 kW`) **`43.2 dk`** (`≥ 30 dk`), kritik Tier-1 güvenlik + UHV + kontrol yükünde (`2.533 kW`) **`202.8 dk`** (`≥ 180 dk`).
 - **Hızlı UHV İzolasyon & Yonga Koruma:** Yay-dönüşlü all-metal UHV sürgülü vanalar **`80.0 ms`** (`≤ 100 ms`) içinde kapanır; `5.0e-08 Torr` basınç dalgasında temiz `Si(100)` yonga oksitlenmesi yalnızca **`6.000e-04 ML`** (`<< 0,01 ML`).
 
 | Zaman (`t`) | Alt-Sistem | Deterministik Güvenli Kapanma Eylemi |
 |---:|---|---|
-| `0.0 ms` | `S7.SAFETY` | Online double-conversion UPS zero-transfer hold (0 ms bus continuity) |
+| `0.0 ms` | `S7.SAFETY` | Utility-side fast contactor (<5 ms) sheds 12.5 kW PT420 & heavy Tier-2 mains AHEAD of UPS; online UPS holds Tier-1+1B (5.38 kW <= 13.5 kW) at 0 ms |
 | `3.2 ms` | `S5.5` | SIL-3 target safety PLC cuts S5.5 808 nm diode driver & drops dual blade shutter |
-| `18.3 ms` | `S1/S2` | S1-S2 HV PSU inhibited; active 2 MOhm crowbar discharges 22 kV < 50 V |
-| `45.0 ms` | `S5.6/S1` | S5.6 MBE pneumatic shutter closed; PBN heater (400 W) & SDS PH3 slam-shut |
+| `18.3 ms` | `S1/S2` | S1-S2 HV PSU & S1.1-05 15 kV deck inhibited; active crowbars discharge < 50 V (7.9 ms deck / 18.3 ms column) |
+| `45.0 ms` | `S5.6/S1` | S5.6 MBE pneumatic shutter closed; PBN heater & SDS PH3/SiF4 slam-shut |
 | `80.0 ms` | `S5` | Spring-return all-metal UHV gate valves (S5.3 LL + S5.2 foreline) seal |
-| `60 s` | `S6/S9.HPC` | Controlled Exp125 magnet ramp-down (120 s) + Option-HPC graceful halt |
+| `1 s` | `S6.3/S9.HPC` | Dedicated Tier-1B UPS magnet ramp-down supply initiates controlled 120 s ramp-down (0.65 kW; passive 1.563 Ohm quench dump backup if faulted) + S9.HPC graceful halt |
+| `125 s` | `S7.SAFETY` | Magnet at 0 A & S9.HPC halted; Tier-1B sheds leaving 2.533 kW steady Tier-1 (>200 min @ 90% DoD) |
 | `300 s` | `S6.8` | LD400 3He/4He mixture recovered into room-temp dump tank (OVC < 0.1 barg) |
 
 ## 3. Tam 25-Satırlı Ön FMEA (`S × O × D = RPN`, Önlem Öncesi vs Sonrası — Sertifikasız `M0`)

@@ -19,6 +19,7 @@ module tb_fpga_top_machine_ctrl;
     reg        rst_n;
     reg        uart_rx;
     wire       uart_tx;
+    wire       uart_rts_n;
 
     // External AXI4-Lite port (used alongside UART to load BOED 1001-bin prior fast)
     reg [15:0] ext_awaddr;
@@ -50,6 +51,7 @@ module tb_fpga_top_machine_ctrl;
     wire       safe_ph3_valve_en;
     wire       safe_magnet_en;
     wire       interlock_trip_out;
+    wire       safety_indep_trip_out;
 
     reg [15:0] blk_tile_done_in;
     reg [15:0] blk_tile_abort_in;
@@ -94,6 +96,7 @@ module tb_fpga_top_machine_ctrl;
         .rst_n                (rst_n),
         .uart_rx              (uart_rx),
         .uart_tx              (uart_tx),
+        .uart_rts_n           (uart_rts_n),
         .ext_axil_awaddr      (ext_awaddr),
         .ext_axil_awvalid     (ext_awvalid),
         .ext_axil_awready     (ext_awready),
@@ -121,6 +124,7 @@ module tb_fpga_top_machine_ctrl;
         .safe_ph3_valve_en    (safe_ph3_valve_en),
         .safe_magnet_en       (safe_magnet_en),
         .interlock_trip_out   (interlock_trip_out),
+        .safety_indep_trip_out(safety_indep_trip_out),
         .blk_tile_done_in     (blk_tile_done_in),
         .blk_tile_abort_in    (blk_tile_abort_in),
         .blk_tile_sel         (blk_tile_sel),
@@ -316,7 +320,66 @@ module tb_fpga_top_machine_ctrl;
 
         repeat (6) @(posedge clk);
         rst_n = 1'b1;
-        repeat (4) @(posedge clk);
+        repeat (6) @(posedge clk);
+
+        // -------------------------------------------------------------------
+        // 0. OBS-115 REGRESSION: INDEPENDENT AXI4-LITE AWVALID/WVALID & WSTRB
+        //    Test AWVALID-before-WVALID (must accept AW immediately, no deadlock!)
+        // -------------------------------------------------------------------
+        @(negedge clk);
+        ext_awaddr  = 16'h0010;
+        ext_awvalid = 1'b1;
+        ext_wvalid  = 1'b0;
+        ext_bready  = 1'b1;
+        @(posedge clk);
+        if (!ext_awready) begin
+            $display("ERROR: OBS-115 AXI4-Lite AW-first deadlocked (ext_awready=0)!");
+            errors = errors + 1;
+        end
+        @(negedge clk);
+        ext_awvalid = 1'b0;
+        repeat (3) @(posedge clk);
+        @(negedge clk);
+        ext_wdata   = 32'h1234_5678;
+        ext_wstrb   = 4'hF;
+        ext_wvalid  = 1'b1;
+        @(posedge clk);
+        if (!ext_wready) begin
+            $display("ERROR: OBS-115 AXI4-Lite delayed WVALID not accepted!");
+            errors = errors + 1;
+        end
+        @(negedge clk);
+        ext_wvalid = 1'b0;
+        while (!ext_bvalid) @(posedge clk);
+        @(posedge clk);
+        @(negedge clk);
+        ext_bready = 1'b0;
+
+        // Partial byte-strobe write (wstrb = 4'b0010 -> overwrite only byte 1 -> 0x1234_AA78)
+        @(negedge clk);
+        ext_awaddr  = 16'h0010;
+        ext_wdata   = 32'hDEAD_AAFF;
+        ext_wstrb   = 4'b0010;
+        ext_awvalid = 1'b1;
+        ext_wvalid  = 1'b1;
+        ext_bready  = 1'b1;
+        @(posedge clk);
+        @(negedge clk);
+        ext_awvalid = 1'b0;
+        ext_wvalid  = 1'b0;
+        while (!ext_bvalid) @(posedge clk);
+        @(posedge clk);
+        @(negedge clk);
+        ext_bready = 1'b0;
+        axil_read(16'h0010, rval);
+        if (rval !== 32'h1234_AA78) begin
+            $display("ERROR: OBS-115 AXI4-Lite wstrb failed! got=%h exp=1234AA78", rval);
+            errors = errors + 1;
+        end
+        if (uart_rts_n !== 1'b0) begin
+            $display("ERROR: OBS-115 uart_rts_n expected LOW (ready) when RX FIFO empty!");
+            errors = errors + 1;
+        end
 
         // -------------------------------------------------------------------
         // 1. REAL UART 8N1 CSR READS/WRITES (ID, Epistemic Status, Scratch)
@@ -364,6 +427,15 @@ module tb_fpga_top_machine_ctrl;
         uart_csr_write(16'h0118, 32'd10, ack_b);      // IL_DWELL_CYCLES = 10
         uart_csr_write(16'h0114, 32'd200000, ack_b);  // IL_WDT_TIMEOUT  = 200,000
         uart_csr_write(16'h0110, 32'd50, ack_b);      // IL_DISCREP_WIN  = 50
+
+        // OBS-116 NEGATIVE TEST: Attempt to disable WDT via unlocked CSR write -> MUST stay locked ON!
+        uart_csr_write(16'h0100, 32'h0000_3F00, ack_b); // bit1=0 attempted while unlocked
+        axil_read(16'h0100, rval);
+        if (rval[1] !== 1'b1 || rval[17] !== 1'b1) begin
+            $display("ERROR: OBS-116 unlocked CSR write disabled HW-locked WDT! IL_CTRL=%h", rval);
+            cfg_lock_ok = 0;
+            errors = errors + 1;
+        end
 
         // NEGATIVE TEST A: Single-channel UART CSR reset (bit3=1 & bit4=1) with il_hw_reset_b=0
         // MUST BE REJECTED because Channel B reset is hardwired strictly to physical il_hw_reset_b!
@@ -426,8 +498,8 @@ module tb_fpga_top_machine_ctrl;
             errors = errors + 1;
         end
         axil_read(16'h0100, rval);
-        if (rval[1] !== 1'b0 || rval[16] !== 1'b1) begin
-            $display("ERROR: wdt_en tampered or cfg_lock cleared while armed! IL_CTRL=%h", rval);
+        if (rval[1] !== 1'b1 || rval[16] !== 1'b1 || rval[17] !== 1'b1) begin
+            $display("ERROR: wdt_en not locked ON or cfg_lock cleared while armed! IL_CTRL=%h", rval);
             cfg_lock_ok = 0;
             errors = errors + 1;
         end
@@ -508,9 +580,9 @@ module tb_fpga_top_machine_ctrl;
             ddc_adc_valid  = 1'b0;
         end
         repeat (30) @(posedge clk);
-        axil_read(16'h0618, rval); // BOED_SPRT_LLR updated automatically by DDC AXI4-Stream!
-        if ($signed(rval) <= 32'sd0 || ddc_qubit_state_mask[1:0] !== 2'b11) begin
-            $display("ERROR: DDC->BOED SPRT autofeed failed! llr=%0d mask=%b",
+        axil_read(16'h0618, rval); // BOED_SPRT_LLR updated ONLY by selected ch 0 (exact 1 update: 65534, NOT 2*65534=131068!)
+        if ($signed(rval) !== 32'sd65534 || ddc_qubit_state_mask[1:0] !== 2'b11) begin
+            $display("ERROR: OBS-114 DDC->BOED single-channel autofeed mismatch! llr=%0d(exp=65534) mask=%b",
                      $signed(rval), ddc_qubit_state_mask[1:0]);
             errors = errors + 1;
         end
@@ -568,22 +640,22 @@ module tb_fpga_top_machine_ctrl;
         // -------------------------------------------------------------------
         // 5. SIMULTANEOUS END-TO-END HARD-WIRED INTERLOCK FAULT INJECTION!
         //    Drop il_ch_a_ok[2] (ODH O2 < 19.5%) while blanker, AOM & HV are live!
+        //    With 2-FF CDC sync + 1-cycle FSM latch, glitch-free trip <= 30 ns (< 1 us)!
         // -------------------------------------------------------------------
         @(negedge clk);
         t_fault = $time;
         il_ch_a_ok[2] = 1'b0; // ODH O2 < 19.5% trip!
-        #1;
-        if (!interlock_trip_out || blk_tile_beam_en !== 16'h0000 || !blk_safe_blanked ||
-            aom_rf_en !== 1'b0 || aom_drive_q16 !== 32'sd0 || hv_clr_n !== 1'b0) begin
-            $display("ERROR: simultaneous hardware override failed immediate clamp!");
-            errors = errors + 1;
-        end
-        @(posedge clk);
+        repeat (3) @(posedge clk);
         #1;
         t_clamped = $time;
         trip_ns   = t_clamped - t_fault;
-        if (trip_ns > 20) begin
-            $display("ERROR: top-level interlock override latency %0d ns > 20 ns!", trip_ns);
+        if (!interlock_trip_out || !safety_indep_trip_out || blk_tile_beam_en !== 16'h0000 || !blk_safe_blanked ||
+            aom_rf_en !== 1'b0 || aom_drive_q16 !== 32'sd0 || hv_clr_n !== 1'b0) begin
+            $display("ERROR: simultaneous hardware override failed 2-FF synced clamp!");
+            errors = errors + 1;
+        end
+        if (trip_ns > 30) begin
+            $display("ERROR: top-level interlock override latency %0d ns > 30 ns!", trip_ns);
             errors = errors + 1;
         end
 

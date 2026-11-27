@@ -14,9 +14,9 @@
     "qty": 1,
     "procurement_class": "CUS",
     "world_origin_mm": [
-      0.0,
-      485.0,
-      506.0
+      420.0,
+      238.7489,
+      705.599
     ],
     "world_rotation_deg": [
       0.0,
@@ -28,14 +28,14 @@
         "name": "s55_viewport_shroud_mate",
         "kind": "flange",
         "position_mm": [
-          0.0,
-          340.0,
-          500.0
+          420.0,
+          165.0395,
+          619.9082
         ],
         "normal": [
           0.0,
-          -1.0,
-          0.0
+          -0.8090169943749475,
+          -0.5877852522924731
         ],
         "standard": "CF63",
         "mating_part_id": "S5.5-02",
@@ -46,20 +46,20 @@
         "bolt_hole_mm": 8.4,
         "bolt_spec": "M8",
         "frame": "world",
-        "notes": "Sleeves around S5.5 +Y CF63 viewport without clashing S5.1-01 or S5.5 optics"
+        "notes": "Sleeves around relocated 36-deg inclined S5.5 +Y CF63 viewport on S5.1-03 without clashing S5.5 optics"
       },
       {
         "name": "fiber_labyrinth_port",
         "kind": "optical",
         "position_mm": [
-          0.0,
-          620.0,
-          500.0
+          420.0,
+          334.933,
+          743.3431
         ],
         "normal": [
           0.0,
-          1.0,
-          0.0
+          0.8090169943749475,
+          0.5877852522924731
         ],
         "standard": "OD>=8 Armored 808 nm Fiber Gland Ø42 mm",
         "mating_part_id": "S5.5-01",
@@ -76,14 +76,14 @@
         "name": "shutter_1oo2d_ctrl",
         "kind": "electrical",
         "position_mm": [
-          0.0,
-          485.0,
-          640.2
+          420.0,
+          169.2727,
+          801.2248
         ],
         "normal": [
           0.0,
-          0.0,
-          1.0
+          -0.5877852522924731,
+          0.8090169943749475
         ],
         "standard": "Dual-Channel 1oo2D Guard Switch & <3.2 ms Shutter Coil",
         "mating_part_id": "S7.SAFETY-03",
@@ -100,7 +100,7 @@
     "dimensions": [
       {
         "label": "SHROUD_W",
-        "nominal_mm": 280.0,
+        "nominal_mm": 210.0,
         "tol_plus_mm": 0.5,
         "tol_minus_mm": -0.5,
         "view": "front",
@@ -110,11 +110,11 @@
         "is_basic": false,
         "datum_ref": "",
         "decimals": 2,
-        "formatted": "280.00 ±0.50"
+        "formatted": "210.00 ±0.50"
       },
       {
         "label": "SHROUD_D",
-        "nominal_mm": 260.0,
+        "nominal_mm": 190.0,
         "tol_plus_mm": 0.5,
         "tol_minus_mm": -0.5,
         "view": "right",
@@ -124,11 +124,11 @@
         "is_basic": false,
         "datum_ref": "",
         "decimals": 2,
-        "formatted": "260.00 ±0.50"
+        "formatted": "190.00 ±0.50"
       },
       {
         "label": "SHROUD_H",
-        "nominal_mm": 232.0,
+        "nominal_mm": 200.0,
         "tol_plus_mm": 0.5,
         "tol_minus_mm": -0.5,
         "view": "front",
@@ -138,7 +138,7 @@
         "is_basic": false,
         "datum_ref": "",
         "decimals": 2,
-        "formatted": "232.00 ±0.50"
+        "formatted": "200.00 ±0.50"
       },
       {
         "label": "WALL_316L_MIN",
@@ -156,7 +156,7 @@
       },
       {
         "label": "CLEAR_CAVITY_W",
-        "nominal_mm": 164.0,
+        "nominal_mm": 148.0,
         "tol_plus_mm": 0.5,
         "tol_minus_mm": -0.5,
         "view": "front",
@@ -166,7 +166,7 @@
         "is_basic": false,
         "datum_ref": "",
         "decimals": 2,
-        "formatted": "164.00 ±0.50"
+        "formatted": "148.00 ±0.50"
       }
     ],
     "gdt_frames": [
@@ -178,7 +178,7 @@
         "datum_primary": "A",
         "datum_secondary": "",
         "datum_tertiary": "",
-        "feature_note": "COLLAR TO S5.5 +Y AXIS",
+        "feature_note": "COLLAR TO S5.5 36-DEG INCLINED AXIS",
         "glyph": "⊥",
         "tolerance_text": "0.20"
       },
@@ -224,15 +224,16 @@
     "notes": [
       "S5.5 +Y pencere (280x260x220 mm): OD>=8 @ 808 nm (111.3 J/darbe), 22 keV X-isini 10.11 -> 1.19e-23 uSv/h (<<0.01 uSv/h), 3.2 ms 1oo2D perde, 45 W / 0 W kriyo, kutle=38.0 kg",
       "Exp150 S7.SAFETY-02 (38.0 kg, 45 W, 0 W cryo): ANSI Z136.1 OD>=8 (808 nm) + >=3 mm 316L 22 keV X-ray shroud (1.19e-23 uSv/h) + 3.2 ms 1oo2D dual-blade shutter.",
-      "Spans Y=[+340, +620], Z=[390.0, 622.0] mm (inner ceiling 612.0 mm -> 10.3 mm clear of S5.5-03 601.7 mm; 148 mm clear of S5.1-01).",
+      "OBS-001 fix: Relocated coaxially onto S5.1-03 36-deg inclined +Y S5.5 optical axis at X=420 mm (inner ceiling +116 mm -> 14.3 mm clear of S5.5-03; 10.8 mm clear below S5.5-04).",
       "PRELIMINARY DESIGN ONLY: iec61508_certified=False, semi_s2_certified=False."
     ],
     "scad_params": {
-      "shroud_w_mm": 280.0,
-      "shroud_d_mm": 260.0,
-      "shroud_h_mm": 232.0,
+      "shroud_w_mm": 210.0,
+      "shroud_d_mm": 190.0,
+      "shroud_h_mm": 200.0,
       "min_316l_wall_mm": 3.0,
-      "cavity_w_mm": 164.0
+      "cavity_w_mm": 148.0,
+      "elev_deg": 36.0
     },
     "target_mass_kg": 38.0,
     "epistemic": {
@@ -258,31 +259,31 @@
     "watertight": true,
     "boundary_edges": 0,
     "non_manifold_edges": 0,
-    "signed_volume_mm3": 4530766.296553449,
-    "surface_area_mm2": 942289.1757885581,
-    "mass_kg": 37.99999999999998,
+    "signed_volume_mm3": 3991140.4078468047,
+    "surface_area_mm2": 631787.7100267222,
+    "mass_kg": 38.00000000000001,
     "cg_mm": [
-      -5.31312016354448e-14,
-      489.39103776057357,
-      506.08048735183655
+      420.0000000000014,
+      247.56431959243744,
+      709.2072242314201
     ],
     "bbox_min_mm": [
-      -140.0,
-      340.0,
-      390.0
+      315.0,
+      90.97852506363766,
+      560.0409338839185
     ],
     "bbox_max_mm": [
-      140.0,
-      619.8,
-      640.2
+      525.0,
+      374.38405936899653,
+      842.3403094788648
     ],
     "inertia_kg_mm2": [
-      595860.4906564613,
-      597171.8228966851,
-      716014.0677453979,
-      6.241370603281386e-10,
-      5.039568280465846e-10,
-      -2658.689013696805
+      323345.6999674279,
+      368697.6504623799,
+      352525.4114445254,
+      6.9734533005355245e-09,
+      9.297937734047366e-09,
+      2178.5067565793
     ],
     "triangle_count": 800,
     "vertex_count": 416,
@@ -300,184 +301,189 @@
   "shell_bboxes_mm": [
     [
       [
-        -140.0,
-        340.0,
-        390.0
+        315.0,
+        90.9785,
+        560.0409
       ],
       [
-        -82.0,
-        354.6,
-        622.0
+        354.0,
+        220.3472,
+        730.426
       ]
     ],
     [
       [
-        82.0,
-        340.0,
-        390.0
+        486.0,
+        90.9785,
+        560.0409
       ],
       [
-        140.0,
-        354.6,
-        622.0
+        525.0,
+        220.3472,
+        730.426
       ]
     ],
     [
       [
-        -81.8,
-        340.0,
-        390.0
+        354.2,
+        197.9554,
+        560.0409
       ],
       [
-        81.8,
-        354.6,
-        405.0
+        485.8,
+        220.3472,
+        583.1849
       ]
     ],
     [
       [
-        -81.8,
-        340.0,
-        607.0
+        354.2,
+        90.9785,
+        707.282
       ],
       [
-        81.8,
-        354.6,
-        622.0
+        485.8,
+        113.3703,
+        730.426
       ]
     ],
     [
       [
-        -140.0,
-        355.0,
-        390.0
+        315.0,
+        103.1138,
+        568.8577
       ],
       [
-        -134.0,
-        615.0,
-        622.0
+        327.0,
+        374.3841,
+        842.3403
       ]
     ],
     [
       [
-        134.0,
-        355.0,
-        390.0
+        513.0,
+        103.1138,
+        568.8577
       ],
       [
-        140.0,
-        615.0,
-        622.0
+        525.0,
+        374.3841,
+        842.3403
       ]
     ],
     [
       [
-        -133.8,
-        355.0,
-        390.0
+        327.2,
+        212.4418,
+        568.8577
       ],
       [
-        133.8,
-        615.0,
-        400.0
+        512.8,
+        374.3841,
+        691.8631
       ]
     ],
     [
       [
-        -133.8,
-        355.0,
-        612.0
+        327.2,
+        103.1138,
+        719.3349
       ],
       [
-        133.8,
-        615.0,
-        622.0
+        512.8,
+        265.056,
+        842.3403
       ]
     ],
     [
       [
-        -133.8,
-        605.0,
-        400.2
+        327.2,
+        252.2293,
+        682.6204
       ],
       [
-        133.8,
-        615.0,
-        611.8
+        512.8,
+        366.0375,
+        830.8523
       ]
     ],
     [
       [
-        -28.0,
-        615.2,
-        472.0
+        392.0,
+        314.5918,
+        717.8692
       ],
       [
-        28.0,
-        619.8,
-        528.0
+        448.0,
+        351.2292,
+        765.878
       ]
     ],
     [
       [
-        -131.0,
-        362.0,
-        440.0
+        329.0,
+        146.8376,
+        582.2379
       ],
       [
-        -93.0,
-        438.0,
-        560.0
+        352.0,
+        299.7398,
+        742.2195
       ]
     ],
     [
       [
-        93.0,
-        362.0,
-        440.0
+        488.0,
+        146.8376,
+        582.2379
       ],
       [
-        131.0,
-        438.0,
-        560.0
+        511.0,
+        299.7398,
+        742.2195
       ]
     ],
     [
       [
-        -116.0,
-        472.0,
-        622.2
+        327.0,
+        158.7555,
+        779.0213
       ],
       [
-        -74.0,
-        498.0,
-        640.2
+        369.0,
+        190.3701,
+        808.866
       ]
     ],
     [
       [
-        74.0,
-        472.0,
-        622.2
+        471.0,
+        158.7555,
+        779.0213
       ],
       [
-        116.0,
-        498.0,
-        640.2
+        513.0,
+        190.3701,
+        808.866
       ]
     ],
     [
       [
-        -120.0,
-        586.0,
-        416.0
+        328.0,
+        232.2529,
+        668.7942
       ],
       [
-        120.0,
-        602.0,
-        596.0
+        512.0,
+        350.4172,
+        818.8159
       ]
     ]
   ],
+  "shell_tie_manifest": {
+    "shell_count": 15,
+    "multi_shell_classification": "subassembly_tied_by_fasteners_or_mount",
+    "floating_structural_shells": 0
+  },
   "reconciliation_notes": []
 }

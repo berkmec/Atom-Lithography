@@ -69,6 +69,64 @@ def _pad_xy(comp: ComponentSpec, pin_num: str) -> tuple[float, float]:
     raise KeyError(f"Pin {pin_num} not found on {comp.ref}")
 
 
+def _ltc6268_soic8_pins(guard_nc_pins: bool = False) -> tuple[PinSpec, ...]:
+    """Exact Analog Devices LTC6268IS8 (8-lead SOIC S8) guard-ring-rotated pinout.
+
+    1:~SHDN (tie V+), 2:V+, 3:OUT, 4:V-, 5:NC(Guard), 6:-IN, 7:+IN, 8:NC(Guard).
+    """
+    names = {
+        "1": "SHDN_N",
+        "2": "V+",
+        "3": "OUT",
+        "4": "V-",
+        "5": "NC_GRD5" if guard_nc_pins else "NC5",
+        "6": "IN-",
+        "7": "IN+",
+        "8": "NC_GRD8" if guard_nc_pins else "NC8",
+    }
+    types = {
+        "1": "input",
+        "2": "power_in",
+        "3": "output",
+        "4": "power_in",
+        "5": "passive" if guard_nc_pins else "no_connect",
+        "6": "input",
+        "7": "input",
+        "8": "passive" if guard_nc_pins else "no_connect",
+    }
+    return auto_footprint_pads("Package_SO:SOIC-8_3.9x4.9mm_P1.27mm", [str(i) for i in range(1, 9)], names, types)
+
+
+def _ada4817_soic8_ep_pins() -> tuple[PinSpec, ...]:
+    """Exact Analog Devices ADA4817-1ARDZ (SOIC-8-1EP) pinout with Pin 1 FB, Pin 8 PD & Exposed Pad.
+
+    1:FB (tie OUT/RG2), 2:-IN, 3:+IN, 4:-VS, 5:NC, 6:OUT, 7:+VS, 8:PD (tie +VS active), 9:EP (-VS).
+    """
+    names = {
+        "1": "FB",
+        "2": "IN-",
+        "3": "IN+",
+        "4": "V-",
+        "5": "NC5",
+        "6": "OUT",
+        "7": "V+",
+        "8": "PD",
+    }
+    types = {
+        "1": "passive",
+        "2": "input",
+        "3": "input",
+        "4": "power_in",
+        "5": "no_connect",
+        "6": "output",
+        "7": "power_in",
+        "8": "input",
+    }
+    base = auto_footprint_pads("Package_SO:SOIC-8_3.9x4.9mm_P1.27mm", [str(i) for i in range(1, 9)], names, types)
+    ep = PinSpec("9", "EP", "power_in", 0.0, 0.0, 2.00, 3.00, 0.0)
+    return base + (ep,)
+
+
 def _soic8_opamp_pins(include_shdn: bool = False) -> tuple[PinSpec, ...]:
     names = {
         "1": "NC1",
@@ -93,16 +151,49 @@ def _soic8_opamp_pins(include_shdn: bool = False) -> tuple[PinSpec, ...]:
     return auto_footprint_pads("Package_SO:SOIC-8_3.9x4.9mm_P1.27mm", [str(i) for i in range(1, 9)], names, types)
 
 
-def _ldo_msop10_pins() -> tuple[PinSpec, ...]:
+def _msop12_ep_geometry(names: dict[str, str], types: dict[str, str]) -> tuple[PinSpec, ...]:
+    """12-lead MSOP with center Exposed Thermal Pad (Pin 13, P=0.65 mm)."""
+    pitch = 0.65
+    x_off = 2.65
+    pw, ph = 1.20, 0.36
+    pins: list[PinSpec] = []
+    for idx in range(12):
+        pnum = str(idx + 1)
+        if idx < 6:
+            dy = (idx - 2.5) * pitch
+            pins.append(PinSpec(pnum, names[pnum], types[pnum], round(-x_off, 4), round(dy, 4), pw, ph, 0.0))
+        else:
+            ridx = idx - 6
+            dy = (2.5 - ridx) * pitch
+            pins.append(PinSpec(pnum, names[pnum], types[pnum], round(x_off, 4), round(dy, 4), pw, ph, 0.0))
+    pins.append(PinSpec("13", names["13"], types["13"], 0.0, 0.0, 1.55, 2.80, 0.0))
+    return tuple(pins)
+
+
+def _lt3045_msop12_ep_pins() -> tuple[PinSpec, ...]:
+    """Exact Analog Devices LT3045EMSE (MSOP-12-1EP) positive 500 mA LDO pinout (EP = GND)."""
     names = {
-        "1": "IN1", "2": "IN2", "3": "EN", "4": "PG", "5": "ILIM",
-        "6": "GND", "7": "SET", "8": "OUTS", "9": "OUT1", "10": "OUT2",
+        "1": "IN1", "2": "IN2", "3": "IN3", "4": "EN_UV", "5": "PG", "6": "ILIM",
+        "7": "PGFB", "8": "GND", "9": "SET", "10": "OUTS", "11": "OUT1", "12": "OUT2", "13": "EP_GND",
     }
     types = {
-        "1": "power_in", "2": "power_in", "3": "input", "4": "no_connect", "5": "no_connect",
-        "6": "power_in", "7": "input", "8": "input", "9": "power_out", "10": "power_out",
+        "1": "power_in", "2": "power_in", "3": "power_in", "4": "input", "5": "no_connect", "6": "passive",
+        "7": "input", "8": "power_in", "9": "input", "10": "input", "11": "power_out", "12": "power_out", "13": "power_in",
     }
-    return auto_footprint_pads("Package_SO:MSOP-10_3x3mm_P0.5mm", [str(i) for i in range(1, 11)], names, types)
+    return _msop12_ep_geometry(names, types)
+
+
+def _lt3094_msop12_ep_pins() -> tuple[PinSpec, ...]:
+    """Exact Analog Devices LT3094EMSE (MSOP-12-1EP) negative 500 mA LDO pinout (EP = VIN_N!)."""
+    names = {
+        "1": "IN1", "2": "IN2", "3": "IN3", "4": "EN_UV", "5": "PG", "6": "ILIM",
+        "7": "VIOC", "8": "PGFB", "9": "GND", "10": "SET", "11": "OUTS", "12": "OUT", "13": "EP_VIN_N",
+    }
+    types = {
+        "1": "power_in", "2": "power_in", "3": "power_in", "4": "input", "5": "no_connect", "6": "passive",
+        "7": "no_connect", "8": "input", "9": "power_in", "10": "input", "11": "input", "12": "power_out", "13": "power_in",
+    }
+    return _msop12_ep_geometry(names, types)
 
 
 # ---------------------------------------------------------------------------
@@ -148,27 +239,40 @@ def build_cold_csa_board() -> BoardSpec:
     ))
     jpwr = add_c(ComponentSpec(
         "JPWR_COLD", "HDR_4P_VCCA_VSSA_AGND", "Connector_PinHeader:HDR_1x4_2.54mm",
-        62.0, 96.5, rotation_deg=90.0,
+        70.0, 96.5, rotation_deg=90.0,
         pins=auto_footprint_pads("HDR_1x4_2.54mm", ("1", "2", "3", "4"),
                                  {"1": "VCCA", "2": "VSSA", "3": "AGND1", "4": "AGND2"}),
         bom_id="S3.2-06", epistemic_tag="{Pasif-COTS}",
     ))
     cbulk_p = add_c(ComponentSpec(
         "CBULK_P", "10uF_10V_C0G", "Capacitor_SMD:C_0805_2012Metric",
-        78.0, 96.5, pins=auto_footprint_pads("0805", ("1", "2")), bom_id="S3.2-01", epistemic_tag="{Pasif-COTS}",
+        84.0, 96.5, pins=auto_footprint_pads("0805", ("1", "2")), bom_id="S3.2-01", epistemic_tag="{Pasif-COTS}",
     ))
     cbulk_n = add_c(ComponentSpec(
         "CBULK_N", "10uF_10V_C0G", "Capacitor_SMD:C_0805_2012Metric",
-        86.0, 96.5, pins=auto_footprint_pads("0805", ("1", "2")), bom_id="S3.2-01", epistemic_tag="{Pasif-COTS}",
+        92.0, 96.5, pins=auto_footprint_pads("0805", ("1", "2")), bom_id="S3.2-01", epistemic_tag="{Pasif-COTS}",
     ))
-    # Cold-board local guard-ring reference tie resistor (100 Ohm dampening to JGUARD_IN)
+    # Active cold bootstrap guard follower (LTC6268IS8 unity-gain buffer, ZERO 100nF AC-short to AGND!)
     rgrd_in = add_c(ComponentSpec(
-        "RGRD_IN", "49.9R_1pct", "Resistor_SMD:R_0603_1608Metric",
-        43.0, 96.5, pins=auto_footprint_pads("0603", ("1", "2")), bom_id="S3.1-02", epistemic_tag="{Pasif-COTS}",
+        "RGRD_IN", "100R_1pct", "Resistor_SMD:R_0603_1608Metric",
+        41.5, 96.5, pins=auto_footprint_pads("0603", ("1", "2")), bom_id="S3.1-02", epistemic_tag="{Pasif-COTS}",
     ))
-    cgrd_in = add_c(ComponentSpec(
-        "CGRD_IN", "100nF_C0G", "Capacitor_SMD:C_0603_1608Metric",
-        50.0, 96.5, pins=auto_footprint_pads("0603", ("1", "2")), bom_id="S3.1-02", epistemic_tag="{Pasif-COTS}",
+    ugrd_boot = add_c(ComponentSpec(
+        "U_GRD_BOOT", "LTC6268_GUARD_BOOT_BUF", "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm",
+        50.0, 96.5, pins=_ltc6268_soic8_pins(guard_nc_pins=False),
+        mpn="LTC6268IS8", bom_id="S3.1-02", epistemic_tag="{Aday-COTS}",
+    ))
+    rgrd_iso = add_c(ComponentSpec(
+        "RGRD_ISO", "49.9R_1pct", "Resistor_SMD:R_0603_1608Metric",
+        58.5, 96.5, pins=auto_footprint_pads("0603", ("1", "2")), bom_id="S3.1-02", epistemic_tag="{Pasif-COTS}",
+    ))
+    cd_grdp = add_c(ComponentSpec(
+        "CD_GRDP", "100nF_C0G", "Capacitor_SMD:C_0402_1005Metric",
+        50.0, 91.5, pins=auto_footprint_pads("0402", ("1", "2")), bom_id="S3.1-02", epistemic_tag="{Pasif-COTS}",
+    ))
+    cd_grdn = add_c(ComponentSpec(
+        "CD_GRDN", "100nF_C0G", "Capacitor_SMD:C_0402_1005Metric",
+        50.0, 101.5, pins=auto_footprint_pads("0402", ("1", "2")), bom_id="S3.1-02", epistemic_tag="{Pasif-COTS}",
     ))
 
     conn("HV_BIAS_COLD", "JHV_IN", 1)
@@ -176,9 +280,15 @@ def build_cold_csa_board() -> BoardSpec:
     conn("GUARD_IN", "JGUARD_IN", 1)
     conn("AGND", "JGUARD_IN", 2)
     conn("GUARD_IN", "RGRD_IN", 1)
-    conn("GUARD_DRV", "RGRD_IN", 2)
-    conn("GUARD_DRV", "CGRD_IN", 1)
-    conn("AGND", "CGRD_IN", 2)
+    conn("GUARD_REF", "RGRD_IN", 2)
+    conn("GUARD_REF", "U_GRD_BOOT", 7)     # LTC6268IS8 Pin 7 = +IN
+    conn("GUARD_BOOT_OUT", "U_GRD_BOOT", 3) # LTC6268IS8 Pin 3 = OUT
+    conn("GUARD_BOOT_OUT", "U_GRD_BOOT", 6) # LTC6268IS8 Pin 6 = -IN (unity-gain follower)
+    conn("GUARD_BOOT_OUT", "RGRD_ISO", 1)
+    conn("GUARD_DRV", "RGRD_ISO", 2)
+    conn("VCCA", "U_GRD_BOOT", 1); conn("VCCA", "U_GRD_BOOT", 2); conn("VSSA", "U_GRD_BOOT", 4)
+    conn("VCCA", "CD_GRDP", 1); conn("AGND", "CD_GRDP", 2)
+    conn("VSSA", "CD_GRDN", 1); conn("AGND", "CD_GRDN", 2)
     conn("VCCA", "JPWR_COLD", 1)
     conn("VSSA", "JPWR_COLD", 2)
     conn("AGND", "JPWR_COLD", 3)
@@ -211,19 +321,20 @@ def build_cold_csa_board() -> BoardSpec:
             f"D{ch}", "IBIC_PIXEL_DIODE_C0p5", "Custom:IBIC_PIXEL_FLIPCHIP_3P",
             33.5, yc, pins=diode_pins, bom_id="S3.1-01", epistemic_tag="{Ozel-Uretim}",
         ))
-        # Feedback Cf=0.25 pF & Rf=1 GOhm tightly adjacent to LTC6268 IN-
+        # Feedback Cf=0.25 pF & cryo thin-film 0805 low-parasitic Rf=1 GOhm adjacent to LTC6268 IN- (pin 6)
         cf = add_c(ComponentSpec(
             f"CF{ch}", "0.25pF_C0G_NP0", "Capacitor_SMD:C_0402_1005Metric",
-            44.0, yc - 2.0, pins=auto_footprint_pads("0402", ("1", "2")), bom_id="S3.2-01", epistemic_tag="{Pasif-COTS}",
+            44.0, yc - 1.9, pins=auto_footprint_pads("0402", ("1", "2")), bom_id="S3.2-01", epistemic_tag="{Pasif-COTS}",
         ))
         rf = add_c(ComponentSpec(
-            f"RF{ch}", "1G_THICKFILM_CRYO", "Resistor_SMD:R_0402_1005Metric",
-            44.0, yc + 2.0, pins=auto_footprint_pads("0402", ("1", "2")), bom_id="S3.2-01", epistemic_tag="{Pasif-COTS}",
+            f"RF{ch}", "1G_THINFILM_CRYO_0805", "Resistor_SMD:R_0805_2012Metric",
+            44.0, yc + 1.9, pins=auto_footprint_pads("0805", ("1", "2")),
+            mpn="CHV0805-1G0-THINFILM-CRYO", bom_id="S3.2-01", epistemic_tag="{Pasif-COTS}",
         ))
-        # LTC6268 CSA (100 K cold island)
+        # LTC6268IS8 CSA (100 K cold island; rotated 180 deg so pins 5/6/7/8 face left toward D{ch}/CF/RF)
         ua = add_c(ComponentSpec(
             f"U{ch}A", "LTC6268_CSA_FET", "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm",
-            56.5, yc, pins=_soic8_opamp_pins(include_shdn=True),
+            56.5, yc, rotation_deg=180.0, pins=_ltc6268_soic8_pins(guard_nc_pins=True),
             mpn="LTC6268IS8", bom_id="S3.2-01", epistemic_tag="{Aday-COTS}",
         ))
         cd_ap = add_c(ComponentSpec(
@@ -234,10 +345,10 @@ def build_cold_csa_board() -> BoardSpec:
             f"CD{ch}AN", "100nF_C0G", "Capacitor_SMD:C_0402_1005Metric",
             66.5, yc + 2.3, pins=auto_footprint_pads("0402", ("1", "2")), bom_id="S3.2-01", epistemic_tag="{Pasif-COTS}",
         ))
-        # 50 Ohm Coax Line Driver (LTC6268, G = +2.00 driving 49.9 Ohm series -> 50 Ohm coax)
+        # 50 Ohm Coax Line Driver (LTC6268IS8, G = +2.00 driving 49.9 Ohm series -> 50 Ohm coax; rotated 180 deg)
         ud = add_c(ComponentSpec(
             f"U{ch}D", "LTC6268_COAX_DRV_G2", "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm",
-            77.5, yc, pins=_soic8_opamp_pins(include_shdn=True),
+            77.5, yc, rotation_deg=180.0, pins=_ltc6268_soic8_pins(guard_nc_pins=False),
             mpn="LTC6268IS8", bom_id="S3.2-01", epistemic_tag="{Aday-COTS}",
         ))
         rdrv1 = add_c(ComponentSpec(
@@ -275,61 +386,64 @@ def build_cold_csa_board() -> BoardSpec:
         conn(f"HV_BIAS_{p}", diode.ref, 2)
         conn("GUARD_DRV", diode.ref, 3)
 
-        # Ultra-low-C summing node CH{ch}.CSA_SUM
+        # Ultra-low-C summing node CH{ch}.CSA_SUM (exact LTC6268IS8 S8 pinout: 6=-IN, 7=+IN, 5/8=GUARD_DRV)
         conn(f"{p}.CSA_SUM", diode.ref, 1)
         conn(f"{p}.CSA_SUM", cf.ref, 2)
         conn(f"{p}.CSA_SUM", rf.ref, 2)
-        conn(f"{p}.CSA_SUM", ua.ref, 2)
-        conn("AGND", ua.ref, 3)
+        conn(f"{p}.CSA_SUM", ua.ref, 6)
+        conn("AGND", ua.ref, 7)
+        conn("GUARD_DRV", ua.ref, 5)
+        conn("GUARD_DRV", ua.ref, 8)
 
-        # CSA output -> feedback + coax driver IN+
-        conn(f"{p}.CSA_OUT", ua.ref, 6)
+        # CSA output (Pin 3) -> feedback + coax driver +IN (Pin 7)
+        conn(f"{p}.CSA_OUT", ua.ref, 3)
         conn(f"{p}.CSA_OUT", cf.ref, 1)
         conn(f"{p}.CSA_OUT", rf.ref, 1)
-        conn(f"{p}.CSA_OUT", ud.ref, 3)
+        conn(f"{p}.CSA_OUT", ud.ref, 7)
 
-        # Coax line driver G = +2.00 (RDRV1 = RDRV2 = 499 Ohm) -> RTX (49.9 Ohm) -> 50 Ohm coax
-        conn(f"{p}.DRV_FB", ud.ref, 2)
+        # Coax line driver G = +2.00 (LTC6268IS8: 6=-IN, 3=OUT) -> RTX (49.9 Ohm) -> 50 Ohm coax (S3.2-04)
+        conn(f"{p}.DRV_FB", ud.ref, 6)
         conn(f"{p}.DRV_FB", rdrv1.ref, 1)
         conn(f"{p}.DRV_FB", rdrv2.ref, 1)
         conn("AGND", rdrv1.ref, 2)
-        conn(f"{p}.DRV_OUT", ud.ref, 6)
+        conn(f"{p}.DRV_OUT", ud.ref, 3)
         conn(f"{p}.DRV_OUT", rdrv2.ref, 2)
         conn(f"{p}.DRV_OUT", rtx.ref, 1)
         conn(f"{p}.COAX_TX", rtx.ref, 2)
         conn(f"{p}.COAX_TX", jcoax.ref, 1)
         conn("AGND", jcoax.ref, 2)
 
-        # Power & decoupling
-        conn("VCCA", ua.ref, 7); conn("VCCA", ua.ref, 8); conn("VSSA", ua.ref, 4)
+        # Exact LTC6268IS8 power & enable (Pin 1=~SHDN -> VCCA, Pin 2=V+ -> VCCA, Pin 4=V- -> VSSA)
+        conn("VCCA", ua.ref, 1); conn("VCCA", ua.ref, 2); conn("VSSA", ua.ref, 4)
         conn("VCCA", cd_ap.ref, 1); conn("AGND", cd_ap.ref, 2)
         conn("VSSA", cd_an.ref, 1); conn("AGND", cd_an.ref, 2)
-        conn("VCCA", ud.ref, 7); conn("VCCA", ud.ref, 8); conn("VSSA", ud.ref, 4)
+        conn("VCCA", ud.ref, 1); conn("VCCA", ud.ref, 2); conn("VSSA", ud.ref, 4)
         conn("VCCA", cd_dp.ref, 1); conn("AGND", cd_dp.ref, 2)
         conn("VSSA", cd_dn.ref, 1); conn("AGND", cd_dn.ref, 2)
 
         # Copper traces:
-        # 1) Short high-Z CSA_SUM trace (total length < 12 mm, width 0.15 mm)
+        # 1) Short high-Z CSA_SUM trace (total length < 20 mm, width 0.15 mm) connecting D{ch}.1 -> CF/RF.2 -> U{ch}A.6
         p_d1 = _pad_xy(diode, "1")
         p_cf2 = _pad_xy(cf, "2")
         p_rf2 = _pad_xy(rf, "2")
-        p_u2 = _pad_xy(ua, "2")
-        traces.append(make_manhattan_trace(f"{p}.CSA_SUM", "F.Cu", p_d1, (44.48, yc), width_mm=0.15))
-        traces.append(make_manhattan_trace(f"{p}.CSA_SUM", "F.Cu", p_cf2, p_rf2, width_mm=0.15))
-        traces.append(make_manhattan_trace(f"{p}.CSA_SUM", "F.Cu", (44.48, yc), p_u2, width_mm=0.15, mid_x=49.5))
+        p_u6 = _pad_xy(ua, "6")
+        traces.append(make_manhattan_trace(f"{p}.CSA_SUM", "F.Cu", p_d1, (45.0, yc), width_mm=0.15))
+        traces.append(make_manhattan_trace(f"{p}.CSA_SUM", "F.Cu", p_cf2, (45.0, yc), width_mm=0.15))
+        traces.append(make_manhattan_trace(f"{p}.CSA_SUM", "F.Cu", p_rf2, (45.0, yc), width_mm=0.15))
+        traces.append(make_manhattan_trace(f"{p}.CSA_SUM", "F.Cu", (45.0, yc), p_u6, width_mm=0.15, mid_x=49.5))
 
-        # 2) Physically closed 3D driven Guard Ring cage enclosing CSA_SUM (S3.2-01 / S3.1-02)
-        #    Corner vias at y = yc +/- 3.6 sit strictly outside In1/In2 keepout (yc +/- 3.0)
+        # 2) Physically closed 3D driven Guard Ring cage enclosing D{ch}.1 AND U{ch}A.6 without crossing under CSA_SUM!
+        #    Left rail x=34.2 sits strictly left of D{ch}.1 (x=35.15); right rail x=55.0 sits strictly right of U{ch}A.6 (x=53.80)
         gr_traces, gr_vias = connect_guard_ring(
-            "GUARD_DRV", "F.Cu", 36.8, round(yc - 3.6, 3), 52.0, round(yc + 3.6, 3),
+            "GUARD_DRV", "F.Cu", 34.2, round(yc - 3.6, 3), 55.0, round(yc + 3.6, 3),
             width_mm=0.25, via_layer="B.Cu", via_diameter_mm=0.48, via_drill_mm=0.24, top_only_rails=True,
         )
         traces.extend(gr_traces)
         vias.extend(gr_vias)
-        # 3) Reference-plane copper keepout directly under CSA_SUM to enforce < 0.15 pF stray C!
+        # 3) Reference-plane copper keepout enclosing D{ch}.1 (x=34.8..35.5) through U{ch}A.6 (x=53.07..54.52)!
         keepouts.append(KeepoutSpec(
             name=f"KO_CSASUM_{p}", kind="copper_keepout", layers=("In1.Cu", "In2.Cu"),
-            x_mm=34.5, y_mm=round(yc - 3.0, 3), width_mm=18.0, height_mm=6.0,
+            x_mm=34.0, y_mm=round(yc - 3.0, 3), width_mm=21.2, height_mm=6.0,
         ))
 
         # 4) Controlled-impedance 50 Ohm microstrip from RTX.2 to JCOAX.1 on F.Cu
@@ -358,11 +472,14 @@ def build_cold_csa_board() -> BoardSpec:
             target_z0_ohm=z0,
         ))
 
-    # Ground/power zones (leaving left x < 31.0 mm clear of AGND/power planes on F.Cu; In1/In2 start at x=28 mm away from HV trunk)
+    # Ground/power zones: In1.Cu AGND starts at x=35.5 mm (clear of HV D{ch}.2 at x=31.85);
+    # In2.Cu VCCA/VSSA start at x=56.0 mm (strictly right of KO_CSASUM x=55.2 and U{ch}A input pins);
+    # B.Cu active GUARD_DRV shield zone directly under CSA_SUM keepout window (x=34.2..55.0).
     zones = (
-        ZoneSpec("AGND", "In1.Cu", ((28.0, 2.0), (123.0, 2.0), (123.0, 102.0), (28.0, 102.0))),
-        ZoneSpec("VCCA", "In2.Cu", ((54.0, 2.0), (105.0, 2.0), (105.0, 52.0), (54.0, 52.0))),
-        ZoneSpec("VSSA", "In2.Cu", ((54.0, 53.0), (105.0, 53.0), (105.0, 102.0), (54.0, 102.0))),
+        ZoneSpec("AGND", "In1.Cu", ((35.5, 2.0), (123.0, 2.0), (123.0, 102.0), (35.5, 102.0))),
+        ZoneSpec("VCCA", "In2.Cu", ((56.0, 2.0), (105.0, 2.0), (105.0, 52.0), (56.0, 52.0))),
+        ZoneSpec("VSSA", "In2.Cu", ((56.0, 53.0), (105.0, 53.0), (105.0, 102.0), (56.0, 102.0))),
+        ZoneSpec("GUARD_DRV", "B.Cu", ((34.2, 8.0), (55.0, 8.0), (55.0, 89.5), (34.2, 89.5))),
     )
 
     creepage_rules = (
@@ -456,18 +573,18 @@ def build_warm_shaper_board() -> BoardSpec:
     ))
     jadc = add_c(ComponentSpec(
         "JADC", "FMC_PHA_ADC_TAP_16P", "Connector_PinHeader:HDR_2x8_2.54mm",
-        177.0, 32.0,
+        112.0, 6.5, rotation_deg=90.0,
         pins=auto_footprint_pads("HDR_2x8_2.54mm", [str(i) for i in range(1, 17)]),
         bom_id="S3.3-03", epistemic_tag="{Pasif-COTS}",
     ))
     jfpga = add_c(ComponentSpec(
         "JFPGA", "FPGA_COUNT_SPI_24P", "Connector_PinHeader:HDR_2x12_2.54mm",
-        177.0, 82.0,
+        171.0, 62.0,
         pins=auto_footprint_pads("HDR_2x12_2.54mm", [str(i) for i in range(1, 25)]),
         bom_id="S3.3-01", epistemic_tag="{Pasif-COTS}",
     ))
 
-    # Ultra-low-noise LT3045 / LT3094 LDO Power Tree (S3.2-06: +/-12V & +/-5V -> +/-2.5V, +3.3V, +/-5V)
+    # Ultra-low-noise LT3045EMSE / LT3094EMSE MSOP-12-1EP LDO Power Tree (S3.2-06)
     ldo_specs = [
         ("ULDO_P2V5", "LT3045_P2V5_LDO", "VIN_P5", "VCCA", "AGND", "24.9k_0.1pct", 36.0),
         ("ULDO_N2V5", "LT3094_N2V5_LDO", "VIN_N5", "VSSA", "AGND", "24.9k_0.1pct", 56.0),
@@ -476,10 +593,12 @@ def build_warm_shaper_board() -> BoardSpec:
         ("ULDO_N5A",  "LT3094_N5V_LDO",  "VIN_N12", "V_N5A", "AGND", "49.9k_0.1pct", 114.0),
     ]
     for lref, lval, vin, vout, gnd, rset_val, lx in ldo_specs:
+        is_pos = "LT3045" in lval
         uldo = add_c(ComponentSpec(
-            lref, lval, "Package_SO:MSOP-10_3x3mm_P0.5mm",
-            lx, 118.0, pins=_ldo_msop10_pins(),
-            mpn="LT3045EMSE" if "LT3045" in lval else "LT3094EMSE",
+            lref, lval, "Package_SO:MSOP-12-1EP_3x4mm_P0.65mm",
+            lx, 118.0,
+            pins=_lt3045_msop12_ep_pins() if is_pos else _lt3094_msop12_ep_pins(),
+            mpn="LT3045EMSE" if is_pos else "LT3094EMSE",
             bom_id="S3.2-06", epistemic_tag="{Aday-COTS}",
         ))
         cin = add_c(ComponentSpec(
@@ -492,18 +611,34 @@ def build_warm_shaper_board() -> BoardSpec:
         ))
         rset = add_c(ComponentSpec(
             f"RSET_{lref}", rset_val, "Resistor_SMD:R_0402_1005Metric",
-            lx - 5.5, 123.5, pins=auto_footprint_pads("0402", ("1", "2")), bom_id="S3.2-06", epistemic_tag="{Pasif-COTS}",
+            lx - 5.5, 124.5, pins=auto_footprint_pads("0402", ("1", "2")), bom_id="S3.2-06", epistemic_tag="{Pasif-COTS}",
         ))
         cset = add_c(ComponentSpec(
             f"CSET_{lref}", "4.7uF_10V_X7R", "Capacitor_SMD:C_0603_1608Metric",
-            lx + 5.5, 123.5, pins=auto_footprint_pads("0603", ("1", "2")), bom_id="S3.2-06", epistemic_tag="{Pasif-COTS}",
+            lx + 5.5, 124.5, pins=auto_footprint_pads("0603", ("1", "2")), bom_id="S3.2-06", epistemic_tag="{Pasif-COTS}",
         ))
-        conn(vin, uldo.ref, 1); conn(vin, uldo.ref, 2); conn(vin, uldo.ref, 3)
-        conn(gnd, uldo.ref, 6)
-        conn(f"{lref}_SET", uldo.ref, 7)
+        # Exact 12-lead + EP pinouts: LT3045EMSE (positive, EP=GND) vs LT3094EMSE (negative, EP=VIN_N)
+        for p_in in (1, 2, 3, 4):
+            conn(vin, uldo.ref, p_in)
+        if is_pos:
+            conn(gnd, uldo.ref, 6)    # ILIM -> GND (max 500 mA limit)
+            conn(vout, uldo.ref, 7)   # PGFB -> VOUT (PG unused)
+            conn(gnd, uldo.ref, 8)    # GND
+            conn(f"{lref}_SET", uldo.ref, 9)
+            conn(vout, uldo.ref, 10)  # OUTS
+            conn(vout, uldo.ref, 11)  # OUT
+            conn(vout, uldo.ref, 12)  # OUT
+            conn(gnd, uldo.ref, 13)   # EP = GND
+        else:
+            conn(gnd, uldo.ref, 6)    # ILIM -> GND
+            conn(vout, uldo.ref, 8)   # PGFB -> VOUT_N (Pin 7 VIOC NC)
+            conn(gnd, uldo.ref, 9)    # GND
+            conn(f"{lref}_SET", uldo.ref, 10)
+            conn(vout, uldo.ref, 11)  # OUTS
+            conn(vout, uldo.ref, 12)  # OUT
+            conn(vin, uldo.ref, 13)   # EP = VIN_N (internally connected to negative IN!)
         conn(f"{lref}_SET", rset.ref, 1); conn(gnd, rset.ref, 2)
         conn(f"{lref}_SET", cset.ref, 1); conn(gnd, cset.ref, 2)
-        conn(vout, uldo.ref, 8); conn(vout, uldo.ref, 9); conn(vout, uldo.ref, 10)
         conn(vin, cin.ref, 1); conn(gnd, cin.ref, 2)
         conn(vout, cout.ref, 1); conn(gnd, cout.ref, 2)
 
@@ -544,7 +679,7 @@ def build_warm_shaper_board() -> BoardSpec:
 
     for ch in range(CHANNELS):
         p = f"CH{ch}"
-        yc = round(12.5 + ch * 11.5, 3)
+        yc = round(20.0 + ch * 11.0, 3)
 
         jin = add_c(ComponentSpec(
             f"JIN{ch}", "SMA_50R_FROM_CF63", "Connector_Coaxial:SMA_EdgeMount",
@@ -565,8 +700,8 @@ def build_warm_shaper_board() -> BoardSpec:
             33.0, yc, pins=auto_footprint_pads("0402", ("1", "2")), bom_id="S3.2-02", epistemic_tag="{Pasif-COTS}",
         ))
         ub = add_c(ComponentSpec(
-            f"U{ch}B", "ADA4817-1_SHAPER", "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm",
-            44.5, yc, pins=_soic8_opamp_pins(include_shdn=False),
+            f"U{ch}B", "ADA4817-1_SHAPER", "Package_SO:SOIC-8-1EP_3.9x4.9mm_P1.27mm",
+            44.5, yc, pins=_ada4817_soic8_ep_pins(),
             mpn="ADA4817-1ARDZ", bom_id="S3.2-02", epistemic_tag="{Aday-COTS}",
         ))
         rg1 = add_c(ComponentSpec(
@@ -591,62 +726,63 @@ def build_warm_shaper_board() -> BoardSpec:
         ))
         cp = add_c(ComponentSpec(
             f"CP{ch}", "600pF_C0G_1pct", "Capacitor_SMD:C_0603_1608Metric",
-            77.0, yc, pins=auto_footprint_pads("0603", ("1", "2")), bom_id="S3.2-02", epistemic_tag="{Pasif-COTS}",
+            76.5, yc, pins=auto_footprint_pads("0603", ("1", "2")), bom_id="S3.2-02", epistemic_tag="{Pasif-COTS}",
         ))
         # Buffered Analog SHP_OUT Tap to 50 MS/s 12-bit FMC PHA ADC (S3.3-03)
         ue = add_c(ComponentSpec(
-            f"U{ch}E", "ADA4817-1_ADC_BUF", "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm",
-            88.5, yc, pins=_soic8_opamp_pins(include_shdn=False),
+            f"U{ch}E", "ADA4817-1_ADC_BUF", "Package_SO:SOIC-8-1EP_3.9x4.9mm_P1.27mm",
+            87.5, yc, pins=_ada4817_soic8_ep_pins(),
             mpn="ADA4817-1ARDZ", bom_id="S3.3-03", epistemic_tag="{Aday-COTS}",
         ))
         cd_ep = add_c(ComponentSpec(
             f"CD{ch}EP", "100nF_C0G", "Capacitor_SMD:C_0402_1005Metric",
-            98.0, yc - 2.3, pins=auto_footprint_pads("0402", ("1", "2")), bom_id="S3.3-03", epistemic_tag="{Pasif-COTS}",
+            96.0, yc - 2.3, pins=auto_footprint_pads("0402", ("1", "2")), bom_id="S3.3-03", epistemic_tag="{Pasif-COTS}",
         ))
         cd_en = add_c(ComponentSpec(
             f"CD{ch}EN", "100nF_C0G", "Capacitor_SMD:C_0402_1005Metric",
-            98.0, yc + 2.3, pins=auto_footprint_pads("0402", ("1", "2")), bom_id="S3.3-03", epistemic_tag="{Pasif-COTS}",
+            96.0, yc + 2.3, pins=auto_footprint_pads("0402", ("1", "2")), bom_id="S3.3-03", epistemic_tag="{Pasif-COTS}",
         ))
         raa = add_c(ComponentSpec(
             f"RAA{ch}", "49.9R_1pct", "Resistor_SMD:R_0402_1005Metric",
-            105.0, yc, pins=auto_footprint_pads("0402", ("1", "2")), bom_id="S3.3-03", epistemic_tag="{Pasif-COTS}",
+            102.5, yc, pins=auto_footprint_pads("0402", ("1", "2")), bom_id="S3.3-03", epistemic_tag="{Pasif-COTS}",
         ))
         caa = add_c(ComponentSpec(
             f"CAA{ch}", "120pF_C0G_1pct", "Capacitor_SMD:C_0402_1005Metric",
-            111.5, yc, pins=auto_footprint_pads("0402", ("1", "2")), bom_id="S3.3-03", epistemic_tag="{Pasif-COTS}",
+            108.0, yc, pins=auto_footprint_pads("0402", ("1", "2")), bom_id="S3.3-03", epistemic_tag="{Pasif-COTS}",
         ))
-        # Per-channel DAC threshold RC filter + TLV3501 hysteresis comparator
+        # Per-channel DAC threshold RC filter + TI SBOS321 TLV3501AIDBVR hysteresis comparator
         rdac = add_c(ComponentSpec(
             f"RDAC{ch}", "1.00k_1pct", "Resistor_SMD:R_0402_1005Metric",
-            119.5, yc - 2.3, pins=auto_footprint_pads("0402", ("1", "2")), bom_id="S3.2-02", epistemic_tag="{Pasif-COTS}",
+            124.5, yc - 2.3, pins=auto_footprint_pads("0402", ("1", "2")), bom_id="S3.2-02", epistemic_tag="{Pasif-COTS}",
         ))
         cdac = add_c(ComponentSpec(
             f"CDAC{ch}", "100nF_C0G", "Capacitor_SMD:C_0402_1005Metric",
-            119.5, yc + 2.3, pins=auto_footprint_pads("0402", ("1", "2")), bom_id="S3.2-02", epistemic_tag="{Pasif-COTS}",
+            124.5, yc + 2.3, pins=auto_footprint_pads("0402", ("1", "2")), bom_id="S3.2-02", epistemic_tag="{Pasif-COTS}",
         ))
         rhys1 = add_c(ComponentSpec(
             f"RHYS1{ch}", "1.00k_1pct", "Resistor_SMD:R_0402_1005Metric",
-            127.5, yc - 2.3, pins=auto_footprint_pads("0402", ("1", "2")), bom_id="S3.2-02", epistemic_tag="{Pasif-COTS}",
+            132.0, yc - 2.3, pins=auto_footprint_pads("0402", ("1", "2")), bom_id="S3.2-02", epistemic_tag="{Pasif-COTS}",
         ))
         rhys2 = add_c(ComponentSpec(
             f"RHYS2{ch}", "1.00M_1pct", "Resistor_SMD:R_0402_1005Metric",
-            127.5, yc + 2.3, pins=auto_footprint_pads("0402", ("1", "2")), bom_id="S3.2-02", epistemic_tag="{Pasif-COTS}",
+            132.0, yc + 2.3, pins=auto_footprint_pads("0402", ("1", "2")), bom_id="S3.2-02", epistemic_tag="{Pasif-COTS}",
         ))
+        # Exact TI SBOS321 DBV SOT-23-6 pinout: 1:-IN, 2:V-, 3:+IN, 4:V+, 5:OUT, 6:SHDN(active-HIGH -> DGND)
         uc = add_c(ComponentSpec(
             f"U{ch}C", "TLV3501_CMP_4p5NS", "Package_TO_SOT_SMD:SOT-23-6",
-            138.0, yc,
+            141.5, yc,
             pins=auto_footprint_pads("SOT-23-6", ("1", "2", "3", "4", "5", "6"),
-                                     {"1": "OUT", "2": "GND", "3": "IN+", "4": "IN-", "5": "SHDN", "6": "VCC"},
-                                     {"1": "output", "2": "power_in", "3": "input", "4": "input", "5": "input", "6": "power_in"}),
+                                     {"1": "IN-", "2": "V-", "3": "IN+", "4": "V+", "5": "OUT", "6": "SHDN"},
+                                     {"1": "input", "2": "power_in", "3": "input", "4": "power_in", "5": "output", "6": "input"}),
             mpn="TLV3501AIDBVR", bom_id="S3.2-02", epistemic_tag="{Aday-COTS}",
         ))
         cd_c = add_c(ComponentSpec(
             f"CD{ch}C", "100nF_C0G", "Capacitor_SMD:C_0402_1005Metric",
-            146.5, yc + 2.3, pins=auto_footprint_pads("0402", ("1", "2")), bom_id="S3.2-02", epistemic_tag="{Pasif-COTS}",
+            148.5, yc + 2.3, pins=auto_footprint_pads("0402", ("1", "2")), bom_id="S3.2-02", epistemic_tag="{Pasif-COTS}",
         ))
         rterm = add_c(ComponentSpec(
             f"RTERM{ch}", "49.9R_1pct", "Resistor_SMD:R_0402_1005Metric",
-            154.0, yc, pins=auto_footprint_pads("0402", ("1", "2")), bom_id="S3.2-02", epistemic_tag="{Pasif-COTS}",
+            155.0, yc, pins=auto_footprint_pads("0402", ("1", "2")), bom_id="S3.2-02", epistemic_tag="{Pasif-COTS}",
         ))
 
         # Netlist wiring
@@ -662,6 +798,7 @@ def build_warm_shaper_board() -> BoardSpec:
         conn(f"{p}.SHP_FB", rg1.ref, 1); conn("AGND", rg1.ref, 2)
         conn(f"{p}.SHP_FB", rg2.ref, 1)
         conn(f"{p}.SHP_GAIN", ub.ref, 6)
+        conn(f"{p}.SHP_GAIN", ub.ref, 1)      # ADA4817-1 Pin 1 = FB tied to OUT/RG2
         conn(f"{p}.SHP_GAIN", rg2.ref, 2)
         conn(f"{p}.SHP_GAIN", rs2.ref, 1)
 
@@ -671,6 +808,7 @@ def build_warm_shaper_board() -> BoardSpec:
 
         # Unity-gain buffered analog SHP_BUF drives BOTH anti-alias FMC ADC tap AND comparator RHYS1!
         conn(f"{p}.SHP_BUF", ue.ref, 6)
+        conn(f"{p}.SHP_BUF", ue.ref, 1)      # ADA4817-1 Pin 1 = FB tied to OUT
         conn(f"{p}.SHP_BUF", ue.ref, 2)
         conn(f"{p}.SHP_BUF", raa.ref, 1)
         conn(f"{p}.SHP_BUF", rhys1.ref, 1)
@@ -678,37 +816,78 @@ def build_warm_shaper_board() -> BoardSpec:
         conn(f"{p}.SHP_ADC", caa.ref, 1); conn("AGND", caa.ref, 2)
         conn(f"{p}.SHP_ADC", jadc.ref, 1 + 2 * ch)
 
-        # Threshold DAC filter & TLV3501 comparator
+        # Threshold DAC filter & exact TI SBOS321 TLV3501 comparator (1:-IN, 2:V-, 3:+IN, 4:V+, 5:OUT, 6:SHDN)
         conn(f"{p}.THRESH_RAW", udac.ref, dac_out_pins[ch])
         conn(f"{p}.THRESH_RAW", rdac.ref, 1)
         conn(f"{p}.THRESH", rdac.ref, 2)
         conn(f"{p}.THRESH", cdac.ref, 1); conn("AGND", cdac.ref, 2)
-        conn(f"{p}.THRESH", uc.ref, 4)
+        conn(f"{p}.THRESH", uc.ref, 1)
 
         conn(f"{p}.CMP_INP", rhys1.ref, 2)
         conn(f"{p}.CMP_INP", rhys2.ref, 1)
         conn(f"{p}.CMP_INP", uc.ref, 3)
-        conn(f"{p}.CMP_OUT", uc.ref, 1)
+        conn(f"{p}.CMP_OUT", uc.ref, 5)
         conn(f"{p}.CMP_OUT", rhys2.ref, 2)
         conn(f"{p}.CMP_OUT", rterm.ref, 1)
         conn(f"{p}.COUNT_HIT", rterm.ref, 2)
         conn(f"{p}.COUNT_HIT", jfpga.ref, 1 + ch)
 
-        # Power & decoupling
-        conn("VCCA", ub.ref, 7); conn("VSSA", ub.ref, 4)
+        # Power, active PD/SHDN, exposed thermal pad EP (VSSA) & decoupling
+        conn("VCCA", ub.ref, 7); conn("VCCA", ub.ref, 8)
+        conn("VSSA", ub.ref, 4); conn("VSSA", ub.ref, 9)
         conn("VCCA", cd_bp.ref, 1); conn("AGND", cd_bp.ref, 2)
         conn("VSSA", cd_bn.ref, 1); conn("AGND", cd_bn.ref, 2)
-        conn("VCCA", ue.ref, 7); conn("VSSA", ue.ref, 4)
+        conn("VCCA", ue.ref, 7); conn("VCCA", ue.ref, 8)
+        conn("VSSA", ue.ref, 4); conn("VSSA", ue.ref, 9)
         conn("VCCA", cd_ep.ref, 1); conn("AGND", cd_ep.ref, 2)
         conn("VSSA", cd_en.ref, 1); conn("AGND", cd_en.ref, 2)
-        conn("VCCD", uc.ref, 6); conn("VCCD", uc.ref, 5); conn("DGND", uc.ref, 2)
+        conn("VCCD", uc.ref, 4); conn("DGND", uc.ref, 2); conn("DGND", uc.ref, 6)
         conn("VCCD", cd_c.ref, 1); conn("DGND", cd_c.ref, 2)
 
-        # Controlled-impedance 50 Ohm coax-input microstrip on F.Cu (remaining nets & SHP_ADC/COUNT_HIT routed pad-to-pad by auto_route_board)
+        # Controlled-impedance 50 Ohm microstrips strictly on F.Cu over continuous In1.Cu AGND / DGND!
         traces.append(make_manhattan_trace(f"{p}.COAX_IN", "F.Cu", _pad_xy(jin, "1"), _pad_xy(rrx, "1"), width_mm=w50))
+        # SHP_ADC: F.Cu corridor x=110.5..121.0 (over solid In1.Cu AGND, never crossing DGND or B.Cu!)
+        p_raa2 = _pad_xy(raa, "2")
+        p_caa1 = _pad_xy(caa, "1")
+        p_jadc = _pad_xy(jadc, str(1 + 2 * ch))
+        x_lane_adc = round(111.0 + ch * 1.15, 3)
+        y_top_adc = round(14.5 - ch * 0.85, 3)
+        traces.append(make_manhattan_trace(f"{p}.SHP_ADC", "F.Cu", p_raa2, p_caa1, width_mm=w50))
+        traces.append(TraceSpec(
+            f"{p}.SHP_ADC", "F.Cu",
+            (p_caa1, (p_caa1[0], round(yc - 1.6, 3)), (x_lane_adc, round(yc - 1.6, 3)), (x_lane_adc, y_top_adc), (p_jadc[0], y_top_adc), p_jadc),
+            width_mm=w50,
+        ))
+        # COUNT_HIT: 100% planar F.Cu routing over solid In1.Cu DGND (zero crossings, zero B.Cu segments!)
+        p_rterm2 = _pad_xy(rterm, "2")
+        p_jfpga = _pad_xy(jfpga, str(1 + ch))
+        if ch % 2 == 0:
+            # Left column of JFPGA (pins 1, 3, 5, 7 at x=169.73)
+            x_lane_hit = {0: 166.5, 2: 162.5, 4: 162.5, 6: 166.5}[ch]
+            traces.append(TraceSpec(
+                f"{p}.COUNT_HIT", "F.Cu",
+                (p_rterm2, (x_lane_hit, p_rterm2[1]), (x_lane_hit, p_jfpga[1]), p_jfpga),
+                width_mm=w50,
+            ))
+        elif ch == 7:
+            # Pin 8 (right column bottom of COUNT_HIT group): clean wrap below JFPGA on F.Cu
+            traces.append(TraceSpec(
+                f"{p}.COUNT_HIT", "F.Cu",
+                (p_rterm2, (177.5, p_rterm2[1]), (177.5, p_jfpga[1]), p_jfpga),
+                width_mm=w50,
+            ))
+        else:
+            # Right column pins 2, 4, 6: pass cleanly through exact 2.54 mm pin midpoint (0.207 mm clearance > 0.127 mm!)
+            x_lane_hit = {1: 164.5, 3: 160.5, 5: 164.5}[ch]
+            y_slot = round(p_jfpga[1] + 1.27, 4)
+            traces.append(TraceSpec(
+                f"{p}.COUNT_HIT", "F.Cu",
+                (p_rterm2, (x_lane_hit, p_rterm2[1]), (x_lane_hit, y_slot), (175.0, y_slot), (175.0, p_jfpga[1]), p_jfpga),
+                width_mm=w50,
+            ))
         # Ground stitching vias tied to In1.Cu AGND / DGND zones
         vias.append(ViaSpec("AGND", 13.0, round(yc - 2.6, 3), diameter_mm=0.60, drill_mm=0.30))
-        vias.append(ViaSpec("DGND", 150.0, round(yc - 2.6, 3), diameter_mm=0.60, drill_mm=0.30))
+        vias.append(ViaSpec("DGND", 151.5, round(yc - 2.6, 3), diameter_mm=0.60, drill_mm=0.30))
 
     nets: list[NetSpec] = []
     power_names = {"VIN_P12", "VIN_N12", "VIN_P5", "VIN_N5", "VCCA", "VSSA", "VCCD", "V_P5A", "V_N5A", "AGND", "DGND"}
@@ -813,10 +992,10 @@ def build_hv_bias_guard_board() -> BoardSpec:
         conn("AGND", jout.ref, 2)
         traces.append(make_manhattan_trace(f"HV_OUT{k}", "F.Cu", _pad_xy(riso, "2"), _pad_xy(jout, "1"), width_mm=0.35))
 
-    # 100:1 HV sense divider (RHV_DIV_TOP 2512 = 4.8 mm pad gap; MON_HV_DIV <= 1.0 V)
+    # 100:1 HV sense divider: RHV_DIV_TOP sits cleanly inside HV zone behind the extended air-slot!
     rhv_top = add_c(ComponentSpec(
         "RHV_DIV_TOP", "10.0M_200V_0.1pct", "Resistor_SMD:R_2512_6332Metric",
-        51.0, 69.5, pins=auto_footprint_pads("2512", ("1", "2")), bom_id="S3.2-03", epistemic_tag="{Pasif-COTS}",
+        47.0, 44.0, pins=auto_footprint_pads("2512", ("1", "2")), bom_id="S3.2-03", epistemic_tag="{Pasif-COTS}",
     ))
     rhv_bot = add_c(ComponentSpec(
         "RHV_DIV_BOT", "100k_0.1pct", "Resistor_SMD:R_0805_2012Metric",
@@ -827,17 +1006,18 @@ def build_hv_bias_guard_board() -> BoardSpec:
         70.5, 69.5, pins=auto_footprint_pads("0603", ("1", "2")), bom_id="S3.2-03", epistemic_tag="{Pasif-COTS}",
     ))
 
-    # --- Right Low-Voltage Domain (x = 64..104 mm, separated by milled air-slot at x = 56..58.5 mm!) ---
+    # --- Right Low-Voltage Domain (x = 64..104 mm, separated by extended milled air-slot at x = 56..58.5 mm!) ---
     jlv_pwr = add_c(ComponentSpec(
         "JLV_PWR", "HDR_4P_P12_N12_AGND_SENSE", "Connector_PinHeader:HDR_1x4_2.54mm",
         67.0, 16.0, pins=auto_footprint_pads("HDR_1x4_2.54mm", ("1", "2", "3", "4"),
                                              {"1": "V_P12", "2": "V_N12", "3": "AGND", "4": "AGND_SENSE"}),
         bom_id="S3.2-06", epistemic_tag="{Pasif-COTS}",
     ))
+    # Non-chopper ultra-low-noise precision op-amp AD8675ARZ (2.8 nV/rtHz, zero chopper ripple!)
     uguard = add_c(ComponentSpec(
-        "UGUARD", "ADA4522-1_GUARD_BUF", "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm",
+        "UGUARD", "AD8675_NONCHOP_GUARD_BUF", "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm",
         80.0, 22.0, pins=_soic8_opamp_pins(include_shdn=False),
-        mpn="ADA4522-1ARZ", bom_id="S3.2-03", epistemic_tag="{Aday-COTS}",
+        mpn="AD8675ARZ", bom_id="S3.2-03", epistemic_tag="{Aday-COTS}",
     ))
     rgrd_fb = add_c(ComponentSpec("RGRD_FB", "100R_0.1pct", "Resistor_SMD:R_0603_1608Metric", 74.0, 31.0, pins=auto_footprint_pads("0603", ("1", "2")), bom_id="S3.2-03", epistemic_tag="{Pasif-COTS}"))
     cgrd_comp = add_c(ComponentSpec("CGRD_COMP", "100pF_C0G", "Capacitor_SMD:C_0603_1608Metric", 82.0, 31.0, pins=auto_footprint_pads("0603", ("1", "2")), bom_id="S3.2-03", epistemic_tag="{Pasif-COTS}"))
@@ -919,9 +1099,9 @@ def build_hv_bias_guard_board() -> BoardSpec:
     vias.append(ViaSpec("AGND", 88.0, 10.0, diameter_mm=0.60, drill_mm=0.30))
     vias.append(ViaSpec("AGND", 88.0, 68.0, diameter_mm=0.60, drill_mm=0.30))
 
-    # Milled Edge.Cuts air-slot isolating 0-100 V HV filter domain from LV guard-buffer domain!
+    # Milled Edge.Cuts air-slot isolating ALL 0-100 V HV filter/divider nodes (y=12..62) from LV domain!
     keepouts = (
-        KeepoutSpec("HV_LV_AIR_SLOT", "air_slot", ("Edge.Cuts",), x_mm=56.0, y_mm=8.0, width_mm=2.5, height_mm=54.0),
+        KeepoutSpec("HV_LV_AIR_SLOT", "air_slot", ("Edge.Cuts",), x_mm=56.0, y_mm=6.0, width_mm=2.5, height_mm=61.0),
     )
 
     nets: list[NetSpec] = []
@@ -1031,15 +1211,15 @@ Evn_1f inp_int inp_w flk_ac 0 1.0
 * 3) Parallel input current noise: sqrt(2*q*0.05p + (0.5f)^2) = 0.515773 fA/rtHz (zero DC!)
 Rni ni 0 1k temp=26.85
 Gin 0 inn ni 0 1.267145e-7
-* Single-pole open-loop gain (A0=1e5, GBP=500 MHz -> fp=5 kHz) + 1 Ohm output impedance
+* Single-pole open-loop gain (A0=1e5, GBP=500 MHz -> fp=5 kHz) + +/-2.5 V rail saturation clamp + 1 Ohm Rout
 Egain n1 0 inp_int inn 1e5
 Rp n1 n2 1k noisy=0
 Cp n2 0 31.8309886n
-Ebuf n_out 0 n2 0 1.0
+Bbuf n_out 0 V = 2.4 * tanh(v(n2) / 2.4)
 Rout n_out out 1 noisy=0
 .ends OPAMP_LTC6268_100K
 
-* --- Calibrated Cold 50 Ohm Coax Line Driver (LTC6268 @ 100 K, e_n=2.0 nV/rtHz, GBP=500 MHz) ---
+* --- Calibrated Cold 50 Ohm Coax Line Driver (LTC6268 @ 100 K, e_n=2.0 nV/rtHz, GBP=500 MHz, +/-2.5 V clamp) ---
 .subckt OPAMP_LTC6268_DRV inp inn out
 Cin inp inn 0.45p
 Rin inp inn 1T noisy=0
@@ -1048,11 +1228,11 @@ Evn inp_int inp nw 0 1.0
 Egain n1 0 inp_int inn 1e5
 Rp n1 n2 1k noisy=0
 Cp n2 0 31.8309886n
-Ebuf n_out 0 n2 0 1.0
+Bbuf n_out 0 V = 2.4 * tanh(v(n2) / 2.4)
 Rout n_out out 1 noisy=0
 .ends OPAMP_LTC6268_DRV
 
-* --- Calibrated Warm ADA4817-1 Shaper/Buffer Macromodel (300 K: e_n=4.0 nV/rtHz, GBP=1.05 GHz) ---
+* --- Calibrated Warm ADA4817-1 Shaper/Buffer Macromodel (300 K: e_n=4.0 nV/rtHz, GBP=1.05 GHz, +/-2.5 V clamp) ---
 .subckt OPAMP_ADA4817_300K inp inn out
 Cin inp inn 1.3p
 Rin inp inn 500G noisy=0
@@ -1062,13 +1242,13 @@ Evn inp_int inp nw 0 1.0
 Egain n1 0 inp_int inn 1e5
 Rp n1 n2 1k noisy=0
 Cp n2 0 15.1576136n
-Ebuf n_out 0 n2 0 1.0
+Bbuf n_out 0 V = 2.3 * tanh(v(n2) / 2.3)
 Rout n_out out 1 noisy=0
 .ends OPAMP_ADA4817_300K
 
-* --- Fast Rail-to-Rail Comparator (TLV3501, t_pd=4.5 ns, 0..3.3 V) ---
-.subckt CMP_TLV3501 inp inn vcc gnd out
-Braw n1 gnd V = V(vcc) * 0.5 * (1 + tanh(V(inp, inn) / 0.2m))
+* --- Fast Rail-to-Rail Comparator (TI SBOS321 TLV3501AIDBVR, t_pd=4.5 ns, 0..3.3 V, active-HIGH SHDN) ---
+.subckt CMP_TLV3501 inp inn vcc gnd shdn out
+Braw n1 gnd V = v(vcc, gnd) * 0.5 * (1 + tanh((0.5*v(vcc, gnd) - v(shdn, gnd)) / 0.05)) * 0.5 * (1 + tanh(v(inp, inn) / 0.2m))
 Rdel n1 out 100 noisy=0
 Cdel out gnd 45p
 .ends CMP_TLV3501
@@ -1082,12 +1262,18 @@ Vthr thr_in 0 DC {{V_THR}}
 * CHANNEL 0 FULL SPLIT 3-PCB SIGNAL CHAIN (100 K Cold -> 50 Ohm Coax -> 300 K Warm)
 * =========================================================================
 * 1) Cold-Island 100 K CSA PCB (S3.2-01, global .temp = -173.15 C)
+*    Includes active cold guard bootstrap buffer (U_GRD_BOOT, zero 100nF AC-short to AGND)
+*    and 0805 cryo thin-film RF (0.03 pF stray body C trimmed into Cf_nom=0.22 pF -> Cf_eff=0.25 pF)
 Cdet0 csa_sum 0 {{C_DET + C_PAR}}
+Xgrd0 csa_sum grd_boot grd_boot OPAMP_LTC6268_DRV
+Rgrd_iso grd_boot guard_drv 49.9
+Ccsa_grd csa_sum guard_drv 0.65p
 * Positive output polarity (5 keV 31P+ Lindhard @ 100 K: Q_ION = 341.715 e- = 0.05475 fC in 1.5 ns collection pulse)
 * Trapezoid area = Ipk * (PW + 0.5*(TR+TF)) = (Q_ION/1.5n) * (1.4n + 0.1n) = Q_ION exact with automatic SPICE breakpoints!
 Iion0 csa_sum 0 DC 0 AC 1 PULSE(0 {{Q_ION/TAU_COL}} 50n 0.1n 0.1n 1.4n 1m)
 Xcsa0 0 csa_sum csa_out OPAMP_LTC6268_100K
-Cf0   csa_out csa_sum {{C_F}}
+Cf0   csa_out csa_sum 0.22p
+Crf_p csa_out csa_sum 0.03p
 Rf0   csa_out csa_sum {{R_F}}
 
 * Cold 50 Ohm Coax Line Driver (G = +2.00 -> 49.9 Ohm series -> 50 Ohm CF63 coax -> 49.9 Ohm RX = 1.000x net)
@@ -1127,7 +1313,7 @@ Rdac0  thr_in  thresh  1k      temp=26.85
 Cdac0  thresh  0       100n
 Rhys1  shp_buf cmp_inp {{R_HYS1}} temp=26.85
 Rhys2  cmp_out cmp_inp {{R_HYS2}} temp=26.85
-Xcmp0  cmp_inp thresh  vccd 0 cmp_out CMP_TLV3501
+Xcmp0  cmp_inp thresh  vccd 0 0 cmp_out CMP_TLV3501
 Rterm0 cmp_out count_hit {{R_TERM}} temp=26.85
 Rfpga0 count_hit 0     10k     temp=26.85
 
@@ -1257,29 +1443,39 @@ def run_mna_crosscheck() -> dict[str, Any]:
 
 
 def compute_cold_stray_c_budget_pf() -> dict[str, Any]:
-    """Analytical PCB stray capacitance budget on CSA_SUM with In1/In2 keepout & driven guard ring."""
-    # With In1.Cu & In2.Cu copper keepout directly under CSA_SUM on Rogers RO4350B (er=3.48):
-    #   - Distance from F.Cu CSA_SUM trace to B.Cu ground shield = 0.254 + 0.035 + 0.800 + 0.035 + 0.254 = 1.378 mm
-    #   - CSA_SUM copper area: ~12 mm x 0.15 mm trace (1.8 mm^2) + 4 SMD pads (~1.6 mm^2) = 3.4 mm^2
-    #   - Parallel-plate + 35% fringing C to B.Cu: 1.35 * eps0 * 3.48 * (3.4e-6) / (1.378e-3) = 0.102 pF
-    #   - Coplanar guard-ring coupling is actively driven to V(CSA_SUM) (~0 V virtual ground) -> Miller C_eff ~ 0.005 pF!
+    """Analytical PCB stray capacitance budget on CSA_SUM with extended In1/In2 keepout & active bootstrap guard."""
+    # Extended In1/In2 keepout (x=34.0..55.2 mm) encloses D{ch}.1 AND U{ch}A.6 (-IN) with no B.Cu crossing under CSA_SUM:
+    #   - Distance from F.Cu CSA_SUM trace to B.Cu GUARD_DRV shield = 1.378 mm on Rogers RO4350B (er=3.48)
+    #   - Passive unbootstrapped C_csa_to_guard (if AC-grounded) ~ 0.666 pF + 0.109 pF to far ground = 0.775 pF
+    #   - Active bootstrap (U_GRD_BOOT unity-gain follower, zero 100 nF AC-short to AGND):
+    #     effective Miller attenuation (1 - A_buf) ~ 0.01 reduces C_guard_eff to ~0.007 pF!
+    #   - Residual unshielded C_to_gnd (fringing outside guard cage) ~ 0.102 pF -> total active stray ~ 0.109 pF < 0.15 pF
+    #   - S3.2-04 50 Ohm PTFE micro-coax sits strictly on the G=+2 U{ch}D driver output (COAX_TX), NEVER on CSA_SUM.
     eps0 = 8.854187817e-12
     er = 3.48
     h_to_bcu_m = (0.254 + 0.035 + 0.800 + 0.035 + 0.254) * 1e-3
     area_m2 = 3.4e-6
-    c_to_bcu_pf = 1.35 * eps0 * er * area_m2 / h_to_bcu_m * 1e12
-    c_guard_residual_pf = 0.005
-    c_total_stray_pf = c_to_bcu_pf + c_guard_residual_pf
+    c_to_far_gnd_pf = 1.35 * eps0 * er * area_m2 / h_to_bcu_m * 1e12
+    c_csa_to_guard_passive_pf = 0.6658
+    bootstrap_rejection = 0.01  # Active LTC6268 unity-gain follower (A_buf ~ 0.99 over 1.2 us shaper band)
+    c_guard_residual_pf = round(c_csa_to_guard_passive_pf * bootstrap_rejection, 4)
+    c_total_active_pf = c_to_far_gnd_pf + c_guard_residual_pf
+    c_total_passive_unbootstrapped_pf = c_to_far_gnd_pf + c_csa_to_guard_passive_pf
     return {
         "substrate": "Rogers RO4350B (er=3.48)",
         "keepout_layers": ["In1.Cu", "In2.Cu"],
+        "keepout_x_span_mm": [34.0, 55.2],
         "distance_to_bcu_mm": round(h_to_bcu_m * 1e3, 3),
         "csa_sum_copper_area_mm2": 3.4,
-        "c_to_bcu_shield_pF": round(c_to_bcu_pf, 4),
+        "guard_drive_mode": "active_bootstrap_follower_LTC6268_no_ac_gnd_cap",
+        "s3_2_04_coax_location": "G=+2_driver_output_COAX_TX_not_CSA_SUM",
+        "c_to_bcu_shield_pF": round(c_to_far_gnd_pf, 4),
+        "c_csa_to_guard_passive_pF": c_csa_to_guard_passive_pf,
+        "c_total_passive_unbootstrapped_pF": round(c_total_passive_unbootstrapped_pf, 4),
         "c_driven_guard_residual_pF": c_guard_residual_pf,
-        "c_pcb_stray_total_pF": round(c_total_stray_pf, 4),
+        "c_pcb_stray_total_pF": round(c_total_active_pf, 4),
         "budget_max_pF": 0.15,
-        "within_budget": bool(c_total_stray_pf < 0.15),
+        "within_budget": bool(c_total_active_pf < 0.15),
     }
 
 

@@ -14,9 +14,9 @@
     "qty": 1,
     "procurement_class": "COTS/CUS",
     "world_origin_mm": [
-      660.0,
-      -360.0,
-      440.0
+      272.0,
+      0.0,
+      746.7
     ],
     "world_rotation_deg": [
       0.0,
@@ -25,28 +25,28 @@
     ],
     "ports": [
       {
-        "name": "uhv_gate_bonnet_cf63",
+        "name": "uhv_gate_bonnet_cf100",
         "kind": "flange",
         "position_mm": [
-          622.0,
-          -360.0,
-          363.25
+          272.0,
+          0.0,
+          663.7
         ],
         "normal": [
           0.0,
           0.0,
           -1.0
         ],
-        "standard": "CF63",
+        "standard": "CF100",
         "mating_part_id": "S5.1-03",
-        "bore_mm": 63.5,
-        "od_mm": 113.5,
-        "pcd_mm": 92.1,
-        "bolt_count": 8,
+        "bore_mm": 68.0,
+        "od_mm": 152.0,
+        "pcd_mm": 130.2,
+        "bolt_count": 16,
         "bolt_hole_mm": 8.4,
         "bolt_spec": "M8",
         "frame": "world",
-        "notes": "<80 ms spring-return fail-close UHV gate valve actuator bonnet"
+        "notes": "OBS-066 fix: ISO 3669 CF100 <80 ms spring-return fail-close UHV gate valve actuator bonnet coaxially mated to S5.1-03:vat_bonnet_top_cf100 (0.5 mm Cu gasket gap)"
       },
       {
         "name": "iso10156_vcr_in",
@@ -76,9 +76,9 @@
         "name": "solenoid_24vdc_failclose",
         "kind": "electrical",
         "position_mm": [
-          622.0,
-          -443.0,
-          420.0
+          272.0,
+          -83.0,
+          723.7
         ],
         "normal": [
           0.0,
@@ -99,8 +99,8 @@
     ],
     "dimensions": [
       {
-        "label": "BONNET_CF63_OD",
-        "nominal_mm": 113.5,
+        "label": "BONNET_CF100_OD",
+        "nominal_mm": 152.0,
         "tol_plus_mm": 0.1,
         "tol_minus_mm": -0.1,
         "view": "top",
@@ -110,7 +110,7 @@
         "is_basic": false,
         "datum_ref": "",
         "decimals": 2,
-        "formatted": "Ø113.50 ±0.10"
+        "formatted": "Ø152.00 ±0.10"
       },
       {
         "label": "ACTUATOR_OD",
@@ -142,7 +142,7 @@
       },
       {
         "label": "ASSY_H",
-        "nominal_mm": 164.0,
+        "nominal_mm": 166.0,
         "tol_plus_mm": 0.5,
         "tol_minus_mm": -0.5,
         "view": "front",
@@ -152,7 +152,7 @@
         "is_basic": false,
         "datum_ref": "",
         "decimals": 2,
-        "formatted": "164.00 ±0.50"
+        "formatted": "166.00 ±0.50"
       }
     ],
     "gdt_frames": [
@@ -164,7 +164,7 @@
         "datum_primary": "A",
         "datum_secondary": "",
         "datum_tertiary": "",
-        "feature_note": "ACTUATOR STEM TO CF63 FACE",
+        "feature_note": "ACTUATOR STEM TO CF100 FACE",
         "glyph": "⊥",
         "tolerance_text": "Ø0.050"
       },
@@ -197,12 +197,15 @@
     ],
     "notes": [
       "220x180x160 mm, 80.0 ms UHV vana kapama (Si(100) oksitlenme 6.0e-4 ML << 0.01 ML), %5 H2/N2 sinirli akis, 60 W / 0 W kriyo, kutle=12.0 kg",
-      "Exp150 S7.SAFETY-06 (12.0 kg, 60 W, 0 W cryo): <80 ms spring-return fail-close UHV gate-valve actuator + ISO 10156 5% H2/N2 orifice + X-ray survey meter.",
+      "Exp150 S7.SAFETY-06 (12.0 kg, 60 W, 0 W cryo): <80 ms spring-return fail-close CF100 UHV gate-valve actuator + ISO 10156 5% H2/N2 orifice + X-ray survey meter.",
+      "OBS-066 fix: Upgraded bonnet from CF63 to ISO 3669 CF100 (OD=152 mm, bore=68 mm) mated directly onto S5.1-03 VAT gate-valve bonnet at (272.0, 0.0, 663.7) mm.",
       "PRELIMINARY DESIGN ONLY: iec61508_certified=False, semi_s2_certified=False."
     ],
     "scad_params": {
       "close_time_ms": 80.0,
-      "bonnet_cf": "CF63",
+      "bonnet_cf": "CF100",
+      "bonnet_od_mm": 152.0,
+      "bonnet_bore_mm": 68.0,
       "orifice_bore_mm": 0.5
     },
     "target_mass_kg": 12.0,
@@ -229,34 +232,34 @@
     "watertight": true,
     "boundary_edges": 0,
     "non_manifold_edges": 0,
-    "signed_volume_mm3": 1406531.6880717806,
-    "surface_area_mm2": 141487.79994699327,
-    "mass_kg": 11.999999999999998,
+    "signed_volume_mm3": 1520553.2603825268,
+    "surface_area_mm2": 161708.6502329181,
+    "mass_kg": 12.000000000000002,
     "cg_mm": [
-      661.0957476936685,
-      -372.0357786060313,
-      424.5801980665972
+      427.5737731544463,
+      -133.95465276156298,
+      619.9696325191696
     ],
     "bbox_min_mm": [
-      565.25,
-      -443.0,
-      363.25
+      196.0,
+      -430.0,
+      366.0
     ],
     "bbox_max_mm": [
       784.2,
-      -297.0,
-      527.0
+      76.0,
+      829.7
     ],
     "inertia_kg_mm2": [
-      32014.43252782676,
-      54078.329849505404,
-      51083.07580594739,
-      3997.3227388378,
-      2868.587204025768,
-      834.5114738489806
+      664446.4827829364,
+      839218.9429882186,
+      961652.8713859516,
+      460376.7017285868,
+      376184.6324106751,
+      -307304.47983822285
     ],
-    "triangle_count": 1428,
-    "vertex_count": 702,
+    "triangle_count": 2164,
+    "vertex_count": 1054,
     "step_valid": true,
     "dxf_valid": true,
     "svg_valid": true,
@@ -271,38 +274,38 @@
   "shell_bboxes_mm": [
     [
       [
-        565.25,
-        -416.75,
-        363.25
+        196.0,
+        -76.0,
+        663.7
       ],
       [
-        678.75,
-        -303.25,
-        380.75
+        348.0,
+        76.0,
+        683.5
       ]
     ],
     [
       [
-        580.0,
-        -402.0,
-        381.0
+        230.0,
+        -42.0,
+        683.7
       ],
       [
-        664.0,
-        -318.0,
-        527.0
+        314.0,
+        42.0,
+        829.7
       ]
     ],
     [
       [
-        599.0,
-        -443.0,
-        392.0
+        249.0,
+        -83.0,
+        695.7
       ],
       [
-        645.0,
-        -405.0,
-        448.0
+        295.0,
+        -45.0,
+        751.7
       ]
     ],
     [
@@ -354,5 +357,10 @@
       ]
     ]
   ],
+  "shell_tie_manifest": {
+    "shell_count": 7,
+    "multi_shell_classification": "subassembly_tied_by_fasteners_or_mount",
+    "floating_structural_shells": 0
+  },
   "reconciliation_notes": []
 }

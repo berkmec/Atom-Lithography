@@ -29,6 +29,7 @@ bbox_z = 74.9500;
 response_us = 100;
 temp_min_C = 300;
 temp_max_C = 1200;
+elev_deg = 36.0;
 
 // Interface / port parameters (mm)
 port_chamber_cf40_mate_od = 69.500;
@@ -65,6 +66,6 @@ module part_S5_3_03() {
 }
 
 // World assembly mounting transform (global machine frame, mm / deg):
-// translate([205.198, -143.681, 500.000]) rotate([0.000, 0.000, -35.000]) part_S5_3_03();
+// translate([338.330, -130.699, 611.973]) rotate([0.000, -36.000, 238.000]) part_S5_3_03();
 
 part_S5_3_03();

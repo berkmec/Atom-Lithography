@@ -23,9 +23,10 @@ H_PLANCK = 6.62607015e-34
 E_CHARGE = 1.602176634e-19
 GHZ_PER_UEV = (E_CHARGE * 1e-6) / H_PLANCK / 1e9
 
-DEFAULT_F_IR_HZ = 1.0
-DEFAULT_F_UV_HZ = 1.0e8
-DEFAULT_N_FLUCT = 40
+# Consistent 12-decade [1e-2, 1e10] Hz band matching Exp131 ONE_OVER_F_RMS_FACTOR = sqrt(ln(10^12)) = 5.2565 (OBS-111)
+DEFAULT_F_IR_HZ = 1.0e-2
+DEFAULT_F_UV_HZ = 1.0e10
+DEFAULT_N_FLUCT = 60
 
 
 def build_ou_bank_params(

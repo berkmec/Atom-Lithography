@@ -42,7 +42,9 @@
     "verification_tests": [
       "tests/test_rtl_contract.py",
       "tests/test_blanker_tile.py",
-      "tests/test_rtl_machine_ctrl.py"
+      "tests/test_rtl_machine_ctrl.py",
+      "tests/test_bom_detailed.py",
+      "tests/test_full_180_traceability.py"
     ]
   },
   "specialized_specification": {
@@ -72,6 +74,7 @@
     "rtl_verified": true,
     "software_or_eda_verified": true,
     "specialized_icd_present": true,
+    "verification_tests_mapped": true,
     "traceable": true
   },
   "epistemic": {

@@ -4,19 +4,32 @@ Verifies:
 1. `params.py` v6.0 synchronization (no legacy maglev, golden s=0.5, Exp124..143 locked).
 2. All 8 parametric `.scad` files exist and match `gen_scad.py` deterministically.
 3. All 8 binary `.stl` files parse cleanly from disk, are strictly watertight
-   (0 boundary edges, 0 non-manifold edges), and have strictly positive volume.
+   (0 boundary edges, 0 non-manifold edges), have finite vertices, positive surface area,
+   and strictly positive outward-wound signed volume (plus optional trimesh cross-check).
 4. Zero solid-solid clashes across all part pairs and 100% pass on 40/40 critical clearances.
 5. `cad_verification.json` consistency + Exp80/84/124..143 compliance (exact 1,108.14 kg).
 6. All 10 ISO/ANSI technical drawings (.svg + .png >= 1800x1200), `preview_machine.png`,
    and preserved historical v3/v4/v5 overview dashboards.
+7. Strictly read-only test execution (zero tracked CAD files mutated during pytest).
+
+Verification Scope Boundary (OBS-118):
+   This suite validates 3D parametric geometry, STL mesh watertightness/winding, AABB/shell
+   solid clashes, and analytic geometric clearances. It does NOT substitute for 3D EM/FEM
+   multiphysics solvers (DOLFINx, openEMS, structural/thermal FEA) or post-P&R FPGA/ASIC
+   timing closure (nextpnr, Vivado, OpenROAD detailed_route), which are tracked separately
+   in `INTERNAL_PILOT_REPORT.md` (`M0_M1_DESIGN_ONLY`, `no_lab_measurement=True`).
 """
 from __future__ import annotations
 
+import hashlib
+import importlib.util
 import json
+import re
 import struct
 import sys
 from pathlib import Path
 
+import numpy as np
 import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -333,11 +346,70 @@ def test_legacy_overview_dashboards_preserved():
 
 
 def test_cad_portability_no_hardcoded_host_paths():
-    forbidden = ["/" + "home/" + "berk", "/" + "run/" + "media/" + "berk"]
+    active_user = Path.home().name
+    forbidden = ["/" + "home" + "/", "/" + "run" + "/" + "media" + "/", "C:\\" + "Users\\"]
+    user_pat = (
+        re.compile(rf"(?<![A-Za-z0-9_]){re.escape(active_user)}(?![A-Za-z0-9_])", re.IGNORECASE)
+        if active_user and len(active_user) >= 3 and active_user not in {"root", "user", "admin", "runner"}
+        else None
+    )
     for p in list(CAD_DIR.glob("*.py")) + [CAD_DIR / "README.md", CAD_DIR / "cad_verification.json", Path(__file__).resolve()]:
         txt = p.read_text(encoding="utf-8")
         for needle in forbidden:
             assert needle not in txt, f"Hardcoded path '{needle}' in {p.name}"
+        if user_pat is not None:
+            assert not user_pat.search(txt), f"Personal username literal leaked in {p.name}"
+
+
+def test_stl_3d_geometry_winding_area_optional_trimesh_and_zero_mutation():
+    """Verify binary STL 3D mesh invariants directly in numpy (+ optional trimesh) with zero disk mutations."""
+    watched = [CAD_DIR / "cad_verification.json", CAD_DIR / "stl" / "atom_litho_machine.stl"]
+    before_sha = {p: hashlib.sha256(p.read_bytes()).hexdigest() for p in watched}
+
+    # Exercise deterministic emitters & geometric checkers in read-only mode
+    _ = gen_scad.emit_master_scad()
+    _ = mesh_engine.check_all_interferences(params.PARTS, margin_mm=0.05)
+    _ = mesh_engine.compute_critical_clearances(params.PARTS)
+
+    stl_dtype = np.dtype([("normal", "<f4", 3), ("verts", "<f4", (3, 3)), ("attr", "<u2")])
+    has_trimesh = importlib.util.find_spec("trimesh") is not None
+    trimesh_mod = __import__("trimesh") if has_trimesh else None
+
+    for stem in EXPECTED_SUBSYSTEMS + ["atom_litho_machine"]:
+        stl_path = CAD_DIR / "stl" / f"{stem}.stl"
+        raw = stl_path.read_bytes()
+        n_tri = struct.unpack_from("<I", raw, 80)[0]
+        assert n_tri > 0
+        assert len(raw) == 84 + 50 * n_tri, f"Truncated/corrupt binary STL: {stl_path.name}"
+
+        rec = np.frombuffer(raw, dtype=stl_dtype, offset=84, count=n_tri)
+        verts = rec["verts"].astype(np.float64)
+        normals = rec["normal"].astype(np.float64)
+        assert np.all(np.isfinite(verts)), f"Non-finite vertices in {stl_path.name}"
+        assert np.all(np.isfinite(normals)), f"Non-finite normals in {stl_path.name}"
+
+        e1 = verts[:, 1] - verts[:, 0]
+        e2 = verts[:, 2] - verts[:, 0]
+        cross = np.cross(e1, e2)
+        area = 0.5 * float(np.sum(np.linalg.norm(cross, axis=1)))
+        assert area > 0.0, f"Zero surface area in {stl_path.name}"
+
+        signed_vol = float(np.sum(np.einsum("ij,ij->i", verts[:, 0], np.cross(verts[:, 1], verts[:, 2])))) / 6.0
+        assert signed_vol > 0.0, f"Non-positive signed volume (inverted winding) in {stl_path.name}: {signed_vol}"
+        info = mesh_engine.inspect_binary_stl(stl_path)
+        assert signed_vol == pytest.approx(info["volume_mm3"], rel=1e-4)
+
+        flat_v = verts.reshape(-1, 3)
+        span = flat_v.max(axis=0) - flat_v.min(axis=0)
+        assert np.all(span > 0.0), f"Degenerate bounding box in {stl_path.name}: {span}"
+
+        if trimesh_mod is not None:
+            tm = trimesh_mod.load(stl_path, force="mesh")
+            assert tm.is_watertight, f"trimesh reports non-watertight STL: {stl_path.name}"
+            assert abs(float(tm.volume) - signed_vol) / signed_vol < 1e-3
+
+    after_sha = {p: hashlib.sha256(p.read_bytes()).hexdigest() for p in watched}
+    assert after_sha == before_sha, "Read-only CAD test mutated tracked disk artifacts!"
 
 
 @pytest.mark.parametrize("stem", EXPECTED_DRAWINGS)

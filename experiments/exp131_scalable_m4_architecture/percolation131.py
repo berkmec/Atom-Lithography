@@ -286,6 +286,26 @@ def compute_cad_m4_bus_geometry(
     n_meander_turns = math.ceil(l_res_um / meander_leg_um)
     meander_width_um = n_meander_turns * meander_pitch_um
 
+    # OBS-140: 1 um pitch meander parasitic capacitance loading audit (Si substrate eps_eff = 6.35)
+    # Two-wire mutual capacitance between adjacent w=100 nm legs at pitch s=1.0 um:
+    #   C_mut = pi * eps0 * eps_eff / arccosh(s / w)
+    eps0 = 8.854187817e-12
+    eps_eff_si = 6.35
+    c_mut_f_per_m = (math.pi * eps0 * eps_eff_si) / math.acosh(max(meander_pitch_um / (w_wire_nm * 1e-3), 1.01))
+    # Including ground/DC-gate pad self-capacitance: realistic C_l_loaded spans 160..220 pF/m
+    c_loaded_lo = 160.0e-12
+    c_loaded_hi = 220.0e-12
+    z_r_loaded_lo = math.sqrt(l_per_m / c_loaded_hi)   # 2132 Ohm at 220 pF/m
+    z_r_loaded_hi = math.sqrt(l_per_m / c_loaded_lo)   # 2500 Ohm at 160 pF/m
+    l_res_loaded_lo_um = (1.0 / (2.0 * f_hz * math.sqrt(l_per_m * c_loaded_hi))) * 1e6
+    l_res_loaded_hi_um = (1.0 / (2.0 * f_hz * math.sqrt(l_per_m * c_loaded_lo))) * 1e6
+    f_r_300um_loaded_lo_ghz = (1.0 / (2.0 * l_res_m * math.sqrt(l_per_m * c_loaded_hi))) / 1e9
+    f_r_300um_loaded_hi_ghz = (1.0 / (2.0 * l_res_m * math.sqrt(l_per_m * c_loaded_lo))) / 1e9
+    g_eff_reduction_pct_range = [
+        round(100.0 * (1.0 - math.sqrt(z_r_loaded_hi / z_r_ohm)), 2),
+        round(100.0 * (1.0 - math.sqrt(z_r_loaded_lo / z_r_ohm)), 2),
+    ]
+
     # Intra-node candidate pocket standing-wave voltage uniformity across N_cand slots
     pocket_span_um = (n_cand_ft - 1) * (p_cand_nm * 1e-3)
     half_span_um = 0.5 * pocket_span_um
@@ -339,6 +359,17 @@ def compute_cad_m4_bus_geometry(
         "meander_turns": int(n_meander_turns),
         "meander_leg_um": float(meander_leg_um),
         "meander_footprint_um": [float(meander_leg_um), float(meander_width_um)],
+        "meander_parasitic_loading_OBS140": {
+            "eps_eff_si": float(eps_eff_si),
+            "C_ideal_pF_per_m": float(c_per_m * 1e12),
+            "C_mut_adjacent_leg_pF_per_m": round(float(c_mut_f_per_m * 1e12), 2),
+            "C_loaded_realistic_range_pF_per_m": [160.0, 220.0],
+            "Z_r_loaded_range_ohm": [round(z_r_loaded_lo, 1), round(z_r_loaded_hi, 1)],
+            "lambda_half_5GHz_loaded_range_um": [round(l_res_loaded_lo_um, 1), round(l_res_loaded_hi_um, 1)],
+            "f_r_at_300um_loaded_range_ghz": [round(f_r_300um_loaded_lo_ghz, 3), round(f_r_300um_loaded_hi_ghz, 3)],
+            "g_eff_sqrt_Zr_reduction_pct_range": g_eff_reduction_pct_range,
+            "mitigation_note": "Increase meander pitch/ground clearance or use L_sq=150-200 pH/sq (or 3*lambda/2 harmonics) to restore 3 kOhm / >=250 um qLDPC reach.",
+        },
         "intra_node_slot_pitch_nm": float(p_cand_nm),
         "pocket_span_6slots_um": float(pocket_span_um),
         "antinode_voltage_uniformity_6slots": float(antinode_cos_min),

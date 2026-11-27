@@ -18,7 +18,7 @@
     "world_origin_mm": [
       0.0,
       0.0,
-      2.51
+      5.215
     ],
     "world_rotation_deg": [
       0.0,
@@ -39,7 +39,7 @@
           0.0,
           -1.0
         ],
-        "standard": "3 kV Lapped Sapphire",
+        "standard": "6 kV Lapped Sapphire",
         "mating_part_id": "S2.3-01",
         "bore_mm": 48.0,
         "od_mm": 59.0,
@@ -63,13 +63,37 @@
           0.0,
           1.0
         ],
-        "standard": "3 kV Lapped Sapphire",
+        "standard": "6 kV Lapped Sapphire",
         "mating_part_id": "S2.2-04",
         "bore_mm": 48.0,
         "od_mm": 59.0,
         "pcd_mm": 53.5,
         "bolt_count": 6,
         "bolt_hole_mm": 2.2,
+        "bolt_spec": "",
+        "frame": "global",
+        "notes": ""
+      },
+      {
+        "name": "stack_tierods_to_cassette",
+        "kind": "mechanical",
+        "position_mm": [
+          0.0,
+          0.0,
+          10.18
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "standard": "3x Sapphire Tie-Rods @ PCD 62.4",
+        "mating_part_id": "S2.1-04",
+        "bore_mm": 0.0,
+        "od_mm": 0.0,
+        "pcd_mm": 62.4,
+        "bolt_count": 3,
+        "bolt_hole_mm": 1.1,
         "bolt_spec": "",
         "frame": "global",
         "notes": ""
@@ -131,6 +155,20 @@
         "datum_ref": "",
         "decimals": 3,
         "formatted": "Ø53.500 ±0.002"
+      },
+      {
+        "label": "TIEROD_L",
+        "nominal_mm": 9.93,
+        "tol_plus_mm": 0.01,
+        "tol_minus_mm": -0.01,
+        "view": "front",
+        "unit": "mm",
+        "prefix": "",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 3,
+        "formatted": "9.930 ±0.010"
       }
     ],
     "gdt_frames": [
@@ -166,7 +204,7 @@
         "datum_primary": "A",
         "datum_secondary": "B",
         "datum_tertiary": "",
-        "feature_note": "OPTICAL DOWEL PINS",
+        "feature_note": "OPTICAL DOWEL PINS & TIE-RODS",
         "glyph": "⌖",
         "tolerance_text": "Ø0.0005"
       }
@@ -187,15 +225,18 @@
     ],
     "notes": [
       "Elektrot araligi 100-500 um, 3 kV dayanimi",
-      "Precision-lapped sapphire 3 kV HV spacer ring (±0.5 um parallelism) + 3x Zerodur optical-axis dowel alignment pins"
+      "Precision-lapped sapphire 6 kV HV spacer ring + 3x Zerodur dowel pins + 3x full-stack kinematic Ø1.10 mm sapphire tie-rods (R=31.2 mm, Z=[0.25, 10.18] mm, clearing S3.1-04 R_in=32.0 mm) mechanically anchoring the S2 optical stack to S2.1-04"
     ],
     "scad_params": {
       "od": 59.0,
       "id": 48.0,
       "thickness": 0.5,
-      "hv_standoff_kV": 3.0
+      "tierod_pcd": 62.4,
+      "tierod_d": 1.1,
+      "tierod_h": 9.93,
+      "hv_standoff_kV": 6.0
     },
-    "target_mass_kg": 0.002,
+    "target_mass_kg": 0.003,
     "epistemic": {
       "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",
       "no_lab_measurement": true,
@@ -219,34 +260,34 @@
     "watertight": true,
     "boundary_edges": 0,
     "non_manifold_edges": 0,
-    "signed_volume_mm3": 453.4325305200218,
-    "surface_area_mm2": 2010.559344552582,
-    "mass_kg": 0.0018046614714696866,
+    "signed_volume_mm3": 481.0208679893986,
+    "surface_area_mm2": 2118.402544184867,
+    "mass_kg": 0.001914463054597807,
     "cg_mm": [
-      -5.113907038325546e-15,
-      -6.784263919272442e-15,
-      2.510000000000001
+      1.51851609975782e-14,
+      -6.741738793088221e-14,
+      2.6651418198686363
     ],
     "bbox_min_mm": [
       -29.5,
       -29.5,
-      2.26
+      0.25
     ],
     "bbox_max_mm": [
+      31.75,
       29.5,
-      29.5,
-      2.76
+      10.18
     ],
     "inertia_kg_mm2": [
-      0.6515794447278676,
-      0.6515794447278666,
-      1.3030837366389627,
-      -2.692218004085589e-16,
-      -7.8457599084203e-18,
-      1.5347392423592495e-17
+      0.7066897539090535,
+      0.7066897539090529,
+      1.4099851758186952,
+      -1.6704194649719305e-15,
+      8.790051600359542e-17,
+      1.182735692978254e-16
     ],
-    "triangle_count": 1208,
-    "vertex_count": 598,
+    "triangle_count": 1400,
+    "vertex_count": 700,
     "step_valid": true,
     "dxf_valid": true,
     "svg_valid": true,
@@ -307,6 +348,11 @@
         "S2.3-03_dowel_pin_reg": 84.7457627118644
       }
     }
+  },
+  "shell_mate_metadata": {
+    "n_shells": 7,
+    "fea_bonding_mode": "TIED_SUBASSEMBLY_CONTACTS",
+    "watertight": true
   },
   "epistemic": {
     "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",

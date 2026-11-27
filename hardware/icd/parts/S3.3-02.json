@@ -81,7 +81,15 @@
     ],
     "rtl_audit_json": "results/stage2_rtl_verification/rtl_machine_ctrl_audit.json",
     "software_and_eda_files": [],
-    "verification_tests": []
+    "verification_tests": [
+      "tests/test_bom_detailed.py",
+      "tests/test_full_180_traceability.py",
+      "tests/test_cad_s3_s4.py",
+      "tests/test_rtl_machine_ctrl.py",
+      "tests/test_detector_frontend.py",
+      "tests/test_cad_parts.py",
+      "tests/test_pcb_fpga_blanker_cryo.py"
+    ]
   },
   "specialized_specification": null,
   "verification_status": {
@@ -91,6 +99,7 @@
     "rtl_verified": true,
     "software_or_eda_verified": false,
     "specialized_icd_present": false,
+    "verification_tests_mapped": true,
     "traceable": true
   },
   "epistemic": {

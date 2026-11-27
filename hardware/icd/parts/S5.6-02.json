@@ -3,13 +3,13 @@
   "part_id": "S5.6-02",
   "parent_bom_id": "S5.6",
   "subsystem": "S5",
-  "part_name": "Zenginlestirilmis 28Si cubuk (<50 ppm 29Si, >1000 yonga) + UHV QCM kalinlik izleme & vana (Exp139, 3.4 kg)",
+  "part_name": "Zenginlestirilmis 28Si cubuk (<50 ppm 29Si, 5 g; %5 MBE verimi: ~427x200mm / ~190x300mm / ~6830x50mm) + UHV QCM & vana (Exp139, 3.4 kg)",
   "part_category": "PHYSICAL_SOLID",
   "bom_metadata": {
     "qty": "1",
     "unit": "set",
     "material": "28Si cubuk (<50 ppm 29Si, ~5 g) + kuvars QCM / 316LN vana",
-    "key_spec": ">1000 yonga @ 8 nm, QCM ±0.3 nm gercek-zamanli kalinlik izleme, He<=1e-10 mbar*L/s, kutle=3.4 kg",
+    "key_spec": "5 g cubuk @ 8 nm kaplama: 0.585 mg/200mm, 1.317 mg/300mm, 0.0366 mg/50mm FOAK; %5-%10 gercekci eksen-disi MBE yakalama -> 427-854x200mm / 190-380x300mm / 6830x50mm; QCM ±0.3 nm, kutle=3.4 kg",
     "tolerance": "<50 ppm 29Si, ±0.3 nm",
     "temp_stage": "300 K",
     "vacuum_grade": "UHV 1.5e-10 Torr",
@@ -20,7 +20,7 @@
     "usd_high": 28000.0,
     "legacy_cad_module": "s5_uhv_chamber_loadlock",
     "bom_epistemic_tag": "{Varsayım}",
-    "notes": "DELTA-V5.0-EXP139 (S5.6 2/4, 3.4 kg; s56_hardware_spec.json $18k birebir; RFQ-08)"
+    "notes": "DELTA-V5.0-EXP139 (S5.6 2/4, 3.4 kg; s56_hardware_spec.json $18k birebir; OBS-134: %5 gercekci MBE yakalama verimiyle 200/300mm >1000 yonga varsayimi duzeltildi; lead P10/P50/P90=26/48/78 hf; UNQUOTED_ROM_ESTIMATE; RFQ-08)"
   },
   "artifact_links": {
     "cad": {
@@ -34,8 +34,8 @@
       "cad_json": "hardware/cad_parts/out/S5/S5.6-02.json",
       "watertight": true,
       "all_6_files_valid": true,
-      "mass_kg": 1.999217,
-      "triangle_count": 1512,
+      "mass_kg": 2.012247,
+      "triangle_count": 1524,
       "temp_k": 300.0,
       "canonical_bbox_min_mm": [
         385.25,
@@ -43,7 +43,7 @@
         670.25
       ],
       "canonical_bbox_max_mm": [
-        465.0,
+        469.0,
         -88.5,
         757.5
       ],
@@ -72,7 +72,16 @@
     "rtl_modules": [],
     "rtl_audit_json": null,
     "software_and_eda_files": [],
-    "verification_tests": []
+    "verification_tests": [
+      "tests/test_bom_detailed.py",
+      "tests/test_full_180_traceability.py",
+      "tests/test_cad_s5.py",
+      "tests/test_pcb_cryo_and_elec_icds.py",
+      "tests/test_exp139.py",
+      "tests/test_exp141.py",
+      "tests/test_cad_parts.py",
+      "tests/test_exp130.py"
+    ]
   },
   "specialized_specification": null,
   "verification_status": {
@@ -82,6 +91,7 @@
     "rtl_verified": false,
     "software_or_eda_verified": false,
     "specialized_icd_present": false,
+    "verification_tests_mapped": true,
     "traceable": true
   },
   "epistemic": {

@@ -5,7 +5,7 @@
 
 .temp 26.85
 
-* 1.0 V Dual-Phase PMBus Buck VRM (TPS546D24A 15 A class closed-loop small-signal output model)
+* 1.0 V Dual-Phase PMBus Buck VRM (TPS546D24A QFN-40 15 A class closed-loop small-signal output model)
 Vvrm vrm_src 0 DC 1.0
 Rvrm vrm_src vrm_r 1.000000e-03
 Lvrm vrm_r n_bulk 1.400000e-08
@@ -42,7 +42,7 @@ L470n n_470n_l 0 2.500000e-11
 Rpl3 n_perim n_pl3 1.500000e-04
 Lpl3 n_pl3 n_bga 1.400000e-11
 
-* Tier 5: 24x 100 nF 0402 Under-BGA Low-ESL MLCC Bank (2.40 uF, ESR=1.50 mOhm, ESL=10.4 pH)
+* Tier 5: 24x 100 nF 0402 Under-BGA Low-ESL MLCC Bank (physically placed INSIDE FFG900 cavity on B.Cu!)
 C100n n_bga n_100n_r 2.400000e-06
 R100n n_100n_r n_100n_l 1.500000e-03
 L100n n_100n_l 0 1.041667e-11
@@ -58,14 +58,11 @@ Cdie vccint_die n_die_r 6.000000e-07
 Rdie n_die_r 0 6.000000e-03
 
 * Load Current Stimulus at FPGA Die:
-*   AC = 1 A (so vm(vccint_die) directly equals |Z_PDN(f)| in Ohms!)
-*   TRAN = 1 A baseline -> 6 A (+5 A step, t_rise=50 ns, di/dt=100 A/us) -> 1 A release
 Iload vccint_die 0 DC 1.0 AC 1.0 PULSE(1.0 6.0 10u 50n 50n 60u 200u)
 
 .control
 set noaskquit
 
-* 1) AC PDN Impedance Sweep: 100 Hz to 30 MHz (100 pts/dec; evaluated over 100 Hz .. 20 MHz)
 ac dec 100 100 30Meg
 meas ac z_pdn_max_ohm MAX vm(vccint_die) FROM=100 TO=20Meg
 meas ac z_pdn_max_freq_hz MAX_AT vm(vccint_die) FROM=100 TO=20Meg
@@ -75,7 +72,6 @@ meas ac z_pdn_1mhz_ohm  FIND vm(vccint_die) AT=1Meg
 meas ac z_pdn_10mhz_ohm FIND vm(vccint_die) AT=10Meg
 meas ac z_pdn_20mhz_ohm FIND vm(vccint_die) AT=20Meg
 
-* 2) Transient 5 A Load-Step (1 A -> 6 A in 50 ns) Droop & Overshoot
 tran 20n 140u
 meas tran v_init_v FIND v(vccint_die) AT=5u
 meas tran v_min_step_v MIN v(vccint_die) FROM=9.5u TO=40u

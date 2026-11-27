@@ -198,13 +198,34 @@ class Q1616BOEDCore:
         lor_q16 = lut_interp_q16(u_q16, self.lor_lut, LOR_U_MAX, LOR_LUT_SIZE)
 
         y_q16 = int(to_q16(y_meas))
-        resid_q16 = y_q16 - lor_q16
-        resid2_q16 = q16_mul(resid_q16, resid_q16)
+        resid_q16 = (y_q16 - lor_q16).astype(np.int64)
 
-        inv_2var_q16 = int(to_q16(0.5 / max(sigma_n * sigma_n, 1e-9)))
-        delta_lp_q16 = q16_mul(resid2_q16, inv_2var_q16)
+        # Dynamic power-of-two barrel shift prevents Q16.16 saturation of inv_2var = 0.5 / sigma_n^2
+        # when sigma_n < 0.00391 (high-SNR regime), while staying bit-exact with shift_k == 0
+        # for standard sigma_n >= 0.0156!
+        inv_2var_f = 0.5 / max(sigma_n * sigma_n, 1e-12)
+        shift_k = 0
+        while inv_2var_f / (1 << shift_k) > 2048.0 and shift_k < 24:
+            shift_k += 1
+        inv_2var_scaled_q16 = int(to_q16(inv_2var_f / (1 << shift_k)))
+        if shift_k == 0:
+            resid2_q16 = q16_mul(resid_q16, resid_q16)
+            delta_lp_q16 = np.clip(q16_mul(resid2_q16, inv_2var_scaled_q16), 0, INT32_MAX)
+        else:
+            # Preserve extra fractional bits of resid^2 in 48-bit DSP48E2 path before shifting
+            pre_shift = max(0, Q_FRAC - shift_k)
+            post_shift = max(0, shift_k - Q_FRAC)
+            r2_q32 = resid_q16 * resid_q16
+            if pre_shift > 0:
+                r2_scaled = (r2_q32 + (1 << (pre_shift - 1))) >> pre_shift
+            else:
+                r2_scaled = r2_q32
+            delta_lp_raw = (r2_scaled * inv_2var_scaled_q16 + Q_HALF) >> Q_FRAC
+            if post_shift > 0:
+                delta_lp_raw = delta_lp_raw << post_shift
+            delta_lp_q16 = np.clip(delta_lp_raw, 0, INT32_MAX)
 
-        new_lp_q16 = np.clip(log_p_q16 - delta_lp_q16, INT32_MIN, INT32_MAX)
+        new_lp_q16 = np.clip(log_p_q16.astype(np.int64) - delta_lp_q16, INT32_MIN, INT32_MAX)
 
         # --- PASS 2: Max-subtract + BRAM exp(-x) LUT + 48-bit DSP48E2 MAC (Z, M1, M2) ---
         max_lp = int(np.max(new_lp_q16))
@@ -219,16 +240,29 @@ class Q1616BOEDCore:
         acc_m2 = int(np.sum(w_q16 * (df_bins * df_bins), dtype=np.int64))
 
         # --- PASS 3: Hardware Radix-4 Divider + CORDIC isqrt + Fisher-optimal argmax ---
-        # Mean offset in tenths-of-Hz (fixed-point scaled by 100 for 0.1 Hz precision)
         step_hz = self.cfg.bin_step_Hz
-        mu_off_q8 = (acc_m1 * step_hz * 256) // acc_z
-        mu_Hz = f_init_int + (mu_off_q8 / 256.0)
+        if shift_k == 0:
+            # Bit-exact parity with boed_q16_core.v truncating hardware divider (64/64 vectors 0 LSB)
+            mu_off_q8 = (acc_m1 * step_hz * 256) // acc_z
+            mu_Hz = f_init_int + (mu_off_q8 / 256.0)
+            mean_b_q8 = (acc_m1 * 256) // acc_z
+            ex2_q16 = (acc_m2 << 16) // acc_z
+            var_bins_q16 = max(0, ex2_q16 - (mean_b_q8 * mean_b_q8))
+            var_Hz2_q8 = (var_bins_q16 * step_hz * step_hz) >> 8
+        else:
+            # Extended high-SNR path (sigma_n < 0.0156): round-to-nearest + Q16 mean avoids cancellation (OBS-117)
+            def _div_round(num: int, den: int) -> int:
+                if num >= 0:
+                    return (num + (den >> 1)) // den
+                return -((-num + (den >> 1)) // den)
 
-        # Exact integer variance in Hz^2 (Q8 -> CORDIC isqrt gives Q4 = 0.0625 Hz resolution!)
-        mean_b_q8 = (acc_m1 * 256) // acc_z
-        ex2_q16 = (acc_m2 << 16) // acc_z
-        var_bins_q16 = max(0, ex2_q16 - (mean_b_q8 * mean_b_q8))
-        var_Hz2_q8 = (var_bins_q16 * step_hz * step_hz) >> 8
+            mu_off_q8 = _div_round(acc_m1 * step_hz * 256, acc_z)
+            mu_Hz = f_init_int + (mu_off_q8 / 256.0)
+            mean_b_q16 = _div_round(acc_m1 << Q_FRAC, acc_z)
+            ex2_q16 = _div_round(acc_m2 << Q_FRAC, acc_z)
+            mean2_q16 = (mean_b_q16 * mean_b_q16 + Q_HALF) >> Q_FRAC
+            var_bins_q16 = max(0, ex2_q16 - mean2_q16)
+            var_Hz2_q8 = (var_bins_q16 * step_hz * step_hz + 128) >> 8
         std_q4 = math.isqrt(max(0, int(var_Hz2_q8)))
         std_Hz = std_q4 / 16.0
 

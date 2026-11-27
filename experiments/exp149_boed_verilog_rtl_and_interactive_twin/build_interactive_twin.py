@@ -48,10 +48,23 @@ def collect_live_twin_payload(rtl_res: dict[str, Any] | None = None) -> dict[str
     d148 = _load_json("results/exp148_sb121_quadrupole_echo_qudit/exp148.json")
     d150 = _load_json("results/exp150_industrial_safety_fmea_hazop/exp150.json")
     s_safety = _load_json("results/exp150_industrial_safety_fmea_hazop/s_safety_spec.json")
+    d138 = _load_json("results/exp138_defective_surface_code_ft/exp138.json")
     cad = _load_json("research/atom_lithography_machine/cad/cad_verification.json")
+    cad164 = _load_json("hardware/cad_parts/cad_parts_verification.json")
+    ups_budget = _load_json("hardware/icd/electrical/master_electrical_power_ups_budget.json")
+    openroad = _load_json("hardware/eda_flow/openroad_signoff_manifest.json")
     rtl = rtl_res or run_full_rtl_verification(write_outputs=False)
 
     # Aggregate BOM_DETAILED.csv by subsystem live from disk
+    # Aggregate BOM_DETAILED.csv and unified 164-part CAD mass by subsystem live from disk
+    cad164_by_sub: dict[str, dict[str, Any]] = {}
+    cad164_parts_iter = cad164["parts"] if isinstance(cad164["parts"], list) else cad164["parts"].values()
+    for pt in cad164_parts_iter:
+        sub_k = pt["part_id"].split(".")[0]
+        sl = cad164_by_sub.setdefault(sub_k, {"parts": 0, "mass_kg": 0.0})
+        sl["parts"] += 1
+        sl["mass_kg"] += float(pt["mass_kg"])
+
     bom_by_sub: dict[str, dict[str, Any]] = {}
     with (REPO_ROOT / "research/atom_lithography_machine/BOM_DETAILED.csv").open(
         "r", encoding="utf-8", newline=""
@@ -64,107 +77,106 @@ def collect_live_twin_payload(rtl_res: dict[str, Any] | None = None) -> dict[str
             slot["usd_nom"] += float(row["usd_nom"])
             slot["usd_high"] += float(row["usd_high"])
 
-    # Keep 9 canonical machine subsystems (preserving Exp149 contract) + v7.0 S7.SAFETY metadata
-    cad_subs = cad["subsystems"]
+    # Keep 9 canonical machine subsystems (preserving Exp149 contract) using unified 164-part CAD masses (OBS-067)
     subsystems = [
         {
             "id": "S1",
             "name": "Ion Source, Column & S1.7 Multi-Species",
-            "temp": "300 K (HV 14-22 keV)",
-            "cad_parts": cad_subs["s1_ion_source_column"]["part_count"],
-            "cad_mass_kg": round(cad_subs["s1_ion_source_column"]["mass_kg"], 3),
+            "temp": "300 K (HV 10->5 keV, 14-22 kV)",
+            "cad_parts": cad164_by_sub.get("S1", {}).get("parts", 0),
+            "cad_mass_kg": round(cad164_by_sub.get("S1", {}).get("mass_kg", 0.0), 2),
             "bom_parts": bom_by_sub.get("S1", {}).get("parts", 0),
             "bom_nom_usd": round(bom_by_sub.get("S1", {}).get("usd_nom", 0.0)),
             "rfq": "RFQ-01 + RFQ-09A (S1.7 121Sb Q-Echo-8 / 167Er)",
-            "safety": "Exp150 S7.SAFETY-01: Sub-atm SDS PH3 (0.00715 ppm << 0.05 TLV) + 18.3 ms HV crowbar",
+            "safety": "Exp150 S7.SAFETY-01: Sub-atm SDS PH3 (0.00715 ppm << 0.05 TLV) + 18.3 ms HV crowbar (uncertified M0)",
         },
         {
             "id": "S2",
-            "name": "32x32 MEMS Multi-Beamlet Write Head",
+            "name": "32x32 MEMS Write Head & 1024-ch Blanker",
             "temp": "300 K UHV",
-            "cad_parts": cad_subs["s2_mems_write_head"]["part_count"],
-            "cad_mass_kg": round(cad_subs["s2_mems_write_head"]["mass_kg"], 3),
+            "cad_parts": cad164_by_sub.get("S2", {}).get("parts", 0),
+            "cad_mass_kg": round(cad164_by_sub.get("S2", {}).get("mass_kg", 0.0), 2),
             "bom_parts": bom_by_sub.get("S2", {}).get("parts", 0),
             "bom_nom_usd": round(bom_by_sub.get("S2", {}).get("usd_nom", 0.0)),
             "rfq": "RFQ-02 (1,024 active + 128 spare blanker channels)",
-            "safety": "Blanker watchdog RTL + 5% dead-channel auto-remap (auto_recal.py)",
+            "safety": "Programmable watchdog RTL + 5% dead-channel step-and-stitch (61.51% honest throughput)",
         },
         {
             "id": "S3",
-            "name": "IBIC Single-Ion Detector Frontend",
-            "temp": "300 K / Cryo-compatible",
-            "cad_parts": cad_subs["s3_ibic_detector_assembly"]["part_count"],
-            "cad_mass_kg": round(cad_subs["s3_ibic_detector_assembly"]["mass_kg"], 3),
+            "name": "100 K Cold-Island IBIC Single-Ion Detector",
+            "temp": "100 K Cold Island / 300 K Warm Shaper",
+            "cad_parts": cad164_by_sub.get("S3", {}).get("parts", 0),
+            "cad_mass_kg": round(cad164_by_sub.get("S3", {}).get("mass_kg", 0.0), 2),
             "bom_parts": bom_by_sub.get("S3", {}).get("parts", 0),
             "bom_nom_usd": round(bom_by_sub.get("S3", {}).get("usd_nom", 0.0)),
-            "rfq": "COTS + Custom ASIC/JFET frontend",
-            "safety": "Counted-implantation closed-loop gate (99.9%+ single-ion detection)",
+            "rfq": "COTS + Custom KiCad 8 PCBs (10/10 0 ERC/DRC, ngspice-47)",
+            "safety": "Counted-implantation closed-loop gate (5 keV 31P+ 100 K IBIC model; no lab measurement)",
         },
         {
             "id": "S4",
             "name": "6-DOF Piezo Stage & Interferometry",
-            "temp": "300 K UHV (Zerodur)",
-            "cad_parts": cad_subs["s4_piezo_stage_interferometry"]["part_count"],
-            "cad_mass_kg": round(cad_subs["s4_piezo_stage_interferometry"]["mass_kg"], 3),
+            "temp": "300 K UHV (Zerodur / Invar-36)",
+            "cad_parts": cad164_by_sub.get("S4", {}).get("parts", 0),
+            "cad_mass_kg": round(cad164_by_sub.get("S4", {}).get("mass_kg", 0.0), 2),
             "bom_parts": bom_by_sub.get("S4", {}).get("parts", 0),
             "bom_nom_usd": round(bom_by_sub.get("S4", {}).get("usd_nom", 0.0)),
-            "rfq": "RFQ-03 (sub-nm laser interferometry + active vibration control)",
-            "safety": "CFG4 active decoupling: sigma_total = 3.57 nm <= 3.80 nm",
+            "rfq": "RFQ-03 (sub-nm laser interferometry + EDM flexure k~2.0 MN/m)",
+            "safety": "CFG4 active decoupling + CalculiX C3D10 EDM flexure FEA + 13/13 clear optical LOS",
         },
         {
             "id": "S5",
             "name": "UHV Chamber, S5.5 Flash Anneal & S5.6 MBE",
-            "temp": "300 K (1530 K flash, 2e-10 Torr)",
-            "cad_parts": cad_subs["s5_uhv_chamber_loadlock"]["part_count"],
-            "cad_mass_kg": round(cad_subs["s5_uhv_chamber_loadlock"]["mass_kg"], 3),
+            "temp": "300 K (1530 K flash, 50-mm FOAK wafer)",
+            "cad_parts": cad164_by_sub.get("S5", {}).get("parts", 0),
+            "cad_mass_kg": round(cad164_by_sub.get("S5", {}).get("mass_kg", 0.0), 2),
             "bom_parts": bom_by_sub.get("S5", {}).get("parts", 0),
             "bom_nom_usd": round(bom_by_sub.get("S5", {}).get("usd_nom", 0.0)),
             "rfq": "RFQ-07 (S5.5 808nm 43.49 J/cm2) + RFQ-08 (S5.6 28Si MBE)",
-            "safety": "Exp150 OD=8 + 3 mm steel dual Laser/X-ray model (1.19e-23 uSv/h) + 3.2 ms SIL-3 target shutter (uncertified M0) + 80 ms UHV gate valve",
+            "safety": "Exp150 OD=8 + Pb-glass/steel X-ray viewport shielding + 80 ms UHV gate valve (uncertified M0)",
         },
         {
             "id": "S6",
-            "name": "20 mK LD400 DR, 1.5T Magnet & S6.5 Cryo-MUX",
+            "name": "20 mK LD400 DR, In-Plane Magnet & S6.5 Cryo-MUX",
             "temp": "20 mK / 100 mK / 4 K / 50 K",
-            "cad_parts": cad_subs["s6_cryo_dr_magnet_readout"]["part_count"],
-            "cad_mass_kg": round(cad_subs["s6_cryo_dr_magnet_readout"]["mass_kg"], 3),
+            "cad_parts": cad164_by_sub.get("S6", {}).get("parts", 0),
+            "cad_mass_kg": round(cad164_by_sub.get("S6", {}).get("mass_kg", 0.0), 2),
             "bom_parts": bom_by_sub.get("S6", {}).get("parts", 0),
             "bom_nom_usd": round(bom_by_sub.get("S6", {}).get("usd_nom", 0.0)),
-            "rfq": "RFQ-04/05/06/08 (N_mux*=32, 3 kOhm NbTiN, 2,887 cells/cryo)",
-            "safety": "Exp150 Dry-cryo He O2 = 20.57% (>=19.5% OSHA) + DN50 16.4x OVC relief + 64.6 K quench dump",
+            "rfq": "RFQ-04/05/06/08 (N_mux*=32, 3 kOhm NbTiN, 50K/4K UHV shields)",
+            "safety": "Exp150 Dry-cryo He O2 = 20.57% in 60 m3 (prohibit <=15 m3 unventilated) + DN50 OVC relief",
         },
         {
             "id": "S7",
-            "name": "ZU48DR RFSoC, S9.HPC & S7.SAFETY (RFQ-10)",
-            "temp": "300 K Rack + Facility Safety (+355 kg)",
-            "cad_parts": cad_subs["s7_electronics_rack_interconnect"]["part_count"],
-            "cad_mass_kg": round(cad_subs["s7_electronics_rack_interconnect"]["mass_kg"], 3),
+            "name": "ZU48DR RFSoC, Control Racks & S7.SAFETY (RFQ-10)",
+            "temp": "300 K Rack + Facility Safety (355.0 kg)",
+            "cad_parts": cad164_by_sub.get("S7", {}).get("parts", 0),
+            "cad_mass_kg": round(cad164_by_sub.get("S7", {}).get("mass_kg", 0.0), 2),
             "bom_parts": bom_by_sub.get("S7", {}).get("parts", 0),
             "bom_nom_usd": round(bom_by_sub.get("S7", {}).get("usd_nom", 0.0)),
             "rfq": "RFQ-08 (RFSoC ZU48DR) + RFQ-09B (RDMA) + RFQ-10 (S7.SAFETY $145k, 6 items)",
-            "safety": "16-ch Q16.16 BOED RTL (584 cyc) + uncertified M0 SIL-3 target PLC (SEMI S2 / IEC 61508 reference) + 15 kVA UPS (40/213 min), 0 W cryo",
+            "safety": "16-ch Q16.16 BOED RTL (584 cyc) + uncertified M0 1oo2D target + 12.0 kWh LFP UPS (202.8 min @ 90% DoD)",
         },
         {
             "id": "S9.4",
             "name": "Option-Q: 50 Ohm <-> 3 kOhm qRAM & 1550 nm Fiber",
             "temp": "20 mK / 4 K (+0.78 uW @ 20 mK)",
-            "cad_parts": cad["exp142_s9q_audit"]["s91_part_count"] + cad["exp142_s9q_audit"]["s16_part_count"],
-            "cad_mass_kg": cad["exp142_s9q_audit"]["total_mass_kg"],
+            "cad_parts": 3,
+            "cad_mass_kg": round(sum(float(pt["mass_kg"]) for pt in (cad164["parts"] if isinstance(cad164["parts"], list) else cad164["parts"].values()) if pt["part_id"].startswith("S9.4")), 2),
             "bom_parts": 4,
             "bom_nom_usd": round(d128["bom_detailed_summary"]["v6_option_q_nom_usd"]),
-            "rfq": "RFQ-09 Lot 9A (Chebyshev-5 IL=0.0004 dB, F_SWAP=0.9858)",
-            "safety": "Passive superconducting NbTiN (0 W standby, 8,403x-25,122x lifetime)",
+            "rfq": "RFQ-09 Lot 9A (7-section lumped NbTiN LC ladder, F_SWAP=0.9858)",
+            "safety": "Passive superconducting NbTiN (0 W standby, 8,403x-25,122x lifetime model)",
         },
         {
             "id": "S9.HPC",
-            "name": "Option-HPC: 4U 100G RoCEv2 Real-Time QEC Decoder",
+            "name": "Option-HPC: 4U 100G RoCEv2 QEC Decoder Node",
             "temp": "300 K (2,195 W, 0.0 W cryo)",
-            "cad_parts": cad["exp143_s9hpc_audit"]["part_count"],
-            "cad_mass_kg": cad["exp143_s9hpc_audit"]["total_mass_kg"],
+            "cad_parts": 3,
+            "cad_mass_kg": round(float(cad164["mass_budget"]["s9_hpc_total_mass_kg"]), 2),
             "bom_parts": 3,
             "bom_nom_usd": round(d128["bom_detailed_summary"]["v6_option_hpc_nom_usd"]),
-            "rfq": "RFQ-09 Lot 9B (tau_ingest=777 ns, d=37: 6.34 us, qLDPC: 2.32 us)",
-            "safety": "Redundant 100G QSFP28 fiber link, backlog-free streaming FIFO",
+            "rfq": "RFQ-09 Lot 9B (CPU C++ BP+OSD-2: 34.7-181.7 ms; zero QEC decoder RTL)",
+            "safety": "Redundant 100G QSFP28 fiber link; hardware FPGA/ASIC BP+OSD accelerator remains future R&D",
         },
     ]
 
@@ -216,21 +228,25 @@ def collect_live_twin_payload(rtl_res: dict[str, Any] | None = None) -> dict[str
 
     return {
         "meta": {
-            "version": "v7.2 (TRL 1-2 M0 Conceptual Design & Reduced-Order Multiphysics + Real-EDA RTL + Uncertified Safety Target + Cloud QPU Control Proxy)",
+            "version": "v7.2 (TRL 1-2 M0 Conceptual Design & Reduced-Order Multiphysics + Real-EDA RTL + Unified 164-Part CAD + Uncertified Safety Target + Cloud QPU Control Proxy)",
             "v6_cert_sha256": v6_cert["sha256"],
-            "cad_version": cad["cad_version"],
-            "cad_parts": cad["master_assembly"]["part_count"],
-            "cad_mass_kg": round(float(cad["master_assembly"]["total_mass_kg"]), 3),
-            "facility_safety_mass_kg": round(float(d128["v7_hardware_mass_reconciliation"]["facility_safety_bom_total_mass_kg"]), 1),
-            "total_facility_mass_kg": round(float(d128["v7_hardware_mass_reconciliation"]["total_facility_load_mass_kg"]), 3),
-            "cad_clashes": cad["interference_audit"]["solid_clashes"],
-            "cad_pairs": cad["interference_audit"]["pairs_checked"],
+            "cad_version": "unified-164-part-blueprint-v8",
+            "cad_parts": cad164["artifact_integrity"]["found_on_disk"],
+            "cad_mass_kg": round(float(cad164["mass_budget"]["total_machine_mass_kg"]), 4),
+            "facility_safety_mass_kg": round(float(cad164["mass_budget"]["s7_safety_total_mass_kg"]), 1),
+            "total_facility_mass_kg": round(float(cad164["mass_budget"]["total_machine_mass_kg"]), 4),
+            "cad_clashes": cad164["global_clash_audit"]["clash_count"],
+            "cad_pairs": cad164["global_clash_audit"]["total_pairs_checked"],
             "bom_version": b128["bom_version"],
             "bom_parts": b128["total_parts"],
             "rfq9_nom_pct": round(float(d128["rfq_coverage"]["rfq9_nom_share"]) * 100.0, 2),
             "rfq10_nom_pct": round(float(d128["rfq_coverage"]["rfq10_nom_share"]) * 100.0, 2),
             "rfq10_var_pct": round(float(d128["rfq_coverage"]["rfq10_variance_share_mc"]) * 100.0, 2),
             "mxc_cap_cells": d140["cryo_heat_budgets"]["m4_10000_hemt7p8mW"]["single_cryostat_max_cells"],
+            "ups_battery_kWh": ups_budget["ups_s7_safety_04"]["battery_energy_kWh"],
+            "ups_tier1_90pct_dod_min": ups_budget["ups_s7_safety_04"]["tier1_critical"]["runtime_tier1_min_conservative_90pct_dod_incl_350w_loss"],
+            "stim_qec_threshold_band": d138.get("obs_022_029_047_110_111_133_honest_audit", {}).get("stim_circuit_threshold_p2q_band_OBS022", [0.006, 0.0098]),
+            "openroad_status": openroad.get("tapeout_readiness_status", "PRE_FOUNDRY_NCH8_MACRO_PROTOTYPE_NOT_TAPEOUT_READY"),
         },
         "bom_modular": {
             "base_nom": b128["m3_v5_base_nom_usd"],
@@ -304,7 +320,7 @@ def collect_live_twin_payload(rtl_res: dict[str, Any] | None = None) -> dict[str
                 "power_mw": femoco_cult["tco_and_power"]["total_facility_power_mw"],
                 "cost_per_solve_usd": femoco_cult["cost_per_solve_usd_p50"],
                 "cryo_compression_x": femoco_comp["cryostats_x"],
-                "uq5_honest_note": "UQ5 honest FAIL: 2-3 us readout ceiling (p_meas=0.22-0.39%) requires D3++ (p_2q<=0.20%, p_meas<=0.10%) or d=24 for p_fail_mem<1%",
+                "uq5_honest_note": "Exp147 UQ4/UQ5/UQ6 honest FAIL: FeMoco d=18 and RSA-2048 d=24 both yield p_fail_total=1.0 under D3 (RSA-2048 d_req=174.1; Stim circuit threshold 0.60-0.98%); 16/291 cryos are footprint lower bounds requiring D3++ (p_2q<=0.15-0.20%, p_meas<=0.15%)",
             },
             "rsa2048": {
                 "qldpc_cryos": rsa_cult["total_cryostats_ld400"],
@@ -313,6 +329,8 @@ def collect_live_twin_payload(rtl_res: dict[str, Any] | None = None) -> dict[str
                 "power_mw": rsa_cult["tco_and_power"]["total_facility_power_mw"],
                 "tco5_musd": rsa_cult["tco_and_power"]["tco5_musd_p50"],
                 "cryo_compression_x": rsa_comp["cryostats_x"],
+                "d24_p_fail_total": d147.get("honest_obstacle_closure_audit", {}).get("OBS030_rsa2048_d24_p_fail_total", 1.0),
+                "d_required_1e14": d147.get("honest_obstacle_closure_audit", {}).get("OBS030_rsa2048_d_required_1e14", 174.1),
             },
         },
         "v7_sb121": {
@@ -345,8 +363,10 @@ def collect_live_twin_payload(rtl_res: dict[str, Any] | None = None) -> dict[str
             "ph3_operator_ppm": d150["hazard_2_ph3_and_forming_gas"]["mitigated_sds_system"]["operator_direct_sds_diffusive_ppm"],
             "he_o2_60m3_pct": d150["hazard_4_cryo_odh_and_quench"]["helium_odh"]["room_sweep"]["60m3"]["dry_ld400_pt420_O2_pct"],
             "ups_kva": d150["hazard_5_epo_ups_shutdown"]["ups_spec"]["rating_kVA"],
+            "ups_battery_kWh": ups_budget["ups_s7_safety_04"]["battery_energy_kWh"],
             "ups_full_min": d150["hazard_5_epo_ups_shutdown"]["ups_spec"]["runtime_at_rated_13p5kW_min"],
-            "ups_tier1_min": d150["hazard_5_epo_ups_shutdown"]["ups_spec"]["runtime_tier1_min"],
+            "ups_tier1_min": ups_budget["ups_s7_safety_04"]["tier1_critical"]["runtime_tier1_min_conservative_90pct_dod_incl_350w_loss"],
+            "ups_tier1_nom_min": ups_budget["ups_s7_safety_04"]["tier1_critical"]["runtime_tier1_min_exp150_nominal_eta090"],
             "uhv_valve_ms": d150["hazard_5_epo_ups_shutdown"]["uhv_isolation"]["gate_valve_close_ms"],
             "kit_totals": s_safety["totals"],
             "kit_items": [
@@ -660,7 +680,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
     </div>
   </div>
   <div class="epistemic-banner">
-    <strong>Epistemic Boundary (TRL 1-2 / M0):</strong> Silicon <sup>31</sup>P atom lithography fabrication (S1-S8), CAD v6.0 (199p nominal static geometry only; excl. GD&amp;T/thermal/DFM), BOM v7.0 (180p parametric / 10-RFQ draft, <code>no_supplier_quotes=true</code>), D3 GRAPE, Universal qLDPC d=18 (Exp147), <sup>121</sup>Sb Q-Echo-8 (Exp148), Verilog RTL (<strong>real EDA verified via Icarus Verilog + Verilator -Wall + Yosys pre-P&amp;R</strong>; <code>no_external_eda_sim=false</code>, <code>no_vendor_vivado_pnr=true</code>, <code>no_lab_measurement_rtl=true</code>, Exp149), and Exp150 Preliminary Safety FMEA/HAZOP (uncertified M0 — SEMI does not certify S2; no IEC 61508 SIL assessment) are <strong>conceptual systems-design &amp; reduced-order multiphysics models (M0, no_lab_measurement=true, tapeout_done=false)</strong>. Control-stack execution (CellISA v4.0 -&gt; OpenQASM 3.0), Hahn-Echo/XY4 DD, 5Q d=3 QEC, and bit-exact Q16.16 BOED Ramsey estimation were run on <strong>ibm_marrakesh (156Q Heron r2, job_id=dc1tdo2nj2vs73dfrfl0, 0 secret leaks) as a cloud superconducting-QPU control/decoder proxy</strong> (validates zero silicon <sup>31</sup>P fabrication hardware).
+    <strong>Epistemic Boundary (TRL 1-2 / M0):</strong> Silicon <sup>31</sup>P atom lithography fabrication (S1-S8), Unified 164-Part Engineering CAD (<code>164/164</code> watertight solids, <code>2,957.95 kg</code> total, <code>0/13,366</code> clashes, <code>32/32</code> thermal, <code>10/10</code> GD&amp;T; <code>180</code> BOM rows; no lab fab), BOM v7.0 (180p parametric / 10-RFQ draft, <code>no_supplier_quotes=true</code>), 10/10 KiCad 8 PCBs (<code>1,128/1,128</code> nets, 0 ERC/DRC + ngspice-47; 3D EM/FEM parasitic/cavity audit documented), Universal qLDPC d=18 (Exp147: <code>UQ4/UQ5/UQ6 FAIL</code> — FeMoco d=18 &amp; RSA-2048 d=24 yield <code>p_fail_total=1.0</code> under D3, RSA-2048 <code>d_req=174.1</code>; Stim circuit threshold <code>0.60-0.98%</code>), <sup>121</sup>Sb Q-Echo-8 (Exp148), Verilog RTL (<strong>real EDA verified via Icarus Verilog + Verilator -Wall + Yosys pre-P&amp;R + nextpnr-ecp5 proxy</strong>; <code>no_external_eda_sim=false</code>, <code>no_vendor_vivado_pnr=true</code>, <code>no_lab_measurement_rtl=true</code>; SKY130 OpenROAD <code>PRE_FOUNDRY_NCH8_MACRO_PROTOTYPE_NOT_TAPEOUT_READY</code>), and Exp150 Preliminary Safety FMEA/HAZOP (uncertified M0, <code>12.0 kWh</code> LFP UPS <code>202.8 min @ 90% DoD</code>; SEMI does not certify S2; no IEC 61508 SIL assessment) are <strong>conceptual systems-design &amp; reduced-order multiphysics models (M0, no_lab_measurement=true, tapeout_done=false)</strong>. Control-stack execution (CellISA v4.0 -&gt; OpenQASM 3.0), Hahn-Echo/XY4 DD, 5Q d=3 QEC, and bit-exact Q16.16 BOED Ramsey estimation were run on <strong>ibm_marrakesh (156Q Heron r2, job_id=dc1tdo2nj2vs73dfrfl0, 0 secret leaks) as a cloud superconducting-QPU control/decoder proxy</strong> (validates zero silicon <sup>31</sup>P fabrication hardware).
   </div>
 </header>
 
@@ -744,7 +764,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
           <div class="kpi"><div class="k-lbl">100L Fleet Cryostats</div><div class="k-val c-emerald" id="k-cryo">1</div><div class="k-sub" id="k-cryo-sub">108L in 1 LD400 (679x vs D2)</div></div>
           <div class="kpi"><div class="k-lbl">Deployed $/L_sys (5y)</div><div class="k-val c-amber" id="k-usdl">$63.8k</div><div class="k-sub" id="k-fabl">Silicon fab: $0.0085/L</div></div>
           <div class="kpi"><div class="k-lbl">M3 Machine BOM (v7.0)</div><div class="k-val c-cyan" id="k-bom">$5.39M</div><div class="k-sub" id="k-p100">P(&gt;$100M) = 4.67% (PASS)</div></div>
-          <div class="kpi"><div class="k-lbl">Mass (Frame / Total)</div><div class="k-val" id="k-mass">1,034.9 / 1,389.9 kg</div><div class="k-sub" id="k-parts">173 BOM / 189 CAD + 355 kg fac.</div></div>
+          <div class="kpi"><div class="k-lbl">Unified CAD Mass</div><div class="k-val" id="k-mass">2,889.55 kg</div><div class="k-sub" id="k-parts">173 BOM / 158 CAD solids (Full: 2,957.95 kg / 164p)</div></div>
           <div class="kpi"><div class="k-lbl">MXC 20 mK Heat Load</div><div class="k-val c-purple" id="k-mxc">6.26 uW</div><div class="k-sub">Limit 14.0 uW (0 W from Safety)</div></div>
           <div class="kpi"><div class="k-lbl">Model Capacity (Assumed Inputs)</div><div class="k-val c-emerald" id="k-daily">1.55B / day</div><div class="k-sub" id="k-blkyld">288-cell block yield: 99.64%</div></div>
         </div>
@@ -825,14 +845,14 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
             <text x="384" y="365" fill="#4b5563" font-size="11.2">+$168k | 9.2 kg | +0.78 uW @ 20 mK | 8,403x life</text>
           </g>
           <rect x="370" y="408" width="350" height="56" rx="2" fill="#f8f9fa" stroke="#d1d5db" stroke-width="1.1"/>
-          <text x="545" y="431" text-anchor="middle" fill="#111827" font-size="11.8" font-weight="700">CAD v6 Nominal: 199p / 1,108 kg | BOM v7 Parametric: 180p</text>
-          <text x="545" y="450" text-anchor="middle" fill="#4b5563" font-size="10.8">0/19,701 static clashes (excl. GD&amp;T/thermal/DFM) | 10-RFQ draft</text>
+          <text x="545" y="431" text-anchor="middle" fill="#111827" font-size="11.8" font-weight="700">Unified CAD: 164p / 2,957.95 kg | BOM v7: 180p</text>
+          <text x="545" y="450" text-anchor="middle" fill="#4b5563" font-size="10.8">0/13,366 3D clashes (32/32 thermal, 10/10 GD&amp;T) | 10-RFQ draft</text>
         </svg>
       </div>
       <div class="card">
         <h2 id="sub-title">Subsystem Inspector</h2>
         <div id="sub-detail"></div>
-        <h3>All Subsystems Summary (Nominal CAD v6.0 &amp; Parametric BOM v7.0)</h3>
+        <h3>All Subsystems Summary (Unified 164-Part CAD &amp; Parametric BOM v7.0)</h3>
         <table class="spec" id="tbl-subs"></table>
       </div>
     </div>
@@ -1011,10 +1031,13 @@ function updateExplorer() {
   } else {
     p100m = (optQ && optHPC) ? bm.full_p100m : (optQ ? bm.q_p100m : (optHPC ? bm.hpc_p100m : bm.base_p100m));
   }
-  const frameMass = 1034.937 + (optQ ? 9.2 : 0) + (optHPC ? 64.0 : 0);
-  const facMass = hasSafety ? 355.0 : 0.0;
+  const unifiedTotalMass = DATA.meta.cad_mass_kg;
+  const optQMass = optQ ? 0.0 : 4.4;
+  const optHpcMass = optHPC ? 0.0 : 64.0;
+  const safetyMassDeduct = hasSafety ? 0.0 : 355.0;
+  const activeMass = +(unifiedTotalMass - safetyMassDeduct - optQMass - optHpcMass).toFixed(2);
   const partsBom = 167 + (hasSafety ? 6 : 0) + (optQ ? 4 : 0) + (optHPC ? 3 : 0);
-  const partsCad = 189 + (optQ ? 5 : 0) + (optHPC ? 5 : 0);
+  const partsCad = 164 - (hasSafety ? 0 : 6) - (optQ ? 0 : 3) - (optHPC ? 0 : 3);
   const mxcUw = DATA.physics_anchors.base_1024_20mk_uW + (optQ ? DATA.physics_anchors.option_q_20mk_uW : 0);
 
   document.getElementById('k-fbell').textContent = (fBell * 100).toFixed(2) + '%';
@@ -1035,10 +1058,8 @@ function updateExplorer() {
     p100El.textContent = 'P(>$100M) = ' + p100m.toFixed(2) + '% (>5% Phased)';
     p100El.style.color = '#8b2635';
   }
-  document.getElementById('k-mass').textContent = facMass > 0
-    ? (frameMass.toFixed(1) + ' + 355 kg')
-    : (frameMass.toFixed(1) + ' kg');
-  document.getElementById('k-parts').textContent = partsBom + ' BOM / ' + partsCad + ' CAD' + (facMass > 0 ? ' + fac.' : '');
+  document.getElementById('k-mass').textContent = activeMass.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' kg';
+  document.getElementById('k-parts').textContent = partsBom + ' BOM / ' + partsCad + ' CAD solids (unified)';
   document.getElementById('k-mxc').textContent = mxcUw.toFixed(2) + ' uW';
   document.getElementById('k-blkyld').textContent = nBlkCells + '-cell block yield (N8): ' + blkYld.toFixed(2) + '%';
 
@@ -1112,7 +1133,7 @@ function selectSub(id) {
   document.getElementById('sub-title').textContent = s.id + ' — ' + s.name;
   document.getElementById('sub-detail').innerHTML = `
     <div class="kpi-grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:10px;">
-      <div class="kpi"><div class="k-lbl">CAD v6 Mass</div><div class="k-val c-cyan">${s.cad_mass_kg} kg</div><div class="k-sub">${s.cad_parts} CAD solids</div></div>
+      <div class="kpi"><div class="k-lbl">Unified CAD Mass</div><div class="k-val c-cyan">${s.cad_mass_kg} kg</div><div class="k-sub">${s.cad_parts} CAD solids</div></div>
       <div class="kpi"><div class="k-lbl">BOM v7 Nom</div><div class="k-val">${'$' + (s.bom_nom_usd/1e3).toFixed(1) + 'k'}</div><div class="k-sub">${s.bom_parts} BOM lines</div></div>
       <div class="kpi"><div class="k-lbl">Thermal Stage</div><div class="k-val" style="font-size:0.90rem;">${s.temp}</div><div class="k-sub">Model design target</div></div>
     </div>
@@ -1396,7 +1417,7 @@ function drawV7Suite() {
     <tr><td>S5.5 Laser + 22 keV X-Ray Shroud</td><td class="num">OD=${sf.laser_od_spec} + 3mm (${sf.xray_22kev_shrouded_uSv_h.toExponential(2)} uSv/h)</td><td class="num">SIL-3 target (uncertified M0, ${sf.shutter_ms} ms)</td></tr>
     <tr><td>S1.1 Sub-Atm SDS PH3 Cabinet</td><td class="num">${sf.ph3_operator_ppm.toFixed(5)} ppm (&lt;&lt;0.05 TLV)</td><td class="num">SIL-3 target (uncertified M0, $42k)</td></tr>
     <tr><td>S6 Dry-Cryo He ODH (60 m3 room)</td><td class="num">O2 = ${sf.he_o2_60m3_pct.toFixed(2)}% (&gt;=19.5% OSHA)</td><td class="num">SIL-2 target (uncertified, $12k)</td></tr>
-    <tr><td>15 kVA Online UPS + UHV Gate Valve</td><td class="num">${sf.ups_full_min}/${sf.ups_tier1_min.toFixed(0)} min | ${sf.uhv_valve_ms} ms valve</td><td class="num">SIL-2 target (uncertified, $36k)</td></tr>
+    <tr><td>15 kVA / 12.0 kWh LFP UPS + UHV Valve</td><td class="num">${sf.ups_full_min}/${sf.ups_tier1_min.toFixed(1)} min @ 90% DoD | ${sf.uhv_valve_ms} ms valve</td><td class="num">SIL-2 target (uncertified, $36k)</td></tr>
     <tr><td><strong>S7.SAFETY Total (6 Items, RFQ-10 Draft)</strong></td><td class="num"><strong>${sf.kit_totals.total_mass_kg} kg | ${sf.kit_totals.steady_electrical_power_W} W | 0 W cryo</strong></td><td class="num"><strong>$${(sf.kit_totals.cost_usd_nom/1e3).toFixed(0)}k</strong></td></tr>
   `;
 }

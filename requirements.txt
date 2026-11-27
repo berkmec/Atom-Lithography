@@ -1,17 +1,23 @@
-# Core scientific & cloud-QPU stack for Atom Lithography Machine v7.2
-# (All 35/35 staged Atom Lithography test suites [333/333 fresh-clone pytest; 400/400 in full
-# local dev workspace], real 1% 29Si lattice-bath BOED + Q16.16 FPGA DSP + open-source EDA
-# verified IEEE 1364-2005 Verilog RTL [rtl/boed_fpga/], zero-CDN HTML5 interactive digital
-# twin [docs/digital_twin_interactive.html], CellISA v4.0, pure-requests IBM Quantum Platform
-# 2026 REST bridge [zero qiskit], physical auto_recal/programmer, IBIC 0-ERC netlist/SPICE,
-# BOM v7.0 / 10-RFQ MC [uncertified M0 Exp150 safety], CAD v6.0 STL/SCAD, and Exp124-Exp151
-# Master v7.2 Digital Twin)
+# Core scientific, verification & cloud-QPU stack for Atom Lithography Machine v7.2
+# (Staged Stage-2 + v7.2 pytest suites, real 1% 29Si lattice-bath BOED + Q16.16 FPGA DSP +
+# open-source EDA verified IEEE 1364-2005 Verilog RTL [rtl/boed_fpga/, rtl/machine_ctrl/],
+# zero-CDN HTML5 interactive digital twin [docs/digital_twin_interactive.html], CellISA v4.0,
+# pure-requests IBM Quantum Platform 2026 REST bridge [zero qiskit], physical auto_recal /
+# programmer, IBIC/PCB KiCad 8 + ngspice decks, BOM v7.0 / 10-RFQ MC [uncertified M0 Exp150
+# safety], CAD v6.0 + 164-part STL/STEP/SCAD/DXF/SVG, and Exp124-Exp151 Master Digital Twin)
 numpy>=1.26
 scipy>=1.11
 pandas>=2.0
 torch>=2.2
 requests>=2.31
+networkx>=3.0
 pytest>=8.0
+
+# 3D mesh & optional FEM verification dependencies (used by optional trimesh cross-checks,
+# src/qcell/phonon.py [scikit-fem], and tests/test_fem.py [gmsh])
+trimesh>=4.0
+scikit-fem>=9.0
+gmsh>=4.12
 
 # Optional — required only to re-render 2D technical drawings & PNG/SVG figures
 # pycairo>=1.25

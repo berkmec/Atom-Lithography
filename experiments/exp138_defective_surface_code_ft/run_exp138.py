@@ -76,12 +76,14 @@ def load_upstream_anchors() -> Dict[str, Any]:
         for r in e136["stage6_isotope_stark_sweep"]["stark_tuning_yield_HM5962"]
     }
     f10_yield = float(prim136[1.0]["mode_b"]["yield_frac"])
-    f10_t2e_ms = float(prim136[1.0]["coherence"]["T2e_XY8_N64_alpha2_ms"])
+    f10_yield_ddrf = float(prim136[1.0]["mode_b"]["gap_stats"]["yield_and_gap_ge_6893Hz"])
+    f10_t2e_ms = float(prim136[1.0]["coherence"]["T2e_XY8_N64_alpha1_ms"])  # OBS-110 conservative alpha=1
     f15_yield_base = float(prim136[1.5]["mode_b"]["yield_frac"])
     f15_yield_stark2 = float(stark136[(1.5, 2.0)]["yield_frac"])
-    f15_t2e_ms = float(prim136[1.5]["coherence"]["T2e_XY8_N64_alpha2_ms"])
+    f15_yield_stark2_ddrf = float(stark136[(1.5, 2.0)]["yield_and_gap_ge_6893Hz"])
+    f15_t2e_ms = float(prim136[1.5]["coherence"]["T2e_XY8_N64_alpha1_ms"])  # OBS-110: 7.07 ms (not alpha=2 14.135 ms!)
     f20_yield = float(prim136[2.0]["mode_b"]["yield_frac"])
-    f20_t2e_ms = float(prim136[2.0]["coherence"]["T2e_XY8_N64_alpha2_ms"])
+    f20_t2e_ms = float(prim136[2.0]["coherence"]["T2e_XY8_N64_alpha1_ms"])  # OBS-110: 5.42 ms
 
     # Exp139: Route C charge noise & flip-flop yield
     e139_routes = e139["charge_noise_and_exp137_bridge"]["routes"]
@@ -680,7 +682,8 @@ def compute_machine_scaling_table(
 
 def scan_portability() -> List[str]:
     """Scan all Exp138 code/results/tests for forbidden hardcoded user paths."""
-    forbidden = ("/" + "home" + "/" + "berk", "/" + "run" + "/" + "media" + "/" + "berk")
+    import re
+    patterns = (re.compile(r"/(?:home|run/media)/[a-zA-Z0-9_-]+"),)
     hits: List[str] = []
     targets = [
         REPO_ROOT / "experiments" / "exp138_defective_surface_code_ft",
@@ -696,9 +699,9 @@ def scan_portability() -> List[str]:
             continue
         for f in files:
             txt = f.read_text(errors="ignore")
-            for pat in forbidden:
-                if pat in txt:
-                    hits.append(f"{f.relative_to(REPO_ROOT)} contains '{pat}'")
+            for pat in patterns:
+                if pat.search(txt):
+                    hits.append(f"{f.relative_to(REPO_ROOT)} matches {pat.pattern}")
     return hits
 
 

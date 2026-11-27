@@ -56,21 +56,21 @@
         "position_mm": [
           0.0,
           0.0,
-          -2.85
+          -3.38
         ],
         "normal": [
           0.0,
           0.0,
           -1.0
         ],
-        "standard": "Ø34.0 mm Cryo Thermal Boss + 3x Ø3 H7 Pins",
+        "standard": "Ø34.0 mm Cryo Thermal Boss + 4x M3 Radial-Slot Ti Clamps @ PCD 96.0 mm",
         "mating_part_id": "S6.2-01",
         "bore_mm": 0.0,
         "od_mm": 34.0,
-        "pcd_mm": 66.0,
-        "bolt_count": 3,
-        "bolt_hole_mm": 3.0,
-        "bolt_spec": "",
+        "pcd_mm": 96.0,
+        "bolt_count": 4,
+        "bolt_hole_mm": 3.4,
+        "bolt_spec": "M3",
         "frame": "local",
         "notes": ""
       }
@@ -119,6 +119,20 @@
         "formatted": "Ø50.40 ±0.02"
       },
       {
+        "label": "CHUCK_PCD",
+        "nominal_mm": 96.0,
+        "tol_plus_mm": 0.02,
+        "tol_minus_mm": -0.02,
+        "view": "top",
+        "unit": "mm",
+        "prefix": "Ø",
+        "suffix": "",
+        "is_basic": false,
+        "datum_ref": "",
+        "decimals": 2,
+        "formatted": "Ø96.00 ±0.02"
+      },
+      {
         "label": "THERMAL_BOSS_OD",
         "nominal_mm": 34.0,
         "tol_plus_mm": 0.02,
@@ -134,7 +148,7 @@
       },
       {
         "label": "TOTAL_H",
-        "nominal_mm": 5.7,
+        "nominal_mm": 6.54,
         "tol_plus_mm": 0.02,
         "tol_minus_mm": -0.02,
         "view": "front",
@@ -144,7 +158,7 @@
         "is_basic": false,
         "datum_ref": "",
         "decimals": 2,
-        "formatted": "5.70 ±0.02"
+        "formatted": "6.54 ±0.02"
       }
     ],
     "gdt_frames": [
@@ -180,7 +194,7 @@
         "datum_primary": "A",
         "datum_secondary": "B",
         "datum_tertiary": "",
-        "feature_note": "3x Ø3.0 H7 ALIGNMENT PINS",
+        "feature_note": "4x M3 RADIAL SLOTS @ PCD 96.0 MM",
         "glyph": "⌖",
         "tolerance_text": "Ø0.010"
       }
@@ -201,15 +215,19 @@
     ],
     "notes": [
       "Yuksek termal iletkenlik @ 4K, dusuk parazitik C (<0.05 pF)",
-      "Exp80 BC1 locked 80x80 mm AlN/Sapphire carrier (diag 113.1 mm < Ø150 mm magnet bore).",
+      "Exp80 BC1 80x80 mm AlN/Sapphire carrier aligned to S6.2-01 bolt circle PCD=96.0 mm (45/135/225/315 deg) via 4x radial kinematic slots + Ti-6Al-4V Belleville spring clamps (0 N cooldown radial shear vs 355.6 N/strut rigid).",
+      "Rear Ø34.0 mm central AlN thermal boss seats directly into S6.2-01 Ø34.5 mm pocket at Z_world=-6.38 mm (0.02 mm In foil interface, eliminating 0.55 mm floating Z-gap).",
       "300K->100K AlN pocket vs Si wafer WC rad clearance: 0.1717 mm (PASS).",
       "300K->20mK AlN pocket vs Si wafer WC rad clearance: 0.1703 mm (PASS).",
-      "300K->100K OFHC Cu chuck vs Ø34 AlN boss WC rad clearance: 0.1857 mm (PASS)."
+      "300K->20mK OFHC Cu chuck Ø34.5 pocket vs Ø34 AlN boss WC rad clearance: 0.1790 mm (PASS)."
     ],
     "scad_params": {
       "carrier_size_mm": 80.0,
       "wafer_pocket_id_mm": 50.4,
+      "chuck_bolt_pcd_mm": 96.0,
+      "radial_slot_length_mm": 4.4,
       "thermal_boss_od_mm": 34.0,
+      "thermal_boss_z_bot_mm": -6.38,
       "align_pin_pcd_mm": 66.0
     },
     "target_mass_kg": null,
@@ -236,34 +254,34 @@
     "watertight": true,
     "boundary_edges": 0,
     "non_manifold_edges": 0,
-    "signed_volume_mm3": 29362.418111540876,
-    "surface_area_mm2": 24903.485502673495,
-    "mass_kg": 0.09572148304362325,
+    "signed_volume_mm3": 30088.870252543482,
+    "surface_area_mm2": 25572.694104588216,
+    "mass_kg": 0.09808971702329179,
     "cg_mm": [
-      4.6953726588261897e-17,
-      1.0156947858789873e-15,
-      0.2485419073429379
+      1.2421386242583135e-15,
+      1.0910038867059712e-16,
+      0.21347926398354342
     ],
     "bbox_min_mm": [
       -40.0,
       -40.0,
-      -2.85
+      -3.38
     ],
     "bbox_max_mm": [
       40.0,
       40.0,
-      2.85
+      3.1599999999999997
     ],
     "inertia_kg_mm2": [
-      51.57463652757841,
-      51.574636527578576,
-      102.77425388395058,
-      -3.3563264878466725e-15,
-      9.844402876230717e-17,
-      -5.747624515251335e-17
+      52.539056654983156,
+      52.539056654983234,
+      104.66222405536487,
+      3.842578735202551e-15,
+      1.3182228305967817e-16,
+      -3.891007666178517e-16
     ],
-    "triangle_count": 1496,
-    "vertex_count": 726,
+    "triangle_count": 2008,
+    "vertex_count": 982,
     "step_valid": true,
     "dxf_valid": true,
     "svg_valid": true,
@@ -278,12 +296,12 @@
   "world_bbox_min_mm": [
     -40.0,
     -40.0,
-    -5.85
+    -6.38
   ],
   "world_bbox_max_mm": [
     40.0,
     40.0,
-    -0.1499999999999999
+    0.1599999999999997
   ],
   "reconciliation": null,
   "thermal_contraction_checks": [
@@ -343,6 +361,25 @@
       "min_required_radial_clearance_mm": 0.1,
       "interference_risk": false,
       "passed": true
+    },
+    {
+      "outer_material": "OFHC Cu",
+      "inner_material": "AlN",
+      "t_cold_k": 0.02,
+      "t_ref_k": 293.15,
+      "warm_outer_id_mm": 34.5,
+      "warm_inner_od_mm": 34.0,
+      "cold_outer_id_mm": 34.38753,
+      "cold_inner_od_mm": 33.9796,
+      "outer_strain": -0.0032600000000000406,
+      "inner_strain": -0.0006000000000000449,
+      "warm_radial_clearance_mm": 0.25,
+      "cold_nominal_radial_clearance_mm": 0.20396500000000017,
+      "cold_worst_case_radial_clearance_mm": 0.17896500000000018,
+      "delta_radial_clearance_mm": -0.046034999999999826,
+      "min_required_radial_clearance_mm": 0.1,
+      "interference_risk": false,
+      "passed": true
     }
   ],
   "tolerance_stack_checks": [
@@ -370,5 +407,10 @@
         "datum_offset": 0.0
       }
     }
-  ]
+  ],
+  "shell_mate_metadata": {
+    "n_shells": 10,
+    "fea_bonding_mode": "TIED_SUBASSEMBLY_CONTACTS",
+    "watertight": true
+  }
 }

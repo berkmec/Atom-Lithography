@@ -9,7 +9,7 @@
 // temp_stage        : 300 K
 // vacuum_grade      : UHV 1e-9 mbar
 // tolerance         : ±5 um
-// computed_mass_kg  : 3.52406
+// computed_mass_kg  : 2.99371
 // envelope_mm       : 264.000 x 264.000 x 90.000
 // design_maturity   : M0_M1_DETAILED_CAD_DESIGN_ONLY
 // no_lab_measurement: true
@@ -29,6 +29,8 @@ bbox_z = 90.0000;
 ring_id_mm = 208.0;
 ring_od_mm = 264.0;
 ring_h_mm = 18.0;
+optical_window_deg = 20.0;
+optical_window_h_mm = 13.0;
 col_radius_mm = 118.0;
 n_columns = 4;
 
@@ -49,13 +51,13 @@ module part_S4_5_01() {
         }
       }
       // Invar-36 metrology bridge column #1
-      translate([83.439, 83.439, -9.100]) cylinder(d=15.000, h=71.800, center=true);
+      translate([83.439, 83.439, -9.000]) cylinder(d=15.000, h=72.000, center=true);
       // Invar-36 metrology bridge column #2
-      translate([-83.439, 83.439, -9.100]) cylinder(d=15.000, h=71.800, center=true);
+      translate([-83.439, 83.439, -9.000]) cylinder(d=15.000, h=72.000, center=true);
       // Invar-36 metrology bridge column #3
-      translate([-83.439, -83.439, -9.100]) cylinder(d=15.000, h=71.800, center=true);
+      translate([-83.439, -83.439, -9.000]) cylinder(d=15.000, h=72.000, center=true);
       // Invar-36 metrology bridge column #4
-      translate([83.439, -83.439, -9.100]) cylinder(d=15.000, h=71.800, center=true);
+      translate([83.439, -83.439, -9.000]) cylinder(d=15.000, h=72.000, center=true);
     }
     // 8x M5 precision bolted ring joints
     translate([0.000, 0.000, 36.000]) {
@@ -63,6 +65,27 @@ module part_S4_5_01() {
         rotate([0, 0, i * 360 / 8])
           translate([118.000, 0, 0])
             cylinder(d=5.500, h=22.000, center=true);
+    }
+    // 0-deg X interferometer optical pass-through bore
+    translate([118.000, 0.000, 36.000]) rotate([0.000, 90.000, 0.000]) {
+      hull() {
+        translate([-11.500, 0, 0]) cylinder(d=13.000, h=36.000, center=true);
+        translate([11.500, 0, 0]) cylinder(d=13.000, h=36.000, center=true);
+      }
+    }
+    // 90-deg Y interferometer optical pass-through bore
+    translate([0.000, 118.000, 36.000]) rotate([90.000, 0.000, 0.000]) {
+      hull() {
+        translate([-11.500, 0, 0]) cylinder(d=13.000, h=36.000, center=true);
+        translate([11.500, 0, 0]) cylinder(d=13.000, h=36.000, center=true);
+      }
+    }
+    // 270-deg Z interferometer optical pass-through bore
+    translate([0.000, -118.000, 36.000]) rotate([90.000, 0.000, 0.000]) {
+      hull() {
+        translate([-11.500, 0, 0]) cylinder(d=13.000, h=36.000, center=true);
+        translate([11.500, 0, 0]) cylinder(d=13.000, h=36.000, center=true);
+      }
     }
   }
 }

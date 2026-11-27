@@ -187,7 +187,7 @@ class TestS5ClashesAndCoaxiality:
 
     def test_chamber_s5_1_01_zero_internal_port_intersections(self, s5_parts) -> None:
         shells = split_shells(s5_parts["S5.1-01"].mesh)
-        assert len(shells) >= 20  # Baseplate + wall + 7 pillars + dome + 16 CF flanges
+        assert len(shells) >= 16  # Baseplate + perforated wall + dome + 13 CF flanges
         hits = []
         for i in range(len(shells)):
             for j in range(i + 1, len(shells)):
@@ -200,14 +200,14 @@ class TestS5ClashesAndCoaxiality:
             ("S5.1-01", "top_cf250_column", "S5.1-02", "chamber_top_cf250_mate"),
             ("S5.1-01", "port_loadlock_pos_x", "S5.1-03", "main_chamber_gate_in"),
             ("S5.1-03", "transfer_arm_pos_x", "S5.1-04", "loadlock_cf100_mate"),
-            ("S5.1-01", "port_pump_neg_y", "S5.2-01", "chamber_cf100_inlet"),
+            ("S5.1-01", "port_pump_neg_y", "S5.2-01", "chamber_cf150_inlet"),
             ("S5.2-01", "vacion_top_tee_port", "S5.2-02", "tee_cf100_inlet"),
             ("S5.1-01", "port_gauge_rga_225", "S5.2-04", "chamber_cf40_mate"),
-            ("S5.1-01", "port_rta_flash_140", "S5.3-02", "chamber_cf100_mate"),
+            ("S5.1-03", "port_rta_flash_inclined_42", "S5.3-02", "chamber_cf100_mate"),
             ("S5.3-02", "lamp_head_mount", "S5.3-01", "optical_exit_aperture"),
-            ("S5.1-01", "port_pyro_325", "S5.3-03", "chamber_cf40_mate"),
-            ("S5.1-01", "port_shutter_212", "S5.3-04", "chamber_cf40_mate"),
-            ("S5.1-01", "port_808nm_flash_pos_y", "S5.5-02", "chamber_pos_y_cf63"),
+            ("S5.1-03", "port_pyro_inclined_238", "S5.3-03", "chamber_cf40_mate"),
+            ("S5.1-03", "port_shutter_320", "S5.3-04", "chamber_cf40_mate"),
+            ("S5.1-03", "port_808nm_flash_inclined_90", "S5.5-02", "chamber_pos_y_cf63"),
             ("S5.1-03", "mbe_top_cf100", "S5.6-01", "loadlock_cf100_base"),
             ("S5.6-01", "qcm_neg_y_cf40", "S5.6-02", "mbe_qcm_cf40_mate"),
             ("S5.6-01", "pbn_pos_y_cf40", "S5.6-03", "mbe_pbn_cf40_mate"),
@@ -243,10 +243,23 @@ class TestS5EngineeringSpecifications:
     def test_bom_vs_cad_reconciliations_documented_and_enforced(self, s5_parts) -> None:
         assert set(S5_RECONCILIATIONS.keys()) == {"S5.1-01", "S5.1-04", "S5.4-01"}
 
-        # S5.1-01: R_in=182, R_out=192, 16 CF flanges
+        # S5.1-01: R_in=182, R_out=192, 13 fully-bored CF flanges (10 radial + 3 axial; 4 optical/shutter relocated to S5.1-03)
         c_design = s5_parts["S5.1-01"].design
-        assert len(c_design.ports) == 16
+        assert len(c_design.ports) == 13
         assert any("182.0" in n and "175" in n for n in c_design.notes)
+        # OBS-002 S5 side: 50 deg fiducial CF40 & 0/90/270 deg interferometer CF40 ports present on S5.1-01
+        fid_port = next(p for p in c_design.ports if p.name == "port_fiducial_50")
+        assert fid_port.standard == "CF40" and fid_port.mating_part_id == "S4.5-02"
+        # OBS-004/005: S5.1-02 inline CF100 column isolation gate valve terminates cleanly at Z=705.00 mm
+        s502_w = transform_mesh(
+            s5_parts["S5.1-02"].mesh,
+            translation=s5_parts["S5.1-02"].design.world_origin_mm,
+            rotation_deg=s5_parts["S5.1-02"].design.world_rotation_deg,
+        )
+        assert math.isclose(float(s502_w.bbox()[1][2]), 705.0, abs_tol=0.1)
+        # OBS-107: -Y pump port upgraded to CF150
+        pump_port = next(p for p in c_design.ports if p.name == "port_pump_neg_y")
+        assert pump_port.standard == "CF150"
 
         # S5.1-04: True 500 mm stroke (overall length >= 620 mm, clears Rack Bay 1 at X=1400)
         arm = s5_parts["S5.1-04"]
@@ -268,29 +281,52 @@ class TestS5EngineeringSpecifications:
         assert any("100 mm" in n and "50.0 mm" in n for n in waf.design.notes)
 
     def test_s7_safety_02_plus_y_shroud_fit_and_keepout(self, s5_parts, s5_manifest) -> None:
-        # S5.5 external envelope beyond CF63 flange fits cleanly inside 280x260x220 mm shroud
-        fit = s5_manifest["s7_safety_02_shroud_fit"]
-        assert fit["fits_inside_shroud_with_margin"] is True
-        ext = fit["s55_external_extents_mm"]
-        assert ext[0] < 200.0 and ext[1] < 200.0 and ext[2] < 180.0
-
-        # S5.5-02 CF63 sapphire viewport exact specs
+        # S5.5-02 CF63 sapphire viewport exact specs (relocated to 36-deg inclined +Y port on S5.1-03, OBS-001)
         vp_d = s5_parts["S5.5-02"].design
         cf63_port = next(p for p in vp_d.ports if p.standard == "CF63")
         assert cf63_port.bolt_count == 8
         assert math.isclose(cf63_port.pcd_mm, 92.1, abs_tol=0.05)
         assert math.isclose(cf63_port.bore_mm, 44.0, abs_tol=0.05)
+        assert vp_d.world_rotation_deg[0] >= 35.0
+        assert cf63_port.mating_part_id == "S5.1-03"
 
-        # Verify NO non-S5.5 part intrudes into S7.SAFETY-02 shroud zone (X=[-140,140], Y=[340,600], Z=[390,610])
-        shroud_min = np.array([-140.0, 340.0, 390.0])
-        shroud_max = np.array([140.0, 600.0, 610.0])
-        for pid, build in s5_parts.items():
-            if pid.startswith("S5.5-"):
-                continue
-            wm = transform_mesh(build.mesh, translation=build.design.world_origin_mm, rotation_deg=build.design.world_rotation_deg)
-            mn, mx = wm.vertices.min(axis=0), wm.vertices.max(axis=0)
-            overlaps = bool(np.all(mx >= shroud_min) and np.all(mn <= shroud_max))
-            assert not overlaps, f"Non-S5.5 part {pid} encroaches into S7.SAFETY-02 +Y shroud zone!"
+        # Verify S5.5 external optical assembly sits cleanly inside relocated S7.SAFETY-02 X=[315,525] envelope
+        for pid in ("S5.5-01", "S5.5-03", "S5.5-04"):
+            wm = transform_mesh(
+                s5_parts[pid].mesh,
+                translation=s5_parts[pid].design.world_origin_mm,
+                rotation_deg=s5_parts[pid].design.world_rotation_deg,
+            )
+            mn, mx = wm.bbox()
+            assert mn[0] >= 355.0 and mx[0] <= 485.0, f"{pid} X bounds out of S7.SAFETY-02: {mn[0]:.1f}..{mx[0]:.1f}"
+
+        # OBS-001 Moller-Trumbore LOS check: S5.5 808nm laser, S5.6-01 -Z MBE beam, and S5.6-01 radial ports clear!
+        def _ray_hits(mesh, orig, direc, tmin, tmax):
+            d = direc / np.linalg.norm(direc)
+            v0 = mesh.vertices[mesh.faces[:, 0]]
+            e1 = mesh.vertices[mesh.faces[:, 1]] - v0
+            e2 = mesh.vertices[mesh.faces[:, 2]] - v0
+            h = np.cross(d, e2)
+            a = np.einsum("ij,ij->i", e1, h)
+            m = np.abs(a) > 1e-9
+            f = 1.0 / a[m]
+            s = orig - v0[m]
+            u = f * np.einsum("ij,ij->i", s, h[m])
+            ok = (u >= -1e-6) & (u <= 1.0 + 1e-6)
+            q = np.cross(s[ok], e1[m][ok])
+            v = f[ok] * np.einsum("ij,j->i", q, d)
+            ok2 = (v >= -1e-6) & (u[ok] + v <= 1.0 + 1e-6)
+            t = f[ok][ok2] * np.einsum("ij,ij->i", e2[m][ok][ok2], q[ok2])
+            return t[(t >= tmin) & (t <= tmax)]
+
+        s513_w = transform_mesh(s5_parts["S5.1-03"].mesh, translation=s5_parts["S5.1-03"].design.world_origin_mm, rotation_deg=s5_parts["S5.1-03"].design.world_rotation_deg)
+        s561_w = transform_mesh(s5_parts["S5.6-01"].mesh, translation=s5_parts["S5.6-01"].design.world_origin_mm, rotation_deg=s5_parts["S5.6-01"].design.world_rotation_deg)
+        el = math.radians(36.0)
+        d_s55 = np.array([0.0, math.cos(el), math.sin(el)])
+        assert len(_ray_hits(s513_w, np.array([420.0, 0.0, 500.0]) + 20.0 * d_s55, d_s55, 0.1, 160.0)) == 0
+        assert len(_ray_hits(s513_w, np.array([420.0, 0.0, 680.0]), np.array([0.0, 0.0, -1.0]), 0.1, 175.0)) == 0
+        assert len(_ray_hits(s561_w, np.array([420.0, -10.0, 705.0]), np.array([0.0, -1.0, 0.0]), 0.1, 80.0)) == 0
+        assert len(_ray_hits(s561_w, np.array([430.0, 0.0, 710.0]), np.array([1.0, 0.0, 0.0]), 0.1, 85.0)) == 0
 
     def test_exp139_s56_mbe_envelope_and_mass(self, s5_parts, s5_manifest) -> None:
         mbe = s5_parts["S5.6-01"]

@@ -750,6 +750,108 @@ class NativeOpenQASM3Transpiler:
         suite.update(self.build_c3_ramsey(detuning_kHz=c3_detuning_kHz))
         return suite
 
+    def _emit_swap(self, lines: list[str], a: int, b: int) -> None:
+        """Emit native-ISA SWAP(a, b) using 3 adjacent CNOTs."""
+        self._emit_cnot(lines, a, b)
+        self._emit_cnot(lines, b, a)
+        self._emit_cnot(lines, a, b)
+
+    def _shortest_coupling_path(self, src: int, dst: int) -> list[int]:
+        """BFS shortest undirected path between physical qubits ``src`` and ``dst``."""
+        if src == dst:
+            return [src]
+        adj: dict[int, list[int]] = {}
+        for u, v in self.directed_edges:
+            adj.setdefault(u, []).append(v)
+            adj.setdefault(v, []).append(u)
+        if src not in adj or dst not in adj:
+            raise ValueError(f"Qubits ({src}, {dst}) are not connected in coupling_map")
+        from collections import deque
+        q: deque[list[int]] = deque([[src]])
+        seen = {src}
+        while q:
+            path = q.popleft()
+            cur = path[-1]
+            for nxt in sorted(adj.get(cur, [])):
+                if nxt == dst:
+                    return path + [nxt]
+                if nxt not in seen:
+                    seen.add(nxt)
+                    q.append(path + [nxt])
+        raise ValueError(f"No coupling path between physical qubits {src} and {dst}")
+
+    def _emit_routed_2q(self, lines: list[str], ctrl: int, tgt: int, kind: str = "cnot") -> None:
+        """Emit 2Q gate routed strictly over adjacent physical coupling edges via SWAP chain."""
+        if (ctrl, tgt) in self.directed_edges or (tgt, ctrl) in self.directed_edges:
+            if kind == "cz":
+                self._emit_cz(lines, ctrl, tgt)
+            else:
+                self._emit_cnot(lines, ctrl, tgt)
+            return
+        path = self._shortest_coupling_path(ctrl, tgt)
+        # Swap ctrl forward along path[:-1] until adjacent to tgt
+        for i in range(len(path) - 2):
+            self._emit_swap(lines, path[i], path[i + 1])
+        if kind == "cz":
+            self._emit_cz(lines, path[-2], path[-1])
+        else:
+            self._emit_cnot(lines, path[-2], path[-1])
+        # Uncompute SWAP chain to restore logical-to-physical qubit mapping
+        for i in range(len(path) - 3, -1, -1):
+            self._emit_swap(lines, path[i], path[i + 1])
+
+    def _emit_dd_sequence(
+        self,
+        lines: list[str],
+        q: int,
+        dur_s: float,
+        sequence: str = "XY4",
+        pulses: int = 4,
+    ) -> None:
+        """Emit an exact-identity even-length DD sequence (or bare delay) on qubit ``q``.
+
+        Never emits a single uncompensated X bit-flip: XY4=[X,Y,X,Y] (-I),
+        XY8=[X,Y,X,Y,Y,X,Y,X] (+I), CPMG/ECHO2=[X,X] (+I), IDLE=delay (+I).
+        """
+        seq = str(sequence or "XY4").strip().upper()
+        n_req = int(pulses)
+        if seq in ("IDLE", "BARE", "NONE") or n_req <= 0:
+            n_dt = align_delay_dt(dur_s, self.dt_s, self.granularity, self.min_delay_dt)
+            lines.append(f"barrier ${q};")
+            self._emit_delay_dt(lines, q, n_dt)
+            lines.append(f"barrier ${q};")
+            return
+
+        if seq == "XY8":
+            base = ("X", "Y", "X", "Y", "Y", "X", "Y", "X")
+            # Keep pulse count a positive multiple of 8 (capped reasonably for OpenQASM clarity)
+            n_p = max(8, min(16, int(math.ceil(n_req / 8.0)) * 8))
+            axes = [base[i % 8] for i in range(n_p)]
+        elif seq == "XY4":
+            base = ("X", "Y", "X", "Y")
+            n_p = max(4, min(16, int(math.ceil(n_req / 4.0)) * 4))
+            axes = [base[i % 4] for i in range(n_p)]
+        else:
+            # Even-pulse CPMG / echoed identity (X-X ...): always even so net unitary is +I
+            n_p = max(2, min(16, n_req + (n_req % 2)))
+            axes = ["X"] * n_p
+
+        unit_g = 2 * n_p * self.granularity
+        raw_total = dur_s / max(self.dt_s, 1e-12)
+        total_dt = max(unit_g, int(round(raw_total / unit_g)) * unit_g)
+        tau_dt = total_dt // (2 * n_p)
+        two_tau_dt = 2 * tau_dt
+
+        lines.append(f"barrier ${q};")
+        self._emit_delay_dt(lines, q, tau_dt)
+        for i, ax in enumerate(axes):
+            if ax == "X":
+                self._emit_x(lines, q)
+            else:
+                self._emit_y(lines, q)
+            self._emit_delay_dt(lines, q, two_tau_dt if i < n_p - 1 else tau_dt)
+        lines.append(f"barrier ${q};")
+
     def transpile_cell_program(self, program: CellProgram) -> str:
         """Transpile a CellISA v2.0-v4.0 ``CellProgram`` into native-ISA OpenQASM 3.0."""
         n_q = max(2, program.used_nuclear_count() + 1)
@@ -774,28 +876,28 @@ class NativeOpenQASM3Transpiler:
             elif op == "CNOT":
                 c_idx = parse_qubit(a["control"])
                 t_idx = parse_qubit(a["target"])
-                self._emit_cnot(lines, self.qubits[c_idx], self.qubits[t_idx])
+                self._emit_routed_2q(lines, self.qubits[c_idx], self.qubits[t_idx], kind="cnot")
             elif op == "CZ":
                 c_idx = parse_qubit(a["control"])
                 t_idx = parse_qubit(a["target"])
-                self._emit_cz(lines, self.qubits[c_idx], self.qubits[t_idx])
+                self._emit_routed_2q(lines, self.qubits[c_idx], self.qubits[t_idx], kind="cz")
             elif op == "GHZ":
                 qs = [self.qubits[parse_qubit(q)] for q in a["qubits"]]
                 self._emit_ry(lines, qs[0], math.pi / 2.0)
-                for tgt in qs[1:]:
-                    self._emit_cnot(lines, qs[0], tgt)
+                # Ladder CNOTs along adjacent chain qubits produce exact GHZ with zero non-adjacent edges
+                for idx_g in range(len(qs) - 1):
+                    self._emit_routed_2q(lines, qs[idx_g], qs[idx_g + 1], kind="cnot")
             elif op == "QRAM_SWAP":
                 qa = self.qubits[parse_qubit(a.get("qubit_a", "e"))]
                 qb = self.qubits[parse_qubit(a.get("qubit_b", "n0"))]
-                self._emit_cnot(lines, qa, qb)
-                self._emit_cnot(lines, qb, qa)
-                self._emit_cnot(lines, qa, qb)
+                self._emit_routed_2q(lines, qa, qb, kind="cnot")
+                self._emit_routed_2q(lines, qb, qa, kind="cnot")
+                self._emit_routed_2q(lines, qa, qb, kind="cnot")
             elif op == "DD_HOLD":
                 dur_s = float(a.get("duration_us", 20.0)) * 1e-6
-                n_dt = align_delay_dt(dur_s / 2.0, self.dt_s, self.granularity, self.min_delay_dt)
-                self._emit_delay_dt(lines, self.qubits[0], n_dt)
-                self._emit_x(lines, self.qubits[0])
-                self._emit_delay_dt(lines, self.qubits[0], n_dt)
+                seq = str(a.get("sequence", "XY4"))
+                n_pulses = int(a.get("pulses", 4))
+                self._emit_dd_sequence(lines, self.qubits[0], dur_s, sequence=seq, pulses=n_pulses)
             elif op == "MEASURE":
                 qs = [parse_qubit(q) for q in a.get("qubits", list(range(n_q)))]
                 for bit_i, q_idx in enumerate(qs):
@@ -814,10 +916,15 @@ def validate_openqasm3_isa(
     qasm: str,
     native_2q: str = "cz",
     granularity: int = 16,
+    coupling_map: list[list[int]] | list[tuple[int, int]] | set[tuple[int, int]] | None = None,
 ) -> dict[str, Any]:
-    """Static ISA & timing validator for generated OpenQASM 3.0 programs."""
+    """Static ISA, timing, and physical coupling-map adjacency validator for OpenQASM 3.0."""
     allowed_1q = {"rz", "sx", "x", "id"}
-    allowed_2q = {native_2q.lower()}
+    native_2q_l = native_2q.lower()
+    allowed_2q = {native_2q_l}
+    allowed_edges: set[tuple[int, int]] | None = None
+    if coupling_map is not None:
+        allowed_edges = {(int(e[0]), int(e[1])) for e in coupling_map}
     lines = [ln.strip() for ln in qasm.splitlines() if ln.strip()]
     errors: list[str] = []
 
@@ -856,9 +963,12 @@ def validate_openqasm3_isa(
             continue
         gname = m_gate.group(1).lower()
         qargs = [x.strip() for x in m_gate.group(2).split(",")]
+        phys_ids: list[int] = []
         for qa in qargs:
             if not re.match(r"^\$\d+$", qa):
                 errors.append(f"Non-physical qubit operand {qa!r} in {ln!r}")
+            else:
+                phys_ids.append(int(qa[1:]))
         if len(qargs) == 1:
             if gname not in allowed_1q:
                 errors.append(f"Non-native 1Q gate {gname!r} (allowed: {sorted(allowed_1q)})")
@@ -866,6 +976,19 @@ def validate_openqasm3_isa(
         elif len(qargs) == 2:
             if gname not in allowed_2q:
                 errors.append(f"Non-native 2Q gate {gname!r} (allowed: {sorted(allowed_2q)})")
+            if allowed_edges is not None and len(phys_ids) == 2:
+                edge = (phys_ids[0], phys_ids[1])
+                rev = (phys_ids[1], phys_ids[0])
+                edge_ok = (
+                    (edge in allowed_edges or rev in allowed_edges)
+                    if native_2q_l == "cz"
+                    else (edge in allowed_edges)
+                )
+                if not edge_ok:
+                    errors.append(
+                        f"Non-adjacent / unrouted 2Q gate {gname} ${edge[0]}, ${edge[1]} "
+                        f"not in coupling_map"
+                    )
             n_2q += 1
         else:
             errors.append(f"Unsupported {len(qargs)}-qubit gate {gname!r}")
@@ -1192,11 +1315,12 @@ class IBMQuantumRESTClient:
             if operational is None or pending is None:
                 try:
                     st = self.get_backend_status(name)
-                    operational = st.get("operational", st.get("state", True))
+                    operational = bool(st.get("operational", st.get("state", False)))
                     pending = st.get("pending_jobs", st.get("length_queue", 9999))
                     status_msg = str(st.get("status_msg", st.get("message", status_msg))).lower()
                 except Exception:
-                    operational = (status_msg in ("", "online", "active"))
+                    # Fail closed on REST status errors: never assume a backend is operational
+                    operational = False
                     pending = 9999
             if operational is False or status_msg in ("offline", "retired", "maintenance"):
                 continue

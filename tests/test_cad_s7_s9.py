@@ -86,10 +86,13 @@ def all_29_parts(
 
 
 @pytest.fixture(scope="module")
-def exported_results() -> dict[str, object]:
-    r7 = s7_racks_safety.export_all(S7_OUT_DIR)
-    r9 = s9_spares_hpc.export_all(S9_OUT_DIR)
-    return {**r7, **r9}
+def exported_results(tmp_path_factory: pytest.TempPathFactory) -> tuple[dict[str, object], Path, Path]:
+    """OBS-057 fix: Export to pytest tmp_path so running pytest NEVER mutates tracked CAD files."""
+    tmp_s7 = tmp_path_factory.mktemp("cad_s7_export")
+    tmp_s9 = tmp_path_factory.mktemp("cad_s9_export")
+    r7 = s7_racks_safety.export_all(tmp_s7)
+    r9 = s9_spares_hpc.export_all(tmp_s9)
+    return ({**r7, **r9}, tmp_s7, tmp_s9)
 
 
 # ===========================================================================
@@ -244,19 +247,33 @@ class TestCoordinateHygieneAndClearances:
     ) -> None:
         shroud_shells = [sh.bbox() for sh in split_shells(built_s7["S7.SAFETY-02"].mesh)]
         bmin, bmax = built_s7["S7.SAFETY-02"].mesh.bbox()
-        # Canonical datum Z_FLOOR=0, Z_WAFER=+500; Y in [+340, +620], Z shroud body in [390.0, 622.0]
-        assert bmin[1] >= 339.9
-        assert bmax[1] <= 620.1
-        assert bmin[1] - 192.0 >= 140.0
-        assert math.isclose(bmin[2], 390.0, abs_tol=0.1)
+        # OBS-001 fix: Relocated coaxially onto S5.1-03 36-deg inclined +Y S5.5 optical axis at X=420 mm
+        # Width 210 mm -> X in [315.0, 525.0] (>= 4.0 mm clear of S2.4-03 at X_max=311.0!)
+        assert bmin[0] >= 314.9
+        assert bmax[0] <= 525.1
+        assert bmin[1] >= 85.0
 
         # S5.1-01 UHV vessel keepout box (R=192 mm, Z_canon in [275, 645])
         s51_box = ((-192.0, -192.0, 275.0), (192.0, 192.0, 645.0))
-        # S5.5 +Y 808 nm optical head + dichroic pyrometer (top Z=601.7 mm!) + collimator keepout box
-        s55_optics_box = ((-63.0, 340.0, 443.0), (63.0, 467.0, 602.0))
+        # S2.4-03 45-deg feedthrough flange keepout box (X<=311.0, Y<=311.0, Z in [665, 685])
+        s24_box = ((159.0, 159.0, 665.0), (311.0, 311.0, 685.0))
         for bb in shroud_shells:
             assert not _aabb_overlap(bb[0], bb[1], s51_box[0], s51_box[1]), "S7.SAFETY-02 clashes S5.1-01!"
-            assert not _aabb_overlap(bb[0], bb[1], s55_optics_box[0], s55_optics_box[1]), "S7.SAFETY-02 clashes S5.5 optics!"
+            assert not _aabb_overlap(bb[0], bb[1], s24_box[0], s24_box[1]), "S7.SAFETY-02 clashes S2.4-03!"
+
+    def test_s7_safety_06_cf100_bonnet_mates_s51_03_vat_gate(
+        self,
+        built_s7: dict[str, s7_racks_safety.BuiltPart],
+    ) -> None:
+        """OBS-066 regression: S7.SAFETY-06 uses ISO 3669 CF100 bonnet mated coaxially to S5.1-03 VAT gate."""
+        d = built_s7["S7.SAFETY-06"].design
+        bonnet_port = next(p for p in d.ports if p.name == "uhv_gate_bonnet_cf100")
+        assert bonnet_port.standard == "CF100"
+        assert bonnet_port.mating_part_id == "S5.1-03"
+        assert math.isclose(bonnet_port.position_mm[0], 272.0, abs_tol=0.1)
+        assert math.isclose(bonnet_port.position_mm[1], 0.0, abs_tol=0.1)
+        assert math.isclose(bonnet_port.position_mm[2], 663.7, abs_tol=0.1)
+        assert dict(d.scad_params)["bonnet_cf"] == "CF100"
 
     def test_s7_safety_05_dn50_nozzle_clears_dr_ovc_wall(
         self,
@@ -347,10 +364,11 @@ class TestCoordinateHygieneAndClearances:
 class TestExportsAndPortability:
     def test_all_29_parts_export_valid_artifacts_and_json(
         self,
-        exported_results: dict[str, object],
+        exported_results: tuple[dict[str, object], Path, Path],
     ) -> None:
-        assert len(exported_results) == 29
-        for pid, res in sorted(exported_results.items()):
+        res_map, tmp_s7, tmp_s9 = exported_results
+        assert len(res_map) == 29
+        for pid, res in sorted(res_map.items()):
             assert res.all_valid, f"{pid} export invalid: {res.warnings}"
             assert res.watertight is True
             assert res.boundary_edges == 0
@@ -359,51 +377,58 @@ class TestExportsAndPortability:
             assert res.semi_s2_certified is False
             assert res.no_lab_measurement is True
 
-            out_dir = S7_OUT_DIR if pid.startswith("S7") else S9_OUT_DIR
-            stl_p = out_dir / f"{pid}.stl"
-            step_p = out_dir / f"{pid}.step"
-            dxf_p = out_dir / f"{pid}.dxf"
-            svg_p = out_dir / f"{pid}.svg"
-            scad_p = out_dir / f"{pid}.scad"
-            json_p = out_dir / f"{pid}.json"
+            # Verify BOTH fresh tmp_path export AND tracked disk artifacts (strictly read-only, OBS-057!)
+            for out_dir in (
+                tmp_s7 if pid.startswith("S7") else tmp_s9,
+                S7_OUT_DIR if pid.startswith("S7") else S9_OUT_DIR,
+            ):
+                stl_p = out_dir / f"{pid}.stl"
+                step_p = out_dir / f"{pid}.step"
+                dxf_p = out_dir / f"{pid}.dxf"
+                svg_p = out_dir / f"{pid}.svg"
+                scad_p = out_dir / f"{pid}.scad"
+                json_p = out_dir / f"{pid}.json"
 
-            for p in (stl_p, step_p, dxf_p, svg_p, scad_p, json_p):
-                assert p.is_file(), f"Missing exported file: {p}"
+                for p in (stl_p, step_p, dxf_p, svg_p, scad_p, json_p):
+                    assert p.is_file(), f"Missing exported file: {p}"
 
-            # Binary STL size + watertight round-trip
-            assert stl_p.stat().st_size == 84 + 50 * res.triangle_count
-            loaded_stl = read_binary_stl(stl_p)
-            assert verify_watertight(loaded_stl).watertight
+                # Binary STL size + watertight round-trip
+                assert stl_p.stat().st_size == 84 + 50 * res.triangle_count
+                loaded_stl = read_binary_stl(stl_p)
+                assert verify_watertight(loaded_stl).watertight
 
-            # Strict format validators
-            assert validate_step_file(step_p).valid
-            assert validate_dxf_file(dxf_p).valid
-            assert validate_svg_file(svg_p).valid
-            assert validate_scad_file(scad_p).valid
+                # Strict format validators
+                assert validate_step_file(step_p).valid
+                assert validate_dxf_file(dxf_p).valid
+                assert validate_svg_file(svg_p).valid
+                assert validate_scad_file(scad_p).valid
 
-            # JSON manifest integrity
-            doc = json.loads(json_p.read_text(encoding="utf-8"))
-            assert doc["part_design"]["part_id"] == pid
-            assert doc["part_design"]["epistemic"]["iec61508_certified"] is False
-            assert doc["part_design"]["epistemic"]["semi_s2_certified"] is False
-            assert doc["part_design"]["epistemic"]["no_lab_measurement"] is True
-            assert doc["artifact"]["all_valid"] is True
-            assert len(doc["shell_bboxes_mm"]) >= 1
+                # JSON manifest integrity + OBS-121 shell_tie_manifest
+                doc = json.loads(json_p.read_text(encoding="utf-8"))
+                assert doc["part_design"]["part_id"] == pid
+                assert doc["part_design"]["epistemic"]["iec61508_certified"] is False
+                assert doc["part_design"]["epistemic"]["semi_s2_certified"] is False
+                assert doc["part_design"]["epistemic"]["no_lab_measurement"] is True
+                assert doc["artifact"]["all_valid"] is True
+                assert len(doc["shell_bboxes_mm"]) >= 1
+                assert doc["shell_tie_manifest"]["floating_structural_shells"] == 0
 
-        # Verify summary manifests exist and match totals
-        s7_man = json.loads((S7_OUT_DIR / "S7_manifest.json").read_text(encoding="utf-8"))
-        s9_man = json.loads((S9_OUT_DIR / "S9_spares_hpc_manifest.json").read_text(encoding="utf-8"))
-        assert s7_man["part_count"] == 19 and s7_man["all_valid"] is True
-        assert math.isclose(s7_man["s7_safety_total_mass_kg"], 355.0, abs_tol=0.05)
-        assert s9_man["part_count"] == 10 and s9_man["all_valid"] is True
-        assert math.isclose(s9_man["option_hpc_total_mass_kg"], 64.0, abs_tol=0.05)
+        # Verify summary manifests exist and match totals in both tmp and tracked dirs
+        for d7, d9 in ((tmp_s7, tmp_s9), (S7_OUT_DIR, S9_OUT_DIR)):
+            s7_man = json.loads((d7 / "S7_manifest.json").read_text(encoding="utf-8"))
+            s9_man = json.loads((d9 / "S9_spares_hpc_manifest.json").read_text(encoding="utf-8"))
+            assert s7_man["part_count"] == 19 and s7_man["all_valid"] is True
+            assert math.isclose(s7_man["s7_safety_total_mass_kg"], 355.0, abs_tol=0.05)
+            assert s9_man["part_count"] == 10 and s9_man["all_valid"] is True
+            assert math.isclose(s9_man["option_hpc_total_mass_kg"], 64.0, abs_tol=0.05)
 
     def test_zero_host_path_leaks_across_all_outputs_and_sources(
         self,
-        exported_results: dict[str, object],
+        exported_results: tuple[dict[str, object], Path, Path],
     ) -> None:
-        assert len(exported_results) == 29
-        forbidden_tokens = ("/home/", "/Users/", "C:\\", "/run/media/")
+        res_map, _, _ = exported_results
+        assert len(res_map) == 29
+        forbidden_tokens = ("/" + "home/", "/" + "Users/", "C:" + "\\", "/" + "run/media/")
         scan_files: list[Path] = [
             REPO_ROOT / "hardware" / "cad_parts" / "subsystems" / "s7_racks_safety.py",
             REPO_ROOT / "hardware" / "cad_parts" / "subsystems" / "s9_spares_hpc.py",

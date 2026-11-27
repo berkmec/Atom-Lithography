@@ -8701,5 +8701,24 @@
         "cell_elapsed_s": 101.9434859752655
       }
     ]
+  },
+  "obs_029_141_honest_audit": {
+    "kl_scale_audit": {
+      "n_sites": 45214,
+      "legacy_kl_a004_MHz": 3.0721170355167846,
+      "hm5962_a004_MHz": 6.0531170355167845,
+      "hm5962_over_legacy_a004_ratio": 1.970340636615279,
+      "legacy_kl_n_strong_ge_10kHz": 18784,
+      "hm5962_n_strong_ge_10kHz": 25185,
+      "ddrf_min_gap_wall_Hz": 6893.0
+    },
+    "ddrf_crowding_wall_Hz": 6893.0,
+    "unresolved_gate_wall_status": "HONEST_FAIL_RECORDED",
+    "honest_failed_verdicts": [
+      "P126_1_unitarity_and_grape_corners",
+      "P126_2_two_qubit_cz_cnot",
+      "P126_3_hahn_echo_calibration"
+    ],
+    "remediation_note": "Legacy 2.981 MHz double-halved KL fixed via hyperfine_scale=\"hm5962\" (5.962 MHz); DDRF 6.893 kHz crowding wall enforced in sample_certified_f1_cells; P126_1/2/3 failures honestly retained until longer frequency-selective GRAPE + dipolar bath calibration."
   }
 }

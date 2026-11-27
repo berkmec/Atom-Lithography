@@ -13,109 +13,126 @@
   ]
  },
  "verdicts": {
-  "BO1_anchor_scale": true,
-  "BO2_budget_survives": true,
+  "BO1_anchor_scale": false,
+  "BO2_budget_survives": false,
   "BO3_optimum_stays": false,
   "BO4_range_sanity": true
  },
- "success_rule_met": true,
+ "success_rule_met": false,
  "bca": {
+  "E2": {
+   "E_keV": 2.0,
+   "sigma_x_nm": 2.339416489563964,
+   "sigma_y_nm": 2.3020690403236133,
+   "sigma_lat_nm": 2.3207427649437884,
+   "Rp_nm": 5.33499596586588,
+   "Rp_std_nm": 2.730348138439399,
+   "backscattered": 10
+  },
   "E3": {
    "E_keV": 3.0,
-   "sigma_x_nm": 2.446166290227142,
-   "sigma_y_nm": 2.360357761818743,
-   "Rp_nm": 4.754812049246454,
-   "Rp_std_nm": 2.2205036583157773,
-   "backscattered": 9
+   "sigma_x_nm": 3.162700151830478,
+   "sigma_y_nm": 3.136341491229686,
+   "sigma_lat_nm": 3.149520821530082,
+   "Rp_nm": 7.141332649612401,
+   "Rp_std_nm": 3.6463854214290827,
+   "backscattered": 13
   },
   "E4": {
    "E_keV": 4.0,
-   "sigma_x_nm": 2.7946743430160366,
-   "sigma_y_nm": 2.812803976220843,
-   "Rp_nm": 5.629767646951315,
-   "Rp_std_nm": 2.553014910185579,
-   "backscattered": 4
+   "sigma_x_nm": 3.8245140128802477,
+   "sigma_y_nm": 3.6988503524159944,
+   "sigma_lat_nm": 3.761682182648121,
+   "Rp_nm": 8.776953927407297,
+   "Rp_std_nm": 4.51621791162737,
+   "backscattered": 10
   },
   "E5": {
    "E_keV": 5.0,
-   "sigma_x_nm": 3.2585495402330853,
-   "sigma_y_nm": 3.243810777142517,
-   "Rp_nm": 6.458214487196816,
-   "Rp_std_nm": 2.8790637068167695,
-   "backscattered": 12
+   "sigma_x_nm": 4.373720778061443,
+   "sigma_y_nm": 4.315480756163471,
+   "sigma_lat_nm": 4.344600767112457,
+   "Rp_nm": 10.429926369478581,
+   "Rp_std_nm": 5.227808094872621,
+   "backscattered": 16
   },
   "E6": {
    "E_keV": 6.0,
-   "sigma_x_nm": 3.6007995569789184,
-   "sigma_y_nm": 3.494748096756035,
-   "Rp_nm": 6.992317850721267,
-   "Rp_std_nm": 3.2026322379121828,
+   "sigma_x_nm": 5.032863383776952,
+   "sigma_y_nm": 4.860311054363499,
+   "sigma_lat_nm": 4.946587219070226,
+   "Rp_nm": 11.874110588844134,
+   "Rp_std_nm": 5.80959897095769,
    "backscattered": 14
   },
   "E7.5": {
    "E_keV": 7.5,
-   "sigma_x_nm": 4.113163488339512,
-   "sigma_y_nm": 4.057044433164064,
-   "Rp_nm": 8.181365354115583,
-   "Rp_std_nm": 3.5530254174152236,
-   "backscattered": 14
+   "sigma_x_nm": 5.774633218394301,
+   "sigma_y_nm": 5.737950537389254,
+   "sigma_lat_nm": 5.756291877891778,
+   "Rp_nm": 14.061480188823294,
+   "Rp_std_nm": 6.907904957926236,
+   "backscattered": 13
   },
   "E10": {
    "E_keV": 10.0,
-   "sigma_x_nm": 4.873602053448934,
-   "sigma_y_nm": 4.784261913834783,
-   "Rp_nm": 9.600417633899815,
-   "Rp_std_nm": 4.110935030739668,
-   "backscattered": 9
+   "sigma_x_nm": 7.046274455779739,
+   "sigma_y_nm": 7.175716805412997,
+   "sigma_lat_nm": 7.110995630596368,
+   "Rp_nm": 17.582468596246606,
+   "Rp_std_nm": 8.577620175777515,
+   "backscattered": 10
   },
   "E15": {
    "E_keV": 15.0,
-   "sigma_x_nm": 6.3317077022074635,
-   "sigma_y_nm": 6.418693052009957,
-   "Rp_nm": 11.836148166723964,
-   "Rp_std_nm": 5.154476874735741,
-   "backscattered": 15
+   "sigma_x_nm": 9.642499884077647,
+   "sigma_y_nm": 9.495888850580592,
+   "sigma_lat_nm": 9.56919436732912,
+   "Rp_nm": 24.39599390900295,
+   "Rp_std_nm": 11.68648124773308,
+   "backscattered": 7
   },
   "E20": {
    "E_keV": 20.0,
-   "sigma_x_nm": 7.498819394270516,
-   "sigma_y_nm": 7.261445933815833,
-   "Rp_nm": 13.856873027814293,
-   "Rp_std_nm": 5.869241473231039,
-   "backscattered": 20
+   "sigma_x_nm": 12.214981935491318,
+   "sigma_y_nm": 12.098273426292737,
+   "sigma_lat_nm": 12.156627680892027,
+   "Rp_nm": 31.237296107903997,
+   "Rp_std_nm": 14.47017360490964,
+   "backscattered": 3
   }
  },
- "sigma_total_P91_BCA": 3.7986026889780775,
+ "sigma_total_P91_BCA": 4.789642024933035,
  "sweep_totals": {
-  "E3": 3.328237734212912,
-  "E4": 3.468016426937645,
-  "E5": 3.7986026889780775,
-  "E6": 4.068982265080341,
-  "E7.5": 4.508731948693388,
-  "E10": 5.198298403903072,
-  "E15": 6.577283626394191,
-  "E20": 7.705022364539088
+  "E2": 3.6153288270408694,
+  "E3": 3.88537117227989,
+  "E4": 4.340949284282714,
+  "E5": 4.789642024933035,
+  "E6": 5.377785144812087,
+  "E7.5": 6.062750094663489,
+  "E10": 7.274633532131609,
+  "E15": 9.805505672339253,
+  "E20": 12.34264400420506
  },
- "E_optimum": "E3",
+ "E_optimum": "E2",
  "params": {
   "A_SCR_angstrom": 0.12666061529356334,
   "L_MFP_angstrom": 2.7144176165949063,
   "P_MAX_angstrom": 1.5314461446813734,
   "seed": 20261021,
-  "ions_per_energy": 2000
+  "ions_per_energy": 4000,
+  "zbl_quadrature": "exact_infinite_domain_gauss_mehler_64pt",
+  "obs039_fix_applied": true
  },
- "elapsed_sec": 3.443352222442627,
- "no_lab_measurement": true,
- "detection_extension_posthoc": {
-  "E3_C0.05": 0.602728805896596,
-  "E3_C0.2": 0.4174843531794777,
-  "E3_C0.5": 0.12593206000660656,
-  "E4_C0.05": 0.9811045003718315,
-  "E4_C0.2": 0.9591839303366047,
-  "E4_C0.5": 0.8576119519584255,
-  "E5_C0.05": 0.9991902757906659,
-  "E5_C0.2": 0.9981056447931516,
-  "E5_C0.5": 0.9913660280019122
+ "iradina_validation_anchor": {
+  "E5_Rp_nm": 10.3107,
+  "E5_dRp_nm": 5.098,
+  "E5_sigma_lat_nm": 4.4102,
+  "E10_Rp_nm": 17.4271,
+  "E10_dRp_nm": 8.2895,
+  "E10_sigma_lat_nm": 7.1053,
+  "note": "Matches 3D iradina 1.2.3 within ~1-2% after fixing legacy rmax=R0+80 truncation bug (OBS-039)."
  },
- "detection_note": "Exp72 model verbatim; FRAC at 3/4 keV extrapolated (0.32/0.335). At C=0.5 pF detection collapses below 5 keV, restoring the 5 keV optimum once detection is priced in."
+ "elapsed_sec": 4.5171637535095215,
+ "no_lab_measurement": true
 }

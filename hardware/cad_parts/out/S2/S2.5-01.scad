@@ -38,12 +38,12 @@ port_cap_probe_3_od = 9.000;
 
 module part_S2_5_01() {
   union() {
-    // Capacitive sensor probe #1 (0 deg)
-    translate([57.500, 0.000, 0.000]) cylinder(d=9.000, h=16.000, center=true);
-    // Capacitive sensor probe #2 (120 deg)
-    translate([-28.750, 49.796, 0.000]) cylinder(d=9.000, h=16.000, center=true);
-    // Capacitive sensor probe #3 (240 deg)
-    translate([-28.750, -49.796, 0.000]) cylinder(d=9.000, h=16.000, center=true);
+    // Capacitive sensor probe #1 (60 deg)
+    translate([28.750, 49.796, 0.000]) cylinder(d=9.000, h=16.000, center=true);
+    // Capacitive sensor probe #2 (180 deg)
+    translate([-57.500, 0.000, 0.000]) cylinder(d=9.000, h=16.000, center=true);
+    // Capacitive sensor probe #3 (300 deg)
+    translate([28.750, -49.796, 0.000]) cylinder(d=9.000, h=16.000, center=true);
   }
 }
 

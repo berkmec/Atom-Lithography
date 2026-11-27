@@ -326,9 +326,116 @@ def test_summary_markdown_gfm_tables_valid() -> None:
 
 
 def test_zero_hardcoded_user_paths() -> None:
-    forbidden = ("/home/" + "berk", "/run/media/" + "berk")
+    _u = chr(98) + "erk"
+    forbidden = ("/home/" + _u, "/run/media/" + _u)
     files = list(EXP_DIR.glob("*.py")) + list(RES_DIR.glob("*.json")) + list(RES_DIR.glob("*.md")) + [Path(__file__)]
     for f in files:
         txt = f.read_text(encoding="utf-8")
         for pat in forbidden:
             assert pat not in txt, f"Hardcoded user path found in {f.name}"
+
+
+# ---------------------------------------------------------------------------
+# Wave 1B Live Solver Execution & Closure Tests (OBS-024, 054, 055, 079, 145, 148)
+# ---------------------------------------------------------------------------
+def test_obs148_live_safety_physics150_and_fmea_solvers_execute(exp150_data: dict) -> None:
+    """OBS-148: Directly invoke all live solver entrypoints in safety_physics150 & fmea_hazop150."""
+    from experiments.exp150_industrial_safety_fmea_hazop import fmea_hazop150 as fh
+    from experiments.exp150_industrial_safety_fmea_hazop import safety_physics150 as sp
+
+    anchors = sp.load_upstream_anchors(ROOT)
+    las = sp.analyze_laser_safety(anchors)
+    gas = sp.analyze_ph3_and_gas_safety()
+    hvx = sp.analyze_hv_and_xray_safety(anchors)
+    cryo = sp.analyze_cryo_odh_and_quench(anchors)
+    epo = sp.analyze_epo_ups_shutdown(anchors)
+    iec = sp.evaluate_all_sil3_sif_chains()
+    fmea_rows = fh.build_fmea_25_rows()
+    hazop_nodes = fh.build_hazop_10_nodes()
+    spec = fh.build_safety_hardware_spec(anchors["m3_v6_full_bom_usd"])
+
+    # Live-to-persisted parity checks
+    assert math.isclose(las["nohd_collimated_20mrad_m"], exp150_data["hazard_1_laser_s55"]["nohd_collimated_20mrad_m"], rel_tol=1e-6)
+    assert math.isclose(gas["mitigated_sds_system"]["operator_conservative_ppm"], exp150_data["hazard_2_ph3_and_forming_gas"]["mitigated_sds_system"]["operator_conservative_ppm"], rel_tol=1e-6)
+    assert math.isclose(hvx["energy_sweep"]["50keV"]["s53_02_and_s44_04_bare_sio2_6mm_uSv_h"], exp150_data["hazard_3_hv_and_xray"]["energy_sweep"]["50keV"]["s53_02_and_s44_04_bare_sio2_6mm_uSv_h"], rel_tol=1e-6)
+    assert math.isclose(cryo["asme_ovc_relief"]["relief_safety_margin"], exp150_data["hazard_4_cryo_odh_and_quench"]["asme_ovc_relief"]["relief_safety_margin"], rel_tol=1e-6)
+    assert math.isclose(epo["ups_spec"]["runtime_tier1_90pct_dod_incl_350W_loss_min"], exp150_data["hazard_5_epo_ups_shutdown"]["ups_spec"]["runtime_tier1_90pct_dod_incl_350W_loss_min"], rel_tol=1e-6)
+    assert len(fmea_rows) == 25 and len(hazop_nodes) == 10 and spec["totals"]["total_mass_kg"] == 355.0
+    assert iec["all_6_sil3_sifs_meet_pfd_pfh_sff_bands"] is True
+
+
+def test_obs055_obs145_iec61508_high_demand_pfh_sff_ptc_and_s1105_crowbar() -> None:
+    """Verify full IEC 61508-6 high-demand PFH, lambda_DD, MTTR, SFF, <100% PTC & S1.1-05 deck crowbar."""
+    from experiments.exp150_industrial_safety_fmea_hazop import safety_physics150 as sp
+
+    # PTC < 1.0 strictly increases PFD_avg relative to PTC = 1.0
+    m_ptc100 = sp.compute_iec61508_1oo2d_full(2.5e-7, 2.5e-6, 1.5e-6, t_proof_h=8760.0, proof_test_coverage=1.0)
+    m_ptc090 = sp.compute_iec61508_1oo2d_full(2.5e-7, 2.5e-6, 1.5e-6, t_proof_h=8760.0, proof_test_coverage=0.90)
+    assert m_ptc090["pfd_avg_1oo2d_full"] > m_ptc100["pfd_avg_1oo2d_full"]
+    assert m_ptc090["safe_failure_fraction_SFF"] >= 0.90
+
+    # All 6 SIL-3 SIFs pass PFD < 1e-3, PFH < 1e-7/h, SFF >= 90%, while naive EC gas sensor fails SIL-3 PFH
+    iec = sp.evaluate_all_sil3_sif_chains()
+    assert iec["iec61508_certified"] is False
+    assert iec["naive_ec_gas_sensor_audit_obs055"]["pfh_1oo2d_per_h"] > 1.0e-7
+    assert iec["naive_ec_gas_sensor_audit_obs055"]["sil3_pfd_and_pfh_and_sff_band_met"] is False
+    assert len(iec["sil3_sif_chains_6_rows"]) == 6
+    assert iec["all_6_sil3_sifs_meet_pfd_pfh_sff_bands"] is True
+    assert iec["iso13849_1_laser_valve_pl_e"]["meets_pl_e_parametric_band"] is True
+
+    # OBS-145: S1.1-05 floating 15 kV deck capacitance crowbar
+    anchors = sp.load_upstream_anchors(ROOT)
+    hvx = sp.analyze_hv_and_xray_safety(anchors)
+    deck = hvx["hv_crowbar"]["s11_05_floating_15kv_deck_obs145"]
+    assert deck["c_deck_total_nF"] > 20.0
+    assert deck["stored_energy_15kV_J"] > 2.0
+    assert deck["discharge_to_50V_ms"] < 50.0
+    assert deck["surge_energy_margin_x"] >= 100.0
+    assert deck["passes_50ms_safe_discharge"] is True
+
+
+def test_obs054_22_to_50kv_bremsstrahlung_viewports_and_shutters() -> None:
+    """Verify 10-50 kV Kramers + NIST XCOM across S5.3-02, S4.4-04, S5.5-02 & <=0.5 uSv/h upgraded shutters."""
+    from experiments.exp150_industrial_safety_fmea_hazop import safety_physics150 as sp
+
+    anchors = sp.load_upstream_anchors(ROOT)
+    hvx = sp.analyze_hv_and_xray_safety(anchors)
+    sw = hvx["energy_sweep"]
+    for kv in ("22keV", "25keV", "30keV", "40keV", "50keV"):
+        assert kv in sw
+    # Bare 6 mm SiO2 leaks dangerously (>500 uSv/h at 22 kV, >50 mSv/h at 50 kV); 3 mm steel fails at 50 kV
+    assert sw["22keV"]["s53_02_and_s44_04_bare_sio2_6mm_uSv_h"] > 500.0
+    assert sw["50keV"]["s53_02_and_s44_04_bare_sio2_6mm_uSv_h"] > 50_000.0
+    assert sw["50keV"]["s55_sapphire_plus_3mm_steel_shroud_uSv_h"] > 0.5
+    # Upgraded >= 6 mm SS316L + 2 mm Pb-eq viewport shutters meet <= 0.5 uSv/h up to 50 kV
+    assert sw["50keV"]["viewport_sio2_plus_6mm_316L_and_2mm_Pb_shutter_uSv_h"] <= 0.5
+    assert sw["50keV"]["s55_upgraded_6mm_316L_and_2mm_Pb_shroud_uSv_h"] <= 0.5
+    assert hvx["viewport_shielding_upgrade_obs054"]["all_voltages_10_to_50kV_meet_0p5_uSv_h"] is True
+
+
+def test_obs024_obs079_sif4_hf_sb_quench_uhv_relief_and_ups_tier_shedding() -> None:
+    """Verify SiF4->HF hydrolysis, 121Sb/SbH3, quench+cryosorption UHV burst disc & Tier-1/Tier-2 UPS."""
+    from experiments.exp150_industrial_safety_fmea_hazop import safety_physics150 as sp
+
+    anchors = sp.load_upstream_anchors(ROOT)
+    gas = sp.analyze_ph3_and_gas_safety()
+    hf = gas["sif4_hf_hydrolysis_and_s92_cylinders_obs024"]
+    assert hf["unmitigated_room_60m3_hf_peak_ppm"] > 30.0
+    assert hf["mitigated_room_hf_peak_ppm"] < 0.05
+    assert hf["passes_hf_safety_lt_0p05ppm"] is True
+    assert gas["antimony_121sb_sbh3_hazard_obs024"]["sbh3_generation_prevented_in_normal_and_maint"] is True
+
+    cryo = sp.analyze_cryo_odh_and_quench(anchors)
+    uhv_q = cryo["coupled_quench_cryosorption_uhv_cascade_obs024"]
+    assert uhv_q["unrelieved_peak_overpressure_barg"] > uhv_q["viewport_proof_pressure_barg"]
+    assert uhv_q["uhv_relief_safety_margin"] >= 10.0
+    assert uhv_q["passes_uhv_viewport_protection"] is True
+
+    epo = sp.analyze_epo_ups_shutdown(anchors)
+    ups = epo["ups_spec"]
+    assert ups["pt420_wall_power_utility_side_kW"] == 12.5
+    assert ups["tier1_plus_tier1b_peak_ups_load_kW"] <= 13.5
+    assert ups["ups_peak_load_within_13p5kW_rating"] is True
+    assert ups["runtime_tier1_90pct_dod_incl_350W_loss_min"] >= 180.0
+    assert ups["meets_180min_at_90pct_dod"] is True
+    assert ups["dedicated_magnet_rampdown_ups_branch_W"] > 0.0

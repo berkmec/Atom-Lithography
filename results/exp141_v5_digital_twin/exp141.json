@@ -11,7 +11,7 @@
     "Varsayim",
     "Liste-Capasi"
   ],
-  "runtime_s": 1.73,
+  "runtime_s": 2.42,
   "predictions": {
     "experiment": "exp141_v5_digital_twin",
     "hypothesis_id": "H159",
@@ -75,48 +75,49 @@
   "n_total": 8,
   "success_rule_met": true,
   "primary_ledger_sha256": {
-    "bom_detailed_v5": "bc3de27c58d8599c0ffd042129736be69b5af561c18bd22edaaf71ba636f9745",
-    "cad_v5": "dd332dbf600d248b9c5af08ffe8aadd70db6e3fa3c69428a56f9bcdecadbb3d8",
-    "exp124": "68cb6442b335d80d311989d41e366a518da473fc80f07ad47de6897d5e37c2c2",
-    "exp125": "6f253b008c21db3680ea7e7c73f44cc7c1d1a1d1bf544c9dfc7054eb416ac59b",
-    "exp126": "f6ab38c2f9fbb3a7a2001a061ce60d9eae5ff977c40c4f2af11419a5f9838e3d",
-    "exp127": "0511e2663fe6a16f4d4d76fe228213893cff03708bfa8e00c9f0a841977d8222",
-    "exp128": "8d95876db3ae4d41076567c1b4a8321b8fff0d51b0041a22619d5f4e2922bfea",
-    "exp129": "8d9b3abc8976ac4ad5f00d26254b59dd61b1a01fbfee04f8ef9f9b3bc0acedf4",
-    "exp130": "e24aaa9f7adeab578ec5747eabca9cffd07e2eee438f427db863e231769a6b9e",
-    "exp131": "d3c9e366f3e38f45f7c458fb38e36088cf4c498f38edd57224753545464e88ff",
+    "bom_detailed_v5": "08691e10cd1833bf66aa3aaf423b0cea6d0946719af413a2705077f2fd0385e7",
+    "cad_v5": "1e2f9dae2fdaa891be663aafcad10e603610ffde2813cd5e19b13ddcf1fbecf9",
+    "exp124": "981391bd299bc61e2ef189dd7ea48773fda8caec62845c5330a15817c3d3f570",
+    "exp125": "c98fb20dd9c7c16e5f098453b606a3044113e0e528a064c37e17d1d4f0b74c40",
+    "exp126": "ea7697738da30506c3c38d6931e50c99ee53afe77653d9d8abef7888426557dc",
+    "exp127": "c9be7b179dc7c9c6379c70accb6fca6e68712629515b32e0540f4b72f284ee64",
+    "exp128": "8e79a4b9caa8bc8eab24e36f80618d9be5f08ec593946b1aef3f346565dcdf0c",
+    "exp129": "fd86fb94c2debdc7b435627095844c07098476636b2104524fcffc7a1a6a3556",
+    "exp130": "7f5f9c8b5c4b33a659ed3af49824e04caaa125d808c0ace5ff39fb4fc5f5b2f0",
+    "exp131": "7c7b2a818d2cf2418dc7fd65c8e6cef1c5b1d90fc21d49cc77a0ab55383b3d33",
     "exp132": "4fed7224fd389300b5fe05da6b78daef0d369dc81434e3954b72893a6d9e4f92",
-    "exp133": "3689f9423b4ef01246f30dcce3120d5d33296b3ce29beff013a2bd27cd03da39",
-    "exp134": "9ebff35daf2c7d28376f4d977f43bf1121eb8b6d47766196095cd657710062d7",
+    "exp133": "0449ac38257a82fecff5148ba721da11da1526724c2b15a6f04c559ad0b309bc",
+    "exp134": "045bba2a4a1a05c7158b7ed4827352bffe6a14b4919e794e37a7794aaaa137c9",
     "exp135": "a75aadc4036801437c49dd07ec13a2496fb71b72ed0f6eb047a99170ef09c0ac",
-    "exp136": "d5d90c539f0c490ea94a616152fa55ac725c986f07986b4eceefe1acbe4bc2a0",
-    "exp137": "e98132962959f860c848149ac8e83694c8402605bf10e51a28e8c37751fab157",
-    "exp138": "60d413a99f2385b12be056e2a7f99ea25a21b16549e81ef68ddf785387c3f8d6",
-    "exp139": "5b7ae8330d3a926f3beba91977de3d9c6d5217a14beaec10b45aa7f0ca5941a1",
-    "exp140": "a9b14f8ba882dbda987f6a1b9055f3e276a727f84991a6b6f0b283dd97d5406b"
+    "exp136": "56a362565cc7bfcf6a24f50e14a1f29f277a91f16ae10def15b7fe2b4da113da",
+    "exp137": "79c9d4a279cb08aa921bd1633482d51585bc0ce7b4d2132b76c322f21b27fbd3",
+    "exp138": "8d99e9e334be87cee7af547e81dcf351f8b1a3e41195eaf133740041f89be341",
+    "exp139": "69ad649ec115c994c7c785bb5775274064dca4c16b23800a0a2843ded6656f3b",
+    "exp140": "a3675bb58f0c0e70dcca27eb5d885c337c4be92879ee6c7dd776b499da558958"
   },
   "layer1_integrity": {
     "n_experiment_ledgers": 17,
     "n_total_hashed_artifacts": 19,
     "cad_v5": {
-      "version": "5.0-exp139-exp140-locked",
+      "version": "6.0-exp142-exp143-option-qhpc-locked",
       "overall_pass": true,
-      "part_count": 189,
-      "total_mass_kg": 1034.937,
-      "stl_triangles": 38876,
+      "part_count": 199,
+      "total_mass_kg": 1108.137,
+      "stl_triangles": 39536,
       "stl_watertight": true,
-      "pairs_checked": 17766,
+      "pairs_checked": 19701,
       "solid_clashes": 0,
-      "clearances_passed": 32,
-      "clearances_total": 32
+      "clearances_passed": 40,
+      "clearances_total": 40
     },
     "bom_v5": {
-      "version": "v5.0",
-      "csv_row_count": 167,
-      "exp128_total_parts": 167,
+      "version": "v7.0",
+      "csv_row_count": 180,
+      "exp128_total_parts": 180,
       "m3_v3_nom_usd": 4189600.0,
       "m3_v4_nom_usd": 4609600.0,
       "m3_v5_nom_usd": 5247800.0,
+      "m3_v7_full_nom_usd": 5692800.0,
       "m1_v5_nom_usd": 2466120.0,
       "v5_net_delta_nom_usd": 638200.0,
       "reconciliation_error_usd": 0.0
@@ -125,27 +126,27 @@
   "layer2_v5_placement": {
     "ceiling_nm": 3.8,
     "components_v5_nm": {
-      "sigma_bca_5keV": 3.2585,
-      "sigma_spot_15ms": 1.5318,
-      "sigma_spot_10ms": 1.4284,
+      "sigma_bca_5keV": 4.385,
+      "sigma_spot_15ms": 0.8314,
+      "sigma_spot_10ms": 0.7615,
       "sigma_stage_CFG4": 0.1024,
-      "sigma_pointing_CFG4": 0.1473,
+      "sigma_pointing_CFG4": 0.1342,
       "sigma_thermal_Zerodur": 0.0283,
-      "sigma_anneal_v5_1530K_routeC": 0.4295,
-      "sigma_anneal_v4_1440K_hidden_TED": 1.6465
+      "sigma_anneal_v5_1530K_routeC": 0.4049,
+      "sigma_anneal_v4_1440K_hidden_TED": 0.3417
     },
-    "v300_orig_15ms_nm": 3.7155,
+    "v300_orig_15ms_nm": 4.5563,
     "v400_flash_only_15ms_nm": 3.6201,
-    "v400_hidden_TED_routeC_15ms_nm": 3.9634,
-    "exp139_reported_v4_hidden_TED_nm": 3.9951,
-    "exp139_reported_v5_1530K_nm": 3.6653,
-    "v500_coupled_15ms_nm": 3.6307,
-    "v500_coupled_10ms_nm": 3.5883,
-    "rigid_CFG1_15ms_nm": 2076.97,
-    "v5_routeC_f_act_bulk": 0.999207,
-    "margin_v5_15ms_nm": 0.1693,
-    "margin_v5_10ms_nm": 0.2117,
-    "ted_cure_improvement_nm": 0.3327
+    "v400_hidden_TED_routeC_15ms_nm": 4.4795,
+    "exp139_reported_v4_hidden_TED_nm": 4.6821,
+    "exp139_reported_v5_1530K_nm": 4.6872,
+    "v500_coupled_15ms_nm": 4.4847,
+    "v500_coupled_10ms_nm": 4.4723,
+    "rigid_CFG1_15ms_nm": 2116.61,
+    "v5_routeC_f_act_bulk": 0.9994,
+    "margin_v5_15ms_nm": -0.6847,
+    "margin_v5_10ms_nm": -0.6723,
+    "ted_cure_improvement_nm": -0.0053
   },
   "layer3_quantum_chain": {
     "exp136_tb_sp3d5s": {
@@ -156,33 +157,33 @@
       "defective_d7_N6_p_drop_pct": 0.0213
     },
     "exp139_epi_cap_routeC": {
-      "p_flipflop_C_ge_100": 0.977,
-      "median_cooperativity": 7557.4,
-      "S_eps_nominal_ueV_rtHz": 0.3897,
-      "S_eps_optimistic_ueV_rtHz": 0.283,
+      "p_flipflop_C_ge_100": 0.6755,
+      "median_cooperativity": 998.1,
+      "S_eps_nominal_ueV_rtHz": 0.443,
+      "S_eps_optimistic_ueV_rtHz": 0.3274,
       "S_eps_band_ueV_rtHz": [
-        0.283,
-        0.5491
+        0.3274,
+        0.6057
       ]
     },
     "exp137_echoed_m4_bus": {
-      "best_protocol": "P4_SweetSpot_Parametric_Echo_CZ",
-      "P1_bare_S1p0_F_Bell": 0.844745,
-      "P1_bare_S1p0_F_avg": 0.686016,
-      "P4_S1p0_F_Bell": 0.958671,
-      "P4_S0p5_F_Bell": 0.984292,
-      "P4_S0p25_F_Bell": 0.989299,
-      "P4_S0p25_F_avg": 0.987417,
-      "P4_Q5e5_S0p25_F_Bell": 0.994866,
-      "P4_Q5e5_S0p25_F_avg": 0.99264
+      "best_protocol": "P3_XY4_DRAG_Unclamped_4x4_Tosi",
+      "P1_bare_S1p0_F_Bell": 0.811371,
+      "P1_bare_S1p0_F_avg": 0.632479,
+      "P4_S1p0_F_Bell": 0.849673,
+      "P4_S0p5_F_Bell": 0.911573,
+      "P4_S0p25_F_Bell": 0.954805,
+      "P4_S0p25_F_avg": 0.951083,
+      "P4_Q5e5_S0p25_F_Bell": 0.977727,
+      "P4_Q5e5_S0p25_F_avg": 0.968703
     },
     "exp140_mux_fpga": {
       "n_mux_star": 32,
-      "F_ro_32_2us": 0.996139,
-      "F_ro_64_2us": 0.94132,
-      "purcell_protection_factor": 625.0,
+      "F_ro_32_2us": 0.998084,
+      "F_ro_64_2us": 0.964716,
+      "purcell_protection_factor": 6241.7,
       "fpga_step_latency_us": 2.336,
-      "single_cryostat_max_cells": 2887
+      "single_cryostat_max_cells": 2671
     }
   },
   "layer4_live_control_stack": {
@@ -190,8 +191,8 @@
       "n_candidates": 120,
       "n_lines_paired": 576,
       "rms_fp64_Hz": 67.866,
-      "rms_q16_Hz": 67.848,
-      "abs_delta_rms_Hz": 0.0183,
+      "rms_q16_Hz": 67.926,
+      "abs_delta_rms_Hz": 0.0599,
       "abs_delta_fnr_pct": 0.0,
       "step_latency_us": 2.336
     },
@@ -210,14 +211,14 @@
         "DT5-R1C0",
         "DT5-R2C0"
       ],
-      "mean_bare_cz_fidelity": 0.779146,
-      "mean_echo_cz_fidelity": 0.981799,
-      "echo_fidelity_gain": 0.202653,
-      "syndrome_round_fidelity": 0.942731,
-      "cycle_duration_us": 2.6201,
+      "mean_bare_cz_fidelity": 0.284742,
+      "mean_echo_cz_fidelity": 0.846041,
+      "echo_fidelity_gain": 0.561299,
+      "syndrome_round_fidelity": 0.602801,
+      "cycle_duration_us": 8.045,
       "isa_version": "3.5",
-      "certified": true,
-      "sha256": "d45df8ceffddab16956936aed203c94f63563a18c8671d617b695f7d25696ed1",
+      "certified": false,
+      "sha256": "e12c22683f207e0089e7efa126bd10e84213c31d2d17cd776102fefa49ca08a6",
       "sha256_verified": true
     }
   },
@@ -380,6 +381,7 @@
   "layer6_wafer_cx4_economics": {
     "no_lab_measurement": true,
     "no_supplier_quotes": true,
+    "procurement_status": "UNQUOTED_ROM_ESTIMATE",
     "epistemic_tags": [
       "{Model}",
       "{Varsay\u0131m}",
@@ -437,11 +439,96 @@
       },
       "v5_vs_v3_tco_delta_frac": 0.13296791147084397
     },
+    "foak_50mm_prototype_tier_obs060": {
+      "wafer_code": "W0_FOAK_50mm",
+      "wafer_label": "FOAK R&D Prototip: \u00d850 mm 28Si/29Si (cad/params.py & BOM S5.4-01, $2,240/yonga)",
+      "diameter_mm": 50,
+      "epi_thickness_nm": 100.0,
+      "reg_per_wafer": 3125000.0,
+      "chips_10k_per_wafer": 312.5,
+      "t_active_hr": 0.049936857907086865,
+      "t_swap_hr": 1.0,
+      "s56_serial_overhead_hr": 0.0,
+      "t_total_hr": 1.049936857907087,
+      "active_duty_fraction": 0.04756177243518198,
+      "wafers_per_yr": 6674.687098774244,
+      "chips_10k_per_yr": 2085839.7183669512,
+      "reg_5yr": 104291985918.34756,
+      "machine_usd_per_chip_10k_p50": 1.6449702291931565,
+      "wafer_floor_usd_per_chip_10k": 7.168,
+      "total_usd_per_chip_10k_nom_wafer_p50": 8.812970229193157,
+      "wafer_share_of_chip_cost": 0.813346671279547,
+      "machine_share_of_chip_cost": 0.186653328720453,
+      "usd_per_chip_10k_stoch_wafer": {
+        "mean": 9.811047101478623,
+        "p10": 5.49265148901521,
+        "p50": 8.90639947072027,
+        "p90": 15.126735761184602
+      },
+      "usd_per_register_stoch_wafer": {
+        "mean": 0.0009811047101478624,
+        "p10": 0.0005492651489015211,
+        "p50": 0.0008906399470720271,
+        "p90": 0.0015126735761184602
+      },
+      "usd_per_register_nom_wafer_p50": 0.0008812970229193157
+    },
+    "mbe_rod_utilization_obs134": {
+      "rod_mass_g": 5.0,
+      "rod_cost_nom_usd": 18000.0,
+      "realistic_capture_eff": 0.05,
+      "foak_50mm_at_5pct": {
+        "diameter_mm": 50.0,
+        "capture_efficiency": 0.05,
+        "cap_28si_mass_mg_per_wafer": 0.0366,
+        "wafers_per_5g_rod": 6833.6,
+        "rod_consumable_usd_per_wafer": 2.63
+      },
+      "fab_200mm_at_5pct": {
+        "diameter_mm": 200.0,
+        "capture_efficiency": 0.05,
+        "cap_28si_mass_mg_per_wafer": 0.5853,
+        "wafers_per_5g_rod": 427.1,
+        "rod_consumable_usd_per_wafer": 42.14
+      },
+      "fab_300mm_at_5pct": {
+        "diameter_mm": 300.0,
+        "capture_efficiency": 0.05,
+        "cap_28si_mass_mg_per_wafer": 1.317,
+        "wafers_per_5g_rod": 189.8,
+        "rod_consumable_usd_per_wafer": 94.83
+      },
+      "fab_200mm_at_10pct": {
+        "diameter_mm": 200.0,
+        "capture_efficiency": 0.1,
+        "cap_28si_mass_mg_per_wafer": 0.5853,
+        "wafers_per_5g_rod": 854.2,
+        "rod_consumable_usd_per_wafer": 21.07
+      }
+    },
+    "box_depth_tail_audit_obs134": {
+      "legacy_30nm_soi_unsafe": {
+        "soi_thickness_nm": 30.0,
+        "iradina_3sigma_depth_nm": 32.52,
+        "margin_3sigma_to_box_nm": -2.52,
+        "donor_frac_within_6nm_of_box": 0.124693,
+        "donor_frac_inside_box": 0.007076,
+        "safe_box_isolation_ge_10nm": false
+      },
+      "upgraded_50nm_soi_safe": {
+        "soi_thickness_nm": 50.0,
+        "iradina_3sigma_depth_nm": 32.52,
+        "margin_3sigma_to_box_nm": 17.48,
+        "donor_frac_within_6nm_of_box": 0.0,
+        "donor_frac_inside_box": 0.0,
+        "safe_box_isolation_ge_10nm": true
+      }
+    },
     "scenarios": {
       "W1": {
         "wafer_spec": {
           "code": "W1",
-          "label": "v4.0 Ref: 200 mm Kal\u0131n 28Si Epi ($12k)",
+          "label": "v4.0 Ref: 200 mm Kal\u0131n 28Si Epi ($12k; Fab-scale bore redesign req.)",
           "diameter_mm": 200,
           "epi_thickness_nm": 500.0,
           "area_factor_vs_200mm": 1.0,
@@ -456,7 +543,7 @@
         },
         "v3_0_dense_1h": {
           "wafer_code": "W1",
-          "wafer_label": "v4.0 Ref: 200 mm Kal\u0131n 28Si Epi ($12k)",
+          "wafer_label": "v4.0 Ref: 200 mm Kal\u0131n 28Si Epi ($12k; Fab-scale bore redesign req.)",
           "diameter_mm": 200,
           "epi_thickness_nm": 500.0,
           "reg_per_wafer": 50000000.0,
@@ -490,7 +577,7 @@
         },
         "v5_0_dense_1h_15ms": {
           "wafer_code": "W1",
-          "wafer_label": "v4.0 Ref: 200 mm Kal\u0131n 28Si Epi ($12k)",
+          "wafer_label": "v4.0 Ref: 200 mm Kal\u0131n 28Si Epi ($12k; Fab-scale bore redesign req.)",
           "diameter_mm": 200,
           "epi_thickness_nm": 500.0,
           "reg_per_wafer": 50000000.0,
@@ -524,7 +611,7 @@
         },
         "v5_0_dense_1h_10ms": {
           "wafer_code": "W1",
-          "wafer_label": "v4.0 Ref: 200 mm Kal\u0131n 28Si Epi ($12k)",
+          "wafer_label": "v4.0 Ref: 200 mm Kal\u0131n 28Si Epi ($12k; Fab-scale bore redesign req.)",
           "diameter_mm": 200,
           "epi_thickness_nm": 500.0,
           "reg_per_wafer": 50000000.0,
@@ -558,7 +645,7 @@
         },
         "v5_0_dense_1h_15ms_serial_s56": {
           "wafer_code": "W1",
-          "wafer_label": "v4.0 Ref: 200 mm Kal\u0131n 28Si Epi ($12k)",
+          "wafer_label": "v4.0 Ref: 200 mm Kal\u0131n 28Si Epi ($12k; Fab-scale bore redesign req.)",
           "diameter_mm": 200,
           "epi_thickness_nm": 500.0,
           "reg_per_wafer": 50000000.0,
@@ -592,7 +679,7 @@
         },
         "v5_0_standard_8h_15ms": {
           "wafer_code": "W1",
-          "wafer_label": "v4.0 Ref: 200 mm Kal\u0131n 28Si Epi ($12k)",
+          "wafer_label": "v4.0 Ref: 200 mm Kal\u0131n 28Si Epi ($12k; Fab-scale bore redesign req.)",
           "diameter_mm": 200,
           "epi_thickness_nm": 500.0,
           "reg_per_wafer": 2000000.0,
@@ -638,24 +725,24 @@
       "W2": {
         "wafer_spec": {
           "code": "W2",
-          "label": "v5.0 \u0130nce 30 nm 28Si-on-SOI 200 mm ($2,2k)",
+          "label": "v5.1 G\u00fcvenli 50 nm 28Si-on-SOI 200 mm ($2,5k incl. %5 MBE \u00e7ubuk; OBS-134)",
           "diameter_mm": 200,
-          "epi_thickness_nm": 30.0,
+          "epi_thickness_nm": 50.0,
           "area_factor_vs_200mm": 1.0,
           "price_p10_p50_p90_usd": [
-            1500.0,
-            2200.0,
-            3200.0
+            1750.0,
+            2500.0,
+            3700.0
           ],
           "dense_chips_10k_per_wafer": 5000.0,
-          "wafer_floor_per_chip_10k_usd": 0.44,
+          "wafer_floor_per_chip_10k_usd": 0.5,
           "epistemic_tag": "{Varsay\u0131m}"
         },
         "v3_0_dense_1h": {
           "wafer_code": "W2",
-          "wafer_label": "v5.0 \u0130nce 30 nm 28Si-on-SOI 200 mm ($2,2k)",
+          "wafer_label": "v5.1 G\u00fcvenli 50 nm 28Si-on-SOI 200 mm ($2,5k incl. %5 MBE \u00e7ubuk; OBS-134)",
           "diameter_mm": 200,
-          "epi_thickness_nm": 30.0,
+          "epi_thickness_nm": 50.0,
           "reg_per_wafer": 50000000.0,
           "chips_10k_per_wafer": 5000.0,
           "t_active_hr": 6.082713353602015,
@@ -667,29 +754,29 @@
           "chips_10k_per_yr": 4947256.545710678,
           "reg_5yr": 247362827285.53394,
           "machine_usd_per_chip_10k_p50": 0.6121487034070545,
-          "wafer_floor_usd_per_chip_10k": 0.44,
-          "total_usd_per_chip_10k_nom_wafer_p50": 1.0521487034070545,
-          "wafer_share_of_chip_cost": 0.41819183787918723,
-          "machine_share_of_chip_cost": 0.5818081621208128,
+          "wafer_floor_usd_per_chip_10k": 0.5,
+          "total_usd_per_chip_10k_nom_wafer_p50": 1.1121487034070545,
+          "wafer_share_of_chip_cost": 0.44958016717391824,
+          "machine_share_of_chip_cost": 0.5504198328260818,
           "usd_per_chip_10k_stoch_wafer": {
-            "mean": 1.0977592432664947,
-            "p10": 0.8406712597518831,
-            "p50": 1.0748067064668096,
-            "p90": 1.3844823616991002
+            "mean": 1.1599993480873023,
+            "p10": 0.8894093706850811,
+            "p50": 1.1369069933386626,
+            "p90": 1.4604877805742544
           },
           "usd_per_register_stoch_wafer": {
-            "mean": 0.0001097759243266495,
-            "p10": 8.406712597518831e-05,
-            "p50": 0.00010748067064668095,
-            "p90": 0.00013844823616991002
+            "mean": 0.0001159999348087302,
+            "p10": 8.89409370685081e-05,
+            "p50": 0.00011369069933386625,
+            "p90": 0.00014604877805742545
           },
-          "usd_per_register_nom_wafer_p50": 0.00010521487034070544
+          "usd_per_register_nom_wafer_p50": 0.00011121487034070545
         },
         "v5_0_dense_1h_15ms": {
           "wafer_code": "W2",
-          "wafer_label": "v5.0 \u0130nce 30 nm 28Si-on-SOI 200 mm ($2,2k)",
+          "wafer_label": "v5.1 G\u00fcvenli 50 nm 28Si-on-SOI 200 mm ($2,5k incl. %5 MBE \u00e7ubuk; OBS-134)",
           "diameter_mm": 200,
-          "epi_thickness_nm": 30.0,
+          "epi_thickness_nm": 50.0,
           "reg_per_wafer": 50000000.0,
           "chips_10k_per_wafer": 5000.0,
           "t_active_hr": 0.7989897265133898,
@@ -701,29 +788,29 @@
           "chips_10k_per_yr": 19477598.723095987,
           "reg_5yr": 973879936154.7993,
           "machine_usd_per_chip_10k_p50": 0.17615848279663543,
-          "wafer_floor_usd_per_chip_10k": 0.44,
-          "total_usd_per_chip_10k_nom_wafer_p50": 0.6161584827966354,
-          "wafer_share_of_chip_cost": 0.714101992076644,
-          "machine_share_of_chip_cost": 0.2858980079233559,
+          "wafer_floor_usd_per_chip_10k": 0.5,
+          "total_usd_per_chip_10k_nom_wafer_p50": 0.6761584827966354,
+          "wafer_share_of_chip_cost": 0.7394716072065939,
+          "machine_share_of_chip_cost": 0.2605283927934062,
           "usd_per_chip_10k_stoch_wafer": {
-            "mean": 0.6431194941705389,
-            "p10": 0.47278962259542895,
-            "p50": 0.6254179482593758,
-            "p90": 0.8360525799598847
+            "mean": 0.7051434757317292,
+            "p10": 0.516611541525827,
+            "p50": 0.6851868104311937,
+            "p90": 0.9188459536827727
           },
           "usd_per_register_stoch_wafer": {
-            "mean": 6.431194941705389e-05,
-            "p10": 4.727896225954289e-05,
-            "p50": 6.254179482593758e-05,
-            "p90": 8.360525799598847e-05
+            "mean": 7.05143475731729e-05,
+            "p10": 5.16611541525827e-05,
+            "p50": 6.851868104311936e-05,
+            "p90": 9.188459536827726e-05
           },
-          "usd_per_register_nom_wafer_p50": 6.161584827966354e-05
+          "usd_per_register_nom_wafer_p50": 6.761584827966354e-05
         },
         "v5_0_dense_1h_10ms": {
           "wafer_code": "W2",
-          "wafer_label": "v5.0 \u0130nce 30 nm 28Si-on-SOI 200 mm ($2,2k)",
+          "wafer_label": "v5.1 G\u00fcvenli 50 nm 28Si-on-SOI 200 mm ($2,5k incl. %5 MBE \u00e7ubuk; OBS-134)",
           "diameter_mm": 200,
-          "epi_thickness_nm": 30.0,
+          "epi_thickness_nm": 50.0,
           "reg_per_wafer": 50000000.0,
           "chips_10k_per_wafer": 5000.0,
           "t_active_hr": 0.5326598176755932,
@@ -735,29 +822,29 @@
           "chips_10k_per_yr": 22862216.12643378,
           "reg_5yr": 1143110806321.689,
           "machine_usd_per_chip_10k_p50": 0.1500792495621241,
-          "wafer_floor_usd_per_chip_10k": 0.44,
-          "total_usd_per_chip_10k_nom_wafer_p50": 0.5900792495621241,
-          "wafer_share_of_chip_cost": 0.7456625535070207,
-          "machine_share_of_chip_cost": 0.2543374464929793,
+          "wafer_floor_usd_per_chip_10k": 0.5,
+          "total_usd_per_chip_10k_nom_wafer_p50": 0.6500792495621242,
+          "wafer_share_of_chip_cost": 0.7691369941999942,
+          "machine_share_of_chip_cost": 0.23086300580000582,
           "usd_per_chip_10k_stoch_wafer": {
-            "mean": 0.615813403495469,
-            "p10": 0.44795277320908616,
-            "p50": 0.598046745544091,
-            "p90": 0.8067747259678684
+            "mean": 0.6778320729657393,
+            "p10": 0.49143811764598,
+            "p50": 0.6575372386285084,
+            "p90": 0.8900819781328457
           },
           "usd_per_register_stoch_wafer": {
-            "mean": 6.15813403495469e-05,
-            "p10": 4.4795277320908615e-05,
-            "p50": 5.980467455440909e-05,
-            "p90": 8.067747259678683e-05
+            "mean": 6.778320729657392e-05,
+            "p10": 4.9143811764598e-05,
+            "p50": 6.575372386285084e-05,
+            "p90": 8.900819781328456e-05
           },
-          "usd_per_register_nom_wafer_p50": 5.900792495621241e-05
+          "usd_per_register_nom_wafer_p50": 6.500792495621242e-05
         },
         "v5_0_dense_1h_15ms_serial_s56": {
           "wafer_code": "W2",
-          "wafer_label": "v5.0 \u0130nce 30 nm 28Si-on-SOI 200 mm ($2,2k)",
+          "wafer_label": "v5.1 G\u00fcvenli 50 nm 28Si-on-SOI 200 mm ($2,5k incl. %5 MBE \u00e7ubuk; OBS-134)",
           "diameter_mm": 200,
-          "epi_thickness_nm": 30.0,
+          "epi_thickness_nm": 50.0,
           "reg_per_wafer": 50000000.0,
           "chips_10k_per_wafer": 5000.0,
           "t_active_hr": 0.7989897265133898,
@@ -769,29 +856,29 @@
           "chips_10k_per_yr": 15428263.81539373,
           "reg_5yr": 771413190769.6865,
           "machine_usd_per_chip_10k_p50": 0.22239341254709477,
-          "wafer_floor_usd_per_chip_10k": 0.44,
-          "total_usd_per_chip_10k_nom_wafer_p50": 0.6623934125470947,
-          "wafer_share_of_chip_cost": 0.664257813658008,
-          "machine_share_of_chip_cost": 0.33574218634199215,
+          "wafer_floor_usd_per_chip_10k": 0.5,
+          "total_usd_per_chip_10k_nom_wafer_p50": 0.7223934125470948,
+          "wafer_share_of_chip_cost": 0.6921436315940985,
+          "machine_share_of_chip_cost": 0.30785636840590147,
           "usd_per_chip_10k_stoch_wafer": {
-            "mean": 0.6930894249326537,
-            "p10": 0.5130827945676508,
-            "p50": 0.6748361627032591,
-            "p90": 0.8951288431213512
+            "mean": 0.7552966694045352,
+            "p10": 0.5573504987590766,
+            "p50": 0.7357018800986496,
+            "p90": 0.9779575813101202
           },
           "usd_per_register_stoch_wafer": {
-            "mean": 6.930894249326537e-05,
-            "p10": 5.1308279456765086e-05,
-            "p50": 6.748361627032591e-05,
-            "p90": 8.951288431213511e-05
+            "mean": 7.552966694045354e-05,
+            "p10": 5.573504987590766e-05,
+            "p50": 7.357018800986496e-05,
+            "p90": 9.779575813101202e-05
           },
-          "usd_per_register_nom_wafer_p50": 6.623934125470947e-05
+          "usd_per_register_nom_wafer_p50": 7.223934125470948e-05
         },
         "v5_0_standard_8h_15ms": {
           "wafer_code": "W2",
-          "wafer_label": "v5.0 \u0130nce 30 nm 28Si-on-SOI 200 mm ($2,2k)",
+          "wafer_label": "v5.1 G\u00fcvenli 50 nm 28Si-on-SOI 200 mm ($2,5k incl. %5 MBE \u00e7ubuk; OBS-134)",
           "diameter_mm": 200,
-          "epi_thickness_nm": 30.0,
+          "epi_thickness_nm": 50.0,
           "reg_per_wafer": 2000000.0,
           "chips_10k_per_wafer": 200.0,
           "t_active_hr": 0.031959589060535594,
@@ -803,56 +890,56 @@
           "chips_10k_per_yr": 174502.86999812198,
           "reg_5yr": 8725143499.9061,
           "machine_usd_per_chip_10k_p50": 19.662394318323813,
-          "wafer_floor_usd_per_chip_10k": 11.0,
-          "total_usd_per_chip_10k_nom_wafer_p50": 30.662394318323813,
-          "wafer_share_of_chip_cost": 0.35874563107507923,
-          "machine_share_of_chip_cost": 0.6412543689249207,
+          "wafer_floor_usd_per_chip_10k": 12.5,
+          "total_usd_per_chip_10k_nom_wafer_p50": 32.162394318323805,
+          "wafer_share_of_chip_cost": 0.38865265677308125,
+          "machine_share_of_chip_cost": 0.611347343226919,
           "usd_per_chip_10k_stoch_wafer": {
-            "mean": 32.049240317886074,
-            "p10": 24.31217660845998,
-            "p50": 31.22245428300594,
-            "p90": 40.823480528055015
+            "mean": 33.59867959385364,
+            "p10": 25.5831811220312,
+            "p50": 32.75889330620761,
+            "p90": 42.68211400688954
           },
           "usd_per_register_stoch_wafer": {
-            "mean": 0.0032049240317886065,
-            "p10": 0.002431217660845998,
-            "p50": 0.0031222454283005943,
-            "p90": 0.004082348052805502
+            "mean": 0.0033598679593853644,
+            "p10": 0.00255831811220312,
+            "p50": 0.0032758893306207614,
+            "p90": 0.004268211400688953
           },
-          "usd_per_register_nom_wafer_p50": 0.003066239431832381
+          "usd_per_register_nom_wafer_p50": 0.0032162394318323807
         },
         "reductions": {
-          "vs_v3_W1_baseline_15ms_frac": 0.7954422097090705,
-          "vs_v3_W1_baseline_10ms_frac": 0.8041002262289764,
-          "same_wafer_v3_to_v5_15ms_frac": 0.4143807992145987,
-          "same_wafer_v3_to_v5_10ms_frac": 0.43916744120737206,
+          "vs_v3_W1_baseline_15ms_frac": 0.7755228744079502,
+          "vs_v3_W1_baseline_10ms_frac": 0.784180890927856,
+          "same_wafer_v3_to_v5_15ms_frac": 0.39202511253645145,
+          "same_wafer_v3_to_v5_10ms_frac": 0.41547452461112977,
           "machine_component_reduction_15ms_frac": 0.7122292642029873,
           "cx4_ge_40pct_vs_v3_W1_pass": true,
-          "cx4_ge_40pct_same_wafer_pass": true,
+          "cx4_ge_40pct_same_wafer_pass": false,
           "cx4_ge_50pct_vs_v3_W1_pass": true
         }
       },
       "W3": {
         "wafer_spec": {
           "code": "W3",
-          "label": "v5.0 \u0130nce 30 nm 28Si-on-SOI 300 mm ($3,6k)",
+          "label": "v5.1 G\u00fcvenli 50 nm 28Si-on-SOI 300 mm ($4,1k incl. %5 MBE \u00e7ubuk; OBS-134)",
           "diameter_mm": 300,
-          "epi_thickness_nm": 30.0,
+          "epi_thickness_nm": 50.0,
           "area_factor_vs_200mm": 2.25,
           "price_p10_p50_p90_usd": [
-            2400.0,
-            3600.0,
-            5200.0
+            2800.0,
+            4100.0,
+            6000.0
           ],
           "dense_chips_10k_per_wafer": 11250.0,
-          "wafer_floor_per_chip_10k_usd": 0.32,
+          "wafer_floor_per_chip_10k_usd": 0.36444444444444446,
           "epistemic_tag": "{Varsay\u0131m}"
         },
         "v3_0_dense_1h": {
           "wafer_code": "W3",
-          "wafer_label": "v5.0 \u0130nce 30 nm 28Si-on-SOI 300 mm ($3,6k)",
+          "wafer_label": "v5.1 G\u00fcvenli 50 nm 28Si-on-SOI 300 mm ($4,1k incl. %5 MBE \u00e7ubuk; OBS-134)",
           "diameter_mm": 300,
-          "epi_thickness_nm": 30.0,
+          "epi_thickness_nm": 50.0,
           "reg_per_wafer": 112500000.0,
           "chips_10k_per_wafer": 11250.0,
           "t_active_hr": 13.686105045604535,
@@ -864,29 +951,29 @@
           "chips_10k_per_yr": 5368339.648612029,
           "reg_5yr": 268416982430.60147,
           "machine_usd_per_chip_10k_p50": 0.5641328377316541,
-          "wafer_floor_usd_per_chip_10k": 0.32,
-          "total_usd_per_chip_10k_nom_wafer_p50": 0.8841328377316542,
-          "wafer_share_of_chip_cost": 0.3619365624072931,
-          "machine_share_of_chip_cost": 0.6380634375927068,
+          "wafer_floor_usd_per_chip_10k": 0.36444444444444446,
+          "total_usd_per_chip_10k_nom_wafer_p50": 0.9285772821760987,
+          "wafer_share_of_chip_cost": 0.39247615835526106,
+          "machine_share_of_chip_cost": 0.6075238416447388,
           "usd_per_chip_10k_stoch_wafer": {
-            "mean": 0.9213776393915225,
-            "p10": 0.7035234862651,
-            "p50": 0.8994016874842636,
-            "p90": 1.1679832167746318
+            "mean": 0.9672956013658824,
+            "p10": 0.7401948343728781,
+            "p50": 0.9449194711535307,
+            "p90": 1.224463726311055
           },
           "usd_per_register_stoch_wafer": {
-            "mean": 9.213776393915226e-05,
-            "p10": 7.035234862651e-05,
-            "p50": 8.994016874842636e-05,
-            "p90": 0.00011679832167746319
+            "mean": 9.672956013658825e-05,
+            "p10": 7.401948343728781e-05,
+            "p50": 9.449194711535306e-05,
+            "p90": 0.00012244637263110548
           },
-          "usd_per_register_nom_wafer_p50": 8.841328377316542e-05
+          "usd_per_register_nom_wafer_p50": 9.285772821760987e-05
         },
         "v5_0_dense_1h_15ms": {
           "wafer_code": "W3",
-          "wafer_label": "v5.0 \u0130nce 30 nm 28Si-on-SOI 300 mm ($3,6k)",
+          "wafer_label": "v5.1 G\u00fcvenli 50 nm 28Si-on-SOI 300 mm ($4,1k incl. %5 MBE \u00e7ubuk; OBS-134)",
           "diameter_mm": 300,
-          "epi_thickness_nm": 30.0,
+          "epi_thickness_nm": 50.0,
           "reg_per_wafer": 112500000.0,
           "chips_10k_per_wafer": 11250.0,
           "t_active_hr": 1.7977268846551269,
@@ -898,29 +985,29 @@
           "chips_10k_per_yr": 28180020.155798204,
           "reg_5yr": 1409001007789.9104,
           "machine_usd_per_chip_10k_p50": 0.12175804774491242,
-          "wafer_floor_usd_per_chip_10k": 0.32,
-          "total_usd_per_chip_10k_nom_wafer_p50": 0.44175804774491245,
-          "wafer_share_of_chip_cost": 0.724378427588443,
-          "machine_share_of_chip_cost": 0.27562157241155694,
+          "wafer_floor_usd_per_chip_10k": 0.36444444444444446,
+          "total_usd_per_chip_10k_nom_wafer_p50": 0.48620249218935685,
+          "wafer_share_of_chip_cost": 0.7495733779630804,
+          "machine_share_of_chip_cost": 0.25042662203691957,
           "usd_per_chip_10k_stoch_wafer": {
-            "mean": 0.46254542126813647,
-            "p10": 0.33594066005480694,
-            "p50": 0.4485345340165106,
-            "p90": 0.6042151339823213
+            "mean": 0.5085837822750101,
+            "p10": 0.368528276924764,
+            "p50": 0.4928417395881962,
+            "p90": 0.6660673305908701
           },
           "usd_per_register_stoch_wafer": {
-            "mean": 4.625454212681365e-05,
-            "p10": 3.359406600548069e-05,
-            "p50": 4.485345340165106e-05,
-            "p90": 6.042151339823213e-05
+            "mean": 5.085837822750102e-05,
+            "p10": 3.68528276924764e-05,
+            "p50": 4.9284173958819623e-05,
+            "p90": 6.6606733059087e-05
           },
-          "usd_per_register_nom_wafer_p50": 4.4175804774491246e-05
+          "usd_per_register_nom_wafer_p50": 4.862024921893568e-05
         },
         "v5_0_dense_1h_10ms": {
           "wafer_code": "W3",
-          "wafer_label": "v5.0 \u0130nce 30 nm 28Si-on-SOI 300 mm ($3,6k)",
+          "wafer_label": "v5.1 G\u00fcvenli 50 nm 28Si-on-SOI 300 mm ($4,1k incl. %5 MBE \u00e7ubuk; OBS-134)",
           "diameter_mm": 300,
-          "epi_thickness_nm": 30.0,
+          "epi_thickness_nm": 50.0,
           "reg_per_wafer": 112500000.0,
           "chips_10k_per_wafer": 11250.0,
           "t_active_hr": 1.1984845897700849,
@@ -932,29 +1019,29 @@
           "chips_10k_per_yr": 35861065.55709131,
           "reg_5yr": 1793053277854.5654,
           "machine_usd_per_chip_10k_p50": 0.09567881451040108,
-          "wafer_floor_usd_per_chip_10k": 0.32,
-          "total_usd_per_chip_10k_nom_wafer_p50": 0.4156788145104011,
-          "wafer_share_of_chip_cost": 0.7698251362098055,
-          "machine_share_of_chip_cost": 0.23017486379019444,
+          "wafer_floor_usd_per_chip_10k": 0.36444444444444446,
+          "total_usd_per_chip_10k_nom_wafer_p50": 0.4601232589548455,
+          "wafer_share_of_chip_cost": 0.7920582960145673,
+          "machine_share_of_chip_cost": 0.2079417039854327,
           "usd_per_chip_10k_stoch_wafer": {
-            "mean": 0.4350686473225657,
-            "p10": 0.3130448491493205,
-            "p50": 0.4215576123774951,
-            "p90": 0.5734085304878161
+            "mean": 0.481089438141469,
+            "p10": 0.34565189811354585,
+            "p50": 0.465734190072986,
+            "p90": 0.6348011282413624
           },
           "usd_per_register_stoch_wafer": {
-            "mean": 4.3506864732256564e-05,
-            "p10": 3.130448491493205e-05,
-            "p50": 4.215576123774951e-05,
-            "p90": 5.734085304878162e-05
+            "mean": 4.810894381414689e-05,
+            "p10": 3.456518981135458e-05,
+            "p50": 4.65734190072986e-05,
+            "p90": 6.348011282413623e-05
           },
-          "usd_per_register_nom_wafer_p50": 4.156788145104011e-05
+          "usd_per_register_nom_wafer_p50": 4.6012325895484555e-05
         },
         "v5_0_dense_1h_15ms_serial_s56": {
           "wafer_code": "W3",
-          "wafer_label": "v5.0 \u0130nce 30 nm 28Si-on-SOI 300 mm ($3,6k)",
+          "wafer_label": "v5.1 G\u00fcvenli 50 nm 28Si-on-SOI 300 mm ($4,1k incl. %5 MBE \u00e7ubuk; OBS-134)",
           "diameter_mm": 300,
-          "epi_thickness_nm": 30.0,
+          "epi_thickness_nm": 50.0,
           "reg_per_wafer": 112500000.0,
           "chips_10k_per_wafer": 11250.0,
           "t_active_hr": 1.7977268846551269,
@@ -966,29 +1053,29 @@
           "chips_10k_per_yr": 24110876.62720103,
           "reg_5yr": 1205543831360.0515,
           "machine_usd_per_chip_10k_p50": 0.14230690541178326,
-          "wafer_floor_usd_per_chip_10k": 0.32,
-          "total_usd_per_chip_10k_nom_wafer_p50": 0.46230690541178326,
-          "wafer_share_of_chip_cost": 0.6921808786632151,
-          "machine_share_of_chip_cost": 0.3078191213367849,
+          "wafer_floor_usd_per_chip_10k": 0.36444444444444446,
+          "total_usd_per_chip_10k_nom_wafer_p50": 0.5067513498562277,
+          "wafer_share_of_chip_cost": 0.7191780437246834,
+          "machine_share_of_chip_cost": 0.28082195627531664,
           "usd_per_chip_10k_stoch_wafer": {
-            "mean": 0.4842113571272417,
-            "p10": 0.35421886447229567,
-            "p50": 0.4706265613900339,
-            "p90": 0.6309297774057275
+            "mean": 0.5302668001381282,
+            "p10": 0.3865547462212214,
+            "p50": 0.5152658938296408,
+            "p90": 0.6920857418845412
           },
           "usd_per_register_stoch_wafer": {
-            "mean": 4.842113571272417e-05,
-            "p10": 3.542188644722956e-05,
-            "p50": 4.706265613900339e-05,
-            "p90": 6.309297774057276e-05
+            "mean": 5.302668001381281e-05,
+            "p10": 3.865547462212214e-05,
+            "p50": 5.1526589382964086e-05,
+            "p90": 6.920857418845411e-05
           },
-          "usd_per_register_nom_wafer_p50": 4.6230690541178326e-05
+          "usd_per_register_nom_wafer_p50": 5.067513498562277e-05
         },
         "v5_0_standard_8h_15ms": {
           "wafer_code": "W3",
-          "wafer_label": "v5.0 \u0130nce 30 nm 28Si-on-SOI 300 mm ($3,6k)",
+          "wafer_label": "v5.1 G\u00fcvenli 50 nm 28Si-on-SOI 300 mm ($4,1k incl. %5 MBE \u00e7ubuk; OBS-134)",
           "diameter_mm": 300,
-          "epi_thickness_nm": 30.0,
+          "epi_thickness_nm": 50.0,
           "reg_per_wafer": 4500000.0,
           "chips_10k_per_wafer": 450.0,
           "t_active_hr": 0.07190907538620508,
@@ -1000,29 +1087,29 @@
           "chips_10k_per_yr": 390688.2461816028,
           "reg_5yr": 19534412309.080143,
           "machine_usd_per_chip_10k_p50": 8.782307307979213,
-          "wafer_floor_usd_per_chip_10k": 8.0,
-          "total_usd_per_chip_10k_nom_wafer_p50": 16.782307307979217,
-          "wafer_share_of_chip_cost": 0.47669249842638545,
-          "machine_share_of_chip_cost": 0.5233075015736143,
+          "wafer_floor_usd_per_chip_10k": 9.11111111111111,
+          "total_usd_per_chip_10k_nom_wafer_p50": 17.893418419090324,
+          "wafer_share_of_chip_cost": 0.5091878420162885,
+          "machine_share_of_chip_cost": 0.4908121579837115,
           "usd_per_chip_10k_stoch_wafer": {
-            "mean": 17.57493038681672,
-            "p10": 13.281971638539995,
-            "p50": 17.16734065600685,
-            "p90": 22.396868622497102
+            "mean": 18.72612436114483,
+            "p10": 14.157030423528141,
+            "p50": 18.304991461540816,
+            "p90": 23.85752477008499
           },
           "usd_per_register_stoch_wafer": {
-            "mean": 0.0017574930386816717,
-            "p10": 0.0013281971638539995,
-            "p50": 0.0017167340656006847,
-            "p90": 0.0022396868622497103
+            "mean": 0.001872612436114483,
+            "p10": 0.001415703042352814,
+            "p50": 0.0018304991461540816,
+            "p90": 0.0023857524770084988
           },
-          "usd_per_register_nom_wafer_p50": 0.0016782307307979217
+          "usd_per_register_nom_wafer_p50": 0.0017893418419090324
         },
         "reductions": {
-          "vs_v3_W1_baseline_15ms_frac": 0.8533412220833461,
-          "vs_v3_W1_baseline_10ms_frac": 0.8619992386032519,
-          "same_wafer_v3_to_v5_15ms_frac": 0.5003487836982798,
-          "same_wafer_v3_to_v5_10ms_frac": 0.5298457462830206,
+          "vs_v3_W1_baseline_15ms_frac": 0.838586158897331,
+          "vs_v3_W1_baseline_10ms_frac": 0.8472441754172368,
+          "same_wafer_v3_to_v5_15ms_frac": 0.4764006168124715,
+          "same_wafer_v3_to_v5_10ms_frac": 0.5044857678656992,
           "machine_component_reduction_15ms_frac": 0.7841677711326032,
           "cx4_ge_40pct_vs_v3_W1_pass": true,
           "cx4_ge_40pct_same_wafer_pass": true,
@@ -1035,62 +1122,63 @@
       "v3_W1_reference_chip_10k_usd": 3.0121487034070547,
       "W1_v5_15ms_chip_10k_usd": 2.576158482796635,
       "W1_cx4_pass": false,
-      "W2_v5_15ms_chip_10k_usd": 0.6161584827966354,
-      "W2_reduction_vs_v3_W1_frac": 0.7954422097090705,
-      "W2_reduction_same_wafer_frac": 0.4143807992145987,
+      "W2_v5_15ms_chip_10k_usd": 0.6761584827966354,
+      "W2_with_1p85M_200mm_bore_redesign_chip_10k_usd": 0.7147579940682165,
+      "W2_reduction_vs_v3_W1_frac": 0.7755228744079502,
+      "W2_reduction_same_wafer_frac": 0.39202511253645145,
       "W2_cx4_pass_vs_v3_W1": true,
-      "W2_cx4_pass_same_wafer": true,
-      "W3_v5_15ms_chip_10k_usd": 0.44175804774491245,
-      "W3_reduction_vs_v3_W1_frac": 0.8533412220833461,
-      "W3_reduction_same_wafer_frac": 0.5003487836982798,
+      "W2_cx4_pass_same_wafer": false,
+      "W3_v5_15ms_chip_10k_usd": 0.48620249218935685,
+      "W3_reduction_vs_v3_W1_frac": 0.838586158897331,
+      "W3_reduction_same_wafer_frac": 0.4764006168124715,
       "W3_cx4_pass_vs_v3_W1": true,
       "W3_cx4_pass_same_wafer": true,
-      "W3_with_350k_300mm_stage_adder_chip_10k_usd": 0.4473413986158855,
-      "W3_with_350k_300mm_stage_adder_red_vs_v3_W1_frac": 0.8514876114483008,
-      "W2_zero_hardware_mod_note": "W2 (200 mm thin 30 nm 28Si-on-SOI) fits existing M3 v5.0 200 mm CAD/BOM with $0 tool modification.",
-      "W3_300mm_cad_note": "W3 (300 mm) requires S3 stage & S5 load-lock scaling (~$350k {Varsayim}); impact is <+$0.005/chip.",
+      "W3_with_350k_300mm_stage_adder_chip_10k_usd": 0.5226047265444574,
+      "W3_with_350k_300mm_stage_adder_red_vs_v3_W1_frac": 0.8265010203668441,
+      "W2_zero_hardware_mod_note": "OBS-060 reconciliation: FOAK CAD/BOM (cad/params.py & S5.4-01) is locked to \u00d850 mm; Fab-scale 200 mm W2 (50 nm safe 28Si-on-SOI) requires scaled >=\u00d8300 mm magnet/cryo/LL redesign (+$1.85M {Varsayim} sensitivity modeled explicitly above).",
+      "W3_300mm_cad_note": "OBS-060/134 reconciliation: W3 (300 mm, 50 nm safe 28Si-on-SOI, 5% MBE capture = 190 wafers/5g rod) requires full 300 mm magnet/cryo/stage/load-lock redesign (+$2.45M {Varsayim}).",
       "cx4_wall_broken_in_W2_and_W3": true
     }
   },
   "layer7_logical_qubit_economics": {
     "bom_v5_m3_usd": 5247800.0,
-    "exp140_cryo_cap_cells": 2887,
+    "exp140_cryo_cap_cells": 2671,
     "D2_primary_Lambda1p40": {
       "1e-6": {
         "d_star": 59,
         "N_active": 6961,
         "N_phys": 41766,
-        "cryostats_100L": 242,
+        "cryostats_100L": 261,
         "fab_usd_per_L_W1": 10.7596,
-        "fab_usd_per_L_W2": 2.5734,
-        "fab_usd_per_L_W3": 1.845,
-        "sys_100L_usd_per_L_amort_wright_p50": 6010332.31,
-        "sys_100L_usd_per_L_ded_wright_p50": 6181889.52,
-        "fab_share_of_deployed_tco": 1.5348957156254173e-06
+        "fab_usd_per_L_W2": 2.824,
+        "fab_usd_per_L_W3": 2.0307,
+        "sys_100L_usd_per_L_amort_wright_p50": 6320403.68,
+        "sys_100L_usd_per_L_ded_wright_p50": 6491960.89,
+        "fab_share_of_deployed_tco": 1.6064427456916203e-06
       },
       "1e-9": {
         "d_star": 99,
         "N_active": 19601,
         "N_phys": 117606,
-        "cryostats_100L": 679,
+        "cryostats_100L": 734,
         "fab_usd_per_L_W1": 30.2972,
-        "fab_usd_per_L_W2": 7.2464,
-        "fab_usd_per_L_W3": 5.1953,
-        "sys_100L_usd_per_L_amort_wright_p50": 14939540.79,
-        "sys_100L_usd_per_L_ded_wright_p50": 15111098.0,
-        "fab_share_of_deployed_tco": 1.738788283002536e-06
+        "fab_usd_per_L_W2": 7.952,
+        "fab_usd_per_L_W3": 5.718,
+        "sys_100L_usd_per_L_amort_wright_p50": 15790740.97,
+        "sys_100L_usd_per_L_ded_wright_p50": 15962298.19,
+        "fab_share_of_deployed_tco": 1.810565140402389e-06
       },
       "1e-12": {
         "d_star": 141,
         "N_active": 39761,
         "N_phys": 238566,
-        "cryostats_100L": 1378,
+        "cryostats_100L": 1489,
         "fab_usd_per_L_W1": 61.4584,
-        "fab_usd_per_L_W2": 14.6994,
-        "fab_usd_per_L_W3": 10.5388,
-        "sys_100L_usd_per_L_amort_wright_p50": 28132342.95,
-        "sys_100L_usd_per_L_ded_wright_p50": 28303900.16,
-        "fab_share_of_deployed_tco": 1.8730834225014307e-06
+        "fab_usd_per_L_W2": 16.1308,
+        "fab_usd_per_L_W3": 11.5991,
+        "sys_100L_usd_per_L_amort_wright_p50": 29774802.94,
+        "sys_100L_usd_per_L_ded_wright_p50": 29946360.15,
+        "fab_share_of_deployed_tco": 1.94781110708247e-06
       }
     },
     "D3_target_Lambda2p52": {
@@ -1100,38 +1188,38 @@
         "N_phys": 5286,
         "cryostats_100L": 34,
         "fab_usd_per_L_W1": 1.3618,
-        "fab_usd_per_L_W2": 0.3257,
-        "fab_usd_per_L_W3": 0.2335,
-        "sys_100L_usd_per_L_amort_wright_p50": 1084933.32,
-        "sys_100L_usd_per_L_ded_wright_p50": 1256490.53,
-        "fab_share_of_deployed_tco": 1.0761643100426063e-06
+        "fab_usd_per_L_W2": 0.3574,
+        "fab_usd_per_L_W3": 0.257,
+        "sys_100L_usd_per_L_amort_wright_p50": 1084933.44,
+        "sys_100L_usd_per_L_ded_wright_p50": 1256490.65,
+        "fab_share_of_deployed_tco": 1.1844350444049498e-06
       },
       "1e-9": {
         "d_star": 37,
         "N_active": 2737,
         "N_phys": 16422,
-        "cryostats_100L": 100,
+        "cryostats_100L": 103,
         "fab_usd_per_L_W1": 4.2306,
-        "fab_usd_per_L_W2": 1.0119,
-        "fab_usd_per_L_W3": 0.7255,
-        "sys_100L_usd_per_L_amort_wright_p50": 2759442.22,
-        "sys_100L_usd_per_L_ded_wright_p50": 2930999.43,
-        "fab_share_of_deployed_tco": 1.3144958429621062e-06
+        "fab_usd_per_L_W2": 1.1104,
+        "fab_usd_per_L_W3": 0.7984,
+        "sys_100L_usd_per_L_amort_wright_p50": 2811897.78,
+        "sys_100L_usd_per_L_ded_wright_p50": 2983454.99,
+        "fab_share_of_deployed_tco": 1.419755971780906e-06
       },
       "1e-12": {
         "d_star": 51,
         "N_active": 5201,
         "N_phys": 31206,
-        "cryostats_100L": 181,
+        "cryostats_100L": 195,
         "fab_usd_per_L_W1": 8.0392,
-        "fab_usd_per_L_W2": 1.9228,
-        "fab_usd_per_L_W3": 1.3786,
-        "sys_100L_usd_per_L_amort_wright_p50": 4665317.64,
-        "sys_100L_usd_per_L_ded_wright_p50": 4836874.85,
-        "fab_share_of_deployed_tco": 1.4774451274214122e-06
+        "fab_usd_per_L_W2": 2.11,
+        "fab_usd_per_L_W3": 1.5172,
+        "sys_100L_usd_per_L_amort_wright_p50": 4898842.78,
+        "sys_100L_usd_per_L_ded_wright_p50": 5070399.99,
+        "fab_share_of_deployed_tco": 1.5485733722759117e-06
       }
     },
-    "D2_to_D3_deployed_cost_ratio_1e9": 5.414
+    "D2_to_D3_deployed_cost_ratio_1e9": 5.616
   },
   "v5_master_certificate": {
     "certificate_type": "ATOM_LITHOGRAPHY_MACHINE_V5_FAULT_TOLERANT_DIGITAL_TWIN",
@@ -1147,55 +1235,55 @@
       "Liste-Capasi"
     ],
     "primary_ledger_sha256": {
-      "bom_detailed_v5": "bc3de27c58d8599c0ffd042129736be69b5af561c18bd22edaaf71ba636f9745",
-      "cad_v5": "dd332dbf600d248b9c5af08ffe8aadd70db6e3fa3c69428a56f9bcdecadbb3d8",
-      "exp124": "68cb6442b335d80d311989d41e366a518da473fc80f07ad47de6897d5e37c2c2",
-      "exp125": "6f253b008c21db3680ea7e7c73f44cc7c1d1a1d1bf544c9dfc7054eb416ac59b",
-      "exp126": "f6ab38c2f9fbb3a7a2001a061ce60d9eae5ff977c40c4f2af11419a5f9838e3d",
-      "exp127": "0511e2663fe6a16f4d4d76fe228213893cff03708bfa8e00c9f0a841977d8222",
-      "exp128": "8d95876db3ae4d41076567c1b4a8321b8fff0d51b0041a22619d5f4e2922bfea",
-      "exp129": "8d9b3abc8976ac4ad5f00d26254b59dd61b1a01fbfee04f8ef9f9b3bc0acedf4",
-      "exp130": "e24aaa9f7adeab578ec5747eabca9cffd07e2eee438f427db863e231769a6b9e",
-      "exp131": "d3c9e366f3e38f45f7c458fb38e36088cf4c498f38edd57224753545464e88ff",
+      "bom_detailed_v5": "08691e10cd1833bf66aa3aaf423b0cea6d0946719af413a2705077f2fd0385e7",
+      "cad_v5": "1e2f9dae2fdaa891be663aafcad10e603610ffde2813cd5e19b13ddcf1fbecf9",
+      "exp124": "981391bd299bc61e2ef189dd7ea48773fda8caec62845c5330a15817c3d3f570",
+      "exp125": "c98fb20dd9c7c16e5f098453b606a3044113e0e528a064c37e17d1d4f0b74c40",
+      "exp126": "ea7697738da30506c3c38d6931e50c99ee53afe77653d9d8abef7888426557dc",
+      "exp127": "c9be7b179dc7c9c6379c70accb6fca6e68712629515b32e0540f4b72f284ee64",
+      "exp128": "8e79a4b9caa8bc8eab24e36f80618d9be5f08ec593946b1aef3f346565dcdf0c",
+      "exp129": "fd86fb94c2debdc7b435627095844c07098476636b2104524fcffc7a1a6a3556",
+      "exp130": "7f5f9c8b5c4b33a659ed3af49824e04caaa125d808c0ace5ff39fb4fc5f5b2f0",
+      "exp131": "7c7b2a818d2cf2418dc7fd65c8e6cef1c5b1d90fc21d49cc77a0ab55383b3d33",
       "exp132": "4fed7224fd389300b5fe05da6b78daef0d369dc81434e3954b72893a6d9e4f92",
-      "exp133": "3689f9423b4ef01246f30dcce3120d5d33296b3ce29beff013a2bd27cd03da39",
-      "exp134": "9ebff35daf2c7d28376f4d977f43bf1121eb8b6d47766196095cd657710062d7",
+      "exp133": "0449ac38257a82fecff5148ba721da11da1526724c2b15a6f04c559ad0b309bc",
+      "exp134": "045bba2a4a1a05c7158b7ed4827352bffe6a14b4919e794e37a7794aaaa137c9",
       "exp135": "a75aadc4036801437c49dd07ec13a2496fb71b72ed0f6eb047a99170ef09c0ac",
-      "exp136": "d5d90c539f0c490ea94a616152fa55ac725c986f07986b4eceefe1acbe4bc2a0",
-      "exp137": "e98132962959f860c848149ac8e83694c8402605bf10e51a28e8c37751fab157",
-      "exp138": "60d413a99f2385b12be056e2a7f99ea25a21b16549e81ef68ddf785387c3f8d6",
-      "exp139": "5b7ae8330d3a926f3beba91977de3d9c6d5217a14beaec10b45aa7f0ca5941a1",
-      "exp140": "a9b14f8ba882dbda987f6a1b9055f3e276a727f84991a6b6f0b283dd97d5406b"
+      "exp136": "56a362565cc7bfcf6a24f50e14a1f29f277a91f16ae10def15b7fe2b4da113da",
+      "exp137": "79c9d4a279cb08aa921bd1633482d51585bc0ce7b4d2132b76c322f21b27fbd3",
+      "exp138": "8d99e9e334be87cee7af547e81dcf351f8b1a3e41195eaf133740041f89be341",
+      "exp139": "69ad649ec115c994c7c785bb5775274064dca4c16b23800a0a2843ded6656f3b",
+      "exp140": "a3675bb58f0c0e70dcca27eb5d885c337c4be92879ee6c7dd776b499da558958"
     },
-    "cad_v5_parts": 189,
-    "cad_v5_mass_kg": 1034.937,
+    "cad_v5_parts": 199,
+    "cad_v5_mass_kg": 1108.137,
     "cad_v5_clashes": 0,
-    "cad_v5_clearances_pass": "32/32",
-    "bom_v5_parts": 167,
+    "cad_v5_clearances_pass": "40/40",
+    "bom_v5_parts": 180,
     "bom_v5_m3_nom_usd": 5247800.0,
-    "placement_sigma_v5_15ms_nm": 3.6307,
-    "placement_sigma_v5_10ms_nm": 3.5883,
-    "placement_sigma_v4_hidden_ted_nm": 3.9634,
+    "placement_sigma_v5_15ms_nm": 4.4847,
+    "placement_sigma_v5_10ms_nm": 4.4723,
+    "placement_sigma_v4_hidden_ted_nm": 4.4795,
     "quantum_f_star_pct": 1.5,
-    "quantum_routeC_p_ff": 0.977,
-    "quantum_routeC_S_eps_nom": 0.3897,
-    "quantum_P4_S0p25_F_Bell": 0.989299,
+    "quantum_routeC_p_ff": 0.6755,
+    "quantum_routeC_S_eps_nom": 0.443,
+    "quantum_P4_S0p25_F_Bell": 0.954805,
     "mux_n_star": 32,
-    "mux_F_ro_2us": 0.996139,
-    "live_q16_abs_delta_rms_Hz": 0.0183,
+    "mux_F_ro_2us": 0.998084,
+    "live_q16_abs_delta_rms_Hz": 0.0599,
     "live_cellisa35_opcodes": 17,
-    "live_cellisa35_echo_cz": 0.981799,
-    "live_cellisa35_cert_sha256": "d45df8ceffddab16956936aed203c94f63563a18c8671d617b695f7d25696ed1",
+    "live_cellisa35_echo_cz": 0.846041,
+    "live_cellisa35_cert_sha256": "e12c22683f207e0089e7efa126bd10e84213c31d2d17cd776102fefa49ca08a6",
     "ft_D2_Lambda": 1.3991,
     "ft_D3_Lambda": 2.5198,
     "cx4_W1_pass": false,
-    "cx4_W2_pass": true,
+    "cx4_W2_pass": false,
     "cx4_W3_pass": true,
-    "logical_1e9_D2_fab_W3_usd": 5.1953,
-    "logical_1e9_D2_sys_100L_usd": 14939540.79,
-    "logical_1e9_D3_fab_W3_usd": 0.7255,
-    "logical_1e9_D3_sys_100L_usd": 2759442.22,
-    "sha256": "2828e8ce8d9388f7cba5490b2d05add930aadc5fe6d3ba4295f0380f816d43d1"
+    "logical_1e9_D2_fab_W3_usd": 5.718,
+    "logical_1e9_D2_sys_100L_usd": 15790740.97,
+    "logical_1e9_D3_fab_W3_usd": 0.7984,
+    "logical_1e9_D3_sys_100L_usd": 2811897.78,
+    "sha256": "5cde7deae1f63d985935a001b922bf9b763266443312acbb4dc17c1a8f3b4b04"
   },
   "portability_hardcoded_hits": []
 }

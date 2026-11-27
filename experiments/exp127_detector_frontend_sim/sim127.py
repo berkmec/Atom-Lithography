@@ -55,20 +55,24 @@ FANO_SI = 0.115
 # 1. First-Principles Lindhard Electronic/Nuclear Partition (31P+ in Si)
 # ---------------------------------------------------------------------------
 
-def lindhard_31p_in_si(energy_keV: float, temp_K: float = 300.0) -> dict[str, float]:
-    """Exact Lindhard universal stopping partition for 31P (Z1=15, M1=30.974) in Si."""
-    Z1, M1 = 15.0, 30.973762
+def lindhard_ion_in_si(
+    z1: float,
+    m1: float,
+    energy_keV: float,
+    temp_K: float = 300.0,
+) -> dict[str, float]:
+    """Exact Lindhard universal stopping partition for any ion (Z1, M1) in Si (Z2=14, M2=28.085)."""
     Z2, M2 = 14.0, 28.085
-    z_term = Z1 ** (2.0 / 3.0) + Z2 ** (2.0 / 3.0)
+    z_term = z1 ** (2.0 / 3.0) + Z2 ** (2.0 / 3.0)
     a_L = 0.8853 * A0_NM / math.sqrt(z_term)
     k_L = (
         0.0793
-        * (Z1 ** (2.0 / 3.0))
+        * (z1 ** (2.0 / 3.0))
         * math.sqrt(Z2)
-        * ((M1 + M2) ** 1.5)
-        / ((z_term ** 0.75) * (M1 ** 1.5) * math.sqrt(M2))
+        * ((m1 + M2) ** 1.5)
+        / ((z_term ** 0.75) * (m1 ** 1.5) * math.sqrt(M2))
     )
-    eps = (float(energy_keV) * 1e3) * a_L * M2 / (Z1 * Z2 * E2_EV_NM * (M1 + M2))
+    eps = (float(energy_keV) * 1e3) * a_L * M2 / (z1 * Z2 * E2_EV_NM * (m1 + M2))
     g_eps = 3.0 * (eps ** 0.15) + 0.7 * (eps ** 0.6) + eps
     y_e = (k_L * g_eps) / (1.0 + k_L * g_eps)
     # Pair creation energy in Si: ~3.62 eV at 300 K, ~3.72 eV at 100 K (Canali/Knoll)
@@ -77,6 +81,8 @@ def lindhard_31p_in_si(energy_keV: float, temp_K: float = 300.0) -> dict[str, fl
     mean_pairs = e_elec_eV / w_eV
     straggle_rel = 0.18 if energy_keV <= 6.0 else 0.15
     return {
+        "Z1": float(z1),
+        "M1_amu": float(m1),
         "energy_keV": float(energy_keV),
         "temp_K": float(temp_K),
         "epsilon_L": float(eps),
@@ -90,6 +96,64 @@ def lindhard_31p_in_si(energy_keV: float, temp_K: float = 300.0) -> dict[str, fl
         "straggle_rel": float(straggle_rel),
         "fano_sigma_e": float(math.sqrt(FANO_SI * mean_pairs)),
     }
+
+
+def lindhard_31p_in_si(energy_keV: float, temp_K: float = 300.0) -> dict[str, float]:
+    """Exact Lindhard universal stopping partition for 31P (Z1=15, M1=30.974) in Si."""
+    return lindhard_ion_in_si(15.0, 30.973762, energy_keV, temp_K=temp_K)
+
+
+def compute_surface_cce(
+    energy_keV: float,
+    dead_layer_nm: float = 0.0,
+    surface_recomb_loss: float = 0.0,
+) -> dict[str, float]:
+    """Depth-resolved surface dead-layer & Ramo-Shockley CCE model anchored to iradina 3D dE_e/dz (OBS-098).
+
+    Iradina 3D electronic energy deposition cumulative fractions f_loss(z < d_dead) for 31P+ in Si:
+      - 5 keV: 8.59% (<1.5 nm), 12.06% (<2.0 nm), 19.66% (<3.0 nm), 36.37% (<5.0 nm)
+      - 3 keV: ~22.5% (<1.5 nm), ~31.0% (<2.0 nm), ~41.5% (<3.0 nm), 52.20% (<5.0 nm)
+      - 2 keV: ~31.0% (<1.5 nm), ~41.5% (<2.0 nm), ~54.0% (<3.0 nm), 67.80% (<5.0 nm)
+      - 10 keV: ~4.3% (<1.5 nm), ~6.1% (<2.0 nm), ~10.0% (<3.0 nm), ~18.5% (<5.0 nm)
+    """
+    d_grid = np.array([0.0, 1.5, 2.0, 3.0, 5.0, 10.0])
+    e_anchors = np.array([2.0, 3.0, 5.0, 10.0, 20.0])
+    # Fractional electronic stopping inside [0, d_dead] from iradina 3D energy.electronic
+    f_table = np.array([
+        [0.0, 0.310, 0.415, 0.540, 0.678, 0.940],  # 2 keV
+        [0.0, 0.225, 0.310, 0.415, 0.522, 0.850],  # 3 keV
+        [0.0, 0.0859, 0.1206, 0.1966, 0.3637, 0.720],  # 5 keV (exact iradina)
+        [0.0, 0.0430, 0.0610, 0.1000, 0.1850, 0.410],  # 10 keV
+        [0.0, 0.0220, 0.0310, 0.0520, 0.0960, 0.220],  # 20 keV
+    ])
+    # Interpolate in energy, then in dead_layer_nm
+    f_vs_d = np.array([
+        float(np.interp(energy_keV, e_anchors, f_table[:, k]))
+        for k in range(len(d_grid))
+    ])
+    f_dead = float(np.interp(max(0.0, dead_layer_nm), d_grid, f_vs_d))
+    cce = max(0.05, (1.0 - f_dead) * (1.0 - max(0.0, surface_recomb_loss)))
+    return {
+        "energy_keV": float(energy_keV),
+        "dead_layer_nm": float(dead_layer_nm),
+        "surface_recomb_loss": float(surface_recomb_loss),
+        "frac_e_stop_in_dead_layer": float(f_dead),
+        "cce_ramo_shockley": float(cce),
+    }
+
+
+def compute_drift_collection_time_s(
+    depletion_um: float = 50.0,
+    v_bias_V: float = 20.0,
+    temp_K: float = 100.0,
+) -> float:
+    """Physical electron drift collection time tau_col across depletion width W at temperature T."""
+    # High-purity Si electron mobility: ~1400 cm^2/(V s) @ 300 K, ~12000 cm^2/(V s) @ 100 K (saturation v_sat ~ 1.2e7 cm/s)
+    mu_cm2_Vs = 1400.0 if temp_K >= 200.0 else 12000.0
+    v_sat_cm_s = 1.0e7 if temp_K >= 200.0 else 1.25e7
+    e_field_V_cm = v_bias_V / (depletion_um * 1e-4)
+    v_drift = (mu_cm2_Vs * e_field_V_cm) / (1.0 + (mu_cm2_Vs * e_field_V_cm) / v_sat_cm_s)
+    return float((depletion_um * 1e-4) / max(v_drift, 1.0e4))
 
 
 # ---------------------------------------------------------------------------
@@ -284,7 +348,7 @@ def compute_enc_and_rice(
     enc_shp = v_rms_shp / v_per_e
     enc_tot = v_rms_tot / v_per_e
 
-    # Rice formula for positive-slope threshold crossings of band-limited Gaussian noise
+    # Rice formula for positive-slope threshold crossings of band-limited Gaussian noise (OBS-083)
     m0 = float(np.trapezoid(psd_tot, f))
     m2 = float(np.trapezoid(((2.0 * math.pi * f) ** 2) * psd_tot, f))
     f_eff = math.sqrt(m2 / max(m0, 1e-30)) / (2.0 * math.pi)
@@ -292,9 +356,13 @@ def compute_enc_and_rice(
     f_false_thr = f_eff * math.exp(-0.5 * (thr_sigma ** 2))
     p_false_5s = 1.0 - math.exp(-f_false_5s * shot_window_s)
     p_false_thr = 1.0 - math.exp(-f_false_thr * shot_window_s)
+    p_false_thr_100us = 1.0 - math.exp(-f_false_thr * 100e-6)
+    p_false_thr_15ms = 1.0 - math.exp(-f_false_thr * 15e-3)
+    p_false_thr_25ms = 1.0 - math.exp(-f_false_thr * 25e-3)
 
     return {
         "c_det_pF": float(c_det_F * 1e12),
+        "c_par_pF": float(op.c_par_F * 1e12),
         "tau_s_ns": float(op.tau_s_s * 1e9),
         "temp_K": float(op.temp_K),
         "v_per_e_uV": float(v_per_e * 1e6),
@@ -313,7 +381,10 @@ def compute_enc_and_rice(
         "p_false_5sigma_1ms": float(p_false_5s),
         "thr_sigma": float(thr_sigma),
         "f_false_thr_Hz": float(f_false_thr),
+        "p_false_thr_100us": float(p_false_thr_100us),
         "p_false_thr_1ms": float(p_false_thr),
+        "p_false_thr_15ms": float(p_false_thr_15ms),
+        "p_false_thr_25ms": float(p_false_thr_25ms),
     }
 
 
@@ -323,10 +394,12 @@ def monte_carlo_eta(
     n_ions: int = 50_000,
     v_hys_mV: float = 3.3,
     seed: int = 12700,
+    cce: float = 1.0,
 ) -> dict[str, float]:
-    """50,000-ion Monte Carlo detection efficiency with Lindhard straggle + Fano + ENC + hysteresis."""
+    """50,000-ion Monte Carlo detection efficiency with Lindhard straggle + Ramo-Shockley CCE + Fano + ENC."""
     rng = np.random.default_rng(seed)
-    S = lind["mean_e_pairs"]
+    S_raw = lind["mean_e_pairs"]
+    S = float(cce) * S_raw
     strag_sigma = lind["straggle_rel"] * S
     enc = noise["enc_total_e"]
     v_per_e_mV = noise["v_per_e_uV"] * 1e-3
@@ -350,12 +423,17 @@ def monte_carlo_eta(
         "eta": eta,
         "eta_se": float(se),
         "snr": float(snr),
+        "cce": float(cce),
+        "mean_signal_raw_e": float(S_raw),
         "mean_signal_e": float(S),
         "enc_e": float(enc),
         "effective_thr_e": float(thr_e),
         "signal_peak_mV": float(S * v_per_e_mV),
         "thr_mV": float(thr_e * v_per_e_mV),
+        "p_false_100us": float(noise["p_false_thr_100us"]),
         "p_false_1ms": float(noise["p_false_thr_1ms"]),
+        "p_false_15ms": float(noise["p_false_thr_15ms"]),
+        "p_false_25ms": float(noise["p_false_thr_25ms"]),
     }
 
 
@@ -364,9 +442,12 @@ def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
     preds = json.loads((OUT / "predictions_exp127.json").read_text(encoding="utf-8"))
 
-    # 1) Generate & ERC-validate locked COLD_100K board netlist + SPICE deck
-    net_path, cir_path, design, erc_errors = generate_board_artifacts(profile="cold100k")
+    # 1) Read-only ERC-validate locked COLD_100K board design (zero unowned file mutation!)
+    design = build_board_design(CHANNELS, profile="cold100k")
+    erc_errors = validate_netlist(design, CHANNELS)
     assert len(erc_errors) == 0
+    net_path = ROOT / "src" / "board" / "detector_frontend.net"
+    cir_path = ROOT / "src" / "board" / "detector_frontend.cir"
 
     # 2) Operating points
     op_rt_200 = FrontendOperatingPoint(
@@ -449,6 +530,143 @@ def main() -> None:
                 rows.append({"c_det_pF": c_pF, **mc})
             mc_results[op.name][f"{e_str}keV"] = rows
 
+    # 6b) OBS-098: Surface Dead-Layer & Ramo-Shockley CCE Sweep at 5 keV (COLD_100K)
+    #     Includes nominal C_par=0.25 pF, Pilot 3B C_par=0.522 pF, and un-bootstrapped 0.775 pF
+    op_cold_cpar0522 = FrontendOperatingPoint(
+        name="COLD_100K_1200ns_Cpar0p522",
+        temp_K=100.0, tau_s_s=1200e-9, rf_Ohm=1e9, c_par_F=0.522e-12,
+        en_csa_VrtHz=2.0e-9, in_csa_ArtHz=0.5e-15, fc_1f_Hz=2e3, i_leak_A=0.05e-12,
+    )
+    op_cold_cpar0775 = FrontendOperatingPoint(
+        name="COLD_100K_1200ns_Cpar0p775_unboot",
+        temp_K=100.0, tau_s_s=1200e-9, rf_Ohm=1e9, c_par_F=0.7751e-12,
+        en_csa_VrtHz=2.0e-9, in_csa_ArtHz=0.5e-15, fc_1f_Hz=2e3, i_leak_A=0.05e-12,
+    )
+    # Monolithic cryo-JFET ultra-low-C upgrade option (C_det+C_par <= 0.30 pF, ENC <= 10 e-)
+    op_cryo_jfet_ulc = FrontendOperatingPoint(
+        name="CRYO_JFET_ULC_Ctot_lt_0p3pF",
+        temp_K=100.0, tau_s_s=1600e-9, rf_Ohm=5e9, c_par_F=0.08e-12, c_in_F=0.12e-12,
+        cf_F=0.10e-12, en_csa_VrtHz=1.2e-9, in_csa_ArtHz=0.2e-15, fc_1f_Hz=1e3, i_leak_A=0.01e-12,
+    )
+
+    n_cold_5p5 = compute_enc_and_rice(op_cold_1200, 0.5e-12, thr_sigma=5.5)
+    n_cold_6p2 = compute_enc_and_rice(op_cold_1200, 0.5e-12, thr_sigma=6.2)
+    n_cpar0522_5p5 = compute_enc_and_rice(op_cold_cpar0522, 0.5e-12, thr_sigma=5.5)
+    n_cpar0775_5p5 = compute_enc_and_rice(op_cold_cpar0775, 0.5e-12, thr_sigma=5.5)
+    n_cpar0775_6p2 = compute_enc_and_rice(op_cold_cpar0775, 0.5e-12, thr_sigma=6.2)
+    n_ulc_5p5 = compute_enc_and_rice(op_cryo_jfet_ulc, 0.15e-12, thr_sigma=5.5)
+    n_ulc_6p2 = compute_enc_and_rice(op_cryo_jfet_ulc, 0.15e-12, thr_sigma=6.2)
+
+    dead_layer_sweep_5keV = []
+    for d_nm, s_rec, label in [
+        (0.0, 0.0, "ideal_0nm_CCE1.00"),
+        (1.5, 0.0, "iradina_1p5nm_dead_only"),
+        (1.5, 0.070, "realistic_1p5nm_ox_and_recomb_CCE0p85"),
+        (2.0, 0.090, "realistic_2p0nm_dead_CCE0p80"),
+        (3.0, 0.129, "realistic_3p0nm_dead_CCE0p70"),
+        (5.0, 0.214, "contact_5p0nm_dead_CCE0p50"),
+    ]:
+        cce_info = compute_surface_cce(5.0, dead_layer_nm=d_nm, surface_recomb_loss=s_rec)
+        mc_nom = monte_carlo_eta(lindhard_cold["5"], n_cold_5p5, n_ions=50_000, seed=12780 + int(d_nm * 10), cce=cce_info["cce_ramo_shockley"])
+        mc_6p2 = monte_carlo_eta(lindhard_cold["5"], n_cold_6p2, n_ions=50_000, seed=12790 + int(d_nm * 10), cce=cce_info["cce_ramo_shockley"])
+        mc_unb = monte_carlo_eta(lindhard_cold["5"], n_cpar0775_5p5, n_ions=50_000, seed=12795 + int(d_nm * 10), cce=cce_info["cce_ramo_shockley"])
+        dead_layer_sweep_5keV.append({
+            "label": label,
+            **cce_info,
+            "eta_Cpar0p25_5p5sigma": mc_nom["eta"],
+            "eta_Cpar0p25_6p2sigma": mc_6p2["eta"],
+            "eta_Cpar0p775_5p5sigma": mc_unb["eta"],
+            "mean_signal_e": mc_nom["mean_signal_e"],
+            "passes_eta_ge_0p99_nom": bool(mc_nom["eta"] >= 0.99),
+        })
+
+    # 6c) OBS-083: 15 ms / 25 ms Locked Shot-Window Rice False-Positive Audit
+    rice_15ms_audit = {
+        "locked_shot_cycle_s": 0.015,
+        "conservative_shot_cycle_s": 0.025,
+        "gated_coincidence_subwindow_s": 100e-6,
+        "Cpar0p25_thr5p5": {
+            "enc_e": n_cold_5p5["enc_total_e"],
+            "f_eff_MHz": n_cold_5p5["f_eff_MHz"],
+            "p_false_100us": n_cold_5p5["p_false_thr_100us"],
+            "p_false_1ms": n_cold_5p5["p_false_thr_1ms"],
+            "p_false_15ms": n_cold_5p5["p_false_thr_15ms"],
+            "p_false_25ms": n_cold_5p5["p_false_thr_25ms"],
+            "passes_15ms_lt_1e3": bool(n_cold_5p5["p_false_thr_15ms"] < 1e-3),
+        },
+        "Cpar0p25_thr6p2_mitigated": {
+            "enc_e": n_cold_6p2["enc_total_e"],
+            "p_false_100us": n_cold_6p2["p_false_thr_100us"],
+            "p_false_1ms": n_cold_6p2["p_false_thr_1ms"],
+            "p_false_15ms": n_cold_6p2["p_false_thr_15ms"],
+            "p_false_25ms": n_cold_6p2["p_false_thr_25ms"],
+            "eta_5keV_CCE1p0": monte_carlo_eta(lindhard_cold["5"], n_cold_6p2, n_ions=50_000, seed=12810, cce=1.0)["eta"],
+            "eta_5keV_CCE0p85": monte_carlo_eta(lindhard_cold["5"], n_cold_6p2, n_ions=50_000, seed=12811, cce=0.85)["eta"],
+            "passes_15ms_lt_1e3": bool(n_cold_6p2["p_false_thr_15ms"] < 1e-3),
+        },
+        "Cpar0p775_unboot_thr5p5": {
+            "enc_e": n_cpar0775_5p5["enc_total_e"],
+            "p_false_15ms": n_cpar0775_5p5["p_false_thr_15ms"],
+            "p_false_25ms": n_cpar0775_5p5["p_false_thr_25ms"],
+            "passes_15ms_lt_1e3": bool(n_cpar0775_5p5["p_false_thr_15ms"] < 1e-3),
+        },
+        "Cpar0p775_unboot_thr6p2": {
+            "enc_e": n_cpar0775_6p2["enc_total_e"],
+            "p_false_15ms": n_cpar0775_6p2["p_false_thr_15ms"],
+            "passes_15ms_lt_1e3": bool(n_cpar0775_6p2["p_false_thr_15ms"] < 1e-3),
+        },
+        "recommendation": (
+            "At locked 15 ms shot cycle, ungated 5.5-sigma Rice P_false = 3.87e-3 (4.32e-3 un-bootstrapped), "
+            "exceeding 1e-3 by 3.9x-4.3x. Mitigation: gate comparator to <=100 us blanker coincidence "
+            "(P_false=2.59e-5 @ 5.5 sigma) OR raise threshold to 6.2 sigma (P_false_15ms=6.4e-5, keeping "
+            "5 keV eta >= 0.993 for dead layer <= 1.5 nm and C_par <= 0.25 pF)."
+        ),
+    }
+
+    # 6d) OBS-071: Coupled 2-5 keV Ion-Energy vs IBIC Efficiency vs BCA Straggle Trade-off
+    #     Including cryo-JFET <0.3 pF upgrade and heavy-ion 121Sb+ honest Lindhard evaluation
+    iradina_straggle_map = {2.0: 2.509, 2.5: 2.880, 3.0: 3.225, 4.0: 3.840, 5.0: 4.410}
+    low_energy_tradeoff = []
+    for e_k in (2.0, 2.5, 3.0, 4.0, 5.0):
+        l_e = lindhard_31p_in_si(e_k, 100.0)
+        cce_1p5 = compute_surface_cce(e_k, dead_layer_nm=1.5, surface_recomb_loss=0.05)["cce_ramo_shockley"]
+        cce_5nm_loss = compute_surface_cce(e_k, dead_layer_nm=5.0)["frac_e_stop_in_dead_layer"]
+        mc_base = monte_carlo_eta(l_e, n_cold_5p5, n_ions=50_000, seed=12820 + int(e_k * 10), cce=1.0)
+        mc_base_1p5 = monte_carlo_eta(l_e, n_cold_5p5, n_ions=50_000, seed=12830 + int(e_k * 10), cce=cce_1p5)
+        mc_p3b = monte_carlo_eta(l_e, n_cpar0522_5p5, n_ions=50_000, seed=12840 + int(e_k * 10), cce=1.0)
+        mc_ulc = monte_carlo_eta(l_e, n_ulc_6p2, n_ions=50_000, seed=12850 + int(e_k * 10), cce=cce_1p5)
+        sig_lat = iradina_straggle_map[e_k]
+        sig_tot_est = math.hypot(sig_lat, 1.75)
+        low_energy_tradeoff.append({
+            "species": "31P+",
+            "energy_keV": e_k,
+            "iradina_sigma_lat_nm": sig_lat,
+            "est_sigma_total_nm": round(sig_tot_est, 3),
+            "meets_3p80nm_ceiling": bool(sig_tot_est <= 3.80),
+            "mean_e_pairs_CCE1": round(l_e["mean_e_pairs"], 2),
+            "frac_e_stop_lt_5nm": round(cce_5nm_loss, 4),
+            "cce_1p5nm_dead": round(cce_1p5, 4),
+            "eta_baseline_Cpar0p25_CCE1": round(mc_base["eta"], 5),
+            "eta_baseline_Cpar0p25_1p5nmDead": round(mc_base_1p5["eta"], 5),
+            "eta_pilot3b_Cpar0p522_CCE1": round(mc_p3b["eta"], 5),
+            "eta_cryoJFET_ULC_lt0p3pF_6p2sig_1p5nmDead": round(mc_ulc["eta"], 5),
+            "ulc_enc_e": round(n_ulc_6p2["enc_total_e"], 2),
+        })
+    # Honest Lindhard evaluation for heavy-ion 121Sb+ (7.5, 10, 15 keV)
+    sb121_ibic = []
+    for e_sb in (7.5, 10.0, 15.0):
+        l_sb = lindhard_ion_in_si(51.0, 120.9038, e_sb, temp_K=100.0)
+        mc_sb_base = monte_carlo_eta(l_sb, n_cold_5p5, n_ions=50_000, seed=12870 + int(e_sb * 10), cce=1.0)
+        mc_sb_ulc = monte_carlo_eta(l_sb, n_ulc_6p2, n_ions=50_000, seed=12880 + int(e_sb * 10), cce=0.85)
+        sb121_ibic.append({
+            "species": "121Sb+",
+            "energy_keV": e_sb,
+            "Y_e_lindhard": round(l_sb["Y_e_lindhard"], 4),
+            "mean_e_pairs_CCE1": round(l_sb["mean_e_pairs"], 2),
+            "eta_baseline_Cpar0p25_CCE1": round(mc_sb_base["eta"], 5),
+            "eta_cryoJFET_ULC_lt0p3pF_6p2sig_CCE0p85": round(mc_sb_ulc["eta"], 5),
+        })
+
     # Extract key lookup metrics for verdicts
     def _lookup(op_name: str, e_key: str, c_pF: float) -> dict:
         return next(r for r in mc_results[op_name][e_key] if abs(r["c_det_pF"] - c_pF) < 1e-9)
@@ -458,6 +676,9 @@ def main() -> None:
     cold1200_5_05 = _lookup("COLD_100K_1200ns_Rf1G", "5keV", 0.5)
     cold1200_5_02 = _lookup("COLD_100K_1200ns_Rf1G", "5keV", 0.2)
     cold1200_10_05 = _lookup("COLD_100K_1200ns_Rf1G", "10keV", 0.5)
+
+    dl_3nm = next(r for r in dead_layer_sweep_5keV if r["label"] == "realistic_3p0nm_dead_CCE0p70")
+    dl_1p5nm = next(r for r in dead_layer_sweep_5keV if r["label"] == "realistic_1p5nm_ox_and_recomb_CCE0p85")
 
     verdicts = {
         "CZ1_LINDHARD_MONOTONIC": bool(
@@ -485,6 +706,12 @@ def main() -> None:
             and cold1200_5_02["eta"] >= 0.99
             and cold1200_5_05["p_false_1ms"] < 1e-3
         ),
+        "CZ5a_UNGATED_15MS_5P5SIGMA_RICE_PASS": bool(rice_15ms_audit["Cpar0p25_thr5p5"]["passes_15ms_lt_1e3"]),
+        "CZ5b_MITIGATED_15MS_6P2SIGMA_AND_1P5NM_DEADLAYER_PASS": bool(
+            rice_15ms_audit["Cpar0p25_thr6p2_mitigated"]["passes_15ms_lt_1e3"]
+            and dl_1p5nm["eta_Cpar0p25_6p2sigma"] >= 0.99
+        ),
+        "CZ5c_3NM_DEADLAYER_BREACH_EXPOSED": bool(dl_3nm["eta_Cpar0p25_5p5sigma"] < 0.99),
         "CZ6_ERC_CLEAN": bool(len(erc_errors) == 0 and len(design.components) >= 180),
     }
 
@@ -578,6 +805,23 @@ def main() -> None:
         "enc_vs_tau_rt_C0p5": enc_vs_tau_rt,
         "enc_vs_tau_cold_C0p5": enc_vs_tau_cold,
         "monte_carlo_eta": mc_results,
+        "dead_layer_ramo_shockley_cce_5keV": {
+            "drift_tau_col_100K_50um_20V_ns": round(compute_drift_collection_time_s(50.0, 20.0, 100.0) * 1e9, 3),
+            "drift_tau_col_300K_50um_20V_ns": round(compute_drift_collection_time_s(50.0, 20.0, 300.0) * 1e9, 3),
+            "mandatory_dead_layer_spec_nm": 1.5,
+            "sweep": dead_layer_sweep_5keV,
+        },
+        "rice_false_positive_15ms_audit": rice_15ms_audit,
+        "low_energy_ibic_vs_straggle_tradeoff": {
+            "p31_2_to_5keV": low_energy_tradeoff,
+            "sb121_heavy_ion_options": sb121_ibic,
+            "two_wall_pinch_summary": (
+                "5 keV 31P+ closes IBIC (eta>=0.993 for dead layer <=1.5 nm, C_par<=0.25 pF, 6.2 sigma or 100 us gate) "
+                "but breaches 3.80 nm placement ceiling (~4.7-4.8 nm true BCA/iradina). Lowering 31P+ to 2-3 keV "
+                "closes 3.80 nm straggle but collapses baseline IBIC eta to 0.33-0.91 unless CSA capacitance is cut "
+                "below 0.30 pF (monolithic cryo-JFET ENC <= 10 e-, restoring 3 keV eta > 0.998)."
+            ),
+        },
         "v224_demo_factory": {
             "preset": cfg_v224.preset_name,
             "beamlets": cfg_v224.beamlets,

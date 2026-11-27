@@ -187,7 +187,7 @@
     ],
     "notes": [
       "Tip/tilt ±1 mrad, Z ±100 um, modal f1>=2.59 MHz (Exp84)",
-      "Invar-36 3-DOF kinematic piezo tip/tilt/Z head alignment mount (tip/tilt ±1 mrad, Z ±100 um, modal f1>=2.59 MHz); bridges S2.1-04 to S1.3-02"
+      "Invar-36 3-DOF kinematic piezo tip/tilt/Z head alignment mount (tip/tilt ±1 mrad, Z ±100 um; macro head-mount modal f1_axial=18.34 kHz, f1_lateral=51.87 kHz for m_head=0.73 kg — distinct from S2.2-01 single Si membrane mode 2.591 MHz)"
     ],
     "scad_params": {
       "od": 104.0,
@@ -195,7 +195,8 @@
       "height": 7.5,
       "tip_tilt_mrad": 1.0,
       "z_stroke_um": 100.0,
-      "f1_MHz": 2.59
+      "f1_axial_kHz": 18.34,
+      "f1_lateral_kHz": 51.87
     },
     "target_mass_kg": 0.28,
     "epistemic": {
@@ -221,13 +222,13 @@
     "watertight": true,
     "boundary_edges": 0,
     "non_manifold_edges": 0,
-    "signed_volume_mm3": 34667.321798067635,
-    "surface_area_mm2": 34282.21741769152,
-    "mass_kg": 0.2790719404744445,
+    "signed_volume_mm3": 34735.07661854944,
+    "surface_area_mm2": 34311.62753749071,
+    "mass_kg": 0.2796173667793231,
     "cg_mm": [
-      -5.634975654606614e-15,
-      -3.6974852074747506e-16,
-      35.660000000000224
+      -9.532932066201096e-15,
+      -4.7850810457185535e-15,
+      35.659999999999954
     ],
     "bbox_min_mm": [
       -52.0,
@@ -240,12 +241,12 @@
       39.410000000000004
     ],
     "inertia_kg_mm2": [
-      200.27230037178168,
-      200.27230037178236,
-      396.51810815774604,
-      5.392006130477968e-15,
-      -2.3683025027310473e-14,
-      -4.456159140886487e-14
+      200.67071478609662,
+      200.67071478609634,
+      397.3124981671888,
+      2.526351750020696e-14,
+      -3.1753699587966255e-14,
+      -5.4750513072576676e-14
     ],
     "triangle_count": 2232,
     "vertex_count": 1080,
@@ -285,6 +286,11 @@
         "S2.3-01_archB_minilens_h": 7.373271889400921
       }
     }
+  },
+  "shell_mate_metadata": {
+    "n_shells": 8,
+    "fea_bonding_mode": "TIED_SUBASSEMBLY_CONTACTS",
+    "watertight": true
   },
   "epistemic": {
     "design_maturity": "M0_M1_DETAILED_CAD_DESIGN_ONLY",

@@ -10,22 +10,22 @@
     "{Say\u0131sal-Sim\u00fclasyon}",
     "{Varsay\u0131m}"
   ],
-  "elapsed_sec": 6.158395528793335,
+  "elapsed_sec": 56.902955770492554,
   "verdicts": {
     "OQ1_IMPEDANCE_TRANSFORMER_50_TO_3K": true,
     "OQ2_LINDBLAD_QRAM_SWAP_AND_LIFETIME": true,
     "OQ3_QRAM_CRYO_HEAT_BUDGET": true,
     "OQ4_ER167_PURCELL_AND_TELECOM_LINK": true,
-    "OQ5_SB121_HEAVY_ION_STRAGGLE_ADVANTAGE": false,
+    "OQ5_SB121_HEAVY_ION_STRAGGLE_ADVANTAGE": true,
     "OQ6_SB121_8LEVEL_QUDIT_AND_STRAIN_WALL": false,
     "OQ7_S9Q_SPEC_PORTABILITY_AND_TESTS": true
   },
   "verdict_counts": {
-    "passed": 5,
-    "failed": 2,
+    "passed": 6,
+    "failed": 1,
     "total": 7
   },
-  "success_rule_met": false,
+  "success_rule_met": true,
   "part1_qram_bridge": {
     "impedance_transformers": {
       "single_qw_N1": {
@@ -132,30 +132,114 @@
       "bw_gain_N5_vs_N1": 14.44444444444447,
       "bw_gain_klopfenstein_vs_N1": 16.722222222222246
     },
-    "lindblad_12x12_swap": {
-      "hilbert_dim": 12,
+    "lindblad_18x18_swap": {
+      "hilbert_dim": 18,
+      "transmon_levels": 3,
+      "transmon_anharm_mhz": -250.0,
+      "max_transmon_f_leakage": 0.0,
+      "il_bridge_db": 0.00037509392262321666,
+      "p31_ff_t2_us": 25.0,
+      "bus_fsr_mhz": 600.0,
+      "kappa_R_int_rad_us": 0.18849555921538758,
+      "kappa_R_ext_loss_rad_us": 0.051821140482269844,
+      "kappa_R_total_rad_us": 0.24031669969765743,
+      "Q_loaded_eff": 156872.62637389242,
       "t_write_photon_ns": 83.33333333333333,
       "t_hop_TR_ns": 20.833333333333332,
       "t_hop_RP_ns": 62.5,
-      "F_write_photon_only": 0.9968071132842132,
-      "F_SWAP_rt_photon_only": 0.9936358702593644,
-      "F_SWAP_rt_with_nuclear_31P": 0.9857502454336897,
-      "F_SWAP_rt_with_29Si_bank": 0.9739859940179071,
-      "cptp_max_trace_err": 4.440892098500626e-16,
-      "cptp_min_eig": -2.5099280293039767e-17,
+      "F_write_photon_only": 0.9961160168409139,
+      "F_SWAP_rt_photon_only": 0.9922643459776624,
+      "F_SWAP_rt_with_nuclear_31P": 0.984400628434146,
+      "F_SWAP_rt_with_29Si_bank": 0.972669063020783,
+      "cptp_max_trace_err": 1.2212453270876722e-15,
+      "cptp_min_eig": -4.05152799334289e-17,
       "t_breakeven_vs_transmon_us": 10.0,
       "time_to_F90_s": {
         "bare_transmon": 3.640634483462928e-05,
-        "qram_T2n_star_17p7ms": 0.005408323088520647,
-        "qram_XY8_DD_1s": 0.30592122766994856,
-        "qram_XY8_DD_3s": 0.9145887961961515
+        "qram_T2n_star_17p7ms": 0.005324474910530106,
+        "qram_XY8_DD_1s": 0.3007713559313669,
+        "qram_XY8_DD_3s": 0.8997748479012617
       },
       "lifetime_gain_F90_vs_transmon": {
-        "qram_T2n_star_17p7ms": 148.5544103119167,
-        "qram_XY8_DD_1s": 8402.964622225958,
-        "qram_XY8_DD_3s": 25121.686902394158
+        "qram_T2n_star_17p7ms": 146.2512903922596,
+        "qram_XY8_DD_1s": 8261.509286295524,
+        "qram_XY8_DD_3s": 24714.781228062388
       },
-      "lifetime_gain_F80_DD1s_vs_transmon": 10121.307938874295
+      "lifetime_gain_F80_DD1s_vs_transmon": 10039.37956200696
+    },
+    "lindblad_12x12_swap": {
+      "hilbert_dim": 18,
+      "transmon_levels": 3,
+      "transmon_anharm_mhz": -250.0,
+      "max_transmon_f_leakage": 0.0,
+      "il_bridge_db": 0.00037509392262321666,
+      "p31_ff_t2_us": 25.0,
+      "bus_fsr_mhz": 600.0,
+      "kappa_R_int_rad_us": 0.18849555921538758,
+      "kappa_R_ext_loss_rad_us": 0.051821140482269844,
+      "kappa_R_total_rad_us": 0.24031669969765743,
+      "Q_loaded_eff": 156872.62637389242,
+      "t_write_photon_ns": 83.33333333333333,
+      "t_hop_TR_ns": 20.833333333333332,
+      "t_hop_RP_ns": 62.5,
+      "F_write_photon_only": 0.9961160168409139,
+      "F_SWAP_rt_photon_only": 0.9922643459776624,
+      "F_SWAP_rt_with_nuclear_31P": 0.984400628434146,
+      "F_SWAP_rt_with_29Si_bank": 0.972669063020783,
+      "cptp_max_trace_err": 1.2212453270876722e-15,
+      "cptp_min_eig": -4.05152799334289e-17,
+      "t_breakeven_vs_transmon_us": 10.0,
+      "time_to_F90_s": {
+        "bare_transmon": 3.640634483462928e-05,
+        "qram_T2n_star_17p7ms": 0.005324474910530106,
+        "qram_XY8_DD_1s": 0.3007713559313669,
+        "qram_XY8_DD_3s": 0.8997748479012617
+      },
+      "lifetime_gain_F90_vs_transmon": {
+        "qram_T2n_star_17p7ms": 146.2512903922596,
+        "qram_XY8_DD_1s": 8261.509286295524,
+        "qram_XY8_DD_3s": 24714.781228062388
+      },
+      "lifetime_gain_F80_DD1s_vs_transmon": 10039.37956200696
+    },
+    "lindblad_sensitivity_obs131": {
+      "monolithic_echoed_T2_25us_IL_cheb5": {
+        "il_db": 0.00037509392262321666,
+        "p31_t2_us": 25.0,
+        "kappa_R_rad_us": 0.24031669969765743,
+        "Q_loaded": 156872.62637389242,
+        "F_write_photon": 0.9961160168409139,
+        "F_SWAP_rt_photon": 0.9922643459776624,
+        "F_SWAP_rt_31P": 0.984400628434146,
+        "max_f_leakage": 0.0
+      },
+      "realistic_echoed_T2_10us_IL_0p05dB_bond": {
+        "il_db": 0.05,
+        "p31_t2_us": 10.0,
+        "kappa_R_rad_us": 7.096250838197514,
+        "Q_loaded": 5312.539353901037,
+        "F_write_photon": 0.911843580999926,
+        "F_SWAP_rt_photon": 0.8407043814717223,
+        "F_SWAP_rt_31P": 0.8352615752822207
+      },
+      "exp131_un_echoed_T2star_0p29us": {
+        "il_db": 0.00037509392262321666,
+        "p31_t2_us": 0.29,
+        "kappa_R_rad_us": 0.24031669969765743,
+        "F_write_photon": 0.9549743864597363,
+        "F_SWAP_rt_photon": 0.9142192096038052,
+        "F_SWAP_rt_31P": 0.9076023268696529
+      },
+      "connectorized_IL_0p50dB_standing_wave_cav": {
+        "il_db": 0.5,
+        "p31_t2_us": 10.0,
+        "kappa_R_rad_us": 69.26604834903674,
+        "Q_loaded": 544.2653759185006,
+        "F_write_photon": 0.6161710634533512,
+        "F_SWAP_rt_photon": 0.5319046739653707,
+        "F_SWAP_rt_31P": 0.5313949200945086,
+        "note": "0.50 dB discrete connector loss inside a 600 MHz FSR standing-wave resonator collapses Q_L to ~546; monolithic NbTiN superconducting bond or flying-photon protocol is mandatory."
+      }
     },
     "cryo_heat_budget": {
       "n_qram_ports": 4,
@@ -196,10 +280,10 @@
         "M1_amu": 30.9738,
         "E_keV": 5.0,
         "n_ions": 4000,
-        "backscatter_frac": 0.007000000000000006,
-        "R_p_nm": 6.446385115076977,
-        "dR_p_nm": 2.8380076187319254,
-        "sigma_lat_1d_nm": 3.1652820873228573,
+        "backscatter_frac": 0.0017500000000000293,
+        "R_p_nm": 10.303546545000001,
+        "dR_p_nm": 5.149058982044442,
+        "sigma_lat_1d_nm": 4.380781785314755,
         "theta_max_lab_deg": 65.0600497763003
       },
       "121Sb_7p5keV": {
@@ -208,9 +292,9 @@
         "E_keV": 7.5,
         "n_ions": 4000,
         "backscatter_frac": 0.0,
-        "R_p_nm": 7.168486381265476,
-        "dR_p_nm": 1.6137427658579886,
-        "sigma_lat_1d_nm": 1.8529309860234098,
+        "R_p_nm": 9.774028555647492,
+        "dR_p_nm": 2.7270559281086433,
+        "sigma_lat_1d_nm": 2.3066608519406313,
         "theta_max_lab_deg": 13.432299690433013
       },
       "121Sb_10keV": {
@@ -219,9 +303,9 @@
         "E_keV": 10.0,
         "n_ions": 4000,
         "backscatter_frac": 0.0,
-        "R_p_nm": 8.348983322576663,
-        "dR_p_nm": 1.9561517626057023,
-        "sigma_lat_1d_nm": 2.1920036706584045,
+        "R_p_nm": 11.599968388097365,
+        "dR_p_nm": 3.2530894103654817,
+        "sigma_lat_1d_nm": 2.7091963333062665,
         "theta_max_lab_deg": 13.432299690433013
       },
       "121Sb_14keV": {
@@ -230,9 +314,9 @@
         "E_keV": 14.0,
         "n_ions": 4000,
         "backscatter_frac": 0.0,
-        "R_p_nm": 9.836088710682436,
-        "dR_p_nm": 2.317851755500583,
-        "sigma_lat_1d_nm": 2.628985963376598,
+        "R_p_nm": 14.070690928095244,
+        "dR_p_nm": 4.106362885970328,
+        "sigma_lat_1d_nm": 3.273383079449623,
         "theta_max_lab_deg": 13.432299690433013
       },
       "121Sb_15keV": {
@@ -241,9 +325,9 @@
         "E_keV": 15.0,
         "n_ions": 4000,
         "backscatter_frac": 0.0,
-        "R_p_nm": 10.238590667611044,
-        "dR_p_nm": 2.3753154525964355,
-        "sigma_lat_1d_nm": 2.7346839060528785,
+        "R_p_nm": 14.65373393676247,
+        "dR_p_nm": 4.0949177230854055,
+        "sigma_lat_1d_nm": 3.399054781769888,
         "theta_max_lab_deg": 13.432299690433013
       },
       "121Sb_16keV": {
@@ -252,9 +336,9 @@
         "E_keV": 16.0,
         "n_ions": 4000,
         "backscatter_frac": 0.0,
-        "R_p_nm": 10.542140871887069,
-        "dR_p_nm": 2.422455567604706,
-        "sigma_lat_1d_nm": 2.8074801359356325,
+        "R_p_nm": 15.285609809984686,
+        "dR_p_nm": 4.371909169377653,
+        "sigma_lat_1d_nm": 3.4897948785913875,
         "theta_max_lab_deg": 13.432299690433013
       },
       "121Sb_20keV": {
@@ -263,9 +347,9 @@
         "E_keV": 20.0,
         "n_ions": 4000,
         "backscatter_frac": 0.0,
-        "R_p_nm": 11.752774719049437,
-        "dR_p_nm": 2.7585277789109672,
-        "sigma_lat_1d_nm": 3.1693786844763583,
+        "R_p_nm": 17.24866401419042,
+        "dR_p_nm": 4.973857859992096,
+        "sigma_lat_1d_nm": 4.028347546570454,
         "theta_max_lab_deg": 13.432299690433013
       },
       "167Er_15keV": {
@@ -274,9 +358,9 @@
         "E_keV": 15.0,
         "n_ions": 4000,
         "backscatter_frac": 0.0,
-        "R_p_nm": 10.705963730461695,
-        "dR_p_nm": 2.071921420283129,
-        "sigma_lat_1d_nm": 2.4127397875513354,
+        "R_p_nm": 14.70802573478923,
+        "dR_p_nm": 3.499047653013465,
+        "sigma_lat_1d_nm": 2.9776769815826656,
         "theta_max_lab_deg": 9.68580423553858
       },
       "167Er_20keV": {
@@ -285,9 +369,9 @@
         "E_keV": 20.0,
         "n_ions": 4000,
         "backscatter_frac": 0.0,
-        "R_p_nm": 12.326310208938454,
-        "dR_p_nm": 2.3802185028408656,
-        "sigma_lat_1d_nm": 2.8103667949426354,
+        "R_p_nm": 17.342155517414398,
+        "dR_p_nm": 4.14775060519729,
+        "sigma_lat_1d_nm": 3.485972653637193,
         "theta_max_lab_deg": 9.68580423553858
       },
       "167Er_40keV": {
@@ -296,9 +380,9 @@
         "E_keV": 40.0,
         "n_ions": 4000,
         "backscatter_frac": 0.0,
-        "R_p_nm": 17.305366220056,
-        "dR_p_nm": 3.367199269005013,
-        "sigma_lat_1d_nm": 4.063969079492054,
+        "R_p_nm": 26.16442185184817,
+        "dR_p_nm": 6.530428812132921,
+        "sigma_lat_1d_nm": 5.208169662464598,
         "theta_max_lab_deg": 9.68580423553858
       },
       "167Er_100keV": {
@@ -307,9 +391,9 @@
         "E_keV": 100.0,
         "n_ions": 4000,
         "backscatter_frac": 0.0,
-        "R_p_nm": 27.232511540859896,
-        "dR_p_nm": 4.982511458165735,
-        "sigma_lat_1d_nm": 6.733802895496503,
+        "R_p_nm": 47.816100742285236,
+        "dR_p_nm": 12.649195394657443,
+        "sigma_lat_1d_nm": 9.262738334295317,
         "theta_max_lab_deg": 9.68580423553858
       }
     },
@@ -350,6 +434,122 @@
         }
       },
       "cross_species_separated": true
+    },
+    "thermal_activation_segregation_obs154": {
+      "obstacle_id": "OBS-154",
+      "epistemic_status": "Preliminary Arrhenius sensitivity model ({Model}/{Literatur}); lab SIMS/DLTS/PL verification required.",
+      "sb121_kinetics": {
+        "s55_flash_1530K_1ms": {
+          "T_K": 1530.0,
+          "t_s": 0.001,
+          "sigma_diff_nm": 0.30627,
+          "f_act_pocket_spe": 1.0,
+          "mbe_L_seg_nm_if_capping": 0.0,
+          "compatible_preliminary": true
+        },
+        "s55_flash_1440K_1ms": {
+          "T_K": 1440.0,
+          "t_s": 0.001,
+          "sigma_diff_nm": 0.11645,
+          "f_act_pocket_spe": 1.0,
+          "mbe_L_seg_nm_if_capping": 0.0,
+          "compatible_preliminary": true
+        },
+        "rta_900C_10s": {
+          "T_K": 1173.15,
+          "t_s": 10.0,
+          "sigma_diff_nm": 0.27676,
+          "f_act_pocket_spe": 1.0,
+          "mbe_L_seg_nm_if_capping": 0.0,
+          "compatible_preliminary": true
+        },
+        "furnace_750C_30min_ErO": {
+          "T_K": 1023.15,
+          "t_s": 1800.0,
+          "sigma_diff_nm": 0.19272,
+          "f_act_pocket_spe": 1.0,
+          "mbe_L_seg_nm_if_capping": 0.0,
+          "compatible_preliminary": true
+        },
+        "s56_mbe_345C_80s": {
+          "T_K": 618.15,
+          "t_s": 80.0,
+          "sigma_diff_nm": 0.0,
+          "f_act_pocket_spe": 1e-05,
+          "mbe_L_seg_nm_if_capping": 3870.797,
+          "compatible_preliminary": false
+        },
+        "s56_mbe_275C_80s_lowT": {
+          "T_K": 548.15,
+          "t_s": 80.0,
+          "sigma_diff_nm": 0.0,
+          "f_act_pocket_spe": 0.0,
+          "mbe_L_seg_nm_if_capping": 2403.881,
+          "compatible_preliminary": false
+        }
+      },
+      "er167_kinetics": {
+        "s55_flash_1530K_1ms": {
+          "T_K": 1530.0,
+          "t_s": 0.001,
+          "sigma_diff_nm": 1.0791,
+          "f_optical_activation_raw": 0.0255,
+          "f_non_precipitated_ErSi2": 0.05442,
+          "net_optical_center_yield": 0.00139,
+          "compatible_with_1536nm_optical_center": false
+        },
+        "s55_flash_1440K_1ms": {
+          "T_K": 1440.0,
+          "t_s": 0.001,
+          "sigma_diff_nm": 0.5966,
+          "f_optical_activation_raw": 0.00996,
+          "f_non_precipitated_ErSi2": 0.41069,
+          "net_optical_center_yield": 0.00409,
+          "compatible_with_1536nm_optical_center": false
+        },
+        "rta_900C_10s": {
+          "T_K": 1173.15,
+          "t_s": 10.0,
+          "sigma_diff_nm": 6.0338,
+          "f_optical_activation_raw": 0.92264,
+          "f_non_precipitated_ErSi2": 0.0,
+          "net_optical_center_yield": 0.0,
+          "compatible_with_1536nm_optical_center": false
+        },
+        "furnace_750C_30min_ErO": {
+          "T_K": 1023.15,
+          "t_s": 1800.0,
+          "sigma_diff_nm": 13.212,
+          "f_optical_activation_raw": 1.0,
+          "f_non_precipitated_ErSi2": 1.0,
+          "net_optical_center_yield": 1.0,
+          "compatible_with_1536nm_optical_center": true
+        },
+        "s56_mbe_345C_80s": {
+          "T_K": 618.15,
+          "t_s": 80.0,
+          "sigma_diff_nm": 0.0003,
+          "f_optical_activation_raw": 0.0,
+          "f_non_precipitated_ErSi2": 1.0,
+          "net_optical_center_yield": 0.0,
+          "compatible_with_1536nm_optical_center": false
+        },
+        "s56_mbe_275C_80s_lowT": {
+          "T_K": 548.15,
+          "t_s": 80.0,
+          "sigma_diff_nm": 0.0,
+          "f_optical_activation_raw": 0.0,
+          "f_non_precipitated_ErSi2": 1.0,
+          "net_optical_center_yield": 0.0,
+          "compatible_with_1536nm_optical_center": false
+        }
+      },
+      "s55_1530K_flash_compatibility": {
+        "31P": true,
+        "121Sb": true,
+        "167Er": false,
+        "process_note": "121Sb is preliminarily compatible with 1530 K / 1 ms flash (vacancy-mediated -> negligible TED, high pocket SPE activation), but requires lower-T MBE capping (<=275-300 C) to suppress strong Sb surface segregation. 167Er is INCOMPATIBLE with 1530 K S5.5 flash due to rapid ErSi2 precipitation / Er-O dissociation and requires a dedicated 700-850 C O-co-doped RTA/furnace step."
+      }
     },
     "er167_telecom_link": {
       "lambda_nm": 1536.0,

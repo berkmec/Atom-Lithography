@@ -156,7 +156,7 @@ module tb_spi_dac_hv_ctrl;
 
         repeat (4) @(posedge clk);
         rst_n = 1'b1;
-        @(posedge clk);
+        repeat (4) @(posedge clk);
 
         // 1. Load all 8 channels and verify CSR readback
         for (c = 0; c < 8; c = c + 1) begin
@@ -266,6 +266,57 @@ module tb_spi_dac_hv_ctrl;
             $display("ERROR: last_tx_frame after clamp=%h exp=%h",
                      last_tx_frame, {1'b0, 3'd7, 20'h00000});
             errors = errors + 1;
+        end
+
+        // 5. OBS-144 AD5791 Minimum t_CS_HIGH & t_LDAC Pulse-Width Check at cfg_sclk_div=1!
+        @(negedge clk);
+        hv_safe_clamp = 1'b0;
+        repeat (4) @(posedge clk);
+        write_ch(3'd0, 20'h11111);
+        write_ch(3'd1, 20'h22222);
+        @(negedge clk);
+        cfg_sclk_div    = 16'd1; // Request illegal 10 ns div -> hardware MUST enforce >= 30 ns pulses!
+        update_all      = 1'b0;
+        ch_update_mask  = 8'h03;
+        start_update    = 1'b1;
+        @(posedge clk);
+        @(negedge clk);
+        start_update    = 1'b0;
+
+        // Measure LDAC_N low width and CS_N high width between ch0 and ch1
+        begin : blk_pulse_check
+            integer cs_hi_cyc, ldac_lo_cyc, seen_cs_hi, seen_ldac_lo;
+            reg     prev_c, prev_l, active_c;
+            cs_hi_cyc    = 0;
+            ldac_lo_cyc  = 0;
+            seen_cs_hi   = 0;
+            seen_ldac_lo = 0;
+            prev_c       = 1'b1;
+            prev_l       = 1'b1;
+            active_c     = 1'b0;
+            while (!done_sticky) begin
+                @(posedge clk);
+                if (!spi_cs_n) active_c = 1'b1;
+                if (active_c && spi_cs_n && !seen_cs_hi) begin
+                    cs_hi_cyc = cs_hi_cyc + 1;
+                end else if (active_c && !spi_cs_n && prev_c && cs_hi_cyc > 0) begin
+                    seen_cs_hi = 1;
+                end
+                if (!spi_ldac_n) begin
+                    ldac_lo_cyc  = ldac_lo_cyc + 1;
+                    seen_ldac_lo = 1;
+                end
+                prev_c = spi_cs_n;
+                prev_l = spi_ldac_n;
+            end
+            if (cs_hi_cyc < 3) begin
+                $display("ERROR: OBS-144 t_CS_HIGH=%0d0 ns < 30 ns at cfg_sclk_div=1!", cs_hi_cyc);
+                errors = errors + 1;
+            end
+            if (!seen_ldac_lo || ldac_lo_cyc < 3) begin
+                $display("ERROR: OBS-144 t_LDAC=%0d0 ns < 30 ns at cfg_sclk_div=1!", ldac_lo_cyc);
+                errors = errors + 1;
+            end
         end
 
         $display("SPI_DAC_SUMMARY errors=%0d channels=8 selective_ok=1 full_sync_ldac_ok=1 hv_safe_clamp_zero_ok=1",

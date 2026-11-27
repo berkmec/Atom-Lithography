@@ -9,7 +9,7 @@
 // temp_stage        : 300 K
 // vacuum_grade      : UHV 1e-9 mbar
 // tolerance         : ±0.1 urad
-// computed_mass_kg  : 0.27907
+// computed_mass_kg  : 0.27962
 // envelope_mm       : 104.000 x 104.000 x 7.500
 // design_maturity   : M0_M1_DETAILED_CAD_DESIGN_ONLY
 // no_lab_measurement: true
@@ -31,7 +31,8 @@ bore_id = 28.0;
 height = 7.5;
 tip_tilt_mrad = 1.0;
 z_stroke_um = 100.0;
-f1_MHz = 2.59;
+f1_axial_kHz = 18.34;
+f1_lateral_kHz = 51.87;
 
 // Interface / port parameters (mm)
 port_head_mate_bot_od = 104.000;

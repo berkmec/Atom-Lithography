@@ -10,7 +10,7 @@
 // vacuum_grade      : UHV / Atmosfer
 // tolerance         : <80 ms vana, <=0.01 ML
 // computed_mass_kg  : 12.00000
-// envelope_mm       : 218.950 x 146.000 x 163.750
+// envelope_mm       : 588.200 x 506.000 x 463.700
 // design_maturity   : M0_M1_DETAILED_CAD_DESIGN_ONLY
 // no_lab_measurement: true
 // iec61508_certified: false
@@ -21,45 +21,47 @@
 $fn = 64;
 
 // Nominal bounding envelope parameters (mm)
-bbox_x = 218.9500;
-bbox_y = 146.0000;
-bbox_z = 163.7500;
+bbox_x = 588.2000;
+bbox_y = 506.0000;
+bbox_z = 463.7000;
 
 // Part-specific parametric dimensions
 close_time_ms = 80.0;
-bonnet_cf = "CF63";
+bonnet_cf = "CF100";
+bonnet_od_mm = 152.0;
+bonnet_bore_mm = 68.0;
 orifice_bore_mm = 0.5;
 
 // Interface / port parameters (mm)
-port_uhv_gate_bonnet_cf63_od = 113.500;
-port_uhv_gate_bonnet_cf63_bore = 63.500;
-port_uhv_gate_bonnet_cf63_pcd = 92.100;
-port_uhv_gate_bonnet_cf63_bolts = 8;
+port_uhv_gate_bonnet_cf100_od = 152.000;
+port_uhv_gate_bonnet_cf100_bore = 68.000;
+port_uhv_gate_bonnet_cf100_pcd = 130.200;
+port_uhv_gate_bonnet_cf100_bolts = 16;
 port_iso10156_vcr_in_od = 19.000;
 port_iso10156_vcr_in_bore = 0.500;
 
 module part_S7_SAFETY_06() {
   union() {
-    // CF63 UHV gate-valve bonnet flange
-    translate([-38.000, 0.000, -68.000]) {
+    // CF100 UHV gate-valve bonnet flange
+    translate([0.000, 0.000, -73.100]) {
       difference() {
-        cylinder(d=113.500, h=17.500, center=true);
-        cylinder(d=32.000, h=19.500, center=true);
-        translate([0, 0, 7.500]) cylinder(d=82.400, h=1.750);
-        for (i = [0 : 8 - 1])
-          rotate([0, 0, i * 360 / 8])
-            translate([46.050, 0, 0])
-              cylinder(d=8.400, h=19.500, center=true);
+        cylinder(d=152.000, h=19.800, center=true);
+        cylinder(d=68.000, h=21.800, center=true);
+        translate([0, 0, 8.650]) cylinder(d=120.500, h=1.750);
+        for (i = [0 : 16 - 1])
+          rotate([0, 0, i * 360 / 16])
+            translate([65.100, 0, 0])
+              cylinder(d=8.400, h=21.800, center=true);
       }
     }
     // Spring-return fail-close pneumatic cylinder
-    translate([-38.000, 0.000, 14.000]) cylinder(d=84.000, h=146.000, center=true);
+    translate([0.000, 0.000, 10.000]) cylinder(d=84.000, h=146.000, center=true);
     // ISO 10156 5% H2/N2 flow-restrictor orifice block
-    translate([68.000, 36.000, -35.000]) cube([68.000, 54.000, 44.000], center=true);
+    translate([456.000, -324.000, -341.700]) cube([68.000, 54.000, 44.000], center=true);
   }
 }
 
 // World assembly mounting transform (global machine frame, mm / deg):
-// translate([660.000, -360.000, 440.000]) rotate([0.000, 0.000, 0.000]) part_S7_SAFETY_06();
+// translate([272.000, 0.000, 746.700]) rotate([0.000, 0.000, 0.000]) part_S7_SAFETY_06();
 
 part_S7_SAFETY_06();

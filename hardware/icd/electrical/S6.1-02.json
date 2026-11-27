@@ -3,40 +3,40 @@
   "part_id": "S6.1-02",
   "parent_bom_id": "S6.1",
   "subsystem": "S6",
-  "part_name": "Uzak doner valf, su sogutmali He kompresoru ve esnek hatlar",
+  "part_name": "Uzak doner valf, su sogutmali He kompresoru (CPA1110, 11.4-12.5 kW) ve esnek hatlar",
   "qty": 1,
   "unit": "set",
   "temp_stage": "300 K (tesis)",
   "vacuum_grade": "20 bar He",
-  "bom_key_spec": "Titresimi yongadan izole eden ayrik motor/valf paketi",
+  "bom_key_spec": "Titresimi yongadan izole eden ayrik motor/valf paketi; duvar gucu 11.4 kW nom / 12.5 kW maks @ 60 Hz (3-faz sebeke-tarafi hizli kontaktor UPS onunde)",
   "usd_nom": 11000.0,
   "bom_epistemic_tag": "{Liste-\u00c7apas\u0131}",
   "electrical_class": "E4",
   "grounding_domain": "FACILITY_PE",
-  "grounding_notes": "Water-cooled Cryomech CPA He compressor (9.42 kW 3-phase 400 VAC facility breaker; Tier-2 soft-shed 0.5 s).",
+  "grounding_notes": "Water-cooled Cryomech CPA1110 He compressor (11.4 kW nom / 12.5 kW max @ 60 Hz; 12.42 kW + 80 W S6.9-01 = 12.50 kW on utility-side 3-ph 400 VAC fast contactor AHEAD of UPS \u2014 never on 13.5 kW UPS inverter).",
   "supply_rails": [
     {
-      "rail_name": "AC_3PH_FACILITY_400V",
+      "rail_name": "AC_3PH_UTILITY_CONTACTOR_400V",
       "voltage_v": 400.0,
       "current_type": "AC_3PH",
-      "max_current_a": 18.0,
-      "steady_power_w": 9420.0,
-      "peak_power_w": 10500.0,
+      "max_current_a": 24.0,
+      "steady_power_w": 12420.0,
+      "peak_power_w": 13200.0,
       "source_part_id": "S7.SAFETY-04"
     }
   ],
   "connectors_and_pinout": [
     {
       "connector_ref": "J_3PH",
-      "connector_type": "IEC 60309 3P+PE 32A",
+      "connector_type": "IEC 60309 3P+PE 32A (Utility-Side Fast Contactor Ahead of UPS)",
       "location_side": "facility_chiller",
       "mating_part_id": "S7.SAFETY-04",
       "pins": [
         {
           "pin": "L1-L3",
-          "signal": "FACILITY_400V_3PH",
+          "signal": "UTILITY_400V_3PH_PRE_UPS",
           "direction": "IN",
-          "nominal_level": "9.42 kW PT420 He compressor"
+          "nominal_level": "12.42 kW Cryomech CPA1110 PT420 He compressor (12.50 kW incl. S6.9-01; shed <5 ms ahead of UPS)"
         },
         {
           "pin": "PE",
@@ -56,7 +56,7 @@
           "pin": "1-2",
           "signal": "COMP_SOFT_STOP",
           "direction": "IN",
-          "nominal_level": "Controlled stop at t=0.5 s on utility loss"
+          "nominal_level": "Utility-side contactor open (<5 ms) on utility loss"
         },
         {
           "pin": "3-4",
@@ -75,24 +75,24 @@
   ],
   "interlock_hooks": [
     {
-      "signal_name": "PT420_SOFT_SHED",
+      "signal_name": "PT420_UTILITY_FAST_SHED",
       "target_part_id": "S7.SAFETY-04",
-      "action_on_trip": "Controlled compressor stop on outage (0.5 s)",
-      "response_time_ms": 500.0
+      "action_on_trip": "Open utility-side 3-ph contactor ahead of UPS on outage (<5 ms)",
+      "response_time_ms": 5.0
     }
   ],
   "ups_tier": "TIER2_SHED",
   "ups_budget_group": "EXP150_TIER2_SHED",
-  "exp150_ups_allocation_w": 9420.0,
-  "supply_rails_steady_sum_w": 9420.0,
-  "incremental_mains_w": 9420.0,
+  "exp150_ups_allocation_w": 12420.0,
+  "supply_rails_steady_sum_w": 12420.0,
+  "incremental_mains_w": 12420.0,
   "secondary_or_parent_derived_w": 0.0,
   "non_exp150_aux_shed_w": 0.0,
-  "reconciliation_note": "Exp150 Tier-2 sheddable baseline load: incremental_mains_w = exp150_ups_allocation_w = 9420.0 W (raw supply_rails sum = 9420.0 W, shed cleanly on utility outage).",
+  "reconciliation_note": "Exp150 Tier-2 sheddable baseline load: incremental_mains_w = exp150_ups_allocation_w = 12420.0 W (raw supply_rails sum = 12420.0 W, shed cleanly on utility outage).",
   "timing_sync": {
     "rb_10mhz_port": null,
     "white_rabbit_port": null,
-    "sync_role": "4 K pulse-tube He compressor"
+    "sync_role": "4 K pulse-tube He compressor (utility-side pre-UPS)"
   },
   "epistemic_flags": {
     "design_maturity": "M0_M1_ELECTRICAL_ICD_DESIGN_ONLY",

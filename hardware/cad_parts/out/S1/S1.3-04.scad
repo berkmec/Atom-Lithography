@@ -10,7 +10,7 @@
 // vacuum_grade      : UHV / Dis kilif
 // tolerance         : ±0.2 mm cap
 // computed_mass_kg  : 1.30722
-// envelope_mm       : 124.000 x 124.000 x 173.000
+// envelope_mm       : 124.000 x 124.000 x 162.500
 // design_maturity   : M0_M1_DETAILED_CAD_DESIGN_ONLY
 // no_lab_measurement: true
 // iec61508_certified: false
@@ -23,7 +23,7 @@ $fn = 64;
 // Nominal bounding envelope parameters (mm)
 bbox_x = 124.0000;
 bbox_y = 124.0000;
-bbox_z = 173.0000;
+bbox_z = 162.5000;
 
 // Part-specific parametric dimensions
 hi_od = 124.0;
@@ -72,6 +72,6 @@ module part_S1_3_04() {
 }
 
 // World assembly mounting transform (global machine frame, mm / deg):
-// translate([0.000, 0.000, 128.500]) rotate([0.000, 0.000, 0.000]) part_S1_3_04();
+// translate([0.000, 0.000, 123.250]) rotate([0.000, 0.000, 0.000]) part_S1_3_04();
 
 part_S1_3_04();

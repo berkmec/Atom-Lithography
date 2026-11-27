@@ -360,3 +360,61 @@ def test_deliverable_docs_figures_and_gfm_integrity() -> None:
     # Strict zero-mismatch GFM table verification across all 3 markdown deliverables
     for md in (BOM_ENG_MD, RFQ_MD, SUMMARY128_MD):
         assert _check_gfm_tables(md) == 0, f"GFM table mismatch in {md.name}"
+
+    # OBS-061: Zero shuttered Efabless active dependency; UNQUOTED_ROM_ESTIMATE & lead-time registry present
+    assert "UNQUOTED_ROM_ESTIMATE" in rfq_text
+    assert "ChipFoundry" in rfq_text and "SkyWater" in rfq_text
+
+
+def test_obstacle_closures_bom_ups_icds_and_180_verification_tests() -> None:
+    """Verify OBS-060, 061, 068, 079, 120, 126, 134, 139 across BOM_DETAILED, CAD params, and hardware/icd."""
+    df = pd.read_csv(BOM_DETAILED)
+    by_id = df.set_index("part_id")
+
+    # OBS-060: 50 mm FOAK wafer alignment in BOM S5.4-01 & cad/params.py
+    assert "50 mm" in str(by_id.loc["S5.4-01", "key_spec"])
+    params_txt = (ROOT / "research" / "atom_lithography_machine" / "cad" / "params.py").read_text(encoding="utf-8")
+    assert '"wafer_diameter_mm": 50.0' in params_txt
+    assert '"wafer_tier_canonical": "FOAK_50mm"' in params_txt
+
+    # OBS-061: Efabless replaced by active SkyWater/ChipFoundry/MOSIS MPW brokers
+    assert "ChipFoundry" in str(by_id.loc["S7.3-01", "notes"])
+    assert "ChipFoundry" in str(by_id.loc["S2.4-01", "notes"])
+    exp128 = json.loads(EXP128_JSON.read_text(encoding="utf-8"))
+    assert exp128["procurement_status"] == "UNQUOTED_ROM_ESTIMATE"
+    assert len(exp128["supply_chain_lead_time_registry_obs061"]["critical_path_chokepoints"]) >= 7
+
+    # OBS-134 & OBS-139: 5% MBE capture in S5.6-02 & iradina sputtering yield in S9.3-01
+    assert "427" in str(by_id.loc["S5.6-02", "key_spec"]) and "190" in str(by_id.loc["S5.6-02", "key_spec"])
+    assert "0.913" in str(by_id.loc["S9.3-01", "key_spec"]) and "1.711" in str(by_id.loc["S9.3-01", "key_spec"])
+
+    # OBS-068, 079, 126: Master UPS budget, S2.4-01 (300 K), S6.3-05 (>=300 A HTS + 650 W ramp-down), PT420 12.5 kW
+    ups_master = json.loads((ROOT / "hardware" / "icd" / "electrical" / "master_electrical_power_ups_budget.json").read_text(encoding="utf-8"))
+    ups = ups_master["ups_s7_safety_04"]
+    assert ups["battery_energy_kWh"] == 12.0
+    assert ups["usable_battery_energy_90pct_dod_kWh"] == 10.8
+    assert ups["pt420_wall_power_utility_side_kW"] == 12.5
+    assert ups["utility_side_tier2_contactor_ahead_of_ups"] is True
+    assert ups["tier1_plus_tier1b_peak_ups_load_kW"] <= 13.5
+    assert ups["dedicated_magnet_rampdown_ups_branch_W"] == 650.0
+    assert ups["tier1_critical"]["runtime_tier1_min_conservative_90pct_dod_incl_350w_loss"] >= 180.0
+    assert ups["tier1_critical"]["tier1_conservative_90pct_dod_meets_180min"] is True
+    assert ups["tier2_sheddable"]["tier2_shed_28part_reconciliation"]["reconciliation_discrepancy_W"] == 0.0
+
+    s24 = json.loads((ROOT / "hardware" / "icd" / "parts" / "S2.4-01.json").read_text(encoding="utf-8"))
+    assert s24["artifact_links"]["cad"]["temp_k"] == 300.0
+    assert s24["thermal_boundary_spec"]["cryo_4k_heat_load_W"] == 0.0
+
+    s63 = json.loads((ROOT / "hardware" / "icd" / "parts" / "S6.3-05.json").read_text(encoding="utf-8"))
+    assert s63["magnet_power_and_hts_spec"]["psu_current_rating_A"] >= 300.0
+    assert s63["magnet_power_and_hts_spec"]["dedicated_ups_tier1b_rampdown_W"] == 650.0
+
+    # OBS-120: ALL 180/180 hardware/icd/parts/*.json have non-empty, real existing verification_tests
+    part_files = sorted((ROOT / "hardware" / "icd" / "parts").glob("*.json"))
+    assert len(part_files) == 180
+    for pf in part_files:
+        pd_json = json.loads(pf.read_text(encoding="utf-8"))
+        vts = pd_json["artifact_links"]["verification_tests"]
+        assert isinstance(vts, list) and len(vts) >= 2, f"Empty verification_tests in {pf.name}"
+        for rel in vts:
+            assert (ROOT / rel).is_file(), f"Broken verification_test path {rel} in {pf.name}"

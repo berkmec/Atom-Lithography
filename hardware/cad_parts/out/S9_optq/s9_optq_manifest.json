@@ -6,7 +6,7 @@
   "all_parts_valid": true,
   "clash_report": {
     "parts_checked": 43,
-    "broadphase_aabb_pairs": 108,
+    "broadphase_aabb_pairs": 111,
     "clash_count": 0,
     "clashes": [],
     "passed": true

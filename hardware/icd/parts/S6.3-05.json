@@ -3,14 +3,14 @@
   "part_id": "S6.3-05",
   "parent_bom_id": "S6.3",
   "subsystem": "S6",
-  "part_name": "Cift-kutuplu superiletken miknatis guc kaynagi (±100 A) ve HTS akim uclari",
+  "part_name": "Cift-kutuplu superiletken miknatis guc kaynagi (±300 A) ve >=300 A HTS akim uclari",
   "part_category": "PHYSICAL_SOLID",
   "bom_metadata": {
     "qty": "1",
     "unit": "set",
-    "material": "Cryomagnetics/AMI sinifi + Bi-2223 HTS uclar",
-    "key_spec": "±100 A, 10 ppm kararlik, 4K isi kacagi <50 mW/cift",
-    "tolerance": "±10 ppm",
+    "material": "Cryomagnetics/AMI sinifi + >=300 A Bi-2223 HTS uclar",
+    "key_spec": "±300 A (>=255.9 A S_upper bobin akimina %17 marj), 10 ppm kararlik, 4K isi kacagi <50 mW/cift; ozel 650 W Tier-1B UPS kontrollu 120 s rampa-indirme kolu + 1.563 Ohm pasif quench yedegi",
+    "tolerance": "±10 ppm, >=300 A",
     "temp_stage": "300 K -> 4 K",
     "vacuum_grade": "Atmosfer/Kriyo",
     "procurement_class": "COTS",
@@ -20,7 +20,7 @@
     "usd_high": 39000.0,
     "legacy_cad_module": "s6_cryo_dr_magnet_readout",
     "bom_epistemic_tag": "{Model-Kalibrasyon-Exp114}",
-    "notes": "HTS uclar 4 K PT420 termal butcesini korur"
+    "notes": "OBS-079/126: >=300 A Bi-2223 HTS uclar 4 K PT420 termal butcesini korur; kesintide 650 W Tier-1B UPS koluyla kontrollu rampa-indirme; lead P10/P50/P90=20/34/52 hf; UNQUOTED_ROM_ESTIMATE"
   },
   "artifact_links": {
     "cad": {
@@ -34,8 +34,8 @@
       "cad_json": "hardware/cad_parts/out/S6/S6.3-05.json",
       "watertight": true,
       "all_6_files_valid": true,
-      "mass_kg": 22.221992,
-      "triangle_count": 1324,
+      "mass_kg": 22.604946,
+      "triangle_count": 2572,
       "temp_k": 4.0,
       "canonical_bbox_min_mm": [
         1858.7,
@@ -67,14 +67,23 @@
         "S6.3-01",
         "S6.3-02",
         "S6.3-04",
+        "S7.SAFETY-04",
         "S7.SAFETY-05"
       ],
-      "interlock_hooks_count": 1
+      "interlock_hooks_count": 2
     },
     "rtl_modules": [],
     "rtl_audit_json": null,
     "software_and_eda_files": [],
-    "verification_tests": []
+    "verification_tests": [
+      "tests/test_bom_detailed.py",
+      "tests/test_full_180_traceability.py",
+      "tests/test_cad_s6_optq.py",
+      "tests/test_pcb_cryo_and_elec_icds.py",
+      "tests/test_exp125.py",
+      "tests/test_exp150.py",
+      "tests/test_cad_parts.py"
+    ]
   },
   "specialized_specification": null,
   "verification_status": {
@@ -84,6 +93,7 @@
     "rtl_verified": false,
     "software_or_eda_verified": false,
     "specialized_icd_present": false,
+    "verification_tests_mapped": true,
     "traceable": true
   },
   "epistemic": {
@@ -93,5 +103,15 @@
     "iec61508_certified": false,
     "semi_s2_certified": false,
     "tapeout_done": false
+  },
+  "magnet_power_and_hts_spec": {
+    "psu_current_rating_A": 300.0,
+    "hts_lead_type": "Bi-2223 HTS current lead pair rated >=300 A",
+    "peak_coil_current_A": 255.9,
+    "current_margin_pct": 17.2,
+    "thermal_leak_4k_mW_per_pair_max": 50.0,
+    "dedicated_ups_tier1b_rampdown_W": 650.0,
+    "controlled_rampdown_duration_s": 120.0,
+    "passive_quench_backup_ohm": 1.563
   }
 }

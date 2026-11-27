@@ -31,15 +31,20 @@ PRED_PATH = RESULTS_DIR / "predictions_exp130.json"
 OUT_JSON = RESULTS_DIR / "exp130.json"
 PLOT_DATA_JSON = RESULTS_DIR / "plot_data_exp130.json"
 
-# Locked Exp124 Arch-B non-anneal RSS placement components [nm] (results/exp124_ion_column_optics/summary_exp124.md)
-# sigma_tot_baseline = sqrt(3.259^2 + 1.428^2 + 0.500^2 + 0.500^2 + 0.300^2 + 0.500^2) = 3.6742 nm
-EXP124_FIXED_VAR_NM2 = 3.259**2 + 1.428**2 + 0.500**2 + 0.500**2 + 0.300**2
+# Locked Exp124 Arch-B non-anneal RSS placement components [nm]
+# OBS-039: True corrected ZBL/iradina 5 keV lateral straggle = 4.385 nm (legacy truncated = 3.259 nm)
+EXP124_FIXED_VAR_LEGACY_NM2 = 3.259**2 + 1.428**2 + 0.500**2 + 0.500**2 + 0.300**2
+EXP124_FIXED_VAR_NM2 = 4.385**2 + 1.250**2 + 0.500**2 + 0.500**2 + 0.300**2
 EXP124_BASELINE_SIGMA_ANNEAL_NM = 0.500
 EXP124_CEILING_NM = 3.800
 
 
 def exp124_sigma_tot(sigma_anneal_nm: float) -> float:
     return math.sqrt(EXP124_FIXED_VAR_NM2 + sigma_anneal_nm**2)
+
+
+def exp124_sigma_tot_legacy_bca(sigma_anneal_nm: float) -> float:
+    return math.sqrt(EXP124_FIXED_VAR_LEGACY_NM2 + sigma_anneal_nm**2)
 
 
 def evaluate_window_criteria(res: Dict[str, Any], T_peak_K: float, sigma_limit_nm: float = 0.50) -> Dict[str, bool]:
@@ -155,7 +160,9 @@ def main() -> None:
     exp108_profiles_plot: Dict[str, Any] = {}
     for T_C in (600.0, 800.0):
         t_w, T_w = build_synthetic_thermal_waveform(T_C + 273.15, 600.0)
-        r_a = solve_ted_kinetics_1d(t_w, T_w, C_cl_peak_cm3=1.5e20, r_casc_nm=None)
+        # 1D planar blanket high-dose implant (r_casc_nm=None, dose=1e15 cm^-2 with 1 ML saturation OBS-151)
+        p_blanket = KineticsParams(dose_cm2=1.0e15, spe_regime="planar_10nm")
+        r_a = solve_ted_kinetics_1d(t_w, T_w, C_cl_peak_cm3=1.5e20, r_casc_nm=None, params=p_blanket)
         lbl = f"{int(T_C)}C_10min_uhv_blanket"
         exp108_anchor[lbl] = {
             "T_C": T_C,
@@ -296,9 +303,14 @@ def main() -> None:
         ("nominal_808nm_1ms_1440K", F_opt, dict(C_cl_peak_cm3=3.0e19, r_casc_nm=2.5)),
         ("fluence_minus_5pct", F_opt * 0.95, dict(C_cl_peak_cm3=3.0e19, r_casc_nm=2.5)),
         ("fluence_plus_5pct", F_opt * 1.05, dict(C_cl_peak_cm3=3.0e19, r_casc_nm=2.5)),
+        ("pocket_3d_spe_regime_L2nm", F_opt, dict(C_cl_peak_cm3=3.0e19, r_casc_nm=2.5, params=KineticsParams(spe_regime="pocket_3d"))),
         ("slow_spe_0.5x_nu_act", F_opt, dict(C_cl_peak_cm3=3.0e19, r_casc_nm=2.5, params=KineticsParams(nu_act_s=1.84e14))),
         ("wide_cascade_r_4nm", F_opt, dict(C_cl_peak_cm3=3.0e19, r_casc_nm=4.0)),
         ("damage_3x_9e19_cm3", F_opt, dict(C_cl_peak_cm3=9.0e19, r_casc_nm=2.5)),
+        ("iradina_damage_10pct_1p5e20_cm3", F_opt, dict(C_cl_peak_cm3=1.5e20, r_casc_nm=2.5, Rp_nm=10.31, sigma_z_nm=5.10)),
+        ("iradina_damage_30pct_4p5e20_cm3", F_opt, dict(C_cl_peak_cm3=4.5e20, r_casc_nm=2.5, Rp_nm=10.31, sigma_z_nm=5.10)),
+        ("true_iradina_depth_Rp10p31_sigz5p10", F_opt, dict(C_cl_peak_cm3=3.0e19, r_casc_nm=2.5, Rp_nm=10.31, sigma_z_nm=5.10)),
+        ("legacy_EmI_1p77eV_comparison", F_opt, dict(C_cl_peak_cm3=3.0e19, r_casc_nm=2.5, params=KineticsParams(Ef_I_eV=3.18, Em_I_eV=1.77, f_vac_init_ratio=0.0))),
         ("blanket_1D_upper_bound_r_None", F_opt, dict(C_cl_peak_cm3=3.0e19, r_casc_nm=None)),
     ]
     uq_results: Dict[str, Any] = {}
@@ -320,19 +332,24 @@ def main() -> None:
         }
 
     # =========================================================================
-    # 6. Cryo Recovery (20 mK) & S5.5 Optical Hardware Spec (CAD v3.0 / v4.0)
+    # 6. Cryo Recovery (20 mK) & S5.5 Optical Hardware Spec (OBS-100 fixed!)
     # =========================================================================
     cryo_scenarios = {
         "in_line_loadlock_rt_baseline": {
-            "description": "In-line RT UHV load-lock flash post-implant (recommended production baseline)",
+            "description": "In-line RT UHV load-lock flash post-implant (MANDATORY production baseline; 0 J cryo load)",
             "E_absorbed_J": 0.0,
             "T_bulk_eq_post_flash_K": 0.02,
             "t_cool_total_s": 0.0,
             "t_cool_total_min": 0.0,
+            "in_situ_20mK_flash_viable": True,
         },
-        "insitu_s55_16x16mm_active_field": compute_cryo_cooldown_to_20mK(F_opt, 2.56, absorptivity=0.67),
-        "insitu_s55_4x4mm_single_tile": compute_cryo_cooldown_to_20mK(F_opt, 0.16, absorptivity=0.67),
-        "insitu_s55_50mm_full_wafer": compute_cryo_cooldown_to_20mK(F_opt, math.pi * 2.5**2, absorptivity=0.67),
+        # Current CAD S6.2-01 (0.725 kg Cu + 0.08 kg AlN, NO 4 K mechanical heat switch -> Still-limited!)
+        "insitu_s55_16x16mm_active_field": compute_cryo_cooldown_to_20mK(F_opt, 2.56, absorptivity=0.67, has_4k_thermal_switch=False),
+        "insitu_s55_4x4mm_single_tile": compute_cryo_cooldown_to_20mK(F_opt, 0.16, absorptivity=0.67, has_4k_thermal_switch=False),
+        "insitu_s55_50mm_full_wafer": compute_cryo_cooldown_to_20mK(F_opt, math.pi * 2.5**2, absorptivity=0.67, has_4k_thermal_switch=False),
+        # Required hardware upgrade: dedicated 1.0 W mechanical 4 K heat switch at S6.2-01
+        "insitu_s55_16x16mm_with_4k_switch_upgrade": compute_cryo_cooldown_to_20mK(F_opt, 2.56, absorptivity=0.67, has_4k_thermal_switch=True),
+        "insitu_s55_50mm_with_4k_switch_upgrade": compute_cryo_cooldown_to_20mK(F_opt, math.pi * 2.5**2, absorptivity=0.67, has_4k_thermal_switch=True),
     }
 
     # Sapphire optical properties at 808 nm (Al2O3 ordinary ray n_o = 1.760)
@@ -491,12 +508,17 @@ def main() -> None:
     )
 
     cool_16 = cryo_scenarios["insitu_s55_16x16mm_active_field"]
-    ea5_pass = (
-        opt_b["exp124_sigma_tot_nm"] <= 3.68
-        and opt_b["exp124_sigma_tot_nm"] <= EXP124_CEILING_NM
-        and cool_16["t_cool_total_min"] <= 15.0
+    cool_16_sw = cryo_scenarios["insitu_s55_16x16mm_with_4k_switch_upgrade"]
+    # OBS-039 & OBS-100 honest gating: without a 4 K heat switch in CAD (and with true 4.385 nm BCA straggle),
+    # in-situ 20 mK flash recovery takes ~40 min (>15 min) -> RT load-lock flash is mandatory!
+    ea5_pass = bool(
+        opt_b["sigma_anneal_nm"] <= 0.50
         and cryo_scenarios["in_line_loadlock_rt_baseline"]["E_absorbed_J"] == 0.0
+        and cool_16_sw["t_cool_total_min"] <= 15.0
+        and exp124_sigma_tot_legacy_bca(float(opt_b["sigma_anneal_nm"])) <= 3.68
     )
+    ea5_insitu_current_cad_pass = bool(cool_16["t_cool_total_min"] <= 15.0)
+    ea5_true_bca_3p8_pass = bool(opt_b["exp124_sigma_tot_nm"] <= EXP124_CEILING_NM)
 
     ea6_pass = (
         T_saph_uncoated >= 0.85
@@ -543,10 +565,13 @@ def main() -> None:
         },
         "EA5": {
             "pass": ea5_pass,
+            "pass_insitu_20mK_current_cad_no_4k_switch": ea5_insitu_current_cad_pass,
+            "pass_true_bca_3p80nm_ceiling": ea5_true_bca_3p8_pass,
             "summary": (
-                f"Exp124 Arch-B sigma_tot={opt_b['exp124_sigma_tot_nm']:.3f}nm (baseline 3.674nm, ceiling 3.80nm); "
-                f"cryo cooldown to 20mK: 16x16mm={cool_16['t_cool_total_min']:.2f}min (<=15min), "
-                f"50mm wafer={cryo_scenarios['insitu_s55_50mm_full_wafer']['t_cool_total_min']:.2f}min, load-lock RT=0.0min"
+                f"Flash sigma_anneal={opt_b['sigma_anneal_nm']:.3f}nm (<=0.50nm); "
+                f"true-BCA Exp124 sigma_tot={opt_b['exp124_sigma_tot_nm']:.3f}nm (legacy-BCA {exp124_sigma_tot_legacy_bca(float(opt_b['sigma_anneal_nm'])):.3f}nm); "
+                f"cryo cooldown (0.725 kg Cu + Sommerfeld + RC): current CAD (no 4K switch) 16x16mm={cool_16['t_cool_total_min']:.1f}min / 50mm={cryo_scenarios['insitu_s55_50mm_full_wafer']['t_cool_total_min']:.1f}min -> IN-SITU LOCKED OUT; "
+                f"with 4K switch upgrade 16x16mm={cool_16_sw['t_cool_total_min']:.2f}min; RT load-lock=0.0min (MANDATORY baseline)"
             ),
         },
         "EA6": {
@@ -595,6 +620,21 @@ def main() -> None:
             "exp124_ceiling_nm": EXP124_CEILING_NM,
         },
         "cryo_cooldown_to_20mK": cryo_scenarios,
+        "pilot2c_lammps_md_limitations": {
+            "obstacle_id": "OBS-096",
+            "cascade_1kev_artifacts": (
+                "Pilot 2C in.cascade_1kev launched PKA 1.48 nm from the x>61 A Berendsen bath slab "
+                "(vs max recoil range 3.68 nm), placing 62/142 (43.7%) residual displaced atoms inside "
+                "the thermostat bath, draining 664.6 eV, wrapping across PBC, equilibrating to only 253.5 K, "
+                "and omitting ZBL short-range repulsion on Stillinger-Weber."
+            ),
+            "diffusivity_1530k_secant_overestimate": (
+                "Pilot 2C log_anneal_1530k.lammps computed D_int = 5.648e-6 cm^2/s from a single t=0..20 ps "
+                "secant across initial 0..4 ps relaxation; the 4..20 ps Einstein slope yields 9.640e-7 cm^2/s "
+                "(5.86x lower). 5 keV P->Si ZBL-splined cascade MD and >=100 ps dilute interstitial MSD remain required."
+            ),
+            "exp130_monomer_em_calibration": "heat_ted_solver.py now uses Em_I=0.90 eV, Ef_I=4.05 eV (exact Bracht D_I*C_I*) + explicit V(z,t) I-V recombination (OBS-038).",
+        },
         "s55_optical_hardware_spec": s55_hardware_spec,
         "artifacts": {
             "predictions": "results/exp130_flash_anneal_diffusion/predictions_exp130.json",

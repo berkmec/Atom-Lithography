@@ -255,3 +255,75 @@ def test_auto_recal_integration_and_jsonl_roundtrip(tmp_path: Path) -> None:
         mgr.record_sample("NO.SUCH.CH", 1.0, timestamp_s=1.0)
     with pytest.raises(ValueError):
         SCADATelemetryManager(ring_capacity=0)
+
+
+def test_obs080_nan_inf_failsafe_interlock_superseded_latches_and_thread_safety() -> None:
+    import threading
+
+    mgr = SCADATelemetryManager()
+    # Start from nominal healthy state
+    mgr.record_frame(
+        {
+            "S5.P_MAIN_UHV_TORR": 1.5e-10,
+            "S7.LASER_ENCL_OK": 1.0,
+            "S7.O2_ROOM_PCT": 20.9,
+            "S7.PH3_LEVEL_PPM": 0.0,
+            "S1.V_LANDING_KV": 5.0,
+            "S1.V_EXTRACT_KV": 12.0,
+            "S6.QUENCH_VOLT_V": 0.0,
+            "S7.ESTOP_LOOP_OK": 1.0,
+        },
+        timestamp_s=1.0,
+    )
+    assert mgr.build_il_sensor_vectors_from_telemetry() == (0xFF, 0xFF)
+
+    # 1) NaN and +Inf on UHV vacuum MUST fail-safe trip bit 0 (bit0_healthy == False)
+    s_nan = mgr.record_sample("S5.P_MAIN_UHV_TORR", float("nan"), timestamp_s=2.0)
+    assert s_nan.severity == "INTERLOCK_TRIP"
+    ch_a, ch_b = mgr.build_il_sensor_vectors_from_telemetry()
+    assert (ch_a & (1 << 0)) == 0
+    assert ch_a == ch_b
+
+    mgr.record_sample("S5.P_MAIN_UHV_TORR", 1.5e-10, timestamp_s=3.0)
+    assert (mgr.build_il_sensor_vectors_from_telemetry()[0] & (1 << 0)) != 0
+
+    mgr.record_sample("S5.P_MAIN_UHV_TORR", float("inf"), timestamp_s=4.0)
+    assert (mgr.build_il_sensor_vectors_from_telemetry()[0] & (1 << 0)) == 0
+    mgr.record_sample("S5.P_MAIN_UHV_TORR", 1.5e-10, timestamp_s=5.0)
+
+    # 2) Superseded HI_HI -> HI transition clears HI_HI active flag so ack releases latch cleanly
+    mgr.record_sample("S7.PH3_LEVEL_PPM", 0.06, timestamp_s=10.0)
+    mgr.record_sample("S7.PH3_LEVEL_PPM", 0.03, timestamp_s=11.0)
+    ph3_alarms = {a.limit_breached: a for a in mgr.get_all_alarms() if a.channel_id == "S7.PH3_LEVEL_PPM"}
+    assert "HI_HI" in ph3_alarms and "HI" in ph3_alarms
+    assert ph3_alarms["HI_HI"].active is False
+    assert ph3_alarms["HI_HI"].isa18_state == "UNACK_CLEARED"
+    assert ph3_alarms["HI"].active is True
+    assert ph3_alarms["HI"].isa18_state == "UNACK_ACTIVE"
+
+    # Acknowledging cleared HI_HI alarm releases its latch to NORMAL
+    rec_hihi = mgr.acknowledge_alarm(ph3_alarms["HI_HI"].alarm_id, operator="eng_01", timestamp_s=12.0)
+    assert rec_hihi.latched is False
+    assert rec_hihi.isa18_state == "NORMAL"
+
+    # 3) Thread safety with RLock and bounded _event_log deque
+    assert isinstance(mgr._lock, type(threading.RLock()))
+    errs: list[Exception] = []
+
+    def _worker(tid: int) -> None:
+        try:
+            for k in range(40):
+                val = 0.06 if (k % 3 == 0) else (0.03 if (k % 3 == 1) else 0.0)
+                mgr.record_sample("S7.PH3_LEVEL_PPM", val, timestamp_s=100.0 + tid * 100 + k)
+                _ = mgr.build_il_sensor_vectors_from_telemetry()
+                _ = mgr.get_latched_alarms()
+        except Exception as exc:
+            errs.append(exc)
+
+    threads = [threading.Thread(target=_worker, args=(i,)) for i in range(4)]
+    for t in threads:
+        t.start()
+    for t in threads:
+        t.join()
+    assert errs == []
+    assert mgr._event_log.maxlen is not None and len(mgr._event_log) <= mgr._event_log.maxlen
